@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -74,43 +75,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StandardizedTestDetails> GetListOfStandardizedTestDetails()
         {
-            return new List<StandardizedTestDetails>
-            {
-                new StandardizedTestDetails
+            var standardizedTest = DoRead(u => new DataAccessBase<StandardizedTest>(u).GetAll());
+            var standardizedTestComponent = DoRead(u => new DataAccessBase<StandardizedTestComponent>(u).GetAll());
+            var standardizedTestScoreType = DoRead(u => new DataAccessBase<StandardizedTestScoreType>(u).GetAll());
+
+            return standardizedTest.Select(x => new StandardizedTestDetails
                 {
-                    Id = 1,
-                    Name = "Test1",
-                    DisplayName = "Test1",
-                    Components = new List<StandardizedTestComponent>
-                    {
-                        new StandardizedTestComponent {Id = 1, Name = "Math", StandardizedTestRef = 1},
-                        new StandardizedTestComponent {Id = 2, Name = "English", StandardizedTestRef = 1},
-                    },
-                    ScoreTypes = new List<StandardizedTestScoreType>
-                    {
-                        new StandardizedTestScoreType {Id = 1, StandardizedTestRef = 1, Name = "Numeric"},
-                        new StandardizedTestScoreType {Id = 2, StandardizedTestRef = 1, Name = "Pass"},
-                        new StandardizedTestScoreType {Id = 3, StandardizedTestRef = 1, Name = "Raw"}
-                    }
-                },
-                new StandardizedTestDetails
-                {
-                    Id = 1,
-                    Name = "Test2",
-                    DisplayName = "Test2",
-                    Components = new List<StandardizedTestComponent>
-                    {
-                        new StandardizedTestComponent {Id = 3, Name = "Math2", StandardizedTestRef = 2},
-                        new StandardizedTestComponent {Id = 4, Name = "English2", StandardizedTestRef = 2},
-                    },
-                    ScoreTypes = new List<StandardizedTestScoreType>
-                    {
-                        new StandardizedTestScoreType {Id = 4, StandardizedTestRef = 2, Name = "Numeric2"},
-                        new StandardizedTestScoreType {Id = 5, StandardizedTestRef = 2, Name = "Pass2"},
-                        new StandardizedTestScoreType {Id = 6, StandardizedTestRef = 2, Name = "Raw2"}
-                    }
-                }
-            };
+                    Id = x.Id,
+                    DisplayName = x.DisplayName,
+                    Name = x.Name,
+                    DisplayOnTranscript = x.DisplayOnTranscript,
+                    StateCode = x.StateCode,
+                    SifCode = x.SifCode,
+                    NcesCode = x.NcesCode,
+                    Description = x.Description,
+                    GradeLevelRef = x.GradeLevelRef,
+                    Code = x.Code,
+                    Components = standardizedTestComponent.Where(stc => x.Id == stc.StandardizedTestRef).ToList(),
+                    ScoreTypes = standardizedTestScoreType.Where(stst => x.Id == stst.StandardizedTestRef).ToList()
+                }).ToList();
         }
     }
 }

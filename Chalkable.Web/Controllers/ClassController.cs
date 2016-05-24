@@ -141,47 +141,9 @@ namespace Chalkable.Web.Controllers
         {
             var c = SchoolLocator.ClassService.GetById(classId);
             var settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSettings>();
-
-            //TODO remove this default data later
+            var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             
-            var standardizedTests = new List<StandardizedTestDetails>();
-            standardizedTests.Add(new StandardizedTestDetails
-            {
-                Id = 1,
-                Name = "Test1",
-                DisplayName = "Test1",
-                Components = new List<StandardizedTestComponent>
-                {
-                    new StandardizedTestComponent {Id =1, Name = "Math", StandardizedTestRef = 1},
-                    new StandardizedTestComponent {Id =2, Name = "English", StandardizedTestRef = 1},
-                },
-                ScoreTypes = new List<StandardizedTestScoreType>
-                {
-                    new StandardizedTestScoreType {Id = 1, StandardizedTestRef = 1, Name = "Numeric"},
-                    new StandardizedTestScoreType {Id = 2, StandardizedTestRef = 1, Name = "Pass"},
-                    new StandardizedTestScoreType {Id = 3, StandardizedTestRef = 1, Name = "Raw"}
-                }
-            });
-
-            standardizedTests.Add(new StandardizedTestDetails
-            {
-                Id = 1,
-                Name = "Test2",
-                DisplayName = "Test2",
-                Components = new List<StandardizedTestComponent>
-                {
-                    new StandardizedTestComponent {Id =3, Name = "Math2", StandardizedTestRef = 2},
-                    new StandardizedTestComponent {Id =4, Name = "English2", StandardizedTestRef = 2},
-                },
-                ScoreTypes = new List<StandardizedTestScoreType>
-                {
-                    new StandardizedTestScoreType {Id = 4, StandardizedTestRef = 2, Name = "Numeric2"},
-                    new StandardizedTestScoreType {Id = 5, StandardizedTestRef = 2, Name = "Pass2"},
-                    new StandardizedTestScoreType {Id = 6, StandardizedTestRef = 2, Name = "Raw2"}
-                }
-            });
-            
-            return Json(ClassPanoramaViewData.Create(c, settings, standardizedTests));
+            return Json(ClassPanoramaViewData.Create(c, settings, standardizedTestDetails));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
