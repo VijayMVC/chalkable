@@ -43,21 +43,21 @@ namespace Chalkable.Web.Models
 
     public class ClassDistributionSectionViewData
     {
-        public ClassDestributionStatsViewData GradeAverageDistribution { get; set; }
-        public ClassDestributionStatsViewData AbsencesDistribution { get; set; }
-        public ClassDestributionStatsViewData DisciplineDistribution { get; set; }
+        public ClassDistributionStatsViewData GradeAverageDistribution { get; set; }
+        public ClassDistributionStatsViewData AbsencesDistribution { get; set; }
+        public ClassDistributionStatsViewData DisciplineDistribution { get; set; }
     }
 
-    public class ClassDestributionStatsViewData
+    public class ClassDistributionStatsViewData
     {
         public decimal ClassAvg { get; set; }
-        public IList<DestributionItemViewData> DestributionStats { get; set; }
+        public IList<DistributionItemViewData> DistributionStats { get; set; }
     }
 
-    public class DestributionItemViewData
+    public class DistributionItemViewData
     {
         public decimal Count { get; set; }
-        public string Summery { get; set; }
+        public string Summary { get; set; }
         public decimal StartInterval { get; set; }
         public decimal EndInterval { get; set; }
     }
