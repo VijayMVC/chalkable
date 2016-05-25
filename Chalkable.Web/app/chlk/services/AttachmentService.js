@@ -13,6 +13,11 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'AttachmentService', EXTENDS(chlk.services.BaseService), [
 
+            [[Object]],
+            ria.async.Future, function uploadAttachment(files) {
+                return this.uploadFiles('Attachment/Upload', files, chlk.models.attachment.Attachment, {});
+            },
+
             [[String, chlk.models.attachment.SortAttachmentType, Number, Number]],
             ria.async.Future, function getAttachments(filter_, sortType_, start_, count_){
                 return this.getPaginatedList('Attachment/AttachmentsList.json', chlk.models.attachment.Attachment,{

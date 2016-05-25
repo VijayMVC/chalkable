@@ -50,6 +50,13 @@ NAMESPACE('chlk.services', function () {
                     })
             },
 
+            ria.async.Future, function getExternalAttachApps() {
+                return this.get('Application/ExternalAttachApps.json', ArrayOf(chlk.models.apps.Application), {
+                        start: 0,
+                        count: 25
+                    })
+            },
+
             [[Boolean]],
             ria.async.Future, function getDevApps(refresh_) {
                 var apps = this.getContext().getSession().get(ChlkSessionConstants.DEV_APPS) || [];
