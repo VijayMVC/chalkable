@@ -44,7 +44,7 @@ Set StartDate = DateAdd(d, DateDiff(d, @minAnnDate, StartDate), @startDate)
 
 Update @toCopy
 Set EndDate = IsNull((Select Top(TotalSchoolDays) Max([Day]) From [Date] 
-					  Where SchoolYearRef = @toSchoolYearId And [Day] >= StartDate
+					  Where SchoolYearRef = @toSchoolYearId And [Day] >= StartDate And IsSchoolDay = 1
 					  Group By [Day] Order By [Day] ), StartDate)
 
 --------------Needed because LessonPlan.Id is FK on Announcement.Id----------------

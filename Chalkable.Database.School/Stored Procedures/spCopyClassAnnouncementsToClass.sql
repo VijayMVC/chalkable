@@ -41,6 +41,7 @@ When Not Matched Then
 Output ToCopy.[Id], ToCopy.[FromActivityId], Inserted.[Id], ToCopy.[ToActivityId]
 	Into @newAnnIds;
 
+--Inserting fake data. All class announcement will be merged with sis activities
 Insert Into ClassAnnouncement
 (Id, Expires, ClassRef, MayBeDropped, VisibleForStudent, 
 	[Order], Dropped, SisActivityId, SchoolYearRef, IsScored)

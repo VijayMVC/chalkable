@@ -154,7 +154,7 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.announcement.AnnouncementImportViewData(model.getClassId(), null, announcements);
                     });
             else
-                res = this.announcementService.copy(model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
                     .then(function(ids){
                         this.WidgetComplete(model.getRequestId(), ids);
                         this.BackgroundCloseView(chlk.activities.announcement.AnnouncementImportDialog);
