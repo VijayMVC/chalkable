@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.BusinessLogic.Services.School.Notifications;
+using Chalkable.BusinessLogic.Services.School.PanoramaSettings;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;

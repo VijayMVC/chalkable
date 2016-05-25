@@ -1,6 +1,7 @@
 ﻿using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
+using Chalkable.BusinessLogic.Services.School.PanoramaSettings;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 

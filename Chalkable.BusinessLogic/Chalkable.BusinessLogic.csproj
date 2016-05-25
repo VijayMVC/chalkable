@@ -172,6 +172,10 @@
     <Compile Include="Model\GradingStandardInfo.cs" />
     <Compile Include="Model\LEParams.cs" />
     <Compile Include="Model\OAuthUserIdentity.cs" />
+    <Compile Include="Model\PanoramaSettings\BaseSettingModel.cs" />
+    <Compile Include="Model\PanoramaSettings\ClassProfilePanoramaSetting.cs" />
+    <Compile Include="Model\PanoramaSettings\StandardizedTestFilter.cs" />
+    <Compile Include="Model\PanoramaSettings\StudentProfilePanoramaSetting.cs" />
     <Compile Include="Model\PracticeGradeDetailedInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\Reports\AttendanceRegisterInputModel.cs" />
@@ -348,7 +352,8 @@
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
     <Compile Include="Services\School\Notifications\NotificationService.cs" />
     <Compile Include="Services\School\Notifications\NotificationTemplateProvider.cs" />
-    <Compile Include="Services\School\PanoramaSettingsService.cs" />
+    <Compile Include="Services\School\PanoramaSettings\BasePanoramaSettingsHandler.cs" />
+    <Compile Include="Services\School\PanoramaSettings\PanoramaSettingsService.cs" />
     <Compile Include="Services\School\PeriodService.cs" />
     <Compile Include="Services\School\PersonEmailService.cs" />
     <Compile Include="Services\School\PersonService.cs" />

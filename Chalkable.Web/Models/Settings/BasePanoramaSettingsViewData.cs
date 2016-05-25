@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Services.School;
 
 namespace Chalkable.Web.Models.Settings

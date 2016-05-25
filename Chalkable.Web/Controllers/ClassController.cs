@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
@@ -140,9 +141,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult Panorama(int classId)
         {
             var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var settings = SchoolLocator.PanoramaSettingsService.GetClassPanoramaSettings(classId);
+            var settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSetting>(classId);
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
-            
             return Json(ClassPanoramaViewData.Create(c, settings, standardizedTestDetails));
         }
 
