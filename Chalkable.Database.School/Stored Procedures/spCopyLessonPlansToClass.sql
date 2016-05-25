@@ -5,8 +5,6 @@
 	@startDate datetime2
 As
 
-Begin transaction
-
 Declare @toSchoolYearId int = (Select Top 1 SchoolYearRef From Class Where Id = @toClassId),
 		@minAnnDate datetime2;
 
@@ -46,6 +44,28 @@ Update @toCopy
 Set EndDate = IsNull((Select Top(TotalSchoolDays) Max([Day]) From [Date] 
 					  Where SchoolYearRef = @toSchoolYearId And [Day] >= StartDate And IsSchoolDay = 1
 					  Group By [Day] Order By [Day] ), StartDate)
+
+--Getting last school day of School Year
+Declare @schoolYearEndDate datetime2;
+Set @schoolYearEndDate = (Select Max([Day]) 
+						  From [Date] join SchoolYear On [Date].SchoolYearRef = SchoolYear.Id
+						  Where [Date].SchoolYearRef = @toSchoolYearId And [Date].[Day]>=SchoolYear.EndDate)
+
+--Lps where EndDate is out of School Year date range
+Declare @newLPsOutOfSchoolYear TInt32;
+Insert Into @newLPsOutOfSchoolYear
+	Select Id From @toCopy Where EndDate > @schoolYearEndDate
+
+--Fixing End and Start date for announcement
+Update @toCopy
+Set EndDate = @schoolYearEndDate
+Where Id in(Select * From @newLPsOutOfSchoolYear)
+
+Update @toCopy
+Set StartDate = IsNull((Select Top(TotalSchoolDays) Min([Day]) From [Date]
+				 Where SchoolYearRef = @toSchoolYearId And [Day] <= EndDate And IsSchoolDay = 1
+				 Group By [Day] Order By [Day] desc), EndDate)
+Where Id in(Select * From @newLPsOutOfSchoolYear)
 
 --------------Needed because LessonPlan.Id is FK on Announcement.Id----------------
 
@@ -89,5 +109,3 @@ Select
 	[FromAnnouncementId],
 	[ToAnnouncementId]
 From @newAnnIds
-
-Commit
