@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         }
 
 
-        private static IDictionary<Type, IBasePanoramaSettingsHandler<BaseSettingModel>> _settingHandlers = new Dictionary
+        private static readonly IDictionary<Type, IBasePanoramaSettingsHandler<BaseSettingModel>> _settingHandlers = new Dictionary
             <Type, IBasePanoramaSettingsHandler<BaseSettingModel>>
         {
             {
@@ -38,20 +38,20 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             }
         };
 
-        private IBasePanoramaSettingsHandler<BaseSettingModel> GetSettingHandler(Type settingType)
+        private IBasePanoramaSettingsHandler<TSettings> GetSettingHandler<TSettings>() where TSettings : BaseSettingModel
         {
-            if(!_settingHandlers.ContainsKey(settingType))
-                throw new ChalkableException();
-            return _settingHandlers[settingType];
+            if(!_settingHandlers.ContainsKey(typeof(TSettings)))
+                throw new ChalkableException("Panorama Settings Handler not found");
+            return _settingHandlers[typeof(TSettings)] as IBasePanoramaSettingsHandler<TSettings>;
         }
         
         private TSettings GetInternal<TSettings>(int? personId, int? classId) where TSettings : BaseSettingModel
         {
-            return (GetSettingHandler(typeof(TSettings)).GetSettings(ServiceLocator, personId, classId)) as TSettings;
+            return GetSettingHandler<TSettings>().GetSettings(ServiceLocator, personId, classId);
         }
         private void SetInternal<TSettings>(TSettings settings, int? personId, int? classId) where TSettings : BaseSettingModel
         {
-            GetSettingHandler(typeof(TSettings)).SetSettings(ServiceLocator, personId, classId, settings);
+            GetSettingHandler<TSettings>().SetSettings(ServiceLocator, personId, classId, settings);
         }
 
 
@@ -65,8 +65,8 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         }
         public TSettings Restore<TSettings>(int? classId) where TSettings : BaseSettingModel
         {
-            var handler = GetSettingHandler(typeof (TSettings));
-            var res = (handler.GetDefault(ServiceLocator, Context.PersonId, classId) as TSettings);
+            var handler = GetSettingHandler<TSettings>();
+            var res = handler.GetDefault(ServiceLocator, Context.PersonId, classId);
             handler.SetSettings(ServiceLocator, Context.PersonId, classId, res);
             return res;
         }

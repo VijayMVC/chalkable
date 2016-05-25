@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
-using Chalkable.BusinessLogic.Services.School;
 
 namespace Chalkable.Web.Models.Settings
 {
@@ -12,7 +11,7 @@ namespace Chalkable.Web.Models.Settings
         protected BasePanoramaSettingsViewData(IList<int> schoolYearIds, IList<StandardizedTestFilter> filters)
         {
             SchoolYearIds = schoolYearIds;
-            StandardizedTestFilters = StandardizedTestFilterViewData.Create(filters);
+            StandardizedTestFilters = filters != null ? StandardizedTestFilterViewData.Create(filters) : null;
         }
     }
 }
