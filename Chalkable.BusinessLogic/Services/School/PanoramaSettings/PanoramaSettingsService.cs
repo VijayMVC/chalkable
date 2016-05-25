@@ -32,8 +32,8 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
                     PersonSetting.CLASS_PROFILE_PANORAMA_SETTING)
             },
             {
-                typeof (ClassProfilePanoramaSetting),
-                new DefaultPanoramaSettingHandler<ClassProfilePanoramaSetting>(
+                typeof (StudentProfilePanoramaSetting),
+                new DefaultPanoramaSettingHandler<StudentProfilePanoramaSetting>(
                     PersonSetting.STUDENT_PROFILE_PANORAMA_SETTING)
             }
         };
@@ -45,11 +45,11 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             return _settingHandlers[settingType];
         }
         
-        private TSettings InternalGet<TSettings>(int? personId, int? classId) where TSettings : BaseSettingModel
+        private TSettings GetInternal<TSettings>(int? personId, int? classId) where TSettings : BaseSettingModel
         {
             return (GetSettingHandler(typeof(TSettings)).GetSettings(ServiceLocator, personId, classId)) as TSettings;
         }
-        private void InternalSet<TSettings>(TSettings settings, int? personId, int? classId) where TSettings : BaseSettingModel
+        private void SetInternal<TSettings>(TSettings settings, int? personId, int? classId) where TSettings : BaseSettingModel
         {
             GetSettingHandler(typeof(TSettings)).SetSettings(ServiceLocator, personId, classId, settings);
         }
@@ -57,11 +57,11 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
 
         public void Save<TSettings>(TSettings settings, int? classId) where TSettings: BaseSettingModel
         {
-            InternalSet(settings, Context.PersonId, classId);
+            SetInternal(settings, Context.PersonId, classId);
         }
         public TSettings Get<TSettings>(int? classId) where TSettings: BaseSettingModel
         {
-            return InternalGet<TSettings>(Context.PersonId, classId);
+            return GetInternal<TSettings>(Context.PersonId, classId);
         }
         public TSettings Restore<TSettings>(int? classId) where TSettings : BaseSettingModel
         {
@@ -72,11 +72,11 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         }
         public void SaveDefault<TDefaultSettings>(TDefaultSettings settings) where TDefaultSettings : BaseSettingModel
         {
-            InternalSet(settings, null, null);
+            SetInternal(settings, null, null);
         }
         public TDefaultSettings GetDefaultSettings<TDefaultSettings>() where TDefaultSettings : BaseSettingModel
         {
-            return InternalGet<TDefaultSettings>(null, null);
+            return GetInternal<TDefaultSettings>(null, null);
         }
     }
 
