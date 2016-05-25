@@ -43,6 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
         IList<Person> GetAnnouncementRecipientPersons(int announcementId);
         IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
+        IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
     }
 
 
@@ -53,6 +54,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public abstract IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
+        public abstract IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
+
         public abstract void DeleteAnnouncement(int announcementId);
         public abstract Announcement EditTitle(int announcementId, string title);
         public abstract void Submit(int announcementId);
@@ -300,6 +303,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             return dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
-        } 
+        }
+
+        protected DateTime CalculateStartDateForCopying(int classId)
+        {
+            var grs = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetailsByClassId(classId);
+            if (grs.Count == 0)
+                throw new ChalkableException("Target class for copying hasn't any grading periods");
+
+            return grs.Min(x => x.StartDate);
+        }
     }
 }

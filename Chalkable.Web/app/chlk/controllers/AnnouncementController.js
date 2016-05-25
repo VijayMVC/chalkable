@@ -16,6 +16,8 @@ REQUIRE('chlk.services.AnnouncementAttachmentService');
 REQUIRE('chlk.services.AttachmentService');
 REQUIRE('chlk.services.AnnouncementQnAService');
 REQUIRE('chlk.services.ApplicationService');
+REQUIRE('chlk.services.CalendarService');
+REQUIRE('chlk.services.SchoolYearService');
 
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.LessonPlanFormPage');
@@ -31,6 +33,7 @@ REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
 REQUIRE('chlk.activities.announcement.AddNewCategoryDialog');
 REQUIRE('chlk.activities.announcement.FileCabinetDialog');
 REQUIRE('chlk.activities.announcement.AttachFilesDialog');
+REQUIRE('chlk.activities.announcement.AnnouncementImportDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
@@ -40,6 +43,7 @@ REQUIRE('chlk.models.apps.AppsForAttachViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
 REQUIRE('chlk.models.announcement.FileAttachViewData');
 REQUIRE('chlk.models.people.UsersListSubmit');
+REQUIRE('chlk.models.announcement.post.AnnouncementImportPostViewData');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
@@ -85,6 +89,9 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.ClassService, 'classService',
 
         [ria.mvc.Inject],
+        chlk.services.CalendarService, 'calendarService',
+
+        [ria.mvc.Inject],
         chlk.services.PersonService, 'personService',
 
         [ria.mvc.Inject],
@@ -114,8 +121,48 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.ApplicationService, 'applicationService',
 
+        [ria.mvc.Inject],
+        chlk.services.SchoolYearService, 'schoolYearService',
+
         ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
+
+        [[chlk.models.id.ClassId]],
+        function showImportDialogAction(classId){
+            var res = this.WidgetStart('announcement', 'showImportDialog', [classId])
+                .then(function(data){
+
+                }, this);
+            return null;
+        },
+
+        [[String, chlk.models.id.ClassId]],
+        function showImportDialogWidgetAction(requestId, classId){
+            var res = this.schoolYearService.listOfSchoolYearClasses()
+                .then(function(classesByYears){
+                    return new chlk.models.announcement.AnnouncementImportViewData(classId, classesByYears, null, requestId);
+                });
+            return this.ShadeView(chlk.activities.announcement.AnnouncementImportDialog, res);
+        },
+
+        [[chlk.models.announcement.post.AnnouncementImportPostViewData]],
+        function importAction(model){
+            var res;
+            if(model.getSubmitType() == 'list')
+                res = this.calendarService.listByDateRange(null, null, model.getClassId())
+                    .then(function(announcements){
+                        return new chlk.models.announcement.AnnouncementImportViewData(model.getClassId(), null, announcements);
+                    });
+            else
+                res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                    .then(function(ids){
+                        this.WidgetComplete(model.getRequestId(), ids);
+                        this.BackgroundCloseView(chlk.activities.announcement.AnnouncementImportDialog);
+                        return ria.async.BREAK;
+                    }, this);
+
+            return this.UpdateView(chlk.activities.announcement.AnnouncementImportDialog, res, 'list-update');
+        },
 
         [chlk.controllers.Permissions([
             [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]

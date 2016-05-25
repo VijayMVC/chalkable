@@ -78,6 +78,22 @@ NAMESPACE('chlk.activities.feed', function () {
                     }.bind(this), 10);
             },
 
+            [ria.mvc.DomEventBind('change', '.all-tasks-check')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function allTasksSelect(node, event, selected_){
+                this.dom.find('.feed-item-check').forEach(function(element){
+                    element.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [node.is(':checked')]);
+                });
+
+                this.updateCopySubmitBtn_();
+            },
+
+            [ria.mvc.DomEventBind('change', '.feed-item-check')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function feedItemSelect(node, event, selected_){
+                this.updateCopySubmitBtn_();
+            },
+
             [ria.mvc.DomEventBind('click', '.gradingPeriodSelect + DIV li:last-child')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function dateRangeClick(node, event){
@@ -96,8 +112,60 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('click', '.feed-tools')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function feedToolsClick(node, event){
-                this.dom.find('.left-buttons-block').toggleClass('hidden');
+                this.dom.find('.copy-activities.active').trigger('click');
+                this.dom.find('.tools-buttons-block').toggleClass('hidden');
                 node.toggleClass('active');
+            },
+
+            [ria.mvc.DomEventBind('click', '.copy-activities')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function copyActivitiesClick(node, event){
+                this.dom.find('.feed-tools.active').trigger('click');
+                this.dom.find('.feed-container').toggleClass('copy-mode');
+                node.toggleClass('active');
+            },
+
+            [ria.mvc.DomEventBind('click', '.cancel-copy')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelCopyClick(node, event){
+                this.dom.find('.copy-activities').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('click', '.copy-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function copySubmit(node, event){
+                var announcements = [];
+                this.dom.find('.feed-item-check:checked').forEach(function(node){
+                    announcements.push({
+                        announcementId: node.getData('id'),
+                        announcementType: node.getData('type')
+                    });
+                });
+
+                var value = announcements.length ? JSON.stringify(announcements) : '';
+                this.dom.find('.announcements-to-copy').setValue(value);
+            },
+
+            [ria.mvc.PartialUpdateRule(null, 'announcements-copy')],
+            VOID, function copyUpdate(tpl, model, msg_) {
+                this.dom.find('.copy-activities').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('change', '.copy-to-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function classSelect(node, event, selected_){
+                this.updateCopySubmitBtn_();
+            },
+
+            function updateCopySubmitBtn_(){
+                var btn = this.dom.find('.copy-btn');
+                if(this.dom.find('.feed-item-check:checked').count() > 0 && this.dom.find('[name="toClassId"]').getValue()){
+                    btn.removeAttr('disabled');
+                    btn.setProp('disabled', false);
+                }else{
+                    btn.setAttr('disabled', 'disabled');
+                    btn.setProp('disabled', true);
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.clear-filters')],

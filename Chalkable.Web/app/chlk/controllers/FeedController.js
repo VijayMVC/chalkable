@@ -11,6 +11,7 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.ReportingService');
+REQUIRE('chlk.services.SchoolYearService');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.feed.Feed');
 REQUIRE('chlk.models.id.ClassId');
@@ -31,6 +32,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.FeedService, 'feedService',
+
+        [ria.mvc.Inject],
+        chlk.services.SchoolYearService, 'schoolYearService',
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
@@ -164,6 +168,11 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
+            if(model.getSubmitType() == 'copy'){
+                var res = this.announcementService.copy(this.getCurrentClassId(), model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate());
+                return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
+            }
+
             if(model.getSubmitType() == 'markDone')
                 return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId(), model.getAnnType())
                     .then(function(isMarked){
@@ -217,11 +226,12 @@ NAMESPACE('chlk.controllers', function (){
         function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_){
             return ria.async.wait([
                 this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_),
-                this.gradingPeriodService.getList()
+                this.gradingPeriodService.getList(),
+                this.schoolYearService.listOfSchoolYearClasses()
             ])
                 .attach(this.validateResponse_())
                 .then(function(result){
-                    var model = result[0], gradingPeriods = result[1];
+                    var model = result[0], gradingPeriods = result[1], classesByYears = result[2];
 
                     if(isProfile_){
                         model.setInProfile(true);
@@ -241,6 +251,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                     model.setGradingPeriods(gradingPeriods);
+                    model.setClassesByYears(classesByYears);
                     importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);
 
                     return model;

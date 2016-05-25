@@ -79,7 +79,9 @@ namespace Chalkable.Data.School.Model.Announcements
                 if (adminAnnouncementData != null)
                     adminId = adminAnnouncementData.AdminRef;
             }
+            get { return announcementData;}
         }
+
         public LessonPlan LessonPlanData => lessonPlanData;
         public ClassAnnouncement ClassAnnouncementData => classAnnouncementData;
         public AdminAnnouncement AdminAnnouncementData => adminAnnouncementData;
