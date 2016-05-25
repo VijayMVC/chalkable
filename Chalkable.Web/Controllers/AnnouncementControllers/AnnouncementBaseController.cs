@@ -85,8 +85,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             if (annView.ClassAnnouncementData != null && annView.ClassId.HasValue)
             {
                 var options = SchoolLocator.ClassroomOptionService.GetClassOption(annView.ClassId.Value);
-                annView.ExtraCreditEnabled = options != null && options.IsAveragingMethodPoints &&
-                                             (ann.ClassAnnouncementData.MaxScore == 0 || !ann.ClassAnnouncementData.MaxScore.HasValue);
+                annView.IsAbleUseExtraCredit = options != null && options.IsAveragingMethodPoints;
             }
 
             return annView;

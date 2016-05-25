@@ -22,7 +22,11 @@ namespace Chalkable.BusinessLogic.Security
         {
             return BaseSecurity.IsSysAdmin(context) || context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id;
         }
-        
+
+        public static bool HasAccessToBannedApps(UserContext context)
+        {
+            return BaseSecurity.IsDistrictAdmin(context) || context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id;
+        }
 
         public static bool HasAssessmentEnabled(UserContext context)
         {

@@ -300,7 +300,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult MyApps(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? start, int? count)
         {
-            var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
+            var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter, start ?? 0, count ?? DEFAULT_PAGE_SIZE, withBanned: true);
 
             if (!BaseSecurity.IsDistrictAdmin(Context))
                 return Json(apps.Transform(BaseApplicationViewData.Create));

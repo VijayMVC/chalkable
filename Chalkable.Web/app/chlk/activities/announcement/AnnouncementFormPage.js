@@ -345,6 +345,27 @@ NAMESPACE('chlk.activities.announcement', function () {
                 node.removeClass('should-check');
             },
 
+
+            [ria.mvc.DomEventBind('keyup', '.max-score-container input[name="maxscore"]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function maxScoreKeyUp(node, event){
+                var value = node.getValue() || '';
+                if(value.length == 0 || !isNaN(parseFloat(value))){
+                    var checkBox = node.parent('.right-block').find('.advanced-options-container .extra-credit.checkbox');
+                    var isAbleUseExtraCredit = checkBox.getData('isableuseextracredit');
+
+                    if(!isAbleUseExtraCredit || value.length == 0 || parseFloat(value) > 0) {
+                        if (!checkBox.hasAttr('disabled')) {
+                            checkBox.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), false);
+                            checkBox.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), true);
+                        }
+                    }
+                    else if(checkBox.hasAttr('disabled')){
+                        checkBox.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), false);
+                    }
+                }
+            },
+
             [ria.mvc.DomEventBind('click', '.submit-announcement.disabled button')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function disabledSubmitClick(node, event){
