@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE spCopyLessonPlansToClass
+﻿CREATE PROCEDURE [dbo].[spCopyLessonPlansToClass]
 	@created datetime2,
 	@lessonPlanIds TInt32 Readonly,
 	@toClassId int,
@@ -8,7 +8,22 @@ As
 Declare @toSchoolYearId int = (Select Top 1 SchoolYearRef From Class Where Id = @toClassId),
 		@minAnnDate datetime2;
 
+Declare @classDays table([day] datetime2)
+
+Insert Into @classDays
+Select distinct [Day] 
+From [Date]
+Where SchoolYearRef = @toSchoolYearId and IsSchoolDay = 1 
+	  And exists(Select * From ClassPeriod Where ClassPeriod.DayTypeRef = [Date].DayTypeRef And ClassPeriod.ClassRef = @toClassId)
+	  And [Day] >= @startDate
+Order by [Day]
 ---------------------Creating little of LPs to be copied--------------------
+
+If ((Select count(*) From @classDays) = 0)
+Begin
+	Insert Into @classDays
+	values (@startDate)  
+End
 
 Declare @toCopy table 
 (
@@ -25,9 +40,18 @@ Declare @toCopy table
 Insert Into @toCopy
 	Select 
 		Id, Content, StartDate, EndDate, VisibleForStudent, Title, SchoolYearRef,
-		(Select Sum(Cast(IsSchoolDay As int)) From [Date]					   --|Need for correct
-		 Where [Day] Between vwLessonPlan.StartDate and vwLessonPlan.EndDate   --|data range in new
-			   and [Date].SchoolYearRef = @toSchoolYearId) As TotalSchoolDays  --|LPs
+		(
+		  Select Count(*) 
+		  From [Date]					   
+		  Where [Day] Between vwLessonPlan.StartDate and vwLessonPlan.EndDate 
+			    and exists(
+							Select *
+							From ClassPeriod 
+							Where ClassRef = vwLessonPlan.ClassRef and ClassPeriod.DayTypeRef  = [Date].DayTypeRef
+						  )
+				and IsSchoolDay = 1
+			    and [Date].SchoolYearRef = @toSchoolYearId
+		) As TotalSchoolDays 
 	From 
 		vwLessonPlan 
 	Where 
@@ -40,16 +64,19 @@ Set @minAnnDate = (Select Min(StartDate) From @toCopy)
 Update @toCopy
 Set StartDate = DateAdd(d, DateDiff(d, @minAnnDate, StartDate), @startDate)
 
-Update @toCopy
-Set EndDate = IsNull((Select Top(TotalSchoolDays) Max([Day]) From [Date] 
-					  Where SchoolYearRef = @toSchoolYearId And [Day] >= StartDate And IsSchoolDay = 1
-					  Group By [Day] Order By [Day] ), StartDate)
+Update lp
+Set lp.EndDate = IsNull((Select Max(x.[day]) 
+					    From (
+								Select top(IIF(lp.TotalSchoolDays = 0, 1, lp.TotalSchoolDays)) cd.[day] as [day] 
+								From @classDays cd 
+								Where cd.[day] >= lp.StartDate
+						     ) x
+					 ), lp.StartDate)
+From @toCopy lp
 
 --Getting last school day of School Year
 Declare @schoolYearEndDate datetime2;
-Set @schoolYearEndDate = (Select Max([Day]) 
-						  From [Date] join SchoolYear On [Date].SchoolYearRef = SchoolYear.Id
-						  Where [Date].SchoolYearRef = @toSchoolYearId And [Date].[Day]>=SchoolYear.EndDate)
+Set @schoolYearEndDate = (Select Max([day]) From @classDays)
 
 --Lps where EndDate is out of School Year date range
 Declare @newLPsOutOfSchoolYear TInt32;
@@ -59,12 +86,18 @@ Insert Into @newLPsOutOfSchoolYear
 --Fixing End and Start date for announcement
 Update @toCopy
 Set EndDate = @schoolYearEndDate
-Where Id in(Select * From @newLPsOutOfSchoolYear)
+Where Id in (Select * From @newLPsOutOfSchoolYear)
 
 Update @toCopy
-Set StartDate = IsNull((Select Top(TotalSchoolDays) Min([Day]) From [Date]
-				 Where SchoolYearRef = @toSchoolYearId And [Day] <= EndDate And IsSchoolDay = 1
-				 Group By [Day] Order By [Day] desc), EndDate)
+Set StartDate =  IsNull((Select Min(x.[day]) 
+						From (
+								Select top(IIF(TotalSchoolDays = 0, 1, TotalSchoolDays)) [day] 
+								From @classDays cd 
+								Where cd.[day] <= EndDate 
+								order by [day] desc
+							  ) x
+						), EndDate)
+
 Where Id in(Select * From @newLPsOutOfSchoolYear)
 
 --------------Needed because LessonPlan.Id is FK on Announcement.Id----------------
@@ -109,3 +142,4 @@ Select
 	[FromAnnouncementId],
 	[ToAnnouncementId]
 From @newAnnIds
+GO
