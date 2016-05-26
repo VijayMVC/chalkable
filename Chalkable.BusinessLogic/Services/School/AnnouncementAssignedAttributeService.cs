@@ -350,6 +350,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 .Where(x => !x.SisActivityAssignedAttributeId.HasValue).ToList();
 
             var attributes = new List<AnnouncementAssignedAttribute>();
+            var uploadToCrocodoc = new List<AttachmentContentInfo>();
 
             foreach (var pair in fromToAnnouncementIds)
             {
@@ -370,9 +371,13 @@ namespace Chalkable.BusinessLogic.Services.School
                         var attContent = serviceLocator.AttachementService.GetAttachmentContent(attribute.Attachment);
                         if (attContent.Content != null)
                         {
-                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment,
-                                unitOfWork, serviceLocator, connectorLocator);
-                            attribute.AttachmentRef = att.Id;
+                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content,
+                                    attContent.Attachment.IsStiAttachment,
+                                    unitOfWork, serviceLocator, connectorLocator, false);
+
+                            uploadToCrocodoc.Add(attContent);
+
+                            attribute.AttachmentRef = att?.Id;
                             attribute.Attachment = att;
                         }
                     }
@@ -380,6 +385,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
             }
 
+            AttachmentService.UploadToCrocodoc(uploadToCrocodoc, serviceLocator, unitOfWork);
+            
             da.Insert(attributes);
             return da.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Value).ToList(), attributes.Count);
         }

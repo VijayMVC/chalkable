@@ -183,6 +183,7 @@
     <Compile Include="Exceptions\StudyCenterDisabledException.cs" />
     <Compile Include="Exceptions\UnassignedUserException.cs" />
     <Compile Include="Exceptions\UnknownRoleException.cs" />
+    <Compile Include="Exceptions\UploadToCrocodocFailedException.cs" />
     <Compile Include="GlobalCache.cs" />
     <Compile Include="ImageUtils.cs" />
     <Compile Include="ListTools.cs" />
