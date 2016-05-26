@@ -161,11 +161,6 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function getCurrentClassId(){
-                /*if(classId_ && classId_.valueOf()){
-                    this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CLASSES_BAR_ITEM_ID, classId_);
-                    return classId_
-                }*/
-
                 return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_CLASSES_BAR_ITEM_ID, null);
             },
 

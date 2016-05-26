@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.profile', function () {
     /** @class chlk.models.profile.StandardizedTestItemViewData*/
     CLASS(
         UNSAFE, 'StandardizedTestItemViewData', [
-            chlk.models.id.StandardizedTestScoreTypeId, 'id',
+            chlk.models.id.StandardizedTestItemId, 'id',
             String, 'name',
             chlk.models.id.StandardizedTestId, 'standardizedTestId',
 

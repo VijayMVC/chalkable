@@ -45,6 +45,7 @@ NAMESPACE('chlk.templates.profile', function(){
                     //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))
                     links.push(this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, !this.canViewGrading_(teacherIds), '7.1.6.19573'));
                     links.push(this.buildActionLinkModelForClass('explorer', 'Explorer', pressedActionName, classId_, !this.canViewExplorer_(teacherIds)));
+                    links.push(this.buildActionLinkModelForClass('panorama', 'Panorama', pressedActionName, classId_, !this.canViewPanorama_(teacherIds)));
                 }
                 return links;
             },
@@ -102,6 +103,13 @@ NAMESPACE('chlk.templates.profile', function(){
                     || (this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM)
                     && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
                 return canViewExplorer && this.isStudyCenterEnabled();
+            },
+
+            [[ArrayOf(chlk.models.id.SchoolPersonId)]],
+            Boolean, function canViewPanorama_(teacherIds){
+                var currentUserId = this.getCurrentUser().getId();
+                var canViewPanorama = this.isAdmin() || teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0;
+                return canViewPanorama && this.isStudyCenterEnabled();
             },
 
             [[String, String, String, chlk.models.id.ClassId]],

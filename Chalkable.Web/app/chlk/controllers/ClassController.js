@@ -5,6 +5,7 @@ REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineTypeService');
+REQUIRE('chlk.services.SchoolYearService');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassScheduleViewData');
@@ -16,6 +17,7 @@ REQUIRE('chlk.activities.classes.ClassProfileAttendanceSeatingChartPage');
 REQUIRE('chlk.activities.classes.ClassProfileAppsPage');
 REQUIRE('chlk.activities.classes.ClassExplorerPage');
 REQUIRE('chlk.activities.classes.ClassProfileDisciplinePage');
+REQUIRE('chlk.activities.classes.ClassPanoramaPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -43,6 +45,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.GradingPeriodService, 'gradingPeriodService',
+
+            [ria.mvc.Inject],
+            chlk.services.SchoolYearService, 'schoolYearService',
 
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
@@ -316,6 +321,37 @@ NAMESPACE('chlk.controllers', function (){
                         return data;
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassExplorerPage, res);
+            },
+
+            [[chlk.models.id.ClassId]],
+            function panoramaAction(classId){
+                var res = ria.async.wait([
+                    this.classService.getPanorama(classId),
+                    this.schoolYearService.list()
+                ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var model = result[0];
+                        model.setSchoolYears(result[1]);
+                        return new chlk.models.classes.ClassProfileSummaryViewData(
+                            this.getCurrentRole(), model, this.getUserClaims_(),
+                            this.isAssignedToClass_(classId)
+                        );
+                    }, this);
+                return this.PushView(chlk.activities.classes.ClassPanoramaPage, res);
+            },
+
+            function panoramaSubmitAction(data){
+                var filterValues = JSON.parse(data.filterValues);
+                console.info(filterValues);
+                var res, isSave = data.submitType == 'save';
+
+                if(isSave)
+                    res = this.classService.savePanoramaSettings(data.classId, filterValues);
+                else
+                    res = ria.async.DeferredData(null);
+
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, 'save-filters')
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],

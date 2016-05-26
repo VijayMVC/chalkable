@@ -1,0 +1,46 @@
+.panorama-filter-ctn
+  position: relative
+
+  .with-line
+    border-bottom: 1px solid #c8c7c3
+    padding-bottom: 15px
+    margin-bottom: 15px
+
+  .filters-block
+    border-bottom: 1px solid #e7e6e2
+    padding-bottom: 14px
+
+  .filter-block
+    position: relative
+    margin-bottom: 30px
+
+    .v-line
+      position: absolute
+      height: 31px
+      left: 18px
+      top: 30px
+      width: 0
+
+    &:last-child
+      .v-line
+        border-left: 1px solid #c8c7c3
+
+    SELECT
+      width: 190px
+
+      &+DIV
+        margin-right: 15px
+
+  .add-filter-btn
+    +background(linear-gradient(top, #fff, #f2f2ee))
+    border: 1px solid #c9c8c4
+    display: inline-block
+    font-size: 32px
+    width: 34px
+    text-align: center
+    line-height: 32px
+    border-radius: 17px
+    height: 34px
+    vertical-align: middle
+    margin-right: 12px
+    cursor: pointer

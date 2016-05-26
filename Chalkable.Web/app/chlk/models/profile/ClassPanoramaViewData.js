@@ -2,6 +2,8 @@ REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.id.SchoolYearId');
 REQUIRE('chlk.models.profile.StandardizedTestViewData');
 REQUIRE('chlk.models.profile.ClassDistributionSectionViewData');
+REQUIRE('chlk.models.profile.PanoramaSettingsViewData');
+REQUIRE('chlk.models.schoolYear.Year');
 
 NAMESPACE('chlk.models.profile', function () {
     "use strict";
@@ -14,10 +16,12 @@ NAMESPACE('chlk.models.profile', function () {
             chlk.models.profile.PanoramaSettingsViewData, 'filterSettings',
             ArrayOf(chlk.models.profile.StandardizedTestViewData), 'standardizedTests',
             chlk.models.profile.ClassDistributionSectionViewData, 'classDistributionSection',
+            ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
 
-            VOID, function deserialize(raw) {
-                this.schoolYearIds = SJX.fromArrayOfValues(raw.schoolyearids, chlk.models.id.SchoolYearId);
-                this.standardizedTestFilters = SJX.fromArrayOfDeserializables(raw.standardizedtestfilters, chlk.models.profile.StandardizedTestViewData);
+            OVERRIDE, VOID, function deserialize(raw) {
+                BASE(raw);
+                this.filterSettings = SJX.fromDeserializable(raw.filtersettings, chlk.models.profile.PanoramaSettingsViewData);
+                this.standardizedTests = SJX.fromArrayOfDeserializables(raw.standardizedtests, chlk.models.profile.StandardizedTestViewData);
                 this.classDistributionSection = SJX.fromDeserializable(raw.classdistributionsection, chlk.models.profile.ClassDistributionSectionViewData)
             }
         ]);
