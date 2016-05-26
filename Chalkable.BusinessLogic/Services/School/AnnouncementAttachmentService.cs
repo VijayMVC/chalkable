@@ -78,13 +78,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 foreach (var annAttachment in announcementAttachments)
                 {
                     var attachmentToCopy = annAttachment.Attachment;
-                    var content = serviceLocator.AttachementService.GetAttachmentContent(attachmentToCopy);
-                    uploadToCrocodoc.Add(content);
-
-                    if (content == null)
+                    var attContent = serviceLocator.AttachementService.GetAttachmentContent(attachmentToCopy);
+                    if (attContent?.Content == null)
                         continue;
 
-                    var newAttachment = AttachmentService.Upload(attachmentToCopy.Name, content.Content, attachmentToCopy.IsStiAttachment,
+                    uploadToCrocodoc.Add(attContent);
+                   
+                    var newAttachment = AttachmentService.Upload(attachmentToCopy.Name, attContent.Content, attachmentToCopy.IsStiAttachment,
                         unitOfWork, serviceLocator, connectorLocator, false);
                     var newAnnouncementAtt = new AnnouncementAttachment
                     {
@@ -99,13 +99,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
             }
 
-            var uploadededToCroc = AttachmentService.UploadToCrocodoc(uploadToCrocodoc, serviceLocator);
-            foreach (var item in newAnnAtts)
-            {
-                var uuid = uploadededToCroc.FirstOrDefault(x => x.Attachment.Id == item.Id)?.Attachment?.Uuid;
-                item.Attachment.Uuid = uuid;
-            }
-
+            AttachmentService.UploadToCrocodoc(uploadToCrocodoc, serviceLocator, unitOfWork);
+            
             annAttDataAccess.Insert(newAnnAtts);
             
             return annAttDataAccess.GetByAnnouncementIds(fromToAnnouncementIds.Select(x => x.Value).ToList(), attachmentsOwners);

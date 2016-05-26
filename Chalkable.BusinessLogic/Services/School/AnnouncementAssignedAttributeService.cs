@@ -385,14 +385,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
             }
 
-            var uploadedToCroc = AttachmentService.UploadToCrocodoc(uploadToCrocodoc, serviceLocator);
-
-            foreach (var item in attributes)
-            {
-                var uuid = uploadedToCroc.FirstOrDefault(x => x.Attachment.Id == item.Id)?.Attachment?.Uuid;
-                item.Attachment.Uuid = uuid;
-            }
-
+            AttachmentService.UploadToCrocodoc(uploadToCrocodoc, serviceLocator, unitOfWork);
+            
             da.Insert(attributes);
             return da.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Value).ToList(), attributes.Count);
         }

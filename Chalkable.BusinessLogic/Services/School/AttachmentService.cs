@@ -95,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         private const int UPLOAD_PACKET_SIZE = 3;
-        internal static IList<AttachmentContentInfo> UploadToCrocodoc(IList<AttachmentContentInfo> attachments, IServiceLocatorSchool serviceLocator)
+        internal static IList<AttachmentContentInfo> UploadToCrocodoc(IList<AttachmentContentInfo> attachments, IServiceLocatorSchool serviceLocator, UnitOfWork unitOfWork)
         {
             if (attachments == null || attachments.Count == 0)
                 return new List<AttachmentContentInfo>();
@@ -109,6 +109,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 serviceLocator.CrocodocService.WaitForDocuments(filtered.Skip(i).Take(UPLOAD_PACKET_SIZE).Select(x => x.Attachment.Uuid).ToList());
             }
+
+            var da = new AttachmentDataAccess(unitOfWork);
+            da.Update(filtered.Select(x => x.Attachment).ToList());
 
             return filtered;
         }
