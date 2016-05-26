@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Chalkable.Common;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -46,25 +47,21 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!IsAvailableSettings(keys))
                 throw new ArgumentException("Not recognized settings");
 
-            var ps = GetSettingsForPerson(keys, personId, schoolYearId, classId);
-            var toSet = ps.Select(x => new PersonSetting
+            using (var uow = Update())
             {
-                PersonRef = personId,
-                SchoolYearRef = schoolYearId,
-                Key = x.Key,
-                Value = x.Value
-            }).ToList();
-
-            foreach (var set in toSet)
-            {
-                set.Value = (settings[set.Key] as DateTime?)?
-                    .ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)
-                    ?? settings[set.Key]?.ToString();
+                var da = new PersonSettingDataAccess(uow);
+                var ps = da.GetPersonSettings(keys, personId, schoolYearId, classId);
+                foreach (var set in ps)
+                {
+                    set.Value = (settings[set.Key] as DateTime?)?
+                        .ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)
+                        ?? settings[set.Key]?.ToString();
+                }
+                da.Update(ps);
+                settings = settings.Where(s => ps.All(x => x.Key != s.Key)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                da.AddPersonSettings(settings, personId, schoolYearId, classId);
+                uow.Commit();
             }
-            DoUpdate(u => new PersonSettingDataAccess(u).Update(toSet));
-
-            settings = settings.Where(s => ps.All(x => x.Key != s.Key)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            DoUpdate(u => new PersonSettingDataAccess(u).AddPersonSettings(settings, personId, schoolYearId, classId));
         }
 
         public IDictionary<string, string> GetSettingsForPerson(int personId, int schoolYearId)
@@ -78,7 +75,8 @@ namespace Chalkable.BusinessLogic.Services.School
         }
         public IDictionary<string, string> GetSettingsForPerson(IList<string> keys, int? personId = null, int? schoolYearId = null, int? classId = null)
         {
-            return DoRead(u => new PersonSettingDataAccess(u).GetPersonSettings(keys, personId, schoolYearId, classId));
+            return DoRead(u => new PersonSettingDataAccess(u).GetPersonSettings(keys, personId, schoolYearId, classId).ToDictionary(x=>x.Key, x=>x.Value));
         }
+        
     }
 }
