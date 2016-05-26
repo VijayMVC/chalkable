@@ -370,9 +370,10 @@ namespace Chalkable.BusinessLogic.Services.School
                         var attContent = serviceLocator.AttachementService.GetAttachmentContent(attribute.Attachment);
                         if (attContent.Content != null)
                         {
-                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment,
-                                unitOfWork, serviceLocator, connectorLocator);
-                            attribute.AttachmentRef = att.Id;
+                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content,
+                                    attContent.Attachment.IsStiAttachment,
+                                    unitOfWork, serviceLocator, connectorLocator);
+                            attribute.AttachmentRef = att?.Id;
                             attribute.Attachment = att;
                         }
                     }

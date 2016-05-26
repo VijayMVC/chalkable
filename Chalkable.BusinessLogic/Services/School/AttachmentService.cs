@@ -55,10 +55,24 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     Name = name,
                     PersonRef = context.PersonId.Value,
-                    Uuid = UploadToCrocodoc(name, content, serviceLocator),
+                    Uuid = null,
                     UploadedDate = context.NowSchoolTime,
                     LastAttachedDate = context.NowSchoolTime
                 };
+
+            try
+            {
+                res.Uuid = UploadToCrocodoc(res.Name, content, serviceLocator);
+            }
+            catch (UploadToCrocodocFailedException)
+            {
+                /*Ignore*/
+            }
+            finally
+            {
+                res.Uuid = null;
+            }
+
             var da = new AttachmentDataAccess(unitOfWork);
             if (uploadToSti)
             {
