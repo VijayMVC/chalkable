@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
     {
         public virtual TSettings GetSettings(IServiceLocatorSchool serviceLocator, int? personId, int? classId)
         {
-            var settings = serviceLocator.PersonSettingService.GetSettingsForPerson(new List<string> { SettigKey }, personId, classId);
+            var settings = serviceLocator.PersonSettingService.GetSettingsForPerson(new List<string> { SettigKey }, personId, null, classId);
             return settings.ContainsKey(SettigKey)
                 ? JsonConvert.DeserializeObject<TSettings>(settings[SettigKey])
                 : GetDefault(serviceLocator, personId, classId);
