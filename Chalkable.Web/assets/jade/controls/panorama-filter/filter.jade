@@ -4,7 +4,7 @@ mixin PanoramaFilter(years, standardizedTests, values)
         +Hidden('filterValues', '').filters-value
         .with-line
             -var yearsIds = values ? values.getSchoolYearIds() : []
-            +Select('SchoolYearIds')(multiple="true").school-years-select.submit-after-change
+            +Select('SchoolYearIds')(multiple="true", data-placeholder="Select School Year").school-years-select.submit-after-change.external-items
                 each year in years
                     +Option(year.getId().valueOf(), year.getName(), yearsIds.filter(function(item){return item.getId() == year.getId()}).length > 0)
 

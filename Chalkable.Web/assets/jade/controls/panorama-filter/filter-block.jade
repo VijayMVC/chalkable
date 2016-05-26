@@ -2,7 +2,7 @@
 -var testId = self.getStandardizedTestId()
 
 .filter-block
-    +Select('filterType')(data-placeholder = 'Standardized Test').filter-type-select.filter-select
+    +Select('filterType')(data-placeholder = 'Select Standardized Test').filter-type-select.filter-select
         +Option('', '')
         each item  in standardizedTests
             +Option(item.getId().valueOf(), item.getDisplayName(), item.getId() == testId)

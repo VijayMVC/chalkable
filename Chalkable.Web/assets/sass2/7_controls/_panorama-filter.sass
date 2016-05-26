@@ -1,9 +1,42 @@
 .panorama-filter-ctn
   position: relative
 
+  .school-years-select
+    width: 70%
+
+  SELECT.external-items+DIV.chosen-container-multi
+    left: 230px
+
+    &.chosen-with-drop
+      .chosen-drop
+        left: -230px
+
+    .chosen-drop
+      width: 220px
+
+    .chosen-choices
+      .search-field
+        INPUT
+          width: 220px !important
+          left: -230px
+
+  .chosen-container
+    .chosen-single
+      height: 41px
+      line-height: 41px
+
+      div b
+        background-position: 0 10px
+
+    &.chosen-container-active
+      .chosen-single
+        div b
+          background-position: -18px 10px
+
   .with-line
     border-bottom: 1px solid #c8c7c3
     padding-bottom: 15px
+    padding-top: 10px
     margin-bottom: 15px
 
   .filters-block
@@ -18,7 +51,7 @@
       position: absolute
       height: 31px
       left: 18px
-      top: 30px
+      top: 41px
       width: 0
 
     &:last-child
@@ -27,6 +60,9 @@
 
     SELECT
       width: 190px
+
+      &.filter-type-select
+        width: 220px
 
       &+DIV
         margin-right: 15px
