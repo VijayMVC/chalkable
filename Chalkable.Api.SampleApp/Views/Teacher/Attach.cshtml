@@ -1,0 +1,26 @@
+﻿@using Newtonsoft.Json
+@model Chalkable.Api.SampleApp.Models.DefaultJsonViewData
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section headscripts
+{
+    <script type="text/javascript">
+        CHLK_API.setReady(true);
+    </script>   
+}
+
+<h2>App is Ready to Attach</h2>
+<div>
+    <div>
+        <h3>Person Data</h3><br />
+        <pre> @ViewBag.CurrentUser.JsonData</pre><br />
+    </div>
+    <div>
+        <h3>Announcement Info</h3><br/>
+        <pre> @Model.JsonData</pre><br/>
+    </div>
+</div> 
