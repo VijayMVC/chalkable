@@ -6,4 +6,5 @@
     .summary-view
         +ActionForm('class', 'panoramaSubmit').class-panorama-form
             +Hidden('classId', clazz.getId().valueOf())
-            +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings())
+            +CloseOpen('Filter', true)
+                +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings())

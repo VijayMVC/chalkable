@@ -1,5 +1,5 @@
-mixin CloseOpen(title)
-    -attributes = self.processAttrs(attributes)
+mixin CloseOpen(title, closed)
+    -attributes = self.processAttrs(attributes, closed)
     .close-open-control(attributes).co-finished.co-opened.finished
         h3=title
             .co-open=Msg.Open
