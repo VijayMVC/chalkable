@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+  <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v14.0\WebApplications\Microsoft.WebApplication.targets" />
+	<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v14.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>
+
+	<PropertyGroup>
+        <StackTraceEnabled>False</StackTraceEnabled>
+  </PropertyGroup>
+	
+	<Target Name="Staging">				
+	</Target>  
+	
+	<Target Name="Production">		
+		<Message Text="Using cspack create a package for deployment..."/>		
+		<MSBuild Projects="Chalkable.Azure\Chalkable.Azure.ccproj" Targets="publish" Properties="configuration=release" />
+	</Target>      	
+	
+	<Target Name="Qa">		
+	</Target>      	
+</Project>

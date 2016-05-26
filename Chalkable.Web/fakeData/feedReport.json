@@ -1,0 +1,12 @@
+{"data":{
+  "minstart":"2015-10-20",
+  "maxend":"2015-11-21",
+  "lessonplanonly":true,
+  "includedetails":true,
+  "includeattachments":true,
+  "includehiddenactivities":false,
+  "includehiddenattributes":true,
+  "editablelpoption":false,
+  "classid":123,
+  "announcementtype": 3
+},"success":true}
