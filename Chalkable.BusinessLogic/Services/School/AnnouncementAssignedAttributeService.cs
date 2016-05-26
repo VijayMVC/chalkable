@@ -328,12 +328,14 @@ namespace Chalkable.BusinessLogic.Services.School
                     if (attributeForCopying.Attachment != null)
                     {
                         var attContent = serviceLocator.AttachementService.GetAttachmentContent(attributeForCopying.Attachment);
-                        var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
-                        attribute.AttachmentRef = att.Id;
-                        attribute.Attachment = att;
+                        if (attContent.Content != null)
+                        {
+                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
+                            attribute.AttachmentRef = att.Id;
+                            attribute.Attachment = att;
+                        }
                     }
                     attributes.Add(attribute);
-
                 }
             }
             da.Insert(attributes);
@@ -366,10 +368,13 @@ namespace Chalkable.BusinessLogic.Services.School
                     if (attribute.Attachment != null)
                     {
                         var attContent = serviceLocator.AttachementService.GetAttachmentContent(attribute.Attachment);
-                        var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, 
-                            unitOfWork, serviceLocator, connectorLocator);
-                        attribute.AttachmentRef = att.Id;
-                        attribute.Attachment = att;
+                        if (attContent.Content != null)
+                        {
+                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment,
+                                unitOfWork, serviceLocator, connectorLocator);
+                            attribute.AttachmentRef = att.Id;
+                            attribute.Attachment = att;
+                        }
                     }
                     attributes.Add(newAttribute);
                 }

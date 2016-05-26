@@ -43,16 +43,20 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var attForCopy = annAttForCopy.Attachment;
                     var content = serviceLocator.AttachementService.GetAttachmentContent(attForCopy).Content;
-                    var att = AttachmentService.Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
-                    var annAtt = new AnnouncementAttachment
+                    if (content != null)
                     {
-                        AnnouncementRef = toAnnouncemenId,
-                        AttachedDate = annAttForCopy.AttachedDate,
-                        Order = annAttForCopy.Order,
-                        AttachmentRef = att.Id,
-                        Attachment = att
-                    };
-                    annAtts.Add(annAtt);
+                        var att = AttachmentService.Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
+                        var annAtt = new AnnouncementAttachment
+                        {
+                            AnnouncementRef = toAnnouncemenId,
+                            AttachedDate = annAttForCopy.AttachedDate,
+                            Order = annAttForCopy.Order,
+                            AttachmentRef = att.Id,
+                            Attachment = att
+                        };
+                        annAtts.Add(annAtt);
+                    }
+
                 }
             }
             da.Insert(annAtts);
@@ -75,18 +79,21 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var attachmentToCopy = annAttachment.Attachment;
                     var content = serviceLocator.AttachementService.GetAttachmentContent(attachmentToCopy).Content;
-                    var newAttachment = AttachmentService.Upload(attachmentToCopy.Name, content, attachmentToCopy.IsStiAttachment,
-                        unitOfWork, serviceLocator, connectorLocator);
-                    var newAnnouncementAtt = new AnnouncementAttachment
+                    if (content != null)
                     {
-                        AnnouncementRef = pair.Value,
-                        AttachedDate = annAttachment.AttachedDate,
-                        Order = annAttachment.Order,
-                        AttachmentRef = newAttachment.Id,
-                        Attachment = newAttachment
-                    };
+                        var newAttachment = AttachmentService.Upload(attachmentToCopy.Name, content, attachmentToCopy.IsStiAttachment,
+                                unitOfWork, serviceLocator, connectorLocator);
+                        var newAnnouncementAtt = new AnnouncementAttachment
+                        {
+                            AnnouncementRef = pair.Value,
+                            AttachedDate = annAttachment.AttachedDate,
+                            Order = annAttachment.Order,
+                            AttachmentRef = newAttachment.Id,
+                            Attachment = newAttachment
+                        };
 
-                    newAnnAtts.Add(newAnnouncementAtt);
+                        newAnnAtts.Add(newAnnouncementAtt);
+                    }
                 }
             }
 
