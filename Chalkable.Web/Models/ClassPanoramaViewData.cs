@@ -37,7 +37,7 @@ namespace Chalkable.Web.Models
     {
         public ShortStandardizedTestViewData StandardizedTest { get; set; }
         public StandardizedTestComponentViewData Component { get; set; }
-        public StandardizedTestScoreType ScoreType { get; set; }
+        public StandardizedTestScoreTypeViewData ScoreType { get; set; }
         public IList<DailyStatsViewData> DailyStats { get; set; } 
     }
 
