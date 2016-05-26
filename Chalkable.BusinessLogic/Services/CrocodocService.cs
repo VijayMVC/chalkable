@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services
         public DocumentUploadResponse UploadDocument(string fileName, byte[] fileContent)
         {
             if(!IsDocument(fileName))
-                throw new UploadToCrocodocFailedException("Current file is not a document");
+                throw new ChalkableException("Current file is not a document");
 
             var res = UploadFileToCrocodoc(fileName, fileContent);
             if (res == null)
