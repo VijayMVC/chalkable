@@ -91,8 +91,6 @@ NAMESPACE('chlk.models.notification', function () {
                     case notificationTypeEnum.QUESTION: return new this.createActionModel_('announcement', 'view', [this.getAnnouncementId().valueOf()]);
 
                     case notificationTypeEnum.ITEM_TO_GRADE: return new this.createActionModel_('grades', 'view', [this.getAnnouncementId().valueOf()]);
-                    case notificationTypeEnum.APP_BUDGET_BALANCE: return new this.createActionModel_('appmarket', 'list', []);
-                    case notificationTypeEnum.APPLICATION: return new this.createActionModel_('appmarket', 'details', [this.getApplicationId().valueOf()]);
                     case notificationTypeEnum.NO_TAKE_ATTENDANCE: return new this.createActionModel_('attendance', 'classList', [this.getClassId().valueOf(), this.getCreated()]);
 
                     default: return this.createActionModel_(null, null, null, true);

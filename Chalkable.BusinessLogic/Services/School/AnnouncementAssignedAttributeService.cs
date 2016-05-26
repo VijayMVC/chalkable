@@ -328,16 +328,60 @@ namespace Chalkable.BusinessLogic.Services.School
                     if (attributeForCopying.Attachment != null)
                     {
                         var attContent = serviceLocator.AttachementService.GetAttachmentContent(attributeForCopying.Attachment);
-                        var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
-                        attribute.AttachmentRef = att.Id;
-                        attribute.Attachment = att;
+                        if (attContent.Content != null)
+                        {
+                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
+                            attribute.AttachmentRef = att.Id;
+                            attribute.Attachment = att;
+                        }
                     }
                     attributes.Add(attribute);
-
                 }
             }
             da.Insert(attributes);
             return da.GetLastListByAnnIds(toAnnouncementIds, attributes.Count);
+        }
+
+        public static IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(IDictionary<int, int> fromToAnnouncementIds,
+            UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
+        {
+            var da = new AnnouncementAssignedAttributeDataAccess(unitOfWork);
+            var attributesForCopying = da.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Key).ToList(), int.MaxValue)
+                .Where(x => !x.SisActivityAssignedAttributeId.HasValue).ToList();
+
+            var attributes = new List<AnnouncementAssignedAttribute>();
+
+            foreach (var pair in fromToAnnouncementIds)
+            {
+                var assignedAttToCopy = attributesForCopying.Where(x => x.AnnouncementRef == pair.Key).ToList();
+                foreach (var attribute in assignedAttToCopy)
+                {
+                    var newAttribute = new AnnouncementAssignedAttribute
+                    {
+                        AnnouncementRef = pair.Value,
+                        AttributeTypeId = attribute.AttributeTypeId,
+                        Name = attribute.Name,
+                        Text = attribute.Text,
+                        VisibleForStudents = attribute.VisibleForStudents
+                    };
+
+                    if (attribute.Attachment != null)
+                    {
+                        var attContent = serviceLocator.AttachementService.GetAttachmentContent(attribute.Attachment);
+                        if (attContent.Content != null)
+                        {
+                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment,
+                                unitOfWork, serviceLocator, connectorLocator);
+                            attribute.AttachmentRef = att.Id;
+                            attribute.Attachment = att;
+                        }
+                    }
+                    attributes.Add(newAttribute);
+                }
+            }
+
+            da.Insert(attributes);
+            return da.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Value).ToList(), attributes.Count);
         }
 
         public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId)

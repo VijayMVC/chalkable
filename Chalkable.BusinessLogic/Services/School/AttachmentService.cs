@@ -180,7 +180,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return context.DistrictId.HasValue ? string.Format("{0}_{1}", res, context.DistrictId.Value) : res;
         }
 
-        private static string UploadToCrocodoc(string name, byte[] content, IServiceLocatorSchool serviceLocator)
+        internal static string UploadToCrocodoc(string name, byte[] content, IServiceLocatorSchool serviceLocator)
         {
             if (serviceLocator.CrocodocService.IsDocument(name))
                 return serviceLocator.CrocodocService.UploadDocument(name, content).uuid;

@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null, bool withBanned = false)
         {
             var query = new ApplicationQuery
             {
@@ -31,7 +31,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 GradeLevels = gradeLevels,
                 Filter = filterWords,
                 Start = start,
-                Count = count
+                Count = count,
+                Ban = !withBanned && !BaseSecurity.IsSysAdminOrDeveloper(Context) ? false : (bool?)null
             };
             return GetApplications(query);
         }

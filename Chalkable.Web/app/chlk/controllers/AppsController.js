@@ -916,6 +916,29 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [[String, String]],
+        ria.async.Future, function prepareExternalAttachAppViewData_(mode, appUrlAppend_){
+
+            var appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
+
+            return this.appsService
+                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                })
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var appData = data.getApplication();
+
+                    var viewUrl = appData.getUrl() + '?mode=' + mode
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + data.getAuthorizationCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
+                }, this);
+        },
+
         [chlk.controllers.AssessmentEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DISTRICTADMIN,
@@ -925,33 +948,26 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('assessment')],
         [[String]],
         function assessmentAction(appUrlAppend_) {
-
-            //if(!this.isStudyCenterEnabled())
-            //    return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
-
-            var mode = "myview",
-                // TODO: move to session
-                appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
-
-            var result = this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
-                .catchError(function(error_){
-                    throw new chlk.lib.exception.AppErrorException(error_);
-                })
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    var appData = data.getApplication();
-
-                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
-                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
-                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
-
-                    return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
-                }, this);
-
+            var result = this.prepareExternalAttachAppViewData_("myview", appUrlAppend_);
             return this.PushView(chlk.activities.apps.AppWrapperPage, result);
         },
+
+
+        [chlk.controllers.AssessmentEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.STUDENT
+        ])],
+        [chlk.controllers.SidebarButton('settings')],
+        [[String]],
+        function assessmentProfileAction(appUrlAppend_) {
+            var result = this.prepareExternalAttachAppViewData_("profileview", appUrlAppend_);
+            return this.PushView(chlk.activities.apps.AppWrapperPage, result);
+        },
+
+
+       
 
         [chlk.controllers.SidebarButton('assessment')],
         [chlk.controllers.AccessForRoles([
@@ -960,27 +976,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[String]],
         function assessmentSettingsAction(appUrlAppend_) {
-            var mode = 'sysadminview',
-                // TODO: move to session
-                appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
-
-            var result = this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
-                .catchError(function(error_){
-                    throw new chlk.lib.exception.AppErrorException(error_);
-                })
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    var appData = data.getApplication();
-
-                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
-                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
-                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
-
-                    return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
-                }, this);
-
+            var result = this.prepareExternalAttachAppViewData_("sysadminview", appUrlAppend_);
             return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
         },
 

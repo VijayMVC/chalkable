@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool? canAttach = null);
         PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
-        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null);
+        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null, bool withBanned = false);
         IList<Application> GetApplicationsByIds(IList<Guid> ids);
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
@@ -52,8 +52,10 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 DeveloperId = developerId,
                 State = onlyWithLive ? null : state,
-                Filter = filter
+                Filter = filter,
+                Ban = !BaseSecurity.IsSysAdminOrDeveloper(Context) ? false : (bool?)null
             };
+            
             var apps = GetApplications(query).Where(x=> x.State != ApplicationStateEnum.Live).ToList();
             if (onlyWithLive)
                 apps = apps.Where(a => a.OriginalRef.HasValue).ToList();
@@ -77,7 +79,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Start = start, 
                     Count = count, 
                     Live = live, 
-                    CanAttach = canAttach
+                    CanAttach = canAttach,
+                    Ban = !BaseSecurity.IsSysAdminOrDeveloper(Context) ? false : (bool?)null
                 };
             return GetApplications(query);
         }
@@ -91,8 +94,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     query.SchoolId = Context.SchoolId;
                     query.DeveloperId = Context.DeveloperId;
-
-                    if (!BaseSecurity.IsDistrictAdmin(Context))
+                    if(!ApplicationSecurity.HasAccessToBannedApps(Context))
                         query.Ban = false;
                 }
                 return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
@@ -154,7 +156,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null, bool withBanned = false)
         {
             var query = new ApplicationQuery
                 {
@@ -163,9 +165,10 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Filter = filterWords,
                     Start = start,
                     Count = count,
-                    Live = true
+                    Live = true,
+                    Ban = !withBanned && !BaseSecurity.IsSysAdminOrDeveloper(Context) ? false : (bool?)null
                 };
-            return GetApplications(query);
+             return GetApplications(query);
         }
 
 
@@ -220,6 +223,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)
         {
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new ApplicationSchoolOptionDataAccess(u).BanSchoolsByIds(applicationId, schoolIds));
         }
 

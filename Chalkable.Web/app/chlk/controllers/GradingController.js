@@ -1190,7 +1190,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate){
-                var res = this.calendarService.listByDateRange(startDate, endDate, classId)
+                var res = this.calendarService.listClassAnnsByDateRange(startDate, endDate, classId)
                     .then(function(announcements){
                         var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                         var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.WORKSHEET_REPORT);

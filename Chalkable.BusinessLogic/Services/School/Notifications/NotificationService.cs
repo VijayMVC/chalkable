@@ -24,8 +24,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId, AnnouncementTypeEnum announcementType);
         void AddAnnouncementSetGradeNotificationToStudent(int announcement, int recipient);
         void AddPrivateMessageNotification(int privateMessageId);
-        void AddApplicationNotification(IList<Person> toPerson, Person fromPerson, Guid applicationId);
-        void AddAppBudgetBalanceNotification(int recipientId, double budgetBalance);
         void AddEndMarkingPeriodNotification(int toPersonId, int markingPeriodId, int endDays, bool isNextMpNotExist, bool isNextMpNotAssignedToClass);
         void AddAttendanceNotification(int toPersonId, IList<Person> persons);
         void AddAttendanceNotificationToStudent(int toPersonId, int classAttendanceId);
@@ -244,17 +242,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 uow.Commit();
             }
         }
-
-        public void AddApplicationNotification(IList<Person> toPerson, Person fromPerson, Guid applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddAppBudgetBalanceNotification(int recipientId, double budgetBalance)
-        {
-            throw new NotImplementedException();
-        }
-
         //TODO: those 3 methods are obsolete  ... investigate do we need them
         public void AddEndMarkingPeriodNotification(int toPersonId, int markingPeriodId, int endDays, bool isNextMpNotExist,
                                                     bool isNextMpNotAssignedToClass)

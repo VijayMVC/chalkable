@@ -194,6 +194,7 @@ class BaseAuthedTestCase(unittest.TestCase):
         return self.verify_response(r, status, success)
 
     def post(self, url, params, status=200, success=True):
+
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
 

@@ -97,11 +97,13 @@ NAMESPACE('chlk.templates.profile', function(){
                     res.push(this.createActionLinkModel_(controller, 'discipline', 'Discipline'
                         , pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_DISCIPLINE)));
                     res.push(this.createActionLinkModel_(controller, 'explorer', 'Explorer', pressedLinkName, [userId], !this.isStudyCenterEnabled() || this.getUserRole().isAdmin()));
-
+                    
                     res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId], false));
                 }
                 else
                     res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId], true));
+
+                res.push(this.createActionLinkModel_('apps', 'assessmentProfile', 'Assessments', pressedLinkName, [userId], !this.isAssessmentEnabled()));
                 return res;
                 //return this.getModel().getActionLinksData(); // todo : rewrite this method
             }

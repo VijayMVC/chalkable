@@ -48,7 +48,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.recipients = SJX.fromArrayOfDeserializables(raw.recipients, chlk.models.announcement.AdminAnnouncementRecipient);
                 this.grade = SJX.fromValue(raw.grade, Number);
                 this.comment = SJX.fromValue(raw.comment, String);
-                this.extraCreditEnabled = SJX.fromValue(raw.extracreditenabled, Boolean);
+                this.ableUseExtraCredit = SJX.fromValue(raw.isableuseextracredit, Boolean);
 
                 this.groupIds = SJX.fromValue(raw.groupIds, String);
                 this.attachments = SJX.fromValue(raw.attachments, String);
@@ -141,7 +141,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.ClassId, 'classId',
             chlk.models.id.AnnouncementId, 'announcementForTemplateId',
 
-            Boolean, 'extraCreditEnabled',
+            Boolean, 'ableUseExtraCredit',
 
 
             [[Object]],
@@ -154,6 +154,13 @@ NAMESPACE('chlk.models.announcement', function () {
                 if (!viewData)
                     viewData = {hidefromstudents : raw.hidefromstudents || false};
                 return SJX.fromValue(viewData.hidefromstudents, Boolean);
+            },
+
+            Boolean, function isExtraCreditEnabled(){
+                if(this.isAbleUseExtraCredit() && this.getClassAnnouncementData().getMaxScore() == 0)
+                    return true;
+                else
+                    return false;
             },
 
             function getTitleModel(){
