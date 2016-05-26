@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -20,20 +21,33 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public IDictionary<string, string> GetPersonSettings(IList<string> keys, int? personId, int? schoolYearId, int? classId)
+
+        public IList<PersonSetting> GetPersonSettings(IList<string> keys, int? personId, int? schoolYearId, int? classId)
         {
-            var param = new Dictionary<string, object>
+            var conds = new AndQueryCondition();
+            if (personId.HasValue)
+                conds.Add(nameof(PersonSetting.PersonRef), personId.Value);
+            if (schoolYearId.HasValue)
+                conds.Add(nameof(PersonSetting.SchoolYearRef), schoolYearId.Value);
+            if (classId.HasValue)
+                conds.Add(nameof(PersonSetting.ClassRef), classId.Value);
+            var q = Orm.SimpleSelect<PersonSetting>(conds);
+            if (keys != null && keys.Count > 0)
             {
-                {PERSON_ID_PARAM, personId},
-                {SCHOOL_YEAR_ID_PARAM, schoolYearId },
-                {CLASS_ID_PARAM,  classId},
-                {KEYS_LIST_PARAM, keys}
-            };
-            using (var reader = ExecuteStoredProcedureReader(SP_GET_PERSON_SETTINGS, param))
-            {
-                return reader.ReadList<PersonSetting>().ToDictionary(k => k.Key, v => v.Value);
+                var pKyes = new List<string>();
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    var pKey = $"@key_{i + 1}";
+                    q.Parameters.Add(pKey, keys[i]);
+                    pKyes.Add(pKey);
+                }
+                q.Sql.Append($" and [{nameof(PersonSetting.Key)}] in ({pKyes.JoinString(",")})");
             }
+            return ReadMany<PersonSetting>(q);
         }
+
+
+
 
         public void AddPersonSettings(IDictionary<string, object> ps, int? personId, int? schoolYearId, int? classId)
         {

@@ -7,7 +7,7 @@ As
 
 declare @all int = (select count(*) from @keys)
 
-Select [Key], [Value] From PersonSetting
+Select * From PersonSetting
 Where
 (@personId is null or  PersonRef = @personId)
 And (@schoolYearId is null or SchoolYearRef = @schoolYearId)
