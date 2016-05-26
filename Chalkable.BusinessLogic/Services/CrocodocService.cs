@@ -54,7 +54,8 @@ namespace Chalkable.BusinessLogic.Services
 
             var res = UploadFileToCrocodoc(fileName, fileContent);
             if (res == null)
-                throw new ChalkableException(ChlkResources.ERR_PROCESSING_FILE);
+                throw new UploadToCrocodocFailedException(ChlkResources.ERR_PROCESSING_FILE);
+
             return res;
         }
 

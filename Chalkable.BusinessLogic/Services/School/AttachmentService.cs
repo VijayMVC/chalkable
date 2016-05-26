@@ -47,7 +47,8 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public static Attachment Upload(string name, byte[] content, bool uploadToSti, UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
+        public static Attachment Upload(string name, byte[] content, bool uploadToSti, UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, 
+            ConnectorLocator connectorLocator, bool uploadToCrocodoc = true)
         {
             var context = serviceLocator.Context;
             Trace.Assert(context.PersonId.HasValue);
@@ -55,10 +56,25 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     Name = name,
                     PersonRef = context.PersonId.Value,
-                    Uuid = UploadToCrocodoc(name, content, serviceLocator),
+                    Uuid = null,
                     UploadedDate = context.NowSchoolTime,
                     LastAttachedDate = context.NowSchoolTime
                 };
+
+            if(uploadToCrocodoc)
+                try
+                {
+                    res.Uuid = UploadToCrocodoc(res.Name, content, serviceLocator);
+                }
+                catch (UploadToCrocodocFailedException)
+                {
+                    /*Ignore*/
+                }
+                finally
+                {
+                    res.Uuid = null;
+                }
+
             var da = new AttachmentDataAccess(unitOfWork);
             if (uploadToSti)
             {
@@ -76,6 +92,28 @@ namespace Chalkable.BusinessLogic.Services.School
             res.RelativeBlobAddress = UploadToBlob(res, content, serviceLocator);
             da.Update(res);
             return res;
+        }
+
+        private const int UPLOAD_PACKET_SIZE = 3;
+        internal static IList<AttachmentContentInfo> UploadToCrocodoc(IList<AttachmentContentInfo> attachments, IServiceLocatorSchool serviceLocator, UnitOfWork unitOfWork)
+        {
+            if (attachments == null || attachments.Count == 0)
+                return new List<AttachmentContentInfo>();
+
+            var filtered = attachments.Where(x => serviceLocator.CrocodocService.IsDocument(x.Attachment.Name)).ToList();
+
+            for (var i = 0; i < filtered.Count; i += UPLOAD_PACKET_SIZE)
+            {
+                foreach (var item in filtered.Skip(i).Take(UPLOAD_PACKET_SIZE))
+                    item.Attachment.Uuid = UploadToCrocodoc(item.Attachment.Name, item.Content, serviceLocator);
+                
+                serviceLocator.CrocodocService.WaitForDocuments(filtered.Skip(i).Take(UPLOAD_PACKET_SIZE).Select(x => x.Attachment.Uuid).ToList());
+            }
+
+            var da = new AttachmentDataAccess(unitOfWork);
+            da.Update(filtered.Select(x => x.Attachment).ToList());
+
+            return filtered;
         }
 
         public void Delete(int attachmentId)
