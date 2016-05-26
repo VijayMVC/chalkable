@@ -1,0 +1,26 @@
+-var user = self.getUser()
+-var apps = self.getApplications()
+-var isStudent = self.getUserRole().isStudent()
+.profile-page
+    h2.page-title= isStudent ? Msg.Student_profile : Msg.Profile
+    +ProfileTopBar(self, 'apps')
+    #top-panel
+        #avatar-photo-conainer.left-block.panel-block
+            .img-container
+                +PersonImg(user, 140, !self.getUserRole().isStudent())
+                .grades-container
+        #student-info-panel.right-block.panel-block
+            displayName =user.getDisplayName() || user.getFullName()
+            h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+    .sections
+        +CloseOpen('Applications')
+            .sections-info.app-veiw-section
+                .my-apps
+                    .apps
+                        each app in apps
+                            -var isBanned = false
+                            +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).application
+                                .wrapper
+                                    +LoadingImage(src=app.getBannerPictureUrl())
+                                    .title=app.getName()
+                                    BUTTON Open

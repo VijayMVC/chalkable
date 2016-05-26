@@ -1,0 +1,151 @@
+mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
+    +ActionForm('attendance', 'showEditGridWindow').show-edit-grid-form
+        BUTTON(type="submit", disabled=!(seatingList.length || self.getNotSeatingStudents().length) ).grey-button.update-grid=text
+        +Hidden('rows', rows)
+        +Hidden('columns', columns)
+        +Hidden('minRows', minRows)#min-rows
+        +Hidden('minColumns', minColumns)#min-columns
+        +Hidden('classId', classId)
+        +Hidden('inProfile', self.isInProfile())
+        +Hidden('date', self.getDate().format('mm/dd/yy'))
+        +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
+        +Hidden('attendancesJson').attendances-json
+
+.seating-chart-content
+    h2.page-title Attendance
+    -var showButtons = self.getModel().canPost() && self.isScheduled()
+    -var selectedId = self.getClassId()
+    -var hasStudentOnChart = self.hasStudentOnChart()
+    -var seatingList = self.getSeatingList() || []
+
+    if !self.isInProfile()
+        -var topData = self.getTopData()
+        +ClassesToolBarWithAll(topData, 'attendance', 'seatingChart', [self.getDate().format('mm-dd-yy')], false, true).attendance
+    .action-bar
+        .items
+            +ActionLink(self.isInProfile() ? 'class' : 'attendance', self.isInProfile() ? 'attendanceList' : 'classList', selectedId, self.getDate().toStandardFormat())= Msg.List
+            +ActionLink(self.isInProfile() ? 'class' : 'attendance', self.isInProfile() ? 'attendanceSeatingChart' : 'seatingChart', selectedId, self.getDate().toStandardFormat()).pressed= Msg.Seating_Chart
+
+    +ActionForm('attendance', 'setClassAttendanceListFromSeatingChart').save-attendances-form
+        +Hidden('date', self.getDate().format('mm/dd/yy'))
+        +Hidden('classId', selectedId.valueOf()).class-id
+        +Hidden('attendancesJson').attendances-json
+        +Hidden('inProfile', self.isInProfile())
+
+    div(class=showButtons ? 'can-post' : '').page-content.people-list-container
+        .header
+            +ActionForm('attendance', 'saveFromSeatingChart').save-chart-form.table
+                +Hidden('inProfile', self.isInProfile())
+                +ActionLink('attendance', 'attendanceProfileReport', self.getClassId()).report-link
+                if showButtons
+                    .l &nbsp;
+                    //: +SummaryInfo(self.getPresentStudents().length, seatingList.length)
+                    .l &nbsp;
+                .title
+                    span.date-text=self.getDate().toString('MM dd, yy')
+                    -var params = selectedId ? [selectedId.valueOf()] : null
+                    +DatePicker('date', self.getDate())(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true,
+                            inCurrentGradingPeriods: true,
+                            underOverlay: true
+                        },
+                        data-controller= self.isInProfile() ? "class" : "attendance",
+                        data-action=self.isInProfile() ? "seatingChartForDate" : "seatingChart",
+                        data-params=params
+                    )#attendance-date.tb-date-picker.tr
+                    +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
+                if showButtons
+                    .r
+                        +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), self.isInProfile(), self.isDailyAttendancePeriod(), true)(
+                            class=self.getModel().hasSeatingStudents() ? "" : "disabled"
+                        )#all-present-link=Msg.Mark_all_Present
+                    .r
+                        BUTTON(class=self.getModel().hasSeatingStudents() ? "" : "disabled")#submit-attendance-button.blue-button POST IT
+        if self.isScheduledInMp() && self.isAblePost()
+            .buttons
+                if self.getColumns() == 0 || self.getRows() == 0
+                    +UpdateGridForm(Msg.Create_grid, self.getRows(), self.getColumns(), 0, 0, selectedId.valueOf())
+                    .black-arrow.start=Msg.Start_by_creating_a_grid
+                else
+                    +UpdateGridForm(Msg.Edit_grid, self.getRows(), self.getColumns(), self.getMinData().rows, self.getMinData().columns, selectedId.valueOf())
+                    BUTTON.grey-button.add-remove-students= hasStudentOnChart ? Msg.Edit_students : Msg.Add_students
+                    BUTTON(type="submit")#submit-chart.chlk-button.blue-button=Msg.Save.toUpperCase()
+                    if !hasStudentOnChart
+                        .black-arrow.add= Msg.Add_your_students
+                    else
+                        .add
+        if self.isScheduledInMp()
+            if self.getColumns() * self.getRows() > 0
+                .seating-chart-container
+                    +LeftRightToolbar()(
+                        needDots = true,
+                        roundedDots = true,
+                        padding = 110
+                    ).seating-toolbar.auto-h.big-arrows
+                        -var emptyModel = new chlk.models.attendance.ClassAttendance
+                        -var caTpl = new chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl
+                        div(data-columns=self.getColumns(), data-rows=self.getRows()).droppable
+                            each items in seatingList
+                                .seating-row
+                                    each item in items
+                                        -var info = item.getInfo()
+                                        .student-block.draggable(data-index= item.getIndex(), data-column= item.getColumn(), data-row= item.getRow(), class=info ? '' : 'empty-box')
+                                            -caTpl.assign(info || emptyModel)
+                                            !=caTpl.render()
+                                        if info
+                                            .empty-box.student-block.absolute
+                                                .empty
+        else
+            .people-list
+                .black-arrow.no-class-scheduled.row Selected class is not sceduled in current term
+    typesEnum = chlk.models.attendance.AttendanceTypeEnum
+    .chlk-pop-up-container.seating-chart-popup.popup-bubble.bottom
+        .pop-up-triangle.big
+        .first-part
+            div(data-type=typesEnum.PRESENT.valueOf()).item.present.selected
+                .student-seating-type
+                span.text=Msg.Present
+            div(data-type=typesEnum.LATE.valueOf()).item.late
+                .student-seating-type
+                span.text=Msg.Late
+                span.reason-text
+            div(data-type=typesEnum.ABSENT.valueOf()).item.absent
+                .student-seating-type
+                span.text=Msg.Absent
+                span.reason-text
+        div(data-type=typesEnum.LATE.valueOf()).late-part.type-part
+            div(
+                data-type=typesEnum.LATE.valueOf(),
+                data-level=chlk.models.attendance.AttendanceLevelEnum.LATE_LEVEL.valueOf()
+            ).item.late.reason-item
+                .student-seating-type
+                span.text=Msg.No_reason
+            each item in self.getLateReasons()
+                div(
+                    data-id=item.getId().valueOf(),
+                    data-type=typesEnum.LATE.valueOf(),
+                    data-level=item.getLevel(typesEnum.LATE.valueOf()),
+                    data-tooltip-type="overflow",
+                    data-tooltip=item.getName()
+                ).item.late.reason-item
+                    .student-seating-type
+                    span.text=item.getName()
+        div(data-type=typesEnum.ABSENT.valueOf()).absent-part.type-part
+            div(
+                data-type=typesEnum.ABSENT.valueOf(),
+                data-level=chlk.models.attendance.AttendanceLevelEnum.ABSENT_LEVEL.valueOf()
+            ).item.absent.reason-item
+                .student-seating-type
+                span.text=Msg.No_reason
+            each item in self.getAbsentReasons()
+                div(
+                    data-id=item.getId().valueOf(),
+                    data-type=typesEnum.ABSENT.valueOf(),
+                    data-level=item.getLevel(typesEnum.ABSENT.valueOf()),
+                    data-tooltip-type="overflow",
+                    data-tooltip=item.getName()
+                ).item.absent.reason-item
+                    .student-seating-type
+                    span.text=item.getName()
