@@ -76,6 +76,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
+                this.imported = SJX.fromValue(raw.imported, Boolean);
 
                 if(this.autoGradeApps && this.autoGradeApps.length){
                     var autoGradeApps = [];
@@ -99,6 +100,7 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
 
+            Boolean, 'imported',
             Object, 'createdAnnouncements',
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             String, 'announcementAssignedAttrs',
