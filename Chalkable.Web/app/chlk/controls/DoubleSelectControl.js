@@ -39,8 +39,10 @@ NAMESPACE('chlk.controls', function () {
                 var dropDown = node.parent('.double-select ');
                 dropDown.find('.selected-value').setValue(node.getData('id'));
                 dropDown.find('.value-text').setText(node.getText());
-                dropDown.find('.second-result.active-item').removeClass('active-item');
-                node.addClass('active-item');
+                dropDown.find('.second-result.selected-item').removeClass('selected-item');
+                dropDown.find('.first-result.selected-item').removeClass('selected-item');
+                dropDown.find('.first-result.active-item').addClass('selected-item');
+                node.addClass('selected-item');
                 this.hideDropDown_(dropDown, true);
                 dropDown.trigger('change');
             },
@@ -53,17 +55,17 @@ NAMESPACE('chlk.controls', function () {
                     .find('.second-results')
                     .setHTML('');
 
-                if(!selected_)
-                    node.find('.active-item').removeClass('active-item');
+                node.find('.active-item').removeClass('active-item');
             },
 
             [ria.mvc.DomEventBind('mouseover', '.double-select .first-result')],
             [[ria.dom.Dom, ria.dom.Event]],
             function firstResultOver(node, event){
                 var items = node.getData('items'), res = '', dropDown = node.parent('.double-select');
+                var value = dropDown.find('.selected-value').getValue();
 
                 items.forEach(function(item){
-                    res += '<li class="active-result second-result" data-id="' + item.id  + '">' + item.name + '</li>'
+                    res += '<li class="active-result second-result ' + (value == item.id ? 'selected-item' : '') + '" data-id="' + item.id  + '">' + item.name + '</li>'
                 });
 
                 dropDown.find('.first-result.active-item').removeClass('active-item');

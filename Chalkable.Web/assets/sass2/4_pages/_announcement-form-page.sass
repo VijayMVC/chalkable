@@ -1,11 +1,15 @@
 .double-select.chosen-container.chosen-with-drop
   LI.active-result
     &:hover, &.active-item
-      background: #f1f1f1
       color: #56554f
+      background: #f1f1f1
+
+    &.selected-item
+      background: #e1e1e1
 
   .chosen-drop.second-drop
     left: 100%
+    border: 1px solid #aaa
 
 .add-new-category-dialog
   input[name=value]
