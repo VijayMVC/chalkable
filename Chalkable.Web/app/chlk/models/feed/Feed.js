@@ -24,7 +24,7 @@ NAMESPACE('chlk.models.feed', function () {
                         item.imported = true;
                     });
 
-                    raw.annoucementviewdatas.concat(raw.createdannouncements);
+                    raw.annoucementviewdatas = raw.createdannouncements.concat(raw.annoucementviewdatas);
                 }
 
                 this.announcementsToCopy = SJX.fromValue(raw.announcementsToCopy, String);
