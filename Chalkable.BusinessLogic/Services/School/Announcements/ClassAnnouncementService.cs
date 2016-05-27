@@ -436,7 +436,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            BaseSecurity.EnsureTeacher(Context);
+            BaseSecurity.EnsureAdminOrTeacher(Context);
             if (!ServiceLocator.ClassService.IsTeacherClasses(Context.PersonId.Value, fromClassId, toClassId))
                 throw new ChalkableSecurityException("You can copy announcements only between your classes");
 

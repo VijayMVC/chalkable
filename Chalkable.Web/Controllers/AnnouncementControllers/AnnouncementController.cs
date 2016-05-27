@@ -253,10 +253,17 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 return SchoolLocator.LessonPlanService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
             });
 
-            var res = new List<int>();
-            res.AddRange(await lessonPlanCopyTask);
-            res.AddRange(await classAnnouncementCopyTask);
-
+            var res = new List<CopyAnnouncementResultViewData>();
+            res.AddRange((await lessonPlanCopyTask).Select(x=> new CopyAnnouncementResultViewData
+            {
+                AnnouncementType = (int)AnnouncementTypeEnum.LessonPlan,
+                AnnouncementId = x
+            }));
+            res.AddRange((await classAnnouncementCopyTask).Select(x => new CopyAnnouncementResultViewData
+            {
+                AnnouncementType = (int)AnnouncementTypeEnum.Class,
+                AnnouncementId = x
+            }));
             return Json(res);
         }
     }

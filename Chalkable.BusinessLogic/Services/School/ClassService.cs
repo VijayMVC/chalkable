@@ -129,7 +129,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public bool IsTeacherClasses(int teacherId, params int[] classIds)
         {
-            var queryCondition = new SimpleQueryCondition(nameof(ClassTeacher.PersonRef), teacherId, ConditionRelation.Equal);
+            var queryCondition = new AndQueryCondition {{nameof(ClassTeacher.PersonRef), teacherId}};
             var teacherClasses = DoRead(u => new ClassTeacherDataAccess(u).GetAll(queryCondition))
                 .Select(x => x.ClassRef).ToList();
             return classIds.All(x => teacherClasses.Contains(x));

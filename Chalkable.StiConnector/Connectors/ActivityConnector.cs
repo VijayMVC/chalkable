@@ -146,6 +146,16 @@ namespace Chalkable.StiConnector.Connectors
             Post<Object>(url, null, nvc, HttpMethod.Put);
         }
 
+        public IList<Activity> GetActivitiesByIds(IList<int> ids)
+        {
+            var nvc = new NameValueCollection();
+            if (ids != null && ids.Count > 0)
+                for (var i = 0; i < ids.Count; i++)
+                    nvc.Add($"ids[{i}]", ids[i].ToString());
+            
+            return Call<IList<Activity>>("chalkable/activities", nvc);
+        } 
+
         public void DeleteActivity(int id)
         {
             Delete(string.Format(urlFormat, id));           

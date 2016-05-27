@@ -367,6 +367,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\ClassAnnouncementViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\CopyAnnouncementResultViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\LessonPlanViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementAssignedAttributeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\ShortAnnouncementViewData.cs" />
