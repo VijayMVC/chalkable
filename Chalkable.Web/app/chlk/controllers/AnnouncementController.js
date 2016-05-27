@@ -129,9 +129,10 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.ClassId]],
         function showImportDialogAction(classId){
+            var activity = this.getView().getCurrent().getClass();
             var res = this.WidgetStart('announcement', 'showImportDialog', [classId])
                 .then(function(data){
-
+                    this.BackgroundUpdateView(activity, data, 'after-import');
                 }, this);
             return null;
         },
@@ -155,8 +156,8 @@ NAMESPACE('chlk.controllers', function (){
                     });
             else
                 res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
-                    .then(function(ids){
-                        this.WidgetComplete(model.getRequestId(), ids);
+                    .then(function(createdList){
+                        this.WidgetComplete(model.getRequestId(), createdList);
                         this.BackgroundCloseView(chlk.activities.announcement.AnnouncementImportDialog);
                         return ria.async.BREAK;
                     }, this);
@@ -1904,6 +1905,10 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
+            if (submitType == 'viewImported'){
+                return this.Redirect('feed', 'viewImported', [model.getCreatedAnnouncements(), model.getClassId()]);
+            }
+
             if (submitType == 'save'){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
@@ -2120,7 +2125,7 @@ NAMESPACE('chlk.controllers', function (){
             var classId = model.getClassId();
 
             if(!announcementTypeId)
-                return this.Redirect('announcement', 'lessonPlan', [classId])
+                return this.Redirect('announcement', 'lessonPlan', [classId]);
 
             model.setMarkingPeriodId(this.getCurrentMarkingPeriod().getId());
 
@@ -2134,6 +2139,10 @@ NAMESPACE('chlk.controllers', function (){
 
             if (submitType == 'checkTitle'){
                 return this.checkTitleAction(model.getTitle(), classId, model.getExpiresDate(), model.getId());
+            }
+
+            if (submitType == 'viewImported'){
+                return this.Redirect('feed', 'viewImported', [model.getCreatedAnnouncements(), model.getClassId()]);
             }
 
             if (submitType == 'save'){
