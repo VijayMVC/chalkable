@@ -194,6 +194,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return fromToAnnCopy.Select(x => x.Key).ToList();
         }
 
+        public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
+        {
+            return DoRead(u => InternalGetDetailses(CreateLessonPlanDataAccess(u), announcementIds))
+                .Cast<AnnouncementComplex>().ToList();
+        }
+
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,
                                         DateTime? startDate, DateTime? endDate, bool visibleForStudent)
         {

@@ -24,6 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     {
         Announcement GetAnnouncementById(int id);
         AnnouncementDetails GetAnnouncementDetails(int announcementId);
+        IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds); 
         void DeleteAnnouncement(int announcementId);
         void DeleteDrafts(int schoolpersonid);
         Announcement EditTitle(int announcementId, string title);
@@ -55,13 +56,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public abstract IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         public abstract IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
-
+        public abstract IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds);
+        
         public abstract void DeleteAnnouncement(int announcementId);
         public abstract Announcement EditTitle(int announcementId, string title);
         public abstract void Submit(int announcementId);
         public abstract void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         public abstract bool CanAddStandard(int announcementId);
-
         protected abstract BaseAnnouncementDataAccess<TAnnouncement> CreateDataAccess(UnitOfWork unitOfWork);
 
         public void DeleteDrafts(int personId)
