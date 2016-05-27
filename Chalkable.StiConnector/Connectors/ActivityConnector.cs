@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
@@ -149,11 +150,15 @@ namespace Chalkable.StiConnector.Connectors
         public IList<Activity> GetActivitiesByIds(IList<int> ids)
         {
             var nvc = new NameValueCollection();
+            var urlBilder = new StringBuilder();
+            urlBilder.Append("Chalkable/activities");
             if (ids != null && ids.Count > 0)
-                for (var i = 0; i < ids.Count; i++)
-                    nvc.Add($"ids[{i}]", ids[i].ToString());
-            
-            return Call<IList<Activity>>("chalkable/activities", nvc);
+            {
+                urlBilder.Append("?");
+                foreach (var id in ids)
+                    urlBilder.Append($"ids={id}");
+            }
+            return Call<IList<Activity>>(urlBilder.ToString(), nvc);
         } 
 
         public void DeleteActivity(int id)

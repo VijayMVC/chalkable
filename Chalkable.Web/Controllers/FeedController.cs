@@ -53,8 +53,10 @@ namespace Chalkable.Web.Controllers
                 var clAnnIds = createdAnnouncements.Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Class)
                     .Select(x => x.AnnouncementId).ToList();
 
-                createdAnns.AddRange(schoolL.ClassAnnouncementService.GetAnnouncementsByIds(clAnnIds));
-                createdAnns.AddRange(schoolL.LessonPlanService.GetAnnouncementsByIds(lpIds));
+                if(clAnnIds.Count > 0)
+                    createdAnns.AddRange(schoolL.ClassAnnouncementService.GetAnnouncementsByIds(clAnnIds));
+                if(lpIds.Count > 0)
+                    createdAnns.AddRange(schoolL.LessonPlanService.GetAnnouncementsByIds(lpIds));
             }
             return PrepareFeedComplexViewData(schoolL, list, settings, createdAnns);
         }
