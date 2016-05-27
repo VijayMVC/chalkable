@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="9ff684a3-98f2-47c0-9e09-18b60343bf41" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
+  <name>Chalkable Old</name>
+  <description />
+  <settings>
+    <options>
+      <option name="artifactRules" value="Chalkable.Database.Master\bin\Staging\Chalkable.Database.Master.dacpac =&gt; /Chalkable.Database.Master.%build.number%.dacpac&#xA;Chalkable.Database.School\bin\Staging\Chalkable.Database.School.dacpac =&gt; /Chalkable.Database.School.%build.number%.dacpac&#xA;Chalkable.Azure\bin\Release\app.publish\Chalkable.Azure.cspkg =&gt; /ReleasePackage.%build.number%.zip&#xA;Chalkable.Azure\ServiceConfiguration.*.cscfg =&gt; /ReleasePackage.%build.number%.zip" />
+      <option name="buildNumberPattern" value="0-7-%system.build.vcs.number%-%build.counter%" />
+      <option name="checkoutMode" value="ON_AGENT" />
+    </options>
+    <disabled-settings>
+      <setting-ref ref="BUILD_EXT_12" />
+      <setting-ref ref="BUILD_EXT_13" />
+      <setting-ref ref="RUNNER_44" />
+      <setting-ref ref="RUNNER_45" />
+      <setting-ref ref="RUNNER_47" />
+      <setting-ref ref="RUNNER_49" />
+      <setting-ref ref="RUNNER_54" />
+      <setting-ref ref="TRIGGER_5" />
+      <setting-ref ref="vcsTrigger" />
+    </disabled-settings>
+    <parameters>
+      <param name="env.AZURE_STORAGE_ACCESS_KEY" value="zxxda1db24a9e0854386ffb9225581b53b11e8068db01aac7fa326fea8c13c7d40c0c8a7535bb0801a9a16d0aa1c6d74044c021f9e34eb150819c6e8c3320f88eff36cd35d4c321162ec3192c5ba9431098e9520b6646dbdf75775d03cbe80d301b" spec="password display='hidden'" />
+      <param name="env.BUILD_BRANCH" value="%vcsroot.branchName%" />
+      <param name="env.BUILD_COUNTER" value="%build.counter%" />
+      <param name="env.PEM_ENCRYPTION_SECRET" value="zxxb518bd5a770ce9ee28a6b89b530d041bef9450c060986f1ca2df77aca73da318" spec="password display='hidden'" />
+      <param name="env.RAYGUN_AUTHTOKEN" value="zxxdcfd4d7a5253c38f710f6e0d35995be18543f795223130a90ac54ee3bda21c69775d03cbe80d301b" spec="password display='hidden'" />
+    </parameters>
+    <build-runners>
+      <runner id="RUNNER_42" name="install nuget" type="jb.nuget.installer">
+        <parameters>
+          <param name="nuget.path" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nuget.updatePackages.mode" value="sln" />
+          <param name="nuget.use.restore" value="restore" />
+          <param name="nugetCustomPath" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="nugetPathSelector" value="?NuGet.CommandLine.DEFAULT.nupkg" />
+          <param name="sln.path" value="Chalkable.sln" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_43" name="install npms" type="jonnyzzz.npm">
+        <parameters>
+          <param name="npm_commands" value="install" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_44" name="install bower" type="jonnyzzz.node">
+        <parameters>
+          <param name="node_execution_mode" value="file" />
+          <param name="node_file" value="node_modules/bower/bin/bower" />
+          <param name="node_script_args" value="install" />
+          <param name="teamcity.build.workingDir" value="Chalkable.Web" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_45" name="versioning" type="jonnyzzz.grunt">
+        <parameters>
+          <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
+--build.number=%build.number%
+--vcs.branch=%teamcity.build.branch%]]></param>
+          <param name="jonnyzzz.grunt.mode" value="npm" />
+          <param name="jonnyzzz.grunt.tasks" value="version" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_46" name="versioning (old)" type="MSBuild">
+        <parameters>
+          <param name="build-file-path" value="version-label.msbuild" />
+          <param name="dotNetCoverage.NCover.HTMLReport.File.Sort" value="0" />
+          <param name="dotNetCoverage.NCover.HTMLReport.File.Type" value="1" />
+          <param name="dotNetCoverage.NCover.Reg" value="selected" />
+          <param name="dotNetCoverage.NCover.platformBitness" value="x86" />
+          <param name="dotNetCoverage.NCover.platformVersion" value="v2.0" />
+          <param name="dotNetCoverage.NCover3.Reg" value="selected" />
+          <param name="dotNetCoverage.NCover3.args" value="//ias .*" />
+          <param name="dotNetCoverage.NCover3.platformBitness" value="x86" />
+          <param name="dotNetCoverage.NCover3.platformVersion" value="v2.0" />
+          <param name="dotNetCoverage.NCover3.reporter.executable.args" value="//or FullCoverageReport:Html:{teamcity.report.path}" />
+          <param name="dotNetCoverage.PartCover.Reg" value="selected" />
+          <param name="dotNetCoverage.PartCover.includes" value="[*]*" />
+          <param name="dotNetCoverage.PartCover.platformBitness" value="x86" />
+          <param name="dotNetCoverage.PartCover.platformVersion" value="v2.0" />
+          <param name="msbuild_version" value="12.0" />
+          <param name="run-platform" value="x86" />
+          <param name="targets" value="VersionAssemblies" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="toolsVersion" value="none" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_47" name="js compile" type="jonnyzzz.grunt">
+        <parameters>
+          <param name="jonnyzzz.grunt.mode" value="npm" />
+          <param name="jonnyzzz.grunt.tasks"><![CDATA[jsmin
+jsbuild3]]></param>
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_48" name="js compile (old)" type="jonnyzzz.node">
+        <parameters>
+          <param name="node_execution_mode" value="file" />
+          <param name="node_file" value="node_modules/emp.ria-jsbuild3/bin/jsbuild3" />
+          <param name="node_script_args" value="--config Chalkable.Web/jsbuild.json" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_49" name="css compile" type="jonnyzzz.grunt">
+        <parameters>
+          <param name="jonnyzzz.grunt.mode" value="npm" />
+          <param name="jonnyzzz.grunt.tasks"><![CDATA[compass
+cssmin]]></param>
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_50" name="css compile (old)" type="simpleRunner">
+        <parameters>
+          <param name="script.content" value="compass compile -e production --force" />
+          <param name="teamcity.build.workingDir" value="Chalkable.Web" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="use.custom.script" value="true" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_51" name="code compile" type="VS.Solution">
+        <parameters>
+          <param name="build-file-path" value="Chalkable.sln" />
+          <param name="msbuild.prop.Configuration" value="Release" />
+          <param name="msbuild_version" value="14.0" />
+          <param name="run-platform" value="x86" />
+          <param name="targets" value="Rebuild" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="toolsVersion" value="14.0" />
+          <param name="vs.version" value="vs2015" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_52" name="azure package" type="MSBuild">
+        <parameters>
+          <param name="build-file-path" value="build.proj" />
+          <param name="dotNetCoverage.NCover.HTMLReport.File.Sort" value="0" />
+          <param name="dotNetCoverage.NCover.HTMLReport.File.Type" value="1" />
+          <param name="dotNetCoverage.NCover.Reg" value="selected" />
+          <param name="dotNetCoverage.NCover.platformBitness" value="x86" />
+          <param name="dotNetCoverage.NCover.platformVersion" value="v2.0" />
+          <param name="dotNetCoverage.NCover3.Reg" value="selected" />
+          <param name="dotNetCoverage.NCover3.args" value="//ias .*" />
+          <param name="dotNetCoverage.NCover3.platformBitness" value="x86" />
+          <param name="dotNetCoverage.NCover3.platformVersion" value="v2.0" />
+          <param name="dotNetCoverage.NCover3.reporter.executable.args" value="//or FullCoverageReport:Html:{teamcity.report.path}" />
+          <param name="dotNetCoverage.PartCover.Reg" value="selected" />
+          <param name="dotNetCoverage.PartCover.includes" value="[*]*" />
+          <param name="dotNetCoverage.PartCover.platformBitness" value="x86" />
+          <param name="dotNetCoverage.PartCover.platformVersion" value="v2.0" />
+          <param name="msbuild_version" value="14.0" />
+          <param name="run-platform" value="x86" />
+          <param name="targets" value="Staging,Production,Qa" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="toolsVersion" value="none" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_53" name="publish to AzureStorage" type="jetbrains_powershell">
+        <parameters>
+          <param name="jetbrains_powershell_bitness" value="x86" />
+          <param name="jetbrains_powershell_execution" value="PS1" />
+          <param name="jetbrains_powershell_scriptArguments" value="%build.number% %teamcity.build.branch%" />
+          <param name="jetbrains_powershell_script_file" value="PublishArtifacts.ps1" />
+          <param name="jetbrains_powershell_script_mode" value="FILE" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_54" name="grunt post-build" type="jonnyzzz.grunt">
+        <parameters>
+          <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
+--build.number=%build.number%
+--vcs.branch=%teamcity.build.branch%]]></param>
+          <param name="jonnyzzz.grunt.mode" value="npm" />
+          <param name="jonnyzzz.grunt.tasks" value="post-build" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings>
+      <vcs-entry-ref root-id="Chalkable_1" />
+    </vcs-settings>
+    <requirements />
+    <build-triggers>
+      <build-trigger id="TRIGGER_5" type="schedulingTrigger">
+        <parameters>
+          <param name="dayOfWeek" value="Sunday" />
+          <param name="hour" value="19" />
+          <param name="minute" value="30" />
+          <param name="schedulingPolicy" value="daily" />
+          <param name="triggerBuildWithPendingChangesOnly" value="true" />
+        </parameters>
+      </build-trigger>
+      <build-trigger id="vcsTrigger" type="vcsTrigger">
+        <parameters>
+          <param name="branchFilter"><![CDATA[+:staging
++:qa]]></param>
+          <param name="quietPeriod" value="600" />
+          <param name="quietPeriodMode" value="USE_CUSTOM" />
+          <param name="triggerRules" value="+:*" />
+        </parameters>
+      </build-trigger>
+    </build-triggers>
+    <build-extensions>
+      <extension id="BUILD_EXT_10" type="BuildFailureOnMessage">
+        <parameters>
+          <param name="buildFailureOnMessage.conditionType" value="contains" />
+          <param name="buildFailureOnMessage.messagePattern" value="failed" />
+          <param name="buildFailureOnMessage.outputText" value="FAILED" />
+          <param name="buildFailureOnMessage.reverse" value="false" />
+        </parameters>
+      </extension>
+      <extension id="BUILD_EXT_11" type="BuildFailureOnMessage">
+        <parameters>
+          <param name="buildFailureOnMessage.conditionType" value="contains" />
+          <param name="buildFailureOnMessage.messagePattern" value="exception" />
+          <param name="buildFailureOnMessage.reverse" value="false" />
+        </parameters>
+      </extension>
+      <extension id="BUILD_EXT_12" type="BuildFailureOnMessage">
+        <parameters>
+          <param name="buildFailureOnMessage.conditionType" value="contains" />
+          <param name="buildFailureOnMessage.messagePattern" value="error" />
+          <param name="buildFailureOnMessage.reverse" value="false" />
+        </parameters>
+      </extension>
+      <extension id="BUILD_EXT_13" type="VcsLabeling">
+        <parameters>
+          <param name="branchFilter"><![CDATA[+:staging
++:qa]]></param>
+          <param name="labelingPattern" value="build-%system.build.number%" />
+          <param name="successfulOnly" value="true" />
+          <param name="vcsRootId" value="Chalkable_1" />
+        </parameters>
+      </extension>
+    </build-extensions>
+    <cleanup />
+  </settings>
+</build-type>
+
