@@ -191,7 +191,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 unitOfWork.Commit();
             }
 
-            return fromToAnnCopy.Select(x => x.Key).ToList();
+            return fromToAnnCopy.Select(x => x.Value).ToList();
         }
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,

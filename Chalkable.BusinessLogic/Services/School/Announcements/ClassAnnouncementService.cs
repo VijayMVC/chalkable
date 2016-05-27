@@ -485,7 +485,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 u.Commit();
             }
 
-            return fromToAnnouncementsIds.Select(x => x.Key).ToList();
+            return fromToAnnouncementsIds.Select(x => x.Value).ToList();
         }
 
         public void CopyAnnouncement(int classAnnouncementId, IList<int> classIds)

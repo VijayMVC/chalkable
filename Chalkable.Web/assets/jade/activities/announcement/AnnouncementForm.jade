@@ -20,7 +20,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
                 )#announcement-type-btn.validate-skip.x-hidden
 
             if classId && classId.valueOf()
-                +ActionLink('announcement', 'showImportDialog', announcement.getClassId()).import-icon
+                +ActionLink('announcement', 'showImportDialog', classId).import-icon
 
     else
         .action-bar
@@ -39,7 +39,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
                         )= item.getName()
 
             if classId && classId.valueOf()
-                +ActionLink('announcement', 'showImportDialog', announcement.getClassId()).import-icon
+                +ActionLink('announcement', 'showImportDialog', classId).import-icon
 
 -var topData = self.getTopData()
 -var announcement = self.getAnnouncement()

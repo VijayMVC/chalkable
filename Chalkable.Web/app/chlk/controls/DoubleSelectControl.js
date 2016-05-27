@@ -30,7 +30,7 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('click', '.double-select.chosen-container-active')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function activeDoubleSelectClick(node, event) {
-                this.hideDropDown_(node);
+                node.is('.chosen-container-active') && this.hideDropDown_(node);
             },
 
             [ria.mvc.DomEventBind('click', '.double-select .second-result')],
@@ -39,29 +39,39 @@ NAMESPACE('chlk.controls', function () {
                 var dropDown = node.parent('.double-select ');
                 dropDown.find('.selected-value').setValue(node.getData('id'));
                 dropDown.find('.value-text').setText(node.getText());
-                this.hideDropDown_(dropDown);
+                dropDown.find('.second-result.selected-item').removeClass('selected-item');
+                dropDown.find('.first-result.selected-item').removeClass('selected-item');
+                dropDown.find('.first-result.active-item').addClass('selected-item');
+                node.addClass('selected-item');
+                this.hideDropDown_(dropDown, true);
                 dropDown.trigger('change');
             },
 
-            function hideDropDown_(node){
+            function hideDropDown_(node, selected_){
                 node.removeClass('chosen-container-active').removeClass('chosen-with-drop');
                 node.parent('.double-select')
                     .find('.second-drop')
                     .addClass('x-hidden')
                     .find('.second-results')
                     .setHTML('');
+
+                node.find('.active-item').removeClass('active-item');
             },
 
             [ria.mvc.DomEventBind('mouseover', '.double-select .first-result')],
             [[ria.dom.Dom, ria.dom.Event]],
             function firstResultOver(node, event){
-                var items = node.getData('items'), res = '';
+                var items = node.getData('items'), res = '', dropDown = node.parent('.double-select');
+                var value = dropDown.find('.selected-value').getValue();
 
                 items.forEach(function(item){
-                    res += '<li class="active-result second-result" data-id="' + item.id  + '">' + item.name + '</li>'
+                    res += '<li class="active-result second-result ' + (value == item.id ? 'selected-item' : '') + '" data-id="' + item.id  + '">' + item.name + '</li>'
                 });
 
-                node.parent('.double-select')
+                dropDown.find('.first-result.active-item').removeClass('active-item');
+                node.addClass('active-item');
+
+                dropDown
                     .find('.second-drop')
                     .removeClass('x-hidden')
                     .find('.second-results')
@@ -76,7 +86,7 @@ NAMESPACE('chlk.controls', function () {
                         new ria.dom.Dom(document).on('click.doubleselect', function(node, event){
                             var target = new ria.dom.Dom(event.target);
                             if(!target.isOrInside('.double-select')){
-                                this.hideDropDown_(ria.dom.Dom('.double-select'));
+                                this.hideDropDown_(ria.dom.Dom('.double-select.chosen-container-active'));
                             }
                         }.bind(this));
                     }.bind(this));
