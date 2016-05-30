@@ -62,19 +62,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
 
             if(uploadToCrocodoc)
-                try
-                {
-                    res.Uuid = UploadToCrocodoc(res.Name, content, serviceLocator);
-                }
-                catch (UploadToCrocodocFailedException)
-                {
-                    /*Ignore*/
-                }
-                finally
-                {
-                    res.Uuid = null;
-                }
-
+                 res.Uuid = UploadToCrocodoc(res.Name, content, serviceLocator);
+           
             var da = new AttachmentDataAccess(unitOfWork);
             if (uploadToSti)
             {
