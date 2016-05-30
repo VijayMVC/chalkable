@@ -151,12 +151,13 @@ namespace Chalkable.StiConnector.Connectors
         {
             var nvc = new NameValueCollection();
             var urlBilder = new StringBuilder();
-            urlBilder.Append("Chalkable/activities");
+            urlBilder.Append(BaseUrl + "chalkable/activities");
             if (ids != null && ids.Count > 0)
             {
-                urlBilder.Append("?");
-                foreach (var id in ids)
-                    urlBilder.Append($"ids={id}");
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    nvc.Add($"ids[{i}]", ids[i].ToString());
+                }
             }
             return Call<IList<Activity>>(urlBilder.ToString(), nvc);
         } 
