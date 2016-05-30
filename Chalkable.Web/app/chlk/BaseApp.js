@@ -33,13 +33,12 @@ REQUIRE('chlk.controls.SelectControl');
 REQUIRE('chlk.controls.SlideCheckboxControl');
 REQUIRE('chlk.controls.TextAreaControl');
 REQUIRE('chlk.controls.VideoControl');
-REQUIRE('chlk.controls.PayCheckControl');
 REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
-REQUIRE('chlk.controls.SimplePayCheckControl');
 REQUIRE('chlk.controls.CloseOpenControl');
 REQUIRE('chlk.controls.ClassesBarControl');
 REQUIRE('chlk.controls.GradesBarControl');
+REQUIRE('chlk.controls.DoubleSelectControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
@@ -71,6 +70,15 @@ REQUIRE('chlk.lib.mvc.ChlkView');
 REQUIRE('chlk.controllers.ErrorController');
 
 NAMESPACE('chlk', function (){
+
+    // FIX for IE
+    (function(win_loc) {
+        try {
+            if (!win_loc.origin) {
+                win_loc.origin = win_loc.protocol + "//" + win_loc.hostname + (win_loc.port ? ':' + win_loc.port : '');
+            }
+        } catch (ignored) {}
+    })(window.location);
 
     var Raygun = window.Raygun || null;
 

@@ -67,6 +67,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             Boolean, 'ableToGrade',
             Boolean, 'ableDropStudentScore',
             Boolean, 'ableToExempt',
+            Boolean, 'dropped',
             Boolean, 'moreClicked',
 
             Array, 'zeroPercentageScores',
@@ -92,7 +93,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     owner: this.getOwner(),
                     announcementId: this.getAnnouncementId(),
                     ableDropStudentScore : this.isAbleDropStudentScore(),
-                    gradable: this.isAbleToGrade()//this.isGradable()
+                    gradable: this.isAbleToGrade(),//this.isGradable(),
+                    dropped: this.isDropped()
                 });
                 var container = this.dom.find('.grading-part');
                 container.empty();
@@ -165,6 +167,14 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function makeVisibleClick(node, event){
                 node.parent().parent().hide();
+            },
+
+            [ria.mvc.DomEventBind('change', '.drop-unDrop-checkbox')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function changeDropUnDropp(node, event){
+                var dropped = node.checked();
+                this.setDropped(dropped);
+                node.parent('form').trigger('submit');
             },
 
             [ria.mvc.DomEventBind('focus', '.grade-input')],
@@ -343,6 +353,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var lessonPlan = model.getLessonPlanData();
                 if(this.getRole().isTeacher() && classAnnouncement){
                     this.setAbleDropStudentScore(classAnnouncement.isAbleDropStudentScore());
+                    this.setDropped(classAnnouncement.isDropped());
                     this.setAbleToExempt(classAnnouncement.isAbleToExempt());
                     model.getAlternateScores().forEach(function(item){
                         allScores.push(item.getName());
@@ -942,12 +953,22 @@ NAMESPACE('chlk.activities.announcement', function () {
                 node.parent().find('.grade-input').removeClass('disabled-submit');
             },
 
+            Boolean, 'noGradeSave',
+
+            [ria.mvc.DomEventBind('mousedown', '.drop-unDrop-checkbox')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function dropUndropMouseDown(node, event){
+                this.setNoGradeSave(true);
+            },
+
             [ria.mvc.DomEventBind('blur', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeInputBlur(node, event){
-                if(!node.hasClass('disabled-submit') && !node.parent('form').find('.small-pop-up:visible').exists()){
+                if(!this.isNoGradeSave() && !node.hasClass('disabled-submit') && !node.parent('form').find('.small-pop-up:visible').exists()){
                     node.parent('form').trigger('submit');
                 }
+
+                this.setNoGradeSave(false);
             },
 
             [ria.mvc.DomEventBind('click', '.attribute-title')],

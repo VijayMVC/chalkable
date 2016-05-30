@@ -7,6 +7,7 @@ REQUIRE('chlk.models.student.StudentInfo');
 REQUIRE('chlk.models.student.StudentGradingInfo');
 REQUIRE('chlk.models.people.Schedule');
 REQUIRE('chlk.models.student.StudentExplorer');
+REQUIRE('chlk.models.people.PersonApps');
 
 NAMESPACE('chlk.services', function () {
     "use strict";

@@ -32,6 +32,12 @@ namespace Chalkable.Web.ActionFilters
             if (CompilerHelper.IsProduction)
             {
                 var tags = new List<string> { Settings.Domain };
+                if (filterContext.HttpContext.Request.IsAjaxRequest())
+                    tags.Add("ajax-request");
+
+                if (filterContext.HttpContext.Request.IsApiRequest())
+                    tags.Add("api-request");
+
                 if (filterContext.HttpContext?.User != null)
                 {
                     raygunClient.User = filterContext.HttpContext.User.Identity.Name;
@@ -59,6 +65,12 @@ namespace Chalkable.Web.ActionFilters
                         // ignored
                     }
                 }
+                else
+                {
+                    tags.Add("no-user");
+                }
+
+
                 raygunClient.SendInBackground(filterContext.Exception, tags);
             }
 
@@ -112,7 +124,7 @@ namespace Chalkable.Web.ActionFilters
 
             filterContext.HttpContext.Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(filterContext.HttpContext.Response.StatusCode);
 
-            var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(filterContext.Exception, filterContext.Exception.InnerException))
+            var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(filterContext.Exception))
             {
                 Success = false
             };

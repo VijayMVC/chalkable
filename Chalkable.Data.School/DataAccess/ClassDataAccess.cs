@@ -191,6 +191,26 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
+        public IList<Class> GetClassBySchoolYearIds(IList<int> schoolYearIds, int teacherId)
+        {
+            var query =
+                $@"Select {nameof(Class)}.*
+                   From   {nameof(Class)} join {nameof(ClassTeacher)}
+                       On {nameof(Class.Id)} = {nameof(ClassTeacher.ClassRef)}
+                   Where
+                          {nameof(Class.SchoolYearRef)} in (Select * From @schoolYearIds)
+                      And {nameof(ClassTeacher.PersonRef)} = @teacherId";
 
+            var @params = new Dictionary<string, object>
+            {
+                ["schoolYearIds"] = schoolYearIds,
+                ["teacherId"] = teacherId
+            };
+
+            using (var reader = ExecuteReaderParametrized(query, @params))
+            {
+                return reader.ReadList<Class>();
+            }
+        } 
     }
 }

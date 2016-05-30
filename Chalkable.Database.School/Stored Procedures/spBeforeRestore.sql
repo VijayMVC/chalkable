@@ -19,9 +19,6 @@ values
 ('Attachment'),
 ('AnnouncementAttachment'),
 ('AnnouncementQnA'),
-('ApplicationInstall'),
-('ApplicationInstallActionClasses'),
-('ApplicationInstallAction'),
 ('PrivateMessageRecipient'),
 ('PrivateMessage'),
 ('LPGalleryCategory'),
@@ -36,8 +33,7 @@ values
 ('AdminAnnouncement'),
 ('ClassAnnouncement'),
 ('LessonPlan'),
-('Announcement'),
-('ApplicationBanHistory')
+('Announcement')
 
 --Disable all FKs
 declare @table nvarchar(2048)

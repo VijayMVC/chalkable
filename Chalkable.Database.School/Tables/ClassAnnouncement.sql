@@ -7,11 +7,12 @@
     [VisibleForStudent]        BIT            NOT NULL,
     [Order]                    INT            NOT NULL,
     [Dropped]                  BIT            NOT NULL,
-    [MaxScore]                 DECIMAL (18)   NULL,
+    [MaxScore]                 DECIMAL (20, 2)   NULL,
     [WeightAddition]           DECIMAL (9, 6) NULL,
     [WeightMultiplier]         DECIMAL (9, 6) NULL,
     [SisActivityId]            INT            NULL,
     [SchoolYearRef]            INT            NOT NULL,
+	[IsScored]				   BIT			  NOT NULL DEFAULT 0
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_ClassAnnouncement_Announcement] FOREIGN KEY ([Id]) REFERENCES [dbo].[Announcement] ([Id]),
     CONSTRAINT [FK_ClassAnnouncement_Class] FOREIGN KEY ([ClassRef]) REFERENCES [dbo].[Class] ([Id]),

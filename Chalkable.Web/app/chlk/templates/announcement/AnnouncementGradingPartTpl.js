@@ -21,8 +21,6 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             chlk.models.people.User, 'owner',
 
-            Boolean, 'ableDropStudentScore',
-
             Boolean, 'ableToExempt',
 
             ArrayOf(chlk.models.standard.Standard), 'standards',

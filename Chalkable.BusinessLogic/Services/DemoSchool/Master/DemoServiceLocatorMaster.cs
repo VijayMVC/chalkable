@@ -18,13 +18,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         private IChalkableDepartmentService chalkableDepartmentService;
         private IPersonPictureService personPictureService;
         private IPictureService departmentIconService;
-        private IPictureService fundRequestPictureService;
         private IPictureService applicationPictureService;
         private IApplicationService applicationService;
         private ICategoryService categoryService;
         private IApplicationUploadService applicationUploadService;
         private IEmailService emailService;
-        private IFundService fundService;
         private IDeveloperService developerService;
         private IDbService dbService;
         private IUserTrackingService userTrackingService;
@@ -39,7 +37,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             developerService = new DemoDeveloperService(this);
             districtService = new DemoDistrictService(this);
             emailService = new DemoEmailService(this);
-            fundService = new DemoFundService(this);
             backgroundTaskService = new DemoBackgroundTaskService(this);
             applicationService = new DemoApplicationService(this);
             applicationUploadService = new DemoApplicationUploadService(this);
@@ -48,7 +45,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             personPictureService = new PersonPictureService(this);
             departmentIconService = new DepartmentIconService(this);
             AccessControlService = new AccessControlService(this);
-            fundRequestPictureService = new FundRequestPictureService(this);
             applicationPictureService = new ApplicationPictureService(this);
             dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
             userTrackingService = new NullTrackingService();
@@ -83,8 +79,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             get { return emailService; } 
             protected set { emailService = value; }
         }
-
-        public IFundService FundService { get { return fundService; } }
+        
         public IDeveloperService DeveloperService { get { return developerService; } }
         public IDbService DbService 
         {
@@ -93,7 +88,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         }
 
         public IUserTrackingService UserTrackingService { get { return userTrackingService;} }
-        public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
         public IDbMaintenanceService DbMaintenanceService { get{throw new NotImplementedException();} }
         public IAcademicBenchmarkService AcademicBenchmarkService { get{throw new NotImplementedException();} }

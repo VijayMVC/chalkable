@@ -90,7 +90,7 @@ insert into @announcementsToInsert
  from
   @lessonPlans
   left join AnnouncementRecipientData
-   on Id = AnnouncementRef and personRef = @personid
+   on Id = AnnouncementRef and PersonRef = @personid
  Where AnnouncementRecipientData.Complete is null
 
 Update AnnouncementRecipientData

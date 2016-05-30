@@ -109,7 +109,7 @@ NAMESPACE('chlk.controllers', function (){
                 var hasPermission = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
                 var res = this.adminDistrictService.getSettings()
                     .then(function(data){
-                        var msgViewData = new chlk.models.settings.MessagingSettingsViewData(data.getMessagingSettings(), data.getInstalledApps(), hasPermission);
+                        var msgViewData = new chlk.models.settings.MessagingSettingsViewData(data.getMessagingSettings(), data.getApplications(), hasPermission);
                         return msgViewData
                     })
                     .attach(this.validateResponse_());
@@ -135,7 +135,7 @@ NAMESPACE('chlk.controllers', function (){
                 ])
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var installedApps = result[0].getInstalledApps(),
+                        var applications = result[0].getApplications(),
                             data = result[1],
                             appData = data.getApplication();
 
@@ -143,7 +143,7 @@ NAMESPACE('chlk.controllers', function (){
                             + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
                             + '&code=' + data.getAuthorizationCode();
 
-                        return new chlk.models.settings.AppSettingsViewData(null, appData, viewUrl, '', installedApps);
+                        return new chlk.models.settings.AppSettingsViewData(null, appData, viewUrl, '', applications);
                     }, this);
 
                 return this.PushView(chlk.activities.settings.AppSettingsPage, result);

@@ -445,6 +445,7 @@ var Msg = {
     Enter_when_done: 'Enter when done',
     Error_message: 'Error message',
     Excused_from_a_class: 'Excused from a class',
+    Extra_Credit: 'Extra Credit',
     Family_member:'Family Member',
     Final_Grade: oneOrMany('Final Grade'),
     First_name: 'First name',
@@ -492,7 +493,6 @@ var Msg = {
     Include_withdrawn_students: 'Include withdrawn students',
     Info_this_app_uses: 'Info this app uses:',
     Insert_title: 'Insert title',
-    Install_App: 'Install App',
     Invite_users: 'Invite users',
     IsInternal: 'IsInternal',
     Is_system: 'Is system',
@@ -722,6 +722,7 @@ var Msg = {
     Weight_Addition_Tooltip_Message: 'Enter a number here if points are to be added to each student’s grade for this item.',
     Hide_From_Student_Tooltip_Message: 'This is will hide the item from students',
     Can_Drop_Student_Score_Tooltip_Message: 'Check this box if a score may be dropped for this item',
+    Extra_Credit_Tooltip_Message: '',
 
     Add_Credit_Transaction_Success: function(balance){
         return String.format("Success! Your new balance is ${0}", balance)
@@ -746,7 +747,7 @@ var Msg = {
     Chalkable_REST_API: "Chalkable REST API",
     Chalkable_REST_API_description: "The API allows you to access real-time data from schools. " +
         "All methods return JSON. There are user roles on the bar above. Choosing a role, for example teacher, " +
-        "displays all of the methods available to your app if a teacher had installed it.",
+        "displays all of the methods available to your app.",
     Close_without_attaching_the_app: 'Close without attaching the app?',
     Delete_announcement_btn_tooltip: 'You must delete the grades first to delete this item',
     Edit_Average_Text_1: 'This action overrides the calculated score.',
@@ -783,6 +784,5 @@ var Msg = {
         if (count == 1)
             return "Looks like you entered a comment for 1 student but did not select them. Do you want to continue?";
         return String.format('Looks like you entered a comment for {0} students but did not select them. Do you want to continue?', count);
-    },
-    Installed: 'Installed'
+    }
 };

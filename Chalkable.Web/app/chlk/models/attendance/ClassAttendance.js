@@ -216,6 +216,9 @@ NAMESPACE('chlk.models.attendance', function () {
 
             chlk.models.people.User, 'student',
 
+            [ria.serialize.SerializeProperty('isdailyattendanceperiod')],
+            Boolean, 'dailyAttendancePeriod',
+
             [[chlk.models.people.User]],
             VOID, function setStudent(student){
                 this._student = student;

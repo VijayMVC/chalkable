@@ -82,11 +82,9 @@
     <Build Include="Tables\ABToCCMapping.sql" />
     <Build Include="Tables\Application.sql" />
     <Build Include="Tables\ApplicationCategory.sql" />
-    <Build Include="Tables\ApplicationDistrictOption.sql" />
     <Build Include="Tables\ApplicationGradeLevel.sql" />
     <Build Include="Tables\ApplicationPermission.sql" />
     <Build Include="Tables\ApplicationPicture.sql" />
-    <Build Include="Tables\ApplicationRating.sql" />
     <Build Include="Tables\ApplicationStandard.sql" />
     <Build Include="Tables\BackgroundTask.sql" />
     <Build Include="Tables\Category.sql" />
@@ -95,9 +93,6 @@
     <Build Include="Tables\CommonCoreStandardCategory.sql" />
     <Build Include="Tables\Developer.sql" />
     <Build Include="Tables\District.sql" />
-    <Build Include="Tables\Fund.sql" />
-    <Build Include="Tables\FundRequest.sql" />
-    <Build Include="Tables\FundRequestRoleDistribution.sql" />
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\School.sql" />
     <Build Include="Tables\SchoolUser.sql" />
@@ -111,7 +106,6 @@
     <Build Include="Stored Procedures\spDeleteDistrictData.sql" />
     <Build Include="Stored Procedures\spGetBackgroundTaskForProcessing.sql" />
     <Build Include="Stored Procedures\spGetSuggestedApplications.sql" />
-    <Build Include="Stored Procedures\spSetApplicationDistrictOption.sql" />
     <Build Include="Stored Procedures\spUpdateMessagingDisabled.sql" />
     <Build Include="Stored Procedures\spUpdateStudyCenterEnabled.sql" />
     <Build Include="User Defined Types\TABToCCMapping.sql" />
@@ -120,16 +114,12 @@
     <Build Include="User Defined Types\TApplicationGradeLevel.sql" />
     <Build Include="User Defined Types\TApplicationPermission.sql" />
     <Build Include="User Defined Types\TApplicationPicture.sql" />
-    <Build Include="User Defined Types\TApplicationRating.sql" />
     <Build Include="User Defined Types\TBackgroundTask.sql" />
     <Build Include="User Defined Types\TCategory.sql" />
     <Build Include="User Defined Types\TChalkableDepartment.sql" />
     <Build Include="User Defined Types\TCommonCoreStandard.sql" />
     <Build Include="User Defined Types\TDeveloper.sql" />
     <Build Include="User Defined Types\TDistrict.sql" />
-    <Build Include="User Defined Types\TFund.sql" />
-    <Build Include="User Defined Types\TFundRequest.sql" />
-    <Build Include="User Defined Types\TFundRequestRoleDistribution.sql" />
     <Build Include="User Defined Types\TGUID.sql" />
     <Build Include="User Defined Types\TInt.sql" />
     <Build Include="User Defined Types\TPreference.sql" />
@@ -141,14 +131,22 @@
     <Build Include="Stored Procedures\spUpdateMessagingSettings.sql" />
     <Build Include="Stored Procedures\spUpdateAssessmentEnabled.sql" />
     <Build Include="Tables\UserLog.sql" />
+    <Build Include="Tables\ApplicationSchoolOption.sql" />
+    <Build Include="Stored Procedures\spBanSchoolsByIds.sql" />
+    <Build Include="User Defined Types\TApplicationSchoolOption.sql" />
+    <Build Include="Stored Procedures\spGetApplicationBanInfo.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Pre-Deploy\001_addIsAssessmentEnabledToSchool.PreDeployment.sql" />
     <None Include="Scripts\Pre-Deploy\002_HasDistricAdminSettingsToHasDistrictAdminSettings.PreDeployment.sql" />
     <None Include="Scripts\Pre-Deploy\003_ApplicationChangeProvidesRecomendedContentToProvidesRecommendedContent.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\004_Paid_apps_cleaning.PreDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Post-Deploy\Insert ABIds and Delete CCStIds in AppStand table.sql" />
     <None Include="Scripts\Post-Deploy\004_drop_IsNewAssessmentEnabled_In_School.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Chalkable.Database.Master.refactorlog" />
   </ItemGroup>
 </Project>

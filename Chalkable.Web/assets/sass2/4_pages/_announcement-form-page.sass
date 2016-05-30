@@ -1,3 +1,19 @@
+.double-select.chosen-container.chosen-with-drop
+  LI.active-result
+    overflow: hidden
+    text-overflow: ellipsis
+
+    &:hover, &.active-item
+      color: #56554f
+      background: #f1f1f1
+
+    &.selected-item
+      background: #e1e1e1
+
+  .chosen-drop.second-drop
+    left: 100%
+    border: 1px solid #aaa
+
 .add-new-category-dialog
   input[name=value]
     margin: 10px 20px
@@ -5,7 +21,107 @@
   BUTTON.add
     margin-bottom: 15px
 
+.announcement-import-dialog
+  .double-select
+    width: 150px
+    margin-left: 4px
+
+  .top-container
+    background: #f7f7f5
+    line-height: 62px
+    padding: 0 49px 0 32px
+
+    .copy-start-date
+      width: 192px
+
+  .row-block
+    line-height: 48px
+
+    .box-checkbox
+      vertical-align: middle
+
+    &.header-row
+      line-height: 40px
+      font-size: 14px
+      border-bottom: 1px solid #ebebeb
+
+    .name-td:nth-child(2), .name-td:nth-child(3)
+      border-right: 1px solid #ebebeb
+
+  LABEL.text
+    font-weight: bold
+
+  .table-block
+    width: 100%
+
+    .items-container
+      overflow-x: auto
+      height: 300px
+
+    .header-row
+      font-weight: bold
+
+    .name-td
+      display: inline-block
+      text-overflow: ellipsis
+      overflow: hidden
+      white-space: nowrap
+      text-align: left
+      vertical-align: top
+      padding: 0 20px
+
+      &.check
+        padding: 0
+        width: 62px
+        text-align: right
+
+      &.date
+        width: 149px
+
+      &.category
+        width: 209px
+
+      &.name
+        width: 190px
+
+  .dialog
+    width: 750px
+
+    .buttons-container
+      margin: 0
+
 .announcement-form-page, .admin-announcement-form-page, .lesson-plan-form-page
+
+  .title-block-container
+    position: relative
+
+  #view-imported-button
+    position: absolute
+    background: #e9f6ed
+    color: #41b768
+    font-weight: bold
+    border-color: #41b768
+    box-shadow: none
+    width: 260px
+    left: 50%
+    margin-left: -130px
+    top: 0
+    line-height: 35px
+
+  .import-icon
+    opacity: 0.5
+
+    &:hover
+      opacity: 1
+
+  .action-bar
+    .items
+      width: 95%
+
+  .import-icon
+    float: right
+    margin-top: -6px
+
   .attach-btn-area
     margin-bottom: 20px
     border-bottom: 1px solid #e7e6e2

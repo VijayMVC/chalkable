@@ -9,7 +9,6 @@ REQUIRE('chlk.models.apps.AppPlatform');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.apps.ShortAppInfo');
-REQUIRE('chlk.models.apps.AppPersonRating');
 REQUIRE('chlk.models.apps.ApplicationAuthorization');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 REQUIRE('chlk.models.standard.Standard');
@@ -104,12 +103,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AppId]],
-            ria.async.Future, function installApp(appId) {
-                return this
-                    .post('Application/Install.json', Boolean, {applicationId: appId.valueOf()});
-            },
-
             [[chlk.models.id.SchoolPersonId]],
             function testDevApps(devId) {
                 window.location.href = "/DemoSchool/TestApps.json?prefix=" + devId.valueOf();
@@ -179,23 +172,6 @@ NAMESPACE('chlk.services', function () {
                     applicationId: appId_ ? appId_.valueOf() : undefined
                 }).transform(function (applicationAuthorization) {
                     var app = applicationAuthorization.getApplication();
-                    var appInstalls = app.getApplicationInstalls() || [];
-                    app.setSelfInstalled(false);
-                    var uninstallAppIds = [];
-
-                    appInstalls.forEach(function(appInstall){
-                        if (appInstall.isOwner() && forEdit){
-                            uninstallAppIds.push(appInstall.getAppInstallId());
-                            app.setSelfInstalled(appInstall.getPersonId() == appInstall.getInstallationOwnerId());
-                        }
-                        app.setPersonal(appInstall.getPersonId() == personId);
-                    });
-                    app.setUninstallable(forEdit && uninstallAppIds.length > 0);
-                    var ids = uninstallAppIds.map(function(item){
-                        return item.valueOf()
-                    }).join(',');
-                    app.setApplicationInstallIds(ids);
-
                     return applicationAuthorization;
                 });
             },
@@ -381,7 +357,48 @@ NAMESPACE('chlk.services', function () {
                 msg += '|' + encodedKey;
                 //msg += 'test not valid token test';
                 return CryptoJS.SHA256(msg).toString();
-            }
+            },
 
+
+            [[Number, Number]],
+            ria.async.Future, function getAppsForAttach(start_, count_){
+                return this.getPaginatedList('Application/ListForAttach.json', chlk.models.apps.Application,{
+                    start: start_ || 0,
+                    count: count_ || 7
+                });
+            },
+
+            [[String, String, Number, Boolean]],
+            ria.async.Future, function getSuggestedApps(academicBenchmarkIds, start_, count_, myAppsOnly_){
+                return this.get('Application/SuggestedApps.json', ArrayOf(chlk.models.apps.Application),{
+                    abIds : academicBenchmarkIds,
+                    start: start_ | 0,
+                    count: count_ || 9999,
+                    myAppsOnly: myAppsOnly_
+                });
+            },
+
+            [[Number, Number]],
+            ria.async.Future, function getMyApps(start_, count_) {
+                return this.getPaginatedList('Application/MyApps.json', chlk.models.apps.Application, {
+                    start: start_ | 0,
+                    count: count_ || 10000,
+                });
+            },
+
+            [[chlk.models.id.AppId, ArrayOf(chlk.models.id.SchoolId)]],
+            function submitApplicationBan(applicationId, schoolIds){
+                return this.post('Application/SubmitApplicationBan.json', Boolean, {
+                    applicationId: applicationId.valueOf(),
+                    schoolIds: this.arrayToCsv(schoolIds)
+                });
+            },
+
+            [[chlk.models.id.AppId]],
+            function getApplicationBannedSchools(applicationId){
+                return this.get('Application/ApplicationBannedSchools', ArrayOf(chlk.models.apps.ApplicationSchoolBan), {
+                    applicationId: applicationId.valueOf()
+                });
+            }
         ])
 });

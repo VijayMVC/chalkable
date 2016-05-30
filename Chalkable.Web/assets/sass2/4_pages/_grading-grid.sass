@@ -144,7 +144,7 @@
       overflow: hidden
       font-style: italic
 
-  .dotted-container, .lr-toolbar
+  .dotted-container, .lr-toolbar, .fixed-block
     display: inline-block
     vertical-align: top
 
@@ -190,6 +190,10 @@
       width: 214px
       text-align: left
       padding: 0 0 0 19px
+
+  .avgs-container
+    .type-name
+      width: 120px
 
   .student-name
     .withdrawn
@@ -295,6 +299,7 @@
     color: #2d788f
     border-bottom: none
     height: 38px
+    padding: 0
 
     &.error
       border-color: #d16060
@@ -308,7 +313,7 @@
     top: 40px
 
   .active-row
-    background: #fafafa
+    background: rgba(189, 205, 226, 0.5)
 
   .dropped-value
     text-decoration: line-through

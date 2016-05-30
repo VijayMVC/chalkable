@@ -80,6 +80,9 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.AttendanceService, 'attendanceService',
 
+            [ria.mvc.Inject],
+            chlk.services.ClassAnnouncementService, 'classAnnouncementService',
+
 
             [chlk.controllers.Permissions([
                 chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
@@ -497,6 +500,20 @@ NAMESPACE('chlk.controllers', function (){
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
+            },
+
+            [[chlk.models.announcement.SubmitDroppedAnnouncementViewData]],
+            function setAnnouncementDroppedAction(model){
+                (model.isDropped()
+                        ? this.classAnnouncementService.dropAnnouncement(model.getAnnouncementId())
+                        : this.classAnnouncementService.unDropAnnouncement(model.getAnnouncementId())
+                )
+                .attach(this.validateResponse_())
+                .then(function(data){
+                        var redirectModel = new chlk.models.grading.GradingSummaryGridSubmitViewData(model.getClassId(), model.getGradingPeriodId(), true, false, model.getStandardId(), model.getCategoryId(), true);
+                        this.BackgroundNavigate('grading', 'loadGradingPeriodGridSummary', [redirectModel]);
+                }, this);
+               return null;
             },
 
             [chlk.controllers.NotChangedSidebarButton()],
@@ -1173,7 +1190,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate){
-                var res = this.calendarService.listByDateRange(startDate, endDate, classId)
+                var res = this.calendarService.listClassAnnsByDateRange(startDate, endDate, classId)
                     .then(function(announcements){
                         var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                         var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.WORKSHEET_REPORT);

@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
@@ -95,12 +99,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var canAddStandard = SchoolLocator.GetAnnouncementService(type).CanAddStandard(announcementId);
             var isAppEnabled = BaseSecurity.IsDistrictOrTeacher(Context) && Context.SCEnabled;
             var isFileCabinetEnabled = Context.Role == CoreRoles.TEACHER_ROLE; //only teacher can use file cabinet for now
-            //TODO: get external attach apps
-
-            var installedAppsIds = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value)
-                                                .GroupBy(x=>x.ApplicationRef).Select(x=>x.Key).ToList();
-
-            var apps = MasterLocator.ApplicationService.GetApplicationsByIds(installedAppsIds);
+            
+            var apps = MasterLocator.ApplicationService.GetApplications(live:true).ToList();
             apps = apps.Where(app => MasterLocator.ApplicationService.HasExternalAttachMode(app)).ToList();
             return Json(AttachSettingsViewData.Create(assesmentId, canAddStandard, isAppEnabled, isFileCabinetEnabled, apps));
         }
@@ -230,6 +230,42 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public async Task<ActionResult> Copy(CopyAnnouncementsInputModel inputModel)
+        {
+            inputModel.Announcements = inputModel.Announcements ?? new List<AnnouncementToCopyInputModel>();
+
+            var classAnnouncementCopyTask = Task.Factory.StartNew(() => {
+                var ids = inputModel.Announcements
+                    .Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Class)
+                    .Select(x => x.AnnouncementId)
+                    .ToList();
+
+                return SchoolLocator.ClassAnnouncementService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
+            });
+
+            var lessonPlanCopyTask = Task.Factory.StartNew(() => {
+                var ids = inputModel.Announcements
+                        .Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.LessonPlan)
+                        .Select(x => x.AnnouncementId)
+                        .ToList();
+
+                return SchoolLocator.LessonPlanService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
+            });
+
+            var res = new List<CopyAnnouncementResultViewData>();
+            res.AddRange((await lessonPlanCopyTask).Select(x=> new CopyAnnouncementResultViewData
+            {
+                AnnouncementType = (int)AnnouncementTypeEnum.LessonPlan,
+                AnnouncementId = x
+            }));
+            res.AddRange((await classAnnouncementCopyTask).Select(x => new CopyAnnouncementResultViewData
+            {
+                AnnouncementType = (int)AnnouncementTypeEnum.Class,
+                AnnouncementId = x
+            }));
+            return Json(res);
+        }
     }
 
 }

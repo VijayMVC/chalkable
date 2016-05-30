@@ -9,6 +9,6 @@ NAMESPACE('chlk.templates.settings', function () {
         [ria.templates.ModelBind(chlk.models.settings.AppSettingsViewData)],
         'AppSettingsPageTpl', EXTENDS(chlk.templates.apps.AppWrapperPageTpl), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.apps.Application), 'installedApps'
+            ArrayOf(chlk.models.apps.Application), 'applications'
         ]);
 });

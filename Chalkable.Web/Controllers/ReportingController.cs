@@ -166,8 +166,8 @@ namespace Chalkable.Web.Controllers
             {
                 Data = new ChalkableJsonResponce(new
                 {
-                    Exception = ExceptionViewData.Create(exception, exception.InnerException),
-                    InnerException = exception.InnerException != null ? ExceptionViewData.Create(exception.InnerException, exception.InnerException.InnerException) : null,
+                    Exception = ExceptionViewData.Create(exception),
+                    InnerException = ExceptionViewData.Create(exception.InnerException),
                     Messages = errorMessages
                 })
                 {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -13,11 +14,11 @@ namespace Chalkable.Api.SampleApp.Controllers
     {
         protected override async Task<ActionResult> ResolveAction(string mode
             , int? announcementApplicationId
+            , Guid applicationId
             , int? studentId
             , int? announcementId
             , int? announcementType
             , int? attributeId
-            , int? applicationInstallId
             , IEnumerable<StandardInfo> standards
             , string contentId)
         {

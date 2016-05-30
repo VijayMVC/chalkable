@@ -70,7 +70,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             //do this once
             
             RegisterApiMethodDefaults<ApplicationController>(x => x.GetAnnouncementApplication(1), ApiMethodCallType.Post);
-            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Today),ApiMethodCallType.Post);
+            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Today, true),ApiMethodCallType.Post);
             RegisterApiMethodDefaults<AttendanceController>(x => x.ClassList(null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AttendanceController>(x => x.AttendanceSummary(DateTime.Today), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AttendanceController>(x => x.SeatingChart(null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
@@ -85,7 +85,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             RegisterApiMethodDefaults<DisciplineController>(x => x.ClassList(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null, null, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<DisciplineController>(x => x.StudentDisciplineSummary(DemoSchoolConstants.Student1, DemoSchoolConstants.FirstMarkingPeriodId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<DisciplineTypeController>(x => x.List(null, null), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<FeedController>(x => x.List(null, null, null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<FeedController>(x => x.List(null, null, null, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<GradingController>(x => x.ClassSummary(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<GradingController>(x => x.ItemGradingStat(1), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<GradingController>(x => x.ClassSummaryGrids(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);

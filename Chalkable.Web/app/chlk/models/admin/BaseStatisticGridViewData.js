@@ -36,7 +36,8 @@ NAMESPACE('chlk.models.admin', function () {
                 chlk.models.id.SchoolId,
                 String,
                 String,
-                chlk.models.id.SchoolPersonId
+                chlk.models.id.SchoolPersonId,
+                chlk.models.id.SchoolYearId
             ]],
             function $(items_, sortType_, schoolId_, schoolName_, filter_, teacherId_, schoolYearId_){
                 BASE();

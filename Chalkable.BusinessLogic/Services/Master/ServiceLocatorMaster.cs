@@ -18,14 +18,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         IChalkableDepartmentService ChalkableDepartmentService { get; }
         IPersonPictureService PersonPictureService { get; }
         IPictureService DepartmentIconService { get; }
-        IPictureService FundRequestPictureService { get; }
         IPictureService ApplicationPictureService { get; }
         IApplicationService ApplicationService { get; }
         ICategoryService CategoryService { get; }
         IApplicationUploadService ApplicationUploadService { get; }
         IAccessControlService AccessControlService { get; }
         IEmailService EmailService { get; }
-        IFundService FundService { get; }
         IDeveloperService DeveloperService { get; }
         IDbService DbService { get; }
         IUserTrackingService UserTrackingService { get; }
@@ -43,12 +41,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IChalkableDepartmentService chalkableDepartmentService;
         private IPersonPictureService personPictureService;
         private IPictureService departmentIconService;
-        private IPictureService fundRequestPictureService;
         private IPictureService applicationPictureService;
         private IApplicationService applicationService;
         private ICategoryService categoryService;
         private IApplicationUploadService applicationUploadService;
-        private IFundService fundService;
         private IDeveloperService developerService;
         private IUserTrackingService userTrackingService;
         private IDbMaintenanceService dbMaintenanceService;
@@ -69,11 +65,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             AccessControlService = new AccessControlService(this);
             applicationUploadService = new ApplicationUploadService(this);
             EmailService = new EmailService(this);
-            fundService = new FundService(this);
-            fundRequestPictureService = new FundRequestPictureService(this);
             developerService = new DeveloperService(this);
             applicationPictureService = new ApplicationPictureService(this);
-            DbService = new DbService(Context != null ? Context.MasterConnectionString : null);
+            DbService = new DbService(Context?.MasterConnectionString);
             userTrackingService = new MixPanelService(Settings.MixPanelToken);
             dbMaintenanceService = new DbMaintenanceService(this);
             academicBenchmarkService = new AcademicBenchmarkService(this);
@@ -89,17 +83,15 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IPictureService DepartmentIconService { get { return departmentIconService; } }
         public IApplicationService ApplicationService { get { return applicationService; } }
         public ICategoryService CategoryService { get { return categoryService; } }
-        public IApplicationUploadService ApplicationUploadService { get { return applicationUploadService; } }
+        public IApplicationUploadService ApplicationUploadService => applicationUploadService;
         public IAccessControlService AccessControlService { get; protected set; }
         public IEmailService EmailService { get; protected set; }
-        public IFundService FundService { get { return fundService; } }
-        public IDeveloperService DeveloperService { get { return developerService; } }
-        public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
-        public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
+        public IDeveloperService DeveloperService => developerService;
+        public IPictureService ApplicationPictureService => applicationPictureService;
         public IDbService DbService { get; protected set; }
-        public IUserTrackingService UserTrackingService { get { return userTrackingService; } }
-        public IDbMaintenanceService DbMaintenanceService {get { return dbMaintenanceService; }}
-        public IAcademicBenchmarkService AcademicBenchmarkService { get { return academicBenchmarkService; } }
+        public IUserTrackingService UserTrackingService => userTrackingService;
+        public IDbMaintenanceService DbMaintenanceService => dbMaintenanceService;
+        public IAcademicBenchmarkService AcademicBenchmarkService => academicBenchmarkService;
 
 
         public virtual IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)

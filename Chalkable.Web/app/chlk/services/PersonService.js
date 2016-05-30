@@ -53,7 +53,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getAppsInfo(personId){
-                return this.get('Person/Apps.json', chlk.models.people.PersonApps,{
+                return this.get('Person/Apps.json', chlk.models.people.ShortUserInfo,{
                     personId: personId && personId.valueOf()
                 });
             }

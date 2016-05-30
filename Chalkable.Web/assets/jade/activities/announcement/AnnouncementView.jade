@@ -176,7 +176,8 @@ mixin Glue_()
                             gradable = classAnnouncement.isGradable(),
                             standards = self.getStandards(),
                             LEIntegrated = self.isLEIntegrated() && self.isHasAccessToLE(),
-                            classId = classAnnouncement.getClassId()
+                            classId = classAnnouncement.getClassId(),
+                            dropped = classAnnouncement.isDropped()
                         )
 
         if adminAnnouncement

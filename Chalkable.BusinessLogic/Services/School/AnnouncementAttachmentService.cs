@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
@@ -27,6 +29,79 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public class AnnouncementAttachmentService : SisConnectedService, IAnnouncementAttachmentService
     {
+        public static IList<AnnouncementAttachment> CopyAnnouncementAttachments(int fromAnnouncementId, IList<int> attachmentsOwners, IList<int> toAnnouncemenIds, UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
+        {
+            Trace.Assert(serviceLocator.Context.PersonId.HasValue);
+            var da = new AnnouncementAttachmentDataAccess(unitOfWork);
+            var annAttachmentsForCopying = da.GetLastAttachments(fromAnnouncementId)
+                .Where(x => attachmentsOwners.Contains(x.Attachment.PersonRef)).ToList();
+
+            var annAtts = new List<AnnouncementAttachment>();
+            foreach (var annAttForCopy in annAttachmentsForCopying)
+            {
+                foreach (var toAnnouncemenId in toAnnouncemenIds)
+                {
+                    var attForCopy = annAttForCopy.Attachment;
+                    var content = serviceLocator.AttachementService.GetAttachmentContent(attForCopy).Content;
+                    if (content != null)
+                    {
+                        var att = AttachmentService.Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
+                        var annAtt = new AnnouncementAttachment
+                        {
+                            AnnouncementRef = toAnnouncemenId,
+                            AttachedDate = annAttForCopy.AttachedDate,
+                            Order = annAttForCopy.Order,
+                            AttachmentRef = att.Id,
+                            Attachment = att
+                        };
+                        annAtts.Add(annAtt);
+                    }
+
+                }
+            }
+            da.Insert(annAtts);
+            return da.GetLastAttachments(toAnnouncemenIds, annAtts.Count);
+        }
+
+        public static IList<AnnouncementAttachment> CopyAnnouncementAttachments(IDictionary<int, int> fromToAnnouncementIds, IList<int> attachmentsOwners, 
+            UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
+        {
+            var annAttDataAccess = new AnnouncementAttachmentDataAccess(unitOfWork);
+            var annAttsToCopy = annAttDataAccess.GetByAnnouncementIds(fromToAnnouncementIds.Select(x=>x.Key).ToList(), attachmentsOwners);
+
+            var newAnnAtts = new List<AnnouncementAttachment>();
+            //var uploadToCrocodoc = new List<AttachmentContentInfo>();
+
+            foreach (var pair in fromToAnnouncementIds)
+            {
+                var announcementAttachments = annAttsToCopy.Where(x => x.AnnouncementRef == pair.Key).ToList();
+                foreach (var annAttachment in announcementAttachments)
+                {
+                    var attachmentToCopy = annAttachment.Attachment;
+                    var attContent = serviceLocator.AttachementService.GetAttachmentContent(attachmentToCopy);
+                    if (attContent?.Content == null)
+                        continue;
+
+                    //uploadToCrocodoc.Add(attContent);
+                   
+                    var newAttachment = AttachmentService.Upload(attachmentToCopy.Name, attContent.Content, attachmentToCopy.IsStiAttachment,
+                        unitOfWork, serviceLocator, connectorLocator, false);
+                    var newAnnouncementAtt = new AnnouncementAttachment
+                    {
+                        AnnouncementRef = pair.Value,
+                        AttachedDate = annAttachment.AttachedDate,
+                        Order = annAttachment.Order,
+                        AttachmentRef = newAttachment.Id,
+                        Attachment = newAttachment
+                    };
+
+                    newAnnAtts.Add(newAnnouncementAtt);
+                }
+            }
+            annAttDataAccess.Insert(newAnnAtts);
+            return annAttDataAccess.GetByAnnouncementIds(fromToAnnouncementIds.Select(x => x.Value).ToList(), attachmentsOwners);
+        }
+
         public AnnouncementAttachmentService(IServiceLocatorSchool serviceLocator)
             : base(serviceLocator)
         {
@@ -37,37 +112,6 @@ namespace Chalkable.BusinessLogic.Services.School
             var recipients = ServiceLocator.GetAnnouncementService(ann.Type).GetAnnouncementRecipientPersons(ann.Id);
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context) || recipients.Any(p => p.Id == Context.PersonId);
         }
-
-        
-        public static IList<AnnouncementAttachment> CopyAnnouncementAttachments(int fromAnnouncementId, IList<int> attachmentsOwnres, IList<int> toAnnouncemenIds, UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
-        {
-            Trace.Assert(serviceLocator.Context.PersonId.HasValue);
-            var da = new AnnouncementAttachmentDataAccess(unitOfWork);
-            var annAttachmentsForCopying = da.GetLastAttachments(fromAnnouncementId).Where(x=> attachmentsOwnres.Contains(x.Attachment.PersonRef)).ToList();
-            
-            var annAtts = new List<AnnouncementAttachment>();
-            foreach (var annAttForCopy in annAttachmentsForCopying)
-            {
-                foreach (var toAnnouncemenId in toAnnouncemenIds)
-                {
-                    var attForCopy = annAttForCopy.Attachment;
-                    var content = serviceLocator.AttachementService.GetAttachmentContent(attForCopy).Content;
-                    var att = AttachmentService.Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
-                    var annAtt = new AnnouncementAttachment
-                    {
-                        AnnouncementRef = toAnnouncemenId,
-                        AttachedDate = annAttForCopy.AttachedDate,
-                        Order = annAttForCopy.Order,
-                        AttachmentRef = att.Id,
-                        Attachment = att
-                    };
-                    annAtts.Add(annAtt);
-                }
-            }
-            da.Insert(annAtts);
-            return da.GetLastAttachments(toAnnouncemenIds, annAtts.Count);           
-        }
-
 
         public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, IList<int> attachmentOwnersIds, int toAnnouncementId)
         {

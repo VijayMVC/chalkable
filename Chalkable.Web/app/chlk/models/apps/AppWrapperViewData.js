@@ -44,11 +44,11 @@ NAMESPACE('chlk.models.apps', function () {
 
                     case chlk.models.apps.AppModes.MYAPPSVIEW:{
                         var hasMyAppsView = app.getAppAccess().isMyAppsForCurrentRoleEnabled();
-                        var myAppsError = !hasMyAppsView || !app.isPersonal();
+                        var myAppsError = !hasMyAppsView;
                         if (myAppsError){
                             this.setMyAppsError(myAppsError);
                             this.setErrorTitle('oops.');
-                            var msg = !hasMyAppsView ? 'this app does not have a My Apps view for you.' : 'this app is not installed for you.';
+                            var msg = 'this app does not have a My Apps view for you.';
                             this.setErrorMessage(msg);
                         }
                     }break;
@@ -67,12 +67,5 @@ NAMESPACE('chlk.models.apps', function () {
                 BASE(url, []);
                 this.setAppError(true);
             }
-
-
-
-
         ]);
-
-
-
 });

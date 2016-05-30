@@ -48,7 +48,7 @@ namespace Chalkable.Data.Master.DataAccess
         public void CreateDistrictDataBase(string dbName, string prototypeName)
         {
             //TODO: what if servers are different?
-            var sql = string.Format("Create Database [{0}] as copy of [{1}]", dbName, prototypeName);
+            var sql = $"Create Database [{dbName}] as copy of [{prototypeName}]";
             ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         }
         

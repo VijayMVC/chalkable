@@ -37,12 +37,12 @@ namespace Chalkable.Data.School.Model
             get
             {
                 if (CategoryAveraging)
-                    return AVERAGE_METHOD_AVERAGE == AveragingMethod
-                               ? AveragingMethodTypeEnum.CategoryAverage
-                               : AveragingMethodTypeEnum.CategoryPoints;
-                return AVERAGE_METHOD_AVERAGE == AveragingMethod
-                           ? AveragingMethodTypeEnum.Average
-                           : AveragingMethodTypeEnum.Points;
+                    return IsPointsMethod(AveragingMethod)
+                               ? AveragingMethodTypeEnum.CategoryPoints
+                               : AveragingMethodTypeEnum.CategoryAverage;
+                return IsPointsMethod(AveragingMethod)
+                           ? AveragingMethodTypeEnum.Points
+                           : AveragingMethodTypeEnum.Average;
 
             }
             set
@@ -54,6 +54,13 @@ namespace Chalkable.Data.School.Model
                                       ? AVERAGE_METHOD_POINTS 
                                       : AVERAGE_METHOD_AVERAGE;
             }
+        }
+
+        public bool IsAveragingMethodPoints => IsPointsMethod(AveragingMethod);
+
+        private static bool IsPointsMethod(string averageMethod)
+        {
+            return averageMethod == AVERAGE_METHOD_POINTS || averageMethod == "P";
         }
     }
 

@@ -132,6 +132,6 @@ namespace Chalkable.Web.Controllers
         {
             var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId,(ClassSortType?) sortType);
             return Json(classes.Select(ClassStatsViewData.Create));
-        }   
+        }
     }
 }

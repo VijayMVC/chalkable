@@ -7,7 +7,7 @@ REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
-REQUIRE('chlk.models.apps.ApplicationForAttach');
+REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.announcement.AdminAnnouncementRecipient');
 REQUIRE('chlk.models.announcement.CategoryViewData');
 
@@ -43,11 +43,13 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
                 this.exempt = SJX.fromValue(raw.exempt, Boolean);
                 this.ableToRemoveStandard = SJX.fromValue(raw.canremovestandard, Boolean);
-                this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.ApplicationForAttach);
-                this.appsWithContent = SJX.fromArrayOfDeserializables(raw.appswithcontent, chlk.models.apps.ApplicationForAttach);
+                this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.Application);
+                this.appsWithContent = SJX.fromArrayOfDeserializables(raw.appswithcontent, chlk.models.apps.Application);
                 this.recipients = SJX.fromArrayOfDeserializables(raw.recipients, chlk.models.announcement.AdminAnnouncementRecipient);
                 this.grade = SJX.fromValue(raw.grade, Number);
                 this.comment = SJX.fromValue(raw.comment, String);
+                this.createdAnnouncements = SJX.fromValue(raw.createdAnnouncements ? JSON.parse(raw.createdAnnouncements) : raw.createdAnnouncements, Object);
+                this.ableUseExtraCredit = SJX.fromValue(raw.isableuseextracredit, Boolean);
 
                 this.groupIds = SJX.fromValue(raw.groupIds, String);
                 this.attachments = SJX.fromValue(raw.attachments, String);
@@ -63,6 +65,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.maxScore = SJX.fromValue(raw.maxscore, Number);
                 this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
                 this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
+                this.gradable = SJX.fromValue(raw.gradable, Boolean);
                 this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
@@ -73,14 +76,18 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
+                this.imported = SJX.fromValue(raw.imported, Boolean);
 
                 if(this.autoGradeApps && this.autoGradeApps.length){
                     var autoGradeApps = [];
                     this.autoGradeApps.forEach(function(item){
                         var app = autoGradeApps.filter(function(app){return app.id == item.announcementapplicationid})[0];
                         if(!app){
+
                             autoGradeApps.push({
-                                name: this.applications.filter(function(app){return app.getAnnouncementApplicationId().valueOf() == item.announcementapplicationid})[0].name,
+                                name: this.applications.filter(function(app){
+                                    return app.getAnnouncementApplicationId().valueOf() == item.announcementapplicationid
+                                })[0].name,
                                 id: item.announcementapplicationid,
                                 students: [{id:item.studentid, grade:item.grade}]
                             })
@@ -93,6 +100,8 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
 
+            Boolean, 'imported',
+            Object, 'createdAnnouncements',
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             String, 'announcementAssignedAttrs',
             ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
@@ -104,8 +113,8 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.people.User, 'owner',
             Boolean, 'exempt',
             Boolean, 'ableToRemoveStandard',
-            ArrayOf(chlk.models.apps.ApplicationForAttach), 'suggestedApps',
-            ArrayOf(chlk.models.apps.ApplicationForAttach), 'appsWithContent',
+            ArrayOf(chlk.models.apps.Application), 'suggestedApps',
+            ArrayOf(chlk.models.apps.Application), 'appsWithContent',
             Number, 'grade',
             String, 'comment',
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
@@ -132,8 +141,11 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'weightMultiplier',
             Number, 'weightAddition',
             Boolean, 'ableDropStudentScore',
+            Boolean, 'gradable',
             chlk.models.id.ClassId, 'classId',
             chlk.models.id.AnnouncementId, 'announcementForTemplateId',
+
+            Boolean, 'ableUseExtraCredit',
 
 
             [[Object]],
@@ -146,6 +158,13 @@ NAMESPACE('chlk.models.announcement', function () {
                 if (!viewData)
                     viewData = {hidefromstudents : raw.hidefromstudents || false};
                 return SJX.fromValue(viewData.hidefromstudents, Boolean);
+            },
+
+            Boolean, function isExtraCreditEnabled(){
+                if(this.isAbleUseExtraCredit() && this.getClassAnnouncementData().getMaxScore() == 0)
+                    return true;
+                else
+                    return false;
             },
 
             function getTitleModel(){

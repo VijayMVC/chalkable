@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? WeightMultiplier { get; set; }
         public bool CanDropStudentScore { get; set; }
         public bool HideFromStudents { get; set; }
+        public bool Gradable { get; set; }
 
 
         public ClassAnnouncementInfo()
@@ -24,6 +25,7 @@ namespace Chalkable.BusinessLogic.Model
             MaxScore = ClassAnnouncement.DEFAULT_MAX_SCORE;
             WeightAddition = ClassAnnouncement.DEFAULT_WEIGHT_ADDITION;
             WeightMultiplier = ClassAnnouncement.DEFAULT_WEGIHT_MULTIPLIER;
+            Gradable = ClassAnnouncement.DEFAULT_IS_SCORED;
         }
 
         public static ClassAnnouncementInfo Create(ClassAnnouncement announcement)
@@ -39,7 +41,8 @@ namespace Chalkable.BusinessLogic.Model
                     WeightMultiplier = announcement.WeightMultiplier,
                     CanDropStudentScore = announcement.MayBeDropped,
                     HideFromStudents = !announcement.VisibleForStudent,
-                    Title = announcement.Title
+                    Title = announcement.Title,
+                    Gradable = announcement.IsScored
                 };
         }
     }

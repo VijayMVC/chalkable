@@ -179,7 +179,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                         personId: node.getData('id'),
                         type: node.getData('type'),
                         level: node.getData('level'),
-                        attendanceReasonId: node.getData('reason-id')
+                        attendanceReasonId: node.getData('reason-id'),
+                        dailyAttendancePeriod: node.getData('is-daily-attendance-period')
                     });
                 });
                 return res;

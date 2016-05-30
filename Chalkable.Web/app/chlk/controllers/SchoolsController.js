@@ -335,8 +335,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[chlk.models.id.SchoolId, String, chlk.models.id.SchoolPersonId, Number, String]],
-        function classesSummaryTeacherAction(schoolId_, schoolName_, teacherId_, sortType_, filter_, schoolYearId_){
+        [[chlk.models.id.SchoolId, String,chlk.models.id.SchoolYearId, chlk.models.id.SchoolPersonId, Number, String]],
+        function classesSummaryTeacherAction(schoolId_, schoolName_, schoolYearId_, teacherId_, sortType_, filter_){
             sortType_ = sortType_ || chlk.models.admin.ClassSortTypeEnum.CLASS_ASC.valueOf();
             teacherId_ = teacherId_ || this.getCurrentPerson().getId();
             schoolName_ = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_NAME, null);

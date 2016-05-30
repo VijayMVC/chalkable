@@ -67,7 +67,13 @@ NAMESPACE('chlk.templates.grading', function () {
             Boolean, 'inProfile',
 
             function getTbWidth(){
-                return ria.dom.Dom('#content').width() - 412;
+                var res = ria.dom.Dom('#content').width() - 412;
+                if(this.isAbleDisplayStudentAverage() || this.isAbleDisplayAlphaGrades()){
+                    var avgs = ria.dom.Dom('.avgs-container');
+                    res = res - 128 * this.getStudentAverages().length;
+                }
+
+                return res;
             },
 
             function getStudentIds(){

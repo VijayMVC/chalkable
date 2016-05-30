@@ -11,7 +11,7 @@
   background: image-url("images2/loaders/circular-grey.gif") center center no-repeat transparentize(#fff, .5)
   z-index: 999
 
-.partial-update
+.partial-update, .partial-update-h
   position: relative
 
   &:after, .dialog:after
@@ -24,7 +24,11 @@
     background: image-url("images2/loaders/circular-grey.gif") center center no-repeat transparentize(#fff, .5)
     z-index: 999
 
-.partial-update-partial-update-inner
+.partial-update-h
+  &:after, .dialog:after
+    background: image-url("images2/loaders/horizontal.gif") center center no-repeat transparentize(#fff, .5)
+
+.partial-update-inner, .partial-update-inner-h
   &:after
     content: ' '
     position: absolute
@@ -34,6 +38,18 @@
     right: 0
     background: rgba(255,255,255,0.3) url(../content/images2/loaders/circular-grey.gif) center center no-repeat
     z-index: 2
+
+.partial-update-inner-h
+  &:after, .dialog:after
+    background: rgba(255,255,255,0.3) url(../content/images2/loaders/horizontal.gif) center center no-repeat
+
+.app-wrapper-page, .app-settings-page
+  &.activity-model-wait
+    position: static
+    min-height: 700px
+
+  .iframe-wrap.partial-update::after
+    background: image-url("images2/loaders/horizontal.gif") center center no-repeat
 
 .activity-model-wait, .loading
   .loader

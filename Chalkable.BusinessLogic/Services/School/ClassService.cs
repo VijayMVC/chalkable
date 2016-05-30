@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Mapping.EnumMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
@@ -66,6 +67,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
         IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
+        IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
+        bool IsTeacherClasses(int teacherId, params int[] classIds);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -122,6 +125,14 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null)
         {
             return DoRead(uow => new ClassDataAccess(uow).GetTeacherClasses(schoolYearId, teacherId, markingPeriodId));
+        }
+
+        public bool IsTeacherClasses(int teacherId, params int[] classIds)
+        {
+            var queryCondition = new AndQueryCondition {{nameof(ClassTeacher.PersonRef), teacherId}};
+            var teacherClasses = DoRead(u => new ClassTeacherDataAccess(u).GetAll(queryCondition))
+                .Select(x => x.ClassRef).ToList();
+            return classIds.All(x => teacherClasses.Contains(x));
         }
 
         public IList<ClassDetails> GetStudentClasses(int schoolYearId, int studentId, int? markingPeriodId)
@@ -263,6 +274,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 return ClassStatsInfo.Create(iNowRes, classes, classTeachers);
             }           
+        }
+
+        public IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId)
+        {
+            return DoRead(u => new ClassDataAccess(u).GetClassBySchoolYearIds(schoolYearIds, teacherId));
         }
     }
 }

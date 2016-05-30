@@ -13,7 +13,6 @@ namespace Chalkable.API
         public const string ANNOUNCEMENT_ID = "announcementid";
         public const string ANNOUNCEMENT_TYPE = "announcementtype";
         public const string ANNOUNCEMENT_OWNER_ID_PARAM = "announcementownerid";
-        public const string APPLICATION_INSTALL_ID = "applicationinstallid";
         public const string REMOTE_HOST_NAME = "remotehostname";
 
         public const string USER_ROLE_PARAM = "userroleparam";
@@ -31,6 +30,7 @@ namespace Chalkable.API
         public const string VIEW_MODE = "view";
         public const string MY_VIEW_MODE = "myview";
         public const string GRADING_VIEW_MODE = "gradingview";
+        public const string PROFILE_VIEW_MODE = "profileview";
         public const string SETTINGS_MODE = "settingsview";
         public const string STUDENT_PROFILE_MODE = "studentprofileview";
         public const string CONTENT_QUERY = "content-query";

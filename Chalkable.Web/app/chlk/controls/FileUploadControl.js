@@ -29,19 +29,22 @@ NAMESPACE('chlk.controls', function () {
                             var node = ria.dom.Dom('#' + attrs.id);
                             node.on('change', function(target, event){
                                 var files = target.valueOf()[0].files;
-                                var state = that.context.getState();
-                                var p = params.slice();
-                                if(needFileIndex){
-                                    p.push(index);
-                                    index = index + files.length;
-                                }
 
-                                p.push(files);
-                                state.setController(controller);
-                                state.setAction(action);
-                                state.setParams(p);
-                                state.setPublic(false);
-                                that.context.stateUpdated();
+                                if(files && files.length){
+                                    var state = that.context.getState();
+                                    var p = params.slice();
+                                    if(needFileIndex){
+                                        p.push(index);
+                                        index = index + files.length;
+                                    }
+
+                                    p.push(files);
+                                    state.setController(controller);
+                                    state.setAction(action);
+                                    state.setParams(p);
+                                    state.setPublic(false);
+                                    that.context.stateUpdated();
+                                }
                             });
 
                             var $dropArea = dropAreaSelector ? node.$.closest(dropAreaSelector) : node.$;
@@ -77,17 +80,19 @@ NAMESPACE('chlk.controls', function () {
 
                                         var files = e.originalEvent.dataTransfer.files;
 
-                                        var p = params.slice();
-                                        if(needFileIndex){
-                                            p.push(index);
-                                            index = index + files.length;
+                                        if(files && files.length){
+                                            var p = params.slice();
+                                            if(needFileIndex){
+                                                p.push(index);
+                                                index = index + files.length;
+                                            }
+                                            p.push(files);
+                                            state.setController(controller);
+                                            state.setAction(action);
+                                            state.setParams(p);
+                                            state.setPublic(false);
+                                            that.context.stateUpdated();
                                         }
-                                        p.push(files);
-                                        state.setController(controller);
-                                        state.setAction(action);
-                                        state.setParams(p);
-                                        state.setPublic(false);
-                                        that.context.stateUpdated();
                                     }
                                 });
 

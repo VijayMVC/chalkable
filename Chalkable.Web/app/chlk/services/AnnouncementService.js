@@ -17,6 +17,7 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
+REQUIRE('chlk.models.announcement.CopyAnnouncementResultViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -44,13 +45,24 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[Number, chlk.models.id.ClassId, Boolean]],
-            ria.async.Future, function getAnnouncementsList_(start_, classId_, importantOnly_) {
-                return this.get('Feed/List.json', chlk.models.feed.Feed, {
+            [[chlk.models.id.ClassId, chlk.models.id.ClassId, String, chlk.models.common.ChlkDate]],
+            ria.async.Future, function copy(fromClassId, toClassId, announcements, startDate_) {
+                return this.post('Announcement/Copy.json', Array, {
+                    fromClassId: fromClassId.valueOf(),
+                    toClassId: toClassId.valueOf(),
+                    announcements: JSON.parse(announcements),
+                    startDate: startDate_ && startDate_.toStandardFormat()
+                });
+            },
+
+            [[Number, chlk.models.id.ClassId, Boolean, Object]],
+            ria.async.Future, function getAnnouncementsList_(start_, classId_, importantOnly_, createdAnnouncements_) {
+                return this.post('Feed/List.json', chlk.models.feed.Feed, {
                     start: start_ || 0,
                     classId: classId_ ? classId_.valueOf() : null,
                     complete: importantOnly_ ? false : null,
-                    count: 10
+                    count: 10,
+                    createdAnnouncements: createdAnnouncements_
                 });
             },
 
@@ -65,8 +77,8 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[Number, chlk.models.id.ClassId, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
-                chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean]],
-            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_) {
+                chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean, Object]],
+            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, createdAnnouncements_) {
                 if(toSet_){
                     return this.get('Feed/SetSettings.json', Boolean, {
                         announcementType: annType_ && annType_.valueOf(),
@@ -75,10 +87,10 @@ NAMESPACE('chlk.services', function () {
                         toDate: endDate_ && endDate_.toStandardFormat(),
                         gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
                     }).then(function(){
-                        return this.getAnnouncementsList_(start_, classId_, importantOnly_);
+                        return this.getAnnouncementsList_(start_, classId_, importantOnly_, createdAnnouncements_);
                     }.bind(this));
                 }else{
-                    return this.getAnnouncementsList_(start_, classId_, importantOnly_);
+                    return this.getAnnouncementsList_(start_, classId_, importantOnly_, createdAnnouncements_);
                 }
             },
 

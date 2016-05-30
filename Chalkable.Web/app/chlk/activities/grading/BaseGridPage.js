@@ -523,11 +523,13 @@ NAMESPACE('chlk.activities.grading', function () {
                         valueInput = curCell.find('.value-input');
                         if(valueInput.getSelectedText() || valueInput.getCursorPosition() == 0){
                             curBlock = curCell.parent('.grade-container').previous('.grade-container');
-                            if(curBlock.exists() && curBlock.hasClass('total-points'))
-                                curBlock = curBlock.previous('.grade-container');
-                            var nameContainer = curBlock.parent('.ann-types-container').find('.name-container');
+                            var fixedBlock = curCell.parent('.ann-types-container').find('.fixed-block');
+
+                            if(curBlock.exists() && curBlock.hasClass('total-points') || !curBlock.exists() && !curCell.parent('.fixed-block').exists())
+                                curBlock = fixedBlock.find('.grade-container:last');
+
                             if(curBlock.exists()){
-                                if(curBlock.offset().left < (nameContainer.offset().left + nameContainer.width() - eps)){
+                                if(!curBlock.parent('.fixed-block').exists() && curBlock.offset().left < (fixedBlock.offset().left + fixedBlock.width() - eps)){
                                     curBlock.parent('.grid-toolbar').find('.prev-button').trigger('click');
                                     needsTimeout = true;
                                 }
@@ -540,8 +542,23 @@ NAMESPACE('chlk.activities.grading', function () {
                         var value = valueInput.getValue() || '';
                         if(valueInput.getSelectedText() || valueInput.getCursorPosition() == value.length){
                             curBlock = curCell.parent('.grade-container').next('.grade-container');
+
+                            if(!curBlock.exists() && curCell.parent('.fixed-block').exists()){
+                                curBlock = curCell.parent('.fixed-block').next().find('.grade-container:first');
+
+                                var toolbar = curBlock.parent('.lr-toolbar'),
+                                    secondContainer = toolbar.find('.second-container'),
+                                    curLeft = parseInt(secondContainer.getCss('left'), 10);
+
+                                if(curLeft < 0){
+                                    toolbar.trigger(chlk.controls.LRToolbarEvents.CLEAR_LEFT.valueOf());
+                                    needsTimeout = true;
+                                }
+                            }
+
                             if(curBlock.exists() && curBlock.hasClass('total-points'))
                                 curBlock = curBlock.next('.grade-container');
+
                             if(curBlock.exists()){
                                 var parentBlock = curBlock.parent('.grades-container');
                                 if(curBlock.offset().left > parentBlock.offset().left + parentBlock.width() - eps){
@@ -866,11 +883,10 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.BEFORE_RESIZE.valueOf(), '.grid-toolbar')],
             [[ria.dom.Dom, ria.dom.Event]],
             function beforeTbResize(toolbar, event_){
-                var padding = 412;
+                var padding = this.getTbPadding();
                 var maxWidth = ria.dom.Dom('#content').width() - padding;
                 toolbar.setCss('width', maxWidth);
-                var firstContainer = toolbar.find('.first-container'),
-                    thirdContainer = toolbar.find('.third-container');
+                var firstContainer = toolbar.find('.first-container');
                 firstContainer.setCss('width', maxWidth);
             },
 
@@ -894,8 +910,16 @@ NAMESPACE('chlk.activities.grading', function () {
                 return model;
             },
 
+            Number, 'tbPadding',
+
+            function preparePadding_(model){
+                var avgsCount = this.dom.find('.marking-period-container.open').find('.avgs-container').count();
+                this.setTbPadding(412 + 128 * avgsCount);
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
+                this.preparePadding_(model);
                 var gradingModel = this.prepareGradingModel_(model);
                 this.setClassId(gradingModel.getClassId());
                 this.openGradingPeriod(this.dom.find('.open.marking-period-container').find('.mp-data'));
@@ -912,6 +936,17 @@ NAMESPACE('chlk.activities.grading', function () {
                     this.dom.find('.prev-arrow').addClass('disabled');
                     this.dom.find('.next-arrow').addClass('disabled');
                 }
+            },
+
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                this.preparePadding_(model);
+            },
+
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                if(model instanceof chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData)
+                    this.preparePadding_(model);
             },
 
             function prepareAllScores(model){},

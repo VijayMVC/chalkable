@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
@@ -62,6 +63,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected AnnouncementViewData PrepareAnnouncmentViewDataForEdit(AnnouncementDetails ann)
         {
+            Trace.Assert(Context.PersonId.HasValue);
+
             var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann);
             annView.CanAddStandard = SchoolLocator.GetAnnouncementService(ann.Type).CanAddStandard(ann.Id);
             if (annView.Standards != null && annView.Standards.Count > 0)
@@ -74,9 +77,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
                 if (ann.ClassRef.HasValue)
                 {
-                    annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, ann.ClassRef.Value, abIds, mp.Id);
-                    annView.AppsWithContent = AppMarketController.GetInstalledWithContent(SchoolLocator, MasterLocator, Context.PersonId.Value, ann.ClassRef.Value, mp.Id);
+                    annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, abIds);
+                    annView.AppsWithContent = ApplicationLogic.GetApplicationsWithContent(SchoolLocator, MasterLocator);
                 }
+            }
+
+            if (annView.ClassAnnouncementData != null && annView.ClassId.HasValue)
+            {
+                var options = SchoolLocator.ClassroomOptionService.GetClassOption(annView.ClassId.Value);
+                annView.IsAbleUseExtraCredit = options != null && options.IsAveragingMethodPoints;
+
             }
             return annView;
         }
@@ -92,6 +102,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments, IList<AttachmentInfo> attrAttachmentInfo)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             if (ann.ClassAnnouncementData?.SisActivityId != null)
             {
                 ann.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id);
@@ -113,19 +124,15 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return annViewData;
         }
         
-        protected IList<ApplicationForAttachViewData> PrepareSuggestedAppsForAnnouncementViewData(AnnouncementDetails announcementDetails)
+        protected IList<BaseApplicationViewData> PrepareSuggestedAppsForAnnouncementViewData(AnnouncementDetails announcementDetails)
         {
             if (announcementDetails.AnnouncementStandards != null && announcementDetails.AnnouncementStandards.Count > 0 && announcementDetails.ClassRef.HasValue)
             {
-                var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
-                if (mp == null)
-                    throw new NoMarkingPeriodException();
                 var abIds = announcementDetails.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
                     .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
-                return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
-                                                          Context.PersonId.Value, announcementDetails.ClassRef.Value, abIds, mp.Id);
+                return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, abIds);
             }
-            return new List<ApplicationForAttachViewData>();
+            return new List<BaseApplicationViewData>();
         }
 
         private IList<int> GetAnnouncementOwnersIds(AnnouncementDetails ann)

@@ -33,6 +33,4 @@ DELETE a FROM dbo.AnnouncementApplication a WHERE EXISTS(SELECT * FROM @annToDel
 
 DELETE a FROM dbo.Announcement a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.Id)
 
-
-DELETE aiac FROM dbo.ApplicationInstallActionClasses aiac WHERE EXISTS (SELECT * FROM @ClassIds ci WHERE aiac.Id = ci.Value)
 DELETE c FROM dbo.Class c WHERE EXISTS (SELECT * FROM @ClassIds ci WHERE c.Id = ci.Value)

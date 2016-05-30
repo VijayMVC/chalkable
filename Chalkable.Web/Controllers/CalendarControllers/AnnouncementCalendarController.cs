@@ -50,10 +50,10 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          {
              //todo : investigate where this method is used
              var annList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(startDate, endDate, false, classId, filterByStartDate: false);
-             var res = new List<ShortAnnouncementViewData>();
-             res.AddRange(annList.LessonPlans.Select(ShortAnnouncementViewData.Create));
-             res.AddRange(annList.ClassAnnouncements.Select(ShortAnnouncementViewData.Create));
-             res.AddRange(annList.AdminAnnouncements.Select(ShortAnnouncementViewData.Create));
+             var res = new List<AnnouncementViewData>();
+             res.AddRange(annList.LessonPlans.Select(AnnouncementViewData.Create));
+             res.AddRange(annList.ClassAnnouncements.Select(AnnouncementViewData.Create));
+             res.AddRange(annList.AdminAnnouncements.Select(AnnouncementViewData.Create));
              return Json(res);
          }
 

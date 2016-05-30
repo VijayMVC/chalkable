@@ -287,7 +287,6 @@
     <Compile Include="Controllers\AnnouncementControllers\ClassAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\LessonPlanController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
-    <Compile Include="Controllers\AppMarketController.cs" />
     <Compile Include="Controllers\AttachmentController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\AttendanceReasonController.cs" />
@@ -314,7 +313,6 @@
     <Compile Include="Controllers\DisciplineTypeController.cs" />
     <Compile Include="Controllers\DistrictController.cs" />
     <Compile Include="Controllers\FeedController.cs" />
-    <Compile Include="Controllers\FundController.cs" />
     <Compile Include="Controllers\GradingController.cs" />
     <Compile Include="Controllers\GradingPeriodController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
@@ -369,11 +367,13 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\ClassAnnouncementViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\CopyAnnouncementResultViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\LessonPlanViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementAssignedAttributeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\ShortAnnouncementViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\ApplicationSchoolOptionViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
     <Compile Include="Models\AttachmentViewData.cs" />
     <Compile Include="Models\AttachSettingsViewData.cs" />
@@ -391,16 +391,11 @@
     <Compile Include="Models\ClassAnnouncementTypeInputData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
-    <Compile Include="Models\ApplicationsViewData\AppsBudgetViewData.cs" />
     <Compile Include="Models\BudgetBalanceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\AnnouncementApplicationViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationAccessViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationPersmissionsViewData.cs" />
-    <Compile Include="Models\ApplicationsViewData\ApplicationPriceViewData.cs" />
-    <Compile Include="Models\ApplicationsViewData\ApplicationRatingViewData.cs" />
-    <Compile Include="Models\ApplicationsViewData\ApplicationTotalPriceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationUpdateInputModel.cs" />
-    <Compile Include="Models\ApplicationsViewData\InstalledApplicationViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceReasonViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceSummaryViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
@@ -510,6 +505,7 @@
     <Compile Include="Models\SchoolsViewData\SchoolOptionViewData.cs" />
     <Compile Include="Models\SchoolsViewData\SchoolViewData.cs" />
     <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
+    <Compile Include="Models\SchoolYearClassesViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
     <Compile Include="Models\ShortDistrictSummaryViewData.cs" />

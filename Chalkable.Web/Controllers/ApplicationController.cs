@@ -5,16 +5,17 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model.Announcements;
-using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Controllers.AnnouncementControllers;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers
@@ -105,26 +106,11 @@ namespace Chalkable.Web.Controllers
             return FakeJson("~/fakeData/appAnalytics.json");
         }
 
-        [AuthorizationFilter("Developer")]
-        public ActionResult GetAppReviews(Guid applicationId)
-        {
-            var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
-            return Json(ApplicationRatingViewData.Create(appRatings));
-        }
 
-        [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult BanApp(Guid applicationId)
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
+        public ActionResult SubmitApplicationBan(Guid applicationId, GuidList schoolIds)
         {
-            Trace.Assert(Context.DistrictId.HasValue);
-            SchoolLocator.ApplicationSchoolService.BanUnBanApplication(applicationId, true);
-            return Json(true);
-        }
-
-        [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult UnbanApp(Guid applicationId)
-        {
-            Trace.Assert(Context.DistrictId.HasValue);
-            SchoolLocator.ApplicationSchoolService.BanUnBanApplication(applicationId, false);
+            MasterLocator.ApplicationService.SubmitApplicationBan(applicationId, schoolIds);
             return Json(true);
         }
 
@@ -185,16 +171,16 @@ namespace Chalkable.Web.Controllers
         public ActionResult AddToAnnouncement(int announcementId, int announcementType, Guid applicationId)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
             var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, (AnnouncementTypeEnum) announcementType,applicationId);
-            var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.PersonId.Value, false);
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
-
-
+            
             var assessmentApp = MasterLocator.ApplicationService.GetAssessmentApplication();
             if (assessmentApp != null && applicationId == assessmentApp.Id)
                 MasterLocator.UserTrackingService.AttachedAssessment(Context.Login, announcementId);
 
-            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId, (AnnouncementTypeEnum)announcementType));
+            return Json(AnnouncementApplicationViewData.Create(res, app, Context.PersonId, (AnnouncementTypeEnum)announcementType));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
@@ -203,7 +189,6 @@ namespace Chalkable.Web.Controllers
             var ann = SchoolLocator.ApplicationSchoolService.RemoveFromAnnouncement(announcementApplicationId, (AnnouncementTypeEnum)announcementType);
             return Json(PrepareFullAnnouncementViewData(ann.Id, (AnnouncementTypeEnum)announcementType), 6);
         }
-
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Attach(int announcementApplicationId, int announcementType)
@@ -216,12 +201,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Announcement })]
         public ActionResult UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl, string description)
         {
-            if (string.IsNullOrWhiteSpace(imageUrl))
-                imageUrl = null;
-
-            if(imageUrl != null && !Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
-                throw new ChalkableException("Invalid image Url!");
-
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var announcementType = SchoolLocator.AnnouncementFetchService.GetAnnouncementType(res.AnnouncementRef);
             SchoolLocator.ApplicationSchoolService.UpdateAnnouncementApplicationMeta(announcementApplicationId, announcementType, text, imageUrl, description);
@@ -234,9 +213,8 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var announcementType = SchoolLocator.AnnouncementFetchService.GetAnnouncementType(res.AnnouncementRef);
             var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
-            return Json(AnnouncementApplicationViewData.Create(res, app, null, null, announcementType));
+            return Json(AnnouncementApplicationViewData.Create(res, app, null, announcementType));
         }
-
 
         [AuthorizationFilter]
         public ActionResult GetOauthCode(string applicationUrl, Guid? applicationId)
@@ -244,10 +222,7 @@ namespace Chalkable.Web.Controllers
             if ((User.IsInRole("SysAdmin") && !Context.PersonId.HasValue) || User.IsInRole("AppTester"))
                 return GetOauthCodeForSysAdmin(applicationUrl, applicationId);
 
-            //TODO: check if app is installed??
-
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
 
             var app = !string.IsNullOrWhiteSpace(applicationUrl) 
                     ? MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl) : 
@@ -261,16 +236,11 @@ namespace Chalkable.Web.Controllers
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
             
-            var appInstall = SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
-            var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
-            var applicationInstalls = new List<ApplicationInstall>();
-            if(appInstall != null)
-                applicationInstalls.Add(appInstall);
-            var appView = InstalledApplicationViewData.Create(applicationInstalls, Context.PersonId, app, hasMyApps);
-            return Json( new {
-                                AuthorizationCode = authorizationCode,
-                                ApplicationInfo = appView
-                             });
+            return Json(new
+            {
+                AuthorizationCode = authorizationCode,
+                ApplicationInfo = BaseApplicationViewData.Create(app)
+            });
         }
 
         private ActionResult GetOauthCodeForSysAdmin(string applicationUrl, Guid? applicationId)
@@ -286,13 +256,11 @@ namespace Chalkable.Web.Controllers
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, null, ChalkableAuthentication.GetSessionKey());
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-
-            var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
-            var appView = InstalledApplicationViewData.Create(new List<ApplicationInstall>(), null, app, hasMyApps);
+            
             return Json(new
             {
                 AuthorizationCode = authorizationCode,
-                ApplicationInfo = appView
+                ApplicationInfo = app
             });
         }
 
@@ -326,6 +294,63 @@ namespace Chalkable.Web.Controllers
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
             var announcementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationRecipients(studentId, app.Id);
             return Json(announcementApplicationRecipient);
+        }
+
+        private const int ATTACH_DEFAULT_PAGE_SIZE = 12;
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult MyApps(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? start, int? count)
+        {
+            var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter, start ?? 0, count ?? DEFAULT_PAGE_SIZE, withBanned: true);
+
+            if (!BaseSecurity.IsDistrictAdmin(Context))
+                return Json(apps.Transform(BaseApplicationViewData.Create));
+
+            Trace.Assert(Context.DistrictId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value, Context.SchoolLocalId.Value);
+            var appBanInfos = MasterLocator.ApplicationService
+                .GetApplicationBanInfos(Context.DistrictId.Value, school.Id, apps.Select(x => x.Id).ToList());
+
+            var viewData = apps.Transform(x => BaseApplicationViewData.Create(x, appBanInfos.FirstOrDefault(y => y.ApplicationId == x.Id)));
+
+            return Json(viewData);
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult ApplicationBannedSchools(Guid applicationId)
+        {
+            Trace.Assert(Context.DistrictId.HasValue);
+            
+            var appSchoolOptions = MasterLocator.ApplicationService.GetApplicationSchoolBans(Context.DistrictId.Value, applicationId);
+
+            return Json(appSchoolOptions.Select(ApplicationSchoolOptionViewData.Create));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult ListForAttach(int? start, int? count)
+        {
+            var st = start ?? 0;
+            var cnt = count ?? ATTACH_DEFAULT_PAGE_SIZE;
+
+            var applications = MasterLocator.ApplicationService.GetApplications(st, cnt, true, canAttach: true);
+            return Json(applications.Transform(BaseApplicationViewData.Create));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult SuggestedApps(GuidList abIds, int? start, int? count, bool? myAppsOnly)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+
+            var st = start ?? 0;
+            var cnt = count ?? int.MaxValue;
+
+            var suggestedApplications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, st, cnt);
+
+            if (myAppsOnly.HasValue && myAppsOnly.Value)
+                suggestedApplications = suggestedApplications.Where(x => MasterLocator.ApplicationService.HasMyApps(x)).ToList();
+
+            return Json(suggestedApplications.Select(BaseApplicationViewData.Create));
         }
     }
 }

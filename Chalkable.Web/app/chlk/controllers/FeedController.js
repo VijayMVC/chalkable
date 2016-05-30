@@ -11,6 +11,7 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.ReportingService');
+REQUIRE('chlk.services.SchoolYearService');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.feed.Feed');
 REQUIRE('chlk.models.id.ClassId');
@@ -31,6 +32,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.FeedService, 'feedService',
+
+        [ria.mvc.Inject],
+        chlk.services.SchoolYearService, 'schoolYearService',
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
@@ -94,6 +98,14 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
+        [[chlk.models.id.ClassId]],
+        function viewImportedAction(classId){
+            var announcements = this.getContext().getSession().get(ChlkSessionConstants.CREATED_ANNOUNCEMENTS, []);
+            this.getContext().getSession().remove(ChlkSessionConstants.CREATED_ANNOUNCEMENTS);
+            return this.listAction(classId, null, null, null, null, null, null, null, null, null, null, announcements);
+        },
+
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.ClassId, Boolean, Boolean, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
             chlk.models.id.GradingPeriodId, Object, chlk.models.announcement.FeedSortTypeEnum, Boolean]],
         function listForProfileAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_){
@@ -102,8 +114,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.id.ClassId, Boolean, Boolean, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            chlk.models.id.GradingPeriodId, Object, chlk.models.announcement.FeedSortTypeEnum, Boolean, Boolean]],
-        function listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_) {
+            chlk.models.id.GradingPeriodId, Object, chlk.models.announcement.FeedSortTypeEnum, Boolean, Boolean, Object]],
+        function listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_) {
 
             //todo : think about go to inow part
             if(!this.canViewFeed()){
@@ -121,7 +133,7 @@ NAMESPACE('chlk.controllers', function (){
             annType_ = annType_ instanceof chlk.models.announcement.AnnouncementTypeEnum ? annType_ : null;
 
             var result = this
-                .getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_)
+                .getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_)
                 .attach(this.validateResponse_());
 
             if(isProfile_)
@@ -164,6 +176,11 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
+            if(model.getSubmitType() == 'copy'){
+                var res = this.announcementService.copy(this.getCurrentClassId(), model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate());
+                return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
+            }
+
             if(model.getSubmitType() == 'markDone')
                 return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId(), model.getAnnType())
                     .then(function(isMarked){
@@ -213,15 +230,16 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            chlk.models.id.GradingPeriodId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean, Boolean]],
-        function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_){
+            chlk.models.id.GradingPeriodId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean, Boolean, Object]],
+        function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_){
             return ria.async.wait([
-                this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_),
-                this.gradingPeriodService.getList()
+                this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, createdAnnouncements_),
+                this.gradingPeriodService.getList(),
+                this.schoolYearService.listOfSchoolYearClasses()
             ])
                 .attach(this.validateResponse_())
                 .then(function(result){
-                    var model = result[0], gradingPeriods = result[1];
+                    var model = result[0], gradingPeriods = result[1], classesByYears = result[2];
 
                     if(isProfile_){
                         model.setInProfile(true);
@@ -241,6 +259,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                     model.setGradingPeriods(gradingPeriods);
+                    model.setClassesByYears(classesByYears);
                     importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);
 
                     return model;

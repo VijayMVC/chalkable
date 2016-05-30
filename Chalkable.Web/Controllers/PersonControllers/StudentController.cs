@@ -2,10 +2,12 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.GradingViewData;
@@ -46,24 +48,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (studentSummaryInfo.CurrentSectionId.HasValue)
             {
                 currentClass = classes.FirstOrDefault(x => x.Id == studentSummaryInfo.CurrentSectionId.Value);
-                if (currentClass != null && currentClass.RoomRef.HasValue)
+                if (currentClass?.RoomRef != null)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
             }
             
-            IList<StudentHealthCondition> studentHealths = null;
-            if (Context.Role == CoreRoles.STUDENT_ROLE)
-            {
-                studentSummaryInfo.StudentInfo.IsAllowedInetAccess = false;
-                studentSummaryInfo.StudentInfo.SpecialInstructions = null;
-                studentSummaryInfo.StudentInfo.HasMedicalAlert = false;
-                studentSummaryInfo.StudentInfo.SpEdStatus = null;
-            }
-            else
-            {
-                studentHealths = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
-            }
+            var studentHealths = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(schoolPersonId);
-            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, studentHealths);
+            
+            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, studentHealths, BaseSecurity.IsStudent(Context));
             return Json(res);
         }
         
@@ -146,13 +138,17 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Apps(int studentId, int? start, int? count)
         {
+            start = start ?? 0;
+            count = count ?? 12;
+
             var syId = GetCurrentSchoolYearId();
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
-            var currentBalance = FundController.GetPersonBalance(MasterLocator, studentId);
-            var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count, null);
+            var apps = MasterLocator.ApplicationService.GetApplications(start.Value, count.Value, true)
+                .Where(x => MasterLocator.ApplicationService.HasMyApps(x))
+                .Select(BaseApplicationViewData.Create).ToList();
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
-            return Json(StudentAppsViewData.Create(student, currentBalance, apps, customAlerts, stHealsConditions));
+            return Json(StudentAppsViewData.Create(student, apps, customAlerts, stHealsConditions));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]

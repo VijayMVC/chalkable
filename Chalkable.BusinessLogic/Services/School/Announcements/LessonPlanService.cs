@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +10,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Microsoft.ReportingServices.Interfaces;
 
@@ -120,7 +122,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var lessonPlan = GetLessonPlanById(lessonPlanId); // security check
             BaseSecurity.EnsureTeacher(Context);
             if (lessonPlan.IsDraft)
-                throw new ChalkableException("Only submited lesson plan can be duplicate");
+                throw new ChalkableException("Only submited lesson plan can be duplicated");
             
             //get announcementApplications for copying
             var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(lessonPlanId, true);
@@ -140,6 +142,67 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
+        /// <summary>
+        /// Copies lesson plans. Its attachments, attributes and 
+        /// announcement applications for simple apps
+        /// </summary>
+        /// <returns>Copied ids. Not new!</returns>
+        public override IList<int> Copy(IList<int> lessonPlanIds, int fromClassId, int toClassId, DateTime? startDate)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+
+            if (!ServiceLocator.ClassService.IsTeacherClasses(Context.PersonId.Value, fromClassId, toClassId))
+                throw new ChalkableSecurityException("You can copy announcements only between your classes");
+
+            if (lessonPlanIds == null || lessonPlanIds.Count == 0)
+                return new List<int>();
+
+            startDate = startDate ?? CalculateStartDateForCopying(toClassId);
+
+            var announcements = DoRead(u => CreateLessonPlanDataAccess(u, true).GetByIds(lessonPlanIds));
+            var announcementIdsToCopy = announcements.Where(x => !x.IsDraft).Select(x => x.Id).ToList();
+            
+            var announcementApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(announcementIdsToCopy, true);          
+            var applicationIds = announcementApps.Select(x => x.ApplicationRef).ToList();
+            var applications = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(applicationIds)
+                .Where(x => !x.IsAdvanced).ToList();
+            
+            //Filter simple apps
+            announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
+
+            IDictionary<int, int> fromToAnnCopy;
+            List<Attachment> copiedAttachments = new List<Attachment>();
+            
+            using (var unitOfWork = Update())
+            {
+                var teachers = new ClassTeacherDataAccess(unitOfWork).GetClassTeachers(fromClassId, null)
+                    .Select(x => x.PersonRef).ToList();
+                //Here we copy lesson plans
+                fromToAnnCopy = CreateLessonPlanDataAccess(unitOfWork, true)
+                    .CopyLessonPlansToClass(lessonPlanIds, toClassId, startDate.Value, Context.NowSchoolTime);
+
+                copiedAttachments.AddRange(AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnCopy, teachers, 
+                    unitOfWork, ServiceLocator, ConnectorLocator).Select(x=>x.Attachment));
+
+                var attrs = AnnouncementAssignedAttributeService.CopyNonStiAttributes(fromToAnnCopy, unitOfWork, ServiceLocator, ConnectorLocator);
+                copiedAttachments.AddRange(attrs.Where(x=>x.Attachment != null).Select(x=>x.Attachment));
+
+                ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnCopy.Select(x => x.Value).ToList(), unitOfWork);
+
+                unitOfWork.Commit();
+            }
+
+            ServiceLocator.AttachementService.UploadToCrocodoc(copiedAttachments);
+
+            return fromToAnnCopy.Select(x => x.Value).ToList();
+        }
+
+        public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
+        {
+            return DoRead(u => InternalGetDetailses(CreateLessonPlanDataAccess(u), announcementIds))
+                .Cast<AnnouncementComplex>().ToList();
+        }
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,
                                         DateTime? startDate, DateTime? endDate, bool visibleForStudent)

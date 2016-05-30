@@ -15,7 +15,7 @@ NAMESPACE('chlk.templates.apps', function() {
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.apps.ApplicationForAttach), 'suggestedApps',
+            ArrayOf(chlk.models.apps.Application), 'suggestedApps',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'classId',

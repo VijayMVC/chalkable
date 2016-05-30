@@ -65,8 +65,14 @@ NAMESPACE('chlk.models.apps', function () {
                 this.internalScore = SJX.fromValue(raw.internalscore, Number);
                 this.internalDescription = SJX.fromValue(raw.internaldescription, String);
                 this.advancedApp = SJX.fromValue(raw.isadvanced, Boolean);
+
+
                 if(raw.liveapplication)
                     this.liveApplication = SJX.fromDeserializable(raw.liveapplication, SELF);
+
+                this.bannedForCurrentSchool = SJX.fromValue(raw.isbannedforcurrentschool, Boolean);
+                this.bannedForDistrict = SJX.fromValue(raw.isbannedfordistrict, Boolean);
+                this.partiallyBanned = SJX.fromValue(raw.ispartiallybanned, Boolean);
             },
 
             chlk.models.id.AppId, 'id',
@@ -105,8 +111,14 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.id.ABStandardId), 'standardsIds',
             ArrayOf(chlk.models.academicBenchmark.Standard), 'standards',
             Boolean, 'banned',
+
+            Boolean, 'bannedForCurrentSchool',
+            Boolean, 'bannedForDistrict',
+            Boolean, 'partiallyBanned',
+
             Number, 'internalScore',
             String, 'internalDescription',
+
 
             SELF, 'liveApplication',
 

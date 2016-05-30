@@ -30,7 +30,8 @@ declare @pointedClassAnnouncement table
 	[WeightMultiplier] [decimal](9, 6) NULL,
 	[MayBeDropped] [bit] NULL,
 	[VisibleForStudent] [bit] NULL,
-	[ClassRef] [int] NOT NULL
+	[ClassRef] [int] NOT NULL,
+	[IsScored] [bit] NOT NULL
 )
 
 declare @pointedAnnouncementIds table 
@@ -56,7 +57,8 @@ insert into @pointedClassAnnouncement
 	[WeightMultiplier],
 	[MayBeDropped],
 	[VisibleForStudent],
-	[ClassRef]
+	[ClassRef],
+	[IsScored]
 )
 select 
 	[Created],
@@ -74,7 +76,8 @@ select
 	[WeightMultiplier],
 	[MayBeDropped],
 	[VisibleForStudent],
-	[ClassRef]
+	[ClassRef],
+	[IsScored]
 from 
 	@classAnnouncementsFiltered
 
@@ -110,7 +113,8 @@ insert into ClassAnnouncement
 	[WeightAddition],
 	[WeightMultiplier],
 	[SisActivityId],
-	[SchoolYearRef]
+	[SchoolYearRef],
+	[IsScored]
 )
 select 
 	[AnnouncementId],
@@ -125,7 +129,8 @@ select
 	[WeightAddition],
 	[WeightMultiplier],
 	[SisActivityId],
-	[SchoolYearRef]
+	[SchoolYearRef],
+	[IsScored]
 from 
 	@pointedClassAnnouncement PCA
 	join @pointedAnnouncementIds PAI 

@@ -58,7 +58,7 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
                     +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
                 if showButtons
                     .r
-                        +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), self.isInProfile(), true)(
+                        +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), self.isInProfile(), self.isDailyAttendancePeriod(), true)(
                             class=self.getModel().hasSeatingStudents() ? "" : "disabled"
                         )#all-present-link=Msg.Mark_all_Present
                     .r
