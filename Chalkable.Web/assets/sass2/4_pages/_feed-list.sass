@@ -1,0 +1,165 @@
+.feed-container
+
+  .double-select
+    width: 150px
+
+  &:not(.copy-mode)
+    .copy-buttons-block
+      display: none
+
+  &.copy-mode
+    .feed-item
+      .check-cnt
+        display: inline-block
+        position: absolute
+        left: 0
+        height: 80px
+        padding-top: 25px
+        width: 48px
+        text-align: center
+
+      >A
+        margin-left: 53px
+
+  .copy-buttons-block
+    white-space: nowrap
+
+    .copy-start-date
+      width: 192px
+
+    .right-block
+      BUTTON
+        width: 82px
+
+      &>*
+        margin-left: 15px
+
+
+    >DIV, .copy-to-block
+      display: inline-block
+
+    LABEL.text
+      font-weight: bold
+      vertical-align: middle
+      margin: 0 5px 0 12px
+
+    .box-checkbox
+      vertical-align: middle
+
+  .clear-filters
+    display: inline-block
+    color: grey
+    font-weight: 600
+    cursor: pointer
+    margin-top: 5px
+
+  .left-buttons-block
+    position: absolute
+    left: 0
+    top: -45px
+    right: 0
+
+    .left-block
+      margin-left: 11px
+      float: left
+
+    .chosen-container
+      width: 140px !important
+      margin-right: 10px
+
+    &.hidden
+      display: none
+
+  button.active
+    background: #56554f
+    color: white
+    +box-shadow(none)
+
+  .date-range-popup
+    position: absolute
+    top: 40px
+
+    &.important-only
+      left: 145px
+
+    &.hidden
+      display: none
+
+  .right-buttons-block
+    position: absolute
+    right: 0
+    top: -88px
+
+    .print-btn, .copy-btn, .tools-btn
+      opacity: 0.5
+
+      &.active, &:hover
+        opacity: 1
+
+    .copy-btn
+      margin-left: 8px
+
+    .tools-btn
+      margin-left: 4px
+
+    button
+      vertical-align: middle
+
+    .report-btn
+      margin: 0 10px
+      height: 30px
+      width: 40px
+
+    .report-link
+      position: relative
+      top: 0
+      right: 5px
+
+
+    //.report-link
+      position: static
+      margin: 0 10px
+      height: 30px
+      width: 40px
+      background-size: auto
+      background-position: 5px -701px
+
+      //&:hover
+        +icons-32-sprite(printer-icon, 0)
+        background-position: 5px -701px
+        height: 30px
+        width: 40px
+        background-color: #fff
+
+  //.markDoneSelect +DIV
+    width: 127px !important
+
+    .chosen-drop
+      width: 187px
+      margin-left: -60px
+
+  .markDoneSelect+DIV, #sort-select
+    li
+      line-height: 20px
+
+    .chosen-drop
+      margin-top: 0
+      border-top: 1px solid #aaa
+      border-radius: 4px
+      z-index: 999
+
+  .date-range
+    text-align: right
+
+    .hasDatepicker
+      //border: none
+      //box-shadow: none
+      width: 85px
+      margin-left: 4px
+      cursor: pointer
+
+  .wrapper
+    width: 100%
+
+  .chlk-grid
+    margin-top: 50px

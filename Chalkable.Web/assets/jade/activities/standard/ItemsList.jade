@@ -1,0 +1,65 @@
+mixin StandardItemInner_(currentItemsType, item)
+    .item-name=item.getName()
+    if item.getDescription()
+        .item-description= (item.getName() ? '  -  ' : '') + item.getDescription()
+
+mixin DeepestItem_(item, id)
+    .item-block.browse-item.able-add-item(
+        data-id=id.valueOf(),
+        data-name=item.getName(),
+        data-description=item.getDescription()
+    )
+        +StandardItemInner_(currentItemsType, item)
+
+
+mixin StandardItemByType_(currentItemsType, item)
+    case currentItemsType
+        when chlk.models.standard.ItemType.SUBJECT
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.STANDARD
+            if item.isDeepest()
+                +DeepestItem_(item, item.getStandardId())
+            else
+                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), item.getSubjectId(), item.getStandardId()).item-block
+                    +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.AUTHORITY
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.DOCUMENT
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.SUBJECT_DOCUMENT
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.GRADE_LEVEL
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getSubjectDocumentId(), item.getCode()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.STANDARD_COURSE
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getSubjectDocumentId(), item.getGradeLevel(), item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.AB_STANDARD
+            if item.isDeepest()
+                +DeepestItem_(item, item.getStandardId())
+            else
+                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getSubjectDocumentId(), item.getGradeLevel(), item.getStandardCourseId(), item.getStandardId()).item-block
+                    +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.TOPIC_SUBJECT
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.TOPIC_COURSE
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, null, item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.TOPIC
+            if item.isDeepest()
+                +DeepestItem_(item, item.getId())
+            else
+                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, null, item.getCourseId(), item.getId()).item-block
+                    +StandardItemInner_(currentItemsType, item)
+
+
+currentItemsType = self.getCurrentItemsType()
+
+each item in self.getItems()
+    +StandardItemByType_(currentItemsType, item)
+
