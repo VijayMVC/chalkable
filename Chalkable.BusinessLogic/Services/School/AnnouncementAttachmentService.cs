@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var annAttsToCopy = annAttDataAccess.GetByAnnouncementIds(fromToAnnouncementIds.Select(x=>x.Key).ToList(), attachmentsOwners);
 
             var newAnnAtts = new List<AnnouncementAttachment>();
-            var uploadToCrocodoc = new List<AttachmentContentInfo>();
+            //var uploadToCrocodoc = new List<AttachmentContentInfo>();
 
             foreach (var pair in fromToAnnouncementIds)
             {
@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     if (attContent?.Content == null)
                         continue;
 
-                    uploadToCrocodoc.Add(attContent);
+                    //uploadToCrocodoc.Add(attContent);
                    
                     var newAttachment = AttachmentService.Upload(attachmentToCopy.Name, attContent.Content, attachmentToCopy.IsStiAttachment,
                         unitOfWork, serviceLocator, connectorLocator, false);
