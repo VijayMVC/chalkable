@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE spCopyClassAnnouncementsToClass
+﻿Create Procedure [dbo].[spCopyClassAnnouncementsToClass]
 	@sisCopyResult TSisActivityCopyResult Readonly,
 	@toClassId int,
 	@created datetime2
@@ -24,16 +24,21 @@ Declare @toCopy table
 
 Insert Into @toCopy
 	Select [Id], [SisActivityId], [ToActivityId]
-	From ClassAnnouncement join @sisCopyResult As sisCopyRes
-		On ClassAnnouncement.[SisActivityId] = sisCopyRes.[FromActivityId]
+	From ClassAnnouncement join @sisCopyResult as sisCopyRes
+		on ClassAnnouncement.[SisActivityId] = sisCopyRes.[FromActivityId]
 
---Need to filter this
-Insert Into @toCopy
-	Select * from @toCopy
-	Where [ToActivityId] not in(Select SisActivityId From ClassAnnouncement)
+
+Delete From @toCopy
+Where [ToActivityId] in (Select SisActivityId From ClassAnnouncement)
+
+----Need to filter this
+--Insert Into @toCopy
+
+--	Select * from @toCopy
+--	Where [ToActivityId] not in(Select SisActivityId From ClassAnnouncement)
 
 Merge Into Announcement
-Using @toCopy As ToCopy
+Using @toCopy as ToCopy
 	On 1 = 0
 When Not Matched Then
 	Insert (Content, Created, [State], Title)
@@ -41,12 +46,11 @@ When Not Matched Then
 Output ToCopy.[Id], ToCopy.[FromActivityId], Inserted.[Id], ToCopy.[ToActivityId]
 	Into @newAnnIds;
 
---Inserting fake data. All class announcement will be merged with sis activities
 Insert Into ClassAnnouncement
 (Id, Expires, ClassRef, MayBeDropped, VisibleForStudent, 
 	[Order], Dropped, SisActivityId, SchoolYearRef, IsScored)
 	Select 
-		[ToAnnouncementId], GetDate(), @toClassId,
+		[ToAnnouncementId], getDate(), @toClassId,
 		0, 0, 0, 0, 
 		[ToActivityId], --SisActivityId
 		@schoolYearId,  --SchoolYearRef
@@ -59,3 +63,6 @@ Select
 	[ToAnnouncementId]
 From
 	@newAnnIds
+GO
+
+
