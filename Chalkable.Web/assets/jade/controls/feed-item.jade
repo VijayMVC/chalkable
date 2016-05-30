@@ -1,0 +1,52 @@
+mixin Glue_()
+    =[].slice.call(arguments).filter(function (_) { return !/^\s*$/.test(_||'') }).join(' - ')
+
+mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
+    -VALIDATE_ARG('item', [chlk.models.announcement.FeedAnnouncementViewData, chlk.templates.announcement.AnnouncementView, chlk.models.announcement.Announcement], item)
+    -VALIDATE_ARG('disabled_', [Boolean], disabled)
+
+    -var adminAnnouncement = item.getAdminAnnouncementData()
+    -var classAnnouncement = item.getClassAnnouncementData()
+    -var lessonPlan = item.getLessonPlanData()
+    -var itemClasses = attributes['class'] || []
+
+    - itemClasses.push(adminAnnouncement ? 'is-admin' : (lessonPlan ? 'lesson-plan' : 'class-announcement'))
+    - itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
+    - itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
+    - itemClasses.push(item.getOwnerAttachmentsCount() == 0 ? 'no-attachment-icon' : 'has-attachments-icon')
+    - itemClasses.push(item.isImported() ? 'imported' : '')
+
+    - itemClasses.push(item.isHiddenFromStudents() ? 'invisible-for-students' : 'visible-for-students')
+    -if (item.isComplete())           itemClasses.push('complete')
+    -if (item.getApplicationsCount()) itemClasses.push('app-icon')
+
+    div(class = itemClasses).feed-item
+        .check-cnt
+            .box-checkbox.circle
+                +Checkbox('items', false, false, true)(data-id = item.getId().valueOf(), data-type = item.getType().valueOf()).feed-item-check
+        +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), false, item.getType())(class = isStaringDisabled ? 'disabled' : '', data-tooltip=Msg.Done).star.complete
+        +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), true, item.getType())(class = isStaringDisabled ? 'disabled' : '', data-tooltip= Msg.ToDo).star
+        +ActionLink('announcement', 'view', item.getId(), item.getType())(class = disabled ? 'disabled' : '').announcement-link
+            if adminAnnouncement
+                .title: +Glue_(item.getTitle() || Msg.Admin_Announcement, "")
+            if classAnnouncement
+                .title: +Glue_(item.getAnnouncementTypeName(), classAnnouncement.getClassName())
+            if lessonPlan
+                .title: +Glue_(item.getTitle(), lessonPlan.getClassName())
+            if lessonPlan
+                .date= 'Lesson Plan - ' + (lessonPlan.getStartDate() && ('From ' +  lessonPlan.getStartDate().format('M d'))) + (lessonPlan.getEndDate() && (', to ' + lessonPlan.getEndDate().format('M d')))
+                .attachment
+                    .grades
+                        .visible
+                            .content
+                                .line
+                                    .inner-line(style="width:" + lessonPlan.getPercents() + "%;")
+                                .right-text #{lessonPlan.getPercents()}%
+            else
+                -var announcementItem = classAnnouncement || adminAnnouncement
+                .date= announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().toString('m/d/y') : ''
+                .attachment
+                    .grades
+                        .visible
+                            .content: +Glue_(item.getTitle(), item.getShortContent())
+
