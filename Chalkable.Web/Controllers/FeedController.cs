@@ -67,7 +67,7 @@ namespace Chalkable.Web.Controllers
             return new FeedComplexViewData
             {
                 AnnoucementViewDatas = PrepareAnnouncementsComplexViewData(schoolL, announcements),
-                CreatedAnnouncements = PrepareAnnouncementsComplexViewData(schoolL, createdAnnouncements),
+                CreatedAnnouncements = PrepareAnnouncementsComplexViewData(schoolL, createdAnnouncements ?? new List<AnnouncementComplex>()),
                 SettingsForFeed = FeedSettingsViewData.Create(settings)
             };
         }

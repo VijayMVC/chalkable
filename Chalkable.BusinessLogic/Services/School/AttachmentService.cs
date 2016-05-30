@@ -93,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new List<Attachment>();
 
             var filtered = attachments.Where(x => ServiceLocator.CrocodocService.IsDocument(x.Name)
-                && !string.IsNullOrWhiteSpace(x.Uuid)).ToList();
+                && string.IsNullOrWhiteSpace(x.Uuid)).ToList();
             
             for (var i = 0; i < filtered.Count; i += UPLOAD_PACKET_SIZE)
             {
