@@ -172,7 +172,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
 
             IDictionary<int, int> fromToAnnCopy;
-
+            List<Attachment> copiedAttachments = new List<Attachment>();
+            
             using (var unitOfWork = Update())
             {
                 var teachers = new ClassTeacherDataAccess(unitOfWork).GetClassTeachers(fromClassId, null)
@@ -181,15 +182,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 fromToAnnCopy = CreateLessonPlanDataAccess(unitOfWork, true)
                     .CopyLessonPlansToClass(lessonPlanIds, toClassId, startDate.Value, Context.NowSchoolTime);
 
-                AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnCopy, teachers, unitOfWork,
-                    ServiceLocator, ConnectorLocator);
-                AnnouncementAssignedAttributeService.CopyNonStiAttributes(fromToAnnCopy, unitOfWork, ServiceLocator,
-                    ConnectorLocator);
-                ApplicationSchoolService.CopyAnnApplications(announcementApps,
-                    fromToAnnCopy.Select(x => x.Value).ToList(), unitOfWork);
+                copiedAttachments.AddRange(AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnCopy, teachers, 
+                    unitOfWork, ServiceLocator, ConnectorLocator).Select(x=>x.Attachment));
+
+                var attrs = AnnouncementAssignedAttributeService.CopyNonStiAttributes(fromToAnnCopy, unitOfWork, ServiceLocator, ConnectorLocator);
+                copiedAttachments.AddRange(attrs.Where(x=>x.Attachment != null).Select(x=>x.Attachment));
+
+                ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnCopy.Select(x => x.Value).ToList(), unitOfWork);
 
                 unitOfWork.Commit();
             }
+
+            ServiceLocator.AttachementService.UploadToCrocodoc(copiedAttachments);
 
             return fromToAnnCopy.Select(x => x.Value).ToList();
         }

@@ -384,8 +384,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     attributes.Add(newAttribute);
                 }
             }
-
-            AttachmentService.UploadToCrocodoc(uploadToCrocodoc, serviceLocator, unitOfWork);
             
             da.Insert(attributes);
             return da.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Value).ToList(), attributes.Count);

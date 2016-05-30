@@ -39,7 +39,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var annIdsStr = toAnnouncementIds.Select(x => x.ToString()).JoinString(",");
             var dbQuery = new DbQuery();
-            var annRefField = string.Format("{0}_{1}", typeof (AnnouncementAssignedAttribute).Name, AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD);
+            var annRefField = $"{typeof (AnnouncementAssignedAttribute).Name}_{AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD}";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", AnnouncementAssignedAttribute.VW_ANNOUNCEMENT_ASSIGNED_ATTRIBUTE)
                        .AppendFormat(" Where {0} in ({1}) ", annRefField, annIdsStr);
 
