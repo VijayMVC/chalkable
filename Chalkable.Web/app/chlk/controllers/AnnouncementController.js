@@ -1906,7 +1906,8 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'viewImported'){
-                return this.Redirect('feed', 'viewImported', [model.getCreatedAnnouncements(), model.getClassId()]);
+                this.getContext().getSession().set(ChlkSessionConstants.CREATED_ANNOUNCEMENTS, model.getCreatedAnnouncements());
+                return this.Redirect('feed', 'viewImported', [model.getClassId()]);
             }
 
             if (submitType == 'save'){
@@ -2142,7 +2143,8 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'viewImported'){
-                return this.Redirect('feed', 'viewImported', [model.getCreatedAnnouncements(), model.getClassId()]);
+                this.getContext().getSession().set(ChlkSessionConstants.CREATED_ANNOUNCEMENTS, model.getCreatedAnnouncements());
+                return this.Redirect('feed', 'viewImported', [model.getClassId()]);
             }
 
             if (submitType == 'save'){

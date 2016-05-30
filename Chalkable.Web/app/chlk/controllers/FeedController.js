@@ -98,8 +98,10 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[Object, chlk.models.id.ClassId]],
-        function viewImportedAction(announcements, classId){
+        [[chlk.models.id.ClassId]],
+        function viewImportedAction(classId){
+            var announcements = this.getContext().getSession().get(ChlkSessionConstants.CREATED_ANNOUNCEMENTS, []);
+            this.getContext().getSession().remove(ChlkSessionConstants.CREATED_ANNOUNCEMENTS);
             return this.listAction(classId, null, null, null, null, null, null, null, null, null, null, announcements);
         },
 
