@@ -60,7 +60,7 @@ namespace Chalkable.Web.Controllers
 
             if (standard.AcademicBenchmarkId.HasValue)
                 suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(
-                        new[] {standard.AcademicBenchmarkId.Value}, 0, int.MaxValue);
+                        new List<Guid> {standard.AcademicBenchmarkId.Value}, 0, int.MaxValue);
 
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
