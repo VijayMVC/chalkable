@@ -65,7 +65,7 @@ NAMESPACE('chlk.controls', function () {
                 var value = dropDown.find('.selected-value').getValue();
 
                 items.forEach(function(item){
-                    res += '<li class="active-result second-result ' + (value == item.id ? 'selected-item' : '') + '" data-id="' + item.id  + '">' + item.name + '</li>'
+                    res += '<li class="active-result second-result ' + (value == item.id ? 'selected-item' : '') + '" data-id="' + item.id  + '" data-tooltip-type="overflow" data-tooltip="' + item.name + '">' + item.name + '</li>'
                 });
 
                 dropDown.find('.first-result.active-item').removeClass('active-item');
