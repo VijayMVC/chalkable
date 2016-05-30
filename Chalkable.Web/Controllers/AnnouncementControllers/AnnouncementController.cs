@@ -235,7 +235,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             inputModel.Announcements = inputModel.Announcements ?? new List<AnnouncementToCopyInputModel>();
 
-            var lessonPlanCopyTask = Task.Factory.StartNew(() => {
+            var classAnnouncementCopyTask = Task.Factory.StartNew(() => {
                 var ids = inputModel.Announcements
                     .Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Class)
                     .Select(x => x.AnnouncementId)
@@ -244,7 +244,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 return SchoolLocator.ClassAnnouncementService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
             });
 
-            var classAnnouncementCopyTask = Task.Factory.StartNew(() => {
+            var lessonPlanCopyTask = Task.Factory.StartNew(() => {
                 var ids = inputModel.Announcements
                         .Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.LessonPlan)
                         .Select(x => x.AnnouncementId)
@@ -253,10 +253,17 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 return SchoolLocator.LessonPlanService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
             });
 
-            var res = new List<int>();
-            res.AddRange(await lessonPlanCopyTask);
-            res.AddRange(await classAnnouncementCopyTask);
-
+            var res = new List<CopyAnnouncementResultViewData>();
+            res.AddRange((await lessonPlanCopyTask).Select(x=> new CopyAnnouncementResultViewData
+            {
+                AnnouncementType = (int)AnnouncementTypeEnum.LessonPlan,
+                AnnouncementId = x
+            }));
+            res.AddRange((await classAnnouncementCopyTask).Select(x => new CopyAnnouncementResultViewData
+            {
+                AnnouncementType = (int)AnnouncementTypeEnum.Class,
+                AnnouncementId = x
+            }));
             return Json(res);
         }
     }

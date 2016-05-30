@@ -14,6 +14,7 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
     - itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
     - itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
     - itemClasses.push(item.getOwnerAttachmentsCount() == 0 ? 'no-attachment-icon' : 'has-attachments-icon')
+    - itemClasses.push(item.isImported() ? 'imported' : '')
 
     - itemClasses.push(item.isHiddenFromStudents() ? 'invisible-for-students' : 'visible-for-students')
     -if (item.isComplete())           itemClasses.push('complete')

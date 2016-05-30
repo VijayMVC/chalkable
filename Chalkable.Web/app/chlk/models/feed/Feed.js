@@ -17,6 +17,16 @@ NAMESPACE('chlk.models.feed', function () {
                 IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw) {
+
+                //Prepare created announcements
+                if(raw.createdannouncements && raw.createdannouncements.length){
+                    raw.createdannouncements.forEach(function(item){
+                        item.imported = true;
+                    });
+
+                    raw.annoucementviewdatas = raw.createdannouncements.concat(raw.annoucementviewdatas);
+                }
+
                 this.announcementsToCopy = SJX.fromValue(raw.announcementsToCopy, String);
                 this.toClassId = SJX.fromValue(raw.toClassId, chlk.models.id.ClassId);
                 this.copyStartDate = SJX.fromDeserializable(raw.copyStartDate, chlk.models.common.ChlkDate);
@@ -36,6 +46,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.markDoneOption = SJX.fromValue(raw.markDoneOption, Number);
                 this.sortType = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.sorttype : raw.sorttype, chlk.models.announcement.FeedSortTypeEnum);
                 this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
+                //this.createdAnnouncements = SJX.fromArrayOfDeserializables(raw.createdannouncements, chlk.models.announcement.FeedAnnouncementViewData);
             },
 
             [[ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), chlk.models.classes.ClassesForTopBar, Boolean, Number]],
@@ -54,6 +65,8 @@ NAMESPACE('chlk.models.feed', function () {
             },
 
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
+
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'createdAnnouncements',
 
             Boolean, 'readonly',
 

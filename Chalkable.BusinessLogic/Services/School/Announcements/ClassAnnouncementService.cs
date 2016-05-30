@@ -265,7 +265,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
 
-
+        
         public override void DeleteAnnouncement(int announcementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -339,6 +339,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     res.Add(ann);
             }
             return res;
+        }
+
+        public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
+        {
+            //TODO impl stored procedure GetClassAnnouncementsByIds
+            IList<AnnouncementComplex> anns = DoRead(u => InternalGetDetailses(CreateClassAnnouncementDataAccess(u), announcementIds))
+                                              .Cast<AnnouncementComplex>().ToList();
+
+            var activitiesIds = anns.Select(x => x.ClassAnnouncementData.SisActivityId.Value).ToList();
+            var activities = ConnectorLocator.ActivityConnector.GetActivitiesByIds(activitiesIds).ToList();
+            DoUpdate(u => anns = MapActivitiesToAnnouncements(ServiceLocator, u, anns, activities));
+            return anns;
         }
 
         public override AnnouncementDetails GetAnnouncementDetails(int announcementId)
@@ -436,7 +448,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            BaseSecurity.EnsureTeacher(Context);
+            BaseSecurity.EnsureAdminOrTeacher(Context);
             if (!ServiceLocator.ClassService.IsTeacherClasses(Context.PersonId.Value, fromClassId, toClassId))
                 throw new ChalkableSecurityException("You can copy announcements only between your classes");
 

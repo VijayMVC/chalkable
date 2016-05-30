@@ -253,6 +253,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.attach-icon[data-id=' + model.getValue() + ']').removeClass('x-hidden');
             },
 
+            [ria.mvc.PartialUpdateRule(null, 'after-import')],
+            VOID, function afterImport(tpl, model, msg_) {
+                var value = JSON.stringify(model);
+                this.dom.find('.created-announcements').setValue(value);
+                this.dom.find('#view-imported-button').removeClass('x-hidden');
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributeTpl)],
             VOID, function updateAttribute(tpl, model, msg_) {
 

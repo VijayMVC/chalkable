@@ -48,6 +48,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.recipients = SJX.fromArrayOfDeserializables(raw.recipients, chlk.models.announcement.AdminAnnouncementRecipient);
                 this.grade = SJX.fromValue(raw.grade, Number);
                 this.comment = SJX.fromValue(raw.comment, String);
+                this.createdAnnouncements = SJX.fromValue(raw.createdAnnouncements ? JSON.parse(raw.createdAnnouncements) : raw.createdAnnouncements, Object);
                 this.ableUseExtraCredit = SJX.fromValue(raw.isableuseextracredit, Boolean);
 
                 this.groupIds = SJX.fromValue(raw.groupIds, String);
@@ -75,6 +76,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
+                this.imported = SJX.fromValue(raw.imported, Boolean);
 
                 if(this.autoGradeApps && this.autoGradeApps.length){
                     var autoGradeApps = [];
@@ -98,6 +100,8 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
 
+            Boolean, 'imported',
+            Object, 'createdAnnouncements',
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             String, 'announcementAssignedAttrs',
             ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',

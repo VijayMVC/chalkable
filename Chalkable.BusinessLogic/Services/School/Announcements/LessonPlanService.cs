@@ -150,7 +150,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override IList<int> Copy(IList<int> lessonPlanIds, int fromClassId, int toClassId, DateTime? startDate)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            BaseSecurity.EnsureTeacher(Context);
+            BaseSecurity.EnsureAdminOrTeacher(Context);
 
             if (!ServiceLocator.ClassService.IsTeacherClasses(Context.PersonId.Value, fromClassId, toClassId))
                 throw new ChalkableSecurityException("You can copy announcements only between your classes");
@@ -192,6 +192,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
 
             return fromToAnnCopy.Select(x => x.Value).ToList();
+        }
+
+        public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
+        {
+            return DoRead(u => InternalGetDetailses(CreateLessonPlanDataAccess(u), announcementIds))
+                .Cast<AnnouncementComplex>().ToList();
         }
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,
