@@ -483,6 +483,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
 
             IDictionary<int, int> fromToAnnouncementsIds;
+            IList<Attachment> copiedAtts = null;
             using (var u = Update())
             {
                 var attachmentsOwners = new ClassTeacherDataAccess(u).GetClassTeachers(fromClassId, null)
@@ -491,11 +492,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u)
                     .CopyClassAnnouncementsToClass(sisFromToActivityIds, toClassId, Context.NowSchoolTime);
 
-                AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator);
+                copiedAtts = AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator)
+                    .Select(x=>x.Attachment).ToList();
                 ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementsIds.Select(x => x.Value).ToList(), u);
 
                 u.Commit();
             }
+            ServiceLocator.AttachementService.UploadToCrocodoc(copiedAtts);
 
             return fromToAnnouncementsIds.Select(x => x.Value).ToList();
         }

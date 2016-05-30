@@ -3,6 +3,7 @@ var ChlkSessionConstants = {
     ATTRIBUTES_WITH_FILES: 'attributesWithFiles',
     CHART_DATE_TYPE: 'chartDateType',
     CLASS_PROFILE_ATTENDANCE_DATA: 'classProfileAttendanceData',
+    CREATED_ANNOUNCEMENTS: 'createdAnnouncements',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',
     USER_ROLE: 'role',

@@ -17,7 +17,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
     else
         -selected = self.getClassId()
 
-    -var ableCopy = !isAdmin && selected && selected.valueOf()
+    -var ableCopy = self.getUserRole().isTeacher() && selected && selected.valueOf()
 
     h2.page-title Feed
     .action-bar

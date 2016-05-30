@@ -98,11 +98,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     newAnnAtts.Add(newAnnouncementAtt);
                 }
             }
-
-            AttachmentService.UploadToCrocodoc(uploadToCrocodoc, serviceLocator, unitOfWork);
-            
             annAttDataAccess.Insert(newAnnAtts);
-            
             return annAttDataAccess.GetByAnnouncementIds(fromToAnnouncementIds.Select(x => x.Value).ToList(), attachmentsOwners);
         }
 
