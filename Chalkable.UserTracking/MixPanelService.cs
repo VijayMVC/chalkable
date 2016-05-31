@@ -527,6 +527,13 @@ namespace Chalkable.UserTracking
             SendEvent(email, UserTrackingEvents.SavedLessonPlanToGallery, properties);
         }
 
+        private const string SUPLEMENTAL_ANNOUNCEMENT_TITLE = "suplemental announcement title";
+        public void SavedSupplementalAnnouncementToGallery(string email, string supplementalAnnouncementTitle)
+        {
+            var properties = new Dictionary<string, object> { [SUPLEMENTAL_ANNOUNCEMENT_TITLE] = supplementalAnnouncementTitle };
+            SendEvent(email, UserTrackingEvents.SavedSupplementalAnnouncementToGallery, properties);
+        }
+
         private const string DISTINCT_ID = "distinct_id";
         private const string TIME = "time";
         private void SendEvent(string email, string eventName, IDictionary<string, object> properties)

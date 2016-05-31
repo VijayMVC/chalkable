@@ -15,7 +15,8 @@ namespace Chalkable.Data.School.Model.Announcements
         None = 0,
         Class = 1,
         Admin = 2,
-        LessonPlan = 3
+        LessonPlan = 3,
+        Supplemental = 4
     }
 
     public class Announcement
@@ -58,6 +59,7 @@ namespace Chalkable.Data.School.Model.Announcements
         private LessonPlan lessonPlanData;
         private ClassAnnouncement classAnnouncementData;
         private AdminAnnouncement adminAnnouncementData;
+        private SupplementalAnnouncement supplementalAnnouncementData;
 
         private int? classId;
         private int? adminId;
@@ -72,6 +74,7 @@ namespace Chalkable.Data.School.Model.Announcements
                 lessonPlanData = value as LessonPlan;
                 classAnnouncementData = value as ClassAnnouncement;
                 adminAnnouncementData = value as AdminAnnouncement;
+                supplementalAnnouncementData = value as SupplementalAnnouncement;
                 if (lessonPlanData != null)
                     classId = lessonPlanData.ClassRef;
                 if (classAnnouncementData != null)
@@ -85,6 +88,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public LessonPlan LessonPlanData => lessonPlanData;
         public ClassAnnouncement ClassAnnouncementData => classAnnouncementData;
         public AdminAnnouncement AdminAnnouncementData => adminAnnouncementData;
+        public SupplementalAnnouncement SupplementalAnnouncementData => supplementalAnnouncementData;
 
         public bool Complete { get; set; }
         public int QnACount { get; set; }
