@@ -9,16 +9,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     public interface ISupplementalAnnouncementService : IBaseAnnouncementService
     {
         AnnouncementDetails Create(int classId, DateTime expiresDate);
-        AnnouncementDetails Edit(int supplementalAnnouncementPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? expiresDate, bool visibleForStudent);
+        AnnouncementDetails Edit(int supplementalAnnouncementPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds);
         void SetVisibleForStudent(int supplementalAnnouncementPlanId, bool visible);
         SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementPlanId);
-        void SubmitRecipientsToSupplementalAnnouncement(int supplementalAnnouncementPlanId, IList<int> recipientsIds);
         IList<SupplementalAnnouncement> GetSupplementalAnnouncement(DateTime? fromDate, DateTime? toDate, int? classId, int? teacherId, bool filterByStartDate = true);
         IList<AnnouncementComplex> GetSupplementalAnnouncementForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool? ownedOnly = null);
         bool Exists(string title, int? excludeSupplementalAnnouncementPlanId);
-        bool ExistsInGallery(string title, int? excludeSupplementalAnnouncementPlanId);
-        void ReplaceSupplementalAnnouncementInGallery(int oldSupplementalAnnouncementId, int newSupplementalAnnouncementId);
-        void RemoveFromGallery(int supplementalAnnouncementId);
     }
 
     public class SupplementalAnnouncementService : BaseAnnouncementService<SupplementalAnnouncement>, ISupplementalAnnouncementService
@@ -96,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public AnnouncementDetails Edit(int supplementalAnnouncementPlanId, int classId, int? galleryCategoryId, string title,
-            string content, DateTime? expiresDate, bool visibleForStudent)
+            string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds)
         {
             throw new NotImplementedException();
         }
@@ -107,11 +103,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementPlanId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SubmitRecipientsToSupplementalAnnouncement(int supplementalAnnouncementPlanId, IList<int> recipientsIds)
         {
             throw new NotImplementedException();
         }
@@ -129,21 +120,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public bool Exists(string title, int? excludeSupplementalAnnouncementPlanId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool ExistsInGallery(string title, int? excludeSupplementalAnnouncementPlanId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReplaceSupplementalAnnouncementInGallery(int oldSupplementalAnnouncementId, int newSupplementalAnnouncementId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveFromGallery(int supplementalAnnouncementId)
         {
             throw new NotImplementedException();
         }

@@ -322,11 +322,18 @@
     <Build Include="Stored Procedures\spCopyClassAnnouncementsToClass.sql" />
     <Build Include="Tables\SupplementalAnnouncement.sql" />
     <Build Include="Tables\SupplementalAnnouncementRecipients.sql" />
+    <Build Include="Views\vwSupplementalAnnouncement.sql" />
+    <Build Include="Stored Procedures\spCreateSupplementalAnnouncement.sql" />
+    <Build Include="Stored Procedures\spGetSupplementalAnnouncementDetails.sql" />
+    <Build Include="Stored Procedures\spSelectSupplementalAnnouncements.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Pre-Deploy\Paid_apps_cleaning.PreDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
   </ItemGroup>
 </Project>

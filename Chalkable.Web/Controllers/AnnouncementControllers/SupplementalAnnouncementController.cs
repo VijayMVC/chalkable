@@ -19,10 +19,10 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         [AuthorizationFilter("Teacher")]
         public ActionResult Save(int supplementalAnnouncementPlanId, int classId, string title, string content, int? galleryCategoryId,
-            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes)
+            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Supplemental, supplementalAnnouncementPlanId, attributes);
-            var res = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, galleryCategoryId, title, content, expiresDate, !hideFromStudents);
+            var res = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, galleryCategoryId, title, content, expiresDate, !hideFromStudents, recipientsIds);
 
             if (res.SupplementalAnnouncementData?.GalleryCategoryRef != null)
             {
@@ -33,21 +33,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         [AuthorizationFilter("Teacher")]
         public ActionResult Submit(int supplementalAnnouncementPlanId, int classId, string title, string content, int? galleryCategoryId,
-            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes)
+            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, supplementalAnnouncementPlanId, attributes);
-            var ann = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, galleryCategoryId, title, content, expiresDate, !hideFromStudents);
+            var ann = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, galleryCategoryId, title, content, expiresDate, !hideFromStudents, recipientsIds);
             SchoolLocator.SupplementalAnnouncementService.Submit(supplementalAnnouncementPlanId);
-            var lessonPlan = SchoolLocator.SupplementalAnnouncementService.GetSupplementalAnnouncementById(supplementalAnnouncementPlanId);
+            var supplementalAnnouncement = SchoolLocator.SupplementalAnnouncementService.GetSupplementalAnnouncementById(supplementalAnnouncementPlanId);
             //TODO delete old drafts 
-            TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount));
-            return Json(true, 5);
-        }
-
-        [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult SubmitRecipientsToSupplementalAnnouncement(int supplementalAnnouncementPlanId, IntList recipientsIds)
-        {
-            SchoolLocator.SupplementalAnnouncementService.SubmitRecipientsToSupplementalAnnouncement(supplementalAnnouncementPlanId, recipientsIds);
+            TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, supplementalAnnouncement.ClassName, appsCount, doscCount));
             return Json(true, 5);
         }
 
@@ -64,29 +57,9 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult ExistsInGallery(string title, int? excludeSupplementalAnnouncementPlanId)
-        {
-            return Json(SchoolLocator.SupplementalAnnouncementService.ExistsInGallery(title, excludeSupplementalAnnouncementPlanId));
-        }
-
-        [AuthorizationFilter("Teacher")]
         public ActionResult MakeVisible(int supplementalAnnouncementPlanId)
         {
             SchoolLocator.SupplementalAnnouncementService.SetVisibleForStudent(supplementalAnnouncementPlanId, true);
-            return Json(true);
-        }
-
-        [AuthorizationFilter("Teacher")]
-        public ActionResult ReplaceLessonPlanInGallery(int oldSupplementalAnnouncementId, int newSupplementalAnnouncementId)
-        {
-            SchoolLocator.SupplementalAnnouncementService.ReplaceSupplementalAnnouncementInGallery(oldSupplementalAnnouncementId, newSupplementalAnnouncementId);
-            return Json(true);
-        }
-
-        [AuthorizationFilter("Teacher")]
-        public ActionResult RemoveLessonPlanFromGallery(int supplementalAnnouncementId)
-        {
-            SchoolLocator.SupplementalAnnouncementService.RemoveFromGallery(supplementalAnnouncementId);
             return Json(true);
         }
     }
