@@ -129,19 +129,20 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.ClassId]],
         function showImportDialogAction(classId){
+            var classScheduleDateRanges = this.getContext().getSession().get(ChlkSessionConstants.CLASS_SCHEDULE_DATE_RANGES, []);
             var activity = this.getView().getCurrent().getClass();
-            var res = this.WidgetStart('announcement', 'showImportDialog', [classId])
+            var res = this.WidgetStart('announcement', 'showImportDialog', [classId, classScheduleDateRanges])
                 .then(function(data){
                     this.BackgroundUpdateView(activity, data, 'after-import');
                 }, this);
             return null;
         },
 
-        [[String, chlk.models.id.ClassId]],
-        function showImportDialogWidgetAction(requestId, classId){
+        [[String, chlk.models.id.ClassId, Array]],
+        function showImportDialogWidgetAction(requestId, classId, classScheduleDateRanges){
             var res = this.schoolYearService.listOfSchoolYearClasses()
                 .then(function(classesByYears){
-                    return new chlk.models.announcement.AnnouncementImportViewData(classId, classesByYears, null, requestId);
+                    return new chlk.models.announcement.AnnouncementImportViewData(classId, classesByYears, null, requestId, classScheduleDateRanges);
                 });
             return this.ShadeView(chlk.activities.announcement.AnnouncementImportDialog, res);
         },
@@ -413,17 +414,20 @@ NAMESPACE('chlk.controllers', function (){
                     model.setClassInfo(classInfo);
 
                     //prepare class schedule date range
-                    model.setClassScheduleDateRanges(
-                        gradingPeriods
-                            .filter(function(gp){
-                                return item.getMarkingPeriodsId().filter(function(mpId){return mpId == gp.getMarkingPeriodId()}).length > 0
-                            })
-                            .map(function (_) {
-                                return {
-                                    start: _.getStartDate().getDate(),
-                                    end: _.getEndDate().getDate()
-                                }
-                            }));
+                    var classScheduleDateRanges = gradingPeriods
+                        .filter(function(gp){
+                            return item.getMarkingPeriodsId().filter(function(mpId){return mpId == gp.getMarkingPeriodId()}).length > 0
+                        })
+                        .map(function (_) {
+                            return {
+                                start: _.getStartDate().getDate(),
+                                end: _.getEndDate().getDate()
+                            }
+                        });
+
+                    model.setClassScheduleDateRanges(classScheduleDateRanges);
+
+                    this.getContext().getSession().set(ChlkSessionConstants.CLASS_SCHEDULE_DATE_RANGES, classScheduleDateRanges);
 
                     if(classAnnouncement){
                         if (savedClassInfo && savedClassInfo.getClassId() == item.getId()) {
