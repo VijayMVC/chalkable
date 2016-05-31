@@ -13,13 +13,16 @@ NAMESPACE('chlk.models.announcement', function () {
 
         String, 'requestId',
 
-        [[chlk.models.id.ClassId, ArrayOf(chlk.models.schoolYear.YearAndClasses), ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), String]],
-        function $(classId_, classesByYears_, announcements_, requestId_){
+        Array, 'classScheduleDateRanges',
+
+        [[chlk.models.id.ClassId, ArrayOf(chlk.models.schoolYear.YearAndClasses), ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), String, Array]],
+        function $(classId_, classesByYears_, announcements_, requestId_, classScheduleDateRanges_){
             BASE();
             classId_ && this.setClassId(classId_);
             requestId_ && this.setRequestId(requestId_);
             classesByYears_ && this.setClassesByYears(classesByYears_);
             announcements_ && this.setAnnouncements(announcements_);
+            classScheduleDateRanges_ && this.setClassScheduleDateRanges(classScheduleDateRanges_);
         }
     ]);
 });
