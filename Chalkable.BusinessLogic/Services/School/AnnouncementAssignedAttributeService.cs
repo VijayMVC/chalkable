@@ -6,6 +6,7 @@ using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
@@ -342,18 +343,16 @@ namespace Chalkable.BusinessLogic.Services.School
             return da.GetLastListByAnnIds(toAnnouncementIds, attributes.Count);
         }
 
-        public static IDictionary<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute> CopyNonStiAttributes(IDictionary<int, int> fromToAnnouncementIds, 
+        public static IList<Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>> CopyNonStiAttributes(IDictionary<int, int> fromToAnnouncementIds, 
             UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
         {
-
             var attachmentDA = new AttachmentDataAccess(unitOfWork);
 
             var annAssignedAttributeDA = new AnnouncementAssignedAttributeDataAccess(unitOfWork);
             var attributesForCopying = annAssignedAttributeDA.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Key).ToList(), int.MaxValue)
                 .Where(x => !x.SisActivityAssignedAttributeId.HasValue).ToList();
 
-            var fromToAttributes = new Dictionary<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>();
-            var attachments = new List<Attachment>();
+            var fromToAttributes = new List<Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>>();
             
             foreach (var announcementPair in fromToAnnouncementIds)
             {
@@ -385,11 +384,11 @@ namespace Chalkable.BusinessLogic.Services.School
                         newAttribute.AttachmentRef = attachment.Id;
                         newAttribute.Attachment = attachment;
                     }
-                    fromToAttributes.Add(attributeToCopy, newAttribute);
+                    fromToAttributes.Add(new Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>(attributeToCopy, newAttribute));
                 }
             }
 
-            annAssignedAttributeDA.Insert(fromToAttributes.Select(x => x.Value).ToList());
+            annAssignedAttributeDA.Insert(fromToAttributes.Select(x => x.Second).ToList());
             return fromToAttributes;
         }
 

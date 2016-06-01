@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
@@ -66,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
         /// <summary>
         /// </summary>
         /// <returns>Source annAttahcment and new annAttachment</returns>
-        public static IDictionary<AnnouncementAttachment, AnnouncementAttachment> CopyAnnouncementAttachments(IDictionary<int, int> fromToAnnouncementIds, 
+        public static IList<Pair<AnnouncementAttachment, AnnouncementAttachment>> CopyAnnouncementAttachments(IDictionary<int, int> fromToAnnouncementIds, 
             IList<int> attachmentsOwners, UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
         {
             Trace.Assert(serviceLocator.Context.PersonId.HasValue);
@@ -76,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var annoncementAttachmentDA = new AnnouncementAttachmentDataAccess(unitOfWork);
             var annAttachmentsToCopy = annoncementAttachmentDA.GetByAnnouncementIds(fromToAnnouncementIds.Select(x=>x.Key).ToList(), attachmentsOwners);
 
-            var fromToAnnAttachments = new Dictionary<AnnouncementAttachment, AnnouncementAttachment>();
+            var fromToAnnAttachments = new List<Pair<AnnouncementAttachment, AnnouncementAttachment>>();
 
             foreach (var announcementPair in fromToAnnouncementIds)
             {
@@ -104,11 +105,11 @@ namespace Chalkable.BusinessLogic.Services.School
                         Attachment = newAttachment
                     };
 
-                    fromToAnnAttachments.Add(annAttachmentToCopy, newAnnAttachment);
+                    fromToAnnAttachments.Add(new Pair<AnnouncementAttachment, AnnouncementAttachment>(annAttachmentToCopy, newAnnAttachment));
                 }
             }
 
-            annoncementAttachmentDA.Insert(fromToAnnAttachments.Select(x => x.Value).ToList());
+            annoncementAttachmentDA.Insert(fromToAnnAttachments.Select(x => x.Second).ToList());
 
             return fromToAnnAttachments;
         }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Chalkable.Common
 {
@@ -57,6 +59,18 @@ namespace Chalkable.Common
         public override int GetHashCode()
         {
             return First.GetHashCode() ^ Second.GetHashCode();
+        }
+    }
+
+    public static class PairHelper
+    {
+        public static IEnumerable<Pair<TFirst2, TSecond2>> Transform<TFirst1, TSecond1, TFirst2, TSecond2>(
+            this IEnumerable<Pair<TFirst1, TSecond1>> collection,
+            Func<TFirst1, TFirst2> firstSelector, Func<TSecond1, TSecond2> secondSelector)
+        {
+            return
+                collection.Select(x => new Pair<TFirst2, TSecond2>(firstSelector(x.First), secondSelector(x.Second)))
+                    .ToList();
         }
     }
 }

@@ -172,8 +172,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
 
             IDictionary<int, int> fromToAnnouncementIds;
-            IDictionary<AnnouncementAttachment, AnnouncementAttachment> annAttachmentsCopyResult;
-            IDictionary<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute> annAttributesCopyResult;
+            IList<Pair<AnnouncementAttachment, AnnouncementAttachment>> annAttachmentsCopyResult;
+            IList<Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>> annAttributesCopyResult;
             
             using (var unitOfWork = Update())
             {
@@ -190,15 +190,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
 
             //Here we will copy all contents.
-            var attachmentsToCopy = annAttachmentsCopyResult.Select(x => new Pair<Attachment, Attachment>(x.Key.Attachment, x.Value.Attachment)).ToList();
+            var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment, y => y.Attachment).ToList();
             foreach (var attributePair in annAttributesCopyResult)
-                if (attributePair.Key.Attachment != null)
-                    attachmentsToCopy.Add(new Pair<Attachment, Attachment>(attributePair.Key.Attachment, attributePair.Value.Attachment));
+                if (attributePair.First.Attachment != null)
+                    attachmentsToCopy.Add(new Pair<Attachment, Attachment>(attributePair.First.Attachment, attributePair.Second.Attachment));
 
-            var copyContentResult = AttachmentService.CopyContent(attachmentsToCopy, ServiceLocator, ConnectorLocator);
-            ServiceLocator.AttachementService.UploadToCrocodoc(copyContentResult);
-
-            DoUpdate(u => new AttachmentDataAccess(u).Update(copyContentResult));
+            ServiceLocator.AttachementService.CopyContent(attachmentsToCopy);
 
             return fromToAnnouncementIds.Select(x => x.Value).ToList();
         }
