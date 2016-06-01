@@ -1,5 +1,4 @@
 -var isClass = self.getType() == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT
--var isLessonPlan = self.getType() == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN
 .title-block(class = (isClass ? 'class-announcement' : ''))
     if isClass
         .title-text=self.getTitle()

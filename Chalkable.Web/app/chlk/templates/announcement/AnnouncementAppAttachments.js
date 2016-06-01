@@ -37,6 +37,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.SupplementalAnnouncementViewData, 'supplementalAnnouncementData',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
 
             [ria.templates.ModelPropertyBind],

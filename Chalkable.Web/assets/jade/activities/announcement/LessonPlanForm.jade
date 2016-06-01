@@ -3,6 +3,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
         .items
             +ActionLink('announcement', 'lessonPlan', lessonPlan.getClassId()).item.announcement-type-button.pressed Lesson Plan
             if !announcement.getState().valueOf()
+                +ActionLink('announcement', 'supplementalAnnouncement', lessonPlan.getClassId()).item.announcement-type-button.no-save Supplemental
                 each item in types
                     +ActionLink('announcement', 'addClassAnnouncement', lessonPlan.getClassId(), item.getId()).item.announcement-type-button.no-save=item.getName()
 
