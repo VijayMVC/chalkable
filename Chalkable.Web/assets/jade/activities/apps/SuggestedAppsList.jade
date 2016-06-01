@@ -9,7 +9,7 @@
                     +LeftRightToolbar()(fixedElementWidth = true)
                         each app, i in self.getSuggestedApps()
                             .app-icon-link.announcement-item.application
-                                +ActionLink('apps', 'tryToAttachFromAnnouncement', self.getAnnouncementId(), app.getId(), self.getAnnouncementType(), self.getStandardsUrlComponents())(data-tooltip='Attach', class= app.needToInstall() ? "x-hidden" : "", data-id=app.getId().valueOf()).attach-icon +
+                                +ActionLink('apps', 'tryToAttachFromAnnouncement', self.getAnnouncementId(), app.getId(), self.getAnnouncementType(), self.getStandardsUrlComponents())(data-tooltip='Attach', data-id=app.getId().valueOf()).attach-icon +
                                 .wrapper
                                     -var pictureUrl = app.getBannerPictureUrl()
                                     +LoadingImage(src=pictureUrl, id="loading-image-" + i)
