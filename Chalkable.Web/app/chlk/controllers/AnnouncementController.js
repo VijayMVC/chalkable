@@ -2113,12 +2113,16 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'save'){
-                return this.saveAnnouncementFormAction(model);
+                model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
+                model.setApplications(this.getCachedAnnouncementApplications());
+                model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
+                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
+                return this.saveSupplementalAnnouncementAction(model, announcementForm);
             }
 
             if (submitType == 'saveNoUpdate'){
                 this.setNotAblePressSidebarButton(true);
-                return this.saveAnnouncementTeacherAction(model);
+                return this.saveSupplementalAnnouncementAction(model);
             }
 
             if (submitType == 'save'){
