@@ -1,7 +1,5 @@
 normalValue = self.getNormalValue()
 itemCls = (self.isDropped() || self.isAutomaticalyDropped() ? 'dropped' :'')
--console.log(self.isDropped())
--console.log(itemCls)
 
 selectedCls = (!self.isReadonly() ? 'not-selected' : '')
 maxScore = self.getMaxScore()
@@ -19,6 +17,10 @@ div(class="selected " + itemCls, rowIndex=self.getRowIndex(), recId=self.getId()
                 data-value=normalValue,
                 class=self.getGradeInputClass()
                 data-grade-value=self.getGradeValue(),
+                data-dropped = self.isDropped(),
+                data-late = self.isLate(),
+                data-incomplete = self.isIncomplete(),
+                data-exempt = self.isExempt(),
                 data-id=self.getId().valueOf(),
                 data-only-zero-score=(!!self.isAblePutOnlyZero()).toString()
             ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus.select-text
