@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.lessonPlanData = SJX.fromDeserializable(raw.lessonplandata, chlk.models.announcement.LessonPlanViewData);
                 this.adminAnnouncementData = SJX.fromDeserializable(raw.adminannouncementdata, chlk.models.announcement.AdminAnnouncementViewData);
                 this.classAnnouncementData = SJX.fromDeserializable(raw.classannouncementdata, chlk.models.announcement.ClassAnnouncementViewData);
-                this.supplementalAnnouncementData = SJX.fromDeserializable(raw.supplementalsnnouncementdata, chlk.models.announcement.SupplementalAnnouncementViewData);
+                this.supplementalAnnouncementData = SJX.fromDeserializable(raw.supplementalannouncementdata, chlk.models.announcement.SupplementalAnnouncementViewData);
                 this.shortContent = SJX.fromValue(raw.shortcontent, String);
                 this.complete = SJX.fromValue(raw.complete, Boolean);
                 this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
