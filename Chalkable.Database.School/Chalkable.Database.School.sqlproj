@@ -321,7 +321,7 @@
     <Build Include="User Defined Types\TSisActivityCopyResult.sql" />
     <Build Include="Stored Procedures\spCopyClassAnnouncementsToClass.sql" />
     <Build Include="Tables\SupplementalAnnouncement.sql" />
-    <Build Include="Tables\SupplementalAnnouncementRecipients.sql" />
+    <Build Include="Tables\SupplementalAnnouncementRecipient.sql" />
     <Build Include="Views\vwSupplementalAnnouncement.sql" />
     <Build Include="Stored Procedures\spCreateSupplementalAnnouncement.sql" />
     <Build Include="Stored Procedures\spSelectSupplementalAnnouncements.sql" />
