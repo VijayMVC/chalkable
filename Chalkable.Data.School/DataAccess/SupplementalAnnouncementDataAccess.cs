@@ -120,7 +120,7 @@ namespace Chalkable.Data.School.DataAccess
                 ["created"] = created,
                 ["expires"] = expiresDate,
                 ["classId"] = classId,
-                ["classAnnouncementId"] = classAnnouncementTypeId,
+                ["classAnnouncementTypeId"] = classAnnouncementTypeId,
                 ["personId"] = personId,
                 ["state"] = AnnouncementState.Draft
             };
@@ -129,6 +129,12 @@ namespace Chalkable.Data.School.DataAccess
             {
                 return BuildGetDetailsResult(reader);
             }
+        }
+
+        public override void Update(SupplementalAnnouncement entity)
+        {
+            SimpleUpdate<Announcement>(entity);
+            base.Update(entity);
         }
     }
 }
