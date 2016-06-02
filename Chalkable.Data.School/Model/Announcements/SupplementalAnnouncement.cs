@@ -8,14 +8,15 @@ namespace Chalkable.Data.School.Model.Announcements
     {
         public const string CLASS_REF_FIELD = nameof(ClassRef);
         public const string SCHOOL_SCHOOLYEAR_REF_FIELD = nameof(SchoolYearRef);
-        public const string GALERRY_CATEGORY_REF_FIELD = nameof(GalleryCategoryRef);
+        public const string GALERRY_CATEGORY_REF_FIELD = nameof(ClassAnnouncementTypeRef);
         public const string END_DATE_FIELD = nameof(Expires);
         public const string VISIBLE_FOR_STUDENT_FIELD = nameof(VisibleForStudent);
+        public const string VW_SUPPLEMENTAL_ANNOUNCEMENT = "vw" + nameof(SupplementalAnnouncement);
 
         public DateTime Expires { get; set; }
         public bool VisibleForStudent { get; set; }
         public int ClassRef { get; set; }
-        public int? GalleryCategoryRef { get; set; }
+        public int? ClassAnnouncementTypeRef { get; set; }
         public int SchoolYearRef { get; set; }
         
         [NotDbFieldAttr]

@@ -1,30 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.API.Models;
+using Chalkable.Common.Exceptions;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
     public class SupplementalAnnouncementController : AnnouncementController
     {
         [AuthorizationFilter("Teacher")]
-        public ActionResult Create(int classId, DateTime expiresDate)
+        public ActionResult CreateSupplemental(int classId,  DateTime? expiresDate, int? classAnnouncemenTypeId)
         {
-            var res = SchoolLocator.SupplementalAnnouncementService.Create(classId, GenerateDefaultExpiresDate(expiresDate));
+            if (classAnnouncemenTypeId == null)
+            {
+                var classAnnTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
+                if (classAnnTypes.Count == 0)
+                    throw new NoClassAnnouncementTypeException("Item can't be created. Current Class doesn't have categories(class announcement types)");
+                classAnnouncemenTypeId = classAnnTypes.First().Id;
+            }
+
+            var res = SchoolLocator.SupplementalAnnouncementService.Create(classId, GenerateDefaultExpiresDate(expiresDate), classAnnouncemenTypeId.Value);
             return Json(PrepareCreateAnnouncementViewData(res));
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Save(int supplementalAnnouncementPlanId, int classId, string title, string content, int? galleryCategoryId,
+        public ActionResult Save(int supplementalAnnouncementPlanId, int classId, string title, string content, int? classAnnouncemenTypeId,
             DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Supplemental, supplementalAnnouncementPlanId, attributes);
-            var res = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, galleryCategoryId, title, content, expiresDate, !hideFromStudents, recipientsIds);
+            var res = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, classAnnouncemenTypeId, title, content, expiresDate, !hideFromStudents, recipientsIds);
 
-            if (res.SupplementalAnnouncementData?.GalleryCategoryRef != null)
+            if (res.SupplementalAnnouncementData?.AnnouncementTypeName != null)
             {
                 MasterLocator.UserTrackingService.SavedSupplementalAnnouncementToGallery(Context.Login, title);
             }
@@ -32,11 +42,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Submit(int supplementalAnnouncementPlanId, int classId, string title, string content, int? galleryCategoryId,
+        public ActionResult Submit(int supplementalAnnouncementPlanId, int classId, string title, string content, int? classAnnouncemenTypeId,
             DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, supplementalAnnouncementPlanId, attributes);
-            var ann = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, galleryCategoryId, title, content, expiresDate, !hideFromStudents, recipientsIds);
+            var ann = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, classAnnouncemenTypeId, title, content, expiresDate, !hideFromStudents, recipientsIds);
             SchoolLocator.SupplementalAnnouncementService.Submit(supplementalAnnouncementPlanId);
             var supplementalAnnouncement = SchoolLocator.SupplementalAnnouncementService.GetSupplementalAnnouncementById(supplementalAnnouncementPlanId);
             //TODO delete old drafts 

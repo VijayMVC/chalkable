@@ -1,11 +1,18 @@
 ﻿CREATE Procedure [dbo].[spCreateSupplementalAnnouncement] 
-@created datetime, @expires datetime, @visibleForStudent bit, @classId int, @classAnnouncementTypeId int, @schoolYearId int, @personId int, @state int
+	@created datetime, 
+	@expires datetime,
+	@classId int, 
+	@classAnnouncementTypeId int,
+	@personId int, 
+	@state int
 AS
 Begin Transaction
 --Only Teacher can create Suplement Announcement--
 Declare @callerRole int = 2
 Declare @isDraft bit = 0
 Declare @announcementId int
+Declare @schoolYearId int;
+Set @schoolYearId = (Select Top 1 SchoolYearRef From Class Where Id = @classId)
 
 if @state = 0
 Begin
@@ -65,11 +72,16 @@ Begin
 	Set @announcementId = SCOPE_IDENTITY()
 
 	Insert Into SupplementalAnnouncement (Id, Expires, VisibleForStudent, ClassRef, ClassAnnouncementTypeRef, SchoolYearRef)
-	Values(@announcementId, @classId, @visibleForStudent, @classId, @classAnnouncementTypeId, @schoolYearId);
+	Values(@announcementId, @expires, 1, @classId, @classAnnouncementTypeId, @schoolYearId);
 
 End
 
-Exec spGetSupplementalAnnouncementDetails @announcementId, @personId, @callerRole, @schoolYearId
+
+Declare @supplementedAnn TInt32;
+Insert Into @supplementedAnn
+values (@announcementId)
+
+Exec spGetListOfSupplementalAnnouncementDetailsByIds @supplementedAnn, @personId, @callerRole, @schoolYearId
 
 Commit
 GO

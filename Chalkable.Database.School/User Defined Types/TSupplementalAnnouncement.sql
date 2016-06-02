@@ -11,6 +11,7 @@
     [VisibleForStudent]			BIT              NULL,
     [PrimaryTeacherName]		NVARCHAR (MAX)   NULL,
     [PrimaryTeacherGender]		NVARCHAR (MAX)   NULL,
-    [ClassName]					NVARCHAR (30)   NULL,
-    [FullClassName]				NVARCHAR (MAX)   NULL
+    [ClassName]					NVARCHAR (30)    NULL,
+    [FullClassName]				NVARCHAR (MAX)   NULL,
+	[PrimaryTeacherRef]			INT				 NULL
 )

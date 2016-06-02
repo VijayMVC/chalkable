@@ -324,8 +324,8 @@
     <Build Include="Tables\SupplementalAnnouncementRecipients.sql" />
     <Build Include="Views\vwSupplementalAnnouncement.sql" />
     <Build Include="Stored Procedures\spCreateSupplementalAnnouncement.sql" />
-    <Build Include="Stored Procedures\spGetSupplementalAnnouncementDetails.sql" />
     <Build Include="Stored Procedures\spSelectSupplementalAnnouncements.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetListOfSupplementalAnnouncementDetailsByIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
