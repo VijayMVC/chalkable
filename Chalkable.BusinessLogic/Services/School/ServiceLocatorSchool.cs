@@ -1,4 +1,5 @@
-﻿using Chalkable.BusinessLogic.Services.Master;
+﻿using System;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.Common.Exceptions;
@@ -305,7 +306,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 case AnnouncementTypeEnum.Class: return classAnnouncementService;
                 case AnnouncementTypeEnum.Admin: return adminAnnouncementService;
                 case AnnouncementTypeEnum.LessonPlan: return lessonPlanService;
-                default : throw new ChalkableException("Not supported announcement type"); //todo implement NotSupportedChalkableException
+                case AnnouncementTypeEnum.Supplemental: return supplementalAnnouncementService;
+                default : throw new NotSupportedException("Not supported announcement type");
             }
         }
 
