@@ -24,15 +24,15 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'SupplementalAnnouncementService', EXTENDS(chlk.services.BaseService), [
 
-            /*[[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             ria.async.Future, function create(classId_, expiresDate_) {
-                return this.get('SupplementalAnnouncement/Create.json', chlk.models.announcement.SupplementalAnnouncementForm, {
+                return this.get('SupplementalAnnouncement/CreateSupplemental.json', chlk.models.announcement.SupplementalAnnouncementForm, {
                     classId: classId_ ? classId_.valueOf() : null,
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
                 });
-            },*/
+            },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            /*[[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             ria.async.Future, function create(classId_, expiresDate_) {
                 return this.get('ClassAnnouncement/CreateClassAnnouncement.json', null, {
                     classId: classId_ ? classId_.valueOf() : null,
@@ -45,7 +45,7 @@ NAMESPACE('chlk.services', function () {
                         data.announcement.classannouncementdata = null;
                         return Serializer.deserialize(data, chlk.models.announcement.SupplementalAnnouncementForm);
                     });
-            },
+            },*/
 
             /*[[chlk.models.id.AnnouncementId, String]],
             ria.async.Future, function editTitle(announcementId, title) {
