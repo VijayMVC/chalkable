@@ -13,9 +13,6 @@ Declare @supplementalAnnouncements TSupplementalAnnouncement;
 Declare @totalCount int;
 Declare @isOwner int = 1;
 
-Select * from vwSupplementalAnnouncement
-Select * from @supplementalAnnouncements
-
 If @callerRole = 2
 Begin
 	Insert into @supplementalAnnouncements

@@ -42,12 +42,13 @@ namespace Chalkable.Data.School.DataAccess
                         Cast(Case When Count(*) > 0 Then 1 Else 0 End As bit)
                    From 
                         {nameof(ClassTeacher)} 
+                   Join {nameof(SupplementalAnnouncement)} 
+                        On {nameof(SupplementalAnnouncement)}.{SupplementalAnnouncement.CLASS_REF_FIELD} = {nameof(ClassTeacher)}.{ClassTeacher.CLASS_REF_FIELD}
                    Where
-                        {nameof(ClassTeacher)}.{ClassTeacher.PERSON_REF_FIELD} = @callerId
-                    And {nameof(ClassTeacher)}.{ClassTeacher.CLASS_REF_FIELD}  = {nameof(SupplementalAnnouncement)}.{SupplementalAnnouncement.CLASS_REF_FIELD}";
+                        {nameof(ClassTeacher)}.{ClassTeacher.PERSON_REF_FIELD} = @callerId";
 
             var query = 
-                $@"Select {SupplementalAnnouncement.VW_SUPPLEMENTAL_ANNOUNCEMENT}.*, {isOwnerScript} as IsOwner
+                $@"Select {SupplementalAnnouncement.VW_SUPPLEMENTAL_ANNOUNCEMENT}.*, ({isOwnerScript}) as IsOwner
                    From   {SupplementalAnnouncement.VW_SUPPLEMENTAL_ANNOUNCEMENT}";
 
             var @params = new Dictionary<string, object>

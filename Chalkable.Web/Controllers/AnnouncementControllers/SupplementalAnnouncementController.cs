@@ -45,7 +45,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult Submit(int supplementalAnnouncementPlanId, int classId, string title, string content, int? classAnnouncemenTypeId,
             DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds)
         {
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, supplementalAnnouncementPlanId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Supplemental, supplementalAnnouncementPlanId, attributes);
             var ann = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, classAnnouncemenTypeId, title, content, expiresDate, !hideFromStudents, recipientsIds);
             SchoolLocator.SupplementalAnnouncementService.Submit(supplementalAnnouncementPlanId);
             var supplementalAnnouncement = SchoolLocator.SupplementalAnnouncementService.GetSupplementalAnnouncementById(supplementalAnnouncementPlanId);

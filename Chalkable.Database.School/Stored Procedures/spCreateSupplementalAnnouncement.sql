@@ -19,7 +19,7 @@ Begin
 	Select 
 		Top 1 @announcementId = Id
 	From 
-		vwLessonPlan
+		vwSupplementalAnnouncement
 	Where 
 		ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0
 			and SchoolYearRef  = @schoolYearId
