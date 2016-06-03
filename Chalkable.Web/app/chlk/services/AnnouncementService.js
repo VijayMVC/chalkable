@@ -145,7 +145,8 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function editAnnouncement(id, announcementType) {
-                return this.get('Announcement/Edit.json', chlk.models.announcement.AnnouncementForm, {
+                return this.get('Announcement/Edit.json', announcementType == chlk.models.announcement.AnnouncementTypeEnum.SUPPLEMENTAL_ANNOUNCEMENT ?
+                        chlk.models.announcement.SupplementalAnnouncementForm : chlk.models.announcement.AnnouncementForm, {
                     announcementId: id.valueOf(),
                     announcementType: announcementType.valueOf()
                 });

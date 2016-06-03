@@ -744,9 +744,26 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.announcement.AnnouncementForm]],
+        function getSupplementalAnnouncementFromModel_(model) {
+            var classId = model.getAnnouncement().getSupplementalAnnouncementData().getClassId();
+            return this.studentService.getStudents(classId, null, true, true, 0, 999)
+                .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
+                    return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
+                    throw error;
+                }, this)
+                .attach(this.validateResponse_())
+                .then(function(students){
+                    model.setStudents(students.getItems());
+                    return model;
+                },this)
+                .attach(this.validateResponse_());
+        },
+
+        [[chlk.models.announcement.AnnouncementForm]],
         function supplementalAnnouncementFromModel_(model) {
             this.cacheAnnouncementType(chlk.models.announcement.AnnouncementTypeEnum.SUPPLEMENTAL_ANNOUNCEMENT);
-            return this.PushView(this.getAnnouncementFormPageType_(), ria.async.DeferredData(model, 300));
+            var result = this.getSupplementalAnnouncementFromModel_(model);
+            return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
         [[chlk.models.announcement.AnnouncementForm]],
@@ -1168,12 +1185,15 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     var resModel =  this.addEditAction(model, true);
-                    if(resModel.getAnnouncement().getLessonPlanData()){
+                    if(resModel.getAnnouncement().getLessonPlanData())
                         return this.getLessonPlanFromModel_(resModel);
-                    }else{
-                        this.cacheAnnouncementType(announcementType);
-                        return resModel;
-                    }
+
+                    if(resModel.getAnnouncement().getSupplementalAnnouncementData())
+                        return this.getSupplementalAnnouncementFromModel_(resModel);
+
+                    this.cacheAnnouncementType(announcementType);
+                    return resModel;
+
                 }, this);
             return this.PushView(this.getAnnouncementFormPageType_(announcementType), res);
         },
@@ -1193,8 +1213,9 @@ NAMESPACE('chlk.controllers', function (){
             var classAnnouncement = announcement.getClassAnnouncementData();
             var lessonPlan = announcement.getLessonPlanData();
             var adminAnnouncement = announcement.getAdminAnnouncementData();
-            var announcementForClass = classAnnouncement || lessonPlan;
-            var announcementWithExpires = classAnnouncement || adminAnnouncement;
+            var supplementalAnnouncement = announcement.getSupplementalAnnouncementData();
+            var announcementForClass = classAnnouncement || lessonPlan || supplementalAnnouncement;
+            var announcementWithExpires = classAnnouncement || adminAnnouncement || supplementalAnnouncement;
 
             if(announcementForClass && this.userInRole(chlk.models.common.RoleEnum.TEACHER)){
                 var classInfo = this.classService.getClassAnnouncementInfo(announcementForClass.getClassId());
@@ -1215,7 +1236,7 @@ NAMESPACE('chlk.controllers', function (){
             if(!hasMCPermission && classAnnouncement){
                 classAnnouncement.setAbleToGrade(false);
             }
-            announcement.setAbleEdit(announcement.isAnnOwner() && hasMCPermission);
+            announcement.setAbleEdit(true);//announcement.isAnnOwner() && hasMCPermission);
 //                    announcement.setAbleChangeDate(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
             announcement.calculateGradesAvg();
             var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
@@ -2056,6 +2077,11 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function submitSupplementalAnnouncement(model, isEdit){
+            if(!model.getRecipientIds()){
+                this.ShowMsgBox('Please select recipients', 'whoa.');
+                return null;
+            }
+
             var res = this.supplementalAnnouncementService
                 .submitSupplementalAnnouncement(
                     model.getId(),
@@ -2091,7 +2117,6 @@ NAMESPACE('chlk.controllers', function (){
             if(this.isAnnouncementSavingDisabled()) return;
             this.disableAnnouncementSaving(false);
             var submitType = model.getSubmitType();
-            var classId = model.getClassId();
 
             model.setMarkingPeriodId(this.getCurrentMarkingPeriod().getId());
 
@@ -2129,7 +2154,7 @@ NAMESPACE('chlk.controllers', function (){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
                 model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
-                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
+                var announcementForm =  chlk.models.announcement.SupplementalAnnouncementForm.$createFromAnnouncement(model);
                 return this.saveSupplementalAnnouncementAction(model, announcementForm);
             }
 

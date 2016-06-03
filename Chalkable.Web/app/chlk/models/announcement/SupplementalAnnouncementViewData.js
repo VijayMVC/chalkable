@@ -1,7 +1,8 @@
 REQUIRE('ria.serialize.SJX');
-REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
+REQUIRE('chlk.models.announcement.AnnouncementWithExpiresDateViewData');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.LpGalleryCategoryId');
+REQUIRE('chlk.models.people.User');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -11,20 +12,20 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.SupplementalAnnouncementViewData*/
     CLASS(
         UNSAFE, 'SupplementalAnnouncementViewData',
-                EXTENDS(chlk.models.announcement.BaseAnnouncementViewData),
+                EXTENDS(chlk.models.announcement.AnnouncementWithExpiresDateViewData),
                 IMPLEMENTS(ria.serialize.IDeserializable), [
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
-                this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.classId = SJX.fromValue(Number(raw.classid), chlk.models.id.ClassId);
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
                 this.galleryCategoryId = SJX.fromValue(raw.gallerycategoryid, chlk.models.id.LpGalleryCategoryId);
+                this.recipients = SJX.fromArrayOfDeserializables(raw.recipients, chlk.models.people.User);
             },
 
-            chlk.models.common.ChlkDate, 'expiresDate',
+            ArrayOf(chlk.models.people.User), 'recipients',
             chlk.models.id.ClassId, 'classId',
             String, 'shortClassName',
             String, 'className',

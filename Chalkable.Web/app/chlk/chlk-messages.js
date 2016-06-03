@@ -671,6 +671,7 @@ var Msg = {
     Students_with_attendance_issues: 'Students with attendance issues',
     Suggested_grade: 'Suggested grade',
     Sum_of_percents: 'Sum of percents is not 100!',
+    Supplemental_announcement: 'Supplemental announcement',
     Suppress_student_name: 'Suppress student name',
     Swipe_or_Search: 'Swipe or Search',
     System_Type: 'System Type',

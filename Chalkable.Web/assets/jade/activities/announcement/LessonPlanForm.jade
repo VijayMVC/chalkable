@@ -125,8 +125,8 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                     -ann.setNeedButtons(true)
                     -ann.setNeedDeleteButton(true)
                     +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
-                    userRole = userRole,
-                    studyCenterEnabled = self.isStudyCenterEnabled()
+                        userRole = userRole,
+                        studyCenterEnabled = self.isStudyCenterEnabled()
                     )
                 .attributes-block
                     -var attributesList = announcement.getAttributesListViewData();

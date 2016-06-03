@@ -48,9 +48,10 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                     .left-block(class=needStandardsBlock ? 'with-standards' : '')
                         .left-block-container
                             .left-top-container
+                                -var recipientIds = announcementItem.getRecipients() ? announcementItem.getRecipients().map(function(item){return item.getId()}) : []
                                 +Select('students')(multiple).recipients-select
                                     each student in self.getStudents() || []
-                                        +Option(student.getId().valueOf(), student.getFullName())
+                                        +Option(student.getId().valueOf(), student.getFullName(), recipientIds.indexOf(student.getId()) > -1)
                             +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
@@ -92,13 +93,13 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                                     .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
 
                 .apps-attachments-bock.attachments-and-applications
-            ann = announcement
-                -ann.setNeedButtons(true)
-                -ann.setNeedDeleteButton(true)
-                +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
-                    userRole = userRole,
-                    studyCenterEnabled = self.isStudyCenterEnabled()
-                )
+                    ann = announcement
+                    -ann.setNeedButtons(true)
+                    -ann.setNeedDeleteButton(true)
+                    +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
+                        userRole = userRole,
+                        studyCenterEnabled = self.isStudyCenterEnabled()
+                    )
                 .attributes-block
                     -var attributesList = announcement.getAttributesListViewData();
                     -attributesList.setReadOnly(false)

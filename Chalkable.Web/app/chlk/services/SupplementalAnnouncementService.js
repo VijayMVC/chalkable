@@ -75,7 +75,7 @@ NAMESPACE('chlk.services', function () {
                     expiresDate: expiresDate_ && expiresDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
                     attributes: attributesListData,
-                    recipientsIds: recipientsIds
+                    recipientsIds: recipientsIds ? recipientsIds.split(',') : []
                 });
             },
 
@@ -91,7 +91,7 @@ NAMESPACE('chlk.services', function () {
                     expiresDate: expiresDate_ && expiresDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
                     attributes: attributesListData,
-                    recipientsIds: recipientsIds
+                    recipientsIds: recipientsIds ? recipientsIds.split(',') : []
                 });
             }
         ])

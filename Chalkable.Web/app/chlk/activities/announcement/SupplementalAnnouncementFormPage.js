@@ -26,7 +26,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('submit', '.announcement-form>FORM')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
-                var ids = this.dom.find('.recipients-select').getValue().join(',');
+                var value = this.dom.find('.recipients-select').getValue();
+                var ids = value ? this.dom.find('.recipients-select').getValue().join(',') : '';
                 this.dom.find('.recipient-ids').setValue(ids);
             }
         ]
