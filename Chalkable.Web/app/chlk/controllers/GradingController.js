@@ -85,7 +85,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             function indexTeacherAction() {
@@ -104,8 +105,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES//,
-                //[chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -125,7 +126,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.grading.GradingSummaryGridSubmitViewData]],
@@ -137,7 +139,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -211,7 +214,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -475,7 +479,8 @@ NAMESPACE('chlk.controllers', function (){
             /* END CLASS PROFILE */
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -510,7 +515,7 @@ NAMESPACE('chlk.controllers', function (){
                 )
                 .attach(this.validateResponse_())
                 .then(function(data){
-                        var redirectModel = new chlk.models.grading.GradingSummaryGridSubmitViewData(model.getClassId(), model.getGradingPeriodId(), true, false, model.getStandardId(), model.getCategoryId());
+                        var redirectModel = new chlk.models.grading.GradingSummaryGridSubmitViewData(model.getClassId(), model.getGradingPeriodId(), true, false, model.getStandardId(), model.getCategoryId(), true);
                         this.BackgroundNavigate('grading', 'loadGradingPeriodGridSummary', [redirectModel]);
                 }, this);
                return null;
@@ -533,7 +538,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -1190,7 +1196,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate){
-                var res = this.calendarService.listByDateRange(startDate, endDate, classId)
+                var res = this.calendarService.listClassAnnsByDateRange(startDate, endDate, classId)
                     .then(function(announcements){
                         var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                         var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.WORKSHEET_REPORT);

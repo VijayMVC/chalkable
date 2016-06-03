@@ -10,6 +10,7 @@ REQUIRE('chlk.models.calendar.announcement.CalendarDayItem');
 REQUIRE('chlk.models.calendar.TeacherSettingsCalendarDay');
 REQUIRE('chlk.models.calendar.announcement.DayItem');
 REQUIRE('chlk.models.calendar.announcement.Day');
+REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
@@ -24,8 +25,17 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'CalendarService', EXTENDS(chlk.services.BaseService), [
             [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
-            ria.async.Future, function listByDateRange(startDate_, endDate_, classId_) {
+            ria.async.Future, function listClassAnnsByDateRange(startDate_, endDate_, classId_) {
                 return this.get('AnnouncementCalendar/ListClassAnnsByDateRange.json', ArrayOf(chlk.models.announcement.ClassAnnouncementViewData) , {
+                    startDate: startDate_ && startDate_.toString('mm-dd-yy'),
+                    endDate: endDate_ && endDate_.toString('mm-dd-yy'),
+                    classId: classId_ && classId_.valueOf()
+                });
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+            ria.async.Future, function listByDateRange(startDate_, endDate_, classId_) {
+                return this.get('AnnouncementCalendar/ListByDateRange.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData) , {
                     startDate: startDate_ && startDate_.toString('mm-dd-yy'),
                     endDate: endDate_ && endDate_.toString('mm-dd-yy'),
                     classId: classId_ && classId_.valueOf()

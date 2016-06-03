@@ -265,7 +265,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
 
-
+        
         public override void DeleteAnnouncement(int announcementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -339,6 +339,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     res.Add(ann);
             }
             return res;
+        }
+
+        public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
+        {
+            //TODO impl stored procedure GetClassAnnouncementsByIds
+            IList<AnnouncementComplex> anns = DoRead(u => InternalGetDetailses(CreateClassAnnouncementDataAccess(u), announcementIds))
+                                              .Cast<AnnouncementComplex>().ToList();
+
+            var activitiesIds = anns.Select(x => x.ClassAnnouncementData.SisActivityId.Value).ToList();
+            var activities = ConnectorLocator.ActivityConnector.GetActivitiesByIds(activitiesIds).ToList();
+            DoUpdate(u => anns = MapActivitiesToAnnouncements(ServiceLocator, u, anns, activities));
+            return anns;
         }
 
         public override AnnouncementDetails GetAnnouncementDetails(int announcementId)
@@ -425,6 +437,70 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 uow.Commit();
                 return ann;
             }
+        }
+
+        /// <summary>
+        /// Copies class announcements. First sends sis activities ids to iNow
+        /// then copies data in our DB. Data in DB is default, because on feed we
+        /// merge data from iNow.
+        /// </summary>
+        /// <returns>Copied ids. NOT NEW!</returns>
+        public override IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+            if (!ServiceLocator.ClassService.IsTeacherClasses(Context.PersonId.Value, fromClassId, toClassId))
+                throw new ChalkableSecurityException("You can copy announcements only between your classes");
+
+            if (classAnnouncementIds == null || classAnnouncementIds.Count == 0)
+                return new List<int>();
+
+            startDate = startDate ?? CalculateStartDateForCopying(toClassId);
+            var annt = DoRead(u => CreateClassAnnouncementDataAccess(u).GetByIds(classAnnouncementIds));
+            var sisActivitiesIdsToCopy = annt
+                .Where(x => !x.IsDraft && x.SisActivityId.HasValue).Select(x => x.SisActivityId.Value).ToList();
+
+            var sisCopyResult = ConnectorLocator.ActivityConnector.CopyActivities(new ActivityCopyOptions
+            {
+                ActivityIds = sisActivitiesIdsToCopy,
+                StartDate = startDate,
+                CopyToSectionIds = new List<int> { toClassId }
+            });
+
+            if (sisCopyResult == null || !sisCopyResult.Any(x => x.NewActivityId.HasValue))
+                return new List<int>();
+
+            var sisFromToActivityIds = sisCopyResult
+                .Where(x => x.NewActivityId.HasValue)
+                .ToDictionary(x => x.SourceActivityId, y => y.NewActivityId.Value);
+
+            var announcementApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(classAnnouncementIds, true);
+            var applicationIds = announcementApps.Select(x => x.ApplicationRef).ToList();
+            //Only simple apps
+            var applications = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(applicationIds)
+                .Where(x => !x.IsAdvanced).ToList();
+            //Announcement apps. Only simple apps can be copied
+            announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
+
+            IDictionary<int, int> fromToAnnouncementsIds;
+            IList<Attachment> copiedAtts = null;
+            using (var u = Update())
+            {
+                var attachmentsOwners = new ClassTeacherDataAccess(u).GetClassTeachers(fromClassId, null)
+                    .Select(x => x.PersonRef).ToList();
+
+                fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u)
+                    .CopyClassAnnouncementsToClass(sisFromToActivityIds, toClassId, Context.NowSchoolTime);
+
+                copiedAtts = AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator)
+                    .Select(x=>x.Attachment).ToList();
+                ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementsIds.Select(x => x.Value).ToList(), u);
+
+                u.Commit();
+            }
+            ServiceLocator.AttachementService.UploadToCrocodoc(copiedAtts);
+
+            return fromToAnnouncementsIds.Select(x => x.Value).ToList();
         }
 
         public void CopyAnnouncement(int classAnnouncementId, IList<int> classIds)

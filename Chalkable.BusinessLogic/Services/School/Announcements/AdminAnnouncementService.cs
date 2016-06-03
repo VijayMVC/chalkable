@@ -28,7 +28,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         IList<AnnouncementComplex> GetAdminAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
         IList<AnnouncementComplex> GetAdminAnnouncementsSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool sortAsc = false);
-        
         AdminAnnouncement GetLastDraft();
         IList<StudentDetails> GetAdminAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue);
     }
@@ -159,6 +158,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             var anns = GetAnnouncementsComplex(startDate, toDate, null, complete, ownerOnly);
             return DoRead(u => InternalGetDetailses(CreateDataAccess(u), anns.Select(x=>x.Id).ToList()));
+        }
+
+        public override IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate)
+        {
+            throw new NotImplementedException();
+        }
+        public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
+        {
+            throw new NotImplementedException();
         }
 
         public override void DeleteAnnouncement(int announcementId)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
@@ -39,6 +40,18 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var dbQuery = Orm.SimpleSelect(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, conds);
             return ReadOne<ClassAnnouncement>(dbQuery);
         }
+
+        public override IList<ClassAnnouncement> GetByIds(IList<int> keys)
+        {
+            var query = $@"Select * From vwClassAnnouncement Where Id in(select * from @keys)";
+            var @params = new Dictionary<string, object>
+            {
+                ["keys"] = keys
+            };
+
+            return ReadMany<ClassAnnouncement>(new DbQuery(query, @params));
+        }
+
         public override IList<ClassAnnouncement> GetAll(QueryCondition conditions = null)
         {
             var dbQuery = Orm.SimpleSelect(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, conditions);
@@ -282,6 +295,28 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 };
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
             return Exists(dbQuery);
+        }
+        
+        /// <summary>
+        /// Created copies of class announcements.
+        /// </summary>
+        /// <param name="sisCopyResult">Key is SOURCE sis activity id. Value is NEW sis activity id</param>
+        /// <returns>Key is SOURCE announcement id. Value is NEW announcement id</returns>
+        public IDictionary<int, int> CopyClassAnnouncementsToClass(IDictionary<int, int> sisCopyResult, int toClassId, DateTime created)
+        {
+            var sisCopyRes = SisActivityCopyResult.Create(sisCopyResult);
+            var @params = new Dictionary<string, object>
+            {
+                ["sisCopyResult"] = sisCopyRes,
+                ["toClassId"] = toClassId,
+                ["created"] = created
+            };
+
+            using (var reader = ExecuteStoredProcedureReader("spCopyClassAnnouncementsToClass", @params))
+            {
+                return reader.ReadList<AnnouncementCopyResult>()
+                    .ToDictionary(x => x.FromAnnouncementId, y => y.ToAnnouncementId);
+            }
         }
     }
 

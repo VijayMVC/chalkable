@@ -35,7 +35,9 @@ NAMESPACE('chlk.activities.person', function () {
                 tpl.options({
                     messagingDisabled: this.isMessagingDisabled()
                 });
-                ria.dom.Dom(tpl.render()).appendTo(this.dom.find('.people-list'));
+                var grid = this.dom.find('.people-list');
+                ria.dom.Dom(tpl.render()).appendTo(grid);
+                grid.trigger(chlk.controls.GridEvents.UPDATED.valueOf());
                 setTimeout(function(){
                     if(!model.getItems().length)
                         this.dom.find('#people-list-form').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());

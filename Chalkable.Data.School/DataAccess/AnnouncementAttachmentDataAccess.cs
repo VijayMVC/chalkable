@@ -33,6 +33,23 @@ namespace Chalkable.Data.School.DataAccess
                        .AppendFormat(" Where {0} in ({1})", annRefField, annIdsStr);
 
             return ReadMany<AnnouncementAttachment>(dbQuery, true).OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id).ToList();
+        }
+
+        public IList<AnnouncementAttachment> GetByAnnouncementIds(IList<int> announcementIds, IList<int> owners)
+        {
+            var query = new DbQuery();
+            query.Sql.Append(
+                $@"Select * 
+                   From vw{nameof(AnnouncementAttachment)}
+                   Where  {nameof(AnnouncementAttachment)}_{nameof(AnnouncementAttachment.AnnouncementRef)} in (Select * From @announcementIds)");
+
+            if (owners != null && owners.Count != 0)
+                query.Sql.Append($" And {nameof(Attachment)}_{nameof(Attachment.PersonRef)} in (Select * From @owners)");
+
+            query.Parameters.Add("announcementIds", announcementIds);
+            query.Parameters.Add("owners", owners);
+
+            return ReadMany<AnnouncementAttachment>(query, true);
         } 
 
         public IList<AnnouncementAttachment> GetLastAttachments(int announcementId, int count = int.MaxValue)

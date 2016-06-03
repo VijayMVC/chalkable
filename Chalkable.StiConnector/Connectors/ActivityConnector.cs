@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -145,6 +147,21 @@ namespace Chalkable.StiConnector.Connectors
             Post<Object>(url, null, nvc, HttpMethod.Put);
         }
 
+        public IList<Activity> GetActivitiesByIds(IList<int> ids)
+        {
+            var nvc = new NameValueCollection();
+            var urlBilder = new StringBuilder();
+            urlBilder.Append(BaseUrl + "chalkable/activities");
+            if (ids != null && ids.Count > 0)
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    nvc.Add($"ids[{i}]", ids[i].ToString());
+                }
+            }
+            return Call<IList<Activity>>(urlBilder.ToString(), nvc);
+        } 
+
         public void DeleteActivity(int id)
         {
             Delete(string.Format(urlFormat, id));           
@@ -170,5 +187,10 @@ namespace Chalkable.StiConnector.Connectors
             }
             return Post<IList<ActivityCopyResult>>(url, null, nvc);
         }
+
+        public IList<ActivityCopyResult> CopyActivities(ActivityCopyOptions activityCopyOptions)
+        {
+            return Post<IList<ActivityCopyResult>, ActivityCopyOptions>($"{BaseUrl}chalkable/activities/copy", activityCopyOptions);
+        } 
     }
 }
