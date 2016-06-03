@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             PersonId = announcement.PrimaryTeacherRef;
             PersonName = announcement.PrimaryTeacherName;
             PersonGender = announcement.PrimaryTeacherGender;
-            Recipients = announcement.Recipients.Select(ShortPersonViewData.Create).ToList();
+            Recipients = announcement.Recipients?.Select(ShortPersonViewData.Create).ToList();
         }
 
         public static SupplementalAnnouncementViewData Create(SupplementalAnnouncement announcement)

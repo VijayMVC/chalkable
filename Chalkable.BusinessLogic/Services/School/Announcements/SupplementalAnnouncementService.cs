@@ -9,6 +9,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
@@ -232,6 +233,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 if (suppAnnouncement.IsSubmitted)
                     ValidateSupplementalAnnouncement(suppAnnouncement, da, ServiceLocator, recipientsIds, classId);
 
+                var recipientList = recipientsIds?.Select(x => new SupplementalAnnouncementRecipient
+                {
+                    SupplementalAnnouncementRef = supplementalAnnouncementPlanId,
+                    StudentRef = x
+                }).ToList();
+
+                new SupplementalAnnouncementRecipientDataAccess(uow).UpdateRecipients(recipientList);
                 da.Update(suppAnnouncement);
                 uow.Commit();
                 return InternalGetDetails(da, supplementalAnnouncementPlanId);
@@ -348,8 +356,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var unitOfWork = Read())
             {
                 var announcement = CreateSupplementalAnnouncementDataAccess(unitOfWork).GetLastDraft(Context.PersonId.Value);
-                announcement.Recipients = new SupplementalAnnouncementRecipientDataAccess(unitOfWork).GetRecipientsByAnnouncementId(announcement.Id)
-                    .Select(x => x.Recipient).ToList();
+                if(announcement != null)
+                    announcement.Recipients = new SupplementalAnnouncementRecipientDataAccess(unitOfWork).GetRecipientsByAnnouncementId(announcement.Id)
+                        .Select(x => x.Recipient).ToList();
                 return announcement;
             }
         }
