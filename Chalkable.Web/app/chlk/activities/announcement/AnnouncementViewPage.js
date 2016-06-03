@@ -429,7 +429,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 tpl.assign(model);
                 tpl.options({
                     announcementId: this.getAnnouncementId(),
-                    gradable: this.isAbleToGrade() // this.isGradable()
+                    gradable: this.isAbleToGrade(),
+                    dropped: this.isDropped(),
+                    LEIntegrated: this.isLEIntegrated()
                 });
                 tpl.renderTo(this.dom.find('.student-announcements-top-panel').empty());
                 var itemModel = allModel.getCurrentItem();
@@ -912,12 +914,42 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('submit', 'form.update-grade-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
+                var input = node.find('.grade-input');
+
+                if(input.hasClass('processing'))
+                    return false;
+
                 var res = node.find('.input-container').find('.error').valueOf().length == 0;
                 if(res){
+                    var value = (input.getValue() || '').toLowerCase(),
+                        oldValue = input.getData('grade-value'),
+                        droppedValue = node.find('[type=checkbox][name=dropped]').checked(),
+                        oldDroppedValue = input.getData('dropped'),
+                        lateValue = node.find('[type=checkbox][name=islate]').checked(),
+                        oldLateValue = input.getData('late'),
+                        incompleteValue = node.find('[type=checkbox][name=isincomplete]').checked(),
+                        oldIncompleteValue = input.getData('incomplete'),
+                        exemptValue = node.find('[type=checkbox][name=isexempt]').checked(),
+                        oldExemptValue = input.getData('exempt'),
+                        changed = false;
+
+                    if(value != oldValue && !(!value && !oldValue))
+                        changed = true;
+                    if(droppedValue && !oldDroppedValue || !droppedValue && oldDroppedValue)
+                        changed = true;
+                    if(lateValue && !oldLateValue || !lateValue && oldLateValue)
+                        changed = true;
+                    if(incompleteValue && !oldIncompleteValue || !incompleteValue && oldIncompleteValue)
+                        changed = true;
+                    if(exemptValue && !oldExemptValue || !exemptValue && oldExemptValue)
+                        changed = true;
+
+                    if(!changed)
+                        return false;
+
+                    console.info(input.valueOf(), value, oldValue);
                     this.hideDropDown();
                     this.hideGradingPopUp();
-                    var input = node.find('.grade-input');
-                    var value = (input.getValue() || '').toLowerCase();
                     if(!this.canUpdate(input))
                         return false;
                     if(value)
@@ -937,6 +969,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     commentInput.setValue(comment);
                     commentInput.setData('comment', comment);
                     node.find('.comment-text').setHTML(comment ? Msg.Commented : Msg.Comment.toString());
+                    input.addClass('processing');
                 }
                 return res;
             },
@@ -1007,7 +1040,11 @@ NAMESPACE('chlk.activities.announcement', function () {
                     applications: this.getApplications(),
                     standards: this.getStandards()
                 });
-                ria.dom.Dom(tpl.render()).appendTo(this.dom.find('.people-list'));
+
+                var grid = this.dom.find('.people-list');
+
+                ria.dom.Dom(tpl.render()).appendTo(grid);
+                grid.trigger(chlk.controls.GridEvents.UPDATED.valueOf());
                 setTimeout(function(){
                     if(!model.getItems().length)
                         this.dom.find('#people-list-form').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());

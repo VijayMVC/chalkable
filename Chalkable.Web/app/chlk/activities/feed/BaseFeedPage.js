@@ -227,6 +227,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 BASE(model, msg_);
                 this.dom.find('select.prepared').removeClass('prepared');
                 if(model instanceof chlk.models.feed.FeedItems){
+                    this.dom.find('.feed-grid').trigger(chlk.controls.GridEvents.UPDATED.valueOf());
                     if(!model.getItems().length)
                         this.dom.find('.form-for-grid').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
                 }

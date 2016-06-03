@@ -122,7 +122,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                 infiniteScroll = true,
                 needGoToButton = true,
                 pageSize = 10
-            )
+            ).feed-grid
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
                     +FeedItem(item, self.isReadonly(), false, self.isStaringDisabled())

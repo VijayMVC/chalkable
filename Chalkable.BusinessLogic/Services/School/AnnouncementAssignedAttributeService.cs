@@ -98,7 +98,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
             var attributeType = ServiceLocator.AnnouncementAttributeService.GetAttributeById(attributeTypeId, true);
 
-            var id = -1;
 
             using (var uow = Update())
             {
@@ -121,6 +120,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         var activityAssignedAttr = new ActivityAssignedAttribute();
                         MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(activityAssignedAttr, annAttribute);
+                        activityAssignedAttr.Text = " ";
                         activityAssignedAttr = ConnectorLocator.ActivityAssignedAttributeConnector.CreateActivityAttribute(announcement.SisActivityId.Value, activityAssignedAttr);
                         MapperFactory.GetMapper<AnnouncementAssignedAttribute, ActivityAssignedAttribute>().Map(annAttribute, activityAssignedAttr);
                         annAttribute.Name = attributeType.Name;//activity attr returns null name
@@ -128,7 +128,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 
                 var da = new AnnouncementAssignedAttributeDataAccess(uow);
-                id = da.InsertWithEntityId(annAttribute);
+                var id = da.InsertWithEntityId(annAttribute);
                 uow.Commit();
                 return da.GetById(id);
             }
