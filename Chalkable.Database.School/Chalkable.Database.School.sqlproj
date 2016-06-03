@@ -327,6 +327,9 @@
     <Build Include="Stored Procedures\spSelectSupplementalAnnouncements.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spGetListOfSupplementalAnnouncementDetailsByIds.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByDate.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncements.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByClassName.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByTitle.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

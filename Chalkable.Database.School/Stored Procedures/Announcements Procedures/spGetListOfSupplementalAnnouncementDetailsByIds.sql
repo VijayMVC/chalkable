@@ -17,11 +17,14 @@ If @callerRole = 2
 Begin
 	Insert into @supplementalAnnouncements
 		Select
-			vwSupplementalAnnouncement.*
+			vwSA.*,
+			cast((Case When exists(Select * From ClassTeacher CT where CT.PersonRef = @callerId and CT.ClassRef = vwSA.ClassRef) then 1 else 0 End) as Bit),
+			0, 
+			0 as AllCount 
 		From
-			vwSupplementalAnnouncement
+			vwSupplementalAnnouncement vwSA
 		Where Id in(Select * from @announcementIds)
-			And Exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId And ClassTeacher.ClassRef = vwSupplementalAnnouncement.ClassRef)
+			And Exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId And ClassTeacher.ClassRef = vwSA.ClassRef)
 End
 
 Exec spSelectSupplementalAnnouncements @supplementalAnnouncements

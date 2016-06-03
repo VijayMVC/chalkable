@@ -41,6 +41,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             var classAnns = locator.ClassAnnouncementService.GetClassAnnouncementsForFeed(fromDate, toDate, classId, complete, null, start, ct, SortOption);
 
+            var supplementalAnns = locator.SupplementalAnnouncementService.GetSupplementalAnnouncementForFeed(fromDate, toDate, classId, start, count, ownedOnly);
+
             if (start > 0 && classAnns.Count == 0)
                 return classAnns;
 
@@ -57,6 +59,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var lps = InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeTo, ownedOnly);
 
             var res = MerageItems(classAnns, lps);
+
+            res = MerageItems(res, supplementalAnns);
 
             if (locator.Context.Role == CoreRoles.STUDENT_ROLE)
                 res = MerageItems(res, InternalGetAdminAnns(locator, fromDate, toDate, null, complete, 0, int.MaxValue, from, to, includeFrom, includeTo));

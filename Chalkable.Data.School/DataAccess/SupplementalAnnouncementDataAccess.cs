@@ -61,6 +61,43 @@ namespace Chalkable.Data.School.DataAccess
 
             return ReadMany<SupplementalAnnouncement>(dbQuery);
         }
+        ///////////////////////////////////////////
+
+        public AnnouncementQueryResult GetSupplementalAnnouncementOrderedByDate(SupplementalAnnouncementQuery query)
+        {
+            return InternalGetAnnouncements("spGetSupplementalAnnouncementsOrderedByDate", query, null);
+        }
+        public AnnouncementQueryResult GetSupplementalAnnouncementOrderedByTitle(SupplementalAnnouncementQuery query)
+        {
+            var ps = new Dictionary<string, object>
+            {
+                ["fromTitle"] = query.FromTitle,
+                ["toTitle"] = query.ToTitle
+            };
+            return InternalGetAnnouncements("spGetSupplementalAnnouncementsOrderedByTitle", query, ps);
+        }
+        public AnnouncementQueryResult GetSupplementalAnnouncementOrderedByClassName(SupplementalAnnouncementQuery query)
+        {
+            var ps = new Dictionary<string, object>
+            {
+                ["fromClassName"] = query.FromClassName,
+                ["toClassName"] = query.ToClassName
+            };
+            return InternalGetAnnouncements("spGetSupplementalAnnouncementsOrderedByClassName", query, ps);
+        }
+
+        protected virtual AnnouncementQueryResult InternalGetAnnouncements(string procedureName, SupplementalAnnouncementQuery query, IDictionary<string, object> additionalParams)
+        {
+            if (additionalParams == null)
+                additionalParams = new Dictionary<string, object>();
+            
+            additionalParams.Add("schoolYearId", SchoolYearId);
+            additionalParams.Add("classId", query.ClassId);
+
+            return InternalGetAnnouncements<SupplementalAnnouncementQuery>(procedureName, query, additionalParams);
+        }
+
+        ///////////////////////////////////////////
 
         public override SupplementalAnnouncement GetAnnouncement(int id, int callerId)
         {
@@ -167,5 +204,13 @@ namespace Chalkable.Data.School.DataAccess
             SimpleUpdate<Announcement>(entity);
             base.Update(entity);
         }
+    }
+
+
+    public class SupplementalAnnouncementQuery : AnnouncementsQuery
+    {
+        public int? ClassId { get; set; }
+        public string FromClassName { get; set; }
+        public string ToClassName { get; set; }
     }
 }

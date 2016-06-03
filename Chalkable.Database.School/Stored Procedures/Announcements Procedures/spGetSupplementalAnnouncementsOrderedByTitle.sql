@@ -1,4 +1,4 @@
-﻿CREATE Procedure [dbo].[spGetLessonPlansOrderedByDate]
+﻿CREATE PROCEDURE [dbo].[spGetSupplementalAnnouncementsOrderedByTitle]
 	@id int, 
 	@schoolYearId int, 
 	@personId int, 
@@ -9,11 +9,12 @@
 	@toDate DateTime2, 
 	@start int, 
 	@count int,
-	@complete bit, 
-	@galleryCategoryId int,
 	@sort bit,
+	@fromTitle nvarchar,
+	@toTitle nvarchar,
 	@includeFrom bit,
-	@includeTo bit
+	@includeTo bit,
+	@complete  bit
 as
 
 declare 
@@ -25,8 +26,8 @@ declare
 declare 
 	@tempSA TSupplementalAnnouncement
 
-insert into @tempLP 
-	exec spGetLessonPlans 
+insert into @tempSA 
+	exec spGetSupplementalAnnouncements 
 		@id, 
 		@schoolYearId, 
 		@personId, 
@@ -36,9 +37,7 @@ insert into @tempLP
 		null,
 		@ownedOnly, 
 		@fromDate, 
-		@toDate, 
-		@complete, 
-		@galleryCategoryId 
+		@toDate,
+		@complete
 
-exec spInternalSortAdminOrLp @tempLP, @tempAA, @tempSA, 0, 0, 0, @sort, @fromDate, @toDate, @start, @count, @includeFrom, @includeTo
-
+exec spInternalSortAdminOrLp @tempLP, @tempAA, @tempSA, 2, 1, 1, @sort, @fromTitle, @toTitle, @start, @count, @includeFrom, @includeTo

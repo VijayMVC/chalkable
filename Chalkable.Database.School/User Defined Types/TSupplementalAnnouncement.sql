@@ -13,5 +13,8 @@
     [PrimaryTeacherGender]		NVARCHAR (MAX)   NULL,
     [ClassName]					NVARCHAR (30)    NULL,
     [FullClassName]				NVARCHAR (MAX)   NULL,
-	[PrimaryTeacherRef]			INT				 NULL
+	[PrimaryTeacherRef]			INT				 NULL,
+	[IsOwner]					BIT				 NULL,
+    [Complete]					BIT              NULL,
+    [AllCount]					INT              NULL
 )

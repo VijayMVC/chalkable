@@ -11,6 +11,31 @@
 	@count int, 
 	@sort bit,
 	@includeFrom bit,
-	@includeTo bit
+	@includeTo bit,
+	@complete bit
 AS
-Declare @gradeLevelsIdsT table(value int);
+
+declare 
+	@tempLP TLessonPlan
+
+declare
+	@tempAA TAdminAnnouncement
+
+declare 
+	@tempSA TSupplementalAnnouncement
+
+insert into @tempSA 
+	exec spGetSupplementalAnnouncements 
+		@id, 
+		@schoolYearId, 
+		@personId, 
+		@classId,
+		@roleId, 
+		null,
+		null,
+		@ownedOnly, 
+		@fromDate, 
+		@toDate,
+		@complete
+
+exec spInternalSortAdminOrLp @tempLP, @tempAA, @tempSA, 2, 0, 0, @sort, @fromDate, @toDate, @start, @count, @includeFrom, @includeTo
