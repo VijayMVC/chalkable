@@ -90,7 +90,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<Attachment> CopyContent(IList<Pair<Attachment, Attachment>> fromToAttachments)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            
             var toUpdate = new List<Attachment>();
 
             foreach (var attachmentPair in fromToAttachments)
@@ -102,19 +101,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (attachmentPair.First.IsStiAttachment)
                 {
                     var stiAttachment = ConnectorLocator.AttachmentConnector.UploadAttachment(attachmentPair.Second.Name, contentToCopy).Last();
-
                     MapperFactory.GetMapper<Attachment, StiAttachment>().Map(attachmentPair.Second, stiAttachment);
                 }
-                else
-                    attachmentPair.Second.RelativeBlobAddress = UploadToBlob(attachmentPair.Second, contentToCopy, ServiceLocator);
+                else attachmentPair.Second.RelativeBlobAddress = UploadToBlob(attachmentPair.Second, contentToCopy, ServiceLocator);
 
                 toUpdate.Add(attachmentPair.Second);
             }
-
             DoUpdate(u => new AttachmentDataAccess(u).Update(toUpdate));
-
             UploadToCrocodoc(toUpdate);
-
             return toUpdate;
         }
 

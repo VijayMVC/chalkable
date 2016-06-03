@@ -190,10 +190,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
 
             //Here we will copy all contents.
-            var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment, y => y.Attachment).ToList();
-            foreach (var attributePair in annAttributesCopyResult)
-                if (attributePair.First.Attachment != null)
-                    attachmentsToCopy.Add(new Pair<Attachment, Attachment>(attributePair.First.Attachment, attributePair.Second.Attachment));
+            var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment).ToList();
+            attachmentsToCopy.AddRange(annAttributesCopyResult.Where(x=>x.Second.Attachment != null).Transform(x=>x.Attachment));
 
             ServiceLocator.AttachementService.CopyContent(attachmentsToCopy);
 

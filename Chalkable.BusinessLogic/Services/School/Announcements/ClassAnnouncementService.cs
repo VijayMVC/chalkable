@@ -500,7 +500,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
 
             //Here we copy content
-            var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment, y => y.Attachment).ToList();
+            var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment).ToList();
             ServiceLocator.AttachementService.CopyContent(attachmentsToCopy);
 
             return fromToAnnouncementsIds.Select(x => x.Value).ToList();

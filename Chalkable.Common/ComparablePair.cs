@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Diagnostics.Tracing.Parsers.MicrosoftWindowsTCPIP;
 
 namespace Chalkable.Common
 {
@@ -68,9 +69,12 @@ namespace Chalkable.Common
             this IEnumerable<Pair<TFirst1, TSecond1>> collection,
             Func<TFirst1, TFirst2> firstSelector, Func<TSecond1, TSecond2> secondSelector)
         {
-            return
-                collection.Select(x => new Pair<TFirst2, TSecond2>(firstSelector(x.First), secondSelector(x.Second)))
-                    .ToList();
+            return collection.Select(x => new Pair<TFirst2, TSecond2>(firstSelector(x.First), secondSelector(x.Second))).ToList();
+        }
+
+        public static IEnumerable<Pair<T2, T2>> Transform<T1, T2>(this IEnumerable<Pair<T1, T1>> collection, Func<T1, T2> selector)
+        {
+            return collection.Transform(selector, selector);
         }
     }
 }
