@@ -9,9 +9,9 @@ namespace Chalkable.Common
     {
 
 
-        public static IEnumerable<TItem> Merge<TItem>(this IEnumerable<TItem> list1, IEnumerable<TItem> list2, IComparer<TItem> comparetor)
+        public static IEnumerable<TItem> Merge<TItem>(this IEnumerable<TItem> list1, IEnumerable<TItem> list2, IComparer<TItem> comparer)
         {
-            return list1.Merge(list2, x => x, comparetor);
+            return list1.Merge(list2, x => x, comparer);
         }
 
         public static IEnumerable<TItem> Merge<TItem, TKey>(this IEnumerable<TItem> list1, IEnumerable<TItem> list2, Func<TItem, TKey> keySelector, bool sortByDesc = false)
@@ -23,7 +23,7 @@ namespace Chalkable.Common
             , Func<TItem, TKey> keySelector, IComparer<TKey> comparator, bool sortByDesc = false)
         {
 
-            if(keySelector == null) throw new ChalkableException("parameter keySelector is not defined for marge sort");
+            if(keySelector == null) throw new ChalkableException("parameter keySelector is not defined for merge sort");
 
             comparator = comparator ?? Comparer<TKey>.Default;
 

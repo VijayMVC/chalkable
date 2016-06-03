@@ -25,6 +25,7 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassSummaryGridTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.grading.ColumnHeaderPopUpTpl, chlk.activities.lib.DontShowLoader(), '#grading-popup', ria.mvc.PartialUpdateRuleActions.Replace)],
         'GradingClassSummaryGridPage', EXTENDS(chlk.activities.grading.BaseGridPage), [
 
             Array, 'standardScores',
@@ -67,9 +68,10 @@ NAMESPACE('chlk.activities.grading', function () {
                 var standardId = new chlk.models.id.StandardId(annNode.getData('standard-id'));
                 var categoryId = new chlk.models.id.AnnouncementTypeGradingId(annNode.getData('category-id'));
 
-                var popUpTpl = new chlk.templates.grading.ColumnHeaderPopUpTpl();
-                popUpTpl.assign(new chlk.models.announcement.SubmitDroppedAnnouncementViewData(announcementId, dropped, gradingPeriodId, this.getClassId(), categoryId, standardId));
-                popUp.setHTML(popUpTpl.render());
+                var model = new chlk.models.announcement.SubmitDroppedAnnouncementViewData(announcementId, dropped, gradingPeriodId, this.getClassId(), categoryId, standardId);
+
+                this.partialRefreshD(ria.async.Future.$fromData(model), chlk.activities.lib.DontShowLoader());
+
                 setTimeout(function(){
                     popUp.show();
                 }, 10);
