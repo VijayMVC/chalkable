@@ -1,0 +1,26 @@
+-var schools = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+-var sortType = self.getSortType()
+-var typesEnum = chlk.models.admin.SchoolSortTypeEnum
+
+input(type="hidden", name="start", value=0)
+input(type="hidden", name="sortType", value=sortType)
+.chlk-calendar
+    .grid-top-content
+        if schools.length
+            +ListView(schools)(
+                infiniteScroll = true,
+                pageSize = 10
+            ).district-summary-grid
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                .grid-content
+                    .grid-header.grid-row
+                        +ActionLink('district', 'summary', sortType == typesEnum.SCHOOL_ASC.valueOf() ? typesEnum.SCHOOL_DESC.valueOf() : typesEnum.SCHOOL_ASC.valueOf(), self.getFilter()).cell.name=Msg.Schools
+                        +ActionLink('district', 'summary', sortType == typesEnum.STUDENTS_ASC.valueOf() ? typesEnum.STUDENTS_DESC.valueOf() : typesEnum.STUDENTS_ASC.valueOf(), self.getFilter()).cell.students=Msg.Students
+                        if isNotEmptyStatistic
+                            +ActionLink('district', 'summary', sortType == typesEnum.ATTENDANCE_ASC.valueOf() ? typesEnum.ATTENDANCE_DESC.valueOf() : typesEnum.ATTENDANCE_ASC.valueOf(), self.getFilter()).cell.attendance=Msg.Attendance+' %'
+                            +ActionLink('district', 'summary', sortType == typesEnum.DISCIPLINE_ASC.valueOf() ? typesEnum.DISCIPLINE_DESC.valueOf() : typesEnum.DISCIPLINE_ASC.valueOf(), self.getFilter()).cell.discipline=Msg.Discipline
+                            +ActionLink('district', 'summary', sortType == typesEnum.GRADES_ASC.valueOf() ? typesEnum.GRADES_DESC.valueOf() : typesEnum.GRADES_ASC.valueOf(), self.getFilter()).cell.grades=Msg.Grades
+                    +RenderWith(self.getModel(), chlk.templates.district.BaseStatisticItemsTpl)
+        else
+            .no-items-text There are no schools
