@@ -132,6 +132,36 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
+        public SupplementalAnnouncement GetLastDraft(int personId)
+        {
+            var conds = new AndQueryCondition
+                {
+                    {Announcement.STATE_FIELD, AnnouncementState.Draft},
+                    {SupplementalAnnouncement.SCHOOL_SCHOOLYEAR_REF_FIELD, SchoolYearId}
+                };
+            var dbQuery = SelectSupplementalAnnouncement(conds);
+            var callerIdParam = "callerId";
+            dbQuery.Sql.AppendFormat($" and ClassRef in (select ClassRef from ClassTeacher where ClassTeacher.PersonRef =@{callerIdParam})");
+            dbQuery.Parameters.Add(callerIdParam, personId);
+            Orm.OrderBy(dbQuery, SupplementalAnnouncement.VW_SUPPLEMENTAL_ANNOUNCEMENT, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
+            return ReadOneOrNull<SupplementalAnnouncement>(dbQuery);
+        }
+
+        protected DbQuery SelectSupplementalAnnouncement(QueryCondition condition, int? callerId = null)
+        {
+            var dbQuery = new DbQuery();
+            var classTeacherSql = !callerId.HasValue ? "cast(0 as bit)" :
+                            string.Format(@"(select cast(case when count(*) > 0 then 1 else 0 end as bit)
+                                                     from [{0}] where [{0}].[{1}] = {2}  and [{0}].[{3}] = [{4}].[{5}])",
+                              "ClassTeacher", ClassTeacher.PERSON_REF_FIELD, callerId, ClassTeacher.CLASS_REF_FIELD,
+                              SupplementalAnnouncement.VW_SUPPLEMENTAL_ANNOUNCEMENT, SupplementalAnnouncement.CLASS_REF_FIELD);
+
+            var selectSet = $"{SupplementalAnnouncement.VW_SUPPLEMENTAL_ANNOUNCEMENT}.*, {classTeacherSql} as IsOwner";
+            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, SupplementalAnnouncement.VW_SUPPLEMENTAL_ANNOUNCEMENT);
+            condition.BuildSqlWhere(dbQuery, SupplementalAnnouncement.VW_SUPPLEMENTAL_ANNOUNCEMENT);
+            return dbQuery;
+        }
+
         public override void Update(SupplementalAnnouncement entity)
         {
             SimpleUpdate<Announcement>(entity);

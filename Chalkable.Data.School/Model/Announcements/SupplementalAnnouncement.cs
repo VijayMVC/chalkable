@@ -20,6 +20,8 @@ namespace Chalkable.Data.School.Model.Announcements
         public int SchoolYearRef { get; set; }
         
         [NotDbFieldAttr]
+        public IList<Person> Recipients { get; set; }
+        [NotDbFieldAttr]
         public int PrimaryTeacherRef { get; set; }
         [NotDbFieldAttr]
         public string PrimaryTeacherGender { get; set; }

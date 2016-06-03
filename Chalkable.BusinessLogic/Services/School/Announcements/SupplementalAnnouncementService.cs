@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<SupplementalAnnouncement> GetSupplementalAnnouncement(DateTime? fromDate, DateTime? toDate, int? classId, int? teacherId, bool filterByStartDate = true);
         IList<AnnouncementComplex> GetSupplementalAnnouncementForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool? ownedOnly = null);
         bool Exists(string title, int? excludeSupplementalAnnouncementPlanId);
-
+        SupplementalAnnouncement GetLastDraft();
     }
 
     public class SupplementalAnnouncementService : BaseAnnouncementService<SupplementalAnnouncement>, ISupplementalAnnouncementService
@@ -249,6 +249,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public bool Exists(string title, int? excludeSupplementalAnnouncementPlanId)
         {
             throw new NotImplementedException();
+        }
+
+        public SupplementalAnnouncement GetLastDraft()
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            return DoRead(u => CreateSupplementalAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
     }
 }

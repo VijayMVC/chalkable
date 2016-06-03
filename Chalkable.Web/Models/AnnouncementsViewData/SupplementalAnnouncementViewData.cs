@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
@@ -12,6 +13,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string ClassName { get; set; }
         public string FullClassName { get; set; }
         public bool HideFromStudents { get; set; }
+        public IList<ShortPersonViewData> Recipients { get; set; }
 
         protected SupplementalAnnouncementViewData(SupplementalAnnouncement announcement)
             : base(announcement)
