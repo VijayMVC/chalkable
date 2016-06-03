@@ -246,6 +246,25 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
+        protected override IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<SupplementalAnnouncement> dataAccess, IList<int> announcementIds, bool onlyOnwer = true)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
+            if (anns == null)
+                return null;
+
+            var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(announcementIds));
+           
+            foreach (var announcementDetailse in anns)
+            {
+                announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
+                    .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
+                    .Select(x => x.Recipient).ToList();
+            }
+
+            return anns;
+        }
+
         public void SetVisibleForStudent(int supplementalAnnouncementPlanId, bool visible)
         {
             var suppAnnouncement = GetSupplementalAnnouncementById(supplementalAnnouncementPlanId);
