@@ -114,10 +114,10 @@ div(class = noComplete ? "no-complete" : "").feed-container
                 if self.hasFilters()
                     .clear-filters Clear Filters
             .right-buttons-block
-                +ActionLink('feed', 'feedPrinting', selected, self.importantOnly).print-btn
+                +ActionLink('feed', 'feedPrinting', selected, self.importantOnly)(data-tooltip="Print").print-btn
                 if ableCopy
-                    a(href="javascript:").copy-btn.copy-activities
-                a(href="javascript:", class=self.hasFilters() ? 'active' : '').tools-btn.feed-tools
+                    a(href="javascript:", data-tooltip="Copy").copy-btn.copy-activities
+                a(href="javascript:", class=self.hasFilters() ? 'active' : '', data-tooltip="Feed Tools").tools-btn.feed-tools
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,
