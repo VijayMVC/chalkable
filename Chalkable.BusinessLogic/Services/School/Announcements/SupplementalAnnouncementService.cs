@@ -45,8 +45,21 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
         {
-            return DoRead(u => InternalGetDetailses(CreateSupplementalAnnouncementDataAccess(u), announcementIds))
-                .Cast<AnnouncementComplex>().ToList();
+            using (var u = Read())
+            {
+                var announcement =InternalGetDetailses(CreateSupplementalAnnouncementDataAccess(u), announcementIds)
+                        .Cast<AnnouncementComplex>().ToList();
+                var recipients = new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(announcementIds);
+
+                foreach (var announcementComplex in announcement)
+                {
+                    announcementComplex.SupplementalAnnouncementData.Recipients =recipients
+                        .Where(x => x.SupplementalAnnouncementRef == announcementComplex.Id)
+                        .Select(x => x.Recipient).ToList();
+                }
+
+                return announcement;
+            }
         }
 
         public override void DeleteAnnouncement(int announcementId)
@@ -56,6 +69,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var da = CreateSupplementalAnnouncementDataAccess(uow);
                 var announcement = da.GetAnnouncement(announcementId, Context.PersonId.Value);
+
+                new SupplementalAnnouncementRecipientDataAccess(uow).DeleteByAnnouncementId(announcementId);
+
                 if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
                     throw new ChalkableSecurityException();
                 da.Delete(announcementId);
@@ -92,8 +108,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var da = CreateSupplementalAnnouncementDataAccess(u);
                 var res = InternalGetDetails(da, announcementId);
                 var suppAnnouncement = res.SupplementalAnnouncementData;
+                var recipients = new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementId(suppAnnouncement.Id);
                 AnnouncementSecurity.EnsureInModifyAccess(res, Context);
-                //ValidateSupplementalAnnouncement(suppAnnouncement, da, ServiceLocator, suppAnnouncement.);
+
+                ValidateSupplementalAnnouncement(suppAnnouncement, da, ServiceLocator, recipients.Select(x => x.StudentRef).ToList(), suppAnnouncement.ClassRef);
+
                 if (suppAnnouncement.IsDraft)
                 {
                     suppAnnouncement.State = AnnouncementState.Created;
@@ -229,6 +248,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             DoUpdate(u => CreateSupplementalAnnouncementDataAccess(u).Update(suppAnnouncement));
         }
 
+        protected override SupplementalAnnouncement InternalGetAnnouncementById(int id)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            using (var unitOfWork = Read())
+            {
+                var announcement =CreateSupplementalAnnouncementDataAccess(unitOfWork).GetAnnouncement(id, Context.PersonId.Value);
+                announcement.Recipients = new SupplementalAnnouncementRecipientDataAccess(unitOfWork).GetRecipientsByAnnouncementId(id)
+                    .Select(x => x.Recipient).ToList();
+                return announcement;
+            }
+        }
+
         public SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementPlanId)
         {
             return InternalGetAnnouncementById(supplementalAnnouncementPlanId);
@@ -255,7 +286,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
-            return DoRead(u => CreateSupplementalAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
+            using (var unitOfWork = Read())
+            {
+                var announcement = CreateSupplementalAnnouncementDataAccess(unitOfWork).GetLastDraft(Context.PersonId.Value);
+                announcement.Recipients = new SupplementalAnnouncementRecipientDataAccess(unitOfWork).GetRecipientsByAnnouncementId(announcement.Id)
+                    .Select(x => x.Recipient).ToList();
+                return announcement;
+            }
         }
     }
 }
