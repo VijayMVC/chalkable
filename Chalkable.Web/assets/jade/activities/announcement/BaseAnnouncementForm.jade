@@ -73,8 +73,9 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                 .calendar-mark ?
             if !isAdmin
                 .max-score-container
+                    -var maxScore = !classAnnouncement.isGradable() && classAnnouncement.getMaxScore() > 0 ? '0' : classAnnouncement.getMaxScore()
                     label(for="ann-max-score") Max Score
-                    input#ann-max-score(type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=classAnnouncement.isGradable() ? classAnnouncement.getMaxScore() : '0')
+                    input#ann-max-score(type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=maxScore)
                     .question-mark(data-tooltip=Msg.Max_Score_Tooltip_Message) ?
                 .advanced-options
                     A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options
