@@ -61,7 +61,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             }
                         ).copy-start-date
                         BUTTON(type="button").negative-button.cancel-copy Cancel
-                        BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-btn Copy
+                        BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-submit Copy
             .left-buttons-block.tools-buttons-block(class=self.hasFilters() ? '' : 'hidden')
                 if !self.isInProfile() && self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
