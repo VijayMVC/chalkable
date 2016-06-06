@@ -163,10 +163,7 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
             Boolean, function isExtraCreditEnabled(){
-                if(this.isAbleUseExtraCredit() && this.getClassAnnouncementData().getMaxScore() == 0)
-                    return true;
-                else
-                    return false;
+                return this.isAbleUseExtraCredit() && this.getClassAnnouncementData().getMaxScore() == 0;
             },
 
             function getTitleModel(){
