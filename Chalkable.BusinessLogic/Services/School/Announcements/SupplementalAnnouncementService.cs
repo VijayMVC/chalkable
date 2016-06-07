@@ -226,6 +226,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 suppAnnouncement.Content = content;
                 suppAnnouncement.Expires = expiresDate ?? suppAnnouncement.Expires;
                 suppAnnouncement.VisibleForStudent = visibleForStudent;
+                suppAnnouncement.ClassAnnouncementTypeRef = classAnnouncementTypeId;
 
                 if (suppAnnouncement.IsSubmitted)
                     ValidateSupplementalAnnouncement(suppAnnouncement, da, ServiceLocator, recipientsIds, classId);

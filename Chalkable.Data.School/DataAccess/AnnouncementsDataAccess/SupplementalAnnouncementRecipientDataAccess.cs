@@ -21,11 +21,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {SupplementalAnnouncementRecipient.SUPPLEMENTAL_ANNONCEMENT_REF_FIELD, supplementalAnnouncementId}
             });
             if (studentIds != null && studentIds.Count > 0)
-                SimpleInsert(studentIds.Select(x => new SupplementalAnnouncementRecipient
+                SimpleInsert<SupplementalAnnouncementRecipient>(studentIds.Select(x => new SupplementalAnnouncementRecipient
                 {
                     StudentRef = x,
                     SupplementalAnnouncementRef = supplementalAnnouncementId
-                }));
+                }).ToList());
         }
 
         private SupplementalAnnouncementRecipient ReadSupplementalAnnouncementRecipient(DbDataReader reader)

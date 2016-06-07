@@ -33,11 +33,6 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Supplemental, supplementalAnnouncementPlanId, attributes);
             var res = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, classAnnouncementTypeId, title, content, expiresDate, !hideFromStudents, recipientsIds);
-
-            if (res.SupplementalAnnouncementData?.AnnouncementTypeName != null)
-            {
-                MasterLocator.UserTrackingService.SavedSupplementalAnnouncementToGallery(Context.Login, title);
-            }
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
@@ -50,7 +45,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             SchoolLocator.SupplementalAnnouncementService.Submit(supplementalAnnouncementPlanId);
             var supplementalAnnouncement = SchoolLocator.SupplementalAnnouncementService.GetSupplementalAnnouncementById(supplementalAnnouncementPlanId);
             //TODO delete old drafts 
-            TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, supplementalAnnouncement.ClassName, appsCount, doscCount));
+            //TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, supplementalAnnouncement.ClassName, appsCount, doscCount));
             return Json(true, 5);
         }
 
