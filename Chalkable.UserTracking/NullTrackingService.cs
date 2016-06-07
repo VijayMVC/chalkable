@@ -170,6 +170,10 @@ namespace Chalkable.UserTracking
         {
         }
 
+        public void SavedSupplementalAnnouncementToGallery(string login, string supplementalAnnouncementTitle)
+        {
+        }
+
         public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
         {
         }

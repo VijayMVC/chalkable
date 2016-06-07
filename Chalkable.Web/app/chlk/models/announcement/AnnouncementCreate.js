@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
+REQUIRE('chlk.models.people.User');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -11,6 +12,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('isdraft')],
             Boolean, 'isDraft',
+            ArrayOf(chlk.models.people.User), 'students',
 
             function $(announcement_){
                 BASE();

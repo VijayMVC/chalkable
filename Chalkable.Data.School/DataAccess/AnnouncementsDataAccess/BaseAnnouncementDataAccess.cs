@@ -159,10 +159,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         protected abstract TAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader);
-        
-
-        
-       
+           
         protected AnnouncementQueryResult ReadAnnouncementsQueryResult(SqlDataReader reader, AnnouncementsQuery query)
         {
             var res = new AnnouncementQueryResult { Query = query };

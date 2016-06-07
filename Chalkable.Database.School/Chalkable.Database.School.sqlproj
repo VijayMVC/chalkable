@@ -320,11 +320,24 @@
     <Build Include="Stored Procedures\spCopyLessonPlansToClass.sql" />
     <Build Include="User Defined Types\TSisActivityCopyResult.sql" />
     <Build Include="Stored Procedures\spCopyClassAnnouncementsToClass.sql" />
+    <Build Include="Tables\SupplementalAnnouncement.sql" />
+    <Build Include="Tables\SupplementalAnnouncementRecipient.sql" />
+    <Build Include="Views\vwSupplementalAnnouncement.sql" />
+    <Build Include="Stored Procedures\spCreateSupplementalAnnouncement.sql" />
+    <Build Include="Stored Procedures\spSelectSupplementalAnnouncements.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetListOfSupplementalAnnouncementDetailsByIds.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByDate.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncements.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByClassName.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByTitle.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Pre-Deploy\Paid_apps_cleaning.PreDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
   </ItemGroup>
 </Project>

@@ -56,5 +56,6 @@ namespace Chalkable.UserTracking
 
         void CopiedLessonPlanFromGallery(string login);
         void SavedLessonPlanToGallery(string login, string lessonPlanTitle);
+        void SavedSupplementalAnnouncementToGallery(string login, string supplementalAnnouncementTitle);
     }
 }

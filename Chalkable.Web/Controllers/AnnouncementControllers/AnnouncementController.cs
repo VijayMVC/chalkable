@@ -43,6 +43,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 }
                 if (draft is LessonPlan)
                     classId = classId ?? (draft as LessonPlan).ClassRef;
+                if (draft is SupplementalAnnouncement)
+                {
+                    var supplementedAnn = draft as SupplementalAnnouncement;
+                    var classAnnType = classId.HasValue ? null : supplementedAnn.ClassAnnouncementTypeRef;
+                    classId = classId ?? (draft as SupplementalAnnouncement).ClassRef;
+                    
+                    var classAnnTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId.Value);
+                    if (classAnnTypes.Count > 0)
+                        return Redirect<SupplementalAnnouncementController>(c => c.CreateSupplemental(classId.Value, null, classAnnType));
+                }
             }
             if(classId.HasValue)
                 return Redirect<LessonPlanController>(c => c.CreateLessonPlan(classId.Value));
@@ -81,7 +91,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             Currently admin has no rigths to edit lessonplans and activities even
             if he is owner. He can edit this only from teacher portal.
             --------------------------------------------------------------------------*/
-            if((res.LessonPlanData != null || res.ClassAnnouncementData != null) && BaseSecurity.IsDistrictAdmin(Context))
+            if((res.LessonPlanData != null || res.ClassAnnouncementData != null || res.SupplementalAnnouncementData != null) && BaseSecurity.IsDistrictAdmin(Context))
                 res.IsOwner = false;
             //------------------------------------------------------------------------
 
@@ -210,9 +220,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected DateTime GenerateDefaultExpiresDate(DateTime? expiresDate)
         {
-            return expiresDate.HasValue ? expiresDate.Value :
-                                    Context.SchoolYearEndDate.HasValue ? Context.SchoolYearEndDate.Value :
-                                    DateTime.MaxValue;
+            return expiresDate ?? (Context.SchoolYearEndDate ?? DateTime.MaxValue);
         }
 
         protected void TrackNewItemCreate(AnnouncementDetails ann, Action<IUserTrackingService, int, int > trackNewItemCreated)

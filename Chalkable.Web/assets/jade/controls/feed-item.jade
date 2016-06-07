@@ -7,18 +7,15 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
 
     -var adminAnnouncement = item.getAdminAnnouncementData()
     -var classAnnouncement = item.getClassAnnouncementData()
+    -var supplementalAnnouncement = item.getSupplementalAnnouncementData()
     -var lessonPlan = item.getLessonPlanData()
+    -var announcementItem = item.getAnnouncementItem()
     -var itemClasses = attributes['class'] || []
+    -var timeFormat = 'm/d/y'
 
-    - itemClasses.push(adminAnnouncement ? 'is-admin' : (lessonPlan ? 'lesson-plan' : 'class-announcement'))
-    - itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
-    - itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
-    - itemClasses.push(item.getOwnerAttachmentsCount() == 0 ? 'no-attachment-icon' : 'has-attachments-icon')
+    - itemClasses.push(adminAnnouncement ? 'is-admin' : (lessonPlan ? 'lesson-plan' : (supplementalAnnouncement ? 'supplemental' : 'class-announcement')))
     - itemClasses.push(item.isImported() ? 'imported' : '')
-
-    - itemClasses.push(item.isHiddenFromStudents() ? 'invisible-for-students' : 'visible-for-students')
-    -if (item.isComplete())           itemClasses.push('complete')
-    -if (item.getApplicationsCount()) itemClasses.push('app-icon')
+    - itemClasses.push(item.isComplete() ? 'complete' : '')
 
     div(class = itemClasses).feed-item
         .check-cnt
@@ -27,26 +24,26 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), false, item.getType())(class = isStaringDisabled ? 'disabled' : '', data-tooltip=Msg.Done).star.complete
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), true, item.getType())(class = isStaringDisabled ? 'disabled' : '', data-tooltip= Msg.ToDo).star
         +ActionLink('announcement', 'view', item.getId(), item.getType())(class = disabled ? 'disabled' : '').announcement-link
-            if adminAnnouncement
-                .title: +Glue_(item.getTitle() || Msg.Admin_Announcement, "")
-            if classAnnouncement
-                .title: +Glue_(item.getAnnouncementTypeName(), classAnnouncement.getClassName())
+            .title: +Glue_(item.getTitle(), "")
             if lessonPlan
-                .title: +Glue_(item.getTitle(), lessonPlan.getClassName())
-            if lessonPlan
-                .date= 'Lesson Plan - ' + (lessonPlan.getStartDate() && ('From ' +  lessonPlan.getStartDate().format('M d'))) + (lessonPlan.getEndDate() && (', to ' + lessonPlan.getEndDate().format('M d')))
-                .attachment
-                    .grades
-                        .visible
-                            .content
-                                .line
-                                    .inner-line(style="width:" + lessonPlan.getPercents() + "%;")
-                                .right-text #{lessonPlan.getPercents()}%
+                .date= (lessonPlan.getStartDate() && lessonPlan.getStartDate().format(timeFormat)) + " - " + (lessonPlan.getEndDate() && lessonPlan.getEndDate().format(timeFormat)) + '  Lesson Plan  ' + lessonPlan.getCategoryName()
             else
-                -var announcementItem = classAnnouncement || adminAnnouncement
-                .date= announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().toString('m/d/y') : ''
-                .attachment
-                    .grades
-                        .visible
-                            .content: +Glue_(item.getTitle(), item.getShortContent())
+                .date= (announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().toString(timeFormat) : '') + '  ' + announcementItem.getAnnouncementTypeName()
+            .attachment
+                .content: +Glue_(item.getShortContent(), "")
+                if !adminAnnouncement
+                    .description=announcementItem.getClassName()
+                .icons
+                    if item.isHiddenFromStudents()
+                        .small-icon.invisible-icon(data-tooltip="Hidden from students")
+                    if classAnnouncement && classAnnouncement.isGradable()
+                        -var maxScore = classAnnouncement.getMaxScore()
+                        .small-icon.grades-icon(data-tooltip=maxScore + ' possible point' + (maxScore == 1 ? '' : 's') )
+                    if item.getOwnerAttachmentsCount() > 0
+                        .small-icon.attachment-icon
+                    if supplementalAnnouncement
+                        .small-icon.supplemental-icon(data-tooltip=supplementalAnnouncement.getRecipientsTooltip())
 
+                    if lessonPlan
+                        .line(data-tooltip = lessonPlan.getPercents() + '% complete')
+                            .inner-line(style="width:" + lessonPlan.getPercents() + "%;")

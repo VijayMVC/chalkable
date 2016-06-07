@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.SupplementalAnnouncementViewData), 'supplementalAnnouncements',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'date',
 
             [ria.templates.ModelPropertyBind],

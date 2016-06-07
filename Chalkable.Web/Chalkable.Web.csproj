@@ -286,6 +286,7 @@
     <Compile Include="Controllers\AnnouncementControllers\AdminAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\ClassAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\LessonPlanController.cs" />
+    <Compile Include="Controllers\AnnouncementControllers\SupplementalAnnouncementController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\AttachmentController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
@@ -368,6 +369,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\ClassAnnouncementViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\CopyAnnouncementResultViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\SupplementalAnnouncementViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\LessonPlanViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementAssignedAttributeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\ShortAnnouncementViewData.cs" />

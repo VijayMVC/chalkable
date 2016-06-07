@@ -36,5 +36,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             return new StudentViewData(student);
         }
+        
     }
 }

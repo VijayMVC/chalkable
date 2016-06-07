@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public ShortAnnouncementViewData LessonPlanData { get; set; }
         public ShortAnnouncementViewData AdminAnnouncementData { get; set; }
         public ShortAnnouncementViewData ClassAnnouncementData { get; set; }
+        public ShortAnnouncementViewData SupplementalAnnouncementData { get; set; }
 
         public int? ClassId { get; set; }
         public string ClassName { get; set; }
@@ -47,6 +48,15 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 ClassId = lp.ClassRef;
                 ClassName = lp.ClassName;
             }
+            var sup = announcementData as SupplementalAnnouncement;
+            if (sup != null)
+            {
+                SupplementalAnnouncementData = SupplementalAnnouncementViewData.Create(sup);
+                annData = SupplementalAnnouncementData;
+                ClassId = sup.ClassRef;
+                ClassName = sup.ClassName;
+            }
+            
             var adminAnn = announcementData as AdminAnnouncement;
             if (adminAnn != null)
             {
