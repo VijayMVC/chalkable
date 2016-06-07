@@ -1,5 +1,4 @@
 REQUIRE('chlk.models.announcement.AnnouncementForm');
-REQUIRE('chlk.models.people.User');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -7,6 +6,6 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.SupplementalAnnouncementForm*/
     CLASS(
         'SupplementalAnnouncementForm', EXTENDS(chlk.models.announcement.AnnouncementForm), [
-            ArrayOf(chlk.models.people.User), 'students'
+
         ]);
 });

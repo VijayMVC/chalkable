@@ -28,7 +28,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AnnouncementWithExpiresDateViewData, 'adminAnnouncementData',
+            chlk.models.announcement.AdminAnnouncementViewData, 'adminAnnouncementData',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.LessonPlanViewData, 'lessonPlanData',

@@ -20,7 +20,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
             ArrayOf(chlk.models.announcement.LessonPlanViewData), 'lessonPlans',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.AnnouncementWithExpiresDateViewData), 'adminAnnouncements',
+            ArrayOf(chlk.models.announcement.AdminAnnouncementViewData), 'adminAnnouncements',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',

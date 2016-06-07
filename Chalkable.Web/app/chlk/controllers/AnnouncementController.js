@@ -674,7 +674,8 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.apps.Application]],
         function getAppRecommendedContents_(ann, app){
             if(ann.getStandards().length > 0)
-                this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), null,  'before-app-contents-loaded');
+                var emptyModel = new  chlk.models.apps.AppContentListViewData();
+                this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), emptyModel,  'before-app-contents-loaded');
                 this.applicationService.getApplicationContents(
                         app.getUrl(),
                         ann.getId(),
@@ -2154,7 +2155,7 @@ NAMESPACE('chlk.controllers', function (){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
                 model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
-                var announcementForm =  chlk.models.announcement.SupplementalAnnouncementForm.$createFromAnnouncement(model);
+                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
                 return this.saveSupplementalAnnouncementAction(model, announcementForm);
             }
 

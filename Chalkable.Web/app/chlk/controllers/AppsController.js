@@ -952,23 +952,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.apps.AppWrapperPage, result);
         },
 
-
-        [chlk.controllers.AssessmentEnabled()],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DISTRICTADMIN,
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.STUDENT
-        ])],
-        [chlk.controllers.SidebarButton('settings')],
-        [[String]],
-        function assessmentProfileAction(appUrlAppend_) {
-            var result = this.prepareExternalAttachAppViewData_("profileview", appUrlAppend_);
-            return this.PushView(chlk.activities.apps.AppWrapperPage, result);
-        },
-
-
-       
-
         [chlk.controllers.SidebarButton('assessment')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN,
