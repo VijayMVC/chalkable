@@ -1,8 +1,8 @@
-﻿CREATE Procedure [dbo].[spInternalSortAdminOrLp] 
+﻿Create Procedure [dbo].[spInternalSortAdminOrLp] 
 	@lessonPlans TLessonPlan READONLY, 
 	@adminAnn TAdminAnnouncement READONLY, 
 	@supplementalAnn TSupplementalAnnouncement READONLY,
-	@annType bit, 
+	@annType int, 
 	@filterOption int, 
 	@sortOption int, 
 	@sortType bit, 
@@ -69,29 +69,55 @@ If(@annType = @LESSON_PLAN_TYPE)
 						when @SORT_BY_CLASS_NAME then ClassName
 					end
 				from @lessonPlans
-else
-	if(@annType = @ADMIN_ANN_TYPE)
-		if(@filterOption = @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
-			Insert @t select Id, Expires, Expires from @adminAnn
-		else
-			if(@filterOption = @SORT_BY_DATE and @sortOption <> @SORT_BY_DATE)
-				Insert @t select Id, Expires, Title from @adminAnn
-			else
-				if(@filterOption <> @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
-					Insert @t select Id, Title, Expires from @adminAnn
-				else
-					Insert @t select Id, Title, Title from @adminAnn
+
+If(@annType = @ADMIN_ANN_TYPE)
+	if(@filterOption = @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
+		Insert @t select Id, Expires, Expires from @adminAnn
 	else
-		if(@filterOption = @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
-			Insert @t select Id, Expires, Expires from @supplementalAnn
+		if(@filterOption = @SORT_BY_DATE and @sortOption <> @SORT_BY_DATE)
+			Insert @t select Id, Expires, Title from @adminAnn
 		else
-			if(@filterOption = @SORT_BY_DATE and @sortOption <> @SORT_BY_DATE)
-				Insert @t select Id, Expires, Title from @supplementalAnn
+			if(@filterOption <> @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
+				Insert @t select Id, Title, Expires from @adminAnn
 			else
-				if(@filterOption <> @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
-					Insert @t select Id, Title, Expires from @supplementalAnn
-				else
-					Insert @t select Id, Title, Title from @supplementalAnn
+				Insert @t select Id, Title, Title from @adminAnn
+
+If(@annType = @SUPPLEMENTAL_ANN_TYPE)
+	if(@filterOption = @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
+		Insert @t select Id, Expires, Expires from @supplementalAnn
+	else
+		if(@filterOption = @SORT_BY_DATE and @sortOption <> @SORT_BY_DATE)
+			Insert @t 
+				select Id, 
+					Expires, 
+					case @sortOption
+						when @SORT_BY_TITLE then Title
+						when @SORT_BY_CLASS_NAME then ClassName
+					end 
+				from @supplementalAnn
+		else
+			if(@filterOption <> @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
+				Insert @t 
+					select Id, 
+						   case @filterOption
+								when @SORT_BY_TITLE then Title
+								when @SORT_BY_CLASS_NAME then ClassName
+						   end,
+						   Expires
+				from @supplementalAnn
+			else
+				Insert @t 
+					select Id, 
+						case @filterOption
+							when @SORT_BY_TITLE then Title
+							when @SORT_BY_CLASS_NAME then ClassName
+						end,
+						case @sortOption
+							when @SORT_BY_TITLE then Title
+							when @SORT_BY_CLASS_NAME then ClassName
+						end
+					from @supplementalAnn
+
 
 --	cut by sortOprion with includes or no
 	if(@pFrom is not null)
@@ -132,16 +158,17 @@ if(@annType = @ADMIN_ANN_TYPE)
 		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
 if(@annType = @SUPPLEMENTAL_ANN_TYPE)
-	select SA.* From @t T
-	Join @supplementalAnn SA on SA.Id = T.id
-	order by
-		(case 
-			when @sortType = @ASC_SORT then T.SortedField
-		end) ASC,
-		(case 
-			when @sortType = @DESC_SORT then T.SortedField
-		end) DESC
-		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+		select SA.* From @t T
+		Join @supplementalAnn SA on SA.Id = T.id
+		order by
+			(case 
+				when @sortType = @ASC_SORT then T.SortedField
+			end) ASC,
+			(case 
+				when @sortType = @DESC_SORT then T.SortedField
+			end) DESC
+			OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+
 
 GO
 
