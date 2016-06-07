@@ -1,7 +1,7 @@
 REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.announcement.AnnouncementPeriod');
 REQUIRE('chlk.models.announcement.LessonPlanViewData');
-REQUIRE('chlk.models.announcement.AnnouncementWithExpiresDateViewData');
+REQUIRE('chlk.models.announcement.AdminAnnouncementViewData');
 REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.models.Popup');
 REQUIRE('chlk.models.id.ClassId');
@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
                 this.sunday = SJX.fromValue(raw.sunday, Boolean);
                 this.todayClassName = SJX.fromValue(raw.todayclassname, String);
                 this.announcementPeriods = SJX.fromArrayOfDeserializables(raw.announcementperiods, chlk.models.announcement.AnnouncementPeriod);
-                this.adminAnnouncements = SJX.fromArrayOfDeserializables(raw.adminannouncements, chlk.models.announcement.AnnouncementWithExpiresDateViewData);
+                this.adminAnnouncements = SJX.fromArrayOfDeserializables(raw.adminannouncements, chlk.models.announcement.AdminAnnouncementViewData);
             },
 
             chlk.models.common.ChlkDate, 'date',
@@ -40,7 +40,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
 
             ArrayOf(chlk.models.announcement.AnnouncementPeriod), 'announcementPeriods',
 
-            ArrayOf(chlk.models.announcement.AnnouncementWithExpiresDateViewData), 'adminAnnouncements',
+            ArrayOf(chlk.models.announcement.AdminAnnouncementViewData), 'adminAnnouncements',
 
             Boolean, 'noPlusButton'
         ]);

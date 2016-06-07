@@ -12,7 +12,6 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.LpGalleryCategoryId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
-REQUIRE('chlk.models.announcement.SupplementalAnnouncementForm');
 
 
 NAMESPACE('chlk.services', function () {
@@ -26,7 +25,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             ria.async.Future, function create(classId_, expiresDate_) {
-                return this.get('SupplementalAnnouncement/CreateSupplemental.json', chlk.models.announcement.SupplementalAnnouncementForm, {
+                return this.get('SupplementalAnnouncement/CreateSupplemental.json', chlk.models.announcement.AnnouncementForm, {
                     classId: classId_ ? classId_.valueOf() : null,
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
                 });

@@ -3,7 +3,7 @@ REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.announcement.LessonPlanViewData');
-REQUIRE('chlk.models.announcement.AnnouncementWithExpiresDateViewData');
+REQUIRE('chlk.models.announcement.AdminAnnouncementViewData');
 REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.models.announcement.SupplementalAnnouncementViewData');
 
@@ -38,7 +38,7 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
             chlk.models.announcement.LessonPlanViewData, 'lessonPlanData',
-            chlk.models.announcement.AnnouncementWithExpiresDateViewData, 'adminAnnouncementData',
+            chlk.models.announcement.AdminAnnouncementViewData, 'adminAnnouncementData',
             chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData',
             chlk.models.announcement.SupplementalAnnouncementViewData, 'supplementalAnnouncementData',
             String, 'shortContent',

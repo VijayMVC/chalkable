@@ -17,6 +17,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
+                this.announcementTypeName = 'Supplemental';
                 this.classId = SJX.fromValue(Number(raw.classid), chlk.models.id.ClassId);
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.className = SJX.fromValue(raw.fullclassname, String);
@@ -30,6 +31,11 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'shortClassName',
             String, 'className',
             Boolean, 'hiddenFromStudents',
-            chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId'
+            chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId',
+
+            function getRecipientsTooltip(){
+                var res = this.getRecipients().map(function(item){return item.getFullName()}).join('\n');
+                return res;
+            }
         ]);
 });
