@@ -1,0 +1,26 @@
+.my-apps-page
+  .my-apps > DIV
+    margin-bottom: 24px
+
+    .application
+      &.partial-banned
+        border: 5px solid #DC5D5A
+      &.banned
+        &::after
+          background: none !important
+        &:not(:hover)
+          background-color: #DC5D5A
+          border: none
+          .wrapper
+            background-color: white
+          .wrapper > .title
+            color: white
+            background-color: #DC5D5A
+
+
+    .wrapper
+      .disable-app-button
+        margin-bottom: 35px
+
+  .application .close-btn
+    display: block

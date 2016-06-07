@@ -1,0 +1,9 @@
+-var announcement = self.getAnnouncement()
+-var state = announcement && announcement.getState()
+.announcement-form.loader-container
+   if announcement
+      h2.page-title Admin Announcement
+      .loader
+      +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
+         .ann-form-container
+            +BaseAnnouncementFormContainer(self, announcement, null, null, null, null, self.getUserRole(), null, self.getCurrentUser()).announcement-form

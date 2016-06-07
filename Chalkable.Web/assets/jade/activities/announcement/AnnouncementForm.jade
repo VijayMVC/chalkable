@@ -1,0 +1,46 @@
+mixin AnnouncementTypeToolBar(types, announcement)
+    -var classId = announcement.getClassAnnouncementData().getClassId()
+    .action-bar
+        .items
+            +ActionLink('announcement', 'addClassAnnouncement', classId).item.announcement-type-button.no-save.pressed Assignment
+            if !announcement.getState().valueOf()
+                +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-button.no-save Lesson Plan
+                +ActionLink('announcement', 'supplementalAnnouncement', classId).item.announcement-type-button.no-save Supplemental
+        if classId && classId.valueOf()
+            +ActionLink('announcement', 'showImportDialog', classId).import-icon
+
+-var topData = self.getTopData()
+-var announcement = self.getAnnouncement()
+-var classAnnouncement = announcement && announcement.getClassAnnouncementData()
+-var topItems = topData.getTopItems()
+-var classId = announcement && classAnnouncement.getClassId() ? classAnnouncement.getClassId().valueOf() : null
+-var typeId = self.getSelectedTypeId()
+-var state = announcement && announcement.getState().valueOf()
+-var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+
+.announcement-form.loader-container
+    if announcement && classAnnouncement.getClassId()
+        h2.page-title= classAnnouncement.getClassName()
+        .loader
+        +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
+            +ClassesToolBar(topData, null, null, null, state)(pressAfterClick=!state)
+            .not-transparent(class=(classId ? '' : 'x-hidden'))
+                +AnnouncementTypeToolBar(types, announcement, typeId)
+            .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
+                +BaseAnnouncementFormContainer(self, announcement, types, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges(), self.getCurrentUser()).announcement-form
+                if state
+                    .duplicate-btn-container
+                        +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId(), announcement.getType()).big-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
+            .choose-type(class=(classId && !typeId && !state && types.length ? '' : 'x-hidden'))
+            if !classId
+                if topItems.length
+                    .choose-class
+                else
+                    .no-items-text There are no classes for current term
+    else
+        +ClassesToolBar(topData, 'announcement', 'add')
+        if !classId
+            if topItems.length
+                .choose-class
+            else
+                .no-items-text There are no classes for current term
