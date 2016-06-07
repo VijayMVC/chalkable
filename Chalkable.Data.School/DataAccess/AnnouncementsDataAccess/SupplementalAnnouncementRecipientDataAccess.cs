@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -11,11 +12,20 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public SupplementalAnnouncementRecipientDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+        
 
-        public void UpdateRecipients(IList<SupplementalAnnouncementRecipient> entities)
+        public void UpdateRecipients(int supplementalAnnouncementId, IList<int> studentIds)
         {
-            Delete(entities);
-            Insert(entities);
+            SimpleDelete(new AndQueryCondition
+            {
+                {SupplementalAnnouncementRecipient.SUPPLEMENTAL_ANNONCEMENT_REF_FIELD, supplementalAnnouncementId}
+            });
+            if (studentIds != null && studentIds.Count > 0)
+                SimpleInsert(studentIds.Select(x => new SupplementalAnnouncementRecipient
+                {
+                    StudentRef = x,
+                    SupplementalAnnouncementRef = supplementalAnnouncementId
+                }));
         }
 
         private SupplementalAnnouncementRecipient ReadSupplementalAnnouncementRecipient(DbDataReader reader)

@@ -202,11 +202,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 throw new ChalkableException("You can create Supplemented Announcements only for students of current class");
         }
 
-        public AnnouncementDetails Edit(int supplementalAnnouncementPlanId, int classId, int? classAnnouncementTypeId, string title,
+        public AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? classAnnouncementTypeId, string title,
             string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var suppAnnouncement = InternalGetAnnouncementById(supplementalAnnouncementPlanId);
+            var suppAnnouncement = InternalGetAnnouncementById(supplementalAnnouncementId);
             using (var uow = Update())
             {
                 var da = CreateSupplementalAnnouncementDataAccess(uow);
@@ -230,16 +230,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 if (suppAnnouncement.IsSubmitted)
                     ValidateSupplementalAnnouncement(suppAnnouncement, da, ServiceLocator, recipientsIds, classId);
 
-                var recipientList = recipientsIds?.Select(x => new SupplementalAnnouncementRecipient
-                {
-                    SupplementalAnnouncementRef = supplementalAnnouncementPlanId,
-                    StudentRef = x
-                }).ToList();
-
-                new SupplementalAnnouncementRecipientDataAccess(uow).UpdateRecipients(recipientList);
+                new SupplementalAnnouncementRecipientDataAccess(uow).UpdateRecipients(supplementalAnnouncementId, recipientsIds);
                 da.Update(suppAnnouncement);
                 uow.Commit();
-                return InternalGetDetails(da, supplementalAnnouncementPlanId);
+                return InternalGetDetails(da, supplementalAnnouncementId);
             }
         }
 
