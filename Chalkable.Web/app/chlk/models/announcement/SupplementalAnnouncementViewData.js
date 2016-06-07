@@ -34,8 +34,9 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId',
 
             function getRecipientsTooltip(){
-                var res = this.getRecipients().map(function(item){return item.getFullName()}).join('\n');
-                return res;
+                //var res = this.getRecipients().map(function(item){return item.getFullName()}).join('\n');
+                //return res;
+                return '';
             }
         ]);
 });
