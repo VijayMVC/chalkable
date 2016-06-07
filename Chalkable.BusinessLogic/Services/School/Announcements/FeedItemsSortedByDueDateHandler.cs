@@ -43,7 +43,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 {
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
                     if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
-                    return x.LessonPlanData.StartDate ?? x.Created;
+                    if (x.LessonPlanData != null) return (x.LessonPlanData.StartDate ?? x.Created);
+                    return x.SupplementalAnnouncementData.Expires;
                 };
             }
         }
