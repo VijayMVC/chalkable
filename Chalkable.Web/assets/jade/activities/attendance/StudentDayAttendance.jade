@@ -1,0 +1,31 @@
+-var info = self.getItem()
+-var studentAttendance = info.getStudentAttendance()
+.calendar-popup.popup-bubble.top.attendance-popup.profile-calendar-popup
+    +ActionForm('attendance', 'setClassAttendanceListFromPopUp')
+        +Hidden('classIds', '')
+        +Hidden('attendanceTypes', '')
+        +Hidden('attReasons', '')
+        +Hidden('controller', self.getController())
+        +Hidden('action', self.getAction())
+        +Hidden('params', self.getParams())
+        .top-container
+            h1=Msg.Attendance
+
+            each item in studentAttendance.getCheckInCheckOuts()
+                -var title = item.isCheckIn()? "Check-in: " : "Check-out: "
+                h2=title + (item.getCheckInTime() ?  item.getCheckInTime().toString() : "")
+        if studentAttendance.getPeriodAttendances().length
+            table.attendance-table
+                tr
+                    th=Msg.Period
+                    th=Msg.Class
+                    th=Msg.Attendance
+                    th=Msg.Reason
+                each item in studentAttendance.getPeriodAttendances()
+                    tr
+                        td.period-td=item.getPeriodOrder()
+                        td.class-name-td=item.getClassName()
+                        td(class=item.getTypeName().toLowerCase()).attendance-type-td=item.getTypeName()
+                        td(class=item.getTypeName().toLowerCase()).reason-td=item.getAttendanceReason() ? item.getAttendanceReason().getName() : ''
+        else
+            span No Daily Attendance was taken this day

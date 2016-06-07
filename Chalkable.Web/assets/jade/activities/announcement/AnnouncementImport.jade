@@ -1,0 +1,40 @@
+.dialog
+    .x-window-header
+        h1 Import Items
+        .close.close-btn
+
+    +ActionForm('announcement', 'import')
+        +Hidden('toClassId', self.getClassId())
+        +Hidden('requestId', self.getRequestId())
+        +Button(type="submit", name="submitType", value="list").x-hidden.list-update-btn
+        +Hidden('announcementsToCopy').announcements-to-copy
+
+        .top-container
+            .i-b.copy-to-block
+                LABEL.text Select year:
+                +DoubleSelect('classId', self.getClassesForSelect()).copy-to-select
+            .right-block.right
+                +DatePicker('copyStartDate')(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true,
+                        dateRanges: self.getClassScheduleDateRanges()
+                    },
+                    placeholder = 'Start Date'
+                ).copy-start-date
+
+            .clear-fix
+        .table-block.items-table
+            .row-block.header-row
+                .name-td.check
+                    .box-checkbox.circle
+                        +Checkbox('allTasks', false, false, true).all-tasks-check
+                .name-td.date Date
+                .name-td.category Category
+                .name-td.name Name
+            .items-container
+
+        .buttons-container.grey.right-align
+            Button.cancel.close.negative-button Cancel
+            Button(type="submit", disabled="disabled").blue-button.import-btn Import
+
