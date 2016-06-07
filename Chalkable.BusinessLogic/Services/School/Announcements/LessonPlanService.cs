@@ -169,31 +169,31 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //Filter simple apps
             announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
 
-            IDictionary<int, int> fromToAnnCopy;
-            List<Attachment> copiedAttachments = new List<Attachment>();
+            IDictionary<int, int> fromToAnnouncementIds;
+            IList<Pair<AnnouncementAttachment, AnnouncementAttachment>> annAttachmentsCopyResult;
+            IList<Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>> annAttributesCopyResult;
             
             using (var unitOfWork = Update())
             {
-                var teachers = new ClassTeacherDataAccess(unitOfWork).GetClassTeachers(fromClassId, null)
-                    .Select(x => x.PersonRef).ToList();
-                //Here we copy lesson plans
-                fromToAnnCopy = CreateLessonPlanDataAccess(unitOfWork, true)
-                    .CopyLessonPlansToClass(lessonPlanIds, toClassId, startDate.Value, Context.NowSchoolTime);
+                var teachers = new ClassTeacherDataAccess(unitOfWork).GetClassTeachers(fromClassId, null).Select(x => x.PersonRef).ToList();
 
-                copiedAttachments.AddRange(AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnCopy, teachers, 
-                    unitOfWork, ServiceLocator, ConnectorLocator).Select(x=>x.Attachment));
+                fromToAnnouncementIds = CreateLessonPlanDataAccess(unitOfWork, true).CopyLessonPlansToClass(lessonPlanIds, toClassId, startDate.Value, Context.NowSchoolTime);
 
-                var attrs = AnnouncementAssignedAttributeService.CopyNonStiAttributes(fromToAnnCopy, unitOfWork, ServiceLocator, ConnectorLocator);
-                copiedAttachments.AddRange(attrs.Where(x=>x.Attachment != null).Select(x=>x.Attachment));
-
-                ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnCopy.Select(x => x.Value).ToList(), unitOfWork);
+                annAttachmentsCopyResult = AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementIds, teachers, unitOfWork, ServiceLocator, ConnectorLocator);
+                annAttributesCopyResult  = AnnouncementAssignedAttributeService.CopyNonStiAttributes(fromToAnnouncementIds, unitOfWork, ServiceLocator, ConnectorLocator);
+ 
+                ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementIds.Select(x => x.Value).ToList(), unitOfWork);
 
                 unitOfWork.Commit();
             }
 
-            ServiceLocator.AttachementService.UploadToCrocodoc(copiedAttachments);
+            //Here we will copy all contents.
+            var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment).ToList();
+            attachmentsToCopy.AddRange(annAttributesCopyResult.Where(x=>x.Second.Attachment != null).Transform(x=>x.Attachment));
 
-            return fromToAnnCopy.Select(x => x.Value).ToList();
+            ServiceLocator.AttachementService.CopyContent(attachmentsToCopy);
+
+            return fromToAnnouncementIds.Select(x => x.Value).ToList();
         }
 
         public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)

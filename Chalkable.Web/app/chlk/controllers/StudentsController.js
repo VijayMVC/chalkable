@@ -8,12 +8,14 @@ REQUIRE('chlk.services.AttendanceService');
 REQUIRE('chlk.services.MarkingPeriodService');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineCalendarService');
+REQUIRE('chlk.services.ApplicationService');
 
 REQUIRE('chlk.activities.person.ListPage');
 REQUIRE('chlk.activities.student.StudentProfileSummaryPage');
 REQUIRE('chlk.activities.profile.StudentInfoPage');
 REQUIRE('chlk.activities.student.StudentProfileAttendancePage');
 REQUIRE('chlk.activities.student.StudentProfileDisciplinePage');
+REQUIRE('chlk.activities.student.StudentProfileAssessmentPage');
 REQUIRE('chlk.activities.student.StudentProfileGradingPage');
 REQUIRE('chlk.activities.profile.ScheduleWeekPage');
 REQUIRE('chlk.activities.profile.ScheduleMonthPage');
@@ -58,6 +60,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.DisciplineCalendarService, 'disciplineCalendarService',
+
+            [ria.mvc.Inject],
+            chlk.services.ApplicationService, 'appsService',
 
 
             [chlk.controllers.SidebarButton('people')],
@@ -184,9 +189,60 @@ NAMESPACE('chlk.controllers', function (){
                 return this.detailsAction(personId);
             },
 
+
+
+        //move it somewhere
+        [[String, String]],
+        ria.async.Future, function prepareExternalAttachAppViewData_(mode, appUrlAppend_){
+
+            var appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
+
+            return this.appsService
+                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                })
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var appData = data.getApplication();
+
+                    var viewUrl = appData.getUrl() + '?mode=' + mode
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + data.getAuthorizationCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
+                }, this);
+            },
+
+            [chlk.controllers.AssessmentEnabled()],
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN,
+                chlk.models.common.RoleEnum.TEACHER,
+                chlk.models.common.RoleEnum.STUDENT
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
             [[chlk.models.id.SchoolPersonId]],
-            function detailsAction(personId){
-                var result = this.studentService
+            function assessmentProfileAction(personId) {
+                
+                var result = ria.async.wait([
+                    this.prepareExternalAttachAppViewData_("profileview"),
+                    this.prepareStudentProfileSummaryViewData_(personId, chlk.models.student.StudentProfileAssessmentViewData)
+                ])
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var externalAttachViewData = data[0];
+                    var summaryViewData = data[1];
+                    summaryViewData.setAttachAppViewData(externalAttachViewData);
+                    return summaryViewData;
+                });
+                return this.PushView(chlk.activities.student.StudentProfileAssessmentPage, result);
+            },     
+
+
+            [[chlk.models.id.SchoolPersonId, Function]],
+            function prepareStudentProfileSummaryViewData_(personId, mdl){
+                return this.studentService
                     .getSummary(personId)
                     .attach(this.validateResponse_())
                     .then(function (data){
@@ -200,8 +256,13 @@ NAMESPACE('chlk.controllers', function (){
                             !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN))
                                 data.setAttendanceBox(null);
                         data.setRole(role);
-                        return new chlk.models.student.StudentProfileSummaryViewData(this.getCurrentRole(), data, this.getUserClaims_());
+                        return new mdl(this.getCurrentRole(), data, this.getUserClaims_());
                     }, this);
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function detailsAction(personId){
+                var result = this.prepareStudentProfileSummaryViewData_(personId, chlk.models.student.StudentProfileSummaryViewData);
                 return this.PushView(chlk.activities.student.StudentProfileSummaryPage, result);
             },
 

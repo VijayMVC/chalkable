@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -11,6 +12,7 @@ using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -24,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PaginatedList<AttachmentInfo> GetAttachmentsInfo(string filter, AttachmentSortTypeEnum? sortType, int start = 0, int count = Int32.MaxValue);
         AttachmentInfo TransformToAttachmentInfo(Attachment attachment, IList<int> teacherIds = null);
         IList<Attachment> UploadToCrocodoc(IList<Attachment> attachments);
-
+        IList<Attachment> CopyContent(IList<Pair<Attachment, Attachment>> fromToAttachments);
     }
 
 
@@ -85,6 +87,30 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
+        public IList<Attachment> CopyContent(IList<Pair<Attachment, Attachment>> fromToAttachments)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var toUpdate = new List<Attachment>();
+
+            foreach (var attachmentPair in fromToAttachments)
+            {
+                var contentToCopy = ServiceLocator.AttachementService.GetAttachmentContent(attachmentPair.First).Content;
+                if (contentToCopy == null)
+                    continue;
+
+                if (attachmentPair.First.IsStiAttachment)
+                {
+                    var stiAttachment = ConnectorLocator.AttachmentConnector.UploadAttachment(attachmentPair.Second.Name, contentToCopy).Last();
+                    MapperFactory.GetMapper<Attachment, StiAttachment>().Map(attachmentPair.Second, stiAttachment);
+                }
+                else attachmentPair.Second.RelativeBlobAddress = UploadToBlob(attachmentPair.Second, contentToCopy, ServiceLocator);
+
+                toUpdate.Add(attachmentPair.Second);
+            }
+            DoUpdate(u => new AttachmentDataAccess(u).Update(toUpdate));
+            UploadToCrocodoc(toUpdate);
+            return toUpdate;
+        }
 
         private const int UPLOAD_PACKET_SIZE = 3;
         public IList<Attachment> UploadToCrocodoc(IList<Attachment> attachments)
@@ -103,7 +129,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     var attcontent = GetAttachmentContent(item);
                     item.Uuid = UploadToCrocodoc(item.Name, attcontent.Content, ServiceLocator);
                 }
-
 
                 ServiceLocator.CrocodocService.WaitForDocuments(attsForUpload.Select(x => x.Uuid).ToList());
             }
