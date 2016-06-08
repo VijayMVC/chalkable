@@ -39,6 +39,7 @@ REQUIRE('chlk.controls.CloseOpenControl');
 REQUIRE('chlk.controls.ClassesBarControl');
 REQUIRE('chlk.controls.GradesBarControl');
 REQUIRE('chlk.controls.PanoramaFilterControl');
+REQUIRE('chlk.controls.DoubleSelectControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');

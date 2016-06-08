@@ -30,8 +30,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             Boolean, 'gradable',
 
-            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Boolean, Boolean, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId]],
-            function $(classId_, gradingPeriodId_, notCalculateGrid_, isAutoUpdate_, standardId_, categoryId_){
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Boolean, Boolean, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId, Boolean]],
+            function $(classId_, gradingPeriodId_, notCalculateGrid_, isAutoUpdate_, standardId_, categoryId_, ableEdit_){
                 BASE();
                 if(classId_)
                     this.setClassId(classId_);
@@ -43,6 +43,7 @@ NAMESPACE('chlk.models.grading', function () {
                     this.setCategoryId(categoryId_);
                 this.setNotCalculateGrid(notCalculateGrid_ || false);
                 this.setAutoUpdate(isAutoUpdate_ || false);
+                this.setAbleEdit(ableEdit_ || false);
             }
         ]);
 });

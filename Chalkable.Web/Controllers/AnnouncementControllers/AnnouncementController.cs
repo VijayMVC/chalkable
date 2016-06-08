@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common;
@@ -12,7 +14,6 @@ using Chalkable.UserTracking;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
-using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -39,6 +40,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 }
                 if (draft is LessonPlan)
                     classId = classId ?? (draft as LessonPlan).ClassRef;
+                if (draft is SupplementalAnnouncement)
+                {
+                    var supplementedAnn = draft as SupplementalAnnouncement;
+                    var classAnnType = classId.HasValue ? null : supplementedAnn.ClassAnnouncementTypeRef;
+                    classId = classId ?? (draft as SupplementalAnnouncement).ClassRef;
+                    
+                    var classAnnTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId.Value);
+                    if (classAnnTypes.Count > 0)
+                        return Redirect<SupplementalAnnouncementController>(c => c.CreateSupplemental(classId.Value, null, classAnnType));
+                }
             }
             if(classId.HasValue)
                 return Redirect<LessonPlanController>(c => c.CreateLessonPlan(classId.Value));
@@ -77,7 +88,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             Currently admin has no rigths to edit lessonplans and activities even
             if he is owner. He can edit this only from teacher portal.
             --------------------------------------------------------------------------*/
-            if((res.LessonPlanData != null || res.ClassAnnouncementData != null) && BaseSecurity.IsDistrictAdmin(Context))
+            if((res.LessonPlanData != null || res.ClassAnnouncementData != null || res.SupplementalAnnouncementData != null) && BaseSecurity.IsDistrictAdmin(Context))
                 res.IsOwner = false;
             //------------------------------------------------------------------------
 
@@ -206,9 +217,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected DateTime GenerateDefaultExpiresDate(DateTime? expiresDate)
         {
-            return expiresDate.HasValue ? expiresDate.Value :
-                                    Context.SchoolYearEndDate.HasValue ? Context.SchoolYearEndDate.Value :
-                                    DateTime.MaxValue;
+            return expiresDate ?? (Context.SchoolYearEndDate ?? DateTime.MaxValue);
         }
 
         protected void TrackNewItemCreate(AnnouncementDetails ann, Action<IUserTrackingService, int, int > trackNewItemCreated)
@@ -226,6 +235,42 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public async Task<ActionResult> Copy(CopyAnnouncementsInputModel inputModel)
+        {
+            inputModel.Announcements = inputModel.Announcements ?? new List<AnnouncementToCopyInputModel>();
+
+            var classAnnouncementCopyTask = Task.Factory.StartNew(() => {
+                var ids = inputModel.Announcements
+                    .Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Class)
+                    .Select(x => x.AnnouncementId)
+                    .ToList();
+
+                return SchoolLocator.ClassAnnouncementService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
+            });
+
+            var lessonPlanCopyTask = Task.Factory.StartNew(() => {
+                var ids = inputModel.Announcements
+                        .Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.LessonPlan)
+                        .Select(x => x.AnnouncementId)
+                        .ToList();
+
+                return SchoolLocator.LessonPlanService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
+            });
+
+            var res = new List<CopyAnnouncementResultViewData>();
+            res.AddRange((await lessonPlanCopyTask).Select(x=> new CopyAnnouncementResultViewData
+            {
+                AnnouncementType = (int)AnnouncementTypeEnum.LessonPlan,
+                AnnouncementId = x
+            }));
+            res.AddRange((await classAnnouncementCopyTask).Select(x => new CopyAnnouncementResultViewData
+            {
+                AnnouncementType = (int)AnnouncementTypeEnum.Class,
+                AnnouncementId = x
+            }));
+            return Json(res);
+        }
     }
 
 }

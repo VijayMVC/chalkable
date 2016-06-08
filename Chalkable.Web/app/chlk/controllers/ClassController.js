@@ -54,14 +54,16 @@ NAMESPACE('chlk.controllers', function (){
                 var result = ria.async.wait([
                     this.classService.getSummary(classId),
                     this.announcementService.getAnnouncements(0, classId, true),
-                    this.gradingPeriodService.getList()
+                    this.gradingPeriodService.getList(),
+                    this.schoolYearService.listOfSchoolYearClasses()
                 ])
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var model = result[0], feedModel = result[1], gradingPeriods = result[2];
+                        var model = result[0], feedModel = result[1], gradingPeriods = result[2], classesByYears = result[3];
                         var teacherIds = model.getTeachersIds(), currentPersonId = this.getCurrentPerson().getId();
                         var staringEnabled = this.userIsTeacher() && teacherIds.filter(function(id){return id == currentPersonId;}).length > 0;
                         feedModel.setGradingPeriods(gradingPeriods);
+                        feedModel.setClassesByYears(classesByYears);
                         feedModel.setImportantOnly(true);
                         feedModel.setInProfile(true);
                         feedModel.setClassId(classId);

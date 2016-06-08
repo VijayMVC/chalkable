@@ -1,8 +1,12 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -22,6 +26,8 @@ namespace Chalkable.BusinessLogic.Services
         string GetCrocodocApiUrl();
         string BuildDownloadDocumentUrl(string uuid, string docName);
         string BuildDownloadhumbnailUrl(string uuid, int docWith, int docHeigth);
+        IList<CrocodocDocumentStatus> GetDocumentsStatus(IList<string> uuids);
+        IList<CrocodocDocumentStatus> WaitForDocuments(IList<string> uuids);
     }
 
     public class CrocodocService : ICrocodocService
@@ -33,6 +39,7 @@ namespace Chalkable.BusinessLogic.Services
         private const string EDITABLE = "editable";
         private const string SESSION_CREATE = "session/create";
         private const string DOCUMENT_UPLOAD = "document/upload";
+        private const string DOCUMENT_STATUS = @"document/status";
 
         private const string PDF_EXT = ".pdf";
         private const string TRUE = "true";
@@ -47,7 +54,8 @@ namespace Chalkable.BusinessLogic.Services
 
             var res = UploadFileToCrocodoc(fileName, fileContent);
             if (res == null)
-                throw new ChalkableException(ChlkResources.ERR_PROCESSING_FILE);
+                throw new UploadToCrocodocFailedException(ChlkResources.ERR_PROCESSING_FILE);
+
             return res;
         }
 
@@ -129,9 +137,49 @@ namespace Chalkable.BusinessLogic.Services
         private T Deserialize<T>(string response)
         {
             return (new JsonSerializer()).Deserialize<T>(new JsonTextReader(new StringReader(response)));
-        }       
+        }
+
+        public IList<CrocodocDocumentStatus> GetDocumentsStatus(IList<string> uuids)
+        {
+            var joinedIds = uuids.JoinString(",");
+            var url = $@"{GetCrocodocApiUrl()}{DOCUMENT_STATUS}?{TOKEN}={GetToken()}&uuids={joinedIds}";
+            var wc = new WebClient();
+
+            var responce = Encoding.ASCII.GetString(wc.DownloadData(url));
+            return JsonConvert.DeserializeObject<IList<DocumentStatusResponce>>(responce)
+                .Select(CrocodocDocumentStatus.Create).ToList();
+        }
+
+        public IList<CrocodocDocumentStatus> WaitForDocuments(IList<string> uuids)
+        {
+            IList<CrocodocDocumentStatus> docsStates;
+            while (true)
+            {
+                docsStates = GetDocumentsStatus(uuids);
+                if (docsStates.Any(x => x.DocumentStatus == DocumentStatus.Processing || x.DocumentStatus == DocumentStatus.Queued))
+                    Thread.Sleep(400);
+                else
+                    break;
+            }
+
+            return docsStates;
+        }
     }
 
+    public class DocumentStatusResponce
+    {
+        [JsonProperty("uuid")]
+        public string Uuid { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("viewable")]
+        public bool Viewable { get; set; }
+
+        [JsonProperty("error")]
+        public string Error { get; set; }
+    }
 
     public class DocumentUploadResponse
     {

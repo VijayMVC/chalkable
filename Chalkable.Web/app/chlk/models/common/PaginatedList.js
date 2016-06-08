@@ -4,10 +4,11 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.PaginatedList */
     CLASS(
         'PaginatedList', [
-            function $(itemClass) {
+            function $(itemClass, items_) {
                 VALIDATE_ARG('itemClass', [Function, ria.__API.SpecifyDescriptor], itemClass);
                 BASE();
                 this.itemClass = itemClass;
+                items_ && this.setItems(items_);
             },
 
             READONLY, Object, 'itemClass',

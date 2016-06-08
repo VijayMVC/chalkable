@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public ShortAnnouncementViewData LessonPlanData { get; set; }
         public ShortAnnouncementViewData AdminAnnouncementData { get; set; }
         public ShortAnnouncementViewData ClassAnnouncementData { get; set; }
+        public ShortAnnouncementViewData SupplementalAnnouncementData { get; set; }
 
         public int? ClassId { get; set; }
         public string ClassName { get; set; }
@@ -35,35 +36,51 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool ShowGradingIcon { get; set; }
         public Guid? AssessmentApplicationId { get; set; }
 
-        protected AnnouncementViewData(AnnouncementComplex announcement)
-            : base(announcement)
+
+        protected AnnouncementViewData(Announcement announcementData):base(announcementData)
         {
             ShortAnnouncementViewData annData = null;
-            if (announcement.LessonPlanData != null)
+            var lp = announcementData as LessonPlan;
+            if (lp != null)
             {
-                LessonPlanData = LessonPlanViewData.Create(announcement.LessonPlanData);
+                LessonPlanData = LessonPlanViewData.Create(lp);
                 annData = LessonPlanData;
-                ClassId = announcement.LessonPlanData.ClassRef;
-                ClassName = announcement.LessonPlanData.ClassName;
+                ClassId = lp.ClassRef;
+                ClassName = lp.ClassName;
             }
-            if (announcement.AdminAnnouncementData != null)
+            var sup = announcementData as SupplementalAnnouncement;
+            if (sup != null)
             {
-                AdminAnnouncementData = AdminAnnouncementViewData.Create(announcement.AdminAnnouncementData);
+                SupplementalAnnouncementData = SupplementalAnnouncementViewData.Create(sup);
+                annData = SupplementalAnnouncementData;
+                ClassId = sup.ClassRef;
+                ClassName = sup.ClassName;
+            }
+            
+            var adminAnn = announcementData as AdminAnnouncement;
+            if (adminAnn != null)
+            {
+                AdminAnnouncementData = AdminAnnouncementViewData.Create(adminAnn);
                 annData = AdminAnnouncementData;
             }
-            if (announcement.ClassAnnouncementData != null)
+            var classAnn = announcementData as ClassAnnouncement;
+            if (classAnn != null)
             {
-                ClassAnnouncementData = ClassAnnouncementViewData.Create(announcement.ClassAnnouncementData);
+                ClassAnnouncementData = ClassAnnouncementViewData.Create(classAnn);
                 annData = ClassAnnouncementData;
-                ClassId = announcement.ClassAnnouncementData.ClassRef;
-                ClassName = announcement.ClassAnnouncementData.ClassName;
+                ClassId = classAnn.ClassRef;
+                ClassName = classAnn.ClassName;
             }
             if (annData != null)
             {
                 PersonId = annData.PersonId;
                 PersonName = annData.PersonName;
-                PersonGender = annData.PersonGender;   
+                PersonGender = annData.PersonGender;
             }
+        }
+
+        protected AnnouncementViewData(AnnouncementComplex announcement):this(announcement.AnnouncementData)
+        {
             AttachmentsCount = announcement.AttachmentsCount;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             Complete = announcement.Complete;
@@ -79,6 +96,11 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ShowGradingIcon = studentsCounts > 0 && StudentsCountWithAttachments * 4 > studentsCounts || GradingStudentsCount > 0;
         }
 
+
+        public new static AnnouncementViewData Create(Announcement announcement)
+        {
+            return new AnnouncementViewData(announcement);
+        }
 
         public static AnnouncementViewData Create(AnnouncementComplex announcement, string applicationName = null)
         {

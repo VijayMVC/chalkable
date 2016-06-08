@@ -159,10 +159,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         protected abstract TAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader);
-        
-
-        
-       
+           
         protected AnnouncementQueryResult ReadAnnouncementsQueryResult(SqlDataReader reader, AnnouncementsQuery query)
         {
             var res = new AnnouncementQueryResult { Query = query };
@@ -180,8 +177,12 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
             return res;
         }
-        
-        
+
+        protected class AnnouncementCopyResult
+        {
+            public int FromAnnouncementId { get; set; }
+            public int ToAnnouncementId { get; set; }
+        }
     }
     
     public class AnnouncementsQuery

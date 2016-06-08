@@ -1,4 +1,5 @@
-﻿using Chalkable.BusinessLogic.Services.Master;
+﻿using System;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.BusinessLogic.Services.School.PanoramaSettings;
@@ -80,6 +81,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IStudentCustomAlertDetailService StudentCustomAlertDetailService { get; }
         IPanoramaSettingsService PanoramaSettingsService { get; }
         IStandardizedTestService StandardizedTestService { get; }
+        ISupplementalAnnouncementService SupplementalAnnouncementService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -154,6 +156,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private IPanoramaSettingsService panoramaSettingsService;
         private IStandardizedTestService standardizedTestService;
 
+        private ISupplementalAnnouncementService supplementalAnnouncementService;
+
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
         {
@@ -224,6 +228,7 @@ namespace Chalkable.BusinessLogic.Services.School
             studentCustomAlertDetailService = new StudentCustomAlertDetailService(this);
             panoramaSettingsService = new PanoramaSettingsService(this);
             standardizedTestService = new StandardizedTestService(this);
+            supplementalAnnouncementService = new SupplementalAnnouncementService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -310,9 +315,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 case AnnouncementTypeEnum.Class: return classAnnouncementService;
                 case AnnouncementTypeEnum.Admin: return adminAnnouncementService;
                 case AnnouncementTypeEnum.LessonPlan: return lessonPlanService;
-                default : throw new ChalkableException("Not supported announcement type"); //todo implement NotSupportedChalkableException
+                case AnnouncementTypeEnum.Supplemental: return supplementalAnnouncementService;
+                default : throw new NotSupportedException("Not supported announcement type");
             }
         }
 
+        public  ISupplementalAnnouncementService SupplementalAnnouncementService => supplementalAnnouncementService;
     }
 }

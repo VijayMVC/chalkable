@@ -11,7 +11,8 @@ NAMESPACE('chlk.models.announcement', function () {
     ENUM('AnnouncementTypeEnum', {
         CLASS_ANNOUNCEMENT: 1,
         ADMIN: 2,
-        LESSON_PLAN: 3
+        LESSON_PLAN: 3,
+        SUPPLEMENTAL_ANNOUNCEMENT: 4
     });
 
     /** @class chlk.models.announcement.StateEnum*/

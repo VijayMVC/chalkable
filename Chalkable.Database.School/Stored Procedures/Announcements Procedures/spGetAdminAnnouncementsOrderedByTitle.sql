@@ -24,6 +24,9 @@ declare
 declare 
 	@tempAA TAdminAnnouncement
 
+declare 
+	@tempSA TSupplementalAnnouncement
+
 insert into @tempAA 
 	exec spGetAdminAnnouncements 
 		@id, 
@@ -37,6 +40,6 @@ insert into @tempAA
 		@complete, 
 		@studentId
 
-exec spInternalSortAdminOrLp  @tempLP, @tempAA, 1, 1, 1, @sort, @pFrom, @pTo, @start, @count, @includeFrom, @includeTo
+exec spInternalSortAdminOrLp  @tempLP, @tempAA, @tempSA, 1, 1, 1, @sort, @pFrom, @pTo, @start, @count, @includeFrom, @includeTo
 
 

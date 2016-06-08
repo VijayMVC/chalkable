@@ -17,6 +17,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             this.schoolYearId = schoolYearId;
         }
 
+        public override IList<LessonPlan> GetByIds(IList<int> keys)
+        {
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append($@"Select * From {LessonPlan.VW_LESSON_PLAN_NAME} Where Id in(Select * from @keys)");
+            dbQuery.Parameters.Add("keys", keys);
+
+            return ReadMany<LessonPlan>(dbQuery);
+        }
+
         public override void Insert(LessonPlan entity)
         {
             throw new NotImplementedException();
@@ -134,7 +143,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition
             {
                 {Announcement.STATE_FIELD, AnnouncementState.Created},
-                {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
             };
             if (fromDate.HasValue)
                 conds.Add(LessonPlan.END_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
@@ -143,9 +151,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             
             if(filterByStartDate)
                 conds.Add(LessonPlan.START_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
-
+            
+            //if classId was set there is no need to filter by schoolYear ... possible case when class is no in the current schoolYear.
             if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
+            else
+                conds.Add(LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId);
+            
+
             if (galleryCategoryId.HasValue)
                 conds.Add(LessonPlan.GALERRY_CATEGORY_REF_FIELD, galleryCategoryId);
 
@@ -289,10 +302,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public override bool CanAddStandard(int announcementId)
         {
-
             var dbQuery = new DbQuery();
-            var classStandardTName = typeof (ClassStandard).Name;
-            var classTName = typeof (Class).Name;
+            var classStandardTName = nameof(ClassStandard);
+            var classTName = nameof(Class);
             dbQuery.Sql.AppendFormat(Orm.SELECT_COLUMN_FORMAT, Announcement.ID_FIELD, LessonPlan.VW_LESSON_PLAN_NAME)
                    .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, classTName, Class.ID_FIELD, LessonPlan.VW_LESSON_PLAN_NAME, LessonPlan.CLASS_REF_FIELD)
                    .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, classStandardTName, ClassStandard.CLASS_REF_FIELD, classTName, Class.ID_FIELD)
@@ -345,9 +357,39 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var dbQuery = Orm.SimpleSelect(LessonPlan.VW_LESSON_PLAN_NAME, conds);
             return Exists(dbQuery);
         }
+
+        /// <summary>
+        /// Copies lesson plans and announcement standards.
+        /// </summary>
+        /// <returns>Key is SOURCE announcement id. Value is NEW announcement id.</returns>
+        public IDictionary<int, int> CopyLessonPlansToClass(IList<int> lessonPlanIds, int toClassId, DateTime startDate,
+            DateTime created)
+        {
+            lessonPlanIds = lessonPlanIds ?? new List<int>();
+
+            var @params = new Dictionary<string, object>
+            {
+                ["lessonPlanIds"] = lessonPlanIds.Count == 0 ? new List<int>() : lessonPlanIds,
+                ["toClassId"] = toClassId,
+                ["startDate"] = startDate,
+                ["created"] = created
+            };
+
+            IList<AnnouncementCopyResult> result;
+
+            using (var reader = ExecuteStoredProcedureReader("spCopyLessonPlansToClass", @params))
+            {
+                result = reader.ReadList<AnnouncementCopyResult>();
+            }
+
+            return result.ToDictionary(x => x.FromAnnouncementId, y => y.ToAnnouncementId);
+        }
+
         
     }
 
+
+    
 
     public class LessonPlansQuery : AnnouncementsQuery
     {

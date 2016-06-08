@@ -3,6 +3,7 @@ REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');
+REQUIRE('chlk.models.schoolYear.YearAndClasses');
 
 NAMESPACE('chlk.models.feed', function () {
     "use strict";
@@ -16,6 +17,19 @@ NAMESPACE('chlk.models.feed', function () {
                 IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw) {
+
+                //Prepare created announcements
+                if(raw.createdannouncements && raw.createdannouncements.length){
+                    raw.createdannouncements.forEach(function(item){
+                        item.imported = true;
+                    });
+
+                    raw.annoucementviewdatas = raw.createdannouncements.concat(raw.annoucementviewdatas);
+                }
+
+                this.announcementsToCopy = SJX.fromValue(raw.announcementsToCopy, String);
+                this.toClassId = SJX.fromValue(raw.toClassId, chlk.models.id.ClassId);
+                this.copyStartDate = SJX.fromDeserializable(raw.copyStartDate, chlk.models.common.ChlkDate);
                 this.inProfile = SJX.fromValue(raw.inProfile, Boolean);
                 this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
@@ -32,6 +46,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.markDoneOption = SJX.fromValue(raw.markDoneOption, Number);
                 this.sortType = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.sorttype : raw.sorttype, chlk.models.announcement.FeedSortTypeEnum);
                 this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
+                //this.createdAnnouncements = SJX.fromArrayOfDeserializables(raw.createdannouncements, chlk.models.announcement.FeedAnnouncementViewData);
             },
 
             [[ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), chlk.models.classes.ClassesForTopBar, Boolean, Number]],
@@ -51,7 +66,15 @@ NAMESPACE('chlk.models.feed', function () {
 
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
 
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'createdAnnouncements',
+
             Boolean, 'readonly',
+
+            String, 'announcementsToCopy',
+
+            chlk.models.id.ClassId, 'toClassId',
+
+            chlk.models.common.ChlkDate, 'copyStartDate',
 
             Boolean, 'importantOnly',
 
@@ -72,6 +95,8 @@ NAMESPACE('chlk.models.feed', function () {
             chlk.models.announcement.AnnouncementTypeEnum, 'annType',
 
             ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
+
+            ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
 
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 

@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.BusinessLogic.Services.School.PanoramaSettings;
 using Chalkable.Common;
@@ -1834,6 +1835,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IStudentCustomAlertDetailService StudentCustomAlertDetailService { get { throw new NotImplementedException(); } }
         public IPanoramaSettingsService PanoramaSettingsService { get {throw new NotImplementedException();} }
         public IStandardizedTestService StandardizedTestService { get {throw new NotImplementedException();} }
+
+        public ISupplementalAnnouncementService SupplementalAnnouncementService { get { throw new NotImplementedException(); } }
     }
 
 }
