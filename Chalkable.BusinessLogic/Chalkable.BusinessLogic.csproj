@@ -164,6 +164,7 @@
     <Compile Include="Model\ClaimInfo.cs" />
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
+    <Compile Include="Model\PanoramaStuff\ClassPanorama.cs" />
     <Compile Include="Model\ClassStatsInfo.cs" />
     <Compile Include="Model\CopyAnnouncementsInputModel.cs" />
     <Compile Include="Model\CrocodocDocumentStatus.cs" />
@@ -178,6 +179,10 @@
     <Compile Include="Model\PanoramaSettings\ClassProfilePanoramaSetting.cs" />
     <Compile Include="Model\PanoramaSettings\StandardizedTestFilter.cs" />
     <Compile Include="Model\PanoramaSettings\StudentProfilePanoramaSetting.cs" />
+    <Compile Include="Model\PanoramaStuff\ShortStudentAbsenceInfo.cs" />
+    <Compile Include="Model\PanoramaStuff\ShortStudentInfractionsInfo.cs" />
+    <Compile Include="Model\PanoramaStuff\StudentAverageGradeInfo.cs" />
+    <Compile Include="Model\PanoramaStuff\StudentStandardizedTestInfo.cs" />
     <Compile Include="Model\PracticeGradeDetailedInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\Reports\AttendanceRegisterInputModel.cs" />
