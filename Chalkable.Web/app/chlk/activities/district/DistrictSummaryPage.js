@@ -34,6 +34,7 @@ NAMESPACE('chlk.activities.district', function () {
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
                 BASE(model, msg_);
                 if(model instanceof chlk.models.admin.BaseStatisticGridViewData){
+                    this.dom.find('.district-summary-grid').trigger(chlk.controls.GridEvents.UPDATED.valueOf());
                     if(!model.getItems().length)
                         this.dom.find('.school-statistic-form').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
                 }

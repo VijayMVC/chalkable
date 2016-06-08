@@ -103,7 +103,8 @@ NAMESPACE('chlk.templates.profile', function(){
                 else
                     res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId], true));
 
-                res.push(this.createActionLinkModel_('apps', 'assessmentProfile', 'Assessments', pressedLinkName, [userId], !this.isAssessmentEnabled()));
+                if(isStudentController)
+                    res.push(this.createActionLinkModel_(this._studentControllerName, 'assessmentProfile', 'Assessments', pressedLinkName, [userId], !this.isAssessmentEnabled()));
                 return res;
                 //return this.getModel().getActionLinksData(); // todo : rewrite this method
             }

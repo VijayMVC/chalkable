@@ -5,36 +5,25 @@
   &.imported
     border-color: #41b768
 
-  &.lesson-plan
-    .content
-      overflow: visible
-      position: relative
-      margin-right: 40px
+  .line
+    height: 4px
+    background-color: #d45151
+    border-radius: 2px
+    top: 68px
+    position: absolute
+    width: 100%
+    overflow: hidden
 
-    .line
-      height: 4px
-      background-color: #d45151
-      border-radius: 2px
-      margin-top: 38px
-      position: absolute
-      width: 100%
-      overflow: hidden
-
-    .inner-line
-      height: 100%
-      background-color: #41b768
-
-    .right-text
-      position: absolute
-      right: -40px
-      font-style: italic
+  .inner-line
+    height: 100%
+    background-color: #41b768
 
   border: 1px solid #c8c7c3
   border-radius: 5px
   margin: 8px 0 0
   +box-shadow(transparentize(#000, .91) 0 2px 3px)
 
-  padding: 0 24px 0 63px
+  padding: 0 11px 0 63px
   position: relative
 
   .star
@@ -103,56 +92,59 @@
 
       letter-spacing: -1px
 
-    .date
-      left: 0
-      top: 56px
-      width: 262px
-      position: absolute
+  .date
+    left: 0
 
-      font-size: 11px
-      line-height: 15px
-      color: #7b7974
-      +text-shadow(transparentize(#fff, .25) 0 1px 0)
+  .date, .description
+    top: 56px
+    width: 262px
+    position: absolute
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    font-size: 11px
+    line-height: 15px
+    color: #7b7974
+    +text-shadow(transparentize(#fff, .25) 0 1px 0)
 
   .attachment
     height: 80px
 
-    .description
-      top: 53px
-      position: absolute
-      font-size: 13px
-      line-height: 15px
-      color: #2b2a28
-      white-space: nowrap
-      overflow: hidden
-      text-overflow: ellipsis
-
-  .attachment, .grades, .visible
-    padding-right: 32px
+  .attachment
+    padding-right: 140px
     position: relative
 
-    &::before
-      content: ' '
+    .icons
+      height: 100%
       position: absolute
-      right: -5px
-      top: 27px
-      height: 24px
+      right: 0
+      z-index: 1
+      top: 0
+      min-width: 125px
+
+    .small-icon
       width: 24px
-      opacity: .5
+      height: 24px
+      margin: 36px -1px 0 10px
+      display: inline-block
+      vertical-align: middle
+      opacity: 0.5
+      float: right
 
-  .attachment::before
-    +icons-24-sprite(attachment)
+    .discussion-icon
+      +icons-24-sprite(discussion)
 
-  .grades::before
-    +icons-24-sprite(chart)
+    .attachment-icon
+      +icons-24-sprite(attachment)
 
-  .visible::before
-    +icons-24-sprite(invisible)
+    .grades-icon
+      +icons-24-sprite(chart)
 
-  &.no-attachments:not(.app-icon) .attachment, &.no-attachment-icon:not(.app-icon) .attachment, &.non-gradable .grades, &.visible-for-students .visible
-    padding-right: 0
-    &::before
-      display: none
+    .invisible-icon
+      +icons-24-sprite(invisible)
+
+    .supplemental-icon
+      +icons-24-sprite(supplemental)
 
   .content
     overflow: hidden

@@ -70,6 +70,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     return _handlers[sortOption].GetLessonPlansOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count, ownedOnly);
                 case AnnouncementTypeEnum.Admin:
                     return _handlers[sortOption].GetAdminAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, null, complete, start, count);
+                case AnnouncementTypeEnum.Supplemental:
+                    return _handlers[sortOption].GetSupplementalAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count);
             }
             return new List<AnnouncementComplex>();
         }
@@ -170,7 +172,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             if (BaseSecurity.IsDistrictAdmin(Context))
                 return ServiceLocator.AdminAnnouncementService.GetLastDraft();
-            return ServiceLocator.ClassAnnouncementService.GetLastDraft() ?? (Announcement) ServiceLocator.LessonPlanService.GetLastDraft();
+            return (ServiceLocator.ClassAnnouncementService.GetLastDraft() ?? (Announcement) ServiceLocator.LessonPlanService.GetLastDraft()) ?? ServiceLocator.SupplementalAnnouncementService.GetLastDraft();
         }
 
         public AnnouncementTypeEnum GetAnnouncementType(int announcementId)

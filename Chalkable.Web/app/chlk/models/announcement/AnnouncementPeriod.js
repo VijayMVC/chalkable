@@ -2,6 +2,8 @@ REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.period.Period');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
+REQUIRE('chlk.models.announcement.LessonPlanViewData');
+REQUIRE('chlk.models.announcement.SupplementalAnnouncementViewData');
 REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -22,6 +24,7 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.date = SJX.fromDeserializable(raw.date, chlk.models.common.ChlkDate);
                 this.lessonPlans = SJX.fromArrayOfDeserializables(raw.lessonplans, chlk.models.announcement.LessonPlanViewData);
                 this.announcements = SJX.fromArrayOfDeserializables(raw.announcements, chlk.models.announcement.ClassAnnouncementViewData);
+                this.supplementalAnnouncements = SJX.fromArrayOfDeserializables(raw.supplementalannouncements, chlk.models.announcement.SupplementalAnnouncementViewData);
             },
 
             chlk.models.period.Period, 'period',
@@ -35,6 +38,8 @@ NAMESPACE('chlk.models.announcement', function () {
             ArrayOf(chlk.models.announcement.LessonPlanViewData), 'lessonPlans',
 
             ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
+
+            ArrayOf(chlk.models.announcement.SupplementalAnnouncementViewData), 'supplementalAnnouncements',
 
             chlk.models.id.ClassId, 'selectedClassId'
         ]);

@@ -17,6 +17,12 @@ Delete From LessonPlan Where Id in (Select Value From @announcementIdList)
 /*Delete ClassAnnouncement*/
 Delete From ClassAnnouncement Where Id in (Select Value From @announcementIdList)
 
+/*Delete SupplementalAnnouncementRecipient*/
+Delete From SupplementalAnnouncementRecipient Where SupplementalAnnouncementRef in (Select Value From @announcementIdList)
+
+/*Delete SupplementalAnnouncement*/
+Delete From SupplementalAnnouncement Where Id in (Select Value From @announcementIdList)
+
 /*DELETE AnnouncementRecipientData*/
 Delete From AnnouncementRecipientData where AnnouncementRef in (select Value from @announcementIdList)
 

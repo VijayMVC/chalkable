@@ -20,6 +20,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             String, 'requestId',
 
+            [ria.templates.ModelPropertyBind],
+            Array, 'classScheduleDateRanges',
+
             function getClassesForSelect(){
                 var items = this.getClassesByYears(), res = [];
                 items.forEach(function(item){

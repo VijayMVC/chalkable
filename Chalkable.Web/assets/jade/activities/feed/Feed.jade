@@ -61,7 +61,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             }
                         ).copy-start-date
                         BUTTON(type="button").negative-button.cancel-copy Cancel
-                        BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-btn Copy
+                        BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-submit Copy
             .left-buttons-block.tools-buttons-block(class=self.hasFilters() ? '' : 'hidden')
                 if !self.isInProfile() && self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
@@ -108,21 +108,22 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         +Option(null, 'All Types', !self.getAnnType())
                         +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
                         +Option(typesEnum.LESSON_PLAN.valueOf(), 'Lesson Plan Only', typesEnum.LESSON_PLAN == self.getAnnType())
+                        +Option(typesEnum.SUPPLEMENTAL_ANNOUNCEMENT.valueOf(), 'Supplemental Only', typesEnum.SUPPLEMENTAL_ANNOUNCEMENT == self.getAnnType())
                 +Select('sorttype')(data-placeholder = 'Sort').sortSelect.submit-after-select
                     +Option(0, 'Due Date: Earliest', self.getSortType() == chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_ASCENDING)
                     +Option(1, 'Due Date: Latest', self.getSortType() == chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_DESCENDING)
                 if self.hasFilters()
                     .clear-filters Clear Filters
             .right-buttons-block
-                +ActionLink('feed', 'feedPrinting', selected, self.importantOnly).print-btn
+                +ActionLink('feed', 'feedPrinting', selected, self.importantOnly)(data-tooltip="Print").print-btn
                 if ableCopy
-                    a(href="javascript:").copy-btn.copy-activities
-                a(href="javascript:", class=self.hasFilters() ? 'active' : '').tools-btn.feed-tools
+                    a(href="javascript:", data-tooltip="Copy").copy-btn.copy-activities
+                a(href="javascript:", class=self.hasFilters() ? 'active' : '', data-tooltip="Feed Tools").tools-btn.feed-tools
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,
                 pageSize = 10
-            )
+            ).feed-grid
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
                     +FeedItem(item, self.isReadonly(), false, self.isStaringDisabled())

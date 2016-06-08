@@ -3,6 +3,7 @@ REQUIRE('chlk.models.schoolYear.ScheduleSection');
 REQUIRE('chlk.models.announcement.LessonPlanViewData');
 REQUIRE('chlk.models.announcement.AdminAnnouncementViewData');
 REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
+REQUIRE('chlk.models.announcement.SupplementalAnnouncementViewData');
 REQUIRE('chlk.models.Popup');
 REQUIRE('chlk.models.id.ClassId');
 
@@ -29,6 +30,9 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
 
             [ria.serialize.SerializeProperty('adminannouncements')],
             ArrayOf(chlk.models.announcement.AdminAnnouncementViewData), 'adminAnnouncements',
+
+            [ria.serialize.SerializeProperty('supplementalannouncements')],
+            ArrayOf(chlk.models.announcement.SupplementalAnnouncementViewData), 'supplementalAnnouncements',
 
             ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 

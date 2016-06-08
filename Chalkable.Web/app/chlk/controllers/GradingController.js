@@ -85,7 +85,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             function indexTeacherAction() {
@@ -104,8 +105,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES//,
-                //[chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -125,7 +126,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.grading.GradingSummaryGridSubmitViewData]],
@@ -137,7 +139,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -211,7 +214,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -475,7 +479,8 @@ NAMESPACE('chlk.controllers', function (){
             /* END CLASS PROFILE */
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
@@ -533,7 +538,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
+                    chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],

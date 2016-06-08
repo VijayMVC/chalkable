@@ -22,7 +22,12 @@ NAMESPACE('chlk.controls', function () {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        this.addEvents(attributes.id, value, activity.getDom());
+                        var node = ria.dom.Dom('#' + attributes.id);
+
+                        if(!node.hasClass('processed'))
+                            this.addEvents(attributes.id, value, activity.getDom());
+
+                        node.addClass('processed');
                     }.bind(this));
                 if(attributes.addCallBack){
                     setTimeout(function(){

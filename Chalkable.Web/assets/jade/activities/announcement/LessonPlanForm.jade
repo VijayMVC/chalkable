@@ -1,10 +1,11 @@
 mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
     .action-bar
         .items
+            if !announcement.getState().valueOf()
+                +ActionLink('announcement', 'addClassAnnouncement', classId).item.announcement-type-button.no-save Assignment
             +ActionLink('announcement', 'lessonPlan', lessonPlan.getClassId()).item.announcement-type-button.pressed Lesson Plan
             if !announcement.getState().valueOf()
-                each item in types
-                    +ActionLink('announcement', 'addClassAnnouncement', lessonPlan.getClassId(), item.getId()).item.announcement-type-button.no-save=item.getName()
+                +ActionLink('announcement', 'supplementalAnnouncement', lessonPlan.getClassId()).item.announcement-type-button.no-save Supplemental
 
         if lessonPlan.getClassId() && lessonPlan.getClassId().valueOf()
             +ActionLink('announcement', 'showImportDialog', lessonPlan.getClassId()).import-icon
@@ -124,8 +125,8 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                     -ann.setNeedButtons(true)
                     -ann.setNeedDeleteButton(true)
                     +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
-                    userRole = userRole,
-                    studyCenterEnabled = self.isStudyCenterEnabled()
+                        userRole = userRole,
+                        studyCenterEnabled = self.isStudyCenterEnabled()
                     )
                 .attributes-block
                     -var attributesList = announcement.getAttributesListViewData();
