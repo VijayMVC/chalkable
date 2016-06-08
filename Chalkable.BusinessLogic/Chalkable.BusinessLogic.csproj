@@ -340,6 +340,7 @@
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Model\FeedReportSettingsInfo.cs" />
+    <Compile Include="Services\School\EthnicityService.cs" />
     <Compile Include="Services\School\GradedItemService.cs" />
     <Compile Include="Services\School\GradingCommentService.cs" />
     <Compile Include="Services\School\GradingScaleService.cs" />
@@ -359,6 +360,7 @@
     <Compile Include="Services\School\PanoramaSettings\PanoramaSettingsService.cs" />
     <Compile Include="Services\School\PeriodService.cs" />
     <Compile Include="Services\School\PersonEmailService.cs" />
+    <Compile Include="Services\School\PersonEthnicityService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
     <Compile Include="Services\School\PersonSettingService.cs" />
     <Compile Include="Services\School\PhoneService.cs" />

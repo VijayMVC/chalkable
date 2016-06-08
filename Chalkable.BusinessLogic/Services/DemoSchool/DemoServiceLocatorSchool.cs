@@ -1837,6 +1837,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IStandardizedTestService StandardizedTestService { get {throw new NotImplementedException();} }
 
         public ISupplementalAnnouncementService SupplementalAnnouncementService { get { throw new NotImplementedException(); } }
+        public IEthnicityService EthnicityService { get {throw new NotImplementedException();} }
+        public IPersonEthnicityService PersonEthnicityService { get { throw new NotImplementedException(); } }
     }
 
 }

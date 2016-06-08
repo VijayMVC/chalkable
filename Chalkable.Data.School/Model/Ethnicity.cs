@@ -1,10 +1,14 @@
-namespace Chalkable.StiConnector.SyncModel
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Chalkable.Data.School.Model
 {
-    using System;
-    
-    public class Ethnicity : SyncModel
+    public class Ethnicity
     {
-        public short EthnicityID { get; set; }
+        public short Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -13,8 +17,5 @@ namespace Chalkable.StiConnector.SyncModel
         public string NCESCode { get; set; }
         public bool IsActive { get; set; }
         public bool IsSystem { get; set; }
-        public Guid RowVersion { get; set; }
-        public Guid DistrictGuid { get; set; }
-        public override int DefaultOrder => 6;
     }
 }

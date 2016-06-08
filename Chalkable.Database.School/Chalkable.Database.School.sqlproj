@@ -337,6 +337,8 @@
     <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncements.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByClassName.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByTitle.sql" />
+    <Build Include="Tables\Ethnicity.sql" />
+    <Build Include="Tables\PersonEthnicity.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
@@ -346,5 +348,8 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Chalkable.Database.School.refactorlog" />
   </ItemGroup>
 </Project>

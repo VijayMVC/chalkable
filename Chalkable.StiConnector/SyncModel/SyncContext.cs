@@ -80,6 +80,8 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(StandardizedTest));
             RegisterType(typeof(StandardizedTestComponent));
             RegisterType(typeof(StandardizedTestScoreType));
+            RegisterType(typeof(Ethnicity));
+            RegisterType(typeof(PersonEthnicity));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)
