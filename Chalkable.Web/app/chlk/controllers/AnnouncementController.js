@@ -2031,11 +2031,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
         },
 
-        [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.announcement.AnnouncementForm]],
-        function saveSupplementalAnnouncementAction(model, form_) {
-            if(!(model.getClassId() && model.getClassId().valueOf()))
-                return null;
-            var res = this.supplementalAnnouncementService
+        function saveSupplementalAnnouncement_(model){
+            return this.supplementalAnnouncementService
                 .saveSupplementalAnnouncement(
                     model.getId(),
                     model.getClassId(),
@@ -2047,9 +2044,27 @@ NAMESPACE('chlk.controllers', function (){
                     model.getRecipientIds(),
                     model.getAnnouncementTypeId()
                 )
+        },
+
+        [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.announcement.AnnouncementForm]],
+        function saveSupplementalAnnouncementAction(model, form_) {
+            if(!(model.getClassId() && model.getClassId().valueOf()))
+                return null;
+
+            var res;
+
+            if(form_)
+                res = ria.async.wait([this.saveSupplementalAnnouncement_(model), this.studentService.getStudents(model.getClassId(), null, true, true, 0, 999)]);
+            else
+                res = this.saveSupplementalAnnouncement_(model);
+
+
+           res = res
                 .attach(this.validateResponse_())
-                .then(function(model){
+                .then(function(result){
                     if (form_){
+                        var model = result[0];
+                        var students = result[1].getItems();
                         var applications = model.getApplications() || [];
                         this.cacheAnnouncementApplications(applications);
 
@@ -2067,6 +2082,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
                         announcement.setState(model.getState());
                         form_.setAnnouncement(announcement);
+                        form_.setStudents(students);
                         return this.addEditAction(form_, false);
                     }
                 }, this)
