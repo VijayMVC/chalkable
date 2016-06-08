@@ -161,6 +161,4 @@ namespace Chalkable.Web.Controllers
         }
 
     }
-        }
-    }
 }
