@@ -302,10 +302,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public override bool CanAddStandard(int announcementId)
         {
-
             var dbQuery = new DbQuery();
-            var classStandardTName = typeof (ClassStandard).Name;
-            var classTName = typeof (Class).Name;
+            var classStandardTName = nameof(ClassStandard);
+            var classTName = nameof(Class);
             dbQuery.Sql.AppendFormat(Orm.SELECT_COLUMN_FORMAT, Announcement.ID_FIELD, LessonPlan.VW_LESSON_PLAN_NAME)
                    .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, classTName, Class.ID_FIELD, LessonPlan.VW_LESSON_PLAN_NAME, LessonPlan.CLASS_REF_FIELD)
                    .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, classStandardTName, ClassStandard.CLASS_REF_FIELD, classTName, Class.ID_FIELD)

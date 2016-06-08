@@ -139,6 +139,8 @@
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentContactDataAccess.cs" />
     <Compile Include="DataAccess\StudentDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementRecipientDataAccess.cs" />
     <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\AnnouncementRecipientData.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="Model\Announcements\ClassAnnouncement.cs" />
     <Compile Include="Model\Announcements\LessonPlan.cs" />
     <Compile Include="Model\Announcements\SisActivityCopyResult.cs" />
+    <Compile Include="Model\Announcements\SupplementalAnnouncement.cs" />
     <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\AttendanceMonth.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
@@ -176,6 +179,7 @@
     <Compile Include="Model\LPGalleryCategory.cs" />
     <Compile Include="Model\PersonSetting.cs" />
     <Compile Include="Model\StudentCustomAlertDetail.cs" />
+    <Compile Include="Model\SupplementalAnnouncementRecipient.cs" />
     <Compile Include="Model\SystemSetting.cs" />
     <Compile Include="Model\GradedItem.cs" />
     <Compile Include="Model\GradingComment.cs" />

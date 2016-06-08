@@ -1,9 +1,10 @@
 //TODO refactor
-mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges, user)
+mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges, user)
     -var classAnnouncement = announcement.getClassAnnouncementData()
     -var adminAnnouncement = announcement.getAdminAnnouncementData()
     -var announcementItem = classAnnouncement || adminAnnouncement
     -var state = announcement.getState().valueOf()
+    -var editable = !state.valueOf()
 
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementTypeId', classAnnouncement && classAnnouncement.getAnnouncementTypeId())#announcement-type-id
@@ -32,12 +33,27 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
             .add-recipients
                 .recipients-list
                     +RenderWith(announcement, chlk.templates.announcement.AdminAnnouncementRecipientsTpl)(
-                    userRole = userRole
-                    studyCenterEnabled = self.isStudyCenterEnabled()
+                        userRole = userRole
+                        studyCenterEnabled = self.isStudyCenterEnabled()
                     )
     .table
         .left-block(class=needStandardsBlock ? 'with-standards' : '')
             .left-block-container
+                if types
+                    -var typeId = self.getSelectedTypeId()
+                    .left-top-container
+                        +Select('typeid')(disabled = !editable)#type-select
+                            each item in types
+                                if item.getId().valueOf()
+                                    +Option(item.getId(), item.getName(), typeId== item.getId())(
+                                        data-typeid=item.getId(),
+                                        data-typename=item.getName()
+                                    )
+                        BUTTON(
+                            type = editable ? "submit" : "button",
+                            name="submitType",
+                            value="save"
+                        )#announcement-type-btn.validate-skip.x-hidden
                 +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
                 if needStandardsBlock
                     .add-standards-container
@@ -73,8 +89,9 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                 .calendar-mark ?
             if !isAdmin
                 .max-score-container
+                    -var maxScore = !classAnnouncement.isGradable() && classAnnouncement.getMaxScore() > 0 ? '0' : classAnnouncement.getMaxScore()
                     label(for="ann-max-score") Max Score
-                    input#ann-max-score(type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=classAnnouncement.isGradable() ? classAnnouncement.getMaxScore() : '0')
+                    input#ann-max-score(type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=maxScore)
                     .question-mark(data-tooltip=Msg.Max_Score_Tooltip_Message) ?
                 .advanced-options
                     A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options

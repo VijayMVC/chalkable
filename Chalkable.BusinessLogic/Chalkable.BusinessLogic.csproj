@@ -300,6 +300,7 @@
     <Compile Include="Services\School\Announcements\FeedItemsSortedByClassNameHandler.cs" />
     <Compile Include="Services\School\Announcements\FeedItemsSortedByDueDateHandler.cs" />
     <Compile Include="Services\School\Announcements\LessonPlanService.cs" />
+    <Compile Include="Services\School\Announcements\SupplementalAnnouncementService.cs" />
     <Compile Include="Services\School\AttachmentService.cs" />
     <Compile Include="Services\School\AttendanceMonthService.cs" />
     <Compile Include="Services\School\BellScheduleService.cs" />

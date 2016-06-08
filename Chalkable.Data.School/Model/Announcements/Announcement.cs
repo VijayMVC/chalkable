@@ -15,7 +15,8 @@ namespace Chalkable.Data.School.Model.Announcements
         None = 0,
         Class = 1,
         Admin = 2,
-        LessonPlan = 3
+        LessonPlan = 3,
+        Supplemental = 4
     }
 
     public class Announcement
@@ -49,15 +50,12 @@ namespace Chalkable.Data.School.Model.Announcements
 
     public class AnnouncementComplex : Announcement
     {
-        public override bool IsSubmitted => announcementData.IsSubmitted;
-        public override AnnouncementTypeEnum Type => announcementData.Type;
-        public override string AnnouncementTypeName => announcementData.AnnouncementTypeName;
-        public override int OwnereId => announcementData.OwnereId;
+        public override bool IsSubmitted => _announcementData.IsSubmitted;
+        public override AnnouncementTypeEnum Type => _announcementData.Type;
+        public override string AnnouncementTypeName => _announcementData.AnnouncementTypeName;
+        public override int OwnereId => _announcementData.OwnereId;
 
-        private Announcement announcementData;
-        private LessonPlan lessonPlanData;
-        private ClassAnnouncement classAnnouncementData;
-        private AdminAnnouncement adminAnnouncementData;
+        private Announcement _announcementData;
 
         private int? classId;
         private int? adminId;
@@ -68,23 +66,28 @@ namespace Chalkable.Data.School.Model.Announcements
         {
             set
             {
-                announcementData = value;
-                lessonPlanData = value as LessonPlan;
-                classAnnouncementData = value as ClassAnnouncement;
-                adminAnnouncementData = value as AdminAnnouncement;
-                if (lessonPlanData != null)
-                    classId = lessonPlanData.ClassRef;
-                if (classAnnouncementData != null)
-                    classId = classAnnouncementData.ClassRef;
-                if (adminAnnouncementData != null)
-                    adminId = adminAnnouncementData.AdminRef;
+                _announcementData = value;
+                LessonPlanData = value as LessonPlan;
+                ClassAnnouncementData = value as ClassAnnouncement;
+                AdminAnnouncementData = value as AdminAnnouncement;
+                SupplementalAnnouncementData = value as SupplementalAnnouncement;
+
+                if (LessonPlanData != null)
+                    classId = LessonPlanData.ClassRef;
+                if (ClassAnnouncementData != null)
+                    classId = ClassAnnouncementData.ClassRef;
+                if (SupplementalAnnouncementData != null)
+                    classId = SupplementalAnnouncementData.ClassRef;
+                if (AdminAnnouncementData != null)
+                    adminId = AdminAnnouncementData.AdminRef;
             }
-            get { return announcementData;}
+            get { return _announcementData;}
         }
 
-        public LessonPlan LessonPlanData => lessonPlanData;
-        public ClassAnnouncement ClassAnnouncementData => classAnnouncementData;
-        public AdminAnnouncement AdminAnnouncementData => adminAnnouncementData;
+        public LessonPlan LessonPlanData { get; private set; }
+        public ClassAnnouncement ClassAnnouncementData { get; private set; }
+        public AdminAnnouncement AdminAnnouncementData { get; private set; }
+        public SupplementalAnnouncement SupplementalAnnouncementData { get; private set; }
 
         public bool Complete { get; set; }
         public int QnACount { get; set; }

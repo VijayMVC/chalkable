@@ -1,4 +1,5 @@
-﻿using Chalkable.BusinessLogic.Services.Master;
+﻿using System;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.Common.Exceptions;
@@ -77,6 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IAttachementService AttachementService { get; } 
         ILEService LeService { get; }
         IStudentCustomAlertDetailService StudentCustomAlertDetailService { get; }
+        ISupplementalAnnouncementService SupplementalAnnouncementService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -149,6 +151,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAttachementService attachementService;
         private IStudentCustomAlertDetailService studentCustomAlertDetailService;
 
+        private ISupplementalAnnouncementService supplementalAnnouncementService;
+
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
         {
@@ -217,6 +221,7 @@ namespace Chalkable.BusinessLogic.Services.School
             attachementService = new AttachmentService(this);
             personSettingService = new PersonSettingService(this);
             studentCustomAlertDetailService = new StudentCustomAlertDetailService(this);
+            supplementalAnnouncementService = new SupplementalAnnouncementService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -301,9 +306,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 case AnnouncementTypeEnum.Class: return classAnnouncementService;
                 case AnnouncementTypeEnum.Admin: return adminAnnouncementService;
                 case AnnouncementTypeEnum.LessonPlan: return lessonPlanService;
-                default : throw new ChalkableException("Not supported announcement type"); //todo implement NotSupportedChalkableException
+                case AnnouncementTypeEnum.Supplemental: return supplementalAnnouncementService;
+                default : throw new NotSupportedException("Not supported announcement type");
             }
         }
 
+        public  ISupplementalAnnouncementService SupplementalAnnouncementService => supplementalAnnouncementService;
     }
 }

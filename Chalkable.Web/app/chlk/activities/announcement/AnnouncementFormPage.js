@@ -296,7 +296,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('change', '#expiresdate')],
+            [ria.mvc.DomEventBind('change', '#expiresdate:not(.supplemental-date)')],
             [[ria.dom.Dom, ria.dom.Event]],
             function expiresDateChange(node, event){
                 var block = this.dom.find('.title-block-container'),

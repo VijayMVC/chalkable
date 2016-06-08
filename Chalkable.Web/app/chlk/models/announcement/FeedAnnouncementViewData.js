@@ -72,6 +72,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
                 this.filter = SJX.fromValue(raw.filter, String);
+                this.recipientIds = SJX.fromValue(raw.recipientIds, String);
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
@@ -102,6 +103,7 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
 
+            String, 'recipientIds',
             Boolean, 'imported',
             Object, 'createdAnnouncements',
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
@@ -163,15 +165,11 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
             Boolean, function isExtraCreditEnabled(){
-                if(this.isAbleUseExtraCredit() && this.getClassAnnouncementData().getMaxScore() == 0)
-                    return true;
-                else
-                    return false;
+                return this.isAbleUseExtraCredit() && this.getClassAnnouncementData().getMaxScore() == 0;
             },
 
             function getTitleModel(){
-                var title = this.getClassAnnouncementData() ? this.getClassAnnouncementData().getTitle() :
-                    (this.getLessonPlanData() ? this.getLessonPlanData().getTitle() : this.getAdminAnnouncementData().getTitle());
+                var title = this.getAnnouncementItem().getTitle();
                 return new chlk.models.announcement.AnnouncementTitleViewData(title, this.getType());
             },
 

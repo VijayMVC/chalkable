@@ -24,6 +24,9 @@ declare
 declare
 	@tempAA TAdminAnnouncement
 
+declare 
+	@tempSA TSupplementalAnnouncement
+
 insert into @tempLP 
 	exec spGetLessonPlans 
 		@id, 
@@ -39,6 +42,6 @@ insert into @tempLP
 		@complete, 
 		@galleryCategoryId 
 
-exec spInternalSortAdminOrLp @tempLP, @tempAA, 0, 2, 2, @sort, @fromClassName, @toClassName, @start, @count, @includeFrom, @includeTo
+exec spInternalSortAdminOrLp @tempLP, @tempAA, @tempSA, 0, 2, 2, @sort, @fromClassName, @toClassName, @start, @count, @includeFrom, @includeTo
 
 

@@ -23,6 +23,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             throw new NotImplementedException();
         }
 
+        protected override IList<AnnouncementComplex> InternalGetSupplementalAnns(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId,
+            bool? complete, int start, int count, string @from, string to, bool includeFrom, bool includeTo,
+            bool? ownedOnly = null)
+        {
+            return locator.SupplementalAnnouncementService.GetSupplementalAnnouncementSortedByClassName(fromDate, toDate, @from, to, includeFrom, includeTo, classId, start, count, _sortDesc, ownedOnly);
+        }
+
         protected override AnnouncementSortOption SortOption
             => !_sortDesc ? AnnouncementSortOption.SectionNameAscending
                         : AnnouncementSortOption.SectionNameDescending;
@@ -31,7 +38,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             get
             {
-                return x => x.ClassAnnouncementData != null ? x.ClassAnnouncementData.ClassName : x.LessonPlanData?.ClassName;
+                return x =>
+                {
+                    if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.ClassName;
+                    if (x.LessonPlanData != null) return x.LessonPlanData.ClassName;
+                    return x.SupplementalAnnouncementData?.ClassName;
+                };
             }
         }
         protected override Func<ClassAnnouncement, string> FilterSelector { get { return x => x.ClassName; } }
