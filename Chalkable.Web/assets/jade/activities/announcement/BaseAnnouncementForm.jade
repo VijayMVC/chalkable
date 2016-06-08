@@ -81,7 +81,8 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
             if !state
                 input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
         .right-block
-            A.advanced-options-btn(href="javascript:;")
+            if !isAdmin
+                A.advanced-options-btn(href="javascript:;")
             .date-picker-container
                 label(for="expiresdate") Due Date
                 +DatePicker('expiresdate', announcementItem.getExpiresDate())(
