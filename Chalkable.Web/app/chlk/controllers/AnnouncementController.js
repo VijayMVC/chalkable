@@ -683,6 +683,10 @@ NAMESPACE('chlk.controllers', function (){
                         ann.getStandards(),
                         app.getEncodedSecretKey())
                     //.attach(this.validateResponse_())
+                    .catchError(function(e){
+                        this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), null, 'app-contents-fail');
+                        throw e;
+                    }, this)
                     .then(function(paginatedContents){
 
                         if(paginatedContents.getItems() && paginatedContents.getItems().length > 0){
