@@ -68,9 +68,10 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     .add-standards
                                         .standards-list
                                             +RenderWith(self.prepareStandardsListData(), chlk.templates.standard.AnnouncementStandardsTpl)(
-                                            userRole = userRole
-                                            studyCenterEnabled = self.isStudyCenterEnabled()
-                                            ableToRemoveStandard=announcement.isAbleToRemoveStandard())
+                                                userRole = userRole
+                                                studyCenterEnabled = self.isStudyCenterEnabled()
+                                                ableToRemoveStandard=announcement.isAbleToRemoveStandard()
+                                            )
 
                             .drawer-icon
                         .drop-down-container.popup-bubble.top
@@ -107,7 +108,10 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                         .advanced-options
                             .check-box-container
                                 label(for="ann-hidefromstudents")=Msg.Hide_from_Students
-                                +SlideCheckbox('hidefromstudents', lessonPlan.isHiddenFromStudents(), false)(data-tooltip=Msg.Hide_From_Student_Tooltip_Message)
+                                +SlideCheckbox('hidefromstudents', lessonPlan.isHiddenFromStudents(), false)(
+                                    data-tooltip-timeout=500,
+                                    data-tooltip=Msg.Hide_From_Student_Tooltip_Message
+                                )
                             if self.isStudyCenterEnabled()
                                 .check-box-container
                                     label(for="add-to-gallery-check") Add to Lesson Plan Gallery
