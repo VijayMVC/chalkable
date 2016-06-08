@@ -1,0 +1,167 @@
+//TODO refactor
+mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges, user)
+    -var classAnnouncement = announcement.getClassAnnouncementData()
+    -var adminAnnouncement = announcement.getAdminAnnouncementData()
+    -var announcementItem = classAnnouncement || adminAnnouncement
+    -var state = announcement.getState().valueOf()
+    -var editable = !state.valueOf()
+
+    +Hidden('id', announcement.getId().valueOf())
+    +Hidden('announcementTypeId', classAnnouncement && classAnnouncement.getAnnouncementTypeId())#announcement-type-id
+    +Hidden('personid', user.getId().valueOf())
+    //+Hidden('markingperiodid', announcement.getCreated())
+    //+Hidden('state', announcement.getState())
+    +Hidden('isedit', !!state)(data-isedit = !!state).is-edit
+    +Hidden('classId', classId)
+    +Hidden('type', announcement.getType())
+    
+    +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
+    +Hidden('groupIds', announcement.getRecipients() && announcement.getRecipients().map(function(item){return item.getGroupId()}).join(',')).group-ids
+
+
+    -var disableDeleteBtn = !!(announcement.getGradingStudentsCount() && announcement.getGradingStudentsCount() > 0)
+    -var standards = announcement.getStandards() || []
+    -var isAdmin = userRole.isAdmin()
+
+    -var needStandardsBlock = !isAdmin && (standards.length > 0 || announcement.isCanAddStandard())
+    if isAdmin
+        -var recipients = announcement.getRecipients() || []
+        .add-recipients-container
+            .add-recipients
+                .recipients-list
+                    +RenderWith(announcement, chlk.templates.announcement.AdminAnnouncementRecipientsTpl)(
+                        userRole = userRole
+                        studyCenterEnabled = self.isStudyCenterEnabled()
+                    )
+    .table.top-table
+        .left-block
+            .left-block-container
+                div(class=announcementItem.getExpiresDate() || isAdmin ? 'with-date' : '').title-block-container
+                    +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+                    +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
+                if types
+                    -var typeId = self.getSelectedTypeId()
+                    .left-top-container
+                        .recipients-container
+                            label(for="type-select") Recipients:
+                            .types-select-cnt
+                                +Select('typeid')(disabled = !editable)#type-select
+                                    each item in types
+                                        if item.getId().valueOf()
+                                            +Option(item.getId(), item.getName(), typeId== item.getId())(
+                                            data-typeid=item.getId(),
+                                            data-typename=item.getName()
+                                            )
+                            BUTTON(
+                            type = editable ? "submit" : "button",
+                            name="submitType",
+                            value="save"
+                            )#announcement-type-btn.validate-skip.x-hidden
+        .right-block
+            .h-1
+    .table
+        .left-block(class=needStandardsBlock ? 'with-standards' : '')
+            .left-block-container
+                +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
+                if needStandardsBlock
+                    .add-standards-container
+                        .add-standards
+                            .standards-list
+                                +RenderWith(self.prepareStandardsListData(), chlk.templates.standard.AnnouncementStandardsTpl)(
+                                    userRole = userRole
+                                    studyCenterEnabled = self.isStudyCenterEnabled()
+                                    ableToRemoveStandard=announcement.isAbleToRemoveStandard())
+
+                              
+                if !isAdmin
+                    .drawer-icon
+            if !isAdmin
+                .drop-down-container.popup-bubble.top
+                input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+            if !state
+                input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+        .right-block
+            A.advanced-options-btn(href="javascript:;")
+            .date-picker-container
+                label(for="expiresdate") Due Date
+                +DatePicker('expiresdate', announcementItem.getExpiresDate())(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true,
+                        //inCurrentMp: true
+                        dateRanges: classScheduleDateRanges
+                    },
+                    data-value=announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().format('mm/dd/yy') : ''
+                    placeholder=Msg.Due_date,
+                    class='validate[required]'
+                )#expiresdate
+                .calendar-mark ?
+            if !isAdmin
+                .max-score-container
+                    -var maxScore = !classAnnouncement.isGradable() && classAnnouncement.getMaxScore() > 0 ? '0' : classAnnouncement.getMaxScore()
+                    label(for="ann-max-score") Max Score
+                    input#ann-max-score(data-tooltip=Msg.Max_Score_Tooltip_Message, type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=maxScore)
+                .advanced-options
+                    .separator.x-hidden
+                    .advanced-options-container.x-hidden.popup-bubble.top
+                        .weight-multiplier.new-input-container
+                            label(for="ann-weightmultiplier")= Msg.Weight_Multiplier
+                            input#ann-weightmultiplier(data-tooltip=Msg.Weight_Multiplier_Tooltip_Message, type="text", name='weightmultiplier', class="validate[required,custom[double],min[0]]", placeholder="1.00", value=classAnnouncement.getWeightMultiplier() || 1.00)
+                        .weight-addition.new-input-container
+                            label(for="ann-weightaddition")=Msg.Weight_Addition
+                            input#ann-weightaddition(data-tooltip=Msg.Weight_Addition_Tooltip_Message, type="text", name='weightaddition', class="validate[required,custom[double],min[0]]", placeholder="0.00", value=classAnnouncement.getWeightAddition() || 0.00)
+                        .check-box-container
+                            label(for="ann-hidefromstudents")=Msg.Hide_from_Students
+                            +SlideCheckbox('hidefromstudents', classAnnouncement.isHiddenFromStudents(), false)(data-tooltip=Msg.Hide_From_Student_Tooltip_Message)
+                        .check-box-container
+                            label(for="ann-candropstudentscore")=Msg.Can_drop_student_score
+                            +SlideCheckbox('candropstudentscore', classAnnouncement.isAbleDropStudentScore(), false)(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message)
+                        .check-box-container
+                            label(for="ann-gradable")=Msg.Extra_Credit
+                            +SlideCheckbox('gradable', classAnnouncement.isGradable() && announcement.isExtraCreditEnabled(), false, !announcement.isExtraCreditEnabled())(data-isableuseextracredit=announcement.isAbleUseExtraCredit())(data-tooltip=Msg.Extra_Credit_Tooltip_Message).extra-credit
+
+
+
+    .apps-attachments-bock.attachments-and-applications
+        ann = announcement
+        -ann.setNeedButtons(true)
+        -ann.setNeedDeleteButton(true)
+            +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
+                userRole = userRole,
+                studyCenterEnabled = self.isStudyCenterEnabled()
+            )
+
+    .attributes-block
+        -var attributesList = announcement.getAttributesListViewData();
+        -attributesList.setReadOnly(false)
+        +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
+            userRole = userRole
+        )
+    .attach-btn-area.attributes-attach-area(class = announcement.getAnnouncementAttributes().length ? '' : 'x-hidden')
+        +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Add Attribute
+            span.plus +
+
+    if !isAdmin
+        .apps-with-recommended-contents
+
+        .suggested-apps
+            if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
+                +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
+    .bottom-block
+        +Button()(
+            type="submit",
+            name="submitType",
+            value=state ? "submitOnEdit" : "submit"
+        ).special-button.blue-button.submit-btn.submit-announcement.big-button
+            =(state ? Msg.Save : Msg.Submit)
+        if state
+            +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName(), announcement.getType())(
+                disabled=disableDeleteBtn
+            )
+                +Button()(
+                    type="button",
+                    data-tooltip = disableDeleteBtn ? Msg.Delete_announcement_btn_tooltip : '',
+                    class=disableDeleteBtn ? 'disabled' : ''
+                ).special-button.red-button.big-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
+        else
+            +ActionLink('announcement', 'discard', announcement.getType()).grey-link.not-blue.add-loader-btn=Msg.Discard
