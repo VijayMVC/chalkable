@@ -43,7 +43,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                     -var typeId = self.getSelectedTypeId()
                     .left-top-container
                         .recipients-container
-                            label(for="type-select") Recipients:
+                            label(for="type-select") Category:
                             .types-select-cnt
                                 +Select('typeid')(disabled = !editable)#type-select
                                     each item in types
