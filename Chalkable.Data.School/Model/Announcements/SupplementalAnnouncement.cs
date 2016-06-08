@@ -26,12 +26,20 @@ namespace Chalkable.Data.School.Model.Announcements
         public string PrimaryTeacherGender { get; set; }
         [NotDbFieldAttr]
         public string PrimaryTeacherName { get; set; }
+
         [NotDbFieldAttr]
         public string ClassName { get; set; }
         [NotDbFieldAttr]
         public string FullClassName { get; set; }
+        
         [NotDbFieldAttr]
-        public override string AnnouncementTypeName => "Supplemental Announcement";
+        public string ClassAnnouncementTypeName { get; set; }
+        [NotDbFieldAttr]
+        public int? ChalkableAnnouncementType { get; set; }
+
+        [NotDbFieldAttr]
+        public override string AnnouncementTypeName => ClassAnnouncementTypeName;
+
         [NotDbFieldAttr]
         public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.Supplemental;
         [NotDbFieldAttr]
