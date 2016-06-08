@@ -17,7 +17,7 @@ namespace Chalkable.Data.School.DataAccess
         public override AnnouncementAssignedAttribute GetById(int key)
         {
             var dbQuery = new DbQuery();
-            var idField = string.Format("{0}_{1}", typeof (AnnouncementAssignedAttribute).Name, AnnouncementAssignedAttribute.ID_FIELD);
+            var idField = $"{typeof (AnnouncementAssignedAttribute).Name}_{AnnouncementAssignedAttribute.ID_FIELD}";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", AnnouncementAssignedAttribute.VW_ANNOUNCEMENT_ASSIGNED_ATTRIBUTE);
             var conds = new AndQueryCondition {{idField, key}};
             conds.BuildSqlWhere(dbQuery, AnnouncementAssignedAttribute.VW_ANNOUNCEMENT_ASSIGNED_ATTRIBUTE);
