@@ -2564,7 +2564,8 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function makeVisibleAction(id, type){
             this[type == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT ? 'classAnnouncementService' :
-                    (type == chlk.models.announcement.AnnouncementTypeEnum.ADMIN ? 'adminAnnouncementService' : 'lessonPlanService')]
+                    (type == chlk.models.announcement.AnnouncementTypeEnum.ADMIN ? 'adminAnnouncementService' :
+                    (type == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN ? 'lessonPlanService' : 'supplementalAnnouncementService'))]
                 .makeVisible(id)
                 .attach(this.validateResponse_());
             return null;
