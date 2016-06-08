@@ -29,7 +29,8 @@ namespace Chalkable.Web.Models
             return new ClassPanoramaViewData(cClass)
             {
                 FilterSettings = filterSetting != null ? ClassProfilePanoramaSettingsViewData.Create(filterSetting) : null,
-                StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList()
+                StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList(),
+                ClassDistributionSection = ClassDistributionSectionViewData.Create(panorama.Grades, panorama.Absences, panorama.Infractions)
             };
         }
 
@@ -52,8 +53,10 @@ namespace Chalkable.Web.Models
 
         private static ClassDistributionStatsViewData CreateGradeAvgViewData(IList<StudentAverageGradeInfo> models)
         {
-            var res = new ClassDistributionStatsViewData();
-            res.ClassAvg = models.Average(x => x.AverageGrade);
+            var res = new ClassDistributionStatsViewData
+            {
+                ClassAvg = models.Average(x => x.AverageGrade)
+            };
 
             return res;
         }
@@ -115,6 +118,21 @@ namespace Chalkable.Web.Models
             }
 
             res.ClassAvg = res.DistributionStats.Average(x => x.Count);
+
+            return res;
+        }
+
+        public static ClassDistributionSectionViewData Create(IList<StudentAverageGradeInfo> avgInfos,
+            IList<ShortStudentAbsenceInfo> absenceInfos,
+            IList<ShortStudentInfractionsInfo> infractionInfos)
+        {
+            var res = new ClassDistributionSectionViewData();
+            if (avgInfos != null)
+                res.AbsencesDistribution = CreateGradeAvgViewData(avgInfos);
+            if (absenceInfos != null)
+                res.AbsencesDistribution = CreateAbsencesViewData(absenceInfos);
+            if (infractionInfos != null)
+                res.DisciplineDistribution = CreateInfractionViewData(infractionInfos);
 
             return res;
         }
