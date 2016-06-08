@@ -103,7 +103,10 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                         .advanced-options
                             .check-box-container
                                 label(for="ann-hidefromstudents")=Msg.Hide_from_Students
-                                +SlideCheckbox('hidefromstudents', announcementItem.isHiddenFromStudents(), false)
+                                +SlideCheckbox('hidefromstudents', announcementItem.isHiddenFromStudents(), false)(
+                                    data-tooltip-timeout=500,
+                                    data-tooltip=Msg.Hide_From_Student_Tooltip_Message
+                                )
 
                 .apps-attachments-bock.attachments-and-applications
                     ann = announcement
