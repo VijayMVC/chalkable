@@ -38,29 +38,37 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                 +Hidden('type', announcement.getType())
 
                 -var standards = announcement.getStandards() || []
-
-                +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
-                .title-block-container
-                    +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
                 -var needStandardsBlock = (standards.length > 0 || announcement.isCanAddStandard())
+                .table.top-table
+                    .left-block
+                        .left-block-container
+                            .title-block-container
+                                +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+                                +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
+                            .left-top-container
+                                .recipients-container
+                                    label(for="students") Recipients:
+                                    .types-select-cnt
+                                        -var recipientIds = announcementItem.getRecipients() ? announcementItem.getRecipients().map(function(item){return item.getId()}) : []
+                                        +Select('students')(multiple, data-placeholder="Assign To...").recipients-select
+                                            each student in self.getStudents() || []
+                                                +Option(student.getId().valueOf(), student.getFullName(), recipientIds.indexOf(student.getId()) > -1)
+                                .categories-container
+                                    label(for="type-select") Category:
+                                    .types-select-cnt
+                                        -var typeId = self.getSelectedTypeId()
+                                        +Select('typeid')(disabled = !editable)#type-select
+                                            each item in types
+                                                if item.getId().valueOf()
+                                                    +Option(item.getId(), item.getName(), typeId== item.getId())(
+                                                    data-typeid=item.getId(),
+                                                    data-typename=item.getName()
+                                                    )
+                    .right-block
+                        .h-1
                 .table
                     .left-block(class=needStandardsBlock ? 'with-standards' : '')
                         .left-block-container
-                            .left-top-container
-                                -var typeId = self.getSelectedTypeId()
-                                .left-top-container
-                                    +Select('typeid')(disabled = !editable)#type-select
-                                        each item in types
-                                            if item.getId().valueOf()
-                                                +Option(item.getId(), item.getName(), typeId== item.getId())(
-                                                    data-typeid=item.getId(),
-                                                    data-typename=item.getName()
-                                                )
-
-                                -var recipientIds = announcementItem.getRecipients() ? announcementItem.getRecipients().map(function(item){return item.getId()}) : []
-                                +Select('students')(multiple).recipients-select
-                                    each student in self.getStudents() || []
-                                        +Option(student.getId().valueOf(), student.getFullName(), recipientIds.indexOf(student.getId()) > -1)
                             +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
@@ -93,13 +101,9 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                             )#expiresdate.supplemental-date
                             .calendar-mark ?
                         .advanced-options
-                            A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options
-                            .separator.x-hidden
-                            .advanced-options-container.x-hidden.popup-bubble.top
-                                .check-box-container
-                                    label(for="ann-hidefromstudents")=Msg.Hide_from_Students
-                                    +SlideCheckbox('hidefromstudents', announcementItem.isHiddenFromStudents(), false)
-                                    .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
+                            .check-box-container
+                                label(for="ann-hidefromstudents")=Msg.Hide_from_Students
+                                +SlideCheckbox('hidefromstudents', announcementItem.isHiddenFromStudents(), false)
 
                 .apps-attachments-bock.attachments-and-applications
                     ann = announcement

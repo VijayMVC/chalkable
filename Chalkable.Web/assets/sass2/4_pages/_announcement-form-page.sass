@@ -91,6 +91,9 @@
       margin: 0
 
 .announcement-form
+  .h-1
+    min-height: 1px
+    min-width: 225px
 
   .title-block-container
     position: relative
@@ -175,10 +178,18 @@
     .input-container
       position: relative
       display: inline-block
+      width: 100%
+
+      INPUT
+        width: 100%
+        box-sizing: border-box
+
+    .save-title-btn
+      position: absolute
 
     .title-text, INPUT[type=text]
-      font-size: 16px
-      font-weight: 600
+      //font-size: 16px
+      //font-weight: 600
 
     .title-text
       line-height: 31px
@@ -187,6 +198,9 @@
     BUTTON
       vertical-align: top
       margin-left: 3px
+
+  .top-table
+    table-layout: fixed
 
   .table, .left-block
     width: 100%
@@ -312,11 +326,9 @@
       right: 24px
 
   .left-top-container
-    .add-category
-      margin-bottom: 17px
+    margin-bottom: 17px
 
-    >DIV
-      display: inline-block
+    >DIV.i-b
       margin-right: 15px
 
   .right-block, .left-top-container
@@ -328,8 +340,12 @@
     SELECT
       width: 225px
 
-    .chosen-container
-      width: 217px !important
+    .recipients-select+DIV.chosen-container
+      width: 100% !important
+
+    .i-b
+      .chosen-container
+        width: 217px !important
 
     LABEL[for]
       font-size: 13px
@@ -338,10 +354,11 @@
       color: #56554f
       +text-shadow(transparentize(#fff, .5) 0 1px 1px)
       margin-bottom: 6px
-      display: block
+      display: inline-block
+      text-align: left
 
   .right-block
-    width: 250px
+    width: 243px
 
     > *
       margin-left: 18px
@@ -364,18 +381,38 @@
     .calendar-mark
       +icons-24-sprite(calendar)
 
+  .advanced-options-btn
+    position: absolute
+    right: 0
+    +icons-32-sprite(settings)
+    width: 32px
+    height: 32px
+    margin-top: -9px
+    z-index: 1
+
+  .advanced-options
+    .check-box-container
+      margin: 10px 0
+
+      &>*
+        vertical-align: middle
+
+      &>LABEL[FOR]
+        min-width: 165px
 
   .advanced-options-container
     position: absolute
     padding: 15px
     +box-shadow(transparentize(#000, .8) 0 2px 16px)
     margin-left: -16px
-    margin-top: 8px
+    margin-top: -4px
     z-index: 11
-    width: 217px
+    width: 227px
+    text-align: left
 
     > *
       position: relative
+      white-space: normal
 
     &.top::before
       +rotate(-45deg)
