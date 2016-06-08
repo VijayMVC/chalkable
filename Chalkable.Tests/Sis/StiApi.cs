@@ -398,5 +398,36 @@ namespace Chalkable.Tests.Sis
             Debug.WriteLine(DateTime.Now.Month);
         }
 
+        [Test]
+        public void PanoramaApiTest()
+        {
+            var connector = ConnectorLocator.Create("MAGOLDEN-3856695863", "qqqq1111", "http://sandbox.sti-k12.com/chalkable/api/");
+            var callResult = connector.PanoramaConnector.GetSectionPanorama(13861, new List<int> {179}, null, null);
+
+            Debug.WriteLine("Absences [StudentId - NumberOfAbsences - NumberOfDaysEnrolled]:");
+            foreach (var studentAbsence in callResult.Absences)
+            {
+                Debug.WriteLine($"{studentAbsence.StudentId} - {studentAbsence.NumberOfAbsences} - {studentAbsence.NumberOfDaysEnrolled}");
+            }
+
+            Debug.WriteLine("Grades [StudentId - AvarageGrade]:");
+            foreach (var grade in callResult.Grades)
+            {
+                Debug.WriteLine($"{grade.StudentId} - {grade.AverageGrade}");
+            }
+            
+            Debug.WriteLine("Infractions [StudentId - NumberOfInfractions]:");
+            foreach (var inf in callResult.Infractions)
+            {
+                Debug.WriteLine($"{inf.StudentId} - {inf.NumberOfInfractions}");
+            }
+
+            Debug.WriteLine("StandardizedTests [StudentId - Date - Score - StandardizedTestComponentId - StandardizedTestScoreTypeId]:");
+            if(callResult.StandardizedTests != null)
+                foreach (var stTests in callResult.StandardizedTests)
+                {
+                    Debug.WriteLine($"{stTests.StudentId} - {stTests.Date} - {stTests.Score} - {stTests.StandardizedTestComponentId} - {stTests.StandardizedTestId} - {stTests.StandardizedTestScoreTypeId}");
+                }
+        }
     }
 }

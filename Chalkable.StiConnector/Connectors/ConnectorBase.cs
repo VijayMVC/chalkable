@@ -26,7 +26,11 @@ namespace Chalkable.StiConnector.Connectors
             request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
             //request.KeepAlive = false;
             request.ProtocolVersion = HttpVersion.Version10;
+#if DEBUG
+            request.Timeout = 30000;
+#else
             request.Timeout = Settings.WebClientTimeout;
+#endif
             return request;
         }
 
@@ -57,7 +61,7 @@ namespace Chalkable.StiConnector.Connectors
         protected void InitHeaders(WebHeaderCollection headers)
         {
             headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
-            headers["ApplicationKey"] = string.Format("chalkable {0}", Settings.StiApplicationKey);
+            headers["ApplicationKey"] = $"chalkable {Settings.StiApplicationKey}";
             headers["Accept-Encoding"] = "gzip, deflate";
         }
 
@@ -151,7 +155,7 @@ namespace Chalkable.StiConnector.Connectors
                 var startTime = DateTime.Now;
                 var res = client.DownloadData(url);
                 var time = DateTime.Now - startTime;
-                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                var timeString = $"{time.Minutes}:{time.Seconds}.{time.Milliseconds}";
                 Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
 
                 var type = client.ResponseHeaders[HttpResponseHeader.ContentType];

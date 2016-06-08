@@ -162,6 +162,7 @@
     <Compile Include="Connectors\Model\Reports\StudentComprehensiveProgressParams.cs" />
     <Compile Include="Connectors\Model\SchoolSummary.cs" />
     <Compile Include="Connectors\Model\Section.cs" />
+    <Compile Include="Connectors\Model\SectionPanorama.cs" />
     <Compile Include="Connectors\Model\SectionSummary.cs" />
     <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Connectors\Model\TeacherSummary.cs" />
     <Compile Include="Connectors\Model\User.cs" />
     <Compile Include="Connectors\Model\Reports\WorksheetReportParams.cs" />
+    <Compile Include="Connectors\PanoramaConnector.cs" />
     <Compile Include="Connectors\ReportConnector.cs" />
     <Compile Include="Connectors\SeatingChartConnector.cs" />
     <Compile Include="Connectors\SectionDashboardConnector.cs" />
