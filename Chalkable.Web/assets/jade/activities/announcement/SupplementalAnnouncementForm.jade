@@ -7,9 +7,6 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                 +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-buttonLesson.no-save Lesson Plan
             +ActionLink('announcement', 'supplementalAnnouncement', classId).item.announcement-type-button.pressed Supplemental
 
-        if classId && classId.valueOf()
-            +ActionLink('announcement', 'showImportDialog', classId).import-icon
-
 -var topData = self.getTopData()
 -var announcement = self.getAnnouncement()
 -var announcementItem = announcement && announcement.getSupplementalAnnouncementData()
