@@ -29,7 +29,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int StudentsCountWithAttachments { get; set; }
         public int StudentsCountWithoutAttachments { get; set; }
         public int GradingStudentsCount { get; set; }
-        
+        public string AttachmentNames { get; set; }
+
         //Application
         public int ApplicationsCount { get; set; }
         public string ApplicationName { get; set; }
@@ -82,6 +83,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         protected AnnouncementViewData(AnnouncementComplex announcement):this(announcement.AnnouncementData)
         {
             AttachmentsCount = announcement.AttachmentsCount;
+            AttachmentNames = announcement.AttachmentNames;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             Complete = announcement.Complete;
 
