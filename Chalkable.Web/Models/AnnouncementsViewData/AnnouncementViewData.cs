@@ -29,7 +29,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int StudentsCountWithAttachments { get; set; }
         public int StudentsCountWithoutAttachments { get; set; }
         public int GradingStudentsCount { get; set; }
-        public string AttachmentNames { get; set; }
+        public IList<string> AttachmentNames { get; set; }
 
         //Application
         public int ApplicationsCount { get; set; }

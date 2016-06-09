@@ -139,7 +139,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
             foreach (var ann in res)
             {
-                ann.AttachmentNames = annAtts.Where(x => x.AnnouncementRef == ann.Id).Select(x => x.Attachment.Name).JoinString();
+                ann.AttachmentNames = annAtts.Where(x => x.AnnouncementRef == ann.Id).Select(x => x.Attachment.Name).ToList();
             }
 
             reader.NextResult();
@@ -186,12 +186,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
             reader.NextResult();
             var annAtts = reader.ReadList<AnnouncementAttachment>(true);
-
             foreach (var ann in res.Announcements)
-            {
-                ann.AttachmentNames = annAtts.Where(x => x.AnnouncementRef == ann.Id).Select(x => x.Attachment.Name).JoinString();
-            }
-            
+                ann.AttachmentNames = annAtts.Where(x => x.AnnouncementRef == ann.Id).Select(x => x.Attachment.Name).ToList();
             return res;
         }
 
