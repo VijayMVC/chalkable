@@ -12,10 +12,12 @@
         each line in self.getItemsGroupped()
             .row
                 each item in line
-                    announcements = item.getAnnouncements()
-                    itemsArr = item.getItemsArray()
-                    adminAnnouncements = item.getAdminAnnouncements()
-                    disablePopUp = !self.isMainCalendar() || self.getUserRole().isStudent() && !announcements.length && !adminAnnouncements.length
+                    -var announcements = item.getAnnouncements()
+                    -var supplementalAnnouncements = item.getSupplementalAnnouncements()
+                    -announcements = announcements.concat(supplementalAnnouncements);
+                    -var itemsArr = item.getItemsArray()
+                    -var adminAnnouncements = item.getAdminAnnouncements()
+                    -var disablePopUp = !self.isMainCalendar() || self.getUserRole().isStudent() && !announcements.length && !adminAnnouncements.length
                     SPAN(
                         class = [item.isSunday() ? 'sunday' : '', item.getClassName(), item.getTodayClassName(), disablePopUp ? 'disabled' : '', announcements.length ? 'with-anns ' : '', adminAnnouncements.length ? 'with-admin-anns' : '']
                     )
