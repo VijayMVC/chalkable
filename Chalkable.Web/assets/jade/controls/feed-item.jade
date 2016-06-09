@@ -40,7 +40,7 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
                         -var maxScore = classAnnouncement.getMaxScore()
                         .small-icon.grades-icon(data-tooltip=maxScore + ' possible point' + (maxScore == 1 ? '' : 's') )
                     if item.getOwnerAttachmentsCount() > 0
-                        .small-icon.attachment-icon
+                        .small-icon.attachment-icon(data-tooltip=item.getAttachmentNames())
                     if supplementalAnnouncement
                         .small-icon.supplemental-icon(data-tooltip=supplementalAnnouncement.getRecipientsTooltip())
 

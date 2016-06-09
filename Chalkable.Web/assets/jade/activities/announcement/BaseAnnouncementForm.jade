@@ -23,9 +23,6 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
     -var standards = announcement.getStandards() || []
     -var isAdmin = userRole.isAdmin()
 
-    +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
-    div(class=announcementItem.getExpiresDate() || isAdmin ? 'with-date' : '').title-block-container
-        +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
     -var needStandardsBlock = !isAdmin && (standards.length > 0 || announcement.isCanAddStandard())
     if isAdmin
         -var recipients = announcement.getRecipients() || []
@@ -36,24 +33,35 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                         userRole = userRole
                         studyCenterEnabled = self.isStudyCenterEnabled()
                     )
-    .table
-        .left-block(class=needStandardsBlock ? 'with-standards' : '')
+    .table.top-table
+        .left-block
             .left-block-container
+                div(class=announcementItem.getExpiresDate() || isAdmin ? 'with-date' : '').title-block-container
+                    +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+                    +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
                 if types
                     -var typeId = self.getSelectedTypeId()
                     .left-top-container
-                        +Select('typeid')(disabled = !editable)#type-select
-                            each item in types
-                                if item.getId().valueOf()
-                                    +Option(item.getId(), item.getName(), typeId== item.getId())(
-                                        data-typeid=item.getId(),
-                                        data-typename=item.getName()
-                                    )
-                        BUTTON(
+                        .recipients-container
+                            label(for="type-select") Category:
+                            .types-select-cnt
+                                +Select('typeid')(disabled = !editable)#type-select
+                                    each item in types
+                                        if item.getId().valueOf()
+                                            +Option(item.getId(), item.getName(), typeId== item.getId())(
+                                            data-typeid=item.getId(),
+                                            data-typename=item.getName()
+                                            )
+                            BUTTON(
                             type = editable ? "submit" : "button",
                             name="submitType",
                             value="save"
-                        )#announcement-type-btn.validate-skip.x-hidden
+                            )#announcement-type-btn.validate-skip.x-hidden
+        .right-block
+            .h-1
+    .table
+        .left-block(class=needStandardsBlock ? 'with-standards' : '')
+            .left-block-container
                 +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
                 if needStandardsBlock
                     .add-standards-container
@@ -73,6 +81,8 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
             if !state
                 input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
         .right-block
+            if !isAdmin
+                A.advanced-options-btn(href="javascript:;")
             .date-picker-container
                 label(for="expiresdate") Due Date
                 +DatePicker('expiresdate', announcementItem.getExpiresDate())(
@@ -91,32 +101,57 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                 .max-score-container
                     -var maxScore = !classAnnouncement.isGradable() && classAnnouncement.getMaxScore() > 0 ? '0' : classAnnouncement.getMaxScore()
                     label(for="ann-max-score") Max Score
-                    input#ann-max-score(type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=maxScore)
-                    .question-mark(data-tooltip=Msg.Max_Score_Tooltip_Message) ?
+                    input#ann-max-score(
+                        data-tooltip=Msg.Max_Score_Tooltip_Message,
+                        data-tooltip-timeout=500,
+                        type="text", name="maxscore",
+                        placeholder=Msg.Max_score + ' 100',
+                        class="validate[custom[number],min[0]]",
+                        value=maxScore
+                    )
                 .advanced-options
-                    A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options
                     .separator.x-hidden
                     .advanced-options-container.x-hidden.popup-bubble.top
                         .weight-multiplier.new-input-container
                             label(for="ann-weightmultiplier")= Msg.Weight_Multiplier
-                            input#ann-weightmultiplier(type="text", name='weightmultiplier', class="validate[required,custom[double],min[0]]", placeholder="1.00", value=classAnnouncement.getWeightMultiplier() || 1.00)
-                            .question-mark(data-tooltip=Msg.Weight_Multiplier_Tooltip_Message) ?
+                            input#ann-weightmultiplier(
+                                data-tooltip=Msg.Weight_Multiplier_Tooltip_Message,
+                                data-tooltip-timeout=500,
+                                type="text",
+                                name='weightmultiplier',
+                                class="validate[required,custom[double],min[0]]",
+                                placeholder="1.00",
+                                value=classAnnouncement.getWeightMultiplier() || 1.00
+                            )
                         .weight-addition.new-input-container
                             label(for="ann-weightaddition")=Msg.Weight_Addition
-                            input#ann-weightaddition(type="text", name='weightaddition', class="validate[required,custom[double],min[0]]", placeholder="0.00", value=classAnnouncement.getWeightAddition() || 0.00)
-                            .question-mark(data-tooltip=Msg.Weight_Addition_Tooltip_Message) ?
+                            input#ann-weightaddition(
+                                data-tooltip=Msg.Weight_Addition_Tooltip_Message,
+                                data-tooltip-timeout=500,
+                                type="text", name='weightaddition',
+                                class="validate[required,custom[double],min[0]]",
+                                placeholder="0.00",
+                                value=classAnnouncement.getWeightAddition() || 0.00
+                            )
                         .check-box-container
                             label(for="ann-hidefromstudents")=Msg.Hide_from_Students
-                            +SlideCheckbox('hidefromstudents', classAnnouncement.isHiddenFromStudents(), false)
-                            .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
+                            +SlideCheckbox('hidefromstudents', classAnnouncement.isHiddenFromStudents(), false)(
+                                data-tooltip-timeout=500,
+                                data-tooltip=Msg.Hide_From_Student_Tooltip_Message
+                            )
                         .check-box-container
                             label(for="ann-candropstudentscore")=Msg.Can_drop_student_score
-                            +SlideCheckbox('candropstudentscore', classAnnouncement.isAbleDropStudentScore(), false)
-                            .question-mark(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message) ?
+                            +SlideCheckbox('candropstudentscore', classAnnouncement.isAbleDropStudentScore(), false)(
+                                data-tooltip-timeout=500,
+                                data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message
+                            )
                         .check-box-container
                             label(for="ann-gradable")=Msg.Extra_Credit
-                            +SlideCheckbox('gradable', classAnnouncement.isGradable() && announcement.isExtraCreditEnabled(), false, !announcement.isExtraCreditEnabled())(data-isableuseextracredit=announcement.isAbleUseExtraCredit()).extra-credit
-                            .question-mark(data-tooltip=Msg.Extra_Credit_Tooltip_Message) ?
+                            +SlideCheckbox('gradable', classAnnouncement.isGradable() && announcement.isExtraCreditEnabled(), false, !announcement.isExtraCreditEnabled())(
+                                data-isableuseextracredit=announcement.isAbleUseExtraCredit(),
+                                data-tooltip-timeout=500,
+                                data-tooltip=Msg.Extra_Credit_Tooltip_Message
+                            ).extra-credit
 
 
 
