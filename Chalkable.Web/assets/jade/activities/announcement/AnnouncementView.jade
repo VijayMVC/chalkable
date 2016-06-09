@@ -204,7 +204,7 @@ mixin Glue_()
                                     standards = self.getStandards()
                                 )
 
-        if supplementalAnnouncement
+        if supplementalAnnouncement && !self.getUserRole().isStudent()
             +CloseOpen('Students')
                 .people-list-container
                     -var recipients = supplementalAnnouncement.getRecipients()
