@@ -252,16 +252,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (anns == null)
                 return null;
 
-            var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(announcementIds));
-           
-            foreach (var announcementDetailse in anns)
-            {
-                announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
-                    .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
-                    .Select(x => x.Recipient).ToList();
-            }
-
-            return anns;
+            return PrepareRecipientsData(anns);
         }
 
         public void SetVisibleForStudent(int supplementalAnnouncementPlanId, bool visible)
@@ -367,8 +358,20 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 ann.SupplementalAnnouncementData.ClassAnnouncementTypeName = type?.Name;
                 ann.SupplementalAnnouncementData.ChalkableAnnouncementType = type?.ChalkableAnnouncementTypeRef;
             }
-            return anns;
+            return PrepareRecipientsData(anns);
         }
+
+        private IList<TAnnouncement> PrepareRecipientsData<TAnnouncement>(IList<TAnnouncement> anns) where TAnnouncement : AnnouncementComplex
+        {
+            var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(anns.Select(x=>x.Id).ToList()));
+            foreach (var announcementDetailse in anns)
+            {
+                announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
+                    .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
+                    .Select(x => x.Recipient).ToList();
+            }
+            return anns;
+        } 
 
         private SupplementalAnnouncement PrepareClassAnnouncementTypeData(SupplementalAnnouncement supplementalAnnouncement)
         {

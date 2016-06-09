@@ -32,7 +32,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             var announcement = reader.Read<SupplementalAnnouncementRecipient>();
             announcement.Recipient = reader.Read<Person>();
-
             return announcement;
         }
 
@@ -43,7 +42,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {SupplementalAnnouncementRecipient.SUPPLEMENTAL_ANNONCEMENT_REF_FIELD, id }
             });
         }
-
+        //TODO: move this to stored procedure 
         public IList<SupplementalAnnouncementRecipient> GetRecipientsByAnnouncementIds(IList<int> ids)
         {
             var query = $@"Select * 
