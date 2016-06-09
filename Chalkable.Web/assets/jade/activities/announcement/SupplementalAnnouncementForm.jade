@@ -57,7 +57,7 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                                     label(for="type-select") Category:
                                     .types-select-cnt
                                         -var typeId = self.getSelectedTypeId()
-                                        +Select('typeid')(disabled = !editable)#type-select
+                                        +Select('typeid')#type-select
                                             each item in types
                                                 if item.getId().valueOf()
                                                     +Option(item.getId(), item.getName(), typeId== item.getId())(
