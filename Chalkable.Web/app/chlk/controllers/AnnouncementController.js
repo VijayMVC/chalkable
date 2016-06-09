@@ -696,6 +696,8 @@ NAMESPACE('chlk.controllers', function (){
 
                            this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), res, 'update-app-contents');
                         }
+                        else
+                            this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), null, 'app-contents-fail');
                     }, this);
         },
 

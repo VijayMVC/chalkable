@@ -134,41 +134,44 @@ If(@annType = @SUPPLEMENTAL_ANN_TYPE)
 
 --order and result select
 If(@annType = @LESSON_PLAN_TYPE)
+Begin
+	declare @sortedLP TLessonPlan
+
+	Insert Into @sortedLP
 	select LP.* From @t T
 	Join @lessonPlans LP on LP.Id = T.id
-	order by
-		(case 
-			when @sortType = @ASC_SORT then T.SortedField
-		end) ASC,
-		(case 
-			when @sortType = @DESC_SORT then T.SortedField
-		end) DESC
+	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
+		     (case when @sortType = @DESC_SORT then T.SortedField end) DESC
 		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+
+	exec spSelectLessonPlans @sortedLP
+End
 
 if(@annType = @ADMIN_ANN_TYPE)
+Begin
+	declare @sortedAA TAdminAnnouncement
+
+	Insert Into @sortedAA 
 	select AA.* From @t T
 	Join @adminAnn AA on AA.Id = T.id
-	order by
-		(case 
-			when @sortType = @ASC_SORT then T.SortedField
-		end) ASC,
-		(case 
-			when @sortType = @DESC_SORT then T.SortedField
-		end) DESC
+	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
+		     (case when @sortType = @DESC_SORT then T.SortedField end) DESC
 		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
-if(@annType = @SUPPLEMENTAL_ANN_TYPE)
-		select SA.* From @t T
-		Join @supplementalAnn SA on SA.Id = T.id
-		order by
-			(case 
-				when @sortType = @ASC_SORT then T.SortedField
-			end) ASC,
-			(case 
-				when @sortType = @DESC_SORT then T.SortedField
-			end) DESC
-			OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+	exec spSelectAdminAnnoucnement @sortedAA
+End
 
+if(@annType = @SUPPLEMENTAL_ANN_TYPE)
+	declare @sortedSA TSupplementalAnnouncement
+	
+	Insert Into @sortedSA
+	select SA.* From @t T
+	Join @supplementalAnn SA on SA.Id = T.id
+	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
+				(case when @sortType = @DESC_SORT then T.SortedField end) DESC
+		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+
+	exec spSelectSupplementalAnnouncements @sortedSA
 
 GO
 

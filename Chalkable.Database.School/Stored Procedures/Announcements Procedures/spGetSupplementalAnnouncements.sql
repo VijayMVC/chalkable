@@ -37,7 +37,7 @@ Where
 			 @roleId = @DISTRICT_ADMIN_ROLE --District Id
 		)
 	and (@teacherId is null or exists(select * from ClassTeacher where PersonRef = @teacherId and ClassTeacher.ClassRef = vwSupplementalAnnouncement.ClassRef))
-	and (@studentId is null or exists(select * from ClassPerson where PersonRef = @studentId and ClassPerson.ClassRef = vwSupplementalAnnouncement.ClassRef))
+	and (@studentId is null or exists(select * from SupplementalAnnouncementRecipient where StudentRef = @studentId and SupplementalAnnouncementRef = vwSupplementalAnnouncement.Id))
 	and (@fromDate is null or Expires >= @fromDate)
 	and (@toDate is null or Expires <= @toDate)
 	and (@complete is null or annRecipientData.Complete = @complete or (@complete = 0 and annRecipientData.Complete is null))

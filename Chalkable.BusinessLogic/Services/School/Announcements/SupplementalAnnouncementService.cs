@@ -17,13 +17,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     public interface ISupplementalAnnouncementService : IBaseAnnouncementService
     {
         AnnouncementDetails Create(int classId, DateTime expiresDate, int classAnnouncementTypeId);
-        AnnouncementDetails Edit(int supplementalAnnouncementPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds);
-        void SetVisibleForStudent(int supplementalAnnouncementPlanId, bool visible);
-        SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementPlanId);
+        AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? galleryCategoryId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds);
+        void SetVisibleForStudent(int supplementalAnnouncementId, bool visible);
+        SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementId);
         IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
-        bool Exists(string title, int? excludeSupplementalAnnouncementPlanId);
+        IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
+        bool Exists(string title, int? excludeSupplementalAnnouncementId);
         SupplementalAnnouncement GetLastDraft();
     }
 
@@ -252,16 +253,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (anns == null)
                 return null;
 
-            var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(announcementIds));
-           
-            foreach (var announcementDetailse in anns)
-            {
-                announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
-                    .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
-                    .Select(x => x.Recipient).ToList();
-            }
-
-            return anns;
+            return PrepareRecipientsData(anns);
         }
 
         public void SetVisibleForStudent(int supplementalAnnouncementPlanId, bool visible)
@@ -309,7 +301,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 IncludeFrom = includeFromDate,
                 IncludeTo = includeToDate,
                 Sort = sortDesc
-            }, (da, q) => da.GetSupplementalAnnouncementOrderedByTitle(q));
+            }, (da, q) => da.GetSupplementalAnnouncementOrderedByDate(q));
         }
 
         public IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle,
@@ -354,6 +346,24 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }, (da, q)=> da.GetSupplementalAnnouncementOrderedByClassName(q));
         }
 
+        public IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId)
+        {
+            return GetSupplementalAnnouncements(new SupplementalAnnouncementQuery
+            {
+                ClassId = classId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                IncludeFrom = true,
+                IncludeTo = true,
+                Sort = false,
+                TeacherId = teacherId,
+                StudentId = studentId
+            }, (da, q) => da.GetSupplementalAnnouncementOrderedByDate(q))
+            .Select(x=>x.SupplementalAnnouncementData).ToList();
+        }
+
 
         private IList<AnnouncementComplex> GetSupplementalAnnouncements(SupplementalAnnouncementQuery query,
             Func<SupplementalAnnouncementDataAccess, SupplementalAnnouncementQuery, AnnouncementQueryResult> getAnnsMethod)
@@ -367,8 +377,23 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 ann.SupplementalAnnouncementData.ClassAnnouncementTypeName = type?.Name;
                 ann.SupplementalAnnouncementData.ChalkableAnnouncementType = type?.ChalkableAnnouncementTypeRef;
             }
-            return anns;
+            return PrepareRecipientsData(anns);
         }
+
+        private IList<TAnnouncement> PrepareRecipientsData<TAnnouncement>(IList<TAnnouncement> anns) where TAnnouncement : AnnouncementComplex
+        {
+            if (BaseSecurity.IsDistrictOrTeacher(Context))
+            {
+                var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(anns.Select(x => x.Id).ToList()));
+                foreach (var announcementDetailse in anns)
+                {
+                    announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
+                        .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
+                        .Select(x => x.Recipient).ToList();
+                }
+            }
+            return anns;
+        } 
 
         private SupplementalAnnouncement PrepareClassAnnouncementTypeData(SupplementalAnnouncement supplementalAnnouncement)
         {

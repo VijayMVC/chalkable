@@ -97,7 +97,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public int StudentsCountWithAttachments { get; set; }
         public int GradingStudentsCount { get; set; }
         public int ApplicationCount { get; set; }
-
+        public IList<string> AttachmentNames { get; set; }
         public bool Gradable => GradableType && ClassAnnouncementData.IsScored;
         public bool GradableType => ClassAnnouncementData != null;
     }

@@ -1,6 +1,5 @@
 REQUIRE('chlk.models.people.PersonSummary');
 REQUIRE('chlk.models.classes.Class');
-REQUIRE('chlk.models.announcement.AnnouncementClassPeriod');
 
 REQUIRE('chlk.models.common.AttendanceHoverBoxItem');
 REQUIRE('chlk.models.common.DisciplineHoverBoxItem');
@@ -31,7 +30,6 @@ NAMESPACE('chlk.models.student', function () {
                 this.maxPeriodNumber = SJX.fromValue(raw.maxperiodnumber, Number);
 
                 this.classesSection = SJX.fromArrayOfDeserializables(raw.classessection, chlk.models.classes.Class);
-                this.periodSection = SJX.fromArrayOfDeserializables(raw.periodsection, chlk.models.announcement.AnnouncementClassPeriod);
 
                 this.attendanceBox = SJX.fromDeserializable(raw.attendancebox, chlk.models.common.HoverBox.OF(chlk.models.common.AttendanceHoverBoxItem));
                 this.disciplineBox = SJX.fromDeserializable(raw.disciplinebox, chlk.models.common.HoverBox.OF(chlk.models.common.DisciplineHoverBoxItem));
@@ -72,10 +70,7 @@ NAMESPACE('chlk.models.student', function () {
             chlk.models.common.HoverBox.OF(chlk.models.student.StudentRankHoverBoxItem), 'rankBox',
 
 //            [ria.serialize.SerializeProperty('classessection')],
-            ArrayOf(chlk.models.classes.Class), 'classesSection',
-
-//            [ria.serialize.SerializeProperty('periodsection')],
-            ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'periodSection'
+            ArrayOf(chlk.models.classes.Class), 'classesSection'
 
         ]);
 });

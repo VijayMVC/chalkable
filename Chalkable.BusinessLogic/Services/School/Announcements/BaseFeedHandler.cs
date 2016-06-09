@@ -46,9 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var ct = count != int.MaxValue ? count + 1 : count;
 
             var classAnns = locator.ClassAnnouncementService.GetClassAnnouncementsForFeed(fromDate, toDate, classId, complete, null, start, ct, SortOption);
-
-            //var supplementalAnns = locator.SupplementalAnnouncementService.GetSupplementalAnnouncementForFeed(fromDate, toDate, classId, start, count, ownedOnly);
-
+            
             if (start > 0 && classAnns.Count == 0)
                 return classAnns;
 

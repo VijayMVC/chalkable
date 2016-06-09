@@ -25,9 +25,15 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
                             if (!periodItem.getPeriod().getStartTime() || !periodItem.getPeriod().getClassName())
                                 return [];
 
-                            return periodItem.getAnnouncements().filter(function (ann) {
+                            var announcements = periodItem.getAnnouncements().filter(function (ann) {
                                 return ann.getClassId() == classId;
-                            })
+                            });
+
+                            var supplementalAnnouncements = periodItem.getSupplementalAnnouncements().filter(function (ann) {
+                                return ann.getClassId() == classId;
+                            });
+
+                            return announcements.concat(supplementalAnnouncements);
                         }));
 
                         res.day = day;
