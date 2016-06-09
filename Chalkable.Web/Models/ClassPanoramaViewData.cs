@@ -24,13 +24,14 @@ namespace Chalkable.Web.Models
         {
         }
         
-        public static ClassPanoramaViewData Create(ClassDetails cClass, ClassProfilePanoramaSetting filterSetting, IList<StandardizedTestDetails> standardizedTests, ClassPanorama panorama)
+        public static ClassPanoramaViewData Create(ClassDetails cClass, ClassProfilePanoramaSetting filterSetting, IList<StandardizedTestDetails> standardizedTests, 
+            ClassPanorama panorama, IList<GradingScaleRange> gradingScaleRanges)
         {
             return new ClassPanoramaViewData(cClass)
             {
                 FilterSettings = filterSetting != null ? ClassProfilePanoramaSettingsViewData.Create(filterSetting) : null,
                 StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList(),
-                ClassDistributionSection = ClassDistributionSectionViewData.Create(panorama.Grades, panorama.Absences, panorama.Infractions)
+                ClassDistributionSection = ClassDistributionSectionViewData.Create(panorama.Grades, panorama.Absences, panorama.Infractions, gradingScaleRanges)
             };
         }
 
@@ -51,12 +52,28 @@ namespace Chalkable.Web.Models
         public ClassDistributionStatsViewData AbsencesDistribution { get; set; }
         public ClassDistributionStatsViewData DisciplineDistribution { get; set; }
 
-        private static ClassDistributionStatsViewData CreateGradeAvgViewData(IList<StudentAverageGradeInfo> models)
+        private static ClassDistributionStatsViewData CreateGradeAvgViewData(IList<StudentAverageGradeInfo> models, IList<GradingScaleRange> gradingScaleRanges)
         {
             var res = new ClassDistributionStatsViewData
             {
-                ClassAvg = models.Average(x => x.AverageGrade)
+                ClassAvg = models.Average(x => x.AverageGrade),
+                DistributionStats = new List<DistributionItemViewData>()
             };
+
+            gradingScaleRanges = gradingScaleRanges.OrderBy(x => x.LowValue).ToList();
+
+            foreach (var gradingScaleRange in gradingScaleRanges)
+            {
+                var lo = (int) decimal.Round(gradingScaleRange.LowValue);
+                var hi = (int) decimal.Round(gradingScaleRange.HighValue);
+                res.DistributionStats.Add(new DistributionItemViewData
+                {
+                    Count = models.Count(x => x.AverageGrade <= hi && x.AverageGrade >= lo),
+                    StartInterval = lo,
+                    EndInterval = hi,
+                    Summary = $"{lo}-{hi}"
+                });
+            }
 
             return res;
         }
@@ -65,7 +82,7 @@ namespace Chalkable.Web.Models
         {
             var res = new ClassDistributionStatsViewData();
             var absencePersents = models.Where(x => x.NumberOfDaysEnrolled != 0)
-                .Select(x => (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled) * 100)
+                .Select(x => (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled*100))
                 .OrderBy(x => x).ToList();
             
             var maxPersent = absencePersents.Max();
@@ -124,11 +141,11 @@ namespace Chalkable.Web.Models
 
         public static ClassDistributionSectionViewData Create(IList<StudentAverageGradeInfo> avgInfos,
             IList<ShortStudentAbsenceInfo> absenceInfos,
-            IList<ShortStudentInfractionsInfo> infractionInfos)
+            IList<ShortStudentInfractionsInfo> infractionInfos, IList<GradingScaleRange> gradingScaleRanges)
         {
             var res = new ClassDistributionSectionViewData();
             if (avgInfos != null)
-                res.AbsencesDistribution = CreateGradeAvgViewData(avgInfos);
+                res.AbsencesDistribution = CreateGradeAvgViewData(avgInfos, gradingScaleRanges);
             if (absenceInfos != null)
                 res.AbsencesDistribution = CreateAbsencesViewData(absenceInfos);
             if (infractionInfos != null)
