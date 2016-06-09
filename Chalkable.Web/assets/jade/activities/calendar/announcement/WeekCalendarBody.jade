@@ -1,0 +1,36 @@
+mixin TooltipWithOverflow(text)
+    -attributes['data-tooltip'] = text
+    -attributes['data-tooltip-type'] = 'overflow'
+    p(attributes)=text
+
+.week-calendar-body
+    -selectedItem = self.getTopData() ? self.getTopData().getSelectedItemId() : ''
+    .day-names
+        each item in self.getItems()
+            .week
+                p=item.getDate().format('DD, M d')
+    .items-table
+        -var hasWholeDayItems = self.getItems().filter(function(item){return item.getAdminAnnouncements() && item.getAdminAnnouncements().length > 0}).length > 0;
+        if hasWholeDayItems
+            .item.whole-day
+                each item in self.getItems()
+                    .cell(class = item.getTodayClassName())
+                        each ann in item.getAdminAnnouncements()
+                            -var annShowText = ann.getTitle()
+                            +ActionLink('announcement', 'view', ann.getId(), chlk.models.announcement.AnnouncementTypeEnum.ADMIN).period-item.announcement
+                                .announcement-calendar-item(data-tooltip = annShowText)
+                                    strong=annShowText
+        each item in self.groupAnnouncementsAsTable()
+            .item
+                each calendarDayItem, order in item
+                    -var period = item.period
+                    -var day = calendarDayItem.day
+                    .cell(class = day ? day.getTodayClassName() : null)
+                        if order == 0
+                            A: .period-info= period.getName()
+                        each ann in calendarDayItem
+                            -VALIDATE_ARG('ann', [chlk.models.announcement.ClassAnnouncementViewData], ann)
+                            +ActionLink('announcement', 'view', ann.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).period-item.announcement
+                                .announcement-calendar-item(data-tooltip = ann.getTitle() + ' - ' + ann.getClassName())
+                                    strong= ann.getTitle()
+                                    = ' - ' + ann.getClassName()

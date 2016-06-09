@@ -1,0 +1,28 @@
+.month-calendar-body
+    .day-names
+        div: p=Msg.Sunday
+        div: p=Msg.Monday
+        div: p=Msg.Tuesday
+        div: p=Msg.Wednesday
+        div: p=Msg.Thursday
+        div: p=Msg.Friday
+        div: p=Msg.Saturday
+    .items
+        -selectedItem = self.getTopData() ? self.getTopData().getSelectedItemId() : null
+        each line in self.getItemsGroupped()
+            .row
+                each item in line
+                    announcements = item.getAnnouncements()
+                    itemsArr = item.getItemsArray()
+                    adminAnnouncements = item.getAdminAnnouncements()
+                    disablePopUp = !self.isMainCalendar() || self.getUserRole().isStudent() && !announcements.length && !adminAnnouncements.length
+                    SPAN(
+                        class = [item.isSunday() ? 'sunday' : '', item.getClassName(), item.getTodayClassName(), disablePopUp ? 'disabled' : '', announcements.length ? 'with-anns ' : '', adminAnnouncements.length ? 'with-admin-anns' : '']
+                    )
+                        +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().toStandardFormat(), selectedItem).h2.number=item.getDay()
+                        if item.getLessonPlans().length == 1
+                            -var lessonPlan = item.getLessonPlans()[0]
+                            +ActionLink('announcement', 'view', lessonPlan.getId(), chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN)(class=item.getDate().getDate() < getDate() || item.getTodayClassName() == 'today' ? 'green' : 'red').lesson-plan-item #{lessonPlan.getShortClassName()} LP
+                        if item.getLessonPlans().length > 1
+                            +ActionLink('calendar', 'showMonthDayLessonPlans', item.getDate().toStandardFormat(), selectedItem)(class=item.getDate().getDate() < getDate() || item.getTodayClassName() == 'today' ? 'green' : 'red').lesson-plan-item=Msg.Lesson_Plans
+                                span(class=item.getDate().getDate() < getDate() || item.getTodayClassName() == 'today' ? 'red' : 'green').count=item.getLessonPlans().length

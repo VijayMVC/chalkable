@@ -1,0 +1,26 @@
+-var schools = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+
+each school in schools
+    .grid-row
+        .cell.name
+            .icon
+                .pic
+            +ActionLink('schools', 'classesSummary', school.getId(), school.getName())=school.getName()
+        .cell.students=school.getStudentsCount()
+        if isNotEmptyStatistic
+            .cell.attendance
+                .circle(
+                data-tooltip = school.getStudentsCount() + ' Students, ' + school.getAbsences() + ' Absent',
+                class = school.getAbsencesClass()
+                )=school.getPresence() && Math.round(school.getPresence() * 10)/10
+            .cell.discipline
+                .circle(
+                data-tooltip=school.getInfractionsCount() + ' Discipline Infractions Today',
+                class = school.getInfractionsClass()
+                )=school.getInfractionsCount() && parseInt(school.getInfractionsCount(), 10)
+            .cell.grades
+                .circle(
+                data-tooltip=school.getAvg() && (school.getAvg() + '% Average'),
+                class = school.getAvgClass()
+                )=school.getAvg() && parseInt(school.getAvg(), 10)
