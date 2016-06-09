@@ -1,0 +1,46 @@
+body
+  .chosen-container-multi
+    .chosen-choices
+      border: 1px solid #c8c7c3
+      border-radius: 4px
+      +box-shadow(none)
+
+    .chosen-choices li.search-field input
+      line-height: 100%
+
+  select.flat + .chosen-container-single
+    .chosen-single
+      background: #ffffff
+      font-weight: normal
+
+    .chosen-results
+      li.active-result
+        font-weight: normal
+
+  .chosen-container-single
+    .chosen-single
+      height: 30px
+      padding: 0 0 0 14px
+      font-weight: bold
+      line-height: 30px
+
+    .chosen-default
+      color: #56554f
+
+    .chosen-results
+      margin: 0
+      padding: 0
+
+      li.highlighted
+        background: #f1f1f1
+        color: #56554f
+
+      li.active-result
+        font-weight: bold
+        padding-left: 13px
+
+  .chosen-container-active.chosen-with-drop .chosen-single div b
+    background-position: -18px 6px
+
+  .chosen-container-single .chosen-single div b
+    background-position: 0 6px

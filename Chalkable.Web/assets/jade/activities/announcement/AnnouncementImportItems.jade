@@ -1,0 +1,11 @@
+-var announcements = self.getAnnouncements()
+
+each announcement in announcements
+    -var item = announcement.getClassAnnouncementData() || announcement.getLessonPlanData()
+    .row-block
+        .name-td.check
+            .box-checkbox.circle
+                +Checkbox('items', false, false, true)(data-id = announcement.getId().valueOf(), data-type = announcement.getType().valueOf()).announcement-item-check
+        .name-td.date= item.getExpiresDate ? item.getExpiresDate().toStandardFormat() : item.getStartDate().toStandardFormat() + ' : ' + item.getEndDate().toStandardFormat()
+        .name-td.category= announcement.getAnnouncementTypeName()
+        .name-td.name= announcement.getTitle()

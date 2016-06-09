@@ -1,0 +1,37 @@
+-var teachers = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+-var schoolId = teachers[0] && teachers[0].getSchoolId()
+-var schoolName = teachers[0] && teachers[0].getSchoolName()
+
+each teacher in teachers
+    .grid-row
+        .cell.name
+            .icon
+                +PersonImg(teacher, 32)
+            -console.log('SchoolYearId')
+            -console.log(self.getSchoolYearId())
+            +ActionLink('schools', "classesSummary", schoolId, schoolName, self.getSchoolYearId(), teacher.getId())=teacher.getName()
+        .cell.classes
+            .classes-container(data-tooltip=teacher.getClassesText(), data-tooltip-type="overflow")
+                -var classes = teacher.getClasses()
+                each clazz, i in classes
+                    +ActionLink('class', 'info', clazz.getId())=clazz.getName()
+                    if i < classes.length - 1
+                        span ,&nbsp;
+        .cell.students=teacher.getStudentsCount()
+        if isNotEmptyStatistic
+            .cell.attendance
+                .circle(
+                data-tooltip = teacher.getStudentsCount() + ' Students, ' + teacher.getAbsences() + ' Absent',
+                class = teacher.getAbsencesClass()
+                )=teacher.getPresence() && Math.round(teacher.getPresence() * 10)/10
+            .cell.discipline
+                .circle(
+                data-tooltip=teacher.getInfractionsCount() + ' Discipline Infractions Today',
+                class = teacher.getInfractionsClass()
+                )=teacher.getInfractionsCount() && parseInt(teacher.getInfractionsCount(), 10)
+            .cell.grades
+                .circle(
+                data-tooltip=teacher.getAvg() && (teacher.getAvg() + '% Average'),
+                class = teacher.getAvgClass()
+                )=teacher.getAvg() && parseInt(teacher.getAvg(), 10)
