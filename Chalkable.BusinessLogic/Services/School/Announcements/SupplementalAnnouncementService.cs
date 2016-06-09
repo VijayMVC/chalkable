@@ -382,12 +382,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private IList<TAnnouncement> PrepareRecipientsData<TAnnouncement>(IList<TAnnouncement> anns) where TAnnouncement : AnnouncementComplex
         {
-            var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(anns.Select(x=>x.Id).ToList()));
-            foreach (var announcementDetailse in anns)
+            if (BaseSecurity.IsDistrictOrTeacher(Context))
             {
-                announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
-                    .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
-                    .Select(x => x.Recipient).ToList();
+                var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(anns.Select(x => x.Id).ToList()));
+                foreach (var announcementDetailse in anns)
+                {
+                    announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
+                        .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
+                        .Select(x => x.Recipient).ToList();
+                }
             }
             return anns;
         } 
