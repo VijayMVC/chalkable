@@ -34,38 +34,44 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                 +Hidden('type', announcement.getType())
 
                 -var standards = announcement.getStandards() || []
-
-                +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
-                .title-block-container(class = lessonPlan.getGalleryCategoryId() ? 'with-gallery-id' : '')
-                    +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
                 -var needStandardsBlock = (standards.length > 0 || announcement.isCanAddStandard())
-                .table
-                    .left-block(class=needStandardsBlock ? 'with-standards' : '')
+                .table.top-table
+                    .left-block
                         .left-block-container
+                            .title-block-container(class = lessonPlan.getGalleryCategoryId() ? 'with-gallery-id' : '')
+                                +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+                                +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
                             .left-top-container
                                 if !state
-                                    .categories-container
+                                    .categories-container.i-b
                                         label(for="galleryCategoryForSearch") Category:
-                                        SPAN#galleryCategoryForSearchContainer
+                                        #galleryCategoryForSearchContainer
                                             +Select('galleryCategoryForSearch')#galleryCategoryForSearch
                                                 +Option('', 'Select category', true)
                                                 each item in announcement.getCategories()
                                                     +Option(item.getId().valueOf(), item.getName())
+                                                +Option(-1, 'Add Category')
                                         BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
+                                        +ActionButton('lpgallerycategory', 'editCategories').special-button2.add.add-category-btn.x-hidden + Add Category
                                 if self.isStudyCenterEnabled()
-                                    .import-from-template
+                                    .import-from-template.i-b
                                         +ActionButton('lessonplangallery', 'lessonPlanTemplatesList', classId).special-button2.add + Import from new Item Gallery
-                                .add-category
-                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add + Add Category
+
+                    .right-block
+                        .h-1
+                .table
+                    .left-block(class=needStandardsBlock ? 'with-standards' : '')
+                        .left-block-container
                             +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
                                     .add-standards
                                         .standards-list
                                             +RenderWith(self.prepareStandardsListData(), chlk.templates.standard.AnnouncementStandardsTpl)(
-                                            userRole = userRole
-                                            studyCenterEnabled = self.isStudyCenterEnabled()
-                                            ableToRemoveStandard=announcement.isAbleToRemoveStandard())
+                                                userRole = userRole
+                                                studyCenterEnabled = self.isStudyCenterEnabled()
+                                                ableToRemoveStandard=announcement.isAbleToRemoveStandard()
+                                            )
 
                             .drawer-icon
                         .drop-down-container.popup-bubble.top
@@ -100,25 +106,25 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             )#maxdate
                             .calendar-mark
                         .advanced-options
-                            A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options
-                            .separator.x-hidden
-                            .advanced-options-container.x-hidden.popup-bubble.top
+                            .check-box-container
+                                label(for="ann-hidefromstudents")=Msg.Hide_from_Students
+                                +SlideCheckbox('hidefromstudents', lessonPlan.isHiddenFromStudents(), false)(
+                                    data-tooltip-timeout=500,
+                                    data-tooltip=Msg.Hide_From_Student_Tooltip_Message
+                                )
+                            if self.isStudyCenterEnabled()
                                 .check-box-container
-                                    label(for="ann-hidefromstudents")=Msg.Hide_from_Students
-                                    +SlideCheckbox('hidefromstudents', lessonPlan.isHiddenFromStudents(), false)
-                                    .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
-                                if self.isStudyCenterEnabled()
-                                    .check-box-container
-                                        label(for="add-to-gallery-check") Add to Lesson Plan Gallery
-                                        +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), null, !announcement.getCategories().length)#add-to-gallery
-                                    .category-container.new-input-container
-                                        BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
-                                        BUTTON#check-title-btn.validate-skip.x-hidden(name="submitType", value="addToGallery", type="submit" )
-                                        label(for="galleryCategoryId") Category:
-                                        SPAN#galleryCategoryIdContainer
-                                            +Select('galleryCategoryId')(disabled=!!lessonPlan.getGalleryCategoryId() ? false : "disabled")#galleryCategoryId
-                                                each item in announcement.getCategories()
-                                                    +Option(item.getId().valueOf(), item.getName(), lessonPlan.getGalleryCategoryId() && item.getId() == lessonPlan.getGalleryCategoryId())
+                                    label(for="add-to-gallery-check") Add to Lesson Plan Gallery
+                                    +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), null, !announcement.getCategories().length)#add-to-gallery
+                                .category-container.new-input-container
+                                    BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
+                                    BUTTON#check-title-btn.validate-skip.x-hidden(name="submitType", value="addToGallery", type="submit" )
+                                    label(for="galleryCategoryId") Category:
+                                    SPAN#galleryCategoryIdContainer
+                                        +Select('galleryCategoryId')(disabled=!!lessonPlan.getGalleryCategoryId() ? false : "disabled")#galleryCategoryId
+                                            each item in announcement.getCategories()
+                                                +Option(item.getId().valueOf(), item.getName(), lessonPlan.getGalleryCategoryId() && item.getId() == lessonPlan.getGalleryCategoryId())
+
 
                 .apps-attachments-bock.attachments-and-applications
                     ann = announcement
@@ -144,9 +150,9 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                         +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
                 .bottom-block
                     +Button()(
-                    type="submit",
-                    name="submitType",
-                    value=state ? "submitOnEdit" : "submit"
+                        type="submit",
+                        name="submitType",
+                        value=state ? "submitOnEdit" : "submit"
                     ).special-button.blue-button.submit-btn.submit-announcement.big-button
                         =(state ? Msg.Save : Msg.Submit)
                     if state

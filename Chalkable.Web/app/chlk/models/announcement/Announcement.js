@@ -27,6 +27,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.shortContent = SJX.fromValue(raw.shortcontent, String);
                 this.complete = SJX.fromValue(raw.complete, Boolean);
                 this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
+                this.attachmentNames = SJX.fromValue((raw.attachmentnames || []).join('\n'), String);
                 this.ownerAttachmentsCount = SJX.fromValue(raw.ownerattachmentscount, Number);
                 this.canAddStandard = SJX.fromValue(raw.canaddstandard, Boolean);
                 this.studentAnnouncementId = SJX.fromValue(raw.studentannouncementid, chlk.models.id.StudentAnnouncementId);
@@ -42,6 +43,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData',
             chlk.models.announcement.SupplementalAnnouncementViewData, 'supplementalAnnouncementData',
             String, 'shortContent',
+            String, 'attachmentNames',
             Boolean, 'complete',
             Number, 'attachmentsCount',
             Number, 'ownerAttachmentsCount',

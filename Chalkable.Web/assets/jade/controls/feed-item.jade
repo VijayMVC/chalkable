@@ -18,9 +18,10 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
     - itemClasses.push(item.isComplete() ? 'complete' : '')
 
     div(class = itemClasses).feed-item
-        .check-cnt
-            .box-checkbox.circle
-                +Checkbox('items', false, false, true)(data-id = item.getId().valueOf(), data-type = item.getType().valueOf()).feed-item-check
+        if !supplementalAnnouncement
+            .check-cnt
+                .box-checkbox.circle
+                    +Checkbox('items', false, false, true)(data-id = item.getId().valueOf(), data-type = item.getType().valueOf()).feed-item-check
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), false, item.getType())(class = isStaringDisabled ? 'disabled' : '', data-tooltip=Msg.Done).star.complete
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), true, item.getType())(class = isStaringDisabled ? 'disabled' : '', data-tooltip= Msg.ToDo).star
         +ActionLink('announcement', 'view', item.getId(), item.getType())(class = disabled ? 'disabled' : '').announcement-link
@@ -40,7 +41,7 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
                         -var maxScore = classAnnouncement.getMaxScore()
                         .small-icon.grades-icon(data-tooltip=maxScore + ' possible point' + (maxScore == 1 ? '' : 's') )
                     if item.getOwnerAttachmentsCount() > 0
-                        .small-icon.attachment-icon
+                        .small-icon.attachment-icon(data-tooltip=item.getAttachmentNames())
                     if supplementalAnnouncement
                         .small-icon.supplemental-icon(data-tooltip=supplementalAnnouncement.getRecipientsTooltip())
 

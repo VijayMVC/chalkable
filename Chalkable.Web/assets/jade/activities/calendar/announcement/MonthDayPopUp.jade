@@ -1,5 +1,7 @@
 .calendar-popup.popup-bubble.top
     -var announcements = self.getAnnouncements();
+    -var supplementalAnnouncements = self.getSupplementalAnnouncements();
+    -announcements = announcements.concat(supplementalAnnouncements);
     -var adminAnnouncements = self.getAdminAnnouncements();
     if adminAnnouncements.length > 0
         h2=Msg.Admin_Announcements
@@ -17,7 +19,7 @@
             ul.day-items
                 each item in announcements
                     li.items
-                        +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).pop-up-item
+                        +ActionLink('announcement', 'view', item.getId(), item.getType()).pop-up-item
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
                                 +TooltipWithOverflow(item.getClassName()).classname-under

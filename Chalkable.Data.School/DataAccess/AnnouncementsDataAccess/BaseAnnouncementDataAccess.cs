@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -134,6 +135,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
 
             reader.NextResult();
+            var annAtts = reader.ReadList<AnnouncementAttachment>(true);
+
+            foreach (var ann in res)
+            {
+                ann.AttachmentNames = annAtts.Where(x => x.AnnouncementRef == ann.Id).Select(x => x.Attachment.Name).ToList();
+            }
+
+            reader.NextResult();
             var owners = reader.ReadList<Person>();
             reader.NextResult();
             var announcementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
@@ -175,6 +184,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     first = false;
                 }
             }
+            reader.NextResult();
+            var annAtts = reader.ReadList<AnnouncementAttachment>(true);
+            foreach (var ann in res.Announcements)
+                ann.AttachmentNames = annAtts.Where(x => x.AnnouncementRef == ann.Id).Select(x => x.Attachment.Name).ToList();
             return res;
         }
 

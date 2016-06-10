@@ -37,10 +37,18 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '#galleryCategoryForSearch')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function categorySearchChange(node, event, selected_){
-                node.parent('.left-top-container').find('#changeCategoryUpdate').trigger('click');
-                setTimeout(function(){
-                    this.dom.find('.search-templates').trigger('focus');
-                }.bind(this), 10);
+                if(node.getValue() == -1){
+                    node.setValue(node.getData('value'));
+                    node.trigger('chosen:updated');
+                    node.parent('.left-top-container').find('.add-category-btn').trigger('click');
+                }else{
+                    node.parent('.left-top-container').find('#changeCategoryUpdate').trigger('click');
+                    setTimeout(function(){
+                        this.dom.find('.search-templates').trigger('focus');
+                    }.bind(this), 10);
+                    node.setData('value', node.getValue())
+                }
+
             },
 
             [ria.mvc.DomEventBind('change', '.search-templates')],

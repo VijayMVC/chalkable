@@ -14,10 +14,14 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string FullClassName { get; set; }
         public bool HideFromStudents { get; set; }
         public IList<ShortPersonViewData> Recipients { get; set; }
+        public int? AnnouncementTypeId { get; set; }
+        public int? ChalkableAnnouncementTypeId { get; set; }
 
         protected SupplementalAnnouncementViewData(SupplementalAnnouncement announcement)
             : base(announcement)
         {
+            AnnouncementTypeId = announcement.ClassAnnouncementTypeRef;
+            ChalkableAnnouncementTypeId = announcement.ChalkableAnnouncementType;
             ExpiresDate = announcement.Expires;
             ClassId = announcement.ClassRef;
             ClassName = announcement.ClassName;

@@ -57,7 +57,8 @@ namespace Chalkable.Web.Models.CalendarsViewData
             AdminAnnouncements = AdminAnnouncementViewData.Create(adminAnnouncements);
         }
 
-        public static AnnouncementCalendarWeekViewData Create(DateTime date, IList<AnnouncementPeriodViewData> announcementPeriods, IList<AdminAnnouncement> adminAnnouncements)
+        public static AnnouncementCalendarWeekViewData Create(DateTime date, IList<AnnouncementPeriodViewData> announcementPeriods
+            , IList<AdminAnnouncement> adminAnnouncements)
         {
             return new AnnouncementCalendarWeekViewData(date, announcementPeriods, adminAnnouncements); 
         }

@@ -59,6 +59,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            [ria.mvc.PartialUpdateRule(null, 'app-contents-fail', '')],
+            [[Object, Object, String]],
+            VOID, function beforeAppContentsFail(tpl, model, msg_){
+                this.dom.find('.apps-with-recommended-contents').removeClass('before-loading');
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppContentListTpl, 'update-app-contents', '')],
             [[Object, Object, String]],
             VOID, function updateAppContents(tpl, model, msg_){

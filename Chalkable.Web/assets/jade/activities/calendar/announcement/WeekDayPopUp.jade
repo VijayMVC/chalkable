@@ -1,5 +1,7 @@
 .calendar-popup.popup-bubble
     -var announcements = self.getAnnouncements()
+    -var supplementalAnnouncements = self.getSupplementalAnnouncements() || []
+    -announcements = announcements.concat(supplementalAnnouncements)
     -var lessonPlans = self.getLessonPlans()
     -var period = self.getPeriod()
     -var roomNumber = period.getRoomNumber()
@@ -24,7 +26,7 @@
             .day-announcements
                 each item in announcements
                     .items
-                        +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).pop-up-announcement
+                        +ActionLink('announcement', 'view', item.getId(), item.getType()).pop-up-announcement
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
     if lessonPlans && lessonPlans.length > 0

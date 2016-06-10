@@ -17,13 +17,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     public interface ISupplementalAnnouncementService : IBaseAnnouncementService
     {
         AnnouncementDetails Create(int classId, DateTime expiresDate, int classAnnouncementTypeId);
-        AnnouncementDetails Edit(int supplementalAnnouncementPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds);
-        void SetVisibleForStudent(int supplementalAnnouncementPlanId, bool visible);
-        SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementPlanId);
+        AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? galleryCategoryId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds);
+        void SetVisibleForStudent(int supplementalAnnouncementId, bool visible);
+        SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementId);
         IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
-        bool Exists(string title, int? excludeSupplementalAnnouncementPlanId);
+        IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
+        bool Exists(string title, int? excludeSupplementalAnnouncementId);
         SupplementalAnnouncement GetLastDraft();
     }
 
@@ -238,6 +239,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
+        protected override AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<SupplementalAnnouncement> dataAccess, int announcementId)
+        {
+            var res = base.InternalGetDetails(dataAccess, announcementId);
+            res.AnnouncementData = PrepareClassAnnouncementTypeData(res.SupplementalAnnouncementData);
+            return res;
+        }
+
         protected override IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<SupplementalAnnouncement> dataAccess, IList<int> announcementIds, bool onlyOnwer = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -245,16 +253,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (anns == null)
                 return null;
 
-            var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(announcementIds));
-           
-            foreach (var announcementDetailse in anns)
-            {
-                announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
-                    .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
-                    .Select(x => x.Recipient).ToList();
-            }
-
-            return anns;
+            return PrepareRecipientsData(anns);
         }
 
         public void SetVisibleForStudent(int supplementalAnnouncementPlanId, bool visible)
@@ -273,7 +272,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             using (var unitOfWork = Read())
             {
-                var announcement =CreateSupplementalAnnouncementDataAccess(unitOfWork).GetAnnouncement(id, Context.PersonId.Value);
+                var announcement = CreateSupplementalAnnouncementDataAccess(unitOfWork).GetAnnouncement(id, Context.PersonId.Value);
                 announcement.Recipients = new SupplementalAnnouncementRecipientDataAccess(unitOfWork).GetRecipientsByAnnouncementId(id)
                     .Select(x => x.Recipient).ToList();
                 return announcement;
@@ -289,7 +288,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             bool includeToDate, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false,
             bool? ownedOnly = null)
         {
-            return DoRead(u => CreateSupplementalAnnouncementDataAccess(u).GetSupplementalAnnouncementOrderedByDate(new SupplementalAnnouncementQuery
+
+            return GetSupplementalAnnouncements(new SupplementalAnnouncementQuery
             {
                 ClassId = classId,
                 Start = start,
@@ -301,14 +301,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 IncludeFrom = includeFromDate,
                 IncludeTo = includeToDate,
                 Sort = sortDesc
-            })).Announcements;
+            }, (da, q) => da.GetSupplementalAnnouncementOrderedByDate(q));
         }
 
         public IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle,
             bool includeFromTitle, bool includeToTitle, int? classId, int start = 0, int count = int.MaxValue,
             bool sortDesc = false, bool? ownedOnly = null)
         {
-            return DoRead(u => CreateSupplementalAnnouncementDataAccess(u).GetSupplementalAnnouncementOrderedByTitle(new SupplementalAnnouncementQuery
+
+            return GetSupplementalAnnouncements(new SupplementalAnnouncementQuery
             {
                 ClassId = classId,
                 Start = start,
@@ -320,14 +321,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 IncludeFrom = includeFromTitle,
                 IncludeTo = includeToTitle,
                 Sort = sortDesc
-            })).Announcements;
+            }, (da, q) => da.GetSupplementalAnnouncementOrderedByTitle(q));
         }
 
         public IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName,
             string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, int start = 0,
             int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null)
         {
-            return DoRead(u => CreateSupplementalAnnouncementDataAccess(u).GetSupplementalAnnouncementOrderedByClassName(new SupplementalAnnouncementQuery
+
+            return GetSupplementalAnnouncements(new SupplementalAnnouncementQuery
             {
                 ClassId = classId,
                 Start = start,
@@ -341,8 +343,77 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 FromClassName = fromClassName,
                 ToClassName = toClassName,
                 Sort = sortDesc
-            })).Announcements;
+            }, (da, q)=> da.GetSupplementalAnnouncementOrderedByClassName(q));
         }
+
+        public IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId)
+        {
+            return GetSupplementalAnnouncements(new SupplementalAnnouncementQuery
+            {
+                ClassId = classId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                IncludeFrom = true,
+                IncludeTo = true,
+                Sort = false,
+                TeacherId = teacherId,
+                StudentId = studentId
+            }, (da, q) => da.GetSupplementalAnnouncementOrderedByDate(q))
+            .Select(x=>x.SupplementalAnnouncementData).ToList();
+        }
+
+
+        private IList<AnnouncementComplex> GetSupplementalAnnouncements(SupplementalAnnouncementQuery query,
+            Func<SupplementalAnnouncementDataAccess, SupplementalAnnouncementQuery, AnnouncementQueryResult> getAnnsMethod)
+        {
+            var anns = DoRead(u => getAnnsMethod(CreateSupplementalAnnouncementDataAccess(u), query).Announcements);
+            var classIds = anns.Where(x=>x.ClassRef.HasValue).Select(x => x.ClassRef.Value).Distinct().ToList();
+            var types =  ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+            foreach (var ann in anns)
+            {
+                var type = types.FirstOrDefault(x => x.Id == ann.SupplementalAnnouncementData.ClassAnnouncementTypeRef);
+                ann.SupplementalAnnouncementData.ClassAnnouncementTypeName = type?.Name;
+                ann.SupplementalAnnouncementData.ChalkableAnnouncementType = type?.ChalkableAnnouncementTypeRef;
+            }
+            return PrepareRecipientsData(anns);
+        }
+
+        private IList<TAnnouncement> PrepareRecipientsData<TAnnouncement>(IList<TAnnouncement> anns) where TAnnouncement : AnnouncementComplex
+        {
+            if (BaseSecurity.IsDistrictOrTeacher(Context))
+            {
+                var recipients = DoRead(u => new SupplementalAnnouncementRecipientDataAccess(u).GetRecipientsByAnnouncementIds(anns.Select(x => x.Id).ToList()));
+                foreach (var announcementDetailse in anns)
+                {
+                    announcementDetailse.SupplementalAnnouncementData.Recipients = recipients
+                        .Where(x => x.SupplementalAnnouncementRef == announcementDetailse.Id)
+                        .Select(x => x.Recipient).ToList();
+                }
+            }
+            return anns;
+        } 
+
+        private SupplementalAnnouncement PrepareClassAnnouncementTypeData(SupplementalAnnouncement supplementalAnnouncement)
+        {
+            if (supplementalAnnouncement.ClassAnnouncementTypeRef.HasValue)
+            {
+                if (string.IsNullOrEmpty(supplementalAnnouncement.ClassAnnouncementTypeName))
+                {
+                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypeById(supplementalAnnouncement.ClassAnnouncementTypeRef.Value);
+                    supplementalAnnouncement.ClassAnnouncementTypeName = classAnnType.Name;
+                    supplementalAnnouncement.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
+                }
+                else
+                {
+                    var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(supplementalAnnouncement.ClassAnnouncementTypeName);
+                    supplementalAnnouncement.ChalkableAnnouncementType = chlkAnnType?.Id;
+                }
+            }
+            return supplementalAnnouncement;
+        }
+
 
         public bool Exists(string title, int? excludeSupplementalAnnouncementPlanId)
         {

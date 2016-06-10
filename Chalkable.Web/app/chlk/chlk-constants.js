@@ -7,6 +7,7 @@ var ChlkSessionConstants = {
     CREATED_ANNOUNCEMENTS: 'createdAnnouncements',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',
+    SUPPLEMENTAL_STUDENTS: 'supplementalStudents',
     USER_ROLE: 'role',
     SITE_ROOT: 'siteRoot',
     MARKING_PERIOD: 'markingPeriod',

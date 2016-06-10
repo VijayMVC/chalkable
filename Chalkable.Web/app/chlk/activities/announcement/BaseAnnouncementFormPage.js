@@ -86,7 +86,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.advanced-options-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function advancedOptionsButtonClick(node, event){
-                var parentNode = node.parent('.advanced-options');
+                var parentNode = this.dom.find('.advanced-options');
                 node.toggleClass('selected');
                 parentNode.find('.separator').toggleClass('x-hidden');
                 parentNode.find('.advanced-options-container').toggleClass('x-hidden');
