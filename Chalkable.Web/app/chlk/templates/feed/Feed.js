@@ -69,7 +69,7 @@ NAMESPACE('chlk.templates.feed', function () {
             },
 
             function getClassesForSelect(){
-                var items = this.getClassesByYears(), res = [];
+                var items = this.getClassesByYears() || [], res = [];
                 items.forEach(function(item){
                     var classes = item.getClasses();
                     if(classes.length){

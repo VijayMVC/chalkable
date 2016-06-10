@@ -131,7 +131,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('.copy-activities').trigger('click');
             },
 
-            [ria.mvc.DomEventBind('click', '.copy-btn')],
+            [ria.mvc.DomEventBind('click', '.copy-submit')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function copySubmit(node, event){
                 var announcements = [];
@@ -149,6 +149,19 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.PartialUpdateRule(null, 'announcements-copy')],
             VOID, function copyUpdate(tpl, model, msg_) {
                 this.dom.find('.copy-activities').trigger('click');
+                var select = this.dom.find('.copy-to-select');
+                select.find('.selected-value').setValue('');
+                select.find('.value-text').setText('');
+                this.dom.find('.copy-start-date')
+                    .setValue('')
+                    .setData('value', null)
+                    .trigger('change');
+                this.dom.find('.all-tasks-check')
+                    .trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
+
+                this.dom.find('.feed-item-check ').trigger('change');
+
+                this.dom.find('.selected-item').removeClass('selected-item');
             },
 
             [ria.mvc.DomEventBind('change', '.copy-to-select')],
@@ -158,7 +171,7 @@ NAMESPACE('chlk.activities.feed', function () {
             },
 
             function updateCopySubmitBtn_(){
-                var btn = this.dom.find('.copy-btn');
+                var btn = this.dom.find('.copy-submit');
                 if(this.dom.find('.feed-item-check:checked').count() > 0 && this.dom.find('[name="toClassId"]').getValue()){
                     btn.removeAttr('disabled');
                     btn.setProp('disabled', false);
@@ -227,6 +240,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 BASE(model, msg_);
                 this.dom.find('select.prepared').removeClass('prepared');
                 if(model instanceof chlk.models.feed.FeedItems){
+                    this.dom.find('.feed-grid').trigger(chlk.controls.GridEvents.UPDATED.valueOf());
                     if(!model.getItems().length)
                         this.dom.find('.form-for-grid').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
                 }

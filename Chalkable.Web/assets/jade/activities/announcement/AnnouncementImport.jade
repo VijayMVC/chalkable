@@ -17,8 +17,10 @@
                 +DatePicker('copyStartDate')(
                     data-options={
                         showOtherMonths: true,
-                        selectOtherMonths: true
-                    }
+                        selectOtherMonths: true,
+                        dateRanges: self.getClassScheduleDateRanges()
+                    },
+                    placeholder = 'Start Date'
                 ).copy-start-date
 
             .clear-fix

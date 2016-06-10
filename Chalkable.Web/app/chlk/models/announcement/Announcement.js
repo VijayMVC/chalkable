@@ -5,6 +5,7 @@ REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.announcement.LessonPlanViewData');
 REQUIRE('chlk.models.announcement.AdminAnnouncementViewData');
 REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
+REQUIRE('chlk.models.announcement.SupplementalAnnouncementViewData');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -22,9 +23,11 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.lessonPlanData = SJX.fromDeserializable(raw.lessonplandata, chlk.models.announcement.LessonPlanViewData);
                 this.adminAnnouncementData = SJX.fromDeserializable(raw.adminannouncementdata, chlk.models.announcement.AdminAnnouncementViewData);
                 this.classAnnouncementData = SJX.fromDeserializable(raw.classannouncementdata, chlk.models.announcement.ClassAnnouncementViewData);
+                this.supplementalAnnouncementData = SJX.fromDeserializable(raw.supplementalannouncementdata, chlk.models.announcement.SupplementalAnnouncementViewData);
                 this.shortContent = SJX.fromValue(raw.shortcontent, String);
                 this.complete = SJX.fromValue(raw.complete, Boolean);
                 this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
+                this.attachmentNames = SJX.fromValue((raw.attachmentnames || []).join('\n'), String);
                 this.ownerAttachmentsCount = SJX.fromValue(raw.ownerattachmentscount, Number);
                 this.canAddStandard = SJX.fromValue(raw.canaddstandard, Boolean);
                 this.studentAnnouncementId = SJX.fromValue(raw.studentannouncementid, chlk.models.id.StudentAnnouncementId);
@@ -38,7 +41,9 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.announcement.LessonPlanViewData, 'lessonPlanData',
             chlk.models.announcement.AdminAnnouncementViewData, 'adminAnnouncementData',
             chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData',
+            chlk.models.announcement.SupplementalAnnouncementViewData, 'supplementalAnnouncementData',
             String, 'shortContent',
+            String, 'attachmentNames',
             Boolean, 'complete',
             Number, 'attachmentsCount',
             Number, 'ownerAttachmentsCount',
@@ -48,7 +53,21 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'applicationsCount',
             String, 'applicationName',
             Boolean, 'showGradingIcon',
-            chlk.models.id.AppId, 'assessmentApplicationId'
+            chlk.models.id.AppId, 'assessmentApplicationId',
+
+            function getAnnouncementItem(){
+                var type = this.getType();
+                switch(type){
+                    case chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT:
+                        return this.getClassAnnouncementData();
+                    case chlk.models.announcement.AnnouncementTypeEnum.ADMIN:
+                        return this.getAdminAnnouncementData();
+                    case chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN:
+                        return this.getLessonPlanData();
+                    case chlk.models.announcement.AnnouncementTypeEnum.SUPPLEMENTAL_ANNOUNCEMENT:
+                        return this.getSupplementalAnnouncementData();
+                }
+            }
     ])
 });
 

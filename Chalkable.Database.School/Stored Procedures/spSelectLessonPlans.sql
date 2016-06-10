@@ -1,6 +1,4 @@
-﻿
-
-CREATE procedure [dbo].[spSelectLessonPlans] @lessonPlanT TLessonPlan readonly
+﻿Create procedure [dbo].[spSelectLessonPlans] @lessonPlanT TLessonPlan readonly
 As
 Select 
 	t.*,
@@ -16,5 +14,9 @@ Select
 				ClassRef in (select ClassPerson.ClassRef from ClassPerson 
 											where ClassPerson.PersonRef = Attachment_PersonRef)) as x
 	) as StudentsCountWithAttachments,
-	(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount  
+	(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount--,
+	--(Select ' ' + Attachment_Name From vwAnnouncementAttachment Where vwAnnouncementAttachment.AnnouncementAttachment_AnnouncementRef = t.Id) as AttachmentNames
 From @lessonPlanT t
+
+Select * From vwAnnouncementAttachment
+Join @lessonPlanT t on t.Id = vwAnnouncementAttachment.AnnouncementAttachment_AnnouncementRef

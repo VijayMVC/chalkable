@@ -303,7 +303,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         protected virtual IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, IList<int> announcementIds, bool onlyOnwer = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
+            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
+            return anns;
         }
 
         protected DateTime CalculateStartDateForCopying(int classId)

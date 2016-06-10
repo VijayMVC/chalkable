@@ -35,6 +35,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
                  announcementList.LessonPlans = announcementList.LessonPlans.Where(l => classes.Any(c => c.Id == l.ClassRef)).ToList();
                  announcementList.ClassAnnouncements = announcementList.ClassAnnouncements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
+                 announcementList.SupplementalAnnouncements = announcementList.SupplementalAnnouncements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
              }
              if (DemoUserService.IsDemoUser(Context))
              {
@@ -94,16 +95,19 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var schedule = locator.ClassPeriodService.GetSchedule(teacherId, studentId, classId, start, end);
              var classes = locator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
 
-             announcementList.LessonPlans = announcementList.LessonPlans.Where(l => classes.Any(c => c.Id == l.ClassRef)).ToList();
-             announcementList.ClassAnnouncements = announcementList.ClassAnnouncements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
+            announcementList.LessonPlans = announcementList.LessonPlans.Where(l => classes.Any(c => c.Id == l.ClassRef)).ToList();
+            announcementList.ClassAnnouncements = announcementList.ClassAnnouncements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
+            announcementList.SupplementalAnnouncements = announcementList.SupplementalAnnouncements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
+            
 
-             for (var d = start; d <= end; d = d.AddDays(1))
+            for (var d = start; d <= end; d = d.AddDays(1))
              {
                  var classAnns = announcementList.ClassAnnouncements.Where(x => x.Expires.Date == d).ToList();
                  var lessonPlans = announcementList.LessonPlans.Where(x => x.StartDate <= d && x.EndDate >= d).ToList();
                  var adminAnns = announcementList.AdminAnnouncements.Where(x => x.Expires.Date == d).ToList();
+                 var supplementalAnns = announcementList.SupplementalAnnouncements.Where(x => x.Expires.Date == d).ToList();
                  var daySchedule = schedule.Where(x => x.Day == d).ToList();
-                 var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, classAnns, lessonPlans, locator.Context.NowSchoolTime);
+                 var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, classAnns, lessonPlans, supplementalAnns, locator.Context.NowSchoolTime);
                  res.Add(AnnouncementCalendarWeekViewData.Create(d, annPeriods, adminAnns));
              }
              return res;

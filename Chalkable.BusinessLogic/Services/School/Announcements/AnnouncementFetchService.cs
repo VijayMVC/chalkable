@@ -70,6 +70,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     return _handlers[sortOption].GetLessonPlansOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count, ownedOnly);
                 case AnnouncementTypeEnum.Admin:
                     return _handlers[sortOption].GetAdminAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, null, complete, start, count);
+                case AnnouncementTypeEnum.Supplemental:
+                    return _handlers[sortOption].GetSupplementalAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count);
             }
             return new List<AnnouncementComplex>();
         }
@@ -147,6 +149,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 res.LessonPlans = ServiceLocator.LessonPlanService.GetLessonPlans(fromDate, toDate, classId, studentId, teacherId, filterByStartDate);
                 res.ClassAnnouncements = ServiceLocator.ClassAnnouncementService.GetClassAnnouncements(fromDate, toDate, classId, studentId, teacherId);
+                res.SupplementalAnnouncements = ServiceLocator.SupplementalAnnouncementService.GetSupplementalAnnouncements(fromDate, toDate, classId, studentId, teacherId);
             }
             if(!classId.HasValue && !teacherId.HasValue && (BaseSecurity.IsDistrictAdmin(Context) || CoreRoles.STUDENT_ROLE == Context.Role))
                 res.AdminAnnouncements = ServiceLocator.AdminAnnouncementService.GetAdminAnnouncements(null, fromDate, toDate, studentId);
@@ -170,7 +173,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             if (BaseSecurity.IsDistrictAdmin(Context))
                 return ServiceLocator.AdminAnnouncementService.GetLastDraft();
-            return ServiceLocator.ClassAnnouncementService.GetLastDraft() ?? (Announcement) ServiceLocator.LessonPlanService.GetLastDraft();
+            return (ServiceLocator.ClassAnnouncementService.GetLastDraft() ?? (Announcement) ServiceLocator.LessonPlanService.GetLastDraft()) ?? ServiceLocator.SupplementalAnnouncementService.GetLastDraft();
         }
 
         public AnnouncementTypeEnum GetAnnouncementType(int announcementId)
@@ -184,6 +187,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public IList<LessonPlan> LessonPlans { get; set; }
         public IList<ClassAnnouncement> ClassAnnouncements { get; set; }
         public IList<AdminAnnouncement> AdminAnnouncements { get; set; } 
+        public IList<SupplementalAnnouncement> SupplementalAnnouncements { get; set; } 
     }
     
 }

@@ -22,6 +22,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return locator.AdminAnnouncementService.GetAdminAnnouncementsSortedByTitle(fromDate, toDate, @from, to, includeFrom, includeTo, gradeLevels, complete, start, count, _sortDesc);
         }
 
+        protected override IList<AnnouncementComplex> InternalGetSupplementalAnns(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId,
+            bool? complete, int start, int count, string @from, string to, bool includeFrom, bool includeTo,
+            bool? ownedOnly = null)
+        {
+            return locator.SupplementalAnnouncementService.GetSupplementalAnnouncementSortedByTitle(fromDate, toDate, @from, to, includeFrom, includeTo, classId, start, count, _sortDesc, ownedOnly);
+        }
+
         protected override AnnouncementSortOption SortOption
             => !_sortDesc ? AnnouncementSortOption.NameAscending : AnnouncementSortOption.NameDescending;
         protected override Func<AnnouncementComplex, string> SortSelector { get { return x => x.Title; } }

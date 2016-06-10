@@ -15,7 +15,8 @@ NAMESPACE('chlk.controls', function () {
         KEY_DOWN: 'keydown',
         KEY_PRESS: 'keypress',
         SELECT_NEXT_ROW: 'selectnextrow',
-        SELECT_PREV_ROW: 'selectprevrow'
+        SELECT_PREV_ROW: 'selectprevrow',
+        UPDATED: 'updated'
     });
 
     /** @class chlk.controls.FormEvents */
@@ -169,6 +170,12 @@ NAMESPACE('chlk.controls', function () {
                 }
             },
 
+            [ria.mvc.DomEventBind(chlk.controls.GridEvents.UPDATED.valueOf(), '.chlk-grid')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function updated(node, event) {
+                this.removeLoader_(node);
+            },
+
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), '.chlk-grid')],
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             VOID, function deselectRow(node, event, row, index) {
@@ -282,7 +289,7 @@ NAMESPACE('chlk.controls', function () {
                                 tpl.assign(model);
                                 tpl.renderTo(dom);
                             }
-                            this.removeLoader_(grid, true);
+                            this.removeLoader_(grid);
                         }, this);
                 }else{
                     form.find('[name=start]').setValue(configs.currentStart);
@@ -318,7 +325,7 @@ NAMESPACE('chlk.controls', function () {
                             if($(window).scrollTop() > $(document).height() - $(window).height() - 500){
                             //if((contentHeight - pageHeight - scrollPosition) < 1000){
                                 this.scrollAction_(grid);
-                                this.removeLoaderWithInterval_(grid);
+                                //this.removeLoaderWithInterval_(grid);
                                 configs.currentStart += size;
                                 contentHeight += baseContentHeight;
                             }
@@ -330,18 +337,18 @@ NAMESPACE('chlk.controls', function () {
                 }.bind(this), configs.interval || 250);
             },
 
-            [[ria.dom.Dom]],
+            /*[[ria.dom.Dom]],
             VOID, function removeLoaderWithInterval_(grid){
                 var that = this;
                 var interval2 = setInterval(function(){
                     var node = grid.find('.horizontal-loader');
                     if(node.exists()){
                         node.remove();
-                        that.removeLoader_(grid, true);
+                        that.removeLoader_(grid);
                         clearInterval(interval2);
                     }
                 }, 500);
-            },
+            },*/
 
             [[ria.dom.Dom]],
             VOID, function clearInterval_(grid){
@@ -349,20 +356,14 @@ NAMESPACE('chlk.controls', function () {
                 interval = undefined;
                 var configs = this.getConfigs(), that = this;
                 if(!configs.service){
-                    this.removeLoaderWithInterval_(grid);
+                    this.removeLoader_(grid);
                 }
             },
 
-            [[ria.dom.Dom, Boolean]],
-            VOID, function removeLoader_(grid, forceRemove_){
-                var node = grid.find('.horizontal-loader');
-                if(grid.hasClass('scroll-freezed')){
-                    grid.removeClass('scroll-freezed');
-                }
-                if(node.exists() && (node.next().exists() || forceRemove_)){
-                    grid.removeClass('scroll-freezed');
-                    node.remove();
-                }
+            [[ria.dom.Dom]],
+            VOID, function removeLoader_(grid){
+                grid.find('.horizontal-loader').remove();
+                grid.removeClass('scroll-freezed');
             },
 
             [ria.mvc.DomEventBind('click', '.chlk-grid .row')],

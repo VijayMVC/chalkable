@@ -11,27 +11,30 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public ScheduleItemViewData Period { get; set; }
         public IList<ClassAnnouncementViewData> Announcements { get; set; }
         public IList<LessonPlanViewData> LessonPlans { get; set; }
-
+        public IList<SupplementalAnnouncementViewData> SupplementalAnnouncements { get; set; }
+         
         public static AnnouncementPeriodViewData Create(ScheduleItem scheduleItem, IList<ClassAnnouncement> classAnnouncements,
-            IList<LessonPlan> lessonPlans, DateTime nowSchoolTime)
+            IList<LessonPlan> lessonPlans, IList<SupplementalAnnouncement> supplementalAnnouncements, DateTime nowSchoolTime)
         {
             return new AnnouncementPeriodViewData
             {
                 Period =  ScheduleItemViewData.Create(scheduleItem, nowSchoolTime),
                 Announcements = ClassAnnouncementViewData.Create(classAnnouncements),
-                LessonPlans = LessonPlanViewData.Create(lessonPlans)
+                LessonPlans = LessonPlanViewData.Create(lessonPlans),
+                SupplementalAnnouncements = SupplementalAnnouncementViewData.Create(supplementalAnnouncements)
             };
         }
         
         public static IList<AnnouncementPeriodViewData> Create(IList<ScheduleItem> schedule, IList<ClassAnnouncement> classAnnouncements, 
-            IList<LessonPlan> lessonPlans, DateTime nowSchoolTime)
+            IList<LessonPlan> lessonPlans, IList<SupplementalAnnouncement> supplementalAnnouncements, DateTime nowSchoolTime)
         {
             var res = new List<AnnouncementPeriodViewData>();
             foreach (var scheduleItem in schedule)
             {
                 var annItems = classAnnouncements.Where(x => scheduleItem.ClassId == x.ClassRef).ToList();
                 var lsPlans = lessonPlans.Where(x => scheduleItem.ClassId == x.ClassRef).ToList();
-                res.Add(Create(scheduleItem, annItems, lsPlans, nowSchoolTime));
+                var suppAnns = supplementalAnnouncements.Where(x => scheduleItem.ClassId == x.ClassRef).ToList();
+                res.Add(Create(scheduleItem, annItems, lsPlans, suppAnns, nowSchoolTime));
             }
             return res;
         }

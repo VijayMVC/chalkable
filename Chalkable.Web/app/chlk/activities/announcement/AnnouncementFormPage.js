@@ -59,6 +59,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            [ria.mvc.PartialUpdateRule(null, 'app-contents-fail', '')],
+            [[Object, Object, String]],
+            VOID, function beforeAppContentsFail(tpl, model, msg_){
+                this.dom.find('.apps-with-recommended-contents').removeClass('before-loading');
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppContentListTpl, 'update-app-contents', '')],
             [[Object, Object, String]],
             VOID, function updateAppContents(tpl, model, msg_){
@@ -296,7 +302,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('change', '#expiresdate')],
+            [ria.mvc.DomEventBind('change', '#expiresdate:not(.supplemental-date)')],
             [[ria.dom.Dom, ria.dom.Event]],
             function expiresDateChange(node, event){
                 var block = this.dom.find('.title-block-container'),

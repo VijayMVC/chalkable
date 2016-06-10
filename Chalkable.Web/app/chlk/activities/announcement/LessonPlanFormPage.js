@@ -37,10 +37,24 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '#galleryCategoryForSearch')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function categorySearchChange(node, event, selected_){
-                node.parent('.left-top-container').find('#changeCategoryUpdate').trigger('click');
-                setTimeout(function(){
-                    this.dom.find('.search-templates').trigger('focus');
-                }.bind(this), 10);
+                if(node.getValue() == -1){
+                    node.setValue(node.getData('value'));
+                    node.trigger('chosen:updated');
+                    node.parent('.left-top-container').find('.add-category-btn').trigger('click');
+                }else{
+                    node.parent('.left-top-container').find('#changeCategoryUpdate').trigger('click');
+                    setTimeout(function(){
+                        this.dom.find('.search-templates').trigger('focus');
+                    }.bind(this), 10);
+                    node.setData('value', node.getValue())
+                }
+
+            },
+
+            [ria.mvc.DomEventBind('click', '.import-btn, .lesson-plan-import-popup')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function importClick(node, event){
+                this.dom.find('.lesson-plan-import-popup').toggleClass('x-hidden');
             },
 
             [ria.mvc.DomEventBind('change', '.search-templates')],
@@ -112,6 +126,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                 new ria.dom.Dom().on('click', '.create-from-template', function($target, event){
                     that.setNotSave(true);
                 });
+                new ria.dom.Dom().on('click.import', function($target, event){
+                    var node = ria.dom.Dom(event.target);
+                    if(!node.isOrInside('.import-btn'))
+                        that.dom.find('.lesson-plan-import-popup').addClass('x-hidden');
+                });
+
+                new ria.dom.Dom().off('click.import');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanCategoriesListTpl, 'right-categories')],

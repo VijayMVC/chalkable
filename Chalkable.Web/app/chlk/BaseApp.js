@@ -220,9 +220,11 @@ NAMESPACE('chlk', function (){
 
                 ria.templates.ConverterFactories().register(new chlk.ConvertersFactory());
 
+                var tooltipTimeOut;
+
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
-                    if(!jQuery(this).data('wasClick')){
+                    if(!jQuery(this).data('wasClick') && !tooltipTimeOut){
                         var target = jQuery(e.target),
                             tooltip = jQuery('#chlk-tooltip-item');
                         target.off('remove.tooltip');
@@ -243,12 +245,19 @@ NAMESPACE('chlk', function (){
                                 showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
                             }
                             if((value || value === 0) && showTooltip ){
-                                tooltip.show();
+                                var timeout = node.data('tooltip-timeout');
+                                if(timeout){
+                                    tooltipTimeOut = setTimeout(function(){
+                                        tooltip.show();
+                                        tooltipTimeOut = null;
+                                    }, timeout)
+                                }else
+                                    tooltip.show();
+
                                 tooltip.find('.tooltip-content').html(node.data('tooltip'));
                                 tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
                                     .css('top', offset.top - tooltip.height());
                                 clazz && tooltip.addClass(clazz);
-                                e.stopPropagation();
                             }
                         }
                     }
@@ -256,6 +265,8 @@ NAMESPACE('chlk', function (){
                 });
 
                 jQuery(document).on('mouseleave click', '[data-tooltip]', function(e){
+                    clearTimeout(tooltipTimeOut);
+                    tooltipTimeOut = null;
                     var node = jQuery(this);
                     if(e.type == "click"){
                         node.data('wasClick', true);

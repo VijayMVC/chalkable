@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<AnnouncementComplex> GetAllItems(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetLessonPlansOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetAdminAnnouncementsOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, IList<int> gradeLevels, bool? complete, int start, int count);
-
+        IList<AnnouncementComplex> GetSupplementalAnnouncementsOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count, bool? ownedOnly = null);
     }
     
     public abstract class BaseFeedItemHandler<TSortBy, TFilterBy> : IFeedItemHandler
@@ -34,13 +34,19 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return InternalGetAdminAnns(locator, fromDate, toDate, gradeLevels, complete, start, count, default(TFilterBy), default(TFilterBy), true, true);
         }
 
+        public IList<AnnouncementComplex> GetSupplementalAnnouncementsOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId,
+            bool? complete, int start, int count, bool? ownedOnly = null)
+        {
+            return InternalGetSupplementalAnns(locator, fromDate, toDate, classId, complete, start, count, default(TFilterBy), default(TFilterBy), true, true, ownedOnly);
+        }
+        
         public virtual IList<AnnouncementComplex> GetAllItems(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, 
             bool? complete, int start, int count, bool? ownedOnly = null)
         {
             var ct = count != int.MaxValue ? count + 1 : count;
 
             var classAnns = locator.ClassAnnouncementService.GetClassAnnouncementsForFeed(fromDate, toDate, classId, complete, null, start, ct, SortOption);
-
+            
             if (start > 0 && classAnns.Count == 0)
                 return classAnns;
 
@@ -55,8 +61,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             
             var lps = InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeTo, ownedOnly);
-
             var res = MerageItems(classAnns, lps);
+
+            var supplementalAnns = InternalGetSupplementalAnns(locator, fromDate, toDate, classId, complete, start, count, from, to, includeFrom, includeFrom, ownedOnly);
+            res = MerageItems(res, supplementalAnns);
 
             if (locator.Context.Role == CoreRoles.STUDENT_ROLE)
                 res = MerageItems(res, InternalGetAdminAnns(locator, fromDate, toDate, null, complete, 0, int.MaxValue, from, to, includeFrom, includeTo));
@@ -93,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected virtual IList<AnnouncementComplex> MerageItems(IList<AnnouncementComplex> anns1, IList<AnnouncementComplex> anns2)
         {
-            return anns1.Merge(anns2, SortSelector, SortComparetor, _sortDesc).ToList();
+            return anns1.Merge(anns2, SortSelector, SortComparator, _sortDesc).ToList();
         }
 
         protected abstract IList<AnnouncementComplex> InternalGetLessonPlans(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId
@@ -101,8 +109,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         protected abstract IList<AnnouncementComplex> InternalGetAdminAnns(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, IList<int> gradeLevels
             , bool? complete, int start, int count, TFilterBy from, TFilterBy to, bool includeFrom, bool includeTo);
 
-
-        protected virtual IComparer<TSortBy> SortComparetor => null;
+        protected abstract IList<AnnouncementComplex> InternalGetSupplementalAnns(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId
+            , bool? complete, int start, int count, TFilterBy from, TFilterBy to, bool includeFrom, bool includeTo, bool? ownedOnly = null);
+        
+        protected virtual IComparer<TSortBy> SortComparator => null;
         protected abstract Func<ClassAnnouncement, TFilterBy> FilterSelector { get; }
         protected abstract Func<AnnouncementComplex, TSortBy> SortSelector { get; }
         protected abstract AnnouncementSortOption SortOption { get; }
