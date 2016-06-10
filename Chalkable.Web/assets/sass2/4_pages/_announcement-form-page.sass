@@ -91,6 +91,23 @@
       margin: 0
 
 .announcement-form
+  .lesson-plan-import-popup
+    padding: 0
+    right: -49px
+    top: 84px
+    width: 165px
+
+    a
+      display: block
+      padding: 8px 12px
+      text-decoration: none
+      text-align: left
+      font-weight: bold
+      margin: 0
+
+      &:hover
+        background: #f1f1f1
+
   .h-1
     min-height: 1px
     min-width: 225px
@@ -111,9 +128,6 @@
     top: 0
     line-height: 35px
 
-  .import-icon
-    opacity: 0.5
-
     &:hover
       opacity: 1
 
@@ -121,9 +135,12 @@
     .items
       width: 95%
 
-  .import-icon
+  .import-btn
     float: right
-    margin-top: -6px
+    margin-top: 50px
+    position: absolute
+    white-space: nowrap
+    right: 0px
 
   .attach-btn-area
     margin-bottom: 20px
@@ -356,6 +373,9 @@
       margin-bottom: 6px
       display: inline-block
       text-align: left
+
+      &.main-lable
+        margin-top: 10px
 
   .right-block
     width: 243px
