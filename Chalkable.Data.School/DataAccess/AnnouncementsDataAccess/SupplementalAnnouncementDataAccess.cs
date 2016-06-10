@@ -104,6 +104,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             
             additionalParams.Add("schoolYearId", _schoolYearId);
             additionalParams.Add("classId", query.ClassId);
+            additionalParams.Add("teacherId", query.TeacherId);
+            additionalParams.Add("studentId", query.StudentId);
 
             return InternalGetAnnouncements<SupplementalAnnouncementQuery>(procedureName, query, additionalParams);
         }
@@ -299,6 +301,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
     public class SupplementalAnnouncementQuery : AnnouncementsQuery
     {
+        public int? TeacherId { get; set; }
+        public int? StudentId { get; set; }
         public int? ClassId { get; set; }
         public string FromClassName { get; set; }
         public string ToClassName { get; set; }

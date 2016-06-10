@@ -43,9 +43,9 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                     -var typeId = self.getSelectedTypeId()
                     .left-top-container
                         .recipients-container
-                            label(for="type-select") Category:
+                            label(for="type-select").main-lable Category:
                             .types-select-cnt
-                                +Select('typeid')(disabled = !editable)#type-select
+                                +Select('typeid')#type-select
                                     each item in types
                                         if item.getId().valueOf()
                                             +Option(item.getId(), item.getName(), typeId== item.getId())(
@@ -53,9 +53,9 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                                             data-typename=item.getName()
                                             )
                             BUTTON(
-                            type = editable ? "submit" : "button",
-                            name="submitType",
-                            value="save"
+                                type = editable ? "submit" : "button",
+                                name="submitType",
+                                value="save"
                             )#announcement-type-btn.validate-skip.x-hidden
         .right-block
             .h-1

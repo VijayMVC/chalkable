@@ -29,8 +29,7 @@ mixin TooltipWithOverflow(text)
                         if order == 0
                             A: .period-info= period.getName()
                         each ann in calendarDayItem
-                            -VALIDATE_ARG('ann', [chlk.models.announcement.ClassAnnouncementViewData], ann)
-                            +ActionLink('announcement', 'view', ann.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).period-item.announcement
+                            +ActionLink('announcement', 'view', ann.getId(), ann.getType()).period-item.announcement
                                 .announcement-calendar-item(data-tooltip = ann.getTitle() + ' - ' + ann.getClassName())
                                     strong= ann.getTitle()
                                     = ' - ' + ann.getClassName()

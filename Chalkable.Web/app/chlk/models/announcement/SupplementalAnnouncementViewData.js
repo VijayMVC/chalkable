@@ -35,7 +35,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'announcementTypeId',
 
             function getRecipientsTooltip(){
-                var res = this.getRecipients() ? this.getRecipients().map(function(item){return item.getFullName()}).join('\n') : '';
+                var res = this.getRecipients() && this.getRecipients().length ? this.getRecipients().map(function(item){return item.getFullName()}).join('\n') : 'Supplemental Assignment';
                 return res;
             }
         ]);

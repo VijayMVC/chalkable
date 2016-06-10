@@ -51,7 +51,6 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
                         for(var i = len; i < max; i++){
                             item = new chlk.models.calendar.announcement.CalendarDayItem();
                             item.setPeriod(days[index].getCalendarDayItems()[i].getPeriod());
-                            item.setAnnouncementClassPeriods([]);
                             day.getCalendarDayItems().push(item);
                         }
                     }
