@@ -44,14 +44,14 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                                 +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
                             .left-top-container
                                 .recipients-container
-                                    label(for="students") Recipients:
+                                    label(for="students").main-lable Recipients:
                                     .types-select-cnt
                                         -var recipientIds = announcementItem.getRecipients() ? announcementItem.getRecipients().map(function(item){return item.getId()}) : []
                                         +Select('students')(multiple, data-placeholder="Assign To...").recipients-select
                                             each student in self.getStudents() || []
                                                 +Option(student.getId().valueOf(), student.getFullName(), recipientIds.indexOf(student.getId()) > -1)
                                 .categories-container
-                                    label(for="type-select") Category:
+                                    label(for="type-select").main-lable Category:
                                     .types-select-cnt
                                         -var typeId = self.getSelectedTypeId()
                                         +Select('typeid')#type-select
@@ -139,9 +139,6 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                             +Button()(type="button").special-button.red-button.big-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
                     else
                         +ActionLink('announcement', 'discard', announcement.getType()).grey-link.not-blue.add-loader-btn=Msg.Discard
-                if state
-                    .duplicate-btn-container
-                        +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId(), announcement.getType()).big-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
 
             if !classId
                 if topItems.length
