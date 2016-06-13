@@ -184,6 +184,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<SchoolYear> GetSortedYears()
         {
             return SchoolYearStorage.GetAll();

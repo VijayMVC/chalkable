@@ -10,6 +10,7 @@
     [SpEdStatus]          NVARCHAR (256) NULL,
     [PhotoModifiedDate]   DATETIME2 (7)  NULL,
     [UserId]              INT            NOT NULL,
+	[IsHispanic]		  BIT			 NOT NULL DEFAULT 0,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Student_Person] FOREIGN KEY ([Id]) REFERENCES [dbo].[Person] ([Id])
 );

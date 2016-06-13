@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
         void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears);
         IList<SchoolYear> GetDescSortedYearsByIds(IList<int> ids);
+        StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId);
     }
 
     public class SchoolYearService : SisConnectedService, ISchoolYearService
@@ -137,5 +138,9 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new DataAccessBase<StudentSchoolYear>(u).GetAll());
         }
 
+        public StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId)
+        {
+            return DoRead(u => new SchoolYearDataAccess(u).GetPreviousStudentSchoolYearOrNull(studentId));
+        }
     }
 }

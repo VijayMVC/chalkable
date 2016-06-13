@@ -23,7 +23,8 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 HasMedicalAlert = x.HasMedicalAlert,
                 IsAllowedInetAccess = x.IsAllowedInetAccess,
                 SpecialInstructions = x.SpecialInstructions,
-                SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : ""
+                SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : "",
+                IsHispanic = x.IsHispanic
             };
         }
 

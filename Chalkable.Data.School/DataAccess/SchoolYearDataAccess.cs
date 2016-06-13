@@ -58,7 +58,7 @@ namespace Chalkable.Data.School.DataAccess
             return PaginatedSelect< SchoolYear>(new SimpleQueryCondition("SchoolRef", schoolId, ConditionRelation.Equal), "Id", 0, int.MaxValue);
         }
 
-        public SchoolYear GetStudentPreviousSchoolYearOrNull(int studentId)
+        public StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId)
         {
             var @params = new Dictionary<string, object>
             {
@@ -66,7 +66,7 @@ namespace Chalkable.Data.School.DataAccess
             };
             using (var reader = ExecuteStoredProcedureReader("spGetPreviousStudentSchoolYear", @params))
             {
-                return reader.ReadOrNull<SchoolYear>();
+                return reader.ReadOrNull<StudentSchoolYear>();
             }
         }
     }

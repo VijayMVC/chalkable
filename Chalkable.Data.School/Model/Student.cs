@@ -20,6 +20,7 @@ namespace Chalkable.Data.School.Model
         public string SpEdStatus { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
         public int UserId { get; set; }
+        public bool IsHispanic { get; set; }
     }
 
     public class StudentDetails : Student
