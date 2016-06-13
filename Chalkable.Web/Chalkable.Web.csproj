@@ -388,6 +388,7 @@
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
     <Compile Include="Models\ClassPanoramaViewData.cs" />
+    <Compile Include="Models\EthnicityViewData.cs" />
     <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\ClassProfilePanoramaSettingsViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineDailySummaryViewData.cs" />
