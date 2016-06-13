@@ -10,6 +10,8 @@
     [SpEdStatus]          NVARCHAR (512) NULL,
     [PhotoModifiedDate]   DATETIME2 (7)  NULL,
     [UserId]              INT            NOT NULL,
-	[IsHispanic]		  BIT			 NOT NULL
+	[IsHispanic]		  BIT			 NOT NULL,
+	[IEPBeginDate]		  DATETIME2(7)	 NULL,
+	[IEPEndDate]		  DATETIME2(7)	 NULL
 );
 

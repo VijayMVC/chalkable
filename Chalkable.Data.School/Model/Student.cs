@@ -21,6 +21,22 @@ namespace Chalkable.Data.School.Model
         public DateTime? PhotoModifiedDate { get; set; }
         public int UserId { get; set; }
         public bool IsHispanic { get; set; }
+        public DateTime? IEPBeginDate { get; set; }
+        public DateTime? IEPEndDate { get; set; }
+
+        public bool IsIEPActive(DateTime now)
+        {
+            if (IEPBeginDate.HasValue)
+            {
+                if (now >= IEPBeginDate.Value && !IEPEndDate.HasValue)
+                    return true;
+
+                if (IEPEndDate.HasValue && now >= IEPBeginDate.Value && now <= IEPEndDate.Value)
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     public class StudentDetails : Student

@@ -11,7 +11,11 @@
     [PhotoModifiedDate]   DATETIME2 (7)  NULL,
     [UserId]              INT            NOT NULL,
 	[IsHispanic]		  BIT			 NOT NULL DEFAULT 0,
+	[IEPBeginDate]		  DATETIME2(7)	 NULL,
+	[IEPEndDate]		  DATETIME2(7)	 NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Student_Person] FOREIGN KEY ([Id]) REFERENCES [dbo].[Person] ([Id])
 );
 
+/*public DateTime? IEPBeginDate { get; set; }
+        public DateTime? IEPEndDate { get; set; }*/

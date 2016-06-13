@@ -24,7 +24,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 IsAllowedInetAccess = x.IsAllowedInetAccess,
                 SpecialInstructions = x.SpecialInstructions,
                 SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : "",
-                IsHispanic = x.IsHispanic
+                IsHispanic = x.IsHispanic,
+                IEPBeginDate = x.IEPBeginDate,
+                IEPEndDate = x.IEPEndDate
             };
         }
 
