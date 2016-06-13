@@ -100,7 +100,7 @@ namespace Chalkable.Web.Models
         {
             var res = new ClassDistributionStatsViewData
             {
-                ClassAvg = models.Average(x => x.AverageGrade),
+                ClassAvg = models.Count == 0 ? 0 : models.Average(x => x.AverageGrade),
                 DistributionStats = new List<DistributionItemViewData>()
             };
 
