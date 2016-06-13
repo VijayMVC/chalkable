@@ -33,8 +33,8 @@ namespace Chalkable.Web.Models
                 StandardizedTestsStatsByClass = StandardizedTestStatsViewData.Create(panorama.StandardizedTests, standardizedTests)
             };
 
-            var selected = panorama.StandardizedTests.Where(x => selectedStudents.Contains(x.StudentId));
-            res.SelectStandardizedTestsStats = StandardizedTestStatsViewData.Create(selected.ToList(), standardizedTests);
+            var selected = panorama.StandardizedTests?.Where(x => selectedStudents.Contains(x.StudentId));
+            res.SelectStandardizedTestsStats = StandardizedTestStatsViewData.Create(selected?.ToList(), standardizedTests);
 
             return res;
         }
