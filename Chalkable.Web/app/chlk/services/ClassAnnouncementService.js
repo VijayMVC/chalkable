@@ -22,7 +22,7 @@ NAMESPACE('chlk.services', function () {
         'ClassAnnouncementService', EXTENDS(chlk.services.BaseService), [
 
             [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate]],
-            ria.async.Future, function addClassAnnouncement(classId_, classAnnouncementTypeId_, expiresDate_) {
+            ria.async.Future, function add(classId_, classAnnouncementTypeId_, expiresDate_) {
                 return this.get('ClassAnnouncement/CreateClassAnnouncement.json', chlk.models.announcement.AnnouncementForm, {
                     classId: classId_ ? classId_.valueOf() : null,
                     classAnnouncementTypeId: classAnnouncementTypeId_,

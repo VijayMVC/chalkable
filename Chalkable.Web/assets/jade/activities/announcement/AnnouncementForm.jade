@@ -2,10 +2,10 @@ mixin AnnouncementTypeToolBar(types, announcement)
     -var classId = announcement.getClassAnnouncementData().getClassId()
     .action-bar
         .items
-            +ActionLink('announcement', 'addClassAnnouncement', classId).item.announcement-type-button.no-save.pressed Assignment
+            +ActionLink('classannouncement', 'add', classId).item.announcement-type-button.no-save.pressed Assignment
             if !announcement.getState().valueOf()
-                +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-button.no-save Lesson Plan
-                +ActionLink('announcement', 'supplementalAnnouncement', classId).item.announcement-type-button.no-save Supplemental
+                +ActionLink('lessonplan', 'add', classId).item.announcement-type-button.no-save Lesson Plan
+                +ActionLink('supplementalannouncement', 'add', classId).item.announcement-type-button.no-save Supplemental
         if classId && classId.valueOf()
             +ActionButton('announcement', 'showImportDialog', classId).import-btn
                 .import-small-icon.v-m
@@ -24,7 +24,7 @@ mixin AnnouncementTypeToolBar(types, announcement)
     if announcement && classAnnouncement.getClassId()
         h2.page-title= classAnnouncement.getClassName()
         .loader
-        +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
+        +ActionForm('classannouncement', 'save')(onlySubmitValidate=true).no-working
             +ClassesToolBar(topData, null, null, null, state)(pressAfterClick=!state)
             .not-transparent(class=(classId ? '' : 'x-hidden'))
                 +AnnouncementTypeToolBar(types, announcement, typeId)

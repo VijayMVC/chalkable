@@ -21,7 +21,7 @@ studentAnnouncements = self.getItems()
                 lbl = 'A - F'
                 owner = self.getOwner()
                 alertsEnum = chlk.models.grading.AlertsEnum
-                +ActionForm('announcement', 'updateAnnouncementGrade')(
+                +ActionForm('classannouncement', 'updateAnnouncementGrade')(
                     class = (item.isEmptyGrade() ? "empty-grade-form" : ""),
                     data-able-drop=self.isAbleDropStudentScore()
                 ).update-grade-form
