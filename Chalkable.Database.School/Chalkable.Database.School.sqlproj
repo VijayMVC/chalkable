@@ -341,6 +341,7 @@
     <Build Include="Tables\PersonEthnicity.sql" />
     <Build Include="User Defined Types\TEthnicity.sql" />
     <Build Include="User Defined Types\TPersonEthnicity.sql" />
+    <Build Include="Stored Procedures\spGetPreviousStudentSchoolYear.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

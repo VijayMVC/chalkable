@@ -56,6 +56,18 @@ namespace Chalkable.Data.School.DataAccess
         public PaginatedList<SchoolYear> GetBySchool(int schoolId)
         {
             return PaginatedSelect< SchoolYear>(new SimpleQueryCondition("SchoolRef", schoolId, ConditionRelation.Equal), "Id", 0, int.MaxValue);
-        } 
+        }
+
+        public SchoolYear GetStudentPreviousSchoolYearOrNull(int studentId)
+        {
+            var @params = new Dictionary<string, object>
+            {
+                ["studentId"] = studentId
+            };
+            using (var reader = ExecuteStoredProcedureReader("spGetPreviousStudentSchoolYear", @params))
+            {
+                return reader.ReadOrNull<SchoolYear>();
+            }
+        }
     }
 }
