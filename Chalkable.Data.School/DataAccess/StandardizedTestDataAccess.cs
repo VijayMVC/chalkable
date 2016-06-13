@@ -11,9 +11,13 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public IList<StandardizedTestDetails> GetListOfStandardizedTestDetails()
+        public IList<StandardizedTestDetails> GetListOfStandardizedTestDetails(IList<int> ids = null)
         {
-            using (var reader = ExecuteStoredProcedureReader("spGetStandardizedTestDetails", new Dictionary<string, object>()))
+            var @params = new Dictionary<string, object>
+            {
+                ["ids"] = ids ?? new List<int>()
+            };
+            using (var reader = ExecuteStoredProcedureReader("spGetStandardizedTestDetails", @params))
             {
                 var standardizedTest = reader.ReadList<StandardizedTest>();
 

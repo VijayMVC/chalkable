@@ -1,24 +1,29 @@
 ﻿CREATE Procedure [dbo].[spGetStandardizedTestDetails]
+	@ids TInt32 ReadOnly
 AS
 
-declare @standardizedTest TStandardizedTest
+Declare @idsCount int;
+Set @idsCount = (Select count(*) From @ids)
 
-insert into @standardizedTest
-output Inserted.*
-select * from StandardizedTest
+Declare @standardizedTest TStandardizedTest
+
+Insert Into @standardizedTest
+Output Inserted.*
+Select * From StandardizedTest
+Where (@idsCount = 0 or Id in (Select * From @ids))
 
 Select 
 	stc.*
 From 
 	StandardizedTestComponent stc
 	join @standardizedTest st 
-		on st.Id = stc.StandardizedTestRef
+		On st.Id = stc.StandardizedTestRef
 
 Select 
 	stst.*
 From 
 	StandardizedTestScoreType stst
 	join @standardizedTest st 
-		on st.Id = stst.StandardizedTestRef
+		On st.Id = stst.StandardizedTestRef
 
 GO

@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Model.PanoramaStuff
     {
         public int StudentId { get; set; }
         public DateTime Date { get; set; }
-        public string Score { get; set; }
+        public decimal Score { get; set; }
         public int StandardizedTestComponentId { get; set; }
         public int StandardizedTestId { get; set; }
         public int StandardizedTestScoreTypeId { get; set; }
@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Model.PanoramaStuff
                 Date = model.Date,
                 StandardizedTestId = model.StandardizedTestId,
                 StandardizedTestScoreTypeId = model.StandardizedTestScoreTypeId,
-                Score = model.Score,
+                Score = 33,//model.Score,
                 StandardizedTestComponentId = model.StandardizedTestComponentId
             };
         }

@@ -339,6 +339,8 @@
     <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByTitle.sql" />
     <Build Include="Tables\Ethnicity.sql" />
     <Build Include="Tables\PersonEthnicity.sql" />
+    <Build Include="User Defined Types\TEthnicity.sql" />
+    <Build Include="User Defined Types\TPersonEthnicity.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

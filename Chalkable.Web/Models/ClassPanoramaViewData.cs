@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Model.PanoramaStuff;
-using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -11,7 +9,7 @@ using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Models
 {
-    public class ClassPanoramaViewData: ClassViewData
+    public class ClassPanoramaViewData : ClassViewData
     {
         public ClassProfilePanoramaSettingsViewData FilterSettings { get; set; }
         public IList<StandardizedTestViewData> StandardizedTests { get; set; }     
@@ -25,14 +23,20 @@ namespace Chalkable.Web.Models
         }
         
         public static ClassPanoramaViewData Create(ClassDetails cClass, ClassProfilePanoramaSetting filterSetting, IList<StandardizedTestDetails> standardizedTests, 
-            ClassPanorama panorama, IList<GradingScaleRange> gradingScaleRanges)
+            ClassPanorama panorama, IList<GradingScaleRange> gradingScaleRanges, IList<int> selectedStudents)
         {
-            return new ClassPanoramaViewData(cClass)
+            var res = new ClassPanoramaViewData(cClass)
             {
                 FilterSettings = filterSetting != null ? ClassProfilePanoramaSettingsViewData.Create(filterSetting) : null,
                 StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList(),
-                ClassDistributionSection = ClassDistributionSectionViewData.Create(panorama.Grades, panorama.Absences, panorama.Infractions, gradingScaleRanges)
+                ClassDistributionSection = ClassDistributionSectionViewData.Create(panorama.Grades, panorama.Absences, panorama.Infractions, gradingScaleRanges),
+                StandardizedTestsStatsByClass = StandardizedTestStatsViewData.Create(panorama.StandardizedTests, standardizedTests)
             };
+
+            var selected = panorama.StandardizedTests.Where(x => selectedStudents.Contains(x.StudentId));
+            res.SelectStandardizedTestsStats = StandardizedTestStatsViewData.Create(selected.ToList(), standardizedTests);
+
+            return res;
         }
 
     }
@@ -42,7 +46,47 @@ namespace Chalkable.Web.Models
         public ShortStandardizedTestViewData StandardizedTest { get; set; }
         public StandardizedTestComponentViewData Component { get; set; }
         public StandardizedTestScoreTypeViewData ScoreType { get; set; }
-        public IList<DailyStatsViewData> DailyStats { get; set; } 
+        public IList<DailyStatsViewData> DailyStats { get; set; }
+
+        public static IList<StandardizedTestStatsViewData> Create(IList<StudentStandardizedTestInfo> models, IList<StandardizedTestDetails> standardizedTests)
+        {
+            var res = new List<StandardizedTestStatsViewData>();
+
+            if (models == null)
+                return res;
+
+            foreach (var standardizedTestInfo in models)
+            {
+                var test = res.FirstOrDefault(x => x.StandardizedTest.Id == standardizedTestInfo.StandardizedTestId
+                                                   && x.Component.Id == standardizedTestInfo.StandardizedTestComponentId);
+
+                if (test != null)
+                    continue;
+
+                var stTest = standardizedTests.First(x => x.Id == standardizedTestInfo.StandardizedTestId);
+                var component = stTest.Components.First(x => x.Id == standardizedTestInfo.StandardizedTestComponentId);
+                var scoreType = stTest.ScoreTypes.First(x => x.Id == standardizedTestInfo.StandardizedTestScoreTypeId);
+
+                var viewData = new StandardizedTestStatsViewData
+                {
+                    StandardizedTest = ShortStandardizedTestViewData.Create(stTest),
+                    Component = StandardizedTestComponentViewData.Create(component),
+                    ScoreType = StandardizedTestScoreTypeViewData.Create(scoreType)
+                };
+
+                var studentStTestsInfos = models
+                    .Where(x => x.StandardizedTestId == standardizedTestInfo.StandardizedTestId
+                                && x.StandardizedTestComponentId == standardizedTestInfo.StandardizedTestComponentId)
+                    .GroupBy(y => y.Date, x => x.Score);
+
+                foreach (var studentStTestsInfo in studentStTestsInfos)
+                    viewData.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, studentStTestsInfo.Average(x => x), "MMM yyyy"));
+
+                res.Add(viewData);
+            }
+
+            return res;
+        }
     }
 
 
@@ -77,7 +121,6 @@ namespace Chalkable.Web.Models
 
             return res;
         }
-
         private static ClassDistributionStatsViewData CreateAbsencesViewData(IList<ShortStudentAbsenceInfo> models)
         {
             var res = new ClassDistributionStatsViewData();
@@ -103,7 +146,6 @@ namespace Chalkable.Web.Models
 
             return res;
         }
-
         private static ClassDistributionStatsViewData CreateInfractionViewData(IList<ShortStudentInfractionsInfo> models)
         {
             var res = new ClassDistributionStatsViewData
@@ -139,8 +181,7 @@ namespace Chalkable.Web.Models
             return res;
         }
 
-        public static ClassDistributionSectionViewData Create(IList<StudentAverageGradeInfo> avgInfos,
-            IList<ShortStudentAbsenceInfo> absenceInfos,
+        public static ClassDistributionSectionViewData Create(IList<StudentAverageGradeInfo> avgInfos, IList<ShortStudentAbsenceInfo> absenceInfos,
             IList<ShortStudentInfractionsInfo> infractionInfos, IList<GradingScaleRange> gradingScaleRanges)
         {
             var res = new ClassDistributionSectionViewData();
@@ -159,11 +200,6 @@ namespace Chalkable.Web.Models
     {
         public decimal ClassAvg { get; set; }
         public IList<DistributionItemViewData> DistributionStats { get; set; }
-
-        public static ClassDistributionStatsViewData Create()
-        {
-            return new ClassDistributionStatsViewData();
-        }
     }
 
     public class DistributionItemViewData

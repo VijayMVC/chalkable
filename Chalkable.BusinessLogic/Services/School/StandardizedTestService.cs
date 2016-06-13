@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditStandardizedTestScoreTypes(IList<StandardizedTestScoreType> standardizedTestScoreTypes);
         void DeleteStandardizedTestScoreTypes(IList<StandardizedTestScoreType> standardizedTestScoreTypes);
 
-        IList<StandardizedTestDetails> GetListOfStandardizedTestDetails();
+        IList<StandardizedTestDetails> GetListOfStandardizedTestDetails(IList<int> ids = null);
     }
 
     class StandardizedTestService : SchoolServiceBase, IStandardizedTestService
@@ -74,9 +74,9 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<StandardizedTestScoreType>(u).Delete(standardizedTestScoreTypes));
         }
 
-        public IList<StandardizedTestDetails> GetListOfStandardizedTestDetails()
+        public IList<StandardizedTestDetails> GetListOfStandardizedTestDetails(IList<int> ids = null)
         {
-            return DoRead(uow => new StandardizedTestDataAccess(uow).GetListOfStandardizedTestDetails());
+            return DoRead(uow => new StandardizedTestDataAccess(uow).GetListOfStandardizedTestDetails(ids));
         }
     }
 }

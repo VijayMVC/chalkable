@@ -402,7 +402,69 @@ namespace Chalkable.Tests.Sis
         public void PanoramaApiTest()
         {
             var connector = ConnectorLocator.Create("MAGOLDEN-3856695863", "qqqq1111", "http://sandbox.sti-k12.com/chalkable/api/");
-            var callResult = connector.PanoramaConnector.GetSectionPanorama(13861, new List<int> {179}, null, null);
+            var componentsIds = new List<int>
+            {
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                2,
+                2,
+                2,
+                2,
+                2,
+                2,
+                6,
+                7,
+                7,
+                7,
+                7,
+                7,
+                7,
+                8,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15
+            };
+
+            var scoreTypeIds = new List<int>
+            {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                11,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                8,
+                12,
+                12,
+                12,
+                12,
+                12,
+                12
+            };
+
+            Debug.WriteLine($"{componentsIds.Count} - {scoreTypeIds.Count}");
+
+            var callResult = connector.PanoramaConnector.GetSectionPanorama(13806, new List<int> {179}, componentsIds, scoreTypeIds);
 
             Debug.WriteLine("Absences [StudentId - NumberOfAbsences - NumberOfDaysEnrolled]:");
             foreach (var studentAbsence in callResult.Absences)
