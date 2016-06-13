@@ -140,6 +140,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Panorama(ClassProfilePanoramaSetting settings, IntList selectedStudents)
         {
+            //-----------------------------HARDCODED_SNIPPET-------------------------------------
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            settings.SchoolYearIds = settings.SchoolYearIds ?? new List<int>();
+            settings.SchoolYearIds.Add(Context.SchoolYearId.Value);
+            //-----------------------------------------------------------------------------------
+
             var classDetails = SchoolLocator.ClassService.GetClassDetailsById(settings.ClassId);
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             var panorama = SchoolLocator.ClassService.Panorama(settings.ClassId, settings.SchoolYearIds, settings.StandardizedTestFilters);
