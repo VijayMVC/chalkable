@@ -9,5 +9,7 @@
     [SpecialInstructions] NVARCHAR (MAX) NOT NULL,
     [SpEdStatus]          NVARCHAR (512) NULL,
     [PhotoModifiedDate]   DATETIME2 (7)  NULL,
-    [UserId]              INT            NOT NULL);
+    [UserId]              INT            NOT NULL,
+	[IsHispanic]		  BIT			 NOT NULL
+);
 
