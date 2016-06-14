@@ -1,0 +1,66 @@
+mixin FileAttachBlock_(announcementId, announcementType, assignedAttributeId)
+    .upload-button.enabled
+        .announcement-item.application
+            .wrapper
+                .attach-file.img
+                .title Drag here
+                .or or
+                div(class= assignedAttributeId ? 'for-attribute' : '').simple-gray-button.download-link.file Choose File
+                    +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])(
+                        needFileIndex = true
+                        dropAreaSelector = '.upload-button.enabled',
+                        multiple = !assignedAttributeId,
+                        disabledMsgController = 'announcement',
+                        disabledMsgAction = 'uploadDisabled'
+                    )#add-file-attachment.simple-gray-button
+
+mixin AttachDialogSidebar(tpl, name)
+    -var options = tpl.getAttachOptions()
+    -var prefix = "pref"
+    .attach-sidebar
+        +ActionLink('announcement', 'attachFiles')(class = name == 'upload' ? 'active pressed' : '').upload Upload
+        if options.isFileCabinetEnabled()
+            +ActionLink('announcement', 'fileCabinet')(class = name == 'uploaded' ? 'active pressed' : '').uploaded Uploaded
+        if options.isStandardAttachEnabled()
+            +ActionLink('standard', 'showStandards')(class = name == 'standard' ? 'active pressed' : '').standard Standard
+        if options.isAbleAttachApps()
+            +ActionLink('announcement', 'attachApps')(class = name == 'apps' ? 'active pressed' : '').apps Apps
+        if options.isAssessmentAttachEnabled()
+            +ActionLink('apps', 'attachAssessmentApp', options.getAnnouncementId()
+                , options.getAssessmentAppId(), options.getAnnouncementType()
+                , options.getAppUrlAppend())(class = name == options.getAssessmentAppId() ? 'active pressed' : '').assessment Assessment
+        if tpl.isStudyCenterEnabled()
+            each app in options.getExternalAttachApps()
+                style(scoped=true, type="text/css").
+                     .#{prefix + app.getId().valueOf()}::before { background: url(#{app.getExternalAttachPictureUrl()}) 50% 50% no-repeat; background-size: 24px; }
+                +ActionLink('apps', 'viewExternalAttachApp', options.getAnnouncementId()
+                    , app.getId(), options.getAnnouncementType()
+                    , options.getAppUrlAppend()
+                    , options.getAssignedAttributeId())(class = [name == app.getId() ? 'active pressed' : '', prefix + app.getId()])= app.getName()
+
+
+options = self.getAttachOptions()
+announcementId = options.getAnnouncementId() && options.getAnnouncementId().valueOf()
+announcementType = options.getAnnouncementType()
+
+-var assignedAttributeId = options.getAssignedAttributeId();
+
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1
+        a.close.close-btn
+    .attach-content
+        +Hidden('isForAttribute', assignedAttributeId ? true : '')#is-for-attribute
+        +AttachDialogSidebar(self, 'upload')
+        .attach-main
+            +FileAttachBlock_(announcementId, announcementType, assignedAttributeId)
+            .files-container
+                .files-uploaded
+                    span.files-count 0
+                    |&#32;Files Uploaded
+    if assignedAttributeId
+        +ActionLink('announcement', 'refreshAttribute', announcementId, announcementType, assignedAttributeId).refresh-attachments.x-hidden
+    else
+        +ActionLink('announcement', 'refreshAttachments', announcementId, announcementType).refresh-attachments.x-hidden
+
+

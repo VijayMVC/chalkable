@@ -1,0 +1,53 @@
+.tabs-block
+  border: 1px solid #c8c7c3
+  border-radius: 5px
+
+  .tab-headers
+    background: #f2f2f2
+    overflow: hidden
+    border-radius: 5px
+    margin: 0
+    padding: 0
+
+    LI
+      float: left
+      list-style-type: none
+      text-align: center
+      padding: 2px 10px
+      min-width: 110px
+      cursor: pointer
+      border: 1px solid transparent
+      border-width: 0 1px 0 1px
+
+      &:first-child
+        border-left: none
+
+      &.active
+        background: white
+        border-right: 1px solid #c8c7c3
+
+        &:not(:first-child)
+          border-left: 1px solid #c8c7c3
+
+      &:hover
+        background: #f9f9f9
+
+  .charts-content
+    .chart-content
+      +animation(fadeEffect 1s)
+
+      &.active
+        opacity: 1
+
+      &:not(.active)
+        opacity: 0
+        display: none
+
++keyframes(fadeEffect)
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+
+

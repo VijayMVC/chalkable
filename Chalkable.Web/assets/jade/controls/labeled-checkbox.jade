@@ -1,0 +1,13 @@
+mixin LabeledCheckbox(text, name, val, isReadOnly, tooltipText)
+    attributes = self.prepareData(attributes)
+    -var hint = tooltipText ? tooltipText : text
+    .labeled-checkbox(class=(attributes.containerClass + (attributes.withInput ? ' with-input' : '')))
+        +Checkbox(name + (attributes.withInput ? '-checkbox' : ''), val, isReadOnly)(attributes).checkbox
+        if attributes.withInput
+            input(placeholder=attributes.placeholder, name=name, type="text").label-input
+        else if attributes.noTooltip
+            label(for=attributes.id)=text
+        else
+            label(for=attributes.id, data-tooltip=hint, data-tooltip-type=attributes.withoutOverflow ? "": "overflow")=text
+
+

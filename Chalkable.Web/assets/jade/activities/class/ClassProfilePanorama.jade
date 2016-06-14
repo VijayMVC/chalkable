@@ -1,0 +1,15 @@
+-var clazz = self.getClazz()
+
+.profile-page.class-profile.panorama-page
+    h2.page-title=clazz.getName()
+    +ProfileTopBar(self, 'panorama')
+    .summary-view
+        +ActionForm('class', 'panoramaSubmit').class-panorama-form
+            +Hidden('classId', clazz.getId().valueOf())
+            +CloseOpen('Filter', true)
+                +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings())
+            .charts-part
+                +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)
+
+
+
