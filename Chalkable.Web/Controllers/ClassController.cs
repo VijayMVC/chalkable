@@ -122,6 +122,13 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult AllCourseTypes()
+        {
+            var courseTypes = SchoolLocator.CourseTypeService.GetList(true);
+            return Json(ShortCourseTypeViewData.Create(courseTypes).OrderBy(x => x.CoureTypeName));
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
         public ActionResult AllSchoolsActiveClasses()
         {
             var classes = SchoolLocator.ClassService.GetAllSchoolsActiveClasses();
