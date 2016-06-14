@@ -34,6 +34,6 @@ namespace Chalkable.Data.School.Model
         // Panorama Settings 
         public const string CLASS_PROFILE_PANORAMA_SETTING = "classprofilepanoramasetting";
         public const string STUDENT_PROFILE_PANORAMA_SETTING = "studentprofilepanoramasetting";
-
+        public const string ADMIN_PANORAMA_SETTINGS = "adminpanoramasettings";
     }
 }

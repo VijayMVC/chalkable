@@ -39,7 +39,21 @@ namespace Chalkable.Data.School.DataAccess
             q.Sql.AppendFormat("order by {0}  desc", SchoolYear.END_DATE_FIELD);
             return ReadOneOrNull<SchoolYear>(q);
         }
-        
+
+        public IList<SchoolYear> GetPreviousSchoolYears(DateTime currentSyStartDate, int schoolId, int count = 1)
+        {
+            var conds = new AndQueryCondition
+            {
+                {SchoolYear.END_DATE_FIELD, currentSyStartDate, ConditionRelation.LessEqual },
+                {SchoolYear.SCHOOL_REF_FIELD, schoolId, ConditionRelation.Equal }
+            };
+
+            var dbQuery = Orm.SimpleSelect<SchoolYear>(conds, count);
+            Orm.OrderBy(dbQuery, nameof(SchoolYear), SchoolYear.END_DATE_FIELD, Orm.OrderType.Desc);
+
+            return ReadMany<SchoolYear>(dbQuery);
+        }
+
         public void Delete(IList<int> ids)
         {
             SimpleDelete(ids.Select(x => new SchoolYear {Id = x}).ToList());

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
+using Chalkable.Data.School.Model;
 using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
@@ -9,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
     {
         TSettings GetSettings(IServiceLocatorSchool serviceLocator, int? personId, int? classId);
         void SetSettings(IServiceLocatorSchool serviceLocator, int? personId, int? classId, BaseSettingModel settings);
-        TSettings GetDefault(IServiceLocatorSchool serviceLocator, int? personId, int? classId);
+        TSettings GetDefault(IServiceLocatorSchool serviceLocator, int? classId);
     }
     public abstract class BasePanoramaSettingsHandler<TSettings> : IBasePanoramaSettingsHandler<TSettings> where TSettings : BaseSettingModel
     {
@@ -18,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             var settings = serviceLocator.PersonSettingService.GetSettingsForPerson(new List<string> { SettingKey }, personId, null, classId);
             return settings.ContainsKey(SettingKey)
                 ? JsonConvert.DeserializeObject<TSettings>(settings[SettingKey])
-                : GetDefault(serviceLocator, personId, classId);
+                : GetDefault(serviceLocator, classId);
         }
         public virtual void SetSettings(IServiceLocatorSchool serviceLocator, int? personId, int? classId, BaseSettingModel settings)
         {
@@ -26,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             var dic = new Dictionary<string, object> { { SettingKey, obj } };
             serviceLocator.PersonSettingService.SetSettingsForPerson(dic, personId, null, classId);
         }
-        public virtual TSettings GetDefault(IServiceLocatorSchool serviceLocator, int? personId, int? classId)
+        public virtual TSettings GetDefault(IServiceLocatorSchool serviceLocator, int? classId)
         {
             return default(TSettings);
         }
@@ -35,17 +36,44 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
 
     public class DefaultPanoramaSettingHandler<TSettings> : BasePanoramaSettingsHandler<TSettings> where TSettings : BaseSettingModel
     {
-        private readonly Func<IServiceLocatorSchool, int?, int?, TSettings> _getDefaultAction;
-        public DefaultPanoramaSettingHandler(string settingKey, Func<IServiceLocatorSchool, int?, int?, TSettings> getDefaultAction = null)
+        private readonly Func<IServiceLocatorSchool, int?, TSettings> _getDefaultAction;
+        public DefaultPanoramaSettingHandler(string settingKey, Func<IServiceLocatorSchool, int?, TSettings> getDefaultAction = null)
         {
             SettingKey = settingKey;
             _getDefaultAction = getDefaultAction;
         }
         protected override string SettingKey { get; }
-        public override TSettings GetDefault(IServiceLocatorSchool serviceLocator, int? personId, int? classId)
+        public override TSettings GetDefault(IServiceLocatorSchool serviceLocator, int? classId)
         {
-            return _getDefaultAction?.Invoke(serviceLocator, personId, classId);
+            return _getDefaultAction?.Invoke(serviceLocator, classId);
+        }
+    }
+
+    public class AdminPanoramaSettingsHandler : BasePanoramaSettingsHandler<AdminPanoramaSettings>
+    {
+        public AdminPanoramaSettingsHandler(string settingKey)
+        {
+            SettingKey = settingKey;
+        }
+        protected override string SettingKey { get; }
+        public override AdminPanoramaSettings GetDefault(IServiceLocatorSchool serviceLocator, int? classId)
+        {
+            return new AdminPanoramaSettings
+            {
+                PreviousYearsCount = 1,
+                StudentDefaultSettings = new List<StandardizedTestFilter>(),
+                CourseTypeDefaultSettings = new List<CourseTypeSetting>()
+            };
         }
 
+        public override AdminPanoramaSettings GetSettings(IServiceLocatorSchool serviceLocator, int? personId, int? classId)
+        {
+            return base.GetSettings(serviceLocator, null, null);
+        }
+
+        public override void SetSettings(IServiceLocatorSchool serviceLocator, int? personId, int? classId, BaseSettingModel settings)
+        {
+            base.SetSettings(serviceLocator, null, null, settings);
+        }
     }
 }
