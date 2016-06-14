@@ -92,7 +92,7 @@ NAMESPACE('chlk.services', function () {
 
             //[[chlk.models.id.ClassId, Object]],
             ria.async.Future, function getPanorama(classId, data_) {
-                return this.get('Class/Panorama.json', chlk.models.profile.ClassPanoramaViewData, {
+                return this.post('Class/Panorama.json', chlk.models.profile.ClassPanoramaViewData, {
                     classId: classId.valueOf(),
                     standardizedTestFilters: data_ && data_.standardizedTestFilters,
                     schoolYearIds: data_ && data_.schoolYearIds
