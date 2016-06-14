@@ -33,6 +33,9 @@ namespace Chalkable.Web.Models
                 StandardizedTestsStatsByClass = StandardizedTestStatsViewData.Create(panorama.StandardizedTests, standardizedTests)
             };
 
+            if (selectedStudents == null || selectedStudents.Count == 0)
+                return res;
+
             var selected = panorama.StandardizedTests?.Where(x => selectedStudents.Contains(x.StudentId));
             res.SelectStandardizedTestsStats = StandardizedTestStatsViewData.Create(selected?.ToList(), standardizedTests);
 
@@ -71,7 +74,8 @@ namespace Chalkable.Web.Models
                 {
                     StandardizedTest = ShortStandardizedTestViewData.Create(stTest),
                     Component = StandardizedTestComponentViewData.Create(component),
-                    ScoreType = StandardizedTestScoreTypeViewData.Create(scoreType)
+                    ScoreType = StandardizedTestScoreTypeViewData.Create(scoreType),
+                    DailyStats = new List<DailyStatsViewData>()
                 };
 
                 var studentStTestsInfos = models
