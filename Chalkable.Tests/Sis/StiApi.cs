@@ -14,6 +14,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
+using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.SyncModel;
 using NUnit.Framework;
 using Address = Chalkable.StiConnector.SyncModel.Address;
@@ -464,8 +465,40 @@ namespace Chalkable.Tests.Sis
 
             Debug.WriteLine($"{componentsIds.Count} - {scoreTypeIds.Count}");
 
-            var callResult = connector.PanoramaConnector.GetSectionPanorama(13806, new List<int> {179}, componentsIds, scoreTypeIds);
+            SectionPanorama callResult = new SectionPanorama();
+            List<int> classIds = new List<int>
+            {
+                13770,
+                13771,
+                13772,
+                13806,
+                13861,
+                13862,
+                13950,
+                14011,
+                14436,
+                15165
+            };
 
+            bool found = false;
+            int @class = 0;
+            foreach (var classId in classIds)
+            {
+                callResult = connector.PanoramaConnector.GetSectionPanorama(classId, new List<int> {179}, componentsIds, scoreTypeIds);
+                if (callResult.StandardizedTests != null)
+                {
+                    found = true;
+                    @class = classId;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                Debug.WriteLine("StandardizedTests not found in any class");
+                return;
+            }
+
+            Debug.WriteLine($"ClassId : {@class}");
             Debug.WriteLine("Absences [StudentId - NumberOfAbsences - NumberOfDaysEnrolled]:");
             foreach (var studentAbsence in callResult.Absences)
             {

@@ -389,6 +389,7 @@
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
     <Compile Include="Models\ClassPanoramaViewData.cs" />
     <Compile Include="Models\EthnicityViewData.cs" />
+    <Compile Include="Models\Settings\AdminPanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\ClassProfilePanoramaSettingsViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineDailySummaryViewData.cs" />
@@ -514,6 +515,7 @@
     <Compile Include="Models\SchoolYearClassesViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
+    <Compile Include="Models\Settings\CourseTypeSettingViewData.cs" />
     <Compile Include="Models\Settings\PersonProfilePanoramaSettingsViewData.cs" />
     <Compile Include="Models\ShortDistrictSummaryViewData.cs" />
     <Compile Include="Models\Settings\StandardizedTestFilterViewData.cs" />

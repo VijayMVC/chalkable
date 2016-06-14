@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -138,26 +139,34 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult Panorama(ClassProfilePanoramaSetting settings, IntList selectedStudents)
+        public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IntList selectedStudents)
         {
+            if(settings.SchoolYearIds == null)
+                settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSetting>(classId);
+
+            if (settings.SchoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
             //-----------------------------HARDCODED_SNIPPET-------------------------------------
-            Trace.Assert(Context.SchoolYearId.HasValue);
-            settings.SchoolYearIds = settings.SchoolYearIds ?? new List<int>();
-            settings.SchoolYearIds.Add(Context.SchoolYearId.Value);
+            //Trace.Assert(Context.SchoolYearId.HasValue);
+            //settings.SchoolYearIds = settings.SchoolYearIds ?? new List<int>();
+            //settings.SchoolYearIds.Add(Context.SchoolYearId.Value);
             //-----------------------------------------------------------------------------------
 
-            var classDetails = SchoolLocator.ClassService.GetClassDetailsById(settings.ClassId);
+            var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
-            var panorama = SchoolLocator.ClassService.Panorama(settings.ClassId, settings.SchoolYearIds, settings.StandardizedTestFilters);
-            var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(settings.ClassId);
+            var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
+            var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
 
             return Json(ClassPanoramaViewData.Create(classDetails, settings, standardizedTestDetails, panorama, gradingScale, selectedStudents));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult SavePanoramaSettings(ClassProfilePanoramaSetting setting)
+        public ActionResult SavePanoramaSettings(int classId, ClassProfilePanoramaSetting setting)
         {
-            SchoolLocator.PanoramaSettingsService.Save(setting, setting.ClassId);
+            if (setting.SchoolYearIds == null || setting.SchoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            SchoolLocator.PanoramaSettingsService.Save(setting, classId);
             return Json(true);
         }
 
