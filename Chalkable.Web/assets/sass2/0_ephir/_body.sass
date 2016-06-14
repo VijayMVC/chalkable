@@ -1,0 +1,115 @@
+body
+  margin: 0
+  padding: 0
+  background: #f7f7f5 image-url("images2/header.png") repeat-x 3px 0
+  color: #2b2a28
+  font-family: 'Open Sans', sans-serif
+  min-width: 1200px
+  font-size: 13px
+
+  overflow-x: auto
+  overflow-y: scroll
+
+@media screen and (max-width: 1200px)
+  body
+    min-width: 600px
+
+  html
+    zoom: 0.7
+
+@media screen and (max-width: 820px)
+  body
+    min-width: 590px
+
+  html
+    zoom: 0.5
+
+*
+  overflow: visible
+
+div[data-tooltip]
+  text-overflow: ellipsis !important
+  overflow: hidden !important
+
+.x-hidden
+  display: none !important
+  visibility: none
+  opacity: 0
+
+.x-zero
+  position: absolute
+  z-index: 0
+  width: 0
+  height: 0
+  opacity: 0
+
+.wrapper
+  position: relative
+
+.clear-fix
+  clear: both
+
+.right
+  float: right
+
+.left
+  float: left
+
+.i-b
+  display: inline-block
+
+.v-m
+  vertical-align: middle
+
+body .right-align
+  text-align: right
+
+p, h1, h2, h3, h4, h5, h6
+  margin: 0
+
+.withdrawn
+  height: 7px
+  width: 7px
+  border-radius: 50%
+  background: #d45151
+  vertical-align: middle
+  margin-left: 10px
+  display: inline-block
+
+.report-iframe
+  height: 0
+  width: 0
+  border: none
+  position: absolute
+
+.choose-class
+  width: 210px
+  height: 40px
+  background: image_url('images2/announcement/choose-class.png')
+
+.choose-type
+  top: 132px
+  width: 205px
+  height: 45px
+  background: image_url('images2/announcement/choose-type.png')
+
+.choose-type, .choose-class
+  position: absolute
+  left: 271px
+  display: block
+
+.saving-block, .saved-block
+  display: none
+  font: bold 12px Arial
+  color: #5d5d5d
+
+.saved-block
+  background: inline-image('images2/discipline/saved.png') 0 center no-repeat
+  padding-left: 25px
+
+
+.saving .saving-block
+  display: block
+
+.saved .saved-block
+  display: block
