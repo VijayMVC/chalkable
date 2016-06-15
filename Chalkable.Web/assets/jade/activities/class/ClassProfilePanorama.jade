@@ -4,10 +4,10 @@
     h2.page-title=clazz.getName()
     +ProfileTopBar(self, 'panorama')
     .summary-view
-        +ActionForm('class', 'panoramaSubmit').class-panorama-form
+        +ActionForm('class', 'panoramaSubmit').class-panorama-form.no-working
             +Hidden('classId', clazz.getId().valueOf())
-            +CloseOpen('Filter', true)
-                +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings())
+            +CloseOpen('Filter', !clazz.isShowFilters())
+                +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings(), clazz.getId())
             .charts-part
                 +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)
 

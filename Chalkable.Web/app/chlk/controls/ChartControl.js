@@ -88,7 +88,7 @@ NAMESPACE('chlk.controls', function () {
                 }
             }
         },
-        colors: ['#d8d8d8'],
+        //colors: ['#d8d8d8'],
 
         series: [{
             name: '',

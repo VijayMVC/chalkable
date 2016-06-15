@@ -20,6 +20,7 @@ NAMESPACE('chlk.models.profile', function () {
             ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'standardizedTestsStatsByClass',
             ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'selectStandardizedTestsStats',
             ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
+            Boolean, 'showFilters',
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);

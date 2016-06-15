@@ -39,7 +39,7 @@ NAMESPACE('chlk.controls', function () {
                     dom.appendTo(target.empty());
                     this.context.getDefaultView().notifyControlRefreshed();
 
-                    this.formSubmitByNode(node);
+                    this.formSubmitByNode_(node);
                 }
             },
 
@@ -48,7 +48,7 @@ NAMESPACE('chlk.controls', function () {
             function deleteClick(node, event) {
                 var form = node.parent('form'), block = node.parent('.filter-block');
                 block.removeSelf();
-                this.formSubmitByNode(null, form);
+                this.formSubmitByNode_(null, form);
             },
 
             [ria.mvc.DomEventBind('click', '.panorama-filter-form .filter-block')],
@@ -62,12 +62,43 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('change', '.panorama-filter-ctn .submit-after-change')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function submitItemChange(node, event, selected) {
-                this.formSubmitByNode(node);
+                this.formSubmitByNode_(node);
             },
 
-            function formSubmitByNode(node, form_) {
+            function formSubmitByNode_(node, form_) {
                 var filters = [], form = form_ || node.parent('form');
                 form.removeClass('working');
+
+                var res = this.getFiltersObject_(form);
+
+                this.checkRestoreBtn_(form, res);
+
+                form.find('.filters-value').setValue(JSON.stringify(res));
+                form.trigger('submit');
+            },
+
+            function checkRestoreBtn_(form, currentFilters){
+                var oldFilters = form.getData('filters'),
+                    oldYears = oldFilters.schoolYearIds.sort().join(','),
+                    currentYears = currentFilters.schoolYearIds.sort().join(','),
+                    btn = form.find('.restore-btn');
+
+                var oldMap = oldFilters.standardizedTestFilters.map(function(item){
+                    return [item.standardizedTestId, item.componentId, item.scoreTypeId].join(',')
+                }).join(',');
+
+                var currentMap = currentFilters.standardizedTestFilters.map(function(item){
+                    return [item.standardizedTestId, item.componentId, item.scoreTypeId].join(',')
+                }).join(',');
+
+                if(oldYears == currentYears && oldMap == currentMap)
+                    btn.setAttr('disabled', 'disabled');
+                else
+                    btn.removeAttr('disabled');
+            },
+
+            function getFiltersObject_(form){
+                var filters = [];
                 form.find('.filter-block').forEach(function(block){
                     var typeSelect = block.find('.filter-type-select'), type = typeSelect.getValue();
                     if(type){
@@ -85,8 +116,7 @@ NAMESPACE('chlk.controls', function () {
                     schoolYearIds: form.find('.school-years-select').getValue()
                 };
 
-                form.find('.filters-value').setValue(JSON.stringify(res));
-                form.trigger('submit');
+                return res;
             },
 
             ArrayOf(chlk.models.profile.StandardizedTestViewData), 'standardizedTests',
@@ -99,9 +129,11 @@ NAMESPACE('chlk.controls', function () {
                 }));
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        ria.dom.Dom('#'+attributes.id)
-                            .parent('form')
-                            .addClass('panorama-filter-form');
+                        var form = ria.dom.Dom('#'+attributes.id).parent('form'),
+                            filters = this.getFiltersObject_(form);
+
+                        form.addClass('panorama-filter-form')
+                            .setData('filters', filters);
                     }.bind(this));
                 return attributes;
             }

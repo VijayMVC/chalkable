@@ -11,6 +11,7 @@ NAMESPACE('chlk.activities.classes', function () {
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.classes.ClassProfilePanoramaTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaChartsTpl, '', '.charts-part', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassPanoramaPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.PartialUpdateRule(null, 'save-filters')],

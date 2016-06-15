@@ -42,7 +42,6 @@ NAMESPACE('chlk.templates.attendance',function(){
 
                 return {
                     chart: {
-                        width: 800,
                         height: 200
                     },
 
