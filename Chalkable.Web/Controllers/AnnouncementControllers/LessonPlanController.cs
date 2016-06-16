@@ -77,7 +77,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 var lpGalleryId = Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? lessonPlanId : SchoolLocator.LessonPlanService.Create(classId, startDate, endDate).LessonPlanData.Id;
 
                 SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lpGalleryId, attributes);
-                SchoolLocator.LessonPlanService.Edit(lpGalleryId, null, lpCategoryRef, title, content, startDate, endDate, !hideFromStudents, true);
+                SchoolLocator.LessonPlanService.Edit(lpGalleryId, null, lpCategoryRef, title + " Template", content, startDate, endDate, !hideFromStudents, true);
                 SchoolLocator.LessonPlanService.Submit(lpGalleryId);
                 MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
             }
