@@ -42,11 +42,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher, DistrictAdmin")]
-        public ActionResult Save(int lessonPlanId, int? classId, string title, string content, int? galleryCategoryId,
+        public ActionResult Save(int lessonPlanId, int? classId, string title, string content, int? lpCategoryRef,
             DateTime? startDate, DateTime? endDate, bool hideFromStudents, bool inGallery, IList<AssignedAttributeInputModel> attributes)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);
-            var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents, inGallery);
+            var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, lpCategoryRef, title, content, startDate, endDate, !hideFromStudents, inGallery);
 
             //if (res.LessonPlanData?.GalleryCategoryRef != null)
             //{
@@ -77,7 +77,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 var lpGalleryId = Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? lessonPlanId : SchoolLocator.LessonPlanService.Create(classId, startDate, endDate).LessonPlanData.Id;
 
                 SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lpGalleryId, attributes);
-                SchoolLocator.LessonPlanService.Edit(lpGalleryId, null, lpCategoryRef, title, content, startDate, endDate, !hideFromStudents, true);
+                SchoolLocator.LessonPlanService.Edit(lpGalleryId, null, lpCategoryRef, title + " Template", content, startDate, endDate, !hideFromStudents, true);
                 SchoolLocator.LessonPlanService.Submit(lpGalleryId);
                 MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
             }
