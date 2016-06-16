@@ -1,0 +1,59 @@
+{"data":{
+    "disciplineboxes":[
+        {
+            "title":1,
+            "name":"Chewing gum",
+            "ispassing":false,
+            "hover":[
+                {"value":1,"classname":"Algebra 9A"}
+            ]
+        },{
+            "title":8,
+            "name":"Dress Code",
+            "ispassing":false,
+            "hover":[
+                {"value":4,"classname":"English 9A"},
+                {"value":2,"classname":"Algebra 9A"},
+                {"value":1,"classname":"Global History"},
+                {"value":1,"classname":"Gym"}
+            ]
+        },{
+            "title":4,
+            "name":"Fighting",
+            "ispassing":false,
+            "hover":[
+                {"value":2,"classname":"English 9A"},
+                {"value":1,"classname":"Algebra 9A"},
+                {"value":1,"classname":"Gym"}
+            ]
+        },{
+            "title":3,
+            "name":"Weapon",
+            "ispassing":false,
+            "hover":[
+                {"value":2,"classname":"English 9A"},
+                {"value":1,"classname":"Algebra 9A"}
+            ]
+        }
+    ],
+    "markingperiod":{
+        "id":15156,
+        "description":"Default",
+        "name":"Default",
+        "startdate":"2012-09-25",
+        "enddate":"2014-03-25"
+    },
+    "summary":"James is having disciplinary issues in English 9A",
+    "id":1291888,
+    "displayname":"James Abbate",
+    "fullname":"James Abbate",
+    "firstname":"James",
+    "lastname":"Abbate",
+    "gender":"m",
+    "role": {
+        "description": "Student",
+        "id": 3,
+        "name": "Student",
+        "namelowered": "student"
+    }
+},"success":true}
