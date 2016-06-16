@@ -18,8 +18,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     {
         AnnouncementDetails Create(int? classId, DateTime? startDate, DateTime? endDate);
         AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId);
-        AnnouncementDetails Edit(int lessonPlanId, int? classId, int? galleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery);
-        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
+        AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpCategoryRef, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery);
+        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? lpCategoryRef, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
         bool ExistsInGallery(string title, int? exceludedLessonPlanId);
@@ -201,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 .Cast<AnnouncementComplex>().ToList();
         }
 
-        public AnnouncementDetails Edit(int lessonPlanId, int? classId, int? galleryCategoryId, string title, string content,
+        public AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpCategoryRef, string title, string content,
                                         DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -230,7 +230,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.InGallery = inGallery;
 
                 if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
-                    lessonPlan.GalleryCategoryRef = galleryCategoryId;
+                    lessonPlan.GalleryCategoryRef = lpCategoryRef;
 
                 if (lessonPlan.IsSubmitted)
                     ValidateLessonPlan(lessonPlan, da);
@@ -399,12 +399,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         
-        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created)
+        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? lpCategoryRef, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created)
         {
             Trace.Assert(Context.PersonId.HasValue);
             BaseSecurity.EnsureStudyCenterEnabled(Context);
 
-            var lessonPlans = DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId, state, Context.PersonId.Value));
+            var lessonPlans = DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(lpCategoryRef, title, classId, state, Context.PersonId.Value));
 
             switch (sortType)
             {

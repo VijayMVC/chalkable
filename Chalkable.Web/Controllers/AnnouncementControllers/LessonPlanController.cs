@@ -42,11 +42,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher, DistrictAdmin")]
-        public ActionResult Save(int lessonPlanId, int? classId, string title, string content, int? galleryCategoryId,
+        public ActionResult Save(int lessonPlanId, int? classId, string title, string content, int? lpCategoryRef,
             DateTime? startDate, DateTime? endDate, bool hideFromStudents, bool inGallery, IList<AssignedAttributeInputModel> attributes)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);
-            var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents, inGallery);
+            var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, lpCategoryRef, title, content, startDate, endDate, !hideFromStudents, inGallery);
 
             //if (res.LessonPlanData?.GalleryCategoryRef != null)
             //{
