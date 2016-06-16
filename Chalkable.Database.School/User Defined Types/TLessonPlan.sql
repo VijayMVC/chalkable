@@ -10,6 +10,7 @@
     [EndDate]              DATETIME2 (7)    NULL,
     [GalleryCategoryRef]   INT              NULL,
     [VisibleForStudent]    BIT              NULL,
+	[InGallery]			   BIT				NOT NULL,
     [PrimaryTeacherName]   NVARCHAR (MAX)   NULL,
     [PrimaryTeacherGender] NVARCHAR (MAX)   NULL,
     [ClassName]            NVARCHAR (30)   NULL,
