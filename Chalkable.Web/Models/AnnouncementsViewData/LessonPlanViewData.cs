@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int ClassId { get; set; }
+        public int? ClassId { get; set; }
         public string ClassName { get; set; }
         public string FullClassName { get; set; }
         public bool HideFromStudents { get; set; }

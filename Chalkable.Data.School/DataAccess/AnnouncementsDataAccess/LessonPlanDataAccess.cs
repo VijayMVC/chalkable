@@ -47,7 +47,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 Update(lessonPlan);
             }
         }
-        public AnnouncementDetails Create(int classId, DateTime created, DateTime? startDate, DateTime? endDate, int personId, int schoolYearId)
+        public AnnouncementDetails Create(int? classId, DateTime created, DateTime? startDate, DateTime? endDate, int personId, int schoolYearId, int callerRole)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -57,7 +57,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {"startDate", startDate},
                     {"endDate", endDate},
                     {"personId", personId},
-                    {"state", AnnouncementState.Draft}
+                    {"state", AnnouncementState.Draft},
+                    {"callerRole", callerRole}
                 };
             using (var reader = ExecuteStoredProcedureReader("spCreateLessonPlan", parameters))
             {
@@ -214,7 +215,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         protected IList<LessonPlan> GetLessonPlanTemplates(int? lessonPlanId, int? galleryCategoryId, string titleFilter, int? classId, AnnouncementState? state, int callerId)
         {
-            var conds = new AndQueryCondition { { LessonPlan.GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual } };
+            var conds = new AndQueryCondition { { LessonPlan.IN_GALLERY, 1, ConditionRelation.Equal } };
             if(lessonPlanId.HasValue)
                 conds.Add(Announcement.ID_FIELD, lessonPlanId);
             if (state.HasValue)
@@ -254,8 +255,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             if(additionalParams == null)
                 additionalParams = new Dictionary<string, object>();
-
-            additionalParams.Add("galleryCategoryId", query.GalleryCategoryId);
+            
             additionalParams.Add("schoolYearId", schoolYearId);
             additionalParams.Add("classId", query.ClassId);
 
@@ -396,7 +396,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public int? ClassId { get; set; }
         public int? TeacherId { get; set; }
         public int? StudentId { get; set; }
-        public int? GalleryCategoryId { get; set; }
         public string FromClassName { get; set; }
         public string ToClassName { get; set; }
     }

@@ -34,12 +34,13 @@ Declare @toCopy table
 	VisibleForStudent bit,
 	Title nvarchar(200),
 	SchoolYearRef int,
+	InGallery bit,
 	TotalSchoolDays int
 )
 
 Insert Into @toCopy
 	Select 
-		Id, Content, StartDate, EndDate, VisibleForStudent, Title, SchoolYearRef,
+		Id, Content, StartDate, EndDate, VisibleForStudent, Title, SchoolYearRef, InGallery,
 		(
 		  Select Count(*) 
 		  From [Date]					   
@@ -125,6 +126,7 @@ Insert Into LessonPlan
 		@toClassId,
 		null,
 		ToCopy.VisibleForStudent,
+		ToCopy.InGallery,
 		@toSchoolYearId
 	From 
 		@toCopy as ToCopy join @newAnnIds as NewLp

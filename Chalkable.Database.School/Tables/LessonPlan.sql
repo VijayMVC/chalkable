@@ -6,6 +6,7 @@
     [GalleryCategoryRef] INT           NULL,
     [VisibleForStudent]  BIT           NOT NULL,
     [SchoolYearRef]      INT           NOT NULL,
+	[InGallery]			 BIT		   NOT NULL DEFAULT 0,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_LessonPlan_Announcement] FOREIGN KEY ([Id]) REFERENCES [dbo].[Announcement] ([Id]),
     CONSTRAINT [FK_LessonPlan_Class] FOREIGN KEY ([ClassRef]) REFERENCES [dbo].[Class] ([Id]),

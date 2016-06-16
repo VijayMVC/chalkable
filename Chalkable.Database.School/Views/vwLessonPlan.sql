@@ -21,6 +21,7 @@ LessonPlan.StartDate as StartDate,
 LessonPlan.EndDate as EndDate,
 LessonPlan.GalleryCategoryRef as GalleryCategoryRef,
 LessonPlan.VisibleForStudent as VisibleForStudent,
+LessonPlan.InGallery as InGallery,
 
 Staff.FirstName + ' ' + Staff.LastName as PrimaryTeacherName,
 Staff.Gender as PrimaryTeacherGender,

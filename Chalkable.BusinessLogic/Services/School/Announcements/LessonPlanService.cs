@@ -16,9 +16,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
     public interface ILessonPlanService : IBaseAnnouncementService
     {
-        AnnouncementDetails Create(int classId, DateTime? startDate, DateTime? endDate);
+        AnnouncementDetails Create(int? classId, DateTime? startDate, DateTime? endDate);
         AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId);
-        AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent);
+        AnnouncementDetails Edit(int lessonPlanId, int? classId, int? galleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery);
         PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
@@ -69,14 +69,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             throw new ChalkableException("Not supported role for lesson plan");
         }
 
-        public AnnouncementDetails Create(int classId, DateTime? startDate, DateTime? endDate)
+        public AnnouncementDetails Create(int? classId, DateTime? startDate, DateTime? endDate)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
             BaseSecurity.EnsureTeacher(Context);
             using (var u = Update())
             {
-                var res = CreateLessonPlanDataAccess(u).Create(classId, Context.NowSchoolTime, startDate, endDate, Context.PersonId.Value, Context.SchoolYearId.Value);
+                var res = CreateLessonPlanDataAccess(u).Create(classId, Context.NowSchoolTime, startDate, endDate, Context.PersonId.Value, Context.SchoolYearId.Value, Context.RoleId);
                 u.Commit();
                 return res;
             }
@@ -201,8 +201,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 .Cast<AnnouncementComplex>().ToList();
         }
 
-        public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,
-                                        DateTime? startDate, DateTime? endDate, bool visibleForStudent)
+        public AnnouncementDetails Edit(int lessonPlanId, int? classId, int? galleryCategoryId, string title, string content,
+                                        DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var lessonPlan = GetLessonPlanById(lessonPlanId); // security check 
@@ -211,7 +211,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var da = CreateLessonPlanDataAccess(uow);
                 AnnouncementSecurity.EnsureInModifyAccess(lessonPlan, Context);
                 
-                if (lessonPlan.ClassRef != classId)
+                if (classId != null && lessonPlan.ClassRef != classId)
                 {
                     if(!lessonPlan.IsDraft)
                         throw new ChalkableException("Class can't be changed for submited lesson plan");
@@ -219,7 +219,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     lessonPlan.ClassRef = classId;
                     //clear old data befor swiching 
                     new AnnouncementApplicationDataAccess(uow).DeleteByAnnouncementId(lessonPlan.Id);
-                    new AnnouncementStandardDataAccess(uow).DeleteNotAssignedToClass(lessonPlan.Id, classId);
+                    new AnnouncementStandardDataAccess(uow).DeleteNotAssignedToClass(lessonPlan.Id, classId.Value);
                 }
                 
                 lessonPlan.Title = title;
@@ -227,6 +227,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.StartDate = startDate;
                 lessonPlan.EndDate = endDate;
                 lessonPlan.VisibleForStudent = visibleForStudent;
+                lessonPlan.InGallery = inGallery;
 
                 if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
                     lessonPlan.GalleryCategoryRef = galleryCategoryId;

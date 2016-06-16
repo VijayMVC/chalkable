@@ -16,13 +16,15 @@ namespace Chalkable.Data.School.Model.Announcements
         public const string END_DATE_FIELD = nameof(EndDate);
         public const string VISIBLE_FOR_STUDENT_FIELD = nameof(VisibleForStudent);
         public const string FULL_CLASS_NAME = nameof(FullClassName);
+        public const string IN_GALLERY = nameof(InGallery);
 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int? GalleryCategoryRef { get; set; }
         public int SchoolYearRef { get; set; }
-        public int ClassRef { get; set; }
+        public int? ClassRef { get; set; }
         public bool VisibleForStudent { get; set; }
+        public bool InGallery { get; set; }
 
         [NotDbFieldAttr]
         public int PrimaryTeacherRef { get; set; }

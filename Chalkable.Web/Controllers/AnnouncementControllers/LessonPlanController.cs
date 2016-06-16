@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -15,14 +16,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
     [RequireHttps, TraceControllerFilter]
     public class LessonPlanController : AnnouncementController
     {
-        [AuthorizationFilter("Teacher")]
-        public ActionResult CreateLessonPlan(int classId)
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
+        public ActionResult CreateLessonPlan(int? classId)
         {
             var res = SchoolLocator.LessonPlanService.Create(classId, Context.NowSchoolTime, Context.NowSchoolTime);
             return Json(PrepareCreateAnnouncementViewData(res));
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult LessonPlanTemplates(string filter, int? categoryType, int? sortType, int? state, int? start, int? count)
         {
             var st = start ?? 0;
@@ -40,46 +41,62 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(PrepareCreateAnnouncementViewData(res));
         }
 
-        [AuthorizationFilter("Teacher")]
-        public ActionResult Save(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId,
-            DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes)
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
+        public ActionResult Save(int lessonPlanId, int? classId, string title, string content, int? galleryCategoryId,
+            DateTime? startDate, DateTime? endDate, bool hideFromStudents, bool inGallery, IList<AssignedAttributeInputModel> attributes)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);
-            var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
+            var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents, inGallery);
 
-            if (res.LessonPlanData?.GalleryCategoryRef != null)
-            {
-                MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
-            }
+            //if (res.LessonPlanData?.GalleryCategoryRef != null)
+            //{
+            //    MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
+            //}
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
-        [AuthorizationFilter("Teacher")]
-        public ActionResult Submit(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId,
-            DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes)
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
+        public ActionResult Submit(int lessonPlanId, int? classId, string title, string content, int? lpCategoryRef,
+            DateTime? startDate, DateTime? endDate, bool hideFromStudents, bool inGallery, IList<AssignedAttributeInputModel> attributes)
         {
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);
-            var ann = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
-            SchoolLocator.LessonPlanService.Submit(lessonPlanId);
-            var lessonPlan = SchoolLocator.LessonPlanService.GetLessonPlanById(lessonPlanId);
-            //TODO delete old drafts 
-            TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount));
+            if (Context.Role == CoreRoles.TEACHER_ROLE)
+            {
+                SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);
+                var ann = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, lpCategoryRef, title, content, startDate, endDate, !hideFromStudents, false);
+                SchoolLocator.LessonPlanService.Submit(lessonPlanId);
+                var lessonPlan = SchoolLocator.LessonPlanService.GetLessonPlanById(lessonPlanId);
+                //TODO delete old drafts 
+                TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount));
+            }
+
+            if (inGallery && Context.SCEnabled)
+            {
+                if (lpCategoryRef == null)
+                    throw new ChalkableException("Cannot create lesson plan template without category!");
+
+                var lpGalleryId = Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? lessonPlanId : SchoolLocator.LessonPlanService.Create(classId, startDate, endDate).LessonPlanData.Id;
+
+                SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lpGalleryId, attributes);
+                SchoolLocator.LessonPlanService.Edit(lpGalleryId, null, lpCategoryRef, title, content, startDate, endDate, !hideFromStudents, true);
+                SchoolLocator.LessonPlanService.Submit(lpGalleryId);
+                MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
+            }
             return Json(true, 5);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult EditTitle(int announcementId, string title)
         {
             return EditTitle(announcementId, AnnouncementTypeEnum.LessonPlan, title, t => SchoolLocator.LessonPlanService.ExistsInGallery(t, announcementId));              
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult Exists(string title, int? excludeLessonPlanId)
         {
            return Json(SchoolLocator.LessonPlanService.Exists(title, excludeLessonPlanId));
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult ExistsInGallery(string title, int? excludedLessonPlanId)
         {
             return Json(SchoolLocator.LessonPlanService.ExistsInGallery(title, excludedLessonPlanId));
@@ -105,14 +122,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
         {
             SchoolLocator.LessonPlanService.ReplaceLessonPlanInGallery(oldLessonPlanId, newLessonPlanId);
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult RemoveLessonPlanFromGallery(int lessonPlanId)
         {
             SchoolLocator.LessonPlanService.RemoveFromGallery(lessonPlanId);
