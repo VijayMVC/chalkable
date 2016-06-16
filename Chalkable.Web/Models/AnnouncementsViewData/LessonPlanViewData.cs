@@ -14,6 +14,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string FullClassName { get; set; }
         public bool HideFromStudents { get; set; }
         public int? GalleryCategoryId { get; set; }
+        public bool InGallery { get; set; }
 
         protected LessonPlanViewData(LessonPlan announcement)
             : base(announcement)
@@ -28,6 +29,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             PersonId = announcement.PrimaryTeacherRef;
             PersonName = announcement.PrimaryTeacherName;
             PersonGender = announcement.PrimaryTeacherGender;
+            InGallery = announcement.InGallery;
         }
 
         public static LessonPlanViewData Create(LessonPlan lessonPlan)
