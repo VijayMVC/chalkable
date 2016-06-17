@@ -425,11 +425,14 @@
         min-width: 165px
 
       &.gallery
-        LABEL[FOR]
-          margin-right: 10px
+        >LABEL[FOR]
+          &:not(:last-child)
+            margin-right: 10px
 
           &:not(:first-child)
             margin-left: 5px
+            font-weight: normal
+
 
   .advanced-options-container
     position: absolute

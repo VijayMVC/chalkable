@@ -115,16 +115,13 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     data-tooltip=Msg.Hide_From_Student_Tooltip_Message
                                 )
                             if self.isStudyCenterEnabled()
-                                .check-box-container
-                                    label(for="in-gallery") In Gallery
-                                    +SlideCheckbox('inGallery', !!lessonPlan.isInGallery())#in-gallery
                                 .check-box-container.gallery
                                     label(for="in-gallery-personal-public") Gallery
                                     .box-checkbox.circle
-                                        +Checkbox('inGalleryPersonal', !lessonPlan.isInGallery(), false, true)#personal-check
+                                        +Checkbox('inGalleryPersonal', !lessonPlan.isInGallery(), false, true)#personal-check.gallery-check
                                     label(for="personal-check") Personal
                                     .box-checkbox.circle
-                                        +Checkbox('inGallery', !!lessonPlan.isInGallery(), false, true)#public-check
+                                        +Checkbox('inGallery', !!lessonPlan.isInGallery(), false, true)#public-check.gallery-check
                                     label(for="public-check") Public
 
 

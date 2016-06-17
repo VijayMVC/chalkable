@@ -217,8 +217,9 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function getAnnouncementFormPageType_(type_){
+            var announcementType = type_ || this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf();
+
             if(this.userInRole(chlk.models.common.RoleEnum.TEACHER)){
-                var announcementType = type_ || this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf();
                 if(announcementType == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
                     return chlk.activities.announcement.AnnouncementFormPage;
 
@@ -228,8 +229,13 @@ NAMESPACE('chlk.controllers', function (){
                 return chlk.activities.announcement.LessonPlanFormPage;
             }
 
-            if(this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN))
+            if(this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN)){
+                if(announcementType == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
+                    return chlk.activities.announcement.LessonPlanFormDialog;
+
                 return chlk.activities.announcement.AdminAnnouncementFormPage;
+            }
+
 
             if(this.userInRole(chlk.models.common.RoleEnum.STUDENT))
                 return chlk.activities.announcement.AnnouncementViewPage;

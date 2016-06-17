@@ -40,15 +40,20 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.lesson-plan-import-popup').toggleClass('x-hidden');
             },
 
-            [ria.mvc.DomEventBind('change', '#in-gallery')],
+            [ria.mvc.DomEventBind('change', '.gallery-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function addToGalleryChange(node, event, selected_){
-                var select = this.dom.find('#galleryCategoryId');
-                if(node.checked()){
+                var select = this.dom.find('#galleryCategoryId'),
+                    second = node.parent('.box-checkbox').siblings('.box-checkbox').find('.checkbox');
+
+                second.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), !node.checked());
+
+                if(this.dom.find('#public-check').checked()){
                     this.dom.find('.title-block-container').addClass('with-gallery-id');
                     select.removeAttr('disabled');
                     select.setProp('disabled', false);
                     this.dom.find('#check-title-btn').trigger('click');
+
                 }else{
                     this.dom.find('.title-block-container').removeClass('with-gallery-id');
                     select.setAttr('disabled', 'disabled');

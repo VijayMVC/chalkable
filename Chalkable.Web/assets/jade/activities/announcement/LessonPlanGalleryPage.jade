@@ -15,7 +15,8 @@ mixin LessonPlanIcon_(lessonPlan, classId, isAbleToRemove)
         .items
             +ActionLink('lessonplangallery', 'gallery').pressed Public
 
-        +ActionButton('announcement', 'lessonPlanFromGallery').pressed.right +
+        if self.getUserRole().isAdmin()
+            +ActionButton('announcement', 'lessonPlanFromGallery').pressed.right +
 
     .gallery-view
 
