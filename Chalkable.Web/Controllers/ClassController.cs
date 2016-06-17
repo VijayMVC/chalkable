@@ -163,8 +163,10 @@ namespace Chalkable.Web.Controllers
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
             var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
-
-            return Json(ClassPanoramaViewData.Create(classDetails, settings, standardizedTestDetails, panorama, gradingScale, selectedStudents));
+            var classStudents = SchoolLocator.StudentService.GetClassStudents(classId, null, true);           
+            
+            return Json(ClassPanoramaViewData.Create(classDetails, settings, standardizedTestDetails, panorama, gradingScale, 
+                classStudents, selectedStudents, Context.NowSchoolTime));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]

@@ -4,7 +4,7 @@ namespace Chalkable.StiConnector.SyncModel
     
     public class Ethnicity : SyncModel
     {
-        public short EthnicityID { get; set; }
+        public int EthnicityID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

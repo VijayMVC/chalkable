@@ -9,8 +9,18 @@ namespace Chalkable.Data.School.Model
 {
     public class Ethnicity
     {
+        public const string ID_FIELD          = nameof(Id);
+        public const string CODE_FIELD        = nameof(Code);
+        public const string NAME_FIELD        = nameof(Name);
+        public const string DESCRIPTION_FIELD = nameof(Description);
+        public const string STATE_CODE_FIELD  = nameof(StateCode);
+        public const string SIF_CODE_FIELD    = nameof(SIFCode);
+        public const string NCES_CODE_FIELD   = nameof(NCESCode);
+        public const string IS_ACTIVE_FIELD   = nameof(IsActive);
+        public const string IS_SYSTEM_FIELD   = nameof(IsSystem);
+
         [PrimaryKeyFieldAttr]
-        public short Id { get; set; }
+        public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

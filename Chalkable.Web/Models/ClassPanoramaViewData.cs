@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Model.PanoramaStuff;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
+using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Models
@@ -16,32 +19,42 @@ namespace Chalkable.Web.Models
         public ClassDistributionSectionViewData ClassDistributionSection { get; set; } 
         public IList<StandardizedTestStatsViewData> StandardizedTestsStatsByClass { get; set; }
         public IList<StandardizedTestStatsViewData> SelectStandardizedTestsStats { get; set; }
-
+        public IList<StudentStandardizedTestStats> Students { get; set; }
 
         protected ClassPanoramaViewData(ClassDetails cClass) : base(cClass)
         {
         }
         
         public static ClassPanoramaViewData Create(ClassDetails cClass, ClassProfilePanoramaSetting filterSetting, IList<StandardizedTestDetails> standardizedTests, 
-            ClassPanorama panorama, IList<GradingScaleRange> gradingScaleRanges, IList<int> selectedStudents)
+            ClassPanorama panorama, IList<GradingScaleRange> gradingScaleRanges, IList<StudentDetails> classStudents, IList<int> selectedStudents, DateTime today)
         {
             var res = new ClassPanoramaViewData(cClass)
             {
                 FilterSettings = filterSetting != null ? ClassProfilePanoramaSettingsViewData.Create(filterSetting) : null,
                 StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList(),
                 ClassDistributionSection = ClassDistributionSectionViewData.Create(panorama.Grades, panorama.Absences, panorama.Infractions, gradingScaleRanges),
-                StandardizedTestsStatsByClass = StandardizedTestStatsViewData.Create(panorama.StandardizedTests, standardizedTests)
+                StandardizedTestsStatsByClass = StandardizedTestStatsViewData.CreateForClass(panorama.StandardizedTests, standardizedTests),
+                Students = new List<StudentStandardizedTestStats>()
             };
+
+            //Preparing students
+            foreach (var student in classStudents)
+            {
+                var studentStats = StandardizedTestStatsViewData.CreateForStudent(student.Id, panorama.StandardizedTests, standardizedTests);
+                var gradeAvg = panorama.Grades?.FirstOrDefault(x => x.StudentId == student.Id)?.AverageGrade;
+                var infractions = panorama.Infractions?.FirstOrDefault(x => x.StudentId == student.Id)?.NumberOfInfractions;
+                var absences = panorama.Absences?.FirstOrDefault(x => x.StudentId == student.Id)?.NumberOfAbsences;
+                res.Students.Add(StudentStandardizedTestStats.Create(student, gradeAvg, absences, infractions, today, studentStats));
+            }
 
             if (selectedStudents == null || selectedStudents.Count == 0)
                 return res;
 
             var selected = panorama.StandardizedTests?.Where(x => selectedStudents.Contains(x.StudentId));
-            res.SelectStandardizedTestsStats = StandardizedTestStatsViewData.Create(selected?.ToList(), standardizedTests);
+            res.SelectStandardizedTestsStats = StandardizedTestStatsViewData.CreateForClass(selected?.ToList(), standardizedTests);
 
             return res;
         }
-
     }
 
     public class StandardizedTestStatsViewData
@@ -51,7 +64,7 @@ namespace Chalkable.Web.Models
         public StandardizedTestScoreTypeViewData ScoreType { get; set; }
         public IList<DailyStatsViewData> DailyStats { get; set; }
 
-        public static IList<StandardizedTestStatsViewData> Create(IList<StudentStandardizedTestInfo> models, IList<StandardizedTestDetails> standardizedTests)
+        public static IList<StandardizedTestStatsViewData> CreateForClass(IList<StudentStandardizedTestInfo> models, IList<StandardizedTestDetails> standardizedTests)
         {
             var res = new List<StandardizedTestStatsViewData>();
 
@@ -84,13 +97,58 @@ namespace Chalkable.Web.Models
                     .GroupBy(y => y.Date, x => x.Score);
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)
-                    viewData.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, studentStTestsInfo.Average(x => x), "MMM yyyy"));
+                    viewData.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, studentStTestsInfo.Average(), "MMM yyyy"));
 
                 res.Add(viewData);
             }
 
             return res;
         }
+
+        public static IList<StandardizedTestStatsViewData> CreateForStudent(int studentId, IList<StudentStandardizedTestInfo> models,
+            IList<StandardizedTestDetails> standardizedTests)
+        {
+            var res = new List<StandardizedTestStatsViewData>();
+            if (models == null || models.Count == 0)
+                return res;
+
+            var studentTests = models.Where(x => x.StudentId == studentId).ToList();
+            if (studentTests.Count == 0)
+                return res;
+
+            foreach (var test in studentTests)
+            {
+                var currentTest = res.FirstOrDefault(x => x.StandardizedTest.Id == test.StandardizedTestId
+                                                   && x.Component.Id == test.StandardizedTestComponentId);
+
+                if (currentTest != null)
+                    continue;
+
+                var standardizedTest = standardizedTests.FirstOrDefault(x => x.Id == test.StandardizedTestId);
+                var component = standardizedTest?.Components?.FirstOrDefault(x => x.Id == test.StandardizedTestComponentId);
+                var scoreType = standardizedTest?.ScoreTypes?.FirstOrDefault(x => x.Id == test.StandardizedTestScoreTypeId);
+
+                var stats = new StandardizedTestStatsViewData
+                {
+                    Component = component == null ? null : StandardizedTestComponentViewData.Create(component),
+                    StandardizedTest = standardizedTest == null ? null : ShortStandardizedTestViewData.Create(standardizedTest),
+                    ScoreType = scoreType == null ? null : StandardizedTestScoreTypeViewData.Create(scoreType),
+                    DailyStats = new List<DailyStatsViewData>()
+                };
+
+                var studentStTestsInfos = models
+                    .Where(x => x.StandardizedTestId == test.StandardizedTestId
+                                && x.StandardizedTestComponentId == test.StandardizedTestComponentId)
+                    .GroupBy(y => y.Date, x => x.Score);
+
+                foreach (var studentStTestsInfo in studentStTestsInfos)
+                    stats.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, studentStTestsInfo.Average(), "MMM yyyy"));
+
+                res.Add(stats);
+            }
+
+            return res;
+        } 
     }
 
 
@@ -212,5 +270,21 @@ namespace Chalkable.Web.Models
         public string Summary { get; set; }
         public decimal StartInterval { get; set; }
         public decimal EndInterval { get; set; }
+    }
+
+    public class StudentStandardizedTestStats
+    {
+        public StudentDetailsViewData Student { get; set; }
+        public IList<StandardizedTestStatsViewData> StandardizedTestsStats { get; set; }
+
+        public static StudentStandardizedTestStats Create(StudentDetails student, decimal? gradeAvg, decimal? absences, int? infractions, 
+            DateTime currentSchoolTime, IList<StandardizedTestStatsViewData> standardizedTestStats)
+        {
+            return new StudentStandardizedTestStats
+            {
+                Student = StudentDetailsViewData.Create(student, gradeAvg, absences, infractions, currentSchoolTime),
+                StandardizedTestsStats = standardizedTestStats
+            };
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace Chalkable.Web.Models
 {
     public class EthnicityViewData
     {
-        public short Id { get; set; }
+        public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

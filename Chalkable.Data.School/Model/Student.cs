@@ -42,5 +42,7 @@ namespace Chalkable.Data.School.Model
     public class StudentDetails : Student
     {
         public bool? IsWithdrawn { get; set; }
+        [NotDbFieldAttr]
+        public Ethnicity Ethnicity { get; set; }
     }
 }

@@ -20,12 +20,14 @@ namespace Chalkable.Data.School.DataAccess
             {
                 {"@id", id},
                 {"@schoolYearId", schoolYearId}
-
             };
             using (var r = ExecuteStoredProcedureReader("spGetStudentDetails", ps))
             {
                 r.Read();
-                return r.Read<StudentDetails>();
+                var res = r.Read<StudentDetails>();
+                r.NextResult();
+                res.Ethnicity = r.ReadOrNull<Ethnicity>();
+                return res;
             }
         }
 
@@ -40,21 +42,36 @@ namespace Chalkable.Data.School.DataAccess
             return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByTeacher", ps);
         }
 
-        public IList<StudentDetails> GetStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
+        public IList<StudentDetails> GetStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
             {
                 {"@classId", classId},
                 {"@markingPeriodId", markingPeriodId},
                 {"@isEnrolled", isEnrolled}
-
             };
-            return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByClass", ps);
+            using (var reader = ExecuteStoredProcedureReader("spGetStudentsByClass", ps))
+            {
+                var res = new List<StudentDetails>();
+                while (reader.Read())
+                {
+                    var model = reader.Read<StudentDetails>();
+                    var hasEthnicity = SqlTools.ReadInt32Null(reader, $"{nameof(Ethnicity)}_Id") != null;
+                    Ethnicity ethnicity = null;
+                    if(hasEthnicity)
+                        ethnicity = reader.Read<Ethnicity>(true);
+
+                    model.Ethnicity = ethnicity;
+                    res.Add(model);
+                }
+
+                return res;
+            }
         }
 
         public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriod)
         {
-            string[] filters = (filter != null) ? filter.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) : null;
+            var filters = filter?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var ps = new Dictionary<string, object>
             {
                 {"@start", start},

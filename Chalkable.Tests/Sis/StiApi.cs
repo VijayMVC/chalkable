@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using Chalkable.BusinessLogic.Services.Master;
@@ -16,6 +19,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.SyncModel;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Address = Chalkable.StiConnector.SyncModel.Address;
 using AttendanceMonth = Chalkable.StiConnector.SyncModel.AttendanceMonth;
@@ -404,81 +408,16 @@ namespace Chalkable.Tests.Sis
         {
             var connector = ConnectorLocator.Create("MAGOLDEN-3856695863", "qqqq1111", "http://sandbox.sti-k12.com/chalkable/api/");
             var componentsIds = new List<int>
-            {
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                2,
-                2,
-                2,
-                2,
-                2,
-                2,
-                6,
-                7,
-                7,
-                7,
-                7,
-                7,
-                7,
-                8,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15
-            };
+            {1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 6, 7, 7, 7, 7, 7, 7, 8, 10, 11, 12, 13, 14, 15};
 
             var scoreTypeIds = new List<int>
-            {
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                11,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                8,
-                12,
-                12,
-                12,
-                12,
-                12,
-                12
-            };
+            {1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 11, 1, 2, 3, 4, 5, 6, 8, 12, 12, 12, 12, 12, 12};
 
             Debug.WriteLine($"{componentsIds.Count} - {scoreTypeIds.Count}");
 
             SectionPanorama callResult = new SectionPanorama();
             List<int> classIds = new List<int>
-            {
-                13770,
-                13771,
-                13772,
-                13806,
-                13861,
-                13862,
-                13950,
-                14011,
-                14436,
-                15165
-            };
+            {13770, 13771, 13772, 13806, 13861, 13862, 13950, 14011, 14436, 15165};
 
             bool found = false;
             int @class = 0;
@@ -523,6 +462,82 @@ namespace Chalkable.Tests.Sis
                 {
                     Debug.WriteLine($"{stTests.StudentId} - {stTests.Date} - {stTests.Score} - {stTests.StandardizedTestComponentId} - {stTests.StandardizedTestId} - {stTests.StandardizedTestScoreTypeId}");
                 }
+        }
+
+        class WebClientGZip : WebClient
+        {
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                HttpWebRequest request = base.GetWebRequest(address) as HttpWebRequest;
+                request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+                //request.KeepAlive = false;
+                request.ProtocolVersion = HttpVersion.Version10;
+#if DEBUG
+                request.Timeout = 30000;
+#else
+                request.Timeout = Settings.WebClientTimeout;
+#endif
+                return request;
+            }
+        }
+
+        [Test]
+        public void GetSyncTablesProps()
+        {
+            var connector =  ConnectorLocator.Create("Chalkable", "8nA4qU4yG", "http://sandbox.sti-k12.com/chalkable/api/");
+            var client = new WebClientGZip
+            {
+                Headers =
+                {
+                    [HttpRequestHeader.Authorization] = "Session " + connector.Token,
+                    ["ApplicationKey"] = $"chalkable {Settings.StiApplicationKey}",
+                    ["Accept-Encoding"] = "gzip, deflate"
+                },
+                Encoding = Encoding.UTF8
+            };
+            client.Headers.Add("Content-Type", "application/json");
+            try
+            {
+                var url = connector.BaseUrl + $"sync/tables/PersonNationality/";
+
+                client.QueryString = new NameValueCollection();
+                var data = client.DownloadData(url);
+
+                using (var ms = new MemoryStream(data))
+                {
+                    StreamReader reader;
+                    GZipStream unzipped = null;
+                    if (client.ResponseHeaders[HttpResponseHeader.ContentType].ToLower() == "application/octet-stream")
+                    {
+                        unzipped = new GZipStream(ms, CompressionMode.Decompress);
+                        reader = new StreamReader(unzipped);
+                    }
+                    else
+                        reader = new StreamReader(ms);
+
+                    var serializer = new JsonSerializer();
+                    var jsonReader = new JsonTextReader(reader);
+                    
+                    Debug.WriteLine(reader.ReadToEnd());
+
+                    unzipped?.Dispose();
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response is HttpWebResponse &&
+                    (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                    return;
+
+                string msg = ex.Message;
+                var stream = ex.Response?.GetResponseStream();
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
+                    msg = reader.ReadToEnd();
+                }
+                throw new Exception(msg);
+            }
         }
     }
 }
