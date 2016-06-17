@@ -211,6 +211,18 @@ namespace Chalkable.Data.School.DataAccess
             {
                 return reader.ReadList<Class>();
             }
+        }
+
+        public IList<CourseType> CourseTypes(QueryCondition conds, string filter)
+        {
+            var query = Orm.SimpleSelect<CourseType>(conds);
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                query.Sql.Append($@" Where {CourseType.NAME_FIELD} like(@filter)");
+                query.Parameters.Add("filter", $@"%{filter}%");
+            }
+
+            return ReadMany<CourseType>(query);
         } 
     }
 }

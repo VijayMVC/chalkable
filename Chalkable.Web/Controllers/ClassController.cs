@@ -122,9 +122,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult AllCourseTypes()
+        public ActionResult CourseTypes(string filter)
         {
-            var courseTypes = SchoolLocator.CourseTypeService.GetList(true);
+            var courseTypes = SchoolLocator.CourseTypeService.GetList(true, filter);
             return Json(ShortCourseTypeViewData.Create(courseTypes).OrderBy(x => x.CoureTypeName));
         }
 

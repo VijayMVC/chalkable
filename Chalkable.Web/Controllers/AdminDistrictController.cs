@@ -90,5 +90,12 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.PanoramaSettingsService.Save(settings, null);
             return Json(true);
         }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult StandardizedTests()
+        {
+            var tests = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
+            return Json(tests.Select(x => StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)));
+        }
     }
 }

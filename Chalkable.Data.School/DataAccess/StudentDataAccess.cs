@@ -31,7 +31,6 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-
         public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
