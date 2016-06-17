@@ -823,7 +823,7 @@ NAMESPACE('chlk.controllers', function (){
                     return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
                 },this)
                 .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.announcement.LessonPlanFormPage, result);
+            return this.ShadeView(chlk.activities.announcement.LessonPlanFormDialog, result);
         },
 
         [chlk.controllers.Permissions([
@@ -2327,7 +2327,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.Success(success);
                 }, this);
 
-            return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, res, isAddToGallery_ ? 'addToGallery' : chlk.activities.lib.DontShowLoader());
+            return this.UpdateView(this.getView().getCurrent().getClass(), res, isAddToGallery_ ? 'addToGallery' : chlk.activities.lib.DontShowLoader());
         },
 
         [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.announcement.AnnouncementForm]],
