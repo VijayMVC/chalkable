@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     public interface ISupplementalAnnouncementService : IBaseAnnouncementService
     {
         AnnouncementDetails Create(int classId, DateTime expiresDate, int classAnnouncementTypeId);
-        AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? galleryCategoryId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds);
+        AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? classAnnouncementTypeId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds);
         void SetVisibleForStudent(int supplementalAnnouncementId, bool visible);
         SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementId);
         IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);

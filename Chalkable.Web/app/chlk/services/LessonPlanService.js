@@ -159,7 +159,7 @@ NAMESPACE('chlk.services', function () {
                     title: title_ || ('test ' + id.valueOf()),
                     classId: classId_ ? classId_.valueOf() : null,
                     content: content_,
-                    lpCategoryRef: galleryCategoryId_ ? galleryCategoryId_.valueOf() : null,
+                    lpGalleryCategoryId: galleryCategoryId_ ? galleryCategoryId_.valueOf() : null,
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,

@@ -137,7 +137,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return ReadMany<LessonPlan>(dbQuery);
         }
 
-        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId, int callerId, int? studentId, int? teacherId, bool filterByStartDate = true)
+        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? lpGalleryCategoryId, int callerId, int? studentId, int? teacherId, bool filterByStartDate = true)
         {
             //TODO: move this to the stored procedure later 
 
@@ -160,8 +160,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 conds.Add(LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId);
             
 
-            if (galleryCategoryId.HasValue)
-                conds.Add(LessonPlan.GALERRY_CATEGORY_REF_FIELD, galleryCategoryId);
+            if (lpGalleryCategoryId.HasValue)
+                conds.Add(LessonPlan.LP_GALERRY_CATEGORY_REF_FIELD, lpGalleryCategoryId);
 
             var dbQuery = SelectLessonPlan(conds, callerId);
             dbQuery = FilterLessonPlanByCallerId(dbQuery, callerId);
@@ -203,9 +203,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return ReadMany<LessonPlan>(dbQuery);
         } 
         
-        public IList<LessonPlan> GetLessonPlanTemplates(int? galleryCategoryId, string titleFilter, int? classId, AnnouncementState? state, int callerId)
+        public IList<LessonPlan> GetLessonPlanTemplates(int? lpGalleryCategoryId, string titleFilter, int? classId, AnnouncementState? state, int callerId)
         {
-            return GetLessonPlanTemplates(null, galleryCategoryId, titleFilter, classId, state, callerId);
+            return GetLessonPlanTemplates(null, lpGalleryCategoryId, titleFilter, classId, state, callerId);
         }
 
         public LessonPlan GetLessonPlanTemplate(int lessonPlanId, int callerId)
@@ -213,15 +213,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return GetLessonPlanTemplates(lessonPlanId, null, null, null, null, callerId).FirstOrDefault();
         }
 
-        protected IList<LessonPlan> GetLessonPlanTemplates(int? lessonPlanId, int? galleryCategoryId, string titleFilter, int? classId, AnnouncementState? state, int callerId)
+        protected IList<LessonPlan> GetLessonPlanTemplates(int? lessonPlanId, int? lpGalleryCategoryId, string titleFilter, int? classId, AnnouncementState? state, int callerId)
         {
             var conds = new AndQueryCondition { { LessonPlan.IN_GALLERY, 1, ConditionRelation.Equal } };
             if(lessonPlanId.HasValue)
                 conds.Add(Announcement.ID_FIELD, lessonPlanId);
             if (state.HasValue)
                 conds.Add(Announcement.STATE_FIELD, state);
-            if (galleryCategoryId.HasValue)
-                conds.Add(LessonPlan.GALERRY_CATEGORY_REF_FIELD, galleryCategoryId);
+            if (lpGalleryCategoryId.HasValue)
+                conds.Add(LessonPlan.LP_GALERRY_CATEGORY_REF_FIELD, lpGalleryCategoryId);
             if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
             var dbQuery = SelectLessonPlan(conds, callerId);
@@ -350,7 +350,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition
                 {
                     {Announcement.TITLE_FIELD, title},
-                    {LessonPlan.GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual}
+                    {LessonPlan.LP_GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual}
                 };
             if (excludedLessonPlanId.HasValue)
                 conds.Add(Announcement.ID_FIELD, excludedLessonPlanId, ConditionRelation.NotEqual);

@@ -18,8 +18,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     {
         AnnouncementDetails Create(int? classId, DateTime? startDate, DateTime? endDate);
         AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId);
-        AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpCategoryRef, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery);
-        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? lpCategoryRef, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
+        AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpGalleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery);
+        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? lpGalleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
         bool ExistsInGallery(string title, int? exceludedLessonPlanId);
@@ -201,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 .Cast<AnnouncementComplex>().ToList();
         }
 
-        public AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpCategoryRef, string title, string content,
+        public AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpGalleryCategoryId, string title, string content,
                                         DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -230,7 +230,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.InGallery = inGallery;
 
                 if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
-                    lessonPlan.GalleryCategoryRef = lpCategoryRef;
+                    lessonPlan.LpGalleryCategoryRef = lpGalleryCategoryId;
 
                 if (lessonPlan.IsSubmitted)
                     ValidateLessonPlan(lessonPlan, da);
@@ -254,7 +254,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     var da = CreateLessonPlanDataAccess(uow);
                     if (string.IsNullOrEmpty(title))
                         throw new ChalkableException("Title parameter is empty");
-                    if (da.ExistsInGallery(title, announcement.Id) && announcement.GalleryCategoryRef.HasValue)
+                    if (da.ExistsInGallery(title, announcement.Id) && announcement.LpGalleryCategoryRef.HasValue)
                         throw new ChalkableException("The item with current title already exists in the gallery");
                     announcement.Title = title;
                     da.Update(announcement);
@@ -296,7 +296,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             if (string.IsNullOrEmpty(lessonPlan.Title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan Title "));
-            if (da.ExistsInGallery(lessonPlan.Title, lessonPlan.Id) && lessonPlan.GalleryCategoryRef.HasValue)
+            if (da.ExistsInGallery(lessonPlan.Title, lessonPlan.Id) && lessonPlan.LpGalleryCategoryRef.HasValue)
                 throw new ChalkableException("Lesson Plan with current title already exists in the gallery");
                     
         }
@@ -399,12 +399,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         
-        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? lpCategoryRef, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created)
+        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? lpGalleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created)
         {
             Trace.Assert(Context.PersonId.HasValue);
             BaseSecurity.EnsureStudyCenterEnabled(Context);
 
-            var lessonPlans = DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(lpCategoryRef, title, classId, state, Context.PersonId.Value));
+            var lessonPlans = DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(lpGalleryCategoryId, title, classId, state, Context.PersonId.Value));
 
             switch (sortType)
             {
@@ -536,14 +536,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var da = CreateLessonPlanDataAccess(u);
                 var oldLessonPlan = da.GetLessonPlanTemplate(oldLessonPlanId, Context.PersonId.Value);
 
-                if (!oldLessonPlan.GalleryCategoryRef.HasValue)
+                if (!oldLessonPlan.LpGalleryCategoryRef.HasValue)
                     throw new ChalkableException($@"'{oldLessonPlan.Title}' was deleted from Gallery.");
 
                 if (!oldLessonPlan.IsOwner && !Context.Claims.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
                     throw new ChalkableSecurityException("Current user has no access to replace lesson plan in gallery!");
 
-                newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
-                oldLessonPlan.GalleryCategoryRef = null;
+                newLessonPlan.LpGalleryCategoryRef = oldLessonPlan.LpGalleryCategoryRef;
+                oldLessonPlan.LpGalleryCategoryRef = null;
                 CreateLessonPlanDataAccess(u).Update(new[] {oldLessonPlan, newLessonPlan});
             });
         }
@@ -559,7 +559,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var lp = da.GetLessonPlanTemplate(lessonPlanId, Context.PersonId.Value);
                 if (!lp.IsOwner && !Context.Claims.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
                     throw new ChalkableSecurityException("Current user has no access to remove lesson plan from gallery!");
-                lp.GalleryCategoryRef = null;
+                lp.LpGalleryCategoryRef = null;
                 da.Update(lp);
             });
         }

@@ -10,6 +10,6 @@ namespace Chalkable.API.Models
         public string ClassName { get; set; }
         public string FullClassName { get; set; }
         public bool HideFromStudents { get; set; }
-        public int? GalleryCategoryId { get; set; }
+        public int? LpGalleryCategoryId { get; set; }
     }
 }

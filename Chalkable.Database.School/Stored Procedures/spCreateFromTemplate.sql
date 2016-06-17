@@ -56,7 +56,7 @@ Values(@content, GETDATE(), 0, @title)
 
 Set @announcementId = SCOPE_IDENTITY()
 
-Insert Into LessonPlan(Id, ClassRef, StartDate, EndDate, GalleryCategoryRef, SchoolYearRef, VisibleForStudent, InGallery)
+Insert Into LessonPlan(Id, ClassRef, StartDate, EndDate, LpGalleryCategoryRef, SchoolYearRef, VisibleForStudent, InGallery)
 Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, @visibleForStudent, 0)
 End
 
