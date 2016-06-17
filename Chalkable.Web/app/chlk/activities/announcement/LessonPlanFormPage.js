@@ -34,40 +34,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                 titleTimeout = undefined;
             },
 
-            [ria.mvc.DomEventBind('change', '#galleryCategoryForSearch')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            function categorySearchChange(node, event, selected_){
-                if(node.getValue() == -1){
-                    node.setValue(node.getData('value'));
-                    node.trigger('chosen:updated');
-                    node.parent('.left-top-container').find('.add-category-btn').trigger('click');
-                }else{
-                    node.parent('.left-top-container').find('#changeCategoryUpdate').trigger('click');
-                    setTimeout(function(){
-                        this.dom.find('.search-templates').trigger('focus');
-                    }.bind(this), 10);
-                    node.setData('value', node.getValue())
-                }
-
-            },
-
             [ria.mvc.DomEventBind('click', '.import-btn, .lesson-plan-import-popup')],
             [[ria.dom.Dom, ria.dom.Event]],
             function importClick(node, event){
                 this.dom.find('.lesson-plan-import-popup').toggleClass('x-hidden');
             },
 
-            [ria.mvc.DomEventBind('change', '.search-templates')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            function searchTemplatesChange(node, event, selected_){
-                var value = this.dom.find('[name=filter][type=hidden]').getValue();
-                if(value){
-                    this.dom.find('#announcementForTemplateId').setValue(value);
-                    node.parent('.left-top-container').find('#createFromTemplate').trigger('click');
-                }
-            },
-
-            [ria.mvc.DomEventBind('change', '#add-to-gallery')],
+            [ria.mvc.DomEventBind('change', '#in-gallery')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function addToGalleryChange(node, event, selected_){
                 var select = this.dom.find('#galleryCategoryId');
@@ -86,16 +59,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 select.trigger('chosen:updated');
             },
 
-            [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            function categorySelect(node, event, selected_){
-                node.parent('.category-container').find('#add-to-galelry-btn').trigger('click')
-            },
-
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],
             VOID, function addToGalleryRule(tpl, model, msg_) {
-                if(model.isData())
-                    this.dom.find('#add-to-gallery').trigger('click');
+
             },
 
             [ria.mvc.DomEventBind('keyup', 'input[name=title]')],

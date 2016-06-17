@@ -132,11 +132,10 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.LpGalleryCategoryId
-                , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
-                Array
+                , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Array, Boolean
             ]],
             ria.async.Future, function saveLessonPlan(id, classId_, title_, content_, galleryCategoryId_
-                , startDate_, endDate_, hideFromStudent_, attributesListData) {
+                , startDate_, endDate_, hideFromStudent_, attributesListData, inGallery_) {
                 return this.post('LessonPlan/Save.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     lessonPlanId:id.valueOf(),
                     title: title_,
@@ -146,25 +145,26 @@ NAMESPACE('chlk.services', function () {
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
-                    attributes: attributesListData
+                    attributes: attributesListData,
+                    inGallery: inGallery_
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.LpGalleryCategoryId
-                , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
-                Array]],
+                , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Array, Boolean]],
             ria.async.Future, function submitLessonPlan(id, classId_, title_, content_, galleryCategoryId_
-                , startDate_, endDate_, hideFromStudent_, attributesListData) {
+                , startDate_, endDate_, hideFromStudent_, attributesListData, inGallery_) {
                 return this.post('LessonPlan/Submit.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     lessonPlanId:id.valueOf(),
                     title: title_ || ('test ' + id.valueOf()),
                     classId: classId_ ? classId_.valueOf() : null,
                     content: content_,
-                    galleryCategoryId: galleryCategoryId_ ? galleryCategoryId_.valueOf() : null,
+                    lpCategoryRef: galleryCategoryId_ ? galleryCategoryId_.valueOf() : null,
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
-                    attributes: attributesListData
+                    attributes: attributesListData,
+                    inGallery: inGallery_
                 });
             }
         ])

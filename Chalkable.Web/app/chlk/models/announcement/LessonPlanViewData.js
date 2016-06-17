@@ -24,6 +24,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
                 this.galleryCategoryId = SJX.fromValue(raw.gallerycategoryid, chlk.models.id.LpGalleryCategoryId);
                 this.categoryName = SJX.fromValue(raw.gallerycategoryname, String);
+                this.inGallery = SJX.fromValue(raw.ingallery, Boolean);
             },
 
             chlk.models.common.ChlkDate, 'startDate',
@@ -32,6 +33,7 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'shortClassName',
             String, 'className',
             Boolean, 'hiddenFromStudents',
+            Boolean, 'inGallery',
             chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId',
             String, 'categoryName',
 
