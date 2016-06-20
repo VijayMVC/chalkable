@@ -3,6 +3,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -18,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges);
 
         IList<GradingScale> GetGradingScales(bool onlyAppliedToAlphaGrades = true);
+        IList<GradingScaleRange> GetClassGradingScaleRanges(int classId);
     }
 
     public class GradingScaleService : SchoolServiceBase, IGradingScaleService
@@ -73,6 +75,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 var gradingRangeScales = new DataAccessBase<GradingScaleRange>(u).GetAll();
                 return gradingScales.Where(x=>gradingRangeScales.Any(y=> y.GradingScaleRef == x.Id)).ToList();
             }
+        }
+
+        public IList<GradingScaleRange> GetClassGradingScaleRanges(int classId)
+        {
+            return DoRead(u => new GradingScaleDataAccess(u).GetClassGradingScaleRanges(classId));
         }
     }
 }

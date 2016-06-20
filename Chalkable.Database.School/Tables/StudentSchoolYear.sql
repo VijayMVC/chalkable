@@ -3,6 +3,7 @@
     [GradeLevelRef]    INT NOT NULL,
     [StudentRef]       INT NOT NULL,
     [EnrollmentStatus] INT NOT NULL,
+	[IsRetained]       BIT NOT NULL DEFAULT 0,
     CONSTRAINT [PK_StudentSchoolYear] PRIMARY KEY CLUSTERED ([SchoolYearRef] ASC, [StudentRef] ASC),
     CONSTRAINT [FK_StudentSchoolYear_GradeLevel] FOREIGN KEY ([GradeLevelRef]) REFERENCES [dbo].[GradeLevel] ([Id]),
     CONSTRAINT [FK_StudentSchoolYear_Person] FOREIGN KEY ([StudentRef]) REFERENCES [dbo].[Person] ([Id]),
