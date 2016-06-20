@@ -5,7 +5,7 @@
     [IsPrimary] BIT NOT NULL DEFAULT 0,
 	CONSTRAINT PK_PersonLanguage		   PRIMARY KEY (PersonRef, LanguageRef),
 	CONSTRAINT FK_PersonLanguage_Person    FOREIGN KEY (PersonRef)    REFERENCES  [Person](Id),
-	CONSTRAINT FK_PersonLanguage_Language  FOREIGN KEY (LanguageRef)  REFERENCES  [Ethnicity](Id)
+	CONSTRAINT FK_PersonLanguage_Language  FOREIGN KEY (LanguageRef)  REFERENCES  [Language](Id)
 )
 
 /**/
