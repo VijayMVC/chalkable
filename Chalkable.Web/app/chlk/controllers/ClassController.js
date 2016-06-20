@@ -350,7 +350,12 @@ NAMESPACE('chlk.controllers', function (){
             function panoramaSubmitAction(data){
                 var filterValues = data.filterValues ? JSON.parse(data.filterValues) : '',
                     selectedStudents = data.selectedStudents ? JSON.parse(data.selectedStudents) : '',
-                    res, isSave = data.submitType == 'save';
+                    res, isSave = data.submitType == 'save', byCheck = data.submitType == 'check',
+                    byColumn = data.submitType == 'column', isSupplemental = data.submitType == 'supplemental';
+
+                if(isSupplemental){
+                    return this.Redirect('announcement', 'supplementalAnnouncement', [data.classId, null, selectedStudents]);
+                }
 
                 if(isSave){
                     res = this.classService.savePanoramaSettings(data.classId, filterValues)
@@ -361,7 +366,7 @@ NAMESPACE('chlk.controllers', function (){
                 res = this.classService.getPanorama(data.classId, filterValues, selectedStudents)
                     .attach(this.validateResponse_());
 
-                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res);
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, byCheck ? chlk.activities.lib.DontShowLoader() : '');
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],

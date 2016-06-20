@@ -7,11 +7,14 @@
         +ActionForm('class', 'panoramaSubmit').class-panorama-form.no-working
             +Hidden('classId', clazz.getId().valueOf())
             +Hidden('selectedStudents').selected-students
+            BUTTON(type='submit', name="submitType", value="check").x-hidden.submit-by-check
             +CloseOpen('Filter', !clazz.isShowFilters())
                 +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings(), clazz.getId())
             .charts-part
                 +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)
             +CloseOpen('Students')
+                BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add Supplemental Assignment').v-hidden.add-supplemental-btn.right
+                .clear-fix
                 .chlk-calendar.students-grid
                     .grid-top-content.chlk-grid
                         .district-summary-grid
@@ -34,7 +37,7 @@
                                         .cell.test= test.getFullName()
                                 each student in students
                                     -var info = student.getStudent()
-                                    .grid-row
+                                    .grid-row(data-id=info.getId().valueOf())
                                         .cell.checks
                                             .box-checkbox.circle
                                                 +Checkbox('student', false, false, true)(data-id=info.getId().valueOf()).student-check.student-grid-check

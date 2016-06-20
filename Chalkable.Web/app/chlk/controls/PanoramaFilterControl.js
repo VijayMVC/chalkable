@@ -69,7 +69,9 @@ NAMESPACE('chlk.controls', function () {
                 var filters = [], form = form_ || node.parent('form');
                 form.removeClass('working');
 
-                this.checkRestoreBtn_(form, res);
+                filters = this.getFiltersObject_(form);
+
+                this.checkRestoreBtn_(form, filters);
 
                 form.trigger('submit');
             },

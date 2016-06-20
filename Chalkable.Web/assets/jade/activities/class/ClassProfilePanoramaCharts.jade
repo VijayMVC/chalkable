@@ -1,11 +1,6 @@
 +CloseOpen('Standardized Tests')
-    .stats-container
-        .top-bar
-            .title Standardized Tests
-        if self.getTestsChartOptions_()
-            +Chart()(
-                data-options = self.getTestsChartOptions_()
-            ).standardized-tests-chart
+    .stats-container.standardized-tests-tab
+        +RenderWith(self.getModel(), chlk.templates.classes.ClassProfilePanoramaTestsChartTpl)
 +CloseOpen('Class Distribution')
     +Tabs.class-distribution-tabs.stats-container
         .top-bar

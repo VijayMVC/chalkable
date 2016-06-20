@@ -12,11 +12,18 @@ NAMESPACE('chlk.templates.classes', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.profile.ClassDistributionSectionViewData, 'classDistributionSection',
 
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'standardizedTestsStatsByClass',
+            function columnSelectDeselectHandler_(chart, data){
+                setTimeout(function(){
+                    var cnt = jQuery(chart.graphic.element).parents('.chart-container');
+                    var selected = cnt.highcharts().getSelectedPoints();
+                    var ids = [];
+                    selected.forEach(function(column){
+                        ids = ids.concat(data[column.index].getStudentIds())
+                    });
 
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'selectStandardizedTestsStats',
+                    cnt.trigger('columnselect', [ids])
+                })
+            },
 
             [[Object, String]],
             function getDistributionChartOptions_(distribution, color){
@@ -24,7 +31,7 @@ NAMESPACE('chlk.templates.classes', function () {
                     return null;
 
                 var data = distribution.getDistributionStats(), classAvg = distribution.getClassAvg(),
-                    categories = [], columnData = [], avgData = [];
+                    categories = [], columnData = [], avgData = [], that = this, useUnSelect = true;
 
                 data.forEach(function(item){
                     categories.push(item.getSummary());
@@ -68,7 +75,29 @@ NAMESPACE('chlk.templates.classes', function () {
                         color: color,
                         name: '',
                         showInLegend: false,
-                        data: columnData
+                        data: columnData,
+                        allowPointSelect: true,
+                        point: {
+                            events: {
+                                select: function(){
+                                    that.columnSelectDeselectHandler_(this, data);
+                                    useUnSelect = false;
+                                    setTimeout(function(){
+                                        useUnSelect = true;
+                                    }, 5)
+                                },
+
+                                unselect: function(){
+                                    if(useUnSelect){
+                                        that.columnSelectDeselectHandler_(this, data);
+                                        useUnSelect = false;
+                                        setTimeout(function(){
+                                            useUnSelect = true;
+                                        }, 5)
+                                    }
+                                }
+                            }
+                        }
                     }, {
                         type: 'line',
                         color: '#f8b681',
@@ -88,81 +117,6 @@ NAMESPACE('chlk.templates.classes', function () {
 
             function getGradeAverageDistributionChartOptions(){
                 return this.getDistributionChartOptions_(this.getClassDistributionSection().getGradeAverageDistribution(), '#31859b');
-            },
-
-            function getTestsChartOptions_(){
-                var standardizedTestsStatsByClass = this.getStandardizedTestsStatsByClass() || [],
-                    selectStandardizedTestsStats = this.getSelectStandardizedTestsStats() || [],
-                    categories = [], series = [];
-
-                if(!standardizedTestsStatsByClass.length && !selectStandardizedTestsStats.length)
-                    return null;
-
-                standardizedTestsStatsByClass.forEach(function(item, index){
-                    var data = item.getDailyStats(), columnData = [];
-
-                    data.forEach(function(stat){
-                        if(!index)
-                            categories.push(stat.getSummary());
-                        columnData.push(stat.getNumber());
-                    });
-
-                    series.push({
-                        type: 'line',
-                        name: item.getFullName() + ' - class avg',
-                        data: columnData
-                    })
-
-                });
-
-                selectStandardizedTestsStats.forEach(function(item, index){
-                    var data = item.getDailyStats(), columnData = [];
-
-                    data.forEach(function(stat){
-                        columnData.push(stat.getNumber());
-                    });
-
-                    series.push({
-                        type: 'line',
-                        name: item.getStandardizedTest().getDisplayName() + ' | ' + item.getComponent().getName() + ' | ' + item.getScoreType().getName() + ' - selected avg',
-                        data: columnData
-                    })
-
-                });
-
-                return {
-                    chart:{
-                        height: 200
-                    },
-
-                    legend:{
-                        enabled: true
-                    },
-
-                    plotOptions:{
-                        line: {
-                            marker: {
-                                symbol: 'triangle-down'
-                            }
-                        }
-                    },
-
-                    xAxis: {
-                        categories: categories,
-                        gridLineWidth:0,
-                        lineWidth:0
-                    },
-
-                    yAxis: {
-                        gridLineWidth: 1,
-                        lineWidth: 1,
-                        lineColor: '#ebebeb',
-                        gridLineColor: '#ebebeb',
-                        gridLineDashStyle: 'solid'
-                    },
-
-                    series: series
-                }
             }
         ])
 });

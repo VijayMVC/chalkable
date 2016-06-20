@@ -17,11 +17,11 @@ NAMESPACE('chlk.templates.classes', function () {
 
                 return {
                     chart:{
-                        height: 100
+                        height: 50
                     },
 
                     plotOptions:{
-                        series:{
+                        area:{
                             enableMouseTracking:false,
                             lineWidth:1,
                             shadow:false,
@@ -34,7 +34,12 @@ NAMESPACE('chlk.templates.classes', function () {
                     xAxis: {
                         labels:{
                             enabled:false
-                        }
+                        },
+                        maxPadding:0,
+                        minPadding:0,
+                        gridLineWidth: 0,
+                        endOnTick:false,
+                        showFirstLabel:false
                     },
 
                     yAxis: {
@@ -51,28 +56,9 @@ NAMESPACE('chlk.templates.classes', function () {
                         enabled:false
                     },
 
-                    series: [{type:'area',
-                        data: [[
-                            1352740844000,
-                            12
-                        ],
-                            [
-                                1352741744000,
-                                10
-                            ],
-                            [
-                                1352742644000,
-                                20
-                            ],
-                            [
-                                1352743544000,
-                                40
-                            ],
-                            [
-                                1352744444000,
-                                50
-                            ]
-                        ]
+                    series: [{
+                        type:'area',
+                        data: data
                     }]
                 }
             }

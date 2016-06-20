@@ -6,7 +6,8 @@
     +Select('filterType')(data-placeholder = 'Select Standardized Test').filter-type-select.filter-select
         +Option('', '')
         each item  in standardizedTests
-            +Option(item.getId().valueOf(), item.getDisplayName(), item.getId() == testId)
+            if item.getComponents().length && item.getScoreTypes().length
+                +Option(item.getId().valueOf(), item.getDisplayName(), item.getId() == testId)
     .additional-filters.i-b
         if testId
             -var model = new chlk.models.controls.PanoramaFilterBlockViewData(standardizedTests, testId, self.getScoreTypeId(), self.getComponentId())

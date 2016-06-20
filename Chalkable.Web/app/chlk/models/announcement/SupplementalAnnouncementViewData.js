@@ -33,6 +33,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'hiddenFromStudents',
             chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId',
             Number, 'announcementTypeId',
+            ArrayOf(chlk.models.id.SchoolPersonId), 'selectedStudentsIds',
 
             function getRecipientsTooltip(){
                 var res = this.getRecipients() && this.getRecipients().length ? this.getRecipients().map(function(item){return item.getFullName()}).join('\n') : 'Supplemental Assignment';
