@@ -178,7 +178,10 @@ namespace Chalkable.Web.Models
                     Count = models.Count(x => x.AverageGrade <= hi && x.AverageGrade >= lo),
                     StartInterval = lo,
                     EndInterval = hi,
-                    Summary = $"{lo}-{hi}"
+                    Summary = $"{lo}-{hi}",
+                    StudentIds = models.Where(x => x.AverageGrade <= hi && x.AverageGrade >= lo)
+                                       .Select(x => x.StudentId)
+                                       .ToList()
                 });
             }
 
@@ -188,10 +191,10 @@ namespace Chalkable.Web.Models
         {
             var res = new ClassDistributionStatsViewData();
             var absencePersents = models.Where(x => x.NumberOfDaysEnrolled != 0)
-                .Select(x => (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled*100))
+                .Select(x => new { Persent = (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled*100), StudentId = x.StudentId})
                 .OrderBy(x => x).ToList();
             
-            var maxPersent = absencePersents.Max();
+            var maxPersent = absencePersents.Max(x => x.Persent);
 
             res.DistributionStats = new List<DistributionItemViewData>();
             for (var currentPersent = 0; currentPersent <= maxPersent; ++currentPersent)
@@ -200,8 +203,11 @@ namespace Chalkable.Web.Models
                 {
                     StartInterval = currentPersent,
                     EndInterval = currentPersent,
-                    Count = absencePersents.Count(x => x == currentPersent),
-                    Summary = $"{currentPersent}%"
+                    Count = absencePersents.Count(x => x.Persent == currentPersent),
+                    Summary = $"{currentPersent}%",
+                    StudentIds = absencePersents.Where( x => x.Persent == currentPersent)
+                                                .Select(x => x.StudentId)
+                                                .ToList()
                 });
             }
 
@@ -226,7 +232,8 @@ namespace Chalkable.Web.Models
                 Count = models.Count(x => x.NumberOfInfractions == 0),
                 StartInterval = 0,
                 EndInterval = 0,
-                Summary = $"{0}"
+                Summary = $"{0}",
+                StudentIds = models.Where(x => x.NumberOfInfractions == 0).Select(x => x.StudentId).ToList()
             });
             for (var i = 1; i <= maxInfractionCount; i += 3)
             {
@@ -235,7 +242,10 @@ namespace Chalkable.Web.Models
                     Count = models.Count(x => x.NumberOfInfractions >= i && x.NumberOfInfractions < i+3),
                     StartInterval = i,
                     EndInterval = i + 2,
-                    Summary = $"{i}-{i+2}"
+                    Summary = $"{i}-{i+2}",
+                    StudentIds = models.Where(x => x.NumberOfInfractions >= i && x.NumberOfInfractions < i + 3)
+                                       .Select(x => x.StudentId)
+                                       .ToList()
                 });
             }
 
@@ -267,6 +277,7 @@ namespace Chalkable.Web.Models
 
     public class DistributionItemViewData
     {
+        public IList<int> StudentIds { get; set; }
         public decimal Count { get; set; }
         public string Summary { get; set; }
         public decimal StartInterval { get; set; }
