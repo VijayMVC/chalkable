@@ -176,11 +176,14 @@
     <Compile Include="Model\ClassTeacher.cs" />
     <Compile Include="Model\ContactRelationship.cs" />
     <Compile Include="Model\AnnouncementAssignedAttribute.cs" />
+    <Compile Include="Model\Country.cs" />
     <Compile Include="Model\CourseType.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\Ethnicity.cs" />
+    <Compile Include="Model\Language.cs" />
     <Compile Include="Model\LPGalleryCategory.cs" />
     <Compile Include="Model\PersonEthnicity.cs" />
+    <Compile Include="Model\PersonLanguage.cs" />
     <Compile Include="Model\PersonSetting.cs" />
     <Compile Include="Model\StandardizedTest.cs" />
     <Compile Include="Model\StudentCustomAlertDetail.cs" />

@@ -7,13 +7,12 @@ using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
-    public class PersonEthnicity
+    public class PersonLanguage
     {
         [PrimaryKeyFieldAttr]
         public int PersonRef { get; set; }
         [PrimaryKeyFieldAttr]
-        public int EthnicityRef { get; set; }
-        public int Percentage { get; set; }
+        public int LanguageRef { get; set; }
         public bool IsPrimary { get; set; }
     }
 }

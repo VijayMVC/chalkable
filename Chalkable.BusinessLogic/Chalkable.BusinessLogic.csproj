@@ -322,6 +322,7 @@
     <Compile Include="Services\School\ClassroomOptionService.cs" />
     <Compile Include="Services\School\ContactService.cs" />
     <Compile Include="Services\School\AnnouncementAssignedAttributeService.cs" />
+    <Compile Include="Services\School\CountryService.cs" />
     <Compile Include="Services\School\CourseTypeService.cs" />
     <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementQnAService.cs" />
@@ -356,6 +357,7 @@
     <Compile Include="Services\School\GradingPeriodService.cs" />
     <Compile Include="Services\School\GradingStandardService.cs" />
     <Compile Include="Services\School\GradingStatisticService.cs" />
+    <Compile Include="Services\School\LanguageService.cs" />
     <Compile Include="Services\School\LEService.cs" />
     <Compile Include="Services\School\LPGalleryCategoryService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
@@ -366,7 +368,6 @@
     <Compile Include="Services\School\PanoramaSettings\PanoramaSettingsService.cs" />
     <Compile Include="Services\School\PeriodService.cs" />
     <Compile Include="Services\School\PersonEmailService.cs" />
-    <Compile Include="Services\School\PersonEthnicityService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
     <Compile Include="Services\School\PersonSettingService.cs" />
     <Compile Include="Services\School\PhoneService.cs" />

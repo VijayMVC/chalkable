@@ -25,12 +25,12 @@ namespace Chalkable.Web.Models
         {
         }
         
-        public static ClassPanoramaViewData Create(ClassDetails cClass, ClassProfilePanoramaSetting filterSetting, IList<StandardizedTestDetails> standardizedTests, 
-            ClassPanorama panorama, IList<GradingScaleRange> gradingScaleRanges, IList<StudentDetails> classStudents, IList<int> selectedStudents, DateTime today)
+        public static ClassPanoramaViewData Create(ClassDetails cClass, IList<StandardizedTestDetails> standardizedTests, ClassPanorama panorama, 
+            IList<GradingScaleRange> gradingScaleRanges, IList<StudentDetails> classStudents, IList<int> selectedStudents, IList<Ethnicity> ethnicities,
+            DateTime today)
         {
             var res = new ClassPanoramaViewData(cClass)
             {
-                FilterSettings = filterSetting != null ? ClassProfilePanoramaSettingsViewData.Create(filterSetting) : null,
                 StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList(),
                 ClassDistributionSection = ClassDistributionSectionViewData.Create(panorama.Grades, panorama.Absences, panorama.Infractions, gradingScaleRanges),
                 StandardizedTestsStatsByClass = StandardizedTestStatsViewData.CreateForClass(panorama.StandardizedTests, standardizedTests),
@@ -44,7 +44,8 @@ namespace Chalkable.Web.Models
                 var gradeAvg = panorama.Grades?.FirstOrDefault(x => x.StudentId == student.Id)?.AverageGrade;
                 var infractions = panorama.Infractions?.FirstOrDefault(x => x.StudentId == student.Id)?.NumberOfInfractions;
                 var absences = panorama.Absences?.FirstOrDefault(x => x.StudentId == student.Id)?.NumberOfAbsences;
-                res.Students.Add(StudentStandardizedTestStats.Create(student, gradeAvg, absences, infractions, today, studentStats));
+                var ethnicity = ethnicities.FirstOrDefault(x => student.PrimaryPersonEthnicity != null && student.PrimaryPersonEthnicity.EthnicityRef == x.Id);
+                res.Students.Add(StudentStandardizedTestStats.Create(student, ethnicity, gradeAvg, absences, infractions, today, studentStats));
             }
 
             if (selectedStudents == null || selectedStudents.Count == 0)
@@ -277,12 +278,12 @@ namespace Chalkable.Web.Models
         public StudentDetailsViewData Student { get; set; }
         public IList<StandardizedTestStatsViewData> StandardizedTestsStats { get; set; }
 
-        public static StudentStandardizedTestStats Create(StudentDetails student, decimal? gradeAvg, decimal? absences, int? infractions, 
+        public static StudentStandardizedTestStats Create(StudentDetails student, Ethnicity ethnicity, decimal? gradeAvg, decimal? absences, int? infractions, 
             DateTime currentSchoolTime, IList<StandardizedTestStatsViewData> standardizedTestStats)
         {
             return new StudentStandardizedTestStats
             {
-                Student = StudentDetailsViewData.Create(student, gradeAvg, absences, infractions, currentSchoolTime),
+                Student = StudentDetailsViewData.Create(student, ethnicity, gradeAvg, absences, infractions, currentSchoolTime),
                 StandardizedTestsStats = standardizedTestStats
             };
         }

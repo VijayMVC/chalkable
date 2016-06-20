@@ -83,7 +83,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IStandardizedTestService StandardizedTestService { get; }
         ISupplementalAnnouncementService SupplementalAnnouncementService { get; }
         IEthnicityService EthnicityService { get; }
-        IPersonEthnicityService PersonEthnicityService { get; }
+        ILanguageService LanguageService { get; }
+        ICountryService CountryService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -160,7 +161,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private ISupplementalAnnouncementService supplementalAnnouncementService;
         private IEthnicityService ethnicityService;
-        private IPersonEthnicityService personEthnicityService;
+
+        private ILanguageService languageService;
+        private ICountryService countryService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -234,7 +237,8 @@ namespace Chalkable.BusinessLogic.Services.School
             standardizedTestService = new StandardizedTestService(this);
             supplementalAnnouncementService = new SupplementalAnnouncementService(this);
             ethnicityService = new EthnicityService(this);
-            personEthnicityService = new PersonEthnicityService(this);
+            languageService = new LanguageService(this);
+            countryService = new CountryService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -296,7 +300,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public ILEService LeService => leService;
         public IAttachementService AttachementService => attachementService;
         public IPersonSettingService PersonSettingService => personSettingService;
-        public IPersonEthnicityService PersonEthnicityService => personEthnicityService;
 
         public IDbService SchoolDbService
         {
@@ -327,7 +330,9 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public  ISupplementalAnnouncementService SupplementalAnnouncementService => supplementalAnnouncementService;
+        public ISupplementalAnnouncementService SupplementalAnnouncementService => supplementalAnnouncementService;
         public IEthnicityService EthnicityService => ethnicityService;
+        public ILanguageService LanguageService => languageService;
+        public ICountryService CountryService => countryService;
     }
 }

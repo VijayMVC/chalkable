@@ -23,12 +23,11 @@ From
 Where
 	Student.id = @id
 
-Select top 1
-	Ethnicity.*
+Select
+	PersonEthnicity.*
 From 
-	Ethnicity
-	Join PersonEthnicity
-		on Ethnicity.Id = PersonEthnicity.EthnicityRef
-Where PersonEthnicity.PersonRef = @id and PersonEthnicity.IsPrimary = 1
+	PersonEthnicity
+Where 
+	PersonEthnicity.PersonRef = @id
 
 GO

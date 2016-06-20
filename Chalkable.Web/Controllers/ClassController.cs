@@ -146,27 +146,27 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IntList selectedStudents)
+        public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents)
         {
             if(settings.SchoolYearIds == null)
                 settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSetting>(classId);
 
             if (settings.SchoolYearIds.Count == 0)
                 throw new ChalkableException("School years is required parameter");
-            //-----------------------------HARDCODED_SNIPPET-------------------------------------
-            //Trace.Assert(Context.SchoolYearId.HasValue);
-            //settings.SchoolYearIds = settings.SchoolYearIds ?? new List<int>();
-            //settings.SchoolYearIds.Add(Context.SchoolYearId.Value);
-            //-----------------------------------------------------------------------------------
 
             var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
             var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
-            var classStudents = SchoolLocator.StudentService.GetClassStudents(classId, null, true);           
-            
-            return Json(ClassPanoramaViewData.Create(classDetails, settings, standardizedTestDetails, panorama, gradingScale, 
-                classStudents, selectedStudents, Context.NowSchoolTime));
+            var classStudents = SchoolLocator.StudentService.GetClassStudents(classId, null, true);
+            var ethnicities = SchoolLocator.EthnicityService.GetAll();
+
+            var panoramaViewData = ClassPanoramaViewData.Create(classDetails, standardizedTestDetails,
+                panorama, gradingScale, classStudents, selectedStudents, ethnicities, Context.NowSchoolTime);
+
+            panoramaViewData.FilterSettings = ClassProfilePanoramaSettingsViewData.Create(settings);
+
+            return Json(panoramaViewData);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]

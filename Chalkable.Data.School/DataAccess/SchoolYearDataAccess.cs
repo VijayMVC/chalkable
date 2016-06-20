@@ -61,10 +61,15 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<SchoolYear> GetByIds(IList<int> ids, bool onlyActive = true)
         {
-            StringBuilder sqlQuery = new StringBuilder("Select * From [SchoolYear] where Id in("+ids.JoinString(",")+")");
+            if(ids == null || ids.Count == 0)
+                return new List<SchoolYear>();
+
+            var @params = new Dictionary<string, object> { ["ids"] = ids };
+            var sqlQuery = new StringBuilder($"Select * From [{nameof(SchoolYear)}] where {SchoolYear.ID_FIELD} in(Select * From @ids)");
             if (onlyActive)
-                sqlQuery.Append(" And ArchiveDate is null");
-            return ReadMany<SchoolYear>(new DbQuery(sqlQuery, null));
+                sqlQuery.Append($" And {SchoolYear.ARCHIVE_DATE} is null");
+
+            return ReadMany<SchoolYear>(new DbQuery(sqlQuery, @params));
         }
 
         public PaginatedList<SchoolYear> GetBySchool(int schoolId)

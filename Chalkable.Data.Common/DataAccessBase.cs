@@ -417,7 +417,7 @@ namespace Chalkable.Data.Common
             sql.AppendFormat(Orm.Orm.SELECT_FORMAT, '*', typeof(TEntity).Name);
 
             var primaryKeyFields = Orm.Orm.GetPrimaryKeyFields(typeof(TEntity));
-            sql.Append("Where ").Append($"{primaryKeyFields.First().Name} in( Select * From @keys ) ");
+            sql.Append($"Where {primaryKeyFields.First().Name} in( Select * From @keys ) ");
 
             var param = new Dictionary<string, object>
             {

@@ -129,7 +129,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 {typeof(StandardizedTestComponent), new StandardizedTestComponentAdapter(this) },
                 {typeof(StandardizedTestScoreType), new StandardizedTestScoreTypeAdapter(this) },
                 {typeof(Ethnicity), new EthnicityAdapter(this) },
-                {typeof(PersonEthnicity), new PersonEthnicityAdapter(this) }
+                {typeof(PersonEthnicity), new PersonEthnicityAdapter(this) },
+                {typeof(Language), new LanguageAdapter(this) },
+                {typeof(PersonLanguage), new PersonLanguageAdapter(this) },
+                {typeof(Country), new CountryAdapter(this) }
             };
         }
 

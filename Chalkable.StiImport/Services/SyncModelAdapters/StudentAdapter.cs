@@ -26,7 +26,17 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : "",
                 IsHispanic = x.IsHispanic,
                 IEPBeginDate = x.IEPBeginDate,
-                IEPEndDate = x.IEPEndDate
+                IEPEndDate = x.IEPEndDate,
+                AltStudentNumber = x.AltStudentNumber,
+                GenderDescriptor = x.GenderDescriptor,
+                IsForeignExchange = x.IsForeignExchange,
+                IsHomeless = x.IsHomeless,
+                IsImmigrant = x.IsImmigrant,
+                LimitedEnglishRef = x.LimitedEnglishID,
+                OriginalEnrollmentDate = x.OriginalEnrollmentDate,
+                Section504Qualification = x.Section504Qualification,
+                StateIdNumber = x.StateIDNumber,
+                StudentNumber = x.StudentNumber
             };
         }
 

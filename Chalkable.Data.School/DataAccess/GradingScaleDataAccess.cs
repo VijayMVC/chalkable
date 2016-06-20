@@ -17,18 +17,12 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<GradingScaleRange> GetClassGradingScaleRanges(int classId)
         {
-            var query = 
-                $@"Select {nameof(GradingScaleRange)}.* 
-                   From {nameof(Class)} join {nameof(GradingScaleRange)}
-	                    on {nameof(Class)}.{Class.GRADING_SCALE_REF_FIELD} = {nameof(GradingScaleRange)}.{GradingScaleRange.GRADING_SCALE_REF_FIELD}
-                   Where {nameof(Class)}.{Class.ID_FIELD} = @classId";
-
             var @params = new Dictionary<string, object>
             {
                 ["classId"] = classId
             };
 
-            return ReadMany<GradingScaleRange>(new DbQuery(query, @params));
+            return ExecuteStoredProcedureList<GradingScaleRange>("spGetClassGradingScaleRanges", @params);
         }
     }
 }

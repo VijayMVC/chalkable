@@ -1838,7 +1838,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public ISupplementalAnnouncementService SupplementalAnnouncementService { get { throw new NotImplementedException(); } }
         public IEthnicityService EthnicityService { get {throw new NotImplementedException();} }
-        public IPersonEthnicityService PersonEthnicityService { get { throw new NotImplementedException(); } }
+        public ILanguageService LanguageService { get {throw new NotImplementedException();} }
+        public ICountryService CountryService { get { throw new NotImplementedException(); } }
     }
 
 }

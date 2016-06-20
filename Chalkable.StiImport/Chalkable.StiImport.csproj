@@ -166,6 +166,7 @@
     <Compile Include="Services\SyncModelAdapters\CalendarDayAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\ClassroomOptionAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\ContactRelationshipAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\CountryAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\CourseAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\CourseStandardAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\CourseTypeAdapter.cs" />
@@ -179,9 +180,11 @@
     <Compile Include="Services\SyncModelAdapters\GradingScaleAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\GradingScaleRangeAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\InfractionAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\LanguageAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonEmailAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonEthnicityAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\PersonLanguageAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonTelephoneAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\RoomAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\ScheduledSectionAdapter.cs" />

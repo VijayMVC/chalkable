@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -26,10 +28,11 @@ namespace Chalkable.Data.School.DataAccess
                 r.Read();
                 var res = r.Read<StudentDetails>();
                 r.NextResult();
-                res.Ethnicity = r.ReadOrNull<Ethnicity>();
+                res.PersonEthnicities = r.ReadList<PersonEthnicity>();
                 return res;
             }
         }
+
 
         public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
         {
@@ -41,6 +44,18 @@ namespace Chalkable.Data.School.DataAccess
             return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByTeacher", ps);
         }
 
+        private IList<StudentDetails> ReadStudentDetails(SqlDataReader reader)
+        {
+            var students = reader.ReadList<StudentDetails>();
+            reader.NextResult();
+            var personEthnities = reader.ReadList<PersonEthnicity>();
+
+            foreach (var student in students)
+                student.PersonEthnicities = personEthnities.Where(x => x.PersonRef == student.Id).ToList();
+
+            return students;
+        } 
+
         public IList<StudentDetails> GetStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
@@ -51,20 +66,7 @@ namespace Chalkable.Data.School.DataAccess
             };
             using (var reader = ExecuteStoredProcedureReader("spGetStudentsByClass", ps))
             {
-                var res = new List<StudentDetails>();
-                while (reader.Read())
-                {
-                    var model = reader.Read<StudentDetails>();
-                    var hasEthnicity = SqlTools.ReadInt32Null(reader, $"{nameof(Ethnicity)}_Id") != null;
-                    Ethnicity ethnicity = null;
-                    if(hasEthnicity)
-                        ethnicity = reader.Read<Ethnicity>(true);
-
-                    model.Ethnicity = ethnicity;
-                    res.Add(model);
-                }
-
-                return res;
+                return ReadStudentDetails(reader);
             }
         }
 

@@ -9,8 +9,7 @@ namespace Chalkable.Web.Models.Settings
         }
         public static ClassProfilePanoramaSettingsViewData Create(ClassProfilePanoramaSetting setting)
         {
-            return new ClassProfilePanoramaSettingsViewData(setting);
+            return setting == null ? null : new ClassProfilePanoramaSettingsViewData(setting);
         }
-
     }
 }

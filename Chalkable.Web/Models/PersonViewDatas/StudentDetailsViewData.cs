@@ -15,7 +15,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public decimal? Absences { get; set; }
         public int? Discipline { get; set; }
 
-        public static StudentDetailsViewData Create(StudentDetails student, decimal? gradeAvg, decimal? absences, int? infractions, DateTime currentSchoolTime)
+        public static StudentDetailsViewData Create(StudentDetails student, Ethnicity ethnicity, 
+            decimal? gradeAvg, decimal? absences, int? infractions, DateTime currentSchoolTime)
         {
             return new StudentDetailsViewData
             {
@@ -27,7 +28,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 Gender = student.Gender,
                 Role = RoleViewData.Create(CoreRoles.STUDENT_ROLE),
                 IsHispanic = student.IsHispanic,
-                Ethnicity = student.Ethnicity != null ? EthnicityViewData.Create(student.Ethnicity) : null,
+                Ethnicity = ethnicity != null ? EthnicityViewData.Create(ethnicity) : null,
                 Absences = absences,
                 Discipline = infractions,
                 GradeAvg = gradeAvg,

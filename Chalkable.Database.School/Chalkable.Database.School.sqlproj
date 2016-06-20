@@ -342,6 +342,13 @@
     <Build Include="User Defined Types\TEthnicity.sql" />
     <Build Include="User Defined Types\TPersonEthnicity.sql" />
     <Build Include="Stored Procedures\spGetPreviousStudentSchoolYear.sql" />
+    <Build Include="Tables\Language.sql" />
+    <Build Include="User Defined Types\TLanguage.sql" />
+    <Build Include="Tables\PersonLanguage.sql" />
+    <Build Include="User Defined Types\TPersonLanguage.sql" />
+    <Build Include="Tables\Country.sql" />
+    <Build Include="User Defined Types\TCountry.sql" />
+    <Build Include="Stored Procedures\spGetClassGradingScaleRanges.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
