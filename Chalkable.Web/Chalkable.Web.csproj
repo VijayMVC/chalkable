@@ -387,6 +387,12 @@
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
+    <Compile Include="Models\ClassPanoramaViewData.cs" />
+    <Compile Include="Models\EthnicityViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentDetailsViewData.cs" />
+    <Compile Include="Models\Settings\AdminPanoramaSettingsViewData.cs" />
+    <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />
+    <Compile Include="Models\Settings\ClassProfilePanoramaSettingsViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineDailySummaryViewData.cs" />
     <Compile Include="Models\DistrictAdminSettingsViewData.cs" />
     <Compile Include="Models\FeedComplexViewData.cs" />
@@ -479,7 +485,6 @@
     <Compile Include="Models\MarkingPeriodViewData.cs" />
     <Compile Include="Models\PersonViewDatas\CurrentPersonViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
-    <Compile Include="Models\PersonViewDatas\PersonAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonInfoViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonScheduleViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonViewData.cs" />
@@ -510,7 +515,11 @@
     <Compile Include="Models\SchoolYearClassesViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
+    <Compile Include="Models\Settings\CourseTypeSettingViewData.cs" />
+    <Compile Include="Models\Settings\PersonProfilePanoramaSettingsViewData.cs" />
     <Compile Include="Models\ShortDistrictSummaryViewData.cs" />
+    <Compile Include="Models\Settings\StandardizedTestFilterViewData.cs" />
+    <Compile Include="Models\StandardizedTestViewData.cs" />
     <Compile Include="Models\StandardSubjectViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />

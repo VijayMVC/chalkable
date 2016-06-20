@@ -17,6 +17,7 @@ REQUIRE('chlk.activities.classes.ClassProfileAttendanceSeatingChartPage');
 REQUIRE('chlk.activities.classes.ClassProfileAppsPage');
 REQUIRE('chlk.activities.classes.ClassExplorerPage');
 REQUIRE('chlk.activities.classes.ClassProfileDisciplinePage');
+REQUIRE('chlk.activities.classes.ClassPanoramaPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -322,6 +323,50 @@ NAMESPACE('chlk.controllers', function (){
                         return data;
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassExplorerPage, res);
+            },
+
+            [[chlk.models.id.ClassId, Boolean]],
+            function panoramaAction(classId, showFilters_){
+                var res = ria.async.wait([
+                    this.classService.getPanorama(classId),
+                    this.schoolYearService.list()
+                ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var model = result[0];
+                        model.setSchoolYears(result[1]);
+                        showFilters_ && model.setShowFilters(showFilters_);
+                        return new chlk.models.classes.ClassProfileSummaryViewData(
+                            this.getCurrentRole(), model, this.getUserClaims_(),
+                            this.isAssignedToClass_(classId)
+                        );
+                    }, this);
+                if(showFilters_)
+                    return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res);
+
+                return this.PushView(chlk.activities.classes.ClassPanoramaPage, res);
+            },
+
+            function panoramaSubmitAction(data){
+                var filterValues = data.filterValues ? JSON.parse(data.filterValues) : '',
+                    selectedStudents = data.selectedStudents ? JSON.parse(data.selectedStudents) : '',
+                    res, isSave = data.submitType == 'save', byCheck = data.submitType == 'check',
+                    byColumn = data.submitType == 'column', isSupplemental = data.submitType == 'supplemental';
+
+                if(isSupplemental){
+                    return this.Redirect('announcement', 'supplementalAnnouncement', [data.classId, null, selectedStudents]);
+                }
+
+                if(isSave){
+                    res = this.classService.savePanoramaSettings(data.classId, filterValues)
+                        .attach(this.validateResponse_());
+                    return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, 'save-filters');
+                }
+
+                res = this.classService.getPanorama(data.classId, filterValues, selectedStudents)
+                    .attach(this.validateResponse_());
+
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, byCheck ? chlk.activities.lib.DontShowLoader() : '');
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],

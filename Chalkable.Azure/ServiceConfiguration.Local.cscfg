@@ -71,7 +71,7 @@
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="JBWJoVgOgUP0pdPqxrdKO+OqRGyQ2gb2GdN8POvMgRA=" />
       <!-- other settings -->
-      <Setting name="TaskProcessorDelay" value="-1" />
+      <Setting name="TaskProcessorDelay" value="1" />
       <Setting name="DbBackupServiceUrl" value="" />
       <Setting name="PictureProcessorCount" value="1" />
       <Setting name="AllSchoolRunner.DistrictsPerThread" value="4" />

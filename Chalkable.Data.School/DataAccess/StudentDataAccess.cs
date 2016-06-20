@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -20,12 +22,14 @@ namespace Chalkable.Data.School.DataAccess
             {
                 {"@id", id},
                 {"@schoolYearId", schoolYearId}
-
             };
             using (var r = ExecuteStoredProcedureReader("spGetStudentDetails", ps))
             {
                 r.Read();
-                return r.Read<StudentDetails>();
+                var res = r.Read<StudentDetails>();
+                r.NextResult();
+                res.PersonEthnicities = r.ReadList<PersonEthnicity>();
+                return res;
             }
         }
 
@@ -40,21 +44,35 @@ namespace Chalkable.Data.School.DataAccess
             return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByTeacher", ps);
         }
 
-        public IList<StudentDetails> GetStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
+        private IList<StudentDetails> ReadStudentDetails(SqlDataReader reader)
+        {
+            var students = reader.ReadList<StudentDetails>();
+            reader.NextResult();
+            var personEthnities = reader.ReadList<PersonEthnicity>();
+
+            foreach (var student in students)
+                student.PersonEthnicities = personEthnities.Where(x => x.PersonRef == student.Id).ToList();
+
+            return students;
+        } 
+
+        public IList<StudentDetails> GetStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
             {
                 {"@classId", classId},
                 {"@markingPeriodId", markingPeriodId},
                 {"@isEnrolled", isEnrolled}
-
             };
-            return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByClass", ps);
+            using (var reader = ExecuteStoredProcedureReader("spGetStudentsByClass", ps))
+            {
+                return ReadStudentDetails(reader);
+            }
         }
 
         public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriod)
         {
-            string[] filters = (filter != null) ? filter.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) : null;
+            var filters = filter?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var ps = new Dictionary<string, object>
             {
                 {"@start", start},

@@ -15,7 +15,7 @@ namespace Chalkable.BackgroundTaskProcessor
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             if (!sl.DistrictService.IsOnline(task.DistrictRef.Value))
             {
-                log.LogError(string.Format("district {0} is not online yet", task.DistrictRef.Value));
+                log.LogError($"district {task.DistrictRef.Value} is not online yet");
                 return false;
             }
 

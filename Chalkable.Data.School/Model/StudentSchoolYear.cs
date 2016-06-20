@@ -15,6 +15,7 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int StudentRef { get; set; }
         public StudentEnrollmentStatusEnum EnrollmentStatus { get; set; }
+        public bool IsRetained { get; set; }
         [NotDbFieldAttr]
         public GradeLevel GradeLevel { get; set; }
        

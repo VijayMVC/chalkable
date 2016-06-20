@@ -39,7 +39,21 @@ namespace Chalkable.Data.School.DataAccess
             q.Sql.AppendFormat("order by {0}  desc", SchoolYear.END_DATE_FIELD);
             return ReadOneOrNull<SchoolYear>(q);
         }
-        
+
+        public IList<SchoolYear> GetPreviousSchoolYears(DateTime currentSyStartDate, int schoolId, int count = 1)
+        {
+            var conds = new AndQueryCondition
+            {
+                {SchoolYear.END_DATE_FIELD, currentSyStartDate, ConditionRelation.LessEqual },
+                {SchoolYear.SCHOOL_REF_FIELD, schoolId, ConditionRelation.Equal }
+            };
+
+            var dbQuery = Orm.SimpleSelect<SchoolYear>(conds, count);
+            Orm.OrderBy(dbQuery, nameof(SchoolYear), SchoolYear.END_DATE_FIELD, Orm.OrderType.Desc);
+
+            return ReadMany<SchoolYear>(dbQuery);
+        }
+
         public void Delete(IList<int> ids)
         {
             SimpleDelete(ids.Select(x => new SchoolYear {Id = x}).ToList());
@@ -47,15 +61,32 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<SchoolYear> GetByIds(IList<int> ids, bool onlyActive = true)
         {
-            StringBuilder sqlQuery = new StringBuilder("Select * From [SchoolYear] where Id in("+ids.JoinString(",")+")");
+            if(ids == null || ids.Count == 0)
+                return new List<SchoolYear>();
+
+            var @params = new Dictionary<string, object> { ["ids"] = ids };
+            var sqlQuery = new StringBuilder($"Select * From [{nameof(SchoolYear)}] where {SchoolYear.ID_FIELD} in(Select * From @ids)");
             if (onlyActive)
-                sqlQuery.Append(" And ArchiveDate is null");
-            return ReadMany<SchoolYear>(new DbQuery(sqlQuery, null));
+                sqlQuery.Append($" And {SchoolYear.ARCHIVE_DATE} is null");
+
+            return ReadMany<SchoolYear>(new DbQuery(sqlQuery, @params));
         }
 
         public PaginatedList<SchoolYear> GetBySchool(int schoolId)
         {
             return PaginatedSelect< SchoolYear>(new SimpleQueryCondition("SchoolRef", schoolId, ConditionRelation.Equal), "Id", 0, int.MaxValue);
-        } 
+        }
+
+        public StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId)
+        {
+            var @params = new Dictionary<string, object>
+            {
+                ["studentId"] = studentId
+            };
+            using (var reader = ExecuteStoredProcedureReader("spGetPreviousStudentSchoolYear", @params))
+            {
+                return reader.ReadOrNull<StudentSchoolYear>();
+            }
+        }
     }
 }

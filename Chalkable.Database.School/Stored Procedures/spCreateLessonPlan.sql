@@ -37,8 +37,8 @@ If @announcementId is not null
 Begin
 	update Announcement Set [State] = 0 Where Id = @announcementId
 	Set @isDraft = 1
-	End
-	Else Begin
+End
+Else Begin
 
 	/*INSERT TO ANNOUNCEMENT*/
 	Insert Into Announcement (Created, Title, Content, [State])

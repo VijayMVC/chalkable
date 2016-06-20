@@ -46,7 +46,7 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                                 .recipients-container
                                     label(for="students").main-lable Recipients:
                                     .types-select-cnt
-                                        -var recipientIds = announcementItem.getRecipients() ? announcementItem.getRecipients().map(function(item){return item.getId()}) : []
+                                        -var recipientIds = announcementItem.getRecipients() ? announcementItem.getRecipients().map(function(item){return item.getId()}) : (announcementItem.getSelectedStudentsIds() || [])
                                         +Select('students')(multiple, data-placeholder="Assign To...").recipients-select
                                             each student in self.getStudents() || []
                                                 +Option(student.getId().valueOf(), student.getFullName(), recipientIds.indexOf(student.getId()) > -1)

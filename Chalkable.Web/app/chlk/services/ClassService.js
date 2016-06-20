@@ -13,6 +13,7 @@ REQUIRE('chlk.models.attendance.ClassAttendanceStatsViewData');
 REQUIRE('chlk.models.school.SchoolClassesStatisticViewData');
 REQUIRE('chlk.models.classes.ClassDisciplinesSummary');
 REQUIRE('chlk.models.classes.ClassAttendanceSummary');
+REQUIRE('chlk.models.profile.ClassPanoramaViewData');
 
 REQUIRE('chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData');
 REQUIRE('chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData');
@@ -87,6 +88,29 @@ NAMESPACE('chlk.services', function () {
                         this.getContext().getSession().set(ChlkSessionConstants.CLASSES_INFO, classesInfoMap);
                         return classesInfoMap;
                     }, this);
+            },
+
+            ria.async.Future, function getCourseTypes(classId, data_) {
+                return this.get('Class/AllCourseTypes.json', ArrayOf(chlk.models.classes.CourseType));
+            },
+
+            //[[chlk.models.id.ClassId, Object]],
+            ria.async.Future, function getPanorama(classId, data_, selectedStudents_) {
+                return this.post('Class/Panorama.json', chlk.models.profile.ClassPanoramaViewData, {
+                    classId: classId.valueOf(),
+                    standardizedTestFilters: data_ && data_.standardizedTestFilters,
+                    schoolYearIds: data_ && data_.schoolYearIds,
+                    selectedStudents: selectedStudents_
+                });
+            },
+
+            //[[Object, Object]],
+            ria.async.Future, function savePanoramaSettings(classId, data) {
+                return this.post('Class/SavePanoramaSettings.json', Boolean, {
+                    classId : classId,
+                    standardizedTestFilters: data.standardizedTestFilters,
+                    schoolYearIds: data.schoolYearIds
+                });
             },
 
             [[chlk.models.id.ClassId]],

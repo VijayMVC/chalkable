@@ -4,7 +4,8 @@ namespace Chalkable.Data.School.Model
 {
     public class CourseType
     {
-        public const string IS_ACTIVE_FIELD = "IsActive";
+        public const string IS_ACTIVE_FIELD = nameof(IsActive);
+        public const string NAME_FIELD = nameof(Name);
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }

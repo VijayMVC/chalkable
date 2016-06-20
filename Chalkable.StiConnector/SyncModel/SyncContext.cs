@@ -77,6 +77,15 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(SystemSetting));
             RegisterType(typeof(StudentCustomAlertDetail));
             RegisterType(typeof(District));
+            RegisterType(typeof(StandardizedTest));
+            RegisterType(typeof(StandardizedTestComponent));
+            RegisterType(typeof(StandardizedTestScoreType));
+            RegisterType(typeof(Ethnicity));
+            RegisterType(typeof(PersonEthnicity));
+
+            RegisterType(typeof(Language));
+            RegisterType(typeof(PersonLanguage));
+            RegisterType(typeof(Country));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)
@@ -140,10 +149,8 @@ namespace Chalkable.StiConnector.SyncModel
                 return new T[0];
             }
         }
-
-
         public long CurrentVersion { get; set; }
-        public string Name { get { return typeof (T).Name; } }
+        public string Name => typeof (T).Name;
 
         public int RowCount
         {

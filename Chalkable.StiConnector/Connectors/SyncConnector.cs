@@ -20,7 +20,7 @@ namespace Chalkable.StiConnector.Connectors
             var client = InitWebClient();
             try
             {
-                var url = BaseUrl + string.Format("sync/tables/{0}/", type.Name);
+                var url = BaseUrl + $"sync/tables/{type.Name}/";
                 if (fromVersion.HasValue)
                     url = url + fromVersion;
 
