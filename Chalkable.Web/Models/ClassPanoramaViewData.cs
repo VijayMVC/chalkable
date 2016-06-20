@@ -192,7 +192,7 @@ namespace Chalkable.Web.Models
             var res = new ClassDistributionStatsViewData();
             var absencePersents = models.Where(x => x.NumberOfDaysEnrolled != 0)
                 .Select(x => new { Persent = (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled*100), StudentId = x.StudentId})
-                .OrderBy(x => x).ToList();
+                .OrderBy(x => x.Persent).ToList();
             
             var maxPersent = absencePersents.Max(x => x.Persent);
 
