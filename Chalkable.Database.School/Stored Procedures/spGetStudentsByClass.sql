@@ -38,17 +38,7 @@ Insert Into @students
 		and (@isEnrolled is null or StudentSchoolYear.EnrollmentStatus = @enrollmentStatus)
 
 Select 
-	Student.Id,
-	Student.FirstName,
-	Student.LastName,
-	Student.BirthDate,
-	Student.Gender,
-	Student.HasMedicalAlert,
-	Student.IsAllowedInetAccess,
-	Student.SpecialInstructions,
-	Student.SpEdStatus,
-	Student.PhotoModifiedDate,
-	Student.UserId,
+	Student.*,
 	IsWithdrawn
 From
 	Student join @students as stud

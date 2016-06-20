@@ -5,17 +5,7 @@ CREATE Procedure [dbo].[spGetStudentsByTeacher]
 as begin
 
 select
-Student.Id,
-Student.FirstName,
-Student.LastName,
-Student.BirthDate,
-Student.Gender,
-Student.HasMedicalAlert,
-Student.IsAllowedInetAccess,
-Student.SpecialInstructions,
-Student.SpEdStatus,
-Student.PhotoModifiedDate,
-Student.UserId,
+Student.*,
 cast(case
 when StudentSchoolYear.EnrollmentStatus = 0 then 0
 else 1

@@ -63,6 +63,7 @@ namespace Chalkable.Data.School.Model
                 return primary;
             }
         }
+        [NotDbFieldAttr]
         public IList<PersonEthnicity> PersonEthnicities { get; set; }
     }
 }
