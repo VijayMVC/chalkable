@@ -21,6 +21,10 @@ NAMESPACE('chlk.models.profile', function () {
                 this.component = SJX.fromDeserializable(raw.component, chlk.models.profile.StandardizedTestItemViewData);
                 this.scoreType = SJX.fromDeserializable(raw.scoretype, chlk.models.profile.StandardizedTestItemViewData);
                 this.dailyStats = SJX.fromArrayOfDeserializables(raw.dailystats, chlk.models.common.ChartDateItem)
+            },
+
+            function getFullName(){
+                return this.getStandardizedTest().getDisplayName() + ' | ' + this.getComponent().getName() + ' | ' + this.getScoreType().getName()
             }
         ]);
 });

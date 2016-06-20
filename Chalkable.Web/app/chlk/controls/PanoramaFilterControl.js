@@ -69,11 +69,8 @@ NAMESPACE('chlk.controls', function () {
                 var filters = [], form = form_ || node.parent('form');
                 form.removeClass('working');
 
-                var res = this.getFiltersObject_(form);
-
                 this.checkRestoreBtn_(form, res);
 
-                form.find('.filters-value').setValue(JSON.stringify(res));
                 form.trigger('submit');
             },
 
@@ -130,10 +127,15 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var form = ria.dom.Dom('#'+attributes.id).parent('form'),
-                            filters = this.getFiltersObject_(form);
+                            filters = this.getFiltersObject_(form), that = this;
 
                         form.addClass('panorama-filter-form')
-                            .setData('filters', filters);
+                            .setData('filters', filters)
+                            .on('submit', function(node){
+                                var res = that.getFiltersObject_(form);
+
+                                form.find('.filters-value').setValue(JSON.stringify(res));
+                            });
                     }.bind(this));
                 return attributes;
             }

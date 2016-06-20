@@ -348,8 +348,9 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function panoramaSubmitAction(data){
-                var filterValues = JSON.parse(data.filterValues);
-                var res, isSave = data.submitType == 'save';
+                var filterValues = data.filterValues ? JSON.parse(data.filterValues) : '',
+                    selectedStudents = data.selectedStudents ? JSON.parse(data.selectedStudents) : '',
+                    res, isSave = data.submitType == 'save';
 
                 if(isSave){
                     res = this.classService.savePanoramaSettings(data.classId, filterValues)
@@ -357,7 +358,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, 'save-filters');
                 }
 
-                res = this.classService.getPanorama(data.classId, filterValues)
+                res = this.classService.getPanorama(data.classId, filterValues, selectedStudents)
                     .attach(this.validateResponse_());
 
                 return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res);

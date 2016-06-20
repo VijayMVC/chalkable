@@ -109,7 +109,7 @@ NAMESPACE('chlk.templates.classes', function () {
 
                     series.push({
                         type: 'line',
-                        name: item.getStandardizedTest().getDisplayName() + ' | ' + item.getComponent().getName() + ' | ' + item.getScoreType().getName() + ' - class avg',
+                        name: item.getFullName() + ' - class avg',
                         data: columnData
                     })
 
