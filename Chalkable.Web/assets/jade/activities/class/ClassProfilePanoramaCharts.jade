@@ -24,3 +24,49 @@
                     +Chart()(
                         data-options=self.getDisciplineDistributionChartOptions()
                     ).distribution-chart.discipline
++CloseOpen('Students')
+    BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add Supplemental Assignment').v-hidden.add-supplemental-btn.right
+    .clear-fix
+    .chlk-calendar.students-grid
+        .grid-top-content.chlk-grid
+            .district-summary-grid
+                .grid-content
+                    -var students = self.getStudents()
+                    -var tests = self.getStandardizedTestsStatsByClass()
+                    .grid-header.grid-row
+                        .cell.checks
+                            .box-checkbox.circle
+                                +Checkbox('allStudents', false, false, true).all-students-check.student-grid-check
+                        .cell.name Name
+                        .cell.grade Grade Avg
+                        .cell.absences Absences
+                        .cell.discipline Discipline
+                        .cell.ethnicity R
+                        .cell.hispanic H
+                        .cell.iep-active SE
+                        .cell.retained RT
+                        each test in tests
+                            .cell.test= test.getFullName()
+                    each student in students
+                        -var info = student.getStudent()
+                        .grid-row(data-id=info.getId().valueOf())
+                            .cell.checks
+                                .box-checkbox.circle
+                                    +Checkbox('student', false, false, true)(data-id=info.getId().valueOf()).student-check.student-grid-check
+                            .cell.name=info.getFullName()
+                            .cell.grade=info.getGradeAvg()
+                            .cell.absences=info.getAbsences()
+                            .cell.discipline=info.getDiscipline()
+                            .cell.ethnicity=info.getEthnicity().getCode()
+                            .cell.hispanic=info.isHispanic() ? 'Y' : 'N'
+                            .cell.iep-active=info.isIEPActive() ? 'Y' : 'N'
+                            .cell.retained=info.isRetainedFromPrevSchoolYear() ? 'Y' : 'N'
+                            -var studentTests = student.getStandardizedTestsStats();
+                            each test in tests
+                                .cell.test
+                                    if studentTests
+                                        -var studentTest = studentTests.filter(function(item){return item.getStandardizedTest().getId() == test.getStandardizedTest().getId()})[0]
+                                        if studentTest
+                                            +Chart()(
+                                            data-options = self.getStudentChartOptions(studentTest)
+                                            ).small-chart
