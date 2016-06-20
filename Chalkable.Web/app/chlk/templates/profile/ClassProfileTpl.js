@@ -108,7 +108,7 @@ NAMESPACE('chlk.templates.profile', function(){
             [[ArrayOf(chlk.models.id.SchoolPersonId)]],
             Boolean, function canViewPanorama_(teacherIds){
                 var currentUserId = this.getCurrentUser().getId();
-                var canViewPanorama = this.isAdmin() || teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0;
+                var canViewPanorama = this.getUserRole().isAdmin() || teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0;
                 return canViewPanorama && this.isStudyCenterEnabled();
             },
 
