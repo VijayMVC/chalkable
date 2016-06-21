@@ -18,6 +18,7 @@ using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.SectionPanorama;
 using Chalkable.StiConnector.SyncModel;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -404,7 +405,7 @@ namespace Chalkable.Tests.Sis
         }
 
         [Test]
-        public void PanoramaApiTest()
+        public void SectionPanoramaApiTest()
         {
             var connector = ConnectorLocator.Create("MAGOLDEN-3856695863", "qqqq1111", "http://sandbox.sti-k12.com/chalkable/api/");
             var componentsIds = new List<int>
@@ -462,6 +463,44 @@ namespace Chalkable.Tests.Sis
                 {
                     Debug.WriteLine($"{stTests.StudentId} - {stTests.Date} - {stTests.Score} - {stTests.StandardizedTestComponentId} - {stTests.StandardizedTestId} - {stTests.StandardizedTestScoreTypeId}");
                 }
+        }
+
+        [Test]
+        public void StudentPanoramaApiTest()
+        {
+            var studentId = 3315;
+            var connector = ConnectorLocator.Create("MAGOLDEN-3856695863", "qqqq1111", "http://sandbox.sti-k12.com/chalkable/api/");
+            var componentsIds = new List<int>
+            {1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 6, 7, 7, 7, 7, 7, 7, 8, 10, 11, 12, 13, 14, 15};
+            var scoreTypeIds = new List<int>
+            {1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 11, 1, 2, 3, 4, 5, 6, 8, 12, 12, 12, 12, 12, 12};
+            var acadSessionIds = new List<int> {179};
+
+            var studentPanorama = connector.PanoramaConnector.GetStudentPanorama(studentId, acadSessionIds, componentsIds, scoreTypeIds);
+            
+            if (studentPanorama.StandardizedTests != null)
+            {
+                Debug.WriteLine("Standardized Tests:");
+                Debug.WriteLine(JsonConvert.SerializeObject(studentPanorama.StandardizedTests));
+            }
+
+            if (studentPanorama.Infractions != null)
+            {
+                Debug.WriteLine("Infractions:");
+                Debug.WriteLine(JsonConvert.SerializeObject(studentPanorama.Infractions));
+            }
+
+            if (studentPanorama.DailyAbsences != null)
+            {
+                Debug.WriteLine("DailyAbsences:");
+                Debug.WriteLine(JsonConvert.SerializeObject(studentPanorama.DailyAbsences));
+            }
+
+            if (studentPanorama.PeriodAbsences != null)
+            {
+                Debug.WriteLine("PeriodAbsences:");
+                Debug.WriteLine(JsonConvert.SerializeObject(studentPanorama.PeriodAbsences));
+            }
         }
 
         class WebClientGZip : WebClient

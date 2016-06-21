@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Chalkable.StiConnector.Connectors.Model
+namespace Chalkable.StiConnector.Connectors.Model.SectionPanorama
 {
     public class SectionPanorama
     {
