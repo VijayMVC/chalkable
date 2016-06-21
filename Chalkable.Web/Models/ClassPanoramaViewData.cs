@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
@@ -34,6 +35,8 @@ namespace Chalkable.Web.Models
                 StandardizedTestsStatsByClass = StandardizedTestStatsViewData.CreateForClass(panorama.StandardizedTests, standardizedTests),
                 Students = new List<StudentStandardizedTestStats>()
             };
+
+            classStudents = classStudents.OrderBy(x => x.FullName()).ToList();
 
             //Preparing students
             foreach (var student in classStudents)
