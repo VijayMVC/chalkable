@@ -3,7 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Model.Attendances;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
+using Chalkable.BusinessLogic.Model.StudentPanorama;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -37,6 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
         //StudentAttendanceDetailsInfo GetStudentAttendanceInfo(int studentId, int markingPeriodId);
         int GetEnrolledStudentsCount();
+        StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
     }
 
     public class StudentService : SisConnectedService, IStudentService
@@ -204,6 +206,21 @@ namespace Chalkable.BusinessLogic.Services.School
         public int GetEnrolledStudentsCount()
         {
             return DoRead(u => new StudentDataAccess(u).GetEnrolledStudentsCount());
+        }
+
+        public StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        {
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+            if (schoolYearIds == null || schoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            standardizedTestFilters = standardizedTestFilters ?? new List<StandardizedTestFilter>();
+            var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
+            var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);
+
+            var studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
+
+            return StudentPanoramaInfo.Create(studentPanorama);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.SectionPanorama;
 
-namespace Chalkable.BusinessLogic.Model.PanoramaStuff
+namespace Chalkable.BusinessLogic.Model.ClassPanorama
 {
     public class ClassPanorama
     {
