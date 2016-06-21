@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
+using Chalkable.BusinessLogic.Model.PanoramaStuff;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -397,6 +399,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public bool IsTeacherClasses(int teacherId, params int[] classIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             throw new NotImplementedException();
         }

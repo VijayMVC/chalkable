@@ -2,6 +2,7 @@
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -11,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<CourseType> courseTypes);
         void Edit(IList<CourseType> courseTypes);
         void Delete(IList<CourseType> courseTypes);
-        IList<CourseType> GetList(bool activeOnly);
+        IList<CourseType> GetList(bool activeOnly, string filter = null);
     }
 
     public class CourseTypeService : SchoolServiceBase, ICourseTypeService
@@ -39,10 +40,10 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<CourseType>(u).Delete(courseTypes));
         }
 
-        public IList<CourseType> GetList(bool activeOnly)
+        public IList<CourseType> GetList(bool activeOnly, string filter = null)
         {
             var conds = activeOnly ? new AndQueryCondition {{CourseType.IS_ACTIVE_FIELD, true}} : null;
-            return DoRead(u => new DataAccessBase<CourseType>(u).GetAll(conds));
+            return DoRead(u => new ClassDataAccess(u).CourseTypes(conds, filter));
         }
     }
 }

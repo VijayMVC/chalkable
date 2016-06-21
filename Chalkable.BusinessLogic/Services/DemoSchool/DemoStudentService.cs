@@ -122,7 +122,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
+        public IList<StudentDetails> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
         {
             var students = StudentStorage.GetAll();
             var stWithDrawDictionary = ServiceLocator.ClassService.GetClassPersons(null, classId, isEnrolled, markingPeriodId)

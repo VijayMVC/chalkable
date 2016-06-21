@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.Master.Model;
@@ -12,6 +13,7 @@ using Chalkable.Web.Common;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.SchoolsViewData;
+using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Controllers
 {
@@ -71,6 +73,29 @@ namespace Chalkable.Web.Controllers
             }
             
             return Json(DistrictAdminSettingsViewData.Create(messagingSettings, allApps));
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult PanoramaSettings()
+        {
+            var courseTypes = SchoolLocator.CourseTypeService.GetList(true);
+            var settings = SchoolLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
+            return Json(AdminPanoramaSettingsViewData.Create(settings, courseTypes));
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult SavePanoramaSettings(AdminPanoramaSettings settings)
+        {
+            settings = settings ?? SchoolLocator.PanoramaSettingsService.GetDefaultSettings<AdminPanoramaSettings>();
+            SchoolLocator.PanoramaSettingsService.Save(settings, null);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult StandardizedTests()
+        {
+            var tests = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
+            return Json(tests.Select(x => StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)));
         }
     }
 }

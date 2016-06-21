@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<CourseType> GetList(bool activeOnly)
+        public IList<CourseType> GetList(bool activeOnly, string filter = null)
         {
             throw new NotImplementedException();
         }
