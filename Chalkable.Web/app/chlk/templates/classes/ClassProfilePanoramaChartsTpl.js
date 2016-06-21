@@ -12,12 +12,6 @@ NAMESPACE('chlk.templates.classes', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.profile.ClassDistributionSectionViewData, 'classDistributionSection',
 
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'standardizedTestsStatsByClass',
-
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.panorama.StudentStandardizedTestStats), 'students',
-
             function columnSelectDeselectHandler_(chart, data){
                 setTimeout(function(){
                     var cnt = jQuery(chart.graphic.element).parents('.chart-container');
@@ -123,61 +117,6 @@ NAMESPACE('chlk.templates.classes', function () {
 
             function getGradeAverageDistributionChartOptions(){
                 return this.getDistributionChartOptions_(this.getClassDistributionSection().getGradeAverageDistribution(), '#31859b');
-            },
-
-            function getStudentChartOptions(test){
-                var data = [];
-
-                test.getDailyStats().forEach(function(item){
-                    data.push(parseInt(item.getSummary(), 10), item.getNumber())
-                });
-
-                return {
-                    chart:{
-                        height: 50
-                    },
-
-                    plotOptions:{
-                        area:{
-                            enableMouseTracking:false,
-                            lineWidth:1,
-                            shadow:false,
-                            marker:{
-                                enabled: false
-                            }
-                        }
-                    },
-
-                    xAxis: {
-                        labels:{
-                            enabled:false
-                        },
-                        maxPadding:0,
-                        minPadding:0,
-                        gridLineWidth: 0,
-                        endOnTick:false,
-                        showFirstLabel:false
-                    },
-
-                    yAxis: {
-                        maxPadding:0,
-                        minPadding:0,
-                        gridLineWidth: 0,
-                        endOnTick:false,
-                        labels:{
-                            enabled:false
-                        }
-                    },
-
-                    tooltip:{
-                        enabled:false
-                    },
-
-                    series: [{
-                        type:'area',
-                        data: data
-                    }]
-                }
             }
         ])
 });

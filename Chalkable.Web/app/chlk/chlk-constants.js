@@ -5,6 +5,7 @@ var ChlkSessionConstants = {
     CLASS_PROFILE_ATTENDANCE_DATA: 'classProfileAttendanceData',
     CLASS_SCHEDULE_DATE_RANGES: 'classScheduleDateRanges',
     CREATED_ANNOUNCEMENTS: 'createdAnnouncements',
+    CURRENT_PANORAMA: 'currentPanorama',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',
     SUPPLEMENTAL_STUDENTS: 'supplementalStudents',

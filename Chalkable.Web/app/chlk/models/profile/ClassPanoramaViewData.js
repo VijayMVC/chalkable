@@ -12,6 +12,18 @@ NAMESPACE('chlk.models.profile', function () {
 
     var SJX = ria.serialize.SJX;
 
+    /** @class chlk.models.profile.ClassPanoramaSortType*/
+    ENUM('ClassPanoramaSortType', {
+        NAME: 1,
+        GRADE_AVG: 2,
+        ABSENCES: 3,
+        DISCIPLINE: 4,
+        ETHNICITY: 5,
+        HISPANIC: 6,
+        IEP_ACTIVE: 7,
+        RETAINED: 8
+    });
+
     /** @class chlk.models.profile.ClassPanoramaViewData*/
     CLASS(
         UNSAFE, 'ClassPanoramaViewData', EXTENDS(chlk.models.classes.Class), [
@@ -23,6 +35,9 @@ NAMESPACE('chlk.models.profile', function () {
             ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
             ArrayOf(chlk.models.panorama.StudentStandardizedTestStats), 'students',
             Boolean, 'showFilters',
+
+            chlk.models.profile.ClassPanoramaSortType, 'orderBy',
+            Boolean, 'descending',
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);

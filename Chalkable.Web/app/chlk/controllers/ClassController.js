@@ -335,6 +335,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(result){
                         var model = result[0];
                         model.setSchoolYears(result[1]);
+                        model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
                         showFilters_ && model.setShowFilters(showFilters_);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
@@ -347,11 +348,20 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.classes.ClassPanoramaPage, res);
             },
 
+            [[chlk.models.profile.ClassPanoramaSortType, Boolean]],
+            function sortPanoramaStudentsAction(orderBy_, descending_){
+                var res = this.classService.sortPanoramaStudents(orderBy_, descending_)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, 'sort');
+            },
+
             function panoramaSubmitAction(data){
                 var filterValues = data.filterValues ? JSON.parse(data.filterValues) : '',
-                    selectedStudents = data.selectedStudents ? JSON.parse(data.selectedStudents) : '',
+                    selectedStudents = data.selectedStudents || data.highlightedStudents,
                     res, isSave = data.submitType == 'save', byCheck = data.submitType == 'check',
                     byColumn = data.submitType == 'column', isSupplemental = data.submitType == 'supplemental';
+
+                selectedStudents = selectedStudents ? JSON.parse(selectedStudents) : '';
 
                 if(isSupplemental){
                     return this.Redirect('announcement', 'supplementalAnnouncement', [data.classId, null, selectedStudents]);

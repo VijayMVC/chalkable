@@ -101,7 +101,10 @@ NAMESPACE('chlk.services', function () {
                     standardizedTestFilters: data_ && data_.standardizedTestFilters,
                     schoolYearIds: data_ && data_.schoolYearIds,
                     selectedStudents: selectedStudents_
-                });
+                }).then(function(model){
+                    this.getContext().getSession().set(ChlkSessionConstants.CURRENT_PANORAMA, model);
+                    return model;
+                }, this);
             },
 
             //[[Object, Object]],
@@ -111,6 +114,56 @@ NAMESPACE('chlk.services', function () {
                     standardizedTestFilters: data.standardizedTestFilters,
                     schoolYearIds: data.schoolYearIds
                 });
+            },
+
+            [[chlk.models.profile.ClassPanoramaSortType, Boolean]],
+            ria.async.Future, function sortPanoramaStudents(orderBy_, descending_) {
+                orderBy_ = orderBy_ || chlk.models.profile.ClassPanoramaSortType.NAME;
+                descending_ = descending_ || false;
+                var panorama = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PANORAMA, null);
+
+                if(!panorama)
+                    throw 'No panorama saved';
+
+                var students = panorama.getStudents(), propRef, propName,
+                    ref = ria.reflection.ReflectionClass(chlk.models.panorama.StudentDetailsViewData);
+
+                switch (orderBy_){
+                    case chlk.models.profile.ClassPanoramaSortType.NAME: propName = 'displayName'; break;
+                    case chlk.models.profile.ClassPanoramaSortType.GRADE_AVG: propName = 'gradeAvg'; break;
+                    case chlk.models.profile.ClassPanoramaSortType.ABSENCES: propName = 'absences'; break;
+                    case chlk.models.profile.ClassPanoramaSortType.DISCIPLINE: propName = 'discipline'; break;
+                    //case chlk.models.profile.ClassPanoramaSortType.ETHNICITY: propName = 'displayName'; break;
+                    case chlk.models.profile.ClassPanoramaSortType.HISPANIC: propName = 'hispanic'; break;
+                    case chlk.models.profile.ClassPanoramaSortType.IEP_ACTIVE: propName = 'IEPActive'; break;
+                    case chlk.models.profile.ClassPanoramaSortType.RETAINED: propName = 'retainedFromPrevSchoolYear'; break;
+                }
+
+                if(propName)
+                    propRef = ref.getPropertyReflector(propName);
+
+                students = students.sort(function(s1, s2){
+                    var a, b;
+
+                    if(orderBy_ == chlk.models.profile.ClassPanoramaSortType.ETHNICITY){
+                        a = parseInt(s1.getStudent().getEthnicity().getCode(), 10);
+                        b = parseInt(s2.getStudent().getEthnicity().getCode(), 10);
+                    }else{
+                        a = propRef.invokeGetterOn(s1.getStudent());
+                        b = propRef.invokeGetterOn(s2.getStudent());
+                    }
+
+                    if (a > b)
+                        return descending_ ? -1 : 1;
+                    if (a < b)
+                        return descending_ ? 1 : -1;
+                    return 0
+                });
+
+                panorama.setOrderBy(orderBy_);
+                panorama.setDescending(descending_);
+
+                return ria.async.DeferredData(panorama);
             },
 
             [[chlk.models.id.ClassId]],
