@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Security
     {
         public static bool CanAddToAnnouncement(Application application, Announcement announcement, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || (announcement.IsOwner && application.CanAttach);
+            return BaseSecurity.IsSysAdmin(context) || (announcement.IsOwner && application.CanAttach) || BaseSecurity.IsDistrictAdmin(context);
         }
 
         public static bool CanEditApplication(UserContext context, Application application)

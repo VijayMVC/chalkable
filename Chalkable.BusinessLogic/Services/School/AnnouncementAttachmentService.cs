@@ -34,8 +34,9 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Trace.Assert(serviceLocator.Context.PersonId.HasValue);
             var da = new AnnouncementAttachmentDataAccess(unitOfWork);
-            var annAttachmentsForCopying = da.GetLastAttachments(fromAnnouncementId)
-                .Where(x => attachmentsOwners.Contains(x.Attachment.PersonRef)).ToList();
+            var annAttachmentsForCopying = attachmentsOwners.Count == 0 
+                ? da.GetLastAttachments(fromAnnouncementId).ToList() 
+                : da.GetLastAttachments(fromAnnouncementId).Where(x => attachmentsOwners.Contains(x.Attachment.PersonRef)).ToList();
 
             var annAtts = new List<AnnouncementAttachment>();
             foreach (var annAttForCopy in annAttachmentsForCopying)
@@ -191,7 +192,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (notifyUsers)
                     NotifyUsers(annDetails, type);
 
-                return da.GetById(attId, Context.PersonId.Value, Context.RoleId);
+                return da.GetById(attId, Context.PersonId.Value, Context.RoleId, true);
             }
         }
 

@@ -80,8 +80,9 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function removeLessonPlanFromGallery(lessonPlanId){
-                return this.post('LessonPlan/RemoveLessonPlanFromGallery', Boolean,{
-                    lessonPlanId: lessonPlanId.valueOf()
+                return this.post('Announcement/Delete', Boolean,{
+                    announcementId: lessonPlanId.valueOf(),
+                    announcementType: chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN.valueOf()
                 });
             },
 

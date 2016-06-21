@@ -59,6 +59,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult Submit(int lessonPlanId, int? classId, string title, string content, int? lpGalleryCategoryId,
             DateTime? startDate, DateTime? endDate, bool hideFromStudents, bool inGallery, IList<AssignedAttributeInputModel> attributes)
         {
+            if (inGallery)
+            {
+                if (!Context.SCEnabled)
+                    throw new ChalkableException("Cannot create lesson plan template, Study Center disabled!");
+                if (lpGalleryCategoryId == null)
+                    throw new ChalkableException("Cannot create lesson plan template without category!");
+            }
+
             if (Context.Role == CoreRoles.TEACHER_ROLE)
             {
                 SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);
@@ -69,18 +77,22 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount));
             }
 
-            if (inGallery && Context.SCEnabled)
+            if (inGallery)
             {
-                if (lpGalleryCategoryId == null)
-                    throw new ChalkableException("Cannot create lesson plan template without category!");
-
-                var lpGalleryId = Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? lessonPlanId : SchoolLocator.LessonPlanService.Create(classId, startDate, endDate).LessonPlanData.Id;
+                var lpGalleryId = Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? lessonPlanId : SchoolLocator.LessonPlanService.Create(null, startDate, endDate).LessonPlanData.Id;
 
                 SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lpGalleryId, attributes);
                 SchoolLocator.LessonPlanService.Edit(lpGalleryId, null, lpGalleryCategoryId, title + " Template", content, startDate, endDate, !hideFromStudents, true);
                 SchoolLocator.LessonPlanService.Submit(lpGalleryId);
-                MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
+
+                if (Context.Role == CoreRoles.TEACHER_ROLE)
+                {
+                    SchoolLocator.LessonPlanService.CopyToGallery(lessonPlanId, lpGalleryId);
+                    MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
+                }
             }
+                
+
             return Json(true, 5);
         }
 

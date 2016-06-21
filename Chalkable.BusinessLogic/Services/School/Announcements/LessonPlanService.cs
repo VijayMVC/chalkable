@@ -39,6 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds);
         void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId);
         void RemoveFromGallery(int lessonPlanId);
+        void CopyToGallery(int fromAnnouncementId, int toAnnouncementId);
     }
 
     public class LessonPlanService : BaseAnnouncementService<LessonPlan>, ILessonPlanService
@@ -73,7 +74,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
-            BaseSecurity.EnsureTeacher(Context);
+            BaseSecurity.EnsureAdminOrTeacher(Context);
             using (var u = Update())
             {
                 var res = CreateLessonPlanDataAccess(u).Create(classId, Context.NowSchoolTime, startDate, endDate, Context.PersonId.Value, Context.SchoolYearId.Value, Context.RoleId);
@@ -86,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             BaseSecurity.EnsureStudyCenterEnabled(Context);
-            BaseSecurity.EnsureTeacher(Context);
+            BaseSecurity.EnsureAdminOrTeacher(Context);
 
             AnnouncementDetails res;
             var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(lessonPlanTemplateId, true);
@@ -249,7 +250,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 using (var uow = Update())
                 {
-                    if (!announcement.IsOwner)
+                    if (!announcement.IsOwner || Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
                         throw new ChalkableSecurityException();
                     var da = CreateLessonPlanDataAccess(uow);
                     if (string.IsNullOrEmpty(title))
@@ -311,7 +312,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var da = CreateLessonPlanDataAccess(uow);
                 var announcement = da.GetAnnouncement(announcementId, Context.PersonId.Value);
                 if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
-                    throw new ChalkableSecurityException();
+                    throw new ChalkableException("You can delete only your own announcement!");
                 da.Delete(announcementId);
                 uow.Commit();
             }
@@ -562,6 +563,36 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lp.LpGalleryCategoryRef = null;
                 da.Update(lp);
             });
+        }
+
+        public void CopyToGallery(int fromAnnouncementId, int toAnnouncementId)
+        {
+            
+
+            //AnnouncementAttachmentService.CopyAttachments(fromAnnouncementId, new List<int>(), lpGalleryId);
+            //var annApp = ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(new List<int> { fromAnnouncementId }, true);
+            //ApplicationSchoolService.CopyAnnApplications(lpGalleryId, annApp);
+            //StandardService.CopyStandardsToAnnouncement(fromAnnouncementId, lpGalleryId, (int)AnnouncementTypeEnum.LessonPlan);
+            
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+            BaseSecurity.EnsureTeacher(Context);
+
+            //get announcementApplications for copying
+            var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(fromAnnouncementId, true);
+            var appIds = annApps.Select(aa => aa.ApplicationRef).ToList();
+            //get only simple apps
+            var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a => !a.IsAdvanced).ToList();
+            annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
+
+            using (var u = Update())
+            {
+                AnnouncementAttachmentService.CopyAnnouncementAttachments(fromAnnouncementId, new List<int>(), new List<int> { toAnnouncementId }, u, ServiceLocator, ConnectorLocator);
+                AnnouncementAssignedAttributeService.CopyNonStiAttributes(fromAnnouncementId, new List<int> { toAnnouncementId }, u, ServiceLocator, ConnectorLocator);
+                ApplicationSchoolService.CopyAnnApplications(annApps, new List<int> { toAnnouncementId }, u);
+                ServiceLocator.StandardService.CopyStandardsToAnnouncement(fromAnnouncementId, toAnnouncementId, (int)AnnouncementTypeEnum.LessonPlan);
+                u.Commit();
+            }
         }
     }
 }
