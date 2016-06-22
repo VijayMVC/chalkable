@@ -1,0 +1,183 @@
+mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
+    .action-bar
+        .items
+            if !announcement.getState().valueOf()
+                +ActionLink('announcement', 'addClassAnnouncement', classId).item.announcement-type-button.no-save Assignment
+            +ActionLink('announcement', 'lessonPlan', lessonPlan.getClassId()).item.announcement-type-button.pressed Lesson Plan
+            if !announcement.getState().valueOf()
+                +ActionLink('announcement', 'supplementalAnnouncement', lessonPlan.getClassId()).item.announcement-type-button.no-save Supplemental
+
+        if lessonPlan.getClassId() && lessonPlan.getClassId().valueOf()
+            BUTTON(type="button").import-btn
+                .import-small-icon.v-m
+                SPAN.i-b.v-m Import
+            .lesson-plan-import-popup.popup-bubble.top.centered.x-hidden
+                +ActionLink('announcement', 'showImportDialog', lessonPlan.getClassId()) From previous year
+                if self.isStudyCenterEnabled()
+                    +ActionLink('lessonplangallery', 'lessonPlanTemplatesList', lessonPlan.getClassId()) From Gallery
+
+-var topData = self.getTopData()
+-var announcement = self.getAnnouncement()
+-var topItems = topData.getTopItems()
+-var lessonPlan = announcement && announcement.getLessonPlanData()
+-var classId = announcement && lessonPlan.getClassId() ? lessonPlan.getClassId().valueOf() : null
+-var state = announcement && announcement.getState().valueOf()
+-var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+-var userRole = self.getUserRole()
+
+.announcement-form.loader-container
+    if announcement && lessonPlan.getClassId()
+        h2.page-title= lessonPlan.getClassName()
+        .loader
+        +ActionForm('announcement', 'onLessonPlanSave')(onlySubmitValidate=true).no-working
+            +ClassesToolBar(topData, null, null, null, state)(pressAfterClick=!state)
+            .not-transparent(class=(classId ? '' : 'x-hidden'))
+                +LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
+            .ann-form-container(class=(state || classId ? '' : 'x-hidden'))
+                +Hidden('id', announcement.getId().valueOf())
+                +Hidden('isedit', !!state)(data-isedit = !!state).is-edit
+                +Hidden('classId', classId)
+                +Hidden('type', announcement.getType())
+
+                -var standards = announcement.getStandards() || []
+                -var needStandardsBlock = (standards.length > 0 || announcement.isCanAddStandard())
+                .table.top-table
+                    .left-block
+                        .left-block-container
+                            .title-block-container(class = lessonPlan.getGalleryCategoryId() ? 'with-gallery-id' : '')
+                                +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+                                +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
+                            .left-top-container
+                                if !state
+                                    .categories-container.i-b
+                                        label(for="galleryCategoryForSearch").main-lable Category:
+                                        #galleryCategoryForSearchContainer
+                                            +Select('galleryCategoryForSearch')#galleryCategoryForSearch
+                                                +Option('', 'Select category', true)
+                                                each item in announcement.getCategories()
+                                                    +Option(item.getId().valueOf(), item.getName())
+                                                +Option(-1, 'Add Category')
+                                        BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
+                                        +ActionButton('lpgallerycategory', 'editCategories').special-button2.add.add-category-btn.x-hidden + Add Category
+
+                    .right-block
+                        .h-1
+                .table
+                    .left-block(class=needStandardsBlock ? 'with-standards' : '')
+                        .left-block-container
+                            +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
+                            if needStandardsBlock
+                                .add-standards-container
+                                    .add-standards
+                                        .standards-list
+                                            +RenderWith(self.prepareStandardsListData(), chlk.templates.standard.AnnouncementStandardsTpl)(
+                                                userRole = userRole
+                                                studyCenterEnabled = self.isStudyCenterEnabled()
+                                                ableToRemoveStandard=announcement.isAbleToRemoveStandard()
+                                            )
+
+                            .drawer-icon
+                        .drop-down-container.popup-bubble.top
+                        input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+                        if !state
+                            input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+                    .right-block
+                        .date-picker-startdate
+                            label(for="startdate")=Msg.Start_date
+                            +DatePicker('startdate', lessonPlan.getStartDate())(
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true,
+                                    dateRanges: self.getClassScheduleDateRanges()
+                                },
+                                data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
+                                placeholder=Msg.Start_date,
+                                class='validate[required]'
+                            )#mindate
+                            .calendar-mark
+                        .date-picker-container
+                            label(for="enddate")=Msg.End_date
+                            +DatePicker('enddate', lessonPlan.getEndDate())(
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true,
+                                    dateRanges: self.getClassScheduleDateRanges()
+                                },
+                                data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
+                                placeholder=Msg.End_date,
+                                class='validate[required]'
+                            )#maxdate
+                            .calendar-mark
+                        .advanced-options
+                            .check-box-container
+                                label(for="ann-hidefromstudents")=Msg.Hide_from_Students
+                                +SlideCheckbox('hidefromstudents', lessonPlan.isHiddenFromStudents(), false)(
+                                    data-tooltip-timeout=500,
+                                    data-tooltip=Msg.Hide_From_Student_Tooltip_Message
+                                )
+                            if self.isStudyCenterEnabled()
+                                .check-box-container
+                                    label(for="add-to-gallery-check") Add to Lesson Plan Gallery
+                                    +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), null, !announcement.getCategories().length)#add-to-gallery
+                                .category-container.new-input-container
+                                    BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
+                                    BUTTON#check-title-btn.validate-skip.x-hidden(name="submitType", value="addToGallery", type="submit" )
+                                    label(for="galleryCategoryId") Category:
+                                    SPAN#galleryCategoryIdContainer
+                                        +Select('galleryCategoryId')(disabled=!!lessonPlan.getGalleryCategoryId() ? false : "disabled")#galleryCategoryId
+                                            each item in announcement.getCategories()
+                                                +Option(item.getId().valueOf(), item.getName(), lessonPlan.getGalleryCategoryId() && item.getId() == lessonPlan.getGalleryCategoryId())
+
+
+                .apps-attachments-bock.attachments-and-applications
+                    ann = announcement
+                    -ann.setNeedButtons(true)
+                    -ann.setNeedDeleteButton(true)
+                    +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
+                        userRole = userRole,
+                        studyCenterEnabled = self.isStudyCenterEnabled()
+                    )
+                .attributes-block
+                    -var attributesList = announcement.getAttributesListViewData();
+                    -attributesList.setReadOnly(false)
+                    +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
+                        userRole = userRole
+                    )
+                .attach-btn-area.attributes-attach-area(class = announcement.getAnnouncementAttributes().length ? '' : 'x-hidden')
+                    +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Add Attribute
+                        span.plus +
+                .apps-with-recommended-contents
+
+                .suggested-apps
+                    if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
+                        +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
+                .bottom-block
+                    +Button()(
+                        type="submit",
+                        name="submitType",
+                        value=state ? "submitOnEdit" : "submit"
+                    ).special-button.blue-button.submit-btn.submit-announcement.big-button
+                        =(state ? Msg.Save : Msg.Submit)
+                    if state
+                        +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName(), announcement.getType())
+                            +Button()(
+                            type="button",
+                            ).special-button.red-button.big-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
+                    else
+                        +ActionLink('announcement', 'discard', announcement.getType()).grey-link.not-blue.add-loader-btn=Msg.Discard
+                if state
+                    .duplicate-btn-container
+                        +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId(), announcement.getType()).big-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
+
+            if !classId
+                if topItems.length
+                    .choose-class
+                else
+                    .no-items-text There are no classes for current term
+    else
+        +ClassesToolBar(topData, 'announcement', 'add')
+        if !classId
+            if topItems.length
+                .choose-class
+            else
+                .no-items-text There are no classes for current term
