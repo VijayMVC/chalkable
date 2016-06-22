@@ -868,7 +868,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-        function supplementalAnnouncementAction(classId_, date_) {
+        function supplementalAnnouncementAction(classId_, date_, studentIds_) {
             this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
             var result =
@@ -884,6 +884,14 @@ NAMESPACE('chlk.controllers', function (){
                     var model = result[0];
                     var students = result[1];
                     model.setStudents(students.getItems());
+
+                    if(studentIds_){
+                        if(!Array.isArray(studentIds_))
+                            studentIds_ = studentIds_.split(',');
+                        var ids = studentIds_.map(function(id){return new chlk.models.id.SchoolPersonId(id)});
+                        model.getAnnouncement().getSupplementalAnnouncementData().setSelectedStudentsIds(ids);
+                    }
+
                     if(model && model.getAnnouncement())
                         return this.addEditAction(model, false);
 

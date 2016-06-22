@@ -1,3 +1,4 @@
+using System;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.Common;
 using Chalkable.Common.Web;
@@ -7,11 +8,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class StudentViewData : ShortPersonViewData
     {
-        //[SensitiveData]
         public bool HasMedicalAlert { get; set; }
-        //[SensitiveData]
         public bool IsAllowedInetAccess { get; set; }
-        //[SensitiveData]
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
         public bool? IsWithDrawn { get; set; }

@@ -3,7 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Model.Attendances;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
+using Chalkable.BusinessLogic.Model.StudentPanorama;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -28,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId);
         bool IsTeacherStudent(int teacherId, int studentId, int schoolYearId);
-        IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null);
+        IList<StudentDetails> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null);
         PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId);
 
         StudentDetails GetById(int id, int schoolYearId);
@@ -37,6 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
         //StudentAttendanceDetailsInfo GetStudentAttendanceInfo(int studentId, int markingPeriodId);
         int GetEnrolledStudentsCount();
+        StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
     }
 
     public class StudentService : SisConnectedService, IStudentService
@@ -99,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return students.Any(s => s.Id == studentId);
         }
 
-        public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
+        public IList<StudentDetails> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
         {
             return DoRead(u => new StudentDataAccess(u).GetStudents(classId, markingPeriodId, isEnrolled));
         }
@@ -204,6 +206,21 @@ namespace Chalkable.BusinessLogic.Services.School
         public int GetEnrolledStudentsCount()
         {
             return DoRead(u => new StudentDataAccess(u).GetEnrolledStudentsCount());
+        }
+
+        public StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        {
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+            if (schoolYearIds == null || schoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            standardizedTestFilters = standardizedTestFilters ?? new List<StandardizedTestFilter>();
+            var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
+            var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);
+
+            var studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
+
+            return StudentPanoramaInfo.Create(studentPanorama);
         }
     }
 }

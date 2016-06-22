@@ -14,7 +14,6 @@ namespace Chalkable.Api.SampleApp.Controllers
     {
         protected override async Task<ActionResult> ResolveAction(string mode
             , int? announcementApplicationId
-            , Guid applicationId
             , int? studentId
             , int? announcementId
             , int? announcementType

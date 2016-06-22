@@ -48,7 +48,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return PersonScheduleViewData.Create(person, classes);
         }
 
-        protected PersonInfoViewData GetInfo(int id, Func<PersonDetails, PersonInfoViewData> vdCreator)
+        protected T GetInfo<T>(int id, Func<PersonDetails, T> vdCreator) where T: PersonInfoViewData
         {
             if (!CanGetInfo(id))
                 throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);

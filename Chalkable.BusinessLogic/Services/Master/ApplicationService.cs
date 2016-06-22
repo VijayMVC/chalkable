@@ -199,9 +199,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public Guid? GetMiniQuizAppicationId()
         {
-            var key = ApplicationSecurity.HasAssessmentEnabled(Context)
-                    ? Preference.NEW_ASSESSMENT_APLICATION_ID
-                    : Preference.PRACTICE_APPLICATION_ID;
+            var key = Preference.ASSESSMENT_APLICATION_ID;
 
             Guid res;
             return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;
@@ -213,9 +211,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private Guid? InternalGetAssessmentId()
         {
-            var key = ApplicationSecurity.HasAssessmentEnabled(Context)
-                ? Preference.NEW_ASSESSMENT_APLICATION_ID
-                : Preference.ASSESSMENT_APLICATION_ID;
+            var key = Preference.ASSESSMENT_APLICATION_ID;
 
             Guid res;
             return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;

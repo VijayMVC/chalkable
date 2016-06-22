@@ -22,7 +22,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill);
         void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled);
         void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging, bool studentToClassOnly, bool teacherToStudentMessaging, bool teacherToClassOnly);
-        void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled);
         Data.Master.Model.MessagingSettings GetDistrictMessaginSettings(Guid districtId);
     }
 
@@ -118,14 +117,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(uow => new SchoolDataAccess(uow).UpdateStudyCenterEnabled(districtId, schoolId, enabledTill));
-        }
-
-        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
-        {
-            BaseSecurity.EnsureSysAdmin(Context);
-            if(districtId == null && schoolId == null)
-                throw new ChalkableException("Required districtId or schoolId!");
-            DoUpdate(uow => new SchoolDataAccess(uow).UpdateAssessmentEnabled(districtId, schoolId, enabled));
         }
         
         public void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled)

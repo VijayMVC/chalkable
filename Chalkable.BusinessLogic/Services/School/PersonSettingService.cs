@@ -4,17 +4,19 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Chalkable.Common;
-using Chalkable.Data.Common.Orm;
-using Chalkable.Data.School.Model;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IPersonSettingService
     {
         void SetSettingsForPerson(int personId, int schoolYearId, IDictionary<string, object> settings);
+        void SetSettingsForPerson(IDictionary<string, object> settings, int? personId = null, int? schooLYearId = null, int? classId = null);
         IDictionary<string, string> GetSettingsForPerson(int personId, int schoolYearId);
         IDictionary<string, string> GetSettingsForPerson(int personId, int schoolYearId, IList<string> keys);
+        IDictionary<string, string> GetSettingsForPerson(IList<string> keys, int? personId = null, int? schoolYearId = null, int? classId = null);
     }
 
     class PersonSettingService : SchoolServiceBase, IPersonSettingService
@@ -36,37 +38,45 @@ namespace Chalkable.BusinessLogic.Services.School
         }
         public void SetSettingsForPerson(int personId, int schoolYearId, IDictionary<string, object> settings)
         {
+            SetSettingsForPerson(settings, personId, schoolYearId);
+        }
+
+        public void SetSettingsForPerson(IDictionary<string, object> settings, int? personId = null, int? schoolYearId = null, int? classId = null)
+        {
             var keys = settings.Keys.ToList();
             if (!IsAvailableSettings(keys))
                 throw new ArgumentException("Not recognized settings");
-            
-            var ps = GetSettingsForPerson(personId, schoolYearId, keys);
-            var toSet = ps.Select( x => new PersonSetting
-                        {
-                            PersonRef = personId,
-                            SchoolYearRef = schoolYearId,
-                            Key = x.Key,
-                            Value = x.Value
-                        }).ToList();
 
-            foreach (var set in toSet)
+            using (var uow = Update())
             {
-                set.Value = (settings[set.Key] as DateTime?)?
-                    .ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture) 
-                    ?? settings[set.Key]?.ToString();
+                var da = new PersonSettingDataAccess(uow);
+                var ps = da.GetPersonSettings(keys, personId, schoolYearId, classId);
+                foreach (var set in ps)
+                {
+                    set.Value = (settings[set.Key] as DateTime?)?
+                        .ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)
+                        ?? settings[set.Key]?.ToString();
+                }
+                da.Update(ps);
+                settings = settings.Where(s => ps.All(x => x.Key != s.Key)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                da.AddPersonSettings(settings, personId, schoolYearId, classId);
+                uow.Commit();
             }
-            DoUpdate(u => new PersonSettingDataAccess(u).Update(toSet));
-
-            settings = settings.Where(s => ps.All(x => x.Key != s.Key)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            DoUpdate(u => new PersonSettingDataAccess(u).AddPersonSettings(personId, schoolYearId, settings));
         }
+
         public IDictionary<string, string> GetSettingsForPerson(int personId, int schoolYearId)
         {
-            return DoRead(u => new PersonSettingDataAccess(u).GetPersonSettings(personId, schoolYearId, new List<string>()));
+            return GetSettingsForPerson(personId, schoolYearId, new List<string>());
         }
+
         public IDictionary<string , string> GetSettingsForPerson(int personId, int schoolYearId, IList<string> keys)
         {
-            return DoRead(u => new PersonSettingDataAccess(u).GetPersonSettings(personId, schoolYearId, keys));
+            return GetSettingsForPerson(keys, personId, schoolYearId);
         }
+        public IDictionary<string, string> GetSettingsForPerson(IList<string> keys, int? personId = null, int? schoolYearId = null, int? classId = null)
+        {
+            return DoRead(u => new PersonSettingDataAccess(u).GetPersonSettings(keys, personId, schoolYearId, classId).ToDictionary(x=>x.Key, x=>x.Value));
+        }
+        
     }
 }
