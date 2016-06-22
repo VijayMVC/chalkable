@@ -39,6 +39,18 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!value.length)
                         this.clearSearch();
                 }
+
+                if(event.which == ria.dom.Keys.ENTER.valueOf()){
+                    event.preventDefault();
+                }
+            },
+
+            [ria.mvc.DomEventBind('keydown', '.lp-gallery-search')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function filterKeyDown(node, event){
+                if(event.which == ria.dom.Keys.ENTER.valueOf()){
+                    event.preventDefault();
+                }
             },
 
             [ria.mvc.DomEventBind('change', '#lp-gallery-sort-type')],
@@ -51,6 +63,19 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function categoryTypeChanged(node, event, data){
                 this.submitFormWithStart(node);
+            },
+
+            [ria.mvc.DomEventBind('focus', '.lp-gallery-search')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function filterFocus(node, event){
+                var n = node.valueOf()[0];
+                n.selectionStart = n.selectionEnd = n.value.length
+            },
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                this.dom.find('.lp-gallery-search').trigger('focus');
             }
 
         ]
