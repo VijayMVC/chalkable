@@ -70,7 +70,7 @@ NAMESPACE('chlk.controllers', function () {
             function lessonPlanTemplatesListAction(classId, categoryType_, filter_, sortType_, start_, count_){
                 var categoryType = categoryType_ || this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, null);
                 var result = this.getLessonPlanTemplates_(classId, categoryType, filter_, sortType_, start_, count_);
-                return this.ShadeView(chlk.activities.announcement.LessonPlanGalleryDialog, result);
+                return this.ShadeOrUpdateView(chlk.activities.announcement.LessonPlanGalleryDialog, result);
             },
 
             [chlk.controllers.NotChangedSidebarButton()],
