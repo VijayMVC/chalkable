@@ -1312,6 +1312,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId]],
         function viewTemplateAction(announcementId) {
             var announcementType = chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN;
@@ -1778,18 +1779,24 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
         function discardAction(announcementType, isDialog_) {
             this.disableAnnouncementSaving(true);
             var currentPersonId = this.getCurrentPerson().getId();
             isDialog_ && this.BackgroundCloseView(chlk.activities.announcement.LessonPlanFormDialog);
-            return this.announcementService
+            var res =  this.announcementService
                 .deleteDrafts(currentPersonId, announcementType)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(!isDialog_)
                         return this.Redirect('feed', 'list', [null, true]);
                 }, this);
+
+            if(isDialog_)
+                return null;
+
+            return res;
         },
 
         [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],

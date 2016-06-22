@@ -51,4 +51,4 @@ mixin LessonPlanIcon_(tpl, lessonPlan, classId, isAbleToRemove)
                else
                    .no-lesson-plans No Lesson Plans Uploaded
     .paging
-        +Paginator2('lessonplangallery', 'lessonPlanTemplatesList',lessonPlans, [self.getClassId(), self.getCategoryType(),  self.getFilter(), self.getSortType() ])
+        +Paginator2('lessonplangallery', 'gallery',lessonPlans, [self.getCategoryType(),  self.getFilter(), self.getSortType() ])
