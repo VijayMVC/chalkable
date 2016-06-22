@@ -13,9 +13,6 @@ NAMESPACE('chlk.controllers', function () {
             [ria.mvc.Inject],
             chlk.services.AttachmentService, 'attachmentService',
 
-            [ria.mvc.Inject],
-            chlk.services.ApplicationService, 'applicationService',
-
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DISTRICTADMIN,
                 chlk.models.common.RoleEnum.TEACHER,
@@ -29,34 +26,18 @@ NAMESPACE('chlk.controllers', function () {
                 Boolean,
                 String
             ]],
-            function startWidgetAction(requestId
-                , fileCabinetEnabled
-                , standardAttachEnabled
-                , assessmentAppId
-                , ableAttachApps
-                , appUrlAppend_) {
+            function startWidgetAction(requestId) {
 
-                var result = this.applicationService.getExternalAttachApps()
-                    .then(function(externalAttachApps){
-                        //_DEBUG && options.setAssessmentAppId(chlk.models.id.AppId('56c14655-2897-4073-bb48-32dfd61264b5'));
+                var options = chlk.models.common.AttachOptionsViewData.$create(false, false, null, false, "");
 
-                        var options = chlk.models.common.AttachOptionsViewData.$create(
-                            fileCabinetEnabled,
-                            standardAttachEnabled,
-                            assessmentAppId,
-                            ableAttachApps,
-                            appUrlAppend_
-                        );
+                this.getContext().getSession().set('AttachWidget_RequestId', requestId);
+                this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
 
-                        options.setExternalAttachApps(externalAttachApps);
+                var data = new chlk.models.common.BaseAttachViewData(options);
 
-                        this.getContext().getSession().set('AttachWidget_RequestId', requestId);
-                        this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
+                var result = ria.async.Future.$fromData(data);
 
-                        return new chlk.models.common.BaseAttachViewData(options);
-                    }, this);
-
-                return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
+                return this.ShadeOrUpdateView(chlk.activities.attach.AttachFileDialog, result);
             }
         ]);
 });
