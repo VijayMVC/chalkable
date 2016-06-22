@@ -65,7 +65,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             var syId = GetCurrentSchoolYearId();
-            var res = (StudentInfoViewData)GetInfo(personId, personInfo=> StudentInfoViewData.Create(personInfo, syId));
+            var res = GetInfo(personId, personInfo=> StudentInfoViewData.Create(personInfo, syId));
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             var studentDetailsInfo = SchoolLocator.StudentService.GetById(personId, syId);
