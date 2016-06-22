@@ -1,7 +1,4 @@
-﻿
-
-
-CREATE Procedure [dbo].[spDeleteAnnouncements] @announcementIdList TInt32 readonly
+﻿CREATE Procedure [dbo].[spDeleteAnnouncements] @announcementIdList TInt32 readonly
 as
 Begin Transaction
 

@@ -4,17 +4,7 @@
 As
 
 Select
-	Student.Id,
-	Student.FirstName,
-	Student.LastName,
-	Student.BirthDate,
-	Student.Gender,
-	Student.HasMedicalAlert,
-	Student.IsAllowedInetAccess,
-	Student.SpecialInstructions,
-	Student.SpEdStatus,
-	Student.PhotoModifiedDate,
-	Student.UserId,
+	Student.*,
 	Cast(Case When StudentSchoolYear.EnrollmentStatus = 0 Then 0 Else 1 End As Bit) As IsWithdrawn
 From
 	Student

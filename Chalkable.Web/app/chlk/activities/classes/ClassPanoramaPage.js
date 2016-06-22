@@ -2,6 +2,7 @@ REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.classes.ClassProfilePanoramaTpl');
 REQUIRE('chlk.templates.classes.ClassProfilePanoramaChartsTpl');
 REQUIRE('chlk.templates.classes.ClassProfilePanoramaTestsChartTpl');
+REQUIRE('chlk.templates.classes.ClassProfilePanoramaStudentsTpl');
 
 NAMESPACE('chlk.activities.classes', function () {
 
@@ -14,6 +15,7 @@ NAMESPACE('chlk.activities.classes', function () {
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.classes.ClassProfilePanoramaTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaChartsTpl, '', '.charts-part', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaStudentsTpl, 'sort', '.panorama-students-tab', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaTestsChartTpl, chlk.activities.lib.DontShowLoader(), '.standardized-tests-tab', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassPanoramaPage', EXTENDS(chlk.activities.lib.TemplatePage), [
@@ -23,14 +25,38 @@ NAMESPACE('chlk.activities.classes', function () {
 
             },
 
+            function clearCheckedStudents_(){
+                this.dom.find('.student-grid-check:checked').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
+                this.dom.find('.selected-students').setValue('');
+                this.dom.find('.add-supplemental-btn').addClass('v-hidden');
+            },
+
+            function clearHighlightedStudents_(){
+                this.dom.find('.highlighted-students').setValue('');
+                this.dom.find('.students-grid').find('.highlighted').removeClass('highlighted');
+                disableUpdateByColumn = true;
+
+                jQuery('.distribution-chart').each(function(){
+                    var chart = jQuery(this).highcharts();
+                    chart.series[0].data.forEach(function(item){
+                        item.select(false);
+                    });
+                });
+
+                setTimeout(function(){
+                    disableUpdateByColumn = false;
+                }, 1);
+            },
+
             [ria.mvc.DomEventBind('columnselect', '.distribution-chart')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function columnSelect(node, event, selected_){
                 if(!disableUpdateByColumn){
                     clearTimeout(studentsTimeout);
-                    this.dom.find('.student-grid-check:checked').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
-                    this.dom.find('.add-supplemental-btn').addClass('v-hidden');
                     var grid = this.dom.find('.students-grid'), dom = this.dom, currentChart = node.valueOf()[0];
+
+                    this.clearCheckedStudents_();
+
                     grid.find('.highlighted').removeClass('highlighted');
 
                     selected_ && selected_.forEach(function(id){
@@ -39,7 +65,7 @@ NAMESPACE('chlk.activities.classes', function () {
 
                     studentsTimeout = setTimeout(function(){
                         var value = selected_ && selected_.length ? JSON.stringify(selected_) : '';
-                        dom.find('.selected-students').setValue(value);
+                        dom.find('.highlighted-students').setValue(value);
 
                         node.parent('form').find('.submit-by-check').trigger('click');
                         dom.find('.standardized-tests-tab').addClass('partial-update');
@@ -77,6 +103,8 @@ NAMESPACE('chlk.activities.classes', function () {
             VOID, function studentsChange(node, event, selected_){
                 clearTimeout(studentsTimeout);
 
+                this.clearHighlightedStudents_();
+
                 var btn = this.dom.find('.add-supplemental-btn'),
                     dom = this.dom;
 
@@ -98,22 +126,8 @@ NAMESPACE('chlk.activities.classes', function () {
 
                     node.parent('form').find('.submit-by-check').trigger('click');
                     dom.find('.standardized-tests-tab').addClass('partial-update');
-                }, 1000);
+                }, 1000)
 
-                this.dom.find('.students-grid').find('.highlighted').removeClass('highlighted');
-
-                disableUpdateByColumn = true;
-
-                jQuery('.distribution-chart').each(function(){
-                    var chart = jQuery(this).highcharts();
-                    chart.series[0].data.forEach(function(item){
-                        item.select(false);
-                    });
-                });
-
-                setTimeout(function(){
-                    disableUpdateByColumn = false;
-                }, 1);
             },
 
             [ria.mvc.DomEventBind(chlk.controls.TabEvents.TAB_CHANGED.valueOf(), '.tabs-block')],
@@ -134,6 +148,28 @@ NAMESPACE('chlk.activities.classes', function () {
                 this.updateChartsSize_();
                 if(msg_ == chlk.activities.lib.DontShowLoader())
                     this.dom.find('.standardized-tests-tab').removeClass('partial-update');
+
+                if(msg_ == 'sort'){
+                    var selectedStudents = this.dom.find('.selected-students').getValue(), dom = this.dom;
+
+                    if(selectedStudents){
+                        selectedStudents = JSON.parse(selectedStudents);
+
+                        selectedStudents.forEach(function(id){
+                            dom.find('.student-check[data-id=' + id + ']').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [true]);
+                        });
+                    }else{
+                        var highlightedStudents = this.dom.find('.highlighted-students').getValue();
+
+                        if(highlightedStudents){
+                            highlightedStudents = JSON.parse(highlightedStudents);
+
+                            highlightedStudents.forEach(function(id){
+                                dom.find('.grid-row[data-id=' + id + ']').addClass('highlighted');
+                            });
+                        }
+                    }
+                }
             },
 
             function updateChartsSize_(){

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
-using Chalkable.BusinessLogic.Model.PanoramaStuff;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
