@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Chalkable.BusinessLogic.Model.PanoramaSettings;
-using Chalkable.BusinessLogic.Model.PanoramaStuff;
+using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -36,6 +35,8 @@ namespace Chalkable.Web.Models
                 StandardizedTestsStatsByClass = StandardizedTestStatsViewData.CreateForClass(panorama.StandardizedTests, standardizedTests),
                 Students = new List<StudentStandardizedTestStats>()
             };
+
+            classStudents = classStudents.OrderBy(x => x.FullName()).ToList();
 
             //Preparing students
             foreach (var student in classStudents)
@@ -72,6 +73,12 @@ namespace Chalkable.Web.Models
             if (models == null)
                 return res;
 
+            models = models.Where(x =>
+            {
+                decimal a = 0;
+                return decimal.TryParse(x.Score, out a);
+            }).ToList();
+
             foreach (var standardizedTestInfo in models)
             {
                 var test = res.FirstOrDefault(x => x.StandardizedTest.Id == standardizedTestInfo.StandardizedTestId
@@ -95,10 +102,10 @@ namespace Chalkable.Web.Models
                 var studentStTestsInfos = models
                     .Where(x => x.StandardizedTestId == standardizedTestInfo.StandardizedTestId
                                 && x.StandardizedTestComponentId == standardizedTestInfo.StandardizedTestComponentId)
-                    .GroupBy(y => y.Date, x => x.Score);
+                    .GroupBy(y => y.Date, x => decimal.Parse(x.Score));
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)
-                    viewData.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, studentStTestsInfo.Average(), "MMM yyyy"));
+                    viewData.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, !studentStTestsInfo.Any() ? 0 : studentStTestsInfo.Average(), "MMM yyyy"));
 
                 res.Add(viewData);
             }
@@ -114,6 +121,13 @@ namespace Chalkable.Web.Models
                 return res;
 
             var studentTests = models.Where(x => x.StudentId == studentId).ToList();
+            //We can draw plots only when we have numeric scores
+            studentTests = studentTests.Where(x =>
+            {
+                decimal a;
+                return decimal.TryParse(x.Score, out a);
+            }).ToList();
+
             if (studentTests.Count == 0)
                 return res;
 
@@ -140,10 +154,10 @@ namespace Chalkable.Web.Models
                 var studentStTestsInfos = models
                     .Where(x => x.StandardizedTestId == test.StandardizedTestId
                                 && x.StandardizedTestComponentId == test.StandardizedTestComponentId)
-                    .GroupBy(y => y.Date, x => x.Score);
+                    .GroupBy(y => y.Date, x => decimal.Parse(x.Score));
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)
-                    stats.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, studentStTestsInfo.Average(), "MMM yyyy"));
+                    stats.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, !studentStTestsInfo.Any() ? 0 : studentStTestsInfo.Average(), "MMM yyyy"));
 
                 res.Add(stats);
             }
@@ -191,7 +205,7 @@ namespace Chalkable.Web.Models
         {
             var res = new ClassDistributionStatsViewData();
             var absencePersents = models.Where(x => x.NumberOfDaysEnrolled != 0)
-                .Select(x => new { Persent = (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled*100), StudentId = x.StudentId})
+                .Select(x => new { Persent = (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled*100), x.StudentId})
                 .OrderBy(x => x.Persent).ToList();
             
             var maxPersent = absencePersents.Max(x => x.Persent);

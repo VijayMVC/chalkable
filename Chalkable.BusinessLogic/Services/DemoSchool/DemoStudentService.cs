@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
+using Chalkable.BusinessLogic.Model.StudentPanorama;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
@@ -276,6 +278,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public int GetEnrolledStudentsCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentPanoramaInfo Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             throw new NotImplementedException();
         }

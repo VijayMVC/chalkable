@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.EnumMappers;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
-using Chalkable.BusinessLogic.Model.PanoramaStuff;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
@@ -238,8 +238,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
+            if (schoolYearIds == null || schoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
 
-            schoolYearIds = schoolYearIds ?? new List<int>();
             standardizedTestFilters = standardizedTestFilters ?? new List<StandardizedTestFilter>();
             var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
             var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);

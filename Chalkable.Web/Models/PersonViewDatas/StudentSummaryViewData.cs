@@ -21,14 +21,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<StudentSummaryGradeViewData> GradesBox { get; set; }
         public StudentHoverBoxViewData<StudentSummaryRankViewData> RanksBox { get; set; }
 
-        //[SensitiveData]
-
         private const string NO_CLASS_SCHEDULED = "No Class Scheduled";
 
         public int? RoomId { get; set; }
         public string RoomName { get; set; }
         public string RoomNumber { get; set; }
-
 
         protected StudentSummaryViewData(StudentDetails student, Room room, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions) : base(student, customAlerts, healthConditions)
