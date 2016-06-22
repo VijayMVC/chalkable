@@ -9,8 +9,7 @@
 	@ownedOnly bit,
 	@fromDate DateTime2, 
 	@toDate DateTime2, 
-	@complete bit, 
-	@galleryCategoryId int
+	@complete bit
 As
 
 declare @TEACHER_ROLE int = 2,
@@ -42,5 +41,5 @@ Where
 	and (@fromDate is null or StartDate >= @fromDate)
 	and (@toDate is null or StartDate <= @toDate)
 	and (@complete is null or annRecipientData.Complete = @complete or (@complete = 0 and annRecipientData.Complete is null))
-	and (@galleryCategoryId is null or GalleryCategoryRef = @galleryCategoryId)
+	and (InGallery = 0)
 	and SchoolYearRef = @schoolYearId

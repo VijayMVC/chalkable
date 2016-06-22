@@ -36,7 +36,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 String,
                 Boolean
             ]],
-            function $(lessonPlans, categories, sortType, classId, categoryType_, filter_, canRemove){
+            function $(lessonPlans, categories, sortType, classId_, categoryType_, filter_, canRemove){
                 BASE();
                 this.setLessonPlans(lessonPlans);
                 if (filter_)
@@ -48,7 +48,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.setCategories(categories);
 
                 this.setSortType(sortType);
-                this.setClassId(classId);
+                classId_ && this.setClassId(classId_);
 
                 this.setEmpty((this.getLessonPlans().getItems() || []).length == 0);
                 this.setAbleToRemove(canRemove);

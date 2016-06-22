@@ -57,7 +57,7 @@ namespace Chalkable.Web.Controllers
                 .Select(BaseApplicationViewData.Create)
                 .ToList();
 
-            if (ApplicationSecurity.HasAssessmentEnabled(Context) && Context.Claims.HasPermission(ClaimInfo.ASSESSMENT_ADMIN))
+            if (Context.Claims.HasPermission(ClaimInfo.ASSESSMENT_ADMIN))
             {
                 var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
                 if (assessement != null && assessement.HasDistrictAdminSettings && !allApps.Exists(x => x.Id == assessement.Id))

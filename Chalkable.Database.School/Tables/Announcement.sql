@@ -3,7 +3,7 @@
     [Content] NVARCHAR (MAX) NULL,
     [Created] DATETIME2 (7)  NOT NULL,
     [State]   INT            NOT NULL,
-    [Title]   NVARCHAR (30)  NULL,
+    [Title]   NVARCHAR (101)  NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

@@ -7,7 +7,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class LPGalleryCategoryController : ChalkableController
     {
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult CreateCategory(string name)
         {
             if (!SchoolLocator.LPGalleryCategoryService.Exists(name, null))
@@ -18,7 +18,7 @@ namespace Chalkable.Web.Controllers
             return Json(false);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult UpdateCategory(int categoryId, string name)
         {
 
@@ -30,14 +30,14 @@ namespace Chalkable.Web.Controllers
             return Json(false);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult DeleteCategory(int categoryId)
         {
             SchoolLocator.LPGalleryCategoryService.Delete(categoryId);
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult ListCategories()
         {
             var res = SchoolLocator.LPGalleryCategoryService.GetList();

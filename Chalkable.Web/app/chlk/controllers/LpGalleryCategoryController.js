@@ -98,8 +98,9 @@ NAMESPACE('chlk.controllers', function () {
             function afterCategoryEdit_(list){
                 var model = new chlk.models.announcement.FeedAnnouncementViewData();
                 model.setCategories(list);
-                this.BackgroundUpdateView(chlk.activities.announcement.LessonPlanFormPage, model, 'right-categories');
-                this.BackgroundUpdateView(chlk.activities.announcement.LessonPlanFormPage, model, 'categories');
+                var activity = this.userIsAdmin() ? chlk.activities.announcement.LessonPlanFormDialog : chlk.activities.announcement.LessonPlanFormPage;
+                this.BackgroundUpdateView(activity, model, 'right-categories');
+                this.BackgroundUpdateView(activity, model, 'categories');
             }
         ]);
 });

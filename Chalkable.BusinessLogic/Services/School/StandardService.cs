@@ -6,6 +6,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -30,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteClassStandards(IList<ClassStandard> classStandards);
         IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
         IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId);
+        void CopyStandardsToAnnouncement(int fromAnnouncementId, int toAnnouncementId, int announcementType);
 
     }
     public class StandardService : SchoolServiceBase, IStandardService
@@ -179,6 +181,14 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId)
         {
             return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
+        }
+
+        public void CopyStandardsToAnnouncement(int fromAnnouncementId, int toAnnouncementId, int announcementType)
+        {
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+            var annStandards = GetAnnouncementStandards(fromAnnouncementId);
+            var service = ServiceLocator.GetAnnouncementService((AnnouncementTypeEnum?)announcementType);
+            service.SubmitStandardsToAnnouncement(toAnnouncementId, annStandards.Select(x => x.Standard.Id).ToList());
         }
     }
 }

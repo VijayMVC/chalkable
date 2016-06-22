@@ -34,9 +34,18 @@ BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add
                             .box-checkbox.circle
                                 +Checkbox('student', false, false, true)(data-id=info.getId().valueOf()).student-check.student-grid-check
                         .cell.name=info.getFullName()
-                        .cell.grade=info.getGradeAvg()
-                        .cell.absences=info.getAbsences()
-                        .cell.discipline=info.getDiscipline()
+                        .cell.grade
+                            .circle-cnt(
+                                class = info.getGradeAvgClass()
+                            )=info.getGradeAvg()
+                        .cell.absences
+                            .circle-cnt(
+                                class = info.getAbsencesClass()
+                            )=info.getAbsences()
+                        .cell.discipline
+                            .circle-cnt(
+                                class = info.getDisciplineClass()
+                            )=info.getDiscipline()
                         .cell.ethnicity=info.getEthnicity().getCode()
                         .cell.hispanic=info.isHispanic() ? 'Y' : 'N'
                         .cell.iep-active=info.isIEPActive() ? 'Y' : 'N'

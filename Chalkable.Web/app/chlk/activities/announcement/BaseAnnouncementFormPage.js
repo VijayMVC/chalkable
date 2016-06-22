@@ -58,7 +58,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var submitType = node.getData('submit-type');
                     if(submitType == "submitOnEdit" || submitType == "submit"){
                         that.dom.find('#save-form-button').remove();
-                        //that.addPartialRefreshLoader();
                         node.setData('submit-type', null);
                     }
                 }, 10);
@@ -68,15 +67,9 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.add-loader-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function addLoaderOnSubmitClick(node, event){
-                //this.addPartialRefreshLoader();
                 this.dom.find('#save-form-button').remove();
             },
 
-            /*[ria.mvc.DomEventBind('click', '#content')],
-             [[ria.dom.Dom, ria.dom.Event]],
-             VOID, function focusContent(node, event){
-             node.triggerEvent('focus');
-             },*/
             [ria.mvc.DomEventBind('click', '.add-standards .title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function addStandardsClick(node, event){

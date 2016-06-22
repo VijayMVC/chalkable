@@ -37,7 +37,7 @@ namespace Chalkable.Data.School.Model.Announcements
         [NotDbFieldAttr]
         public bool IsOwner { get; set; }
         [NotDbFieldAttr]
-        public virtual int OwnereId => 0;
+        public virtual int? OwnereId => 0;
         [NotDbFieldAttr]
         public bool IsDraft => State == AnnouncementState.Draft;
         [NotDbFieldAttr]
@@ -53,7 +53,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public override bool IsSubmitted => _announcementData.IsSubmitted;
         public override AnnouncementTypeEnum Type => _announcementData.Type;
         public override string AnnouncementTypeName => _announcementData.AnnouncementTypeName;
-        public override int OwnereId => _announcementData.OwnereId;
+        public override int? OwnereId => _announcementData.OwnereId;
 
         private Announcement _announcementData;
 
