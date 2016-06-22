@@ -40,6 +40,19 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.lesson-plan-import-popup').toggleClass('x-hidden');
             },
 
+            [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function categoryChange(node, event, selected_){
+                if(node.getValue() == -1){
+                    node.setValue(node.getData('value'));
+                    node.trigger('chosen:updated');
+                    node.parent('.left-top-container').find('.add-category-btn').trigger('click');
+                }else{
+                    node.setData('value', node.getValue())
+                }
+
+            },
+
             [ria.mvc.DomEventBind('change', '.gallery-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function addToGalleryChange(node, event, selected_){

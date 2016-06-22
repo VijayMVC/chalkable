@@ -54,6 +54,19 @@ NAMESPACE('chlk.activities.announcement', function () {
                 select.trigger('chosen:updated');
             },
 
+            [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function categoryChange(node, event, selected_){
+                if(node.getValue() == -1){
+                    node.setValue(node.getData('value'));
+                    node.trigger('chosen:updated');
+                    node.parent('.left-top-container').find('.add-category-btn').trigger('click');
+                }else{
+                    node.setData('value', node.getValue())
+                }
+
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],
             VOID, function addToGalleryRule(tpl, model, msg_) {
 

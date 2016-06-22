@@ -12,6 +12,8 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'title',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AnnouncementTypeEnum, 'type'
+            chlk.models.announcement.AnnouncementTypeEnum, 'type',
+
+            Boolean, 'readonly'
         ]);
 });

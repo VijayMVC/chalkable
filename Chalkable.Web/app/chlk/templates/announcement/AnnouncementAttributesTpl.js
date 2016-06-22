@@ -19,6 +19,8 @@ NAMESPACE('chlk.templates.announcement', function(){
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'readOnly'
+            Boolean, 'readOnly',
+
+            Boolean, 'dialog'
     ]);
 });

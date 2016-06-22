@@ -216,8 +216,11 @@ NAMESPACE('chlk.controllers', function (){
             return attrs.indexOf(attributeId) > -1;
         },
 
-        function getAnnouncementFormPageType_(type_){
+        function getAnnouncementFormPageType_(type_, isDialog_){
             var announcementType = type_ || this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf();
+
+            if(isDialog_)
+                return chlk.activities.announcement.LessonPlanFormDialog;
 
             if(this.userInRole(chlk.models.common.RoleEnum.TEACHER)){
                 if(announcementType == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
@@ -230,7 +233,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if(this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN)){
-                if(announcementType == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
+                if(announcementType == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN)
                     return chlk.activities.announcement.LessonPlanFormDialog;
 
                 return chlk.activities.announcement.AdminAnnouncementFormPage;
@@ -676,11 +679,11 @@ NAMESPACE('chlk.controllers', function (){
                 },this);
         },
 
-        [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.apps.Application]],
-        function getAppRecommendedContents_(ann, app){
+        [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.apps.Application, Boolean]],
+        function getAppRecommendedContents_(ann, app, isDialog_){
             if(ann.getStandards().length > 0)
                 var emptyModel = new  chlk.models.apps.AppContentListViewData();
-                this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), emptyModel,  'before-app-contents-loaded');
+                this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), emptyModel,  'before-app-contents-loaded');
                 this.applicationService.getApplicationContents(
                         app.getUrl(),
                         ann.getId(),
@@ -689,7 +692,7 @@ NAMESPACE('chlk.controllers', function (){
                         app.getEncodedSecretKey())
                     //.attach(this.validateResponse_())
                     .catchError(function(e){
-                        this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), null, 'app-contents-fail');
+                        this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), null, 'app-contents-fail');
                         throw e;
                     }, this)
                     .then(function(paginatedContents){
@@ -699,19 +702,19 @@ NAMESPACE('chlk.controllers', function (){
                            var res = chlk.models.apps.AppContentListViewData(app, ann.getId(), ann.getType()
                                , ann.getClassId(), paginatedContents, ann.getStandards());
 
-                           this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), res, 'update-app-contents');
+                           this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), res, 'update-app-contents');
                         }
                         else
-                            this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), null, 'app-contents-fail');
+                            this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), null, 'app-contents-fail');
                     }, this);
         },
 
-        [[chlk.models.announcement.FeedAnnouncementViewData]],
-        function getListOfAppRecommendedContents_(announcement){
+        [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
+        function getListOfAppRecommendedContents_(announcement, isDialog_){
             if(announcement.getStandards().length > 0)
-                announcement.getAppsWithContent()
+                (announcement.getAppsWithContent() || [])
                     .forEach(function(app) {
-                        this.getAppRecommendedContents_(announcement, app);
+                        this.getAppRecommendedContents_(announcement, app, isDialog_);
                 },this);
         },
 
@@ -820,7 +823,7 @@ NAMESPACE('chlk.controllers', function (){
                         this.cacheAnnouncementType(type);
                         this.updateAttributesWithFilesList_(announcement);
                         this.prepareAnnouncementAttachedItems(announcement);
-                        this.getListOfAppRecommendedContents_(announcement);
+                        this.getListOfAppRecommendedContents_(announcement, true);
 
                         model.getAnnouncement().setCategories(result[1]);
                         this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
@@ -901,16 +904,17 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.id.ClassId,
             String,
             chlk.models.announcement.AnnouncementTypeEnum,
-            String
+            String,
+            Boolean
         ]],
-        function attachAction(announcementId, classId, announcementTypeName, announcementType, appUrlAppend_) {
+        function attachAction(announcementId, classId, announcementTypeName, announcementType, appUrlAppend_, isDialog_) {
 
             var result = this.announcementService.getAttachSettings(announcementId, announcementType)
                 .then(function(options){
                     //_DEBUG && options.setAssessmentAppId(chlk.models.id.AppId('56c14655-2897-4073-bb48-32dfd61264b5'));
 
                     options.updateByValues(null, null, announcementId, classId, announcementTypeName,
-                        announcementType, null, appUrlAppend_);
+                        announcementType, null, appUrlAppend_, null, isDialog_);
                     this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
                     return new chlk.models.common.BaseAttachViewData(options);
                 }, this);
@@ -1029,8 +1033,8 @@ NAMESPACE('chlk.controllers', function (){
 
         //todo move attribute methods to separate controller
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function fetchAddAttributeFuture_(announcementId, announcementType) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+        function fetchAddAttributeFuture_(announcementId, announcementType, isDialog_) {
             var attributeId = this.assignedAttributeService
                 .getAnnouncementAttributeTypesList()[0].getId();
 
@@ -1048,6 +1052,7 @@ NAMESPACE('chlk.controllers', function (){
                     var attributes = this.getCachedAnnouncementAttributes();
                     attributes.push(attribute);
                     this.cacheAnnouncementAttributes(attributes);
+                    isDialog_ && attribute.setDialog(isDialog_);
                     return attribute;
                 }, this);
         },
@@ -1056,22 +1061,22 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function addAttributeTeacherAction(announcementId, announcementType) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+        function addAttributeTeacherAction(announcementId, announcementType, isDialog_) {
             this.BackgroundCloseView(chlk.activities.apps.AttachAppsDialog);
-            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType),
-                this.fetchAddAttributeFuture_(announcementId, announcementType), 'add-attribute');
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType, isDialog_),
+                this.fetchAddAttributeFuture_(announcementId, announcementType, isDialog_), 'add-attribute');
         },
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function addAttributeDistrictAdminAction(announcementId, announcementType) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+        function addAttributeDistrictAdminAction(announcementId, announcementType, isDialog_) {
             this.BackgroundCloseView(chlk.activities.apps.AttachAppsDialog);
-            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage,
-                this.fetchAddAttributeFuture_(announcementId, announcementType), 'add-attribute');
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType, isDialog_),
+                this.fetchAddAttributeFuture_(announcementId, announcementType, isDialog_), 'add-attribute');
         },
 
         [chlk.controllers.AccessForRoles([
@@ -1105,7 +1110,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, Boolean]],
-        function attachFromCabinetAction(announcementId, announcementType, attachmentId, onCreate_){
+        function attachFromCabinetAction(announcementId, announcementType, attachmentId, isDialog_){
             var res = this.announcementAttachmentService
                 .addAttachment(announcementId, announcementType, attachmentId)
                 .catchError(this.handleNoAnnouncementException_, this)
@@ -1119,12 +1124,12 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
             this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
             var isStudent =  this.userInRole(chlk.models.common.RoleEnum.STUDENT);
-            return this.UpdateView(!isStudent ? this.getAnnouncementFormPageType_(announcementType) : chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
+            return this.UpdateView(!isStudent ? this.getAnnouncementFormPageType_(announcementType, isDialog_) : chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
 
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
-        function attachFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId){
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId, Boolean]],
+        function attachFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId, isDialog_){
             if(this.isAttributeWithFile_(assignedAttributeId))
                 return this.attributeAttachmentExistsAction();
 
@@ -1137,11 +1142,11 @@ NAMESPACE('chlk.controllers', function (){
                     this.afterAttributeFileAttach_(assignedAttributeId);
                     return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
                 }, this);
-            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType), res, 'add-attribute-attachment');
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType, isDialog_), res, 'add-attribute-attachment');
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
-        function cloneFromCabinetAction(announcementId, announcementType, attachmentId){
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId, Boolean]],
+        function cloneFromCabinetAction(announcementId, announcementType, attachmentId, isDialog_){
             var res = this.announcementAttachmentService
                 .cloneAttachment(attachmentId, announcementId, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
@@ -1155,11 +1160,11 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
             this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
             var isStudent =  this.userInRole(chlk.models.common.RoleEnum.STUDENT);
-            return this.UpdateView(!isStudent ? this.getAnnouncementFormPageType_(announcementType) : chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
+            return this.UpdateView(!isStudent ? this.getAnnouncementFormPageType_(announcementType, isDialog_) : chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
-        function cloneFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId){
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId, Boolean]],
+        function cloneFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId, isDialog_){
             if(this.isAttributeWithFile_(assignedAttributeId))
                 return this.attributeAttachmentExistsAction();
 
@@ -1172,7 +1177,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
                 }, this);
             this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
-            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType), res, 'add-attribute-attachment');
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType, isDialog_), res, 'add-attribute-attachment');
         },
 
 
@@ -1194,9 +1199,9 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function removeAttributeTeacherAction(announcementId, attributeId, announcementType) {
-            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType),
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+        function removeAttributeTeacherAction(announcementId, attributeId, announcementType, isDialog_) {
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType, isDialog_),
                 this.fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType),  'remove-attribute');
         },
 
@@ -1204,9 +1209,9 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function removeAttributeDistrictAdminAction(announcementId, attributeId, announcementType) {
-            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage,
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+        function removeAttributeDistrictAdminAction(announcementId, attributeId, announcementType, isDialog_) {
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType, isDialog_),
                 this.fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType),  'remove-attribute');
         },
 
@@ -1297,6 +1302,31 @@ NAMESPACE('chlk.controllers', function (){
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
+        },
+
+        [[chlk.models.id.AnnouncementId]],
+        function viewTemplateAction(announcementId) {
+            var announcementType = chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN;
+
+            var result = ria.async.wait([
+                    this.announcementService.editAnnouncement(announcementId, announcementType),
+                    this.lpGalleryCategoryService.list()
+                ])
+                .then(function(result){
+                    var model = result[0];
+                    var announcement = model.getAnnouncement();
+                    var type = announcement.getType();
+                    this.cacheAnnouncementType(type);
+                    this.updateAttributesWithFilesList_(announcement);
+                    this.prepareAnnouncementAttachedItems(announcement);
+                    this.getListOfAppRecommendedContents_(announcement, true);
+
+                    model.getAnnouncement().setCategories(result[1]);
+                    this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
+                    return model;
+                },this)
+                .attach(this.validateResponse_());
+            return this.ShadeView(chlk.activities.announcement.LessonPlanFormDialog, result);
         },
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
@@ -1404,7 +1434,7 @@ NAMESPACE('chlk.controllers', function (){
             if(fromDialog)
                 return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, 'delete-attachment');
 
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'remove-attribute-attachment');
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, 'remove-attribute-attachment');
         },
 
         [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Number]],
@@ -1665,8 +1695,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement), 'update-attachments');
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function refreshAttachmentsAction(announcementId, announcementType_) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+        function refreshAttachmentsAction(announcementId, announcementType_, isDialog_) {
             var result = this.announcementService
                 .getAnnouncement(announcementId, announcementType_)
                 .attach(this.validateResponse_())
@@ -1678,11 +1708,11 @@ NAMESPACE('chlk.controllers', function (){
                     return announcement
                 }, this);
 
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attachments');
+            return this.UpdateView(this.getAnnouncementFormPageType_(null, isDialog_), result, 'update-attachments');
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
-        function refreshAttributeAction(announcementId, announcementType, assignedAttributeId) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId, Boolean]],
+        function refreshAttributeAction(announcementId, announcementType, assignedAttributeId, isDialog_) {
             var result = this.announcementService
                 .getAnnouncement(announcementId, announcementType)
                 .attach(this.validateResponse_())
@@ -1692,7 +1722,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
                 }, this);
 
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'add-attribute-attachment');
+            return this.UpdateView(this.getAnnouncementFormPageType_(null, isDialog_), result, 'add-attribute-attachment');
         },
 
         function cancelDeleteAction(){
@@ -1740,20 +1770,22 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
-        [[chlk.models.announcement.AnnouncementTypeEnum]],
-        function discardAction(announcementType) {
+        [[chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+        function discardAction(announcementType, isDialog_) {
             this.disableAnnouncementSaving(true);
             var currentPersonId = this.getCurrentPerson().getId();
+            isDialog_ && this.BackgroundCloseView(chlk.activities.announcement.LessonPlanFormDialog);
             return this.announcementService
                 .deleteDrafts(currentPersonId, announcementType)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    return this.Redirect('feed', 'list', [null, true]);
+                    if(!isDialog_)
+                        return this.Redirect('feed', 'list', [null, true]);
                 }, this);
         },
 
-        [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function deleteAppAction(announcementAppId, announcementType) {
+        [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+        function deleteAppAction(announcementAppId, announcementType, isDialog_) {
             var result = this.announcementService
                 .deleteApp(announcementAppId, announcementType)
                 .attach(this.validateResponse_())
@@ -1764,7 +1796,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcementForm.setAnnouncement(model);
                     return this.addEditAction(announcementForm, true).getAnnouncement();
                 }, this);
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attachments');
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType, isDialog_), result, 'update-attachments');
         },
 
         [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
@@ -1778,7 +1810,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.prepareAnnouncementAttachedItems(model);
                     return model;
                 }, this);
-            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, result, 'update-attachments');
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType), result, 'update-attachments');
         },
 
         Boolean, function isAnnouncementSavingDisabled(){
@@ -2259,9 +2291,9 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
-        function createFromTemplateAction(announcementId, classId){
+        function createFromTemplateAction(announcementId, classId_){
             var result = ria.async.wait([
-                    this.lessonPlanService.createFromTemplate(announcementId, classId),
+                    this.lessonPlanService.createFromTemplate(announcementId, classId_),
                     this.lpGalleryCategoryService.list()
                 ])
                 .attach(this.validateResponse_())
@@ -2699,20 +2731,20 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
-        function removeStandardAction(announcementId, standardId){
+        [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId, Boolean]],
+        function removeStandardAction(announcementId, standardId, isDialog_){
             var res = this.announcementService.removeStandard(announcementId, standardId)
                 .then(function(announcement){
                     this.saveStandardIds(announcement);
                     //return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
                     this.prepareAttachments(announcement);
 
-                    this.getListOfAppRecommendedContents_(announcement);
+                    this.getListOfAppRecommendedContents_(announcement, isDialog_);
 
                     return announcement;
                 }, this)
                 .attach(this.validateResponse_());
-            return this.UpdateView(this.getAnnouncementFormPageType_(), res, 'update-standards-and-suggested-apps');
+            return this.UpdateView(this.getAnnouncementFormPageType_(null, isDialog_), res, 'update-standards-and-suggested-apps');
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

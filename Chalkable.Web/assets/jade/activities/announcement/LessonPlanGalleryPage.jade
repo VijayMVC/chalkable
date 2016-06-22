@@ -2,12 +2,12 @@ mixin LessonPlanIcon_(lessonPlan, classId, isAbleToRemove)
    .announcement-item.application
        -var canRemove = isAbleToRemove || lessonPlan.isAnnOwner()
        if canRemove
-            +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId(), classId).close-btn
+            +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId()).close-btn
        .wrapper
            .attach-assessment.img
            .title(data-tooltip=lessonPlan.getTitle(), data-tooltip-type="overflow")= lessonPlan.getTitle()
            .shortdesc
-           +ActionButton('announcement', 'createFromTemplate', lessonPlan.getId(), classId) Open
+           +ActionButton('announcement', 'viewTemplate', lessonPlan.getId()) Open
 
 .lesson-plan-gallery
     h2.page-title Lesson Plan Gallery

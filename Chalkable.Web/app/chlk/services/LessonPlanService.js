@@ -30,10 +30,10 @@ NAMESPACE('chlk.services', function () {
 
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
-            ria.async.Future, function createFromTemplate(lessonPlanTplId, classId) {
+            ria.async.Future, function createFromTemplate(lessonPlanTplId, classId_) {
                 return this.get('LessonPlan/CreateFromTemplate.json', chlk.models.announcement.LessonPlanForm, {
                     lessonPlanTplId: lessonPlanTplId.valueOf(),
-                    classId: classId.valueOf()
+                    classId: classId_ && classId_.valueOf()
                 });
             },
 
