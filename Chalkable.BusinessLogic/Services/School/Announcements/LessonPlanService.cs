@@ -251,7 +251,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 using (var uow = Update())
                 {
-                    if (!announcement.IsOwner || Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
+                    if (!announcement.IsOwner && !BaseSecurity.IsDistrictAdmin(Context) && announcement.GalleryOwnerRef != Context.PersonId)
                         throw new ChalkableSecurityException();
                     var da = CreateLessonPlanDataAccess(uow);
                     if (string.IsNullOrEmpty(title))
