@@ -29,12 +29,12 @@ mixin LessonPlanIcon_(tpl, lessonPlan, classId, isAbleToRemove)
            .buttons.filter
                 .left
                     .sort
-                        +Select('lpGalleryCategoryType')(id="lpGalleryCategoryType", placeholder = "Category")
-                            +Option('', 'Select category', true)
+                        +Select('lpGalleryCategoryType')(id="lpGalleryCategoryType", data-placeholder = "Category...")
+                            +Option('', 'Category...', true)
                             each item in self.getCategories()
                                 +Option(item.getId().valueOf(), item.getName(), item.getId() == self.getCategoryType())
                         span &nbsp;
-                        +Select('lpGallerySortType')#lp-gallery-sort-type
+                        +Select('lpGallerySortType')(data-placeholder = "Sort...")#lp-gallery-sort-type
                             -var sortTypeEnum = chlk.models.attachment.SortAttachmentType
                             +Option(sortTypeEnum.NEWEST_UPLOADED.valueOf(), 'Newest Uploaded', sortTypeEnum.NEWEST_UPLOADED == self.getSortType())
                             +Option(sortTypeEnum.OLDEST_UPLOADED.valueOf(), 'Oldest Uploaded', sortTypeEnum.OLDEST_UPLOADED == self.getSortType())
