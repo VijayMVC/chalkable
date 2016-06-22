@@ -16,7 +16,8 @@ mixin LessonPlanIcon_(tpl, lessonPlan, classId, isAbleToRemove)
             +ActionLink('lessonplangallery', 'gallery').pressed Public
 
         if self.getUserRole().isAdmin()
-            +ActionButton('announcement', 'lessonPlanFromGallery').pressed.right +
+            +ActionLink('announcement', 'lessonPlanFromGallery').right.add-plus-btn Add
+                SPAN.plus +
 
     .gallery-view
 
