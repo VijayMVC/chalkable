@@ -2105,8 +2105,9 @@ NAMESPACE('chlk.controllers', function (){
                 )
                 .attach(this.validateResponse_())
                 .then(function(model){
+                    this.BackgroundNavigate('lessonplangallery', 'gallery');
                     return ria.async.BREAK;
-                });
+                }, this);
 
             return this.UpdateView(chlk.activities.announcement.LessonPlanFormDialog, res);
         },

@@ -25,6 +25,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.galleryCategoryId = SJX.fromValue(raw.gallerycategoryid, chlk.models.id.LpGalleryCategoryId);
                 this.categoryName = SJX.fromValue(raw.gallerycategoryname, String);
                 this.inGallery = SJX.fromValue(raw.ingallery, Boolean);
+                this.galleryOwnerRef = SJX.fromValue(raw.galleryownerref, chlk.models.id.SchoolPersonId);
             },
 
             chlk.models.common.ChlkDate, 'startDate',
@@ -36,6 +37,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'inGallery',
             chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId',
             String, 'categoryName',
+            chlk.models.id.SchoolPersonId, 'galleryOwnerRef',
 
             function getPercents(){
                 if(!this.endDate || !this.startDate)

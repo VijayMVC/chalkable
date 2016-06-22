@@ -1,6 +1,6 @@
-mixin LessonPlanIcon_(lessonPlan, classId, isAbleToRemove)
+mixin LessonPlanIcon_(tpl, lessonPlan, classId, isAbleToRemove)
    .announcement-item.application
-       -var canRemove = isAbleToRemove || lessonPlan.isAnnOwner()
+       -var canRemove = tpl.getUserRole().isAdmin() || lessonPlan.getGalleryOwnerRef() == tpl.getCurrentUser().getId() || isAbleToRemove
        if canRemove
             +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId()).close-btn
        .wrapper
@@ -46,7 +46,7 @@ mixin LessonPlanIcon_(lessonPlan, classId, isAbleToRemove)
                if !self.isEmpty()
                    each lessonPlan in lessonPlans.getItems()
 
-                       +LessonPlanIcon_(lessonPlan, self.getClassId(), self.isAbleToRemove())
+                       +LessonPlanIcon_(self, lessonPlan, self.getClassId(), self.isAbleToRemove())
                else
                    .no-lesson-plans No Lesson Plans Uploaded
     .paging

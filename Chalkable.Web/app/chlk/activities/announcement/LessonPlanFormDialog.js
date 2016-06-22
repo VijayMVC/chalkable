@@ -38,20 +38,16 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 second.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), !node.checked());
 
-                if(this.dom.find('#public-check').checked()){
-                    this.dom.find('.title-block-container').addClass('with-gallery-id');
-                    select.removeAttr('disabled');
-                    select.setProp('disabled', false);
-                    this.dom.find('#check-title-btn').trigger('click');
-
-                }else{
+                if(this.dom.find('#public-check').checked())
+                    this.checkTitle_();
+                else
                     this.dom.find('.title-block-container').removeClass('with-gallery-id');
-                    select.setAttr('disabled', 'disabled');
-                    select.setProp('disabled', true);
-                    select.find('[selected], :selected').setAttr('selected', false);
-                    select.find('[selected], :selected').setProp('selected', false);
-                }
                 select.trigger('chosen:updated');
+            },
+
+            function checkTitle_(){
+                this.dom.find('.title-block-container').addClass('with-gallery-id');
+                this.dom.find('#check-title-button').trigger('click');
             },
 
             [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
@@ -62,9 +58,15 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.trigger('chosen:updated');
                     node.parent('.left-top-container').find('.add-category-btn').trigger('click');
                 }else{
-                    node.setData('value', node.getValue())
-                }
+                    if(this.dom.find('#public-check').checked() && node.getValue() && !node.getData('value')){
+                        this.dom.find('.title-block-container').addClass('with-gallery-id');
 
+                        if(this.dom.find('#title').getValue())
+                            this.dom.find('#check-title-button').trigger('click');
+                    }
+
+                    node.setData('value', node.getValue());
+                }
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],
