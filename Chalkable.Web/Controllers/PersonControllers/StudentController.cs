@@ -2,8 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
@@ -65,7 +67,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             var syId = GetCurrentSchoolYearId();
-            var res = (StudentInfoViewData)GetInfo(personId, personInfo=> StudentInfoViewData.Create(personInfo, syId));
+            var res = GetInfo(personId, personInfo=> StudentInfoViewData.Create(personInfo, syId));
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             var studentDetailsInfo = SchoolLocator.StudentService.GetById(personId, syId);
@@ -96,12 +98,27 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName, int? markingPeriodId)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-            int? teacherId = null;
-            if (myStudentsOnly == true && CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
-                teacherId = SchoolLocator.Context.PersonId;
+            
             int? classMatesToId = null;
+            int? teacherId = null;
             if (CoreRoles.STUDENT_ROLE == SchoolLocator.Context.Role)
                 classMatesToId = Context.PersonId;
+            else
+            {
+                if (myStudentsOnly == true)
+                {
+                    if (Context.Claims.HasPermission(ClaimInfo.VIEW_STUDENT) || Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_STUDENTS))
+                    {
+                        if (CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
+                            teacherId = SchoolLocator.Context.PersonId;
+                    }
+                    else
+                        throw new ChalkableException($"User has no required ({ClaimInfo.VIEW_STUDENT} or {ClaimInfo.VIEW_CLASSROOM_STUDENTS}) permission for watch \"My Students\"");
+                }
+                else
+                    if (!Context.Claims.HasPermission(ClaimInfo.VIEW_STUDENT))
+                        throw new ChalkableException($"User has no required ({ClaimInfo.VIEW_STUDENT}) permission for watch \"Whole Students\"");
+            }
             var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, classMatesToId, filter, byLastName != true, start ?? 0, count ?? 10, markingPeriodId);
             return Json(res.Transform(StudentViewData.Create));
         }
