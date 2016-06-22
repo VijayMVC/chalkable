@@ -1,5 +1,6 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -14,9 +15,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public decimal? GradeAvg { get; set; }
         public decimal? Absences { get; set; }
         public int? Discipline { get; set; }
+        public decimal? TotalOfDaysEnrolled { get; set; }
 
         public static StudentDetailsViewData Create(StudentDetails student, Ethnicity ethnicity, 
-            decimal? gradeAvg, decimal? absences, int? infractions, DateTime currentSchoolTime)
+            decimal? gradeAvg, ShortStudentAbsenceInfo absences, int? infractions, DateTime currentSchoolTime)
         {
             return new StudentDetailsViewData
             {
@@ -29,11 +31,12 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 Role = RoleViewData.Create(CoreRoles.STUDENT_ROLE),
                 IsHispanic = student.IsHispanic,
                 Ethnicity = ethnicity != null ? EthnicityViewData.Create(ethnicity) : null,
-                Absences = absences,
+                Absences = absences?.NumberOfAbsences,
                 Discipline = infractions,
                 GradeAvg = gradeAvg,
                 IsIEPActive = student.IsIEPActive(currentSchoolTime),
-                IsRetainedFromPrevSchoolYear = false
+                IsRetainedFromPrevSchoolYear = false,
+                TotalOfDaysEnrolled = absences?.NumberOfDaysEnrolled
             };
         }
     }
