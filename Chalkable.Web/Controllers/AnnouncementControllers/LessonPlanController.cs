@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
@@ -9,7 +8,6 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
-using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {

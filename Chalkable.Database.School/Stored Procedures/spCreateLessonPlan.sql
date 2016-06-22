@@ -45,8 +45,8 @@ Else
 
 		Set @announcementId = SCOPE_IDENTITY()
 
-		Insert Into LessonPlan (Id, ClassRef, StartDate, EndDate, LPGalleryCategoryRef, SchoolYearRef, VisibleForStudent, InGallery)
-		Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, 0, 0);
+		Insert Into LessonPlan (Id, ClassRef, StartDate, EndDate, LPGalleryCategoryRef, SchoolYearRef, VisibleForStudent, InGallery, GalleryOwnerRef)
+		Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, 0, 0, null);
 
 
 		/*GET CONTENT FROM PREV ANNOUNCEMENT*/

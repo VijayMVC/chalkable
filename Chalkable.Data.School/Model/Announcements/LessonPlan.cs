@@ -25,6 +25,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public int? ClassRef { get; set; }
         public bool VisibleForStudent { get; set; }
         public bool InGallery { get; set; }
+        public int? GalleryOwnerRef { get; set; }
 
         [NotDbFieldAttr]
         public int? PrimaryTeacherRef { get; set; }

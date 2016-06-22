@@ -22,6 +22,7 @@ LessonPlan.EndDate as EndDate,
 LessonPlan.LPGalleryCategoryRef as LPGalleryCategoryRef,
 LessonPlan.VisibleForStudent as VisibleForStudent,
 LessonPlan.InGallery as InGallery,
+LessonPlan.GalleryOwnerRef as GalleryOwnerRef,
 
 Staff.FirstName + ' ' + Staff.LastName as PrimaryTeacherName,
 Staff.Gender as PrimaryTeacherGender,

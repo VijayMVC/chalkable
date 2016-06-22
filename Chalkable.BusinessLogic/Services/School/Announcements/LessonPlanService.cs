@@ -229,6 +229,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.EndDate = endDate;
                 lessonPlan.VisibleForStudent = visibleForStudent;
                 lessonPlan.InGallery = inGallery;
+                lessonPlan.GalleryOwnerRef = Context.PersonId;
 
                 if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
                     lessonPlan.LpGalleryCategoryRef = lpGalleryCategoryId;
@@ -540,8 +541,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 if (!oldLessonPlan.LpGalleryCategoryRef.HasValue)
                     throw new ChalkableException($@"'{oldLessonPlan.Title}' was deleted from Gallery.");
 
-                if (!oldLessonPlan.IsOwner && !Context.Claims.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
-                    throw new ChalkableSecurityException("Current user has no access to replace lesson plan in gallery!");
+                if (!BaseSecurity.IsDistrictAdmin(Context) && oldLessonPlan.GalleryOwnerRef != Context.PersonId)
+                    throw new ChalkableException("Current user has no access to replace lesson plan in gallery!");
 
                 newLessonPlan.LpGalleryCategoryRef = oldLessonPlan.LpGalleryCategoryRef;
                 oldLessonPlan.LpGalleryCategoryRef = null;
@@ -554,15 +555,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center custumers can use lesson plan gallery 
 
             Trace.Assert(Context.PersonId.HasValue);
-            DoUpdate(u =>
+            using (var uow = Update())
             {
-                var da = CreateLessonPlanDataAccess(u);
-                var lp = da.GetLessonPlanTemplate(lessonPlanId, Context.PersonId.Value);
-                if (!lp.IsOwner && !Context.Claims.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
-                    throw new ChalkableSecurityException("Current user has no access to remove lesson plan from gallery!");
-                lp.LpGalleryCategoryRef = null;
-                da.Update(lp);
-            });
+                var da = CreateLessonPlanDataAccess(uow);
+                var lessonPlan = da.GetAnnouncement(lessonPlanId, Context.PersonId.Value);
+                if (!BaseSecurity.IsDistrictAdmin(Context) && lessonPlan.GalleryOwnerRef != Context.PersonId)
+                    throw new ChalkableException("Current user has no access to remove lesson plan from gallery!");
+                da.Delete(lessonPlanId);
+                uow.Commit();
+            }
         }
 
         public void CopyToGallery(int fromAnnouncementId, int toAnnouncementId)
