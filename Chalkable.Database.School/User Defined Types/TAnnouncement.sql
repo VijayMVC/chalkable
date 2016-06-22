@@ -16,6 +16,6 @@
     [WeightAddition]           DECIMAL (18)   NULL,
     [WeightMultiplier]         DECIMAL (18)   NULL,
     [MayBeDropped]             BIT            NOT NULL,
-    [Title]                    NVARCHAR (30)  NULL,
+    [Title]                    NVARCHAR (101)  NULL,
     [VisibleForStudent]        BIT            NOT NULL);
 

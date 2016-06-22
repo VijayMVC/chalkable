@@ -56,14 +56,16 @@ Values(@content, GETDATE(), 0, @title)
 
 Set @announcementId = SCOPE_IDENTITY()
 
-Insert Into LessonPlan(Id, ClassRef, StartDate, EndDate, GalleryCategoryRef, SchoolYearRef, VisibleForStudent)
-Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, @visibleForStudent)
+Insert Into LessonPlan(Id, ClassRef, StartDate, EndDate, LpGalleryCategoryRef, SchoolYearRef, VisibleForStudent, InGallery, GalleryOwnerRef)
+Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, @visibleForStudent, 0, null)
 End
 
 Insert Into AnnouncementStandard(AnnouncementRef, StandardRef)
-Select @announcementId, StandardRef
-From AnnouncementStandard
-Where AnnouncementRef = @lessonPlanTemplateId
+Select @announcementId, AnnouncementStandard.StandardRef
+From AnnouncementStandard 
+Join ClassStandard on AnnouncementStandard.StandardRef = ClassStandard.StandardRef
+Join Class on Class.Id = ClassStandard.ClassRef or Class.CourseRef = ClassStandard.ClassRef
+Where AnnouncementRef = @lessonPlanTemplateId AND Class.Id = @classId
 
 
 exec spGetLessonPlanDetails @announcementId, @personId, @callerRole, @schoolYearId

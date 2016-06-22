@@ -23,8 +23,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var node = this.dom.find('.lp-gallery-search');
                 node.setValue('');
                 this.submitFormWithStart(node);
-                //this.dom.find('.file-search-img').removeClass('opacity0');
-                //this.dom.find('.file-search-close').addClass('opacity0');
             },
 
             [ria.mvc.DomEventBind('keyup', '.lp-gallery-search')],
@@ -36,8 +34,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     timeout = setTimeout(function(){
                         this.submitFormWithStart(node);
                     }.bind(this), 500);
-                    //this.dom.find('.file-search-img').addClass('opacity0');
-                    //this.dom.find('.file-search-close').removeClass('opacity0');
                 }else{
                     if(!value.length)
                         this.clearSearch();

@@ -411,5 +411,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
         }
 
+        public void CopyStandardsToAnnouncement(int fromAnnouncementId, int toAnnouncementId, int announcementType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

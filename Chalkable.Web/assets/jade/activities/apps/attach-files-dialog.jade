@@ -59,8 +59,8 @@ announcementType = options.getAnnouncementType()
                     span.files-count 0
                     |&#32;Files Uploaded
     if assignedAttributeId
-        +ActionLink('announcement', 'refreshAttribute', announcementId, announcementType, assignedAttributeId).refresh-attachments.x-hidden
+        +ActionLink('announcement', 'refreshAttribute', announcementId, announcementType, assignedAttributeId, options.isDialog()).refresh-attachments.x-hidden
     else
-        +ActionLink('announcement', 'refreshAttachments', announcementId, announcementType).refresh-attachments.x-hidden
+        +ActionLink('announcement', 'refreshAttachments', announcementId, announcementType, options.isDialog()).refresh-attachments.x-hidden
 
 

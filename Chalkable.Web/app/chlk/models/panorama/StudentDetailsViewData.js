@@ -21,6 +21,7 @@ NAMESPACE('chlk.models.panorama', function () {
             this.gradeAvg = SJX.fromValue(raw.gradeavg, Number);
             this.absences = SJX.fromValue(raw.absences, Number);
             this.discipline = SJX.fromValue(raw.discipline, Number);
+            this.totalOfDaysEnrolled = SJX.fromValue(raw.totalofdaysenrolled, Number);
         },
 
             Boolean, 'hispanic',
@@ -29,6 +30,28 @@ NAMESPACE('chlk.models.panorama', function () {
             chlk.models.people.EthnicityViewData, 'ethnicity',
             Number, 'gradeAvg',
             Number, 'absences',
-            Number, 'discipline'
+            Number, 'discipline',
+            Number, 'totalOfDaysEnrolled',
+
+            function getAbsencesClass(){
+                if(this.getAbsences() !== null && (this.getAbsences() / this.getTotalOfDaysEnrolled() > 0.1))
+                    return 'red';
+
+                return 'green';
+            },
+
+            function getDisciplineClass(){
+                if(this.getDiscipline() !== null && (this.getDiscipline() / this.getTotalOfDaysEnrolled() > 0.1))
+                    return 'red';
+
+                return 'green';
+            },
+
+            function getGradeAvgClass(){
+                if(this.getGradeAvg() !== null && this.getGradeAvg() < 65)
+                    return 'red';
+
+                return 'green';
+            }
     ]);
 });

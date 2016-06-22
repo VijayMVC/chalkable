@@ -1,3 +1,7 @@
+.lesson-plan-form-dialog
+  .dialog
+    width: 880px
+
 .double-select.chosen-container.chosen-with-drop
   LI.active-result
     overflow: hidden
@@ -417,8 +421,18 @@
       &>*
         vertical-align: middle
 
-      &>LABEL[FOR]
+      &:not(.gallery)>LABEL[FOR]
         min-width: 165px
+
+      &.gallery
+        >LABEL[FOR]
+          &:not(:last-child)
+            margin-right: 10px
+
+          &:not(:first-child)
+            margin-left: 5px
+            font-weight: normal
+
 
   .advanced-options-container
     position: absolute

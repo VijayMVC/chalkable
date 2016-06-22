@@ -10,7 +10,6 @@
 	@start int, 
 	@count int,
 	@complete bit, 
-	@galleryCategoryId int,
 	@sort bit,
 	@includeFrom bit,
 	@includeTo bit
@@ -37,8 +36,7 @@ insert into @tempLP
 		@ownedOnly, 
 		@fromDate, 
 		@toDate, 
-		@complete, 
-		@galleryCategoryId 
+		@complete
 
 exec spInternalSortAdminOrLp @tempLP, @tempAA, @tempSA, 0, 0, 0, @sort, @fromDate, @toDate, @start, @count, @includeFrom, @includeTo
 

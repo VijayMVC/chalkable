@@ -101,7 +101,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             Trace.Assert(Context.PersonId.HasValue);
 
-            var assesmentId = (!ApplicationSecurity.HasStudyCenterAccess(Context) && !ApplicationSecurity.HasAssessmentEnabled(Context)) ? null : MasterLocator.ApplicationService.GetAssessmentId();
+            var assesmentId = !ApplicationSecurity.HasStudyCenterAccess(Context) ? null : MasterLocator.ApplicationService.GetAssessmentId();
             var type = (AnnouncementTypeEnum?)announcementType ?? AnnouncementTypeEnum.Class;
             var canAddStandard = SchoolLocator.GetAnnouncementService(type).CanAddStandard(announcementId);
             var isAppEnabled = BaseSecurity.IsDistrictOrTeacher(Context) && Context.SCEnabled;

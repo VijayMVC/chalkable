@@ -249,7 +249,6 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
-            ViewData[ViewConstants.ASSESSMENT_ENABLED] = Context.AssessmentEnabled;
             ViewData[ViewConstants.MESSAGING_DISABLED] = Context.MessagingDisabled;
             ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
             ViewData[ViewConstants.SIS_API_VERSION] = Context.SisApiVersion;

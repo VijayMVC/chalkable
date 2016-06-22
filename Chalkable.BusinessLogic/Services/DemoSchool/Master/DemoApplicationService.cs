@@ -183,7 +183,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         }
         public Guid? GetAssessmentId()
         {
-            var id = PreferenceService.Get(Context.AssessmentEnabled ? Preference.NEW_ASSESSMENT_APLICATION_ID : Preference.ASSESSMENT_APLICATION_ID).Value;
+            var id = PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value;
             Guid res;
             return Guid.TryParse(id, out res) ? res : (Guid?)null;
         }

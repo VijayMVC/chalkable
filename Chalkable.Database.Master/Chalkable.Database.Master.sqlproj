@@ -129,7 +129,6 @@
     <Build Include="User Defined Types\TUser.sql" />
     <Build Include="User Defined Types\TUserLoginInfo.sql" />
     <Build Include="Stored Procedures\spUpdateMessagingSettings.sql" />
-    <Build Include="Stored Procedures\spUpdateAssessmentEnabled.sql" />
     <Build Include="Tables\UserLog.sql" />
     <Build Include="Tables\ApplicationSchoolOption.sql" />
     <Build Include="Stored Procedures\spBanSchoolsByIds.sql" />
@@ -137,7 +136,6 @@
     <Build Include="Stored Procedures\spGetApplicationBanInfo.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PreDeploy Include="Scripts\Pre-Deploy\001_addIsAssessmentEnabledToSchool.PreDeployment.sql" />
     <None Include="Scripts\Pre-Deploy\002_HasDistricAdminSettingsToHasDistrictAdminSettings.PreDeployment.sql" />
     <None Include="Scripts\Pre-Deploy\003_ApplicationChangeProvidesRecomendedContentToProvidesRecommendedContent.PreDeployment.sql" />
     <None Include="Scripts\Pre-Deploy\004_Paid_apps_cleaning.PreDeployment.sql" />

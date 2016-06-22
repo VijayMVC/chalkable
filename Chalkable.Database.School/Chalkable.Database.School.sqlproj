@@ -354,7 +354,8 @@
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PreDeploy Include="Scripts\Pre-Deploy\Paid_apps_cleaning.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\Paid_apps_cleaning.PreDeployment.sql" />
+    <PreDeploy Include="Scripts\Pre-Deploy\001_LessonPlan_GalleryCategoryRef_To_LpGalleryCategoryRef.PreDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
