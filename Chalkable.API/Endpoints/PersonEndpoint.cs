@@ -13,5 +13,9 @@ namespace Chalkable.API.Endpoints
         {
             return await Connector.Get<SchoolPerson>("/Person/Me.json");
         }
+        public async Task<SchoolPerson> GetStudentInfo(int personId)
+        {
+            return await Connector.Get<SchoolPerson>($"/Student/Info.json?personId={personId}");
+        }
     }
 }
