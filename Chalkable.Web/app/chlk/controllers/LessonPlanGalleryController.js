@@ -34,11 +34,11 @@ NAMESPACE('chlk.controllers', function () {
                 Number,
                 Number
             ]],
-            function galleryAction(){
+            function galleryAction(categoryType_, filter_, sortType_, start_, count_){
                 var state = chlk.models.announcement.StateEnum.SUBMITTED,
-                    categoryType = this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, null);
+                    categoryType = categoryType_ || this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, null);
                 var result = ria.async.wait([
-                    this.lessonPlanService.getLessonPlanTemplatesList(categoryType, null, null, state),
+                    this.lessonPlanService.getLessonPlanTemplatesList(categoryType, filter_, sortType_, state, start_, count_),
                     this.lpGalleryCategoryService.list()
                 ])
                     .attach(this.validateResponse_())
@@ -48,14 +48,14 @@ NAMESPACE('chlk.controllers', function () {
                         return new chlk.models.announcement.LessonPlanGalleryViewData(
                             lessonPlans,
                             lessonPlanCategories,
-                            chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
+                            sortType_ || chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
                             null,
                             categoryType,
-                            null,
+                            filter_,
                             this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)
                         );
                     }, this);
-                return this.PushView(chlk.activities.announcement.LessonPlanGalleryPage, result);
+                return this.PushOrUpdateView(chlk.activities.announcement.LessonPlanGalleryPage, result);
             },
 
             [chlk.controllers.NotChangedSidebarButton()],
