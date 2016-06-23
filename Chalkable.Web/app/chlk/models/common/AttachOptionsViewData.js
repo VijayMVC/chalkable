@@ -30,8 +30,8 @@ NAMESPACE('chlk.models.common', function () {
 
             VOID, function deserialize(raw) {
                 this.assessmentAppId = SJX.fromValue(raw.assessmentapplicationid, chlk.models.id.AppId);
-                console.log(raw.assessmentapplicationid);
-                console.log(this.assessmentAppId);
+                //console.log(raw.assessmentapplicationid);
+                //console.log(this.assessmentAppId);
 
                 if(this.assessmentAppId)
                     this.assessmentAttachEnabled = true;

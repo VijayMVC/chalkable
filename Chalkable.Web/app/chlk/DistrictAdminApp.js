@@ -54,7 +54,7 @@ NAMESPACE('chlk', function (){
                 
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
-                    isAssessmentEnabled: isAssessmentEnabled,
+                    isAssessmentEnabled: isAssessmentEnabled || isStudyCenterEnabled,
                     isClassesEnabled: isClassesEnabled
                 };
                 return BASE()
