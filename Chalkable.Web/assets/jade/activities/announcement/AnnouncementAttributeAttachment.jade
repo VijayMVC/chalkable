@@ -1,0 +1,22 @@
+mixin AttributeAttachment_(attachment)
+    .file-attachment(
+        id='file-attribute-attachment-' + attachment.getAttributeId(),
+        data-attachment-id=attachment.getId(),
+        data-sti-attachment=attachment.isStiAttachment() == true ? "true" : "false",
+        data-uuid=attachment.getUuid(),
+        data-name=attachment.getName(),
+        data-mime-type=attachment.getMimeType()
+    )
+        if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+            A(href=attachment.getUrl()).download-link.attachment-name=attachment.getName()
+        else
+            +ActionLink('announcement', 'viewAttributeAttachment', attachment.getAttributeId(), attachment.getAnnouncementType(),
+            attachment.getAnnouncementId()).attachment-name=attachment.getName()
+        if !attachment.isReadOnly()
+            +ActionLink('announcement', 'removeAttributeAttachment', attachment.getAnnouncementType(),
+            attachment.getAnnouncementId(), attachment.getAttributeId()).remove-file-attachment
+
++AttributeAttachment_(self)
+
+
+

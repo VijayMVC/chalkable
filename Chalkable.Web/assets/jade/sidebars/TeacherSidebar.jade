@@ -1,0 +1,21 @@
++ActionLink('feed', 'doToList').inbox(title="View Feed") Feed
++ActionLink('announcement','index').add-new.new-item(title="Add new item") New Item
++ActionLink('attendance', 'index').attendance(title="View Attendance") Attendance
++ActionLink('grading', 'index').statistic.grades(title="View Grades") Grades
+if self.isAppStoreEnabled
+    +ActionLink('apps', 'myApps').apps(title="View Apps") Apps
+if self.isAssessmentEnabled
+    +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
++ActionLink('calendar', 'index').calendar(title="View Calendar") Calendar
++ActionLink('schools', 'classesSummary').classes(title="View Classes") Classes
+if self.isAppStoreEnabled
+    +ActionLink('lessonplangallery', 'gallery').gallery(title="View Gallery") Gallery
++ActionLink('discipline', 'index').discipline(title="View Discipline") Discipline
+if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
+    a(href="/Home/LearningEarnings", target="blank").le(title="View Learning Earnings", target="blank") LE
+if self.isLEEnabled && !self.isLinkEnabled
+    +ActionLink('error', 'learningEarningsDisabled').le(title="View Learning Earnings", target="blank") LE
+if !self.isMessagingDisabled
+    +ActionLink('message', 'page', false, true).messages(title="View Messages") Messages
++ActionLink('students', 'index').people(title="View People") People
++ActionLink('settings', 'dashboardTeacher').settings(title="View Settings") Settings
