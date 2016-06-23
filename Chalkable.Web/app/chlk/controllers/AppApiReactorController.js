@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
+REQUIRE('chlk.services.AttachmentService');
 REQUIRE('chlk.models.common.Button');
 REQUIRE('chlk.activities.apps.AttachAppsDialog');
 REQUIRE('chlk.activities.apps.AppShadeDialog');
@@ -16,6 +17,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
+
+            [ria.mvc.Inject],
+            chlk.services.AttachmentService, 'attachmentService',
 
             [[Object]],
             function addAppBeginAction(data) {
@@ -168,6 +172,20 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (data) {
                         return data.map(function (_) { return _.serialize(); });
                     }, this)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
+            [[Object]],
+            function showFileUploadAction(data) {
+                this.WidgetStart('attach', 'start', [])
+                    .then(function (ids) {
+                        return this.attachmentService.getByIds(ids.map(chlk.models.id.AttachmentId))
+                    }, this)
+                    .then(function (models) {
+                        return models.getItems().map(function (x) { return x.serialize() });
+                    })
                     .then(this._replayTo(data));
 
                 return null;

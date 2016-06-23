@@ -70,6 +70,7 @@ REQUIRE('chlk.AppApiHost');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 REQUIRE('chlk.lib.mvc.ChlkView');
 REQUIRE('chlk.controllers.ErrorController');
+REQUIRE('chlk.controllers.AttachController');
 
 NAMESPACE('chlk', function (){
 

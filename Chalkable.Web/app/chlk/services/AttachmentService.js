@@ -28,6 +28,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[ArrayOf(chlk.models.id.AttachmentId)]],
+            ria.async.Future, function getByIds(ids){
+                return this.getPaginatedList('Attachment/List.json', chlk.models.attachment.Attachment, {
+                    ids: this.arrayToIds(ids)
+                });
+            },
+
             [[chlk.models.id.AttachmentId, Boolean, Number, Number]],
             String, function getDownloadUri(attachmentId, needsDownload, width, height) {
                 return this.getUrl('Attachment/DownloadAttachment', {

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Runtime.Remoting.Contexts;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
 using Chalkable.Common.Web;
 
 namespace Chalkable.Web.Models
@@ -18,6 +21,7 @@ namespace Chalkable.Web.Models
         public DateTime LastAttached { get; set; }
         public bool IsOwner { get; set; }
         public bool IsTeacherAttachment { get; set; }
+        public string PublicUrl { get; set; }
 
         public static AttachmentViewData Create(AttachmentInfo attachmentInfo, bool isOwner)
         {
@@ -42,6 +46,17 @@ namespace Chalkable.Web.Models
         public static AttachmentViewData Create(AttachmentInfo attachmentInfo, int? currentPersonId = null)
         {
             return Create(attachmentInfo, currentPersonId == attachmentInfo.Attachment.PersonRef);
+        }
+        public static AttachmentViewData Create(AttachmentInfo attachmentInfo, UserContext context, bool isOwner)
+        {
+            var r = AttachmentSecurityTools.ComputeRequestStr(context.DistrictId.Value, context.SchoolLocalId.Value, context.UserId, attachmentInfo.Attachment.Id);
+            var model = Create(attachmentInfo, isOwner);
+            model.PublicUrl = $"/Attachment/PublicAttachment?r={r}";
+            return model;
+        }
+        public static AttachmentViewData Create(AttachmentInfo attachmentInfo, UserContext context)
+        {
+            return Create(attachmentInfo, context, context.PersonId == attachmentInfo.Attachment.PersonRef);
         }
     }
 }

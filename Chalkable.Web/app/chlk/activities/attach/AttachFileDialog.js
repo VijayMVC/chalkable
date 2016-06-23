@@ -13,10 +13,17 @@ NAMESPACE('chlk.activities.attach', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attach.AttachmentTpl, 'attachment-progress')],
             VOID, function attachmentProgress(tpl, model, msg_) {
+                console.log('attachmentProgress', model);
+
                 var node = this.dom.find('.attachment-file[data-index=' + model.getFileIndex() + ']');
                 if(node.exists()){
-                    var percents = model.getLoaded() * 100 / model.getTotal();
-                    node.find('.progress').setCss('width', percents + '%');
+                    var percents = Math.round(model.getLoaded() * 100 / model.getTotal());
+                    if (model.getId()) {
+                        ria.dom.Dom(tpl.render()).insertAfter(node);
+                        node.remove();
+                    } else {
+                        node.find('.progress').setCss('width', percents + '%');
+                    }
                 }else{
                     this.dom.find('.files-container').appendChild(tpl.render());
                 }
@@ -30,7 +37,7 @@ NAMESPACE('chlk.activities.attach', function () {
                 }
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttachmentTpl, 'delete-attachment')],
+            [ria.mvc.PartialUpdateRule(chlk.templates.attach.AttachmentTpl, 'delete-attachment')],
             VOID, function attachmentDelete(tpl, model, msg_) {
                 var btn = this.dom.find('#add-file-attachment');
 
@@ -39,7 +46,7 @@ NAMESPACE('chlk.activities.attach', function () {
                 countNode.setText((parseInt(countNode.getText(), 10) - 1).toString());
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttachmentTpl, 'cancel-attachment-upload')],
+            [ria.mvc.PartialUpdateRule(chlk.templates.attach.AttachmentTpl, 'cancel-attachment-upload')],
             VOID, function cancelAttachmentUpload(tpl, model, msg_){
                this.removeAttachmentFromProgressBar_(model);
             },
@@ -56,16 +63,6 @@ NAMESPACE('chlk.activities.attach', function () {
                 }
                 btn.setValue('');
 
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttachmentTpl, chlk.activities.lib.DontShowLoader())],
-            VOID, function attachmentUploaded(tpl, model, msg_) {
-                var node = this.dom.find('.attachment-file[data-index=' + model.getFileIndex() + ']');
-                ria.dom.Dom(tpl.render()).insertAfter(node);
-                node.remove();
-                var countNode = this.dom.find('.files-count');
-                countNode.setHTML((parseInt(countNode.getText(), 10) + 1).toString());
-                this.dom.find('#add-file-attachment').setValue('');
             },
 
             [ria.mvc.DomEventBind('click', '.delete-attachment')],

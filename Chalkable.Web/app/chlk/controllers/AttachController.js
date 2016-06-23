@@ -3,10 +3,11 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AttachmentService');
 REQUIRE('chlk.services.ApplicationService');
 
-REQUIRE('chlk.activities.announcement.AttachFilesDialog');
+REQUIRE('chlk.activities.attach.AttachFileDialog');
 
 NAMESPACE('chlk.controllers', function () {
 
+    /** @class chlk.controllers.AttachController */
     CLASS(
         'AttachController', EXTENDS(chlk.controllers.BaseController), [
 
@@ -28,16 +29,64 @@ NAMESPACE('chlk.controllers', function () {
             ]],
             function startWidgetAction(requestId) {
 
-                var options = chlk.models.common.AttachOptionsViewData.$create(false, false, null, false, "");
+                var data = new chlk.models.common.BaseAttachViewData();
 
-                this.getContext().getSession().set('AttachWidget_RequestId', requestId);
-                this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
-
-                var data = new chlk.models.common.BaseAttachViewData(options);
+                data.setRequestId(requestId);
 
                 var result = ria.async.Future.$fromData(data);
 
                 return this.ShadeOrUpdateView(chlk.activities.attach.AttachFileDialog, result);
+            },
+
+            [[Number, Object]],
+            function uploadFileAction(fileIndex, files) {
+
+                var all = [].slice.call(files).map(function (file, index) {
+                    var model = new chlk.models.attachment.Attachment();
+                    model.setFileIndex(fileIndex + index);
+                    model.setTotal(file.size);
+                    model.setLoaded(0);
+                    model.setName(file.name);
+                    this.BackgroundUpdateView(chlk.activities.attach.AttachFileDialog, model, 'attachment-progress');
+
+                    return this.attachmentService
+                        .uploadAttachment([file])
+                        .handleProgress(function(event) {
+                            var model = new chlk.models.attachment.Attachment();
+                            model.setFileIndex(fileIndex + index);
+                            model.setTotal(event.total);
+                            model.setLoaded(event.loaded);
+                            model.setName(file.name);
+                            this.BackgroundUpdateView(chlk.activities.attach.AttachFileDialog, model, 'attachment-progress');
+                        }, this)
+                        .catchError(this.handleExceptions_)
+                        .attach(this.validateResponse_())
+                        .then(function (model) {
+                            model.setFileIndex(fileIndex + index);
+                            this.BackgroundUpdateView(chlk.activities.attach.AttachFileDialog, model, 'attachment-progress');
+                            return model;
+                        }, this);
+
+                }.bind(this));
+
+                //ria.async.wait(all)
+                //    .then(function(data) {
+                //
+                //    }, this);
+
+                return null;
+            },
+
+            [[Object]],
+            function completeAction(data) {
+                console.log(data.id);
+
+                this.BackgroundCloseView(chlk.activities.attach.AttachFileDialog);
+                this.WidgetComplete(data.requestId, data.id);
+            },
+
+            function handleExceptions_(error){
+                throw error;
             }
         ]);
 });
