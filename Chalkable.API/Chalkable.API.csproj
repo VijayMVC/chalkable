@@ -65,6 +65,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IBaseController.cs" />
+    <Compile Include="Endpoints\AttachmentEndpoint.cs" />
     <Compile Include="Endpoints\AnnouncementEndpoint.cs" />
     <Compile Include="Endpoints\AttendanceEndpoint.cs" />
     <Compile Include="Endpoints\Base.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Models\AnnouncementApplication.cs" />
     <Compile Include="Models\Announcement.cs" />
     <Compile Include="Models\ApplicationContent.cs" />
+    <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\ClassAnnouncement.cs" />
     <Compile Include="Models\ExceptionViewData.cs" />
     <Compile Include="Models\LessonPlan.cs" />

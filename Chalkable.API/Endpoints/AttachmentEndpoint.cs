@@ -16,11 +16,5 @@ namespace Chalkable.API.Endpoints
             var url = $"/Attachment/Upload.json";
             return await Connector.Put<Attachment>($"{url}filename={fileName}", stream);
         }
-
-        public async Task<IList<AnnouncementApplicationRecipient>> GetRead(int id)
-        {
-            var url = $"/Attachment/Read.json";
-            return await Connector.Get<IList<AnnouncementApplicationRecipient>>($"{url}?attachmentId={id}");
-        }
     }
 }
