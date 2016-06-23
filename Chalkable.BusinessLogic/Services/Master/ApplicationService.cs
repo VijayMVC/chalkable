@@ -218,7 +218,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 : null;
 
             Guid res;
-            return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;
+            return key != null ? (Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null) : null;
         }
 
         public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)
