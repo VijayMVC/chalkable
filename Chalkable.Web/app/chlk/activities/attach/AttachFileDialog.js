@@ -13,68 +13,50 @@ NAMESPACE('chlk.activities.attach', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attach.AttachmentTpl, 'attachment-progress')],
             VOID, function attachmentProgress(tpl, model, msg_) {
-                console.log('attachmentProgress', model);
-
                 var node = this.dom.find('.attachment-file[data-index=' + model.getFileIndex() + ']');
-                if(node.exists()){
-                    var percents = Math.round(model.getLoaded() * 100 / model.getTotal());
-                    if (model.getId()) {
-                        ria.dom.Dom(tpl.render()).insertAfter(node);
-                        node.remove();
-                    } else {
-                        node.find('.progress').setCss('width', percents + '%');
-                    }
-                }else{
+                if(!node.exists()) {
                     this.dom.find('.files-container').appendChild(tpl.render());
+
+                } else if (model.getId()) {
+                    ria.dom.Dom(tpl.render()).insertAfter(node);
+                    node.remove();
+
+                } else {
+                    var percents = Math.round(model.getLoaded() * 100 / model.getTotal());
+                    node.find('.progress').setCss('width', percents + '%');
                 }
 
-                if(this.dom.find('#is-for-attribute').getValue()){
+                if (this.dom.find('#is-for-attribute').getValue()) {
                     var btn = this.dom.find('#add-file-attachment');
                     btn.setAttr('disabled', 'disabled');
                     btn.setProp('disabled', true);
                     btn.parent('.for-attribute').addClass('disabled-upload');
                     btn.parent('.upload-button').removeClass('enabled');
                 }
+
+                this.updateFileCounter_();
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.attach.AttachmentTpl, 'delete-attachment')],
-            VOID, function attachmentDelete(tpl, model, msg_) {
+            VOID, function updateFileCounter_() {
+                var count = this.dom.find('.attachment-file').count();
+
+                this.dom.find('.files-count').setText(count.toString());
+                this.dom.find('#attach-files-btn').toggleAttr('disabled', count == 0);
+
+                var isSingle = this.dom.find('#is-for-attribute').getValue();
+
                 var btn = this.dom.find('#add-file-attachment');
-
-                this.removeAttachmentFromProgressBar_(model);
-                var countNode = this.dom.find('.files-count');
-                countNode.setText((parseInt(countNode.getText(), 10) - 1).toString());
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.attach.AttachmentTpl, 'cancel-attachment-upload')],
-            VOID, function cancelAttachmentUpload(tpl, model, msg_){
-               this.removeAttachmentFromProgressBar_(model);
-            },
-
-
-            VOID, function removeAttachmentFromProgressBar_(model){
-                this.dom.find('.attachment-file[data-index=' + model.getFileIndex() + ']').remove();
-                var btn = this.dom.find('#add-file-attachment');
-                if(this.dom.find('#is-for-attribute').getValue()){
-                    btn.removeAttr('disabled');
-                    btn.setProp('disabled', false);
-                    btn.parent('.for-attribute').removeClass('disabled-upload');
-                    btn.parent('.upload-button').addClass('enabled');
-                }
+                btn.toggleAttr('disabled', isSingle && count > 0);
+                btn.setProp('disabled', isSingle && count > 0);
+                btn.parent('.for-attribute').toggleClass('disabled-upload', isSingle && count > 0);
+                btn.parent('.upload-button').toggleClass('enabled', !(isSingle && count > 0));
                 btn.setValue('');
-
             },
 
             [ria.mvc.DomEventBind('click', '.delete-attachment')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function deleteClick(node, event){
-                node.parent('.attachment-file').addClass('pending').addClass('deleting');
-            },
-
-            OVERRIDE, VOID, function onStop_() {
-                if(this.dom.find('.attachment-file').count())
-                    this.dom.find('.refresh-attachments').trigger('click');
-                BASE();
+            VOID, function deleteAttachment(node, event) {
+                node.parent().removeSelf();
+                this.updateFileCounter_();
             }
         ]);
 });

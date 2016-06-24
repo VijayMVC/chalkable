@@ -63,6 +63,8 @@ NAMESPACE('chlk.controllers', function () {
                         .attach(this.validateResponse_())
                         .then(function (model) {
                             model.setFileIndex(fileIndex + index);
+                            model.setTotal(file.size);
+                            model.setLoaded(file.size);
                             this.BackgroundUpdateView(chlk.activities.attach.AttachFileDialog, model, 'attachment-progress');
                             return model;
                         }, this);
