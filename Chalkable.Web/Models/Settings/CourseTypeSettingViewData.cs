@@ -26,6 +26,9 @@ namespace Chalkable.Web.Models.Settings
         {
             var res = new List<CourseTypeSettingViewData>();
 
+            if (settings == null)
+                return res;
+
             settings = settings.Where(x => courseTypes.Any(y => x.CourseTypeId == y.Id)).ToList();
             foreach (var courseTypeSetting in settings)
             {
