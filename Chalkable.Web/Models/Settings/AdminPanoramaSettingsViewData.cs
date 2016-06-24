@@ -18,7 +18,7 @@ namespace Chalkable.Web.Models.Settings
             return new AdminPanoramaSettingsViewData
             {
                 PreviousYearsCount = settings.PreviousYearsCount,
-                StudentDefaultSettings = settings.StudentDefaultSettings.Select(StandardizedTestFilterViewData.Create).ToList(),
+                StudentDefaultSettings = settings.StudentDefaultSettings?.Select(StandardizedTestFilterViewData.Create).ToList(),
                 CourseTypeDefaultSettings = CourseTypeSettingViewData.Create(settings.CourseTypeDefaultSettings, courseTypes)
             };
         }
