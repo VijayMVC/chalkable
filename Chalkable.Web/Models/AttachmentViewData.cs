@@ -51,7 +51,7 @@ namespace Chalkable.Web.Models
         {
             var r = AttachmentSecurityTools.ComputeRequestStr(context.DistrictId.Value, context.SchoolLocalId.Value, context.UserId, attachmentInfo.Attachment.Id);
             var model = Create(attachmentInfo, isOwner);
-            model.PublicUrl = $"/Attachment/PublicAttachment?r={r}";
+            model.PublicUrl = $"/Attachment/PublicAttachment?r={Uri.EscapeDataString(r)}";
             return model;
         }
         public static AttachmentViewData Create(AttachmentInfo attachmentInfo, UserContext context)
