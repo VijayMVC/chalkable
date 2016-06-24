@@ -25,7 +25,7 @@ NAMESPACE('chlk.templates.classes', function () {
                 var data = [];
 
                 test.getDailyStats().forEach(function(item){
-                    data.push(parseInt(item.getSummary(), 10), item.getNumber())
+                    data.push([item.getDate().getDate().getTime(), item.getNumber()])
                 });
 
                 return {
