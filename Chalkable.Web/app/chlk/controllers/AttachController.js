@@ -84,7 +84,7 @@ NAMESPACE('chlk.controllers', function () {
                 console.log(data.id);
 
                 this.BackgroundCloseView(chlk.activities.attach.AttachFileDialog);
-                this.WidgetComplete(data.requestId, data.id);
+                this.WidgetComplete(data.requestId, data.id.filter(function (x) { return x }));
             },
 
             function handleExceptions_(error){
