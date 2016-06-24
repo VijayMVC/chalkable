@@ -9,13 +9,20 @@ NAMESPACE('chlk.models.panorama', function () {
 
     /** @class chlk.models.panorama.CourseTypeSettingViewData*/
     CLASS(
-        UNSAFE, 'StandardizedTestFilterViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+        UNSAFE, 'CourseTypeSettingViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
             chlk.models.classes.CourseType, 'courseType',
             ArrayOf(chlk.models.profile.StandardizedTestFilterViewData), 'standardizedTestFilters',
 
             VOID, function deserialize(raw) {
                 this.courseType = SJX.fromDeserializable(raw.coursetype, chlk.models.classes.CourseType);
                 this.standardizedTestFilters = SJX.fromArrayOfDeserializables(raw.standardizedtestfilters, chlk.models.profile.StandardizedTestFilterViewData);
+            },
+
+            [[chlk.models.classes.CourseType]],
+            function $(courseType_){
+                BASE();
+                if(courseType_)
+                    this.setCourseType(courseType_);
             }
         ]);
 });

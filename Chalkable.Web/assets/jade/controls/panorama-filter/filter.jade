@@ -19,6 +19,6 @@ mixin PanoramaFilter(years, standardizedTests, values, classId)
                         -var model = new chlk.models.controls.PanoramaFilterBlockViewData(standardizedTests, item.getId(), item.getScoreTypeId(), item.getComponentId())
                         +RenderWith(model, chlk.templates.controls.PanoramaFilterBlockTpl)
             .add-filter-container
-                .add-filter-btn +
+                .add-circle-btn.add-filter-btn +
                 span.light-grey Add filter
 

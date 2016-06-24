@@ -14,6 +14,7 @@ REQUIRE('chlk.models.school.SchoolClassesStatisticViewData');
 REQUIRE('chlk.models.classes.ClassDisciplinesSummary');
 REQUIRE('chlk.models.classes.ClassAttendanceSummary');
 REQUIRE('chlk.models.profile.ClassPanoramaViewData');
+REQUIRE('chlk.models.classes.CourseType');
 
 REQUIRE('chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData');
 REQUIRE('chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData');
@@ -90,8 +91,8 @@ NAMESPACE('chlk.services', function () {
                     }, this);
             },
 
-            ria.async.Future, function getCourseTypes(classId, data_) {
-                return this.get('Class/AllCourseTypes.json', ArrayOf(chlk.models.classes.CourseType));
+            ria.async.Future, function getCourseTypes() {
+                return this.get('Class/CourseTypes.json', ArrayOf(chlk.models.classes.CourseType));
             },
 
             //[[chlk.models.id.ClassId, Object]],

@@ -3,6 +3,8 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.district.DistrictShortSummaryViewData');
 REQUIRE('chlk.models.admin.BaseStatistic');
 REQUIRE('chlk.models.admin.AdminDistrictSettings');
+REQUIRE('chlk.models.profile.StandardizedTestViewData');
+REQUIRE('chlk.models.panorama.AdminPanoramaSettingsViewData');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -27,6 +29,18 @@ NAMESPACE('chlk.services', function () {
 
             ria.async.Future, function getSettings(){
                 return this.get('AdminDistrict/Settings.json', chlk.models.admin.AdminDistrictSettings);
-            }
+            },
+
+            ria.async.Future, function getStandardizedTests(){
+                return this.get('AdminDistrict/StandardizedTests.json', ArrayOf(chlk.models.profile.StandardizedTestViewData));
+            },
+
+            ria.async.Future, function getPanoramaSettings(){
+                return this.get('AdminDistrict/PanoramaSettings.json', chlk.models.panorama.AdminPanoramaSettingsViewData);
+            },
+
+            ria.async.Future, function savePanoramaSettings(data) {
+                return this.post('AdminDistrict/SavePanoramaSettings.json', Boolean, data);
+            },
         ])
 });

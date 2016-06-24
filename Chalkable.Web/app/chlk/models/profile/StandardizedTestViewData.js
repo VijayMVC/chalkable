@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.profile', function () {
 
     /** @class chlk.models.profile.StandardizedTestViewData*/
     CLASS(
-        UNSAFE, 'StandardizedTestViewData', [
+        UNSAFE, 'StandardizedTestViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
             String, 'name',
             String, 'displayName',
             chlk.models.id.StandardizedTestId, 'id',
@@ -20,8 +20,8 @@ NAMESPACE('chlk.models.profile', function () {
                 this.id = SJX.fromValue(raw.id, chlk.models.id.StandardizedTestId);
                 this.name = SJX.fromValue(raw.name, String);
                 this.displayName = SJX.fromValue(raw.displayname, String);
-                this.components = SJX.fromArrayOfDeserializables(raw.components, chlk.models.profile.StandardizedTestItemViewData);
-                this.scoreTypes = SJX.fromArrayOfDeserializables(raw.scoretypes, chlk.models.profile.StandardizedTestItemViewData);
+                this.components = SJX.fromArrayOfDeserializables(raw.components, chlk.models.profile.StandardizedTestItemViewData) || [];
+                this.scoreTypes = SJX.fromArrayOfDeserializables(raw.scoretypes, chlk.models.profile.StandardizedTestItemViewData) || [];
             }
         ]);
 });

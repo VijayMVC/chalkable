@@ -1,6 +1,5 @@
--var standardizedTests = self.getStandardizedTests()
+-var standardizedTests = self.getStandardizedTests() || []
 -var testId = self.getStandardizedTestId()
--console.info('testId', testId, self)
 
 .filter-block
     +Select('filterType')(data-placeholder = 'Select Standardized Test').filter-type-select.filter-select
