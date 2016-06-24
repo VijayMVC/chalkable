@@ -1,0 +1,52 @@
+mixin AttributeAttachment_(attachment, announcementType, announcementId)
+    .attribute-attachment
+        if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+            A(href=attachment.getUrl()).download-link Download
+            .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+        else
+            +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + attachment.getId())
+            .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+            +ActionButton('announcement', 'viewAttributeAttachment', attachment.getId(), announcementType, announcementId) Open
+
+
+mixin AttributeBlock_(attribute)
+    -var attachment = attribute.getAttributeAttachment()
+    .table(id="assigned-attr-" + attribute.getId(), data-announcement-id = attribute.getAnnouncementId().valueOf(),
+    data-announcement-type= attribute.getAnnouncementType(),
+    data-sis-assigned-attr-id = attribute.getSisActivityAssignedAttributeId() ? attribute.getSisActivityAssignedAttributeId().valueOf() : null)
+        .left-block
+            .attribute-item
+                .title-panel
+                    .attribute-title
+                        -var attributeTypes = attribute.getAttributeTypes() || []
+                        +Select("announcement-attrs-type-" + attribute.getId())(id="announcement-attrs-type-" + attribute.getId())(disabled = attribute.isReadOnly())
+                            each item in attributeTypes
+                                +Option(item.getId(), item.getName(),
+                                attribute.getAttributeTypeId() ? attribute.getAttributeTypeId() == item.getId() : false)
+                    .attribute-access
+                            label(for="attr-hidefromstudents" + attribute.getId(), class="hideLabel") Hide from students
+                            .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
+                            +SlideCheckbox('attr-hidefromstudents-' + attribute.getId(), !attribute.isVisibleForStudents(), false)(readonly = attribute.isReadOnly()).edit-attribute-visibility
+                            if !attribute.isReadOnly()
+                                +ActionLink('announcement', 'removeAttribute', attribute.getAnnouncementId(), attribute.getId(), attribute.getAnnouncementType(), self.isDialog()).remove-attribute
+                -var hasAttachment = attachment && attachment.getId() && attachment.getId() > 0
+                .description(class = (hasAttachment ? "with-file" : ""))
+                    +TextArea(class="edit-attribute-text", id="text-" + attribute.getId())(readonly = attribute.isReadOnly())=attribute.getText()
+                    .file-attribute-attachment-area(id ="file-attribute-attachment-area-" + attribute.getId())
+                        if hasAttachment
+                            -attachment.setReadOnly(attribute.isReadOnly())
+                            -attachment.setAnnouncementType(attribute.getAnnouncementType())
+                            -attachment.setAnnouncementId(attribute.getAnnouncementId())
+                            -attachment.setAttributeId(attribute.getId())
+                            +RenderWith(attachment, chlk.templates.announcement.AnnouncementAttributeAttachmentTpl)
+
+
+                if !attribute.isReadOnly()
+                    .attribute-file-attachment(id="file-attachment-button-" + attribute.getId())
+                        +RenderWith(attribute.getModel(), chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl)
+        .right-block
+
++AttributeBlock_(self)
+
+
+
