@@ -18,7 +18,7 @@ namespace Chalkable.Web.Models.Settings
             return new CourseTypeSettingViewData
             {
                 CourseType = ShortCourseTypeViewData.Create(courseType),
-                StandardizedTestFilters = settings.StandardizedTestFilters.Select(StandardizedTestFilterViewData.Create).ToList()
+                StandardizedTestFilters = settings.StandardizedTestFilters?.Select(StandardizedTestFilterViewData.Create).ToList()
             };
         }
 

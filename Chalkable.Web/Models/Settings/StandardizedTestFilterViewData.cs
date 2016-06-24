@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models.Settings
 
         public static IList<StandardizedTestFilterViewData> Create(IList<StandardizedTestFilter> filters)
         {
-            return filters.Select(Create).ToList();
+            return filters?.Select(Create).ToList();
         } 
     }
 }
