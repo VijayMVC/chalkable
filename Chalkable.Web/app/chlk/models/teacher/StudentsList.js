@@ -12,9 +12,10 @@ NAMESPACE('chlk.models.teacher', function () {
             chlk.models.classes.ClassesForTopBar, 'topData',//todo: rename
             Boolean, 'my', //todo: rename
             Boolean, 'hasAccessToLE',
+            Boolean, 'hasAccessToAll',
 
-            [[chlk.models.people.UsersList, chlk.models.classes.ClassesForTopBar, Boolean, chlk.models.id.ClassId, Boolean]],
-            function $(usersList_, classes_, isMy_, classId_, hasAccessToLE_){
+            [[chlk.models.people.UsersList, chlk.models.classes.ClassesForTopBar, Boolean, chlk.models.id.ClassId, Boolean, Boolean]],
+            function $(usersList_, classes_, isMy_, classId_, hasAccessToLE_, hasAccessToAll_){
                 BASE();
                 if(usersList_)
                     this.setUsersList(usersList_);
@@ -25,6 +26,8 @@ NAMESPACE('chlk.models.teacher', function () {
                     this.setClassId(classId_);
                 if(hasAccessToLE_)
                     this.setHasAccessToLE(hasAccessToLE_);
+                if(hasAccessToAll_)
+                    this.setHasAccessToAll(hasAccessToAll_);
             }
         ]);
 });
