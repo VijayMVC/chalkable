@@ -79,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var aa = da.GetById(announcementAppId);
 
                 var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
-                if (!ann.IsOwner)
+                if (!ann.IsOwner && Context.Role != CoreRoles.DISTRICT_ADMIN_ROLE)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Active = true;
                 da.Update(aa);
@@ -96,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementApplicationId);
                 var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
-                if (!ann.IsOwner)
+                if (!ann.IsOwner && Context.Role != CoreRoles.DISTRICT_ADMIN_ROLE)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Text = text;
 
@@ -149,7 +149,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var aa = da.GetById(announcementAppId);
                     var res = ServiceLocator.GetAnnouncementService(type).GetAnnouncementById(aa.AnnouncementRef);
-                    if (!res.IsOwner)
+                    if (!res.IsOwner && Context.Role != CoreRoles.DISTRICT_ADMIN_ROLE)
                         throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
 
                     da.Delete(announcementAppId);

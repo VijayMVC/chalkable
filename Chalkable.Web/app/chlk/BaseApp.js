@@ -389,7 +389,7 @@ NAMESPACE('chlk', function (){
                     isLEEnabled: leParams.isLeEnabled(),
                     isLinkEnabled: leParams.isIntegratedSignOn(),
                     isMessagingDisabled: isMessagingDisabled,
-                    isAssessmentEnabled: isAssessmentEnabled
+                    isAssessmentEnabled: isAssessmentEnabled || isStudyCenterEnabled
                 };
 
                 return sidebarOptions;

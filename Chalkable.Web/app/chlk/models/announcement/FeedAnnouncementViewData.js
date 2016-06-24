@@ -70,6 +70,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
                 this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
+                this.inGallery = SJX.fromValue(raw.inGallery, Boolean);
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
                 this.filter = SJX.fromValue(raw.filter, String);
                 this.recipientIds = SJX.fromValue(raw.recipientIds, String);
@@ -105,6 +106,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'recipientIds',
             Boolean, 'imported',
+            Boolean, 'inGallery',
             Object, 'createdAnnouncements',
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             String, 'announcementAssignedAttrs',

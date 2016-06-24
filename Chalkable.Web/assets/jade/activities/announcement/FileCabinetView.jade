@@ -11,11 +11,11 @@ mixin FileIcon_(announcementId, announcementType, assignedAttributeId, attachmen
             .data='Last Sent: ' + attachment.getLastAttachedDate().format('m/dd/yy')
 
          if assignedAttributeId && assignedAttributeId.valueOf()
-            +ActionButton('announcement', 'attachFromCabinetToAttribute', announcementId, announcementType, attachment.getId(), assignedAttributeId) Attach
-            +ActionButton('announcement', 'cloneFromCabinetToAttribute', announcementId, announcementType,  attachment.getId(), assignedAttributeId) Duplicate
+            +ActionButton('announcement', 'attachFromCabinetToAttribute', announcementId, announcementType, attachment.getId(), assignedAttributeId, options.isDialog()) Attach
+            +ActionButton('announcement', 'cloneFromCabinetToAttribute', announcementId, announcementType,  attachment.getId(), assignedAttributeId, options.isDialog()) Duplicate
          else
-            +ActionButton('announcement', 'attachFromCabinet', announcementId, announcementType, attachment.getId()) Attach
-            +ActionButton('announcement', 'cloneFromCabinet', announcementId, announcementType, attachment.getId()) Duplicate
+            +ActionButton('announcement', 'attachFromCabinet', announcementId, announcementType, attachment.getId(), options.isDialog()) Attach
+            +ActionButton('announcement', 'cloneFromCabinet', announcementId, announcementType, attachment.getId(), options.isDialog()) Duplicate
 
 -var options = self.getAttachOptions()
 -var announcementId = options.getAnnouncementId()

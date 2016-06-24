@@ -66,6 +66,8 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'canAddStandard',
 
+            Boolean, 'dialog',
+
             String, function getStandardsUrlComponents() {
                 return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&');
             }

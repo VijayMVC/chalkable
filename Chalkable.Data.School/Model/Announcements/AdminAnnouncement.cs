@@ -25,6 +25,6 @@ namespace Chalkable.Data.School.Model.Announcements
         [NotDbFieldAttr]
         public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.Admin;
         [NotDbFieldAttr]
-        public override int OwnereId => AdminRef;
+        public override int? OwnereId => AdminRef;
     }
 }

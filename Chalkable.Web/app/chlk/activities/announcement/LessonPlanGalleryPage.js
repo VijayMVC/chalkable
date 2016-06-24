@@ -1,15 +1,16 @@
-REQUIRE('chlk.templates.announcement.LessonPlanGalleryDialogTpl');
+REQUIRE('chlk.templates.announcement.LessonPlanGalleryPageTpl');
+REQUIRE('chlk.activities.lib.TemplatePage');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
 
     var timeout;
 
-    /** @class chlk.activities.announcement.LessonPlanGalleryDialog*/
+    /** @class chlk.activities.announcement.LessonPlanGalleryPage*/
     CLASS(
-        [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [ria.mvc.TemplateBind(chlk.templates.announcement.LessonPlanGalleryDialogTpl)],
-        'LessonPlanGalleryDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
+        [ria.mvc.DomAppendTo('#main')],
+        [ria.mvc.TemplateBind(chlk.templates.announcement.LessonPlanGalleryPageTpl)],
+        'LessonPlanGalleryPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [[ria.dom.Dom]],
             VOID, function submitFormWithStart(node){
@@ -52,25 +53,23 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            [ria.mvc.DomEventBind('change', '#lp-gallery-sort-type')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function sortingChanged(node, event, data){
+                this.submitFormWithStart(node);
+            },
+
+            [ria.mvc.DomEventBind('change', '#lpGalleryCategoryType')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function categoryTypeChanged(node, event, data){
+                this.submitFormWithStart(node);
+            },
+
             [ria.mvc.DomEventBind('focus', '.lp-gallery-search')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function filterFocus(node, event){
                 var n = node.valueOf()[0];
                 n.selectionStart = n.selectionEnd = n.value.length
-            },
-
-            [ria.mvc.DomEventBind('change', '#lp-gallery-sort-type')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function sortingChanged(node, event, data_){
-                this.submitFormWithStart(node);
-
-            },
-
-            [ria.mvc.DomEventBind('change', '#lpGalleryCategoryType')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function categoryTypeChanged(node, event, data_){
-                this.submitFormWithStart(node);
-
             },
 
             [[Object, String]],

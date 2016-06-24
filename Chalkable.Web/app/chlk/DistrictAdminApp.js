@@ -18,6 +18,8 @@ REQUIRE('chlk.controllers.GroupController');
 REQUIRE('chlk.controllers.DistrictController');
 REQUIRE('chlk.controllers.SchoolsController');
 REQUIRE('chlk.controllers.AttachController');
+REQUIRE('chlk.controllers.LessonPlanGalleryController');
+REQUIRE('chlk.controllers.LpGalleryCategoryController');
 
 REQUIRE('chlk.services.SearchService');
 REQUIRE('chlk.templates.search.SiteSearch');
@@ -53,7 +55,7 @@ NAMESPACE('chlk', function (){
 
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
-                    isAssessmentEnabled: isAssessmentEnabled,
+                    isAssessmentEnabled: isAssessmentEnabled || isStudyCenterEnabled,
                     isClassesEnabled: isClassesEnabled
                 };
                 return BASE()

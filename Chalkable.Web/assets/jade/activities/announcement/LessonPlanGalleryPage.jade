@@ -2,18 +2,24 @@ mixin LessonPlanIcon_(tpl, lessonPlan, classId, isAbleToRemove)
    .announcement-item.application
        -var canRemove = tpl.getUserRole().isAdmin() || lessonPlan.getGalleryOwnerRef() == tpl.getCurrentUser().getId() || isAbleToRemove
        if canRemove
-            +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId(), classId).close-btn
+            +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId()).close-btn
        .wrapper
            .attach-assessment.img
            .title(data-tooltip=lessonPlan.getTitle(), data-tooltip-type="overflow")= lessonPlan.getTitle()
            .shortdesc
-           +ActionButton('announcement', 'createFromTemplate', lessonPlan.getId(), classId) Open
+           +ActionButton('announcement', 'viewTemplate', lessonPlan.getId()) Open
 
-.dialog.attach-dialog
-   .x-window-header
-      h1 LESSON PLAN GALLERY
-      a.close.close-btn
-   .x-window-body
+.lesson-plan-gallery
+    h2.page-title Lesson Plan Gallery
+    .action-bar
+        .items
+            +ActionLink('lessonplangallery', 'gallery').pressed Public
+
+        if self.getUserRole().isAdmin()
+            +ActionLink('announcement', 'lessonPlanFromGallery').right.add-plus-btn Add
+                SPAN.plus +
+
+    .gallery-view
 
        -var lessonPlans = self.getLessonPlans()
        +ActionForm('lessonplangallery', 'lessonPlanListFilter')#lp-gallery-filter
@@ -39,10 +45,10 @@ mixin LessonPlanIcon_(tpl, lessonPlan, classId, isAbleToRemove)
                .clear-fix
            .attachments-and-applications
                if !self.isEmpty()
-                   each lessonPlan in lessonPlans.getItems()|| []
+                   each lessonPlan in lessonPlans.getItems()
 
                        +LessonPlanIcon_(self, lessonPlan, self.getClassId(), self.isAbleToRemove())
                else
                    .no-lesson-plans No Lesson Plans Uploaded
     .paging
-        +Paginator2('lessonplangallery', 'lessonPlanTemplatesList',lessonPlans, [self.getClassId(), self.getCategoryType(),  self.getFilter(), self.getSortType() ])
+        +Paginator2('lessonplangallery', 'gallery',lessonPlans, [self.getCategoryType(),  self.getFilter(), self.getSortType() ])

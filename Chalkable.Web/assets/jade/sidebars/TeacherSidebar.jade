@@ -8,6 +8,8 @@ if self.isAssessmentEnabled
     +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
 +ActionLink('calendar', 'index').calendar(title="View Calendar") Calendar
 +ActionLink('schools', 'classesSummary').classes(title="View Classes") Classes
+if self.isAppStoreEnabled
+    +ActionLink('lessonplangallery', 'gallery').gallery(title="View Gallery") Gallery
 +ActionLink('discipline', 'index').discipline(title="View Discipline") Discipline
 if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
     a(href="/Home/LearningEarnings", target="blank").le(title="View Learning Earnings", target="blank") LE

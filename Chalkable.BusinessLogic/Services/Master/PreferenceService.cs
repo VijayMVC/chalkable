@@ -213,8 +213,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             res.Add(Preference.PASSWORD_RESET_FREQUENCY_MINUTES, new PreferenceInfo {Value = "20"});
 
             res.Add(Preference.PRACTICE_APPLICATION_ID, new PreferenceInfo { Value = "56c14655-2897-4073-bb48-32dfd61264b5" });
-            res.Add(Preference.ASSESSMENT_APLICATION_ID, new PreferenceInfo { Value = "f1960bcc-49a8-4b04-861a-230b1580661d" });
-            res.Add(Preference.NEW_ASSESSMENT_APLICATION_ID, new PreferenceInfo { Value = "E989CCFE-F658-4F89-81E7-F3EFA0251B28" });
+            res.Add(Preference.ASSESSMENT_APLICATION_ID, new PreferenceInfo { Value = "E989CCFE-F658-4F89-81E7-F3EFA0251B28" });
             res.Add(Preference.SCHOOL_REGISTRATION_TO_SYSADMIN_EMAIL_BODY, new PreferenceInfo
             {
                 Category = PreferenceCategoryEnum.EmailText,

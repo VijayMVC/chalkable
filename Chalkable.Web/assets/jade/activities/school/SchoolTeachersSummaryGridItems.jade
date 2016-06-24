@@ -21,17 +21,17 @@ each teacher in teachers
         .cell.students=teacher.getStudentsCount()
         if isNotEmptyStatistic
             .cell.attendance
-                .circle(
-                data-tooltip = teacher.getStudentsCount() + ' Students, ' + teacher.getAbsences() + ' Absent',
-                class = teacher.getAbsencesClass()
+                .circle-cnt(
+                    data-tooltip = teacher.getStudentsCount() + ' Students, ' + teacher.getAbsences() + ' Absent',
+                    class = teacher.getAbsencesClass()
                 )=teacher.getPresence() && Math.round(teacher.getPresence() * 10)/10
             .cell.discipline
-                .circle(
-                data-tooltip=teacher.getInfractionsCount() + ' Discipline Infractions Today',
-                class = teacher.getInfractionsClass()
+                .circle-cnt(
+                    data-tooltip=teacher.getInfractionsCount() + ' Discipline Infractions Today',
+                    class = teacher.getInfractionsClass()
                 )=teacher.getInfractionsCount() && parseInt(teacher.getInfractionsCount(), 10)
             .cell.grades
-                .circle(
-                data-tooltip=teacher.getAvg() && (teacher.getAvg() + '% Average'),
-                class = teacher.getAvgClass()
+                .circle-cnt(
+                    data-tooltip=teacher.getAvg() && (teacher.getAvg() + '% Average'),
+                    class = teacher.getAvgClass()
                 )=teacher.getAvg() && parseInt(teacher.getAvg(), 10)

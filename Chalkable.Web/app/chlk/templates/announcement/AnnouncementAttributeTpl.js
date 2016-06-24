@@ -52,7 +52,10 @@ NAMESPACE('chlk.templates.announcement', function(){
             ArrayOf(chlk.models.announcement.AnnouncementAttributeType), 'attributeTypes',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.SisAssignedAttributeId, 'sisActivityAssignedAttributeId'
+            chlk.models.id.SisAssignedAttributeId, 'sisActivityAssignedAttributeId',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'dialog'
 
     ]);
 });

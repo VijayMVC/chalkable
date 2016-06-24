@@ -1,34 +1,121 @@
-REQUIRE('chlk.activities.announcement.BaseAnnouncementFormPage');
-REQUIRE('chlk.templates.announcement.AnnouncementFormTpl');
+REQUIRE('chlk.activities.announcement.LessonPlanFormPage');
+REQUIRE('chlk.templates.announcement.LessonPlanDialogTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
+REQUIRE('chlk.templates.announcement.LessonPlanSearchTpl');
+REQUIRE('chlk.templates.announcement.LessonPlanCategoriesListTpl');
+REQUIRE('chlk.templates.announcement.LessonPlanAutoCompleteTpl');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
-REQUIRE('chlk.templates.announcement.AnnouncementAttributesDropdownTpl');
 REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
-REQUIRE('chlk.templates.announcement.Announcement');
-REQUIRE('chlk.templates.apps.AppContentListTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
     var titleTimeout, wasTypeChanged, wasExistingTitle, wasDisabledBtn, wasDateChanged, wasTitleSaved,
         listLastTimeout;
 
-    /** @class chlk.activities.announcement.AnnouncementFormPage*/
+    /** @class chlk.activities.announcement.LessonPlanFormDialog*/
     CLASS(
-        [ria.mvc.DomAppendTo('#main')],
-        [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementFormTpl)],
+        [ria.mvc.DomAppendTo('#chlk-dialogs')],
+        [ria.mvc.TemplateBind(chlk.templates.announcement.LessonPlanDialogTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementFormTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributesTpl, 'update-attributes', '.attributes-block', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanFormTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementTitleTpl, '.title-block-container', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.SuggestedAppsListTpl, '', '.suggested-apps-block', ria.mvc.PartialUpdateRuleActions.Replace)],
-
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanSearchTpl, 'categories', '#galleryCategoryForSearchContainer', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
-        'AnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
+        'LessonPlanFormDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
+
+            [ria.mvc.DomEventBind('change', '.gallery-check')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function addToGalleryChange(node, event, selected_){
+                var select = this.dom.find('#galleryCategoryId'),
+                    second = node.parent('.box-checkbox').siblings('.box-checkbox').find('.checkbox');
+
+                second.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), !node.checked());
+
+                if(this.dom.find('#public-check').checked())
+                    this.checkTitle_();
+                else
+                    this.dom.find('.title-block-container').removeClass('with-gallery-id');
+                select.trigger('chosen:updated');
+            },
+
+            function checkTitle_(){
+                this.dom.find('.title-block-container').addClass('with-gallery-id');
+                this.dom.find('#check-title-button').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function categoryChange(node, event, selected_){
+                if(node.getValue() == -1){
+                    node.setValue(node.getData('value'));
+                    node.trigger('chosen:updated');
+                    node.parent('.left-top-container').find('.add-category-btn').trigger('click');
+                }else{
+                    if(this.dom.find('#public-check').checked() && node.getValue() && !node.getData('value')){
+                        this.dom.find('.title-block-container').addClass('with-gallery-id');
+
+                        if(this.dom.find('#title').getValue())
+                            this.dom.find('#check-title-button').trigger('click');
+                    }
+
+                    node.setData('value', node.getValue());
+                }
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],
+            VOID, function addToGalleryRule(tpl, model, msg_) {
+
+            },
+
+            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function titleKeyUp(node, event){
+                var dom = this.dom, node = node, value = node.getValue();
+                if(dom.find('.title-block-container').hasClass('with-gallery-id')){
+                    if(!value || !value.trim()){
+                        dom.find('.save-title-btn').setAttr('disabled', true);
+                    }else{
+                        titleTimeout && clearTimeout(titleTimeout);
+                        titleTimeout = setTimeout(function(){
+                            if(value == node.getValue())
+                                dom.find('#check-title-button').trigger('click');
+                        }, 100);
+                    }
+                }
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanCategoriesListTpl, 'right-categories')],
+            VOID, function doUpdateCategories(tpl, model, msg_) {
+                tpl.renderTo(this.dom.find('#galleryCategoryIdContainer').setHTML(''));
+                setTimeout(function(){
+                    var node = this.dom.find('#add-to-gallery');
+                    if(!node.checked()){
+                        var select = this.dom.find('#galleryCategoryId');
+                        select.setAttr('disabled', 'disabled');
+                        select.setProp('disabled', true);
+                        select.trigger('chosen:updated');
+                    }
+                    if(model.getCategories().length){
+                        node.removeAttr('disabled');
+                        node.previous().removeAttr('disabled');
+                        node.parent('.slide-checkbox').removeAttr('disabled');
+                    }
+                    else{
+                        node.setAttr('disabled', 'disabled');
+                        node.previous().setAttr('disabled', 'disabled');
+                        node.parent('.slide-checkbox').setAttr('disabled', 'disabled');
+                    }
+                }.bind(this), 1);
+
+            },
+
 
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
@@ -99,13 +186,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var resNode = appsWithContentNode.find('.app-contents-block[data-appId=' + appId + ']');
 
                     resNode = resNode.exists() ? resNode.empty() : appsWithContentNode;
-                    var dom = new ria.dom.Dom().fromHTML(tpl.render())
+                    var dom = new ria.dom.Dom().fromHTML(tpl.render());
                     dom.appendTo(resNode);
-                    //tpl.renderTo(resNode);
                 }
             },
-
-
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
             [[Object, Object, String]],
@@ -136,7 +220,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.dom.find('.add-standards').find('.title').setText(Msg.Click_to_add_more);
                 }
                 else {
-                    //empty recommended contens section
                     this.dom.find('.apps-with-recommended-contents').empty();
                 }
             },
@@ -209,42 +292,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function setTitleOnSubmitClick(node, event){
                 if(this.dom.find('.title-text').exists())
-                this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
-            },
-
-            [ria.mvc.DomEventBind('change', '.announcement-types-combo')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function typesComboClick(node, event){
-
-            },
-
-            [ria.mvc.DomEventBind('click', '.announcement-type-button:not(.pressed)')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function typeClick(node, event){
-                if(node.hasClass('no-save'))
-                    return;
-                node.parent().find('.pressed').removeClass('pressed');
-                node.addClass('pressed');
-                var typeId = node.getData('typeid');
-                var typeName = node.getData('typename');
-                this.dom.find('input[name=announcementTypeId]').setValue(typeId);
-                this.dom.find('input[name=announcementtypename]').setValue(typeName);
-                setTimeout(function(){
-                    node.parent('form').trigger('submit');
-                },1);
-
-            },
-
-            [ria.mvc.DomEventBind('change', '#type-select')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function typeSelect(node, event, selected_){
-                var option = node.find(':selected');
-                var typeId = option.getData('typeid');
-                var typeName = option.getData('typename');
-                this.dom.find('input[name=announcementTypeId]').setValue(typeId);
-                this.dom.find('input[name=announcementtypename]').setValue(typeName);
-                this.dom.find('#announcement-type-btn').trigger('click');
-                wasTypeChanged = true;
+                    this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
@@ -299,76 +347,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!btn.getAttr('disabled'))
                         btn.trigger('click');
                     return false;
-                }
-            },
-
-            [ria.mvc.DomEventBind('change', '#expiresdate:not(.supplemental-date)')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function expiresDateChange(node, event){
-                var block = this.dom.find('.title-block-container'),
-                    value = node.getValue(),
-                    titleNode = this.dom.find('input[name=title]');
-                if(value){
-                    if(!block.hasClass('with-date'))
-                        block.addClass('was-empty');
-                    else{
-                        block.removeClass('was-empty');
-                    }
-                    block.addClass('with-date');
-                    titleNode
-                        .addClass('should-check')
-                        .trigger('keyup');
-
-                    setTimeout(function(){
-                        wasDateChanged = true;
-                    }, 1);
-                }
-                else
-                    block.removeClass('with-date').removeClass('was-empty');
-            },
-
-            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function titleKeyUp(node, event){
-                wasDateChanged = false;
-                var dom = this.dom, node = node, value = node.getValue();
-                if(dom.find('.title-block-container').hasClass('with-date')){
-                    if(!value || !value.trim()){
-                        dom.find('.save-title-btn').setAttr('disabled', true);
-                    }else{
-                        if(value == node.getData('title') && !node.hasClass('should-check')){
-                            this.updateFormByNotExistingTitle();
-                            dom.find('.save-title-btn').setAttr('disabled', true);
-                        }else{
-                            titleTimeout && clearTimeout(titleTimeout);
-                            titleTimeout = setTimeout(function(){
-                                if(value == node.getValue())
-                                    dom.find('#check-title-button').trigger('click');
-                            }, 100);
-                        }
-                    }
-                }
-                node.removeClass('should-check');
-            },
-
-
-            [ria.mvc.DomEventBind('keyup', '.max-score-container input[name="maxscore"]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function maxScoreKeyUp(node, event){
-                var value = node.getValue() || '';
-                if(value.length == 0 || !isNaN(parseFloat(value))){
-                    var checkBox = node.parent('.right-block').find('.advanced-options-container .extra-credit.checkbox');
-                    var isAbleUseExtraCredit = checkBox.getData('isableuseextracredit');
-
-                    if(!isAbleUseExtraCredit || value.length == 0 || parseFloat(value) > 0) {
-                        if (!checkBox.hasAttr('disabled')) {
-                            checkBox.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), false);
-                            checkBox.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), true);
-                        }
-                    }
-                    else if(checkBox.hasAttr('disabled')){
-                        checkBox.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), false);
-                    }
                 }
             },
 
@@ -443,10 +421,170 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
             OVERRIDE, VOID, function onStop_() {
-                BASE();
+                var button = new ria.dom.Dom('#save-form-button');
+                if(button.exists())
+                    button.trigger('click');
+
                 new ria.dom.Dom().off('click.title');
                 new ria.dom.Dom().off('click.save', '.class-button[type=submit]');
+
+                BASE();
+
+            },
+
+
+            [ria.mvc.DomEventBind('click', '.calendar-mark')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function dateMarkClick(node, event){
+                node.parent().find('.hasDatepicker').trigger('focus');
+            },
+
+            [ria.mvc.DomEventBind('submit', '.announcement-form>FORM')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function submitClick(node, event){
+
+                var that = this;
+
+                this.saveAttributes_();
+
+                setTimeout(function(){
+                    var submitType = node.getData('submit-type');
+                    if(submitType == "submitOnEdit" || submitType == "submit"){
+                        that.dom.find('#save-form-button').remove();
+                        node.setData('submit-type', null);
+                    }
+                }, 10);
+
+            },
+
+            [ria.mvc.DomEventBind('click', '.add-loader-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addLoaderOnSubmitClick(node, event){
+                this.dom.find('#save-form-button').remove();
+            },
+
+            [ria.mvc.DomEventBind('click', '.add-standards .title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addStandardsClick(node, event){
+                jQuery(node.parent('.add-standards').find('.add-standards-btn').valueOf()).click();
+            },
+
+            function saveAttributes_(){
+                var attrDomElems = new ria.dom.Dom('.attributes-block').find('.table') || [];
+                var attrs = [];
+
+                var that = this;
+
+                attrDomElems.forEach(function(domElem){
+                    var id = domElem.getAttr('id').replace('assigned-attr-', '');
+                    var attributeTypeId = that.dom.find('#announcement-attrs-type-'+id).getValue();
+                    var name = that.dom.find('#announcement-attrs-type-'+id).find('option:selected').getText();
+                    var isVisible = !that.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
+                    var text = that.dom.find('#text-'+id).getValue();
+                    var announcementType = domElem.getAttr('data-announcement-type');
+                    var announcementRef = domElem.getAttr('data-announcement-id');
+                    var sisAttrId = domElem.getAttr('data-sis-assigned-attr-id');
+
+                    var attachmentModel = null;
+                    var attachmentDom = that.dom.find('#file-attribute-attachment-' + id);
+                    if (attachmentDom.valueOf()){
+                        var attachmentId = attachmentDom.getAttr('data-attachment-id');
+                        var stiAttachment = attachmentDom.getAttr('data-sti-attachment') == 'true';
+                        var attachmentUuid = attachmentDom.getAttr('data-uuid') || '';
+                        var attachmentName = attachmentDom.getAttr('data-name') || '';
+                        var attachmentMimeType = attachmentDom.getAttr('data-mime-type') || '';
+
+                        var attachmentObj = {
+                            id: attachmentId,
+                            stiattachment: stiAttachment,
+                            uuid: attachmentUuid,
+                            name: attachmentName,
+                            mimetype: attachmentMimeType
+                        };
+
+                        attachmentModel = chlk.models.announcement.AnnouncementAttributeAttachmentViewData.$fromObject(attachmentObj);
+                    }
+
+                    var attr = {
+                        id: id,
+                        text: text,
+                        name: name,
+                        visibleforstudents: isVisible,
+                        attributetypeid: attributeTypeId || 1,
+                        announcementref: announcementRef,
+                        announcementtype: announcementType,
+                        sisactivityassignedattributeid: sisAttrId
+                    };
+
+                    var attrViewData = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(attr);
+                    attrViewData.setAttributeAttachment(attachmentModel);
+                    attrs.push(attrViewData.getPostData());
+                });
+
+
+                var attrJson = JSON.stringify(attrs);
+                this.dom.find('input[name=announcementAssignedAttrs]').setValue(attrJson);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.common.SimpleObjectTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function doUpdateApp(tpl, model, msg_) {
+                this.dom.find('.attach-icon[data-id=' + model.getValue() + ']').removeClass('x-hidden');
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributeTpl)],
+            VOID, function updateAttribute(tpl, model, msg_) {
+
+                if (msg_){
+                    if (msg_ == 'remove-attribute'){
+                        this.dom.find('#assigned-attr-' + model.getId()).removeSelf();
+                        if(!this.dom.find('.attribute-item').count()){
+                            this.dom.find('.attributes-attach-area').addClass('x-hidden');
+                            this.dom.find('.main-attach-attribute-btn').removeClass('x-hidden');
+                        }
+                    }
+                    if (msg_ == 'add-attribute'){
+                        var attrDom = new ria.dom.Dom().fromHTML(tpl.render());
+                        attrDom.appendTo('.attributes-block');
+                        this.dom.find('.attributes-attach-area').removeClass('x-hidden');
+                        this.dom.find('.main-attach-attribute-btn').addClass('x-hidden');
+                    }
+
+                    if (msg_ == 'add-attribute-attachment'){
+
+                        var attachmentTpl = chlk.templates.announcement.AnnouncementAttributeAttachmentTpl();
+                        attachmentTpl.assign(model.getAttributeAttachment());
+                        var attrAttachmentDom = new ria.dom.Dom().fromHTML(attachmentTpl.render());
+                        attrAttachmentDom.appendTo('#file-attribute-attachment-area-' + model.getId());
+
+                        var parent = attrAttachmentDom.parent('.description');
+                        parent.addClass('with-file');
+
+                        var attachDocBtnTpl = chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl();
+                        attachDocBtnTpl.assign(model);
+                        var attachDocBtnDom = new ria.dom.Dom().fromHTML(attachDocBtnTpl.render());
+                        new ria.dom.Dom('#file-attachment-button-'+ model.getId()).empty();
+                        attachDocBtnDom.appendTo('#file-attachment-button-'+ model.getId());
+
+                        autosize.update(parent.find('textarea').valueOf()[0]);
+                    }
+
+                    if (msg_ == 'remove-attribute-attachment'){
+                        if (model.getAttributeAttachment() == null){
+                            var el = this.dom.find('#file-attribute-attachment-' + model.getId()),
+                                parent = el.parent('.with-file');
+                            parent.removeClass('with-file');
+                            el.removeSelf();
+                            var attachDocBtnTpl = chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl();
+                            attachDocBtnTpl.assign(model);
+                            var attachDocBtnDom = new ria.dom.Dom().fromHTML(attachDocBtnTpl.render());
+                            new ria.dom.Dom('#file-attachment-button-'+ model.getId()).empty();
+                            attachDocBtnDom.appendTo('#file-attachment-button-'+ model.getId());
+
+                            autosize.update(parent.find('textarea').valueOf()[0]);
+                        }
+                    }
+                }
             }
-         ]
+        ]
     );
 });

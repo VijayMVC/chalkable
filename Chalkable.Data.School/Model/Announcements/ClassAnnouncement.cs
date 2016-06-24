@@ -44,7 +44,7 @@ namespace Chalkable.Data.School.Model.Announcements
         [NotDbFieldAttr]
         public override bool IsSubmitted => SisActivityId.HasValue && base.IsSubmitted;
         [NotDbFieldAttr]
-        public override int OwnereId => PrimaryTeacherRef;
+        public override int? OwnereId => PrimaryTeacherRef;
 
         [NotDbFieldAttr]
         public override string AnnouncementTypeName => ClassAnnouncementTypeName;
