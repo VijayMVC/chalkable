@@ -3,6 +3,7 @@
     [StartDate]          DATETIME2 (7) NULL,
     [EndDate]            DATETIME2 (7) NULL,
     [ClassRef]           INT           NULL,
+	[GalleryCategoryRef] INT           NULL,
     [LpGalleryCategoryRef] INT           NULL,
     [VisibleForStudent]  BIT           NOT NULL,
     [SchoolYearRef]      INT           NOT NULL,

@@ -70,6 +70,7 @@ REQUIRE('chlk.AppApiHost');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 REQUIRE('chlk.lib.mvc.ChlkView');
 REQUIRE('chlk.controllers.ErrorController');
+REQUIRE('chlk.controllers.AttachController');
 
 NAMESPACE('chlk', function (){
 
@@ -382,13 +383,18 @@ NAMESPACE('chlk', function (){
                 var isMessagingDisabled = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_DISABLED, false);
                 var leParams = this.getContext().getSession().get(ChlkSessionConstants.LE_PARAMS, new chlk.models.school.LEParams());
                 var isAssessmentEnabled = this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED, false);
+                var isPeopleEnabled = this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS, []).filter(function(item){
+                        return item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_STUDENT)
+                            || item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_STUDENTS);
+                    }).length > 0;
 
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
                     isLEEnabled: leParams.isLeEnabled(),
                     isLinkEnabled: leParams.isIntegratedSignOn(),
                     isMessagingDisabled: isMessagingDisabled,
-                    isAssessmentEnabled: isAssessmentEnabled
+                    isAssessmentEnabled: isAssessmentEnabled || isStudyCenterEnabled,
+                    isPeopleEnabled: isPeopleEnabled
                 };
 
                 return sidebarOptions;

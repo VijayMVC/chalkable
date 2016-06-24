@@ -111,7 +111,7 @@
                         studyCenterEnabled = self.isStudyCenterEnabled(),
                         dialog = true
                     )
-                .attributes-block
+                div(class = state ? "attributes content" : "attributes-block")
                     -var attributesList = announcement.getAttributesListViewData();
                     -attributesList.setReadOnly(!!state)
                     +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(

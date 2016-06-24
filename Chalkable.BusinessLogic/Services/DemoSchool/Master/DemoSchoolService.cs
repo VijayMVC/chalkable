@@ -110,6 +110,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            throw new NotImplementedException();
+        }
+
         public MessagingSettings GetDistrictMessaginSettings(Guid districtId)
         {
             throw new NotImplementedException();

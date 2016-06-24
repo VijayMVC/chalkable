@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.teacher', function () {
             Boolean, 'hasAccessToLE',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'my'
+            Boolean, 'my',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'hasAccessToAll'
         ]);
 });

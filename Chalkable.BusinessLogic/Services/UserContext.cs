@@ -40,6 +40,7 @@ namespace Chalkable.BusinessLogic.Services
         public string DistrictServerUrl { get; set; }
         public string DistrictTimeZone { get; set; }
         public bool SCEnabled { get; set; }
+        public bool AssessmentEnabled { get; set; }
         public bool LEEnabled { get; set; }
         public bool LESyncComplete { get; set; }
         public bool MessagingDisabled { get; set; }
@@ -124,6 +125,7 @@ namespace Chalkable.BusinessLogic.Services
                     SCEnabled = district.IsDemoDistrict ||
                         school.StudyCenterEnabledTill.HasValue &&
                                 school.StudyCenterEnabledTill.Value > NowSchoolTime;
+                    AssessmentEnabled = school.IsAssessmentEnabled;
                     LEEnabled = school.IsLEEnabled;
                     LESyncComplete = school.IsLESyncComplete;
                     MessagingDisabled = school.IsMessagingDisabled;

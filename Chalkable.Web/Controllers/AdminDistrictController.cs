@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
@@ -57,7 +54,7 @@ namespace Chalkable.Web.Controllers
                 .Select(BaseApplicationViewData.Create)
                 .ToList();
 
-            if (Context.Claims.HasPermission(ClaimInfo.ASSESSMENT_ADMIN))
+            if (ApplicationSecurity.HasAssessmentEnabled(Context) && Context.Claims.HasPermission(ClaimInfo.ASSESSMENT_ADMIN))
             {
                 var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
                 if (assessement != null && assessement.HasDistrictAdminSettings && !allApps.Exists(x => x.Id == assessement.Id))

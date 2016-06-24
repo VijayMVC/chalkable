@@ -8,6 +8,7 @@
     [SchoolYearRef]        INT              NOT NULL,
     [StartDate]            DATETIME2 (7)    NULL,
     [EndDate]              DATETIME2 (7)    NULL,
+	[GalleryCategoryRef]   INT              NULL,
     [LPGalleryCategoryRef]   INT              NULL,
     [VisibleForStudent]    BIT              NULL,
 	[InGallery]			   BIT				NOT NULL,

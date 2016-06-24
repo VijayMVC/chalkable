@@ -17,6 +17,7 @@ REQUIRE('chlk.controllers.DisciplineController');
 REQUIRE('chlk.controllers.GroupController');
 REQUIRE('chlk.controllers.DistrictController');
 REQUIRE('chlk.controllers.SchoolsController');
+REQUIRE('chlk.controllers.AttachController');
 REQUIRE('chlk.controllers.LessonPlanGalleryController');
 REQUIRE('chlk.controllers.LpGalleryCategoryController');
 
@@ -48,13 +49,13 @@ NAMESPACE('chlk', function (){
                 var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);
                 var isAssessmentEnabled = this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED, false);
                 var isClassesEnabled = this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS, []).filter(function(item){
-                    return item.hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN) 
+                    return item.hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN)
                         || item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN);
                 }).length > 0;
-                
+
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
-                    isAssessmentEnabled: isAssessmentEnabled,
+                    isAssessmentEnabled: isAssessmentEnabled || isStudyCenterEnabled,
                     isClassesEnabled: isClassesEnabled
                 };
                 return BASE()
