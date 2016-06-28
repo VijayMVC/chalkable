@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
@@ -13,6 +15,7 @@ using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.GradingViewData;
+using Chalkable.Web.Models.PanoramaViewDatas;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -20,7 +23,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
     [RequireHttps, TraceControllerFilter]
     public class StudentController : PersonController
     {
-        //[AuthorizationFilter("DistrictAdmin, Teacher, Student", Preference.API_DESCR_STUDENT_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance, AppPermissionType.Discipline, AppPermissionType.Grade })]
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Summary(int schoolPersonId)
         {
@@ -225,5 +227,19 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res);
         }
 
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
+        public ActionResult Panorama(int studentId, StudentProfilePanoramaSetting settings)
+        {
+            if (settings.SchoolYearIds == null)
+                settings = SchoolLocator.PanoramaSettingsService.Get<StudentProfilePanoramaSetting>(null);
+
+            if (settings.SchoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            var studentPanorama = SchoolLocator.StudentService.Panorama(studentId, settings.SchoolYearIds, settings.StandardizedTestFilters);
+            var standardizedTests = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
+
+            return Json(StudentPanoramaViewData.Create(studentId, studentPanorama, standardizedTests));
+        }
     }
 }

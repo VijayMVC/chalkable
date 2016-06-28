@@ -131,27 +131,26 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
-            if (CanGetHealthConditions())
-            {
-                var healthConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
+            if (!CanGetHealthConditions())
+                return new List<StudentHealthCondition>();
 
-                if (healthConditions == null)
-                    return new List<StudentHealthCondition>();
+            var healthConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
 
-                var result = (from studentCondition in healthConditions
-                              where studentCondition != null
-                              select new StudentHealthCondition
-                              {
-                                  Id = studentCondition.Id,
-                                  Name = studentCondition.Name,
-                                  Description = studentCondition.Description,
-                                  IsAlert = studentCondition.IsAlert,
-                                  MedicationType = studentCondition.MedicationType,
-                                  Treatment = studentCondition.Treatment
-                              }).ToList();
-                return result;
-            }
-            return new List<StudentHealthCondition>();
+            if (healthConditions == null)
+                return new List<StudentHealthCondition>();
+
+            var result = (from studentCondition in healthConditions
+                where studentCondition != null
+                select new StudentHealthCondition
+                {
+                    Id = studentCondition.Id,
+                    Name = studentCondition.Name,
+                    Description = studentCondition.Description,
+                    IsAlert = studentCondition.IsAlert,
+                    MedicationType = studentCondition.MedicationType,
+                    Treatment = studentCondition.Treatment
+                }).ToList();
+            return result;
         }
 
         private bool CanGetHealthConditions()

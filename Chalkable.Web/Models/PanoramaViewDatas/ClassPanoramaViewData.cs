@@ -131,10 +131,12 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             if (studentTests.Count == 0)
                 return res;
 
+            studentTests = studentTests.OrderBy(x => x.Date).ToList();
+
             foreach (var test in studentTests)
             {
                 var currentTest = res.FirstOrDefault(x => x.StandardizedTest.Id == test.StandardizedTestId
-                                                   && x.Component.Id == test.StandardizedTestComponentId);
+                                                       && x.Component.Id == test.StandardizedTestComponentId);
 
                 if (currentTest != null)
                     continue;

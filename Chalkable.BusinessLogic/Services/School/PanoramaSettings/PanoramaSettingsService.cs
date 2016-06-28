@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
@@ -47,6 +46,24 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             return res;
         }
 
+        private static StudentProfilePanoramaSetting GetDefaultStudentPanoramaSettings(IServiceLocatorSchool serviceLocator, int? classId)
+        {
+            var currentSchoolYear = serviceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var adminPanoramaSettings = serviceLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
+            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(adminPanoramaSettings.PreviousYearsCount);
+
+            var res = new StudentProfilePanoramaSetting
+            {
+                SchoolYearIds = previousSchoolYear.Select(x => x.Id).ToList(),
+                StandardizedTestFilters = adminPanoramaSettings.StudentDefaultSettings
+                    ?? new List<StandardizedTestFilter>()
+            };
+
+            res.SchoolYearIds.Add(currentSchoolYear.Id);
+
+            return res;
+        }
+
         private static readonly IDictionary<Type, IBasePanoramaSettingsHandler<BaseSettingModel>> _settingHandlers = new Dictionary
             <Type, IBasePanoramaSettingsHandler<BaseSettingModel>>
         {
@@ -56,7 +73,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             },
             {
                 typeof (StudentProfilePanoramaSetting),
-                new DefaultPanoramaSettingHandler<StudentProfilePanoramaSetting>(PersonSetting.STUDENT_PROFILE_PANORAMA_SETTING)
+                new DefaultPanoramaSettingHandler<StudentProfilePanoramaSetting>(PersonSetting.STUDENT_PROFILE_PANORAMA_SETTING, GetDefaultStudentPanoramaSettings)
             },
             {
                 typeof(AdminPanoramaSettings),
@@ -79,7 +96,6 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         {
             GetSettingHandler<TSettings>().SetSettings(ServiceLocator, personId, classId, settings);
         }
-
 
         public void Save<TSettings>(TSettings settings, int? classId) where TSettings: BaseSettingModel
         {
