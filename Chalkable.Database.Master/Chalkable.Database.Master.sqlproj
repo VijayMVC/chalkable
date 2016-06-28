@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Chalkable.Database.Master</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{1d736e07-c8ef-4282-9d37-2e33ba2ecb00}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureDatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Chalkable.Database.Master</RootNamespace>
+    <AssemblyName>Chalkable.Database.Master</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DacVersion>1.0.0.0</DacVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging|AnyCPU' ">
+    <OutputPath>bin\Staging\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables\" />
+    <Folder Include="Views\" />
+    <Folder Include="Functions\" />
+    <Folder Include="Stored Procedures\" />
+    <Folder Include="User Defined Types\" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Pre-Deploy" />
+    <Folder Include="Scripts\Post-Deploy" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\ABToCCMapping.sql" />
+    <Build Include="Tables\Application.sql" />
+    <Build Include="Tables\ApplicationCategory.sql" />
+    <Build Include="Tables\ApplicationGradeLevel.sql" />
+    <Build Include="Tables\ApplicationPermission.sql" />
+    <Build Include="Tables\ApplicationPicture.sql" />
+    <Build Include="Tables\ApplicationStandard.sql" />
+    <Build Include="Tables\BackgroundTask.sql" />
+    <Build Include="Tables\Category.sql" />
+    <Build Include="Tables\ChalkableDepartment.sql" />
+    <Build Include="Tables\CommonCoreStandard.sql" />
+    <Build Include="Tables\CommonCoreStandardCategory.sql" />
+    <Build Include="Tables\Developer.sql" />
+    <Build Include="Tables\District.sql" />
+    <Build Include="Tables\Preference.sql" />
+    <Build Include="Tables\School.sql" />
+    <Build Include="Tables\SchoolUser.sql" />
+    <Build Include="Tables\User.sql" />
+    <Build Include="Tables\UserLoginInfo.sql" />
+    <Build Include="Views\vwDistrictSyncStatus.sql" />
+    <Build Include="Functions\Split.sql" />
+    <Build Include="Stored Procedures\spAfterRestore.sql" />
+    <Build Include="Stored Procedures\spBeforeRestore.sql" />
+    <Build Include="Stored Procedures\spCreateLoginInfos.sql" />
+    <Build Include="Stored Procedures\spDeleteDistrictData.sql" />
+    <Build Include="Stored Procedures\spGetBackgroundTaskForProcessing.sql" />
+    <Build Include="Stored Procedures\spGetSuggestedApplications.sql" />
+    <Build Include="Stored Procedures\spUpdateMessagingDisabled.sql" />
+    <Build Include="Stored Procedures\spUpdateStudyCenterEnabled.sql" />
+    <Build Include="User Defined Types\TABToCCMapping.sql" />
+    <Build Include="User Defined Types\TApplication.sql" />
+    <Build Include="User Defined Types\TApplicationCategory.sql" />
+    <Build Include="User Defined Types\TApplicationGradeLevel.sql" />
+    <Build Include="User Defined Types\TApplicationPermission.sql" />
+    <Build Include="User Defined Types\TApplicationPicture.sql" />
+    <Build Include="User Defined Types\TBackgroundTask.sql" />
+    <Build Include="User Defined Types\TCategory.sql" />
+    <Build Include="User Defined Types\TChalkableDepartment.sql" />
+    <Build Include="User Defined Types\TCommonCoreStandard.sql" />
+    <Build Include="User Defined Types\TDeveloper.sql" />
+    <Build Include="User Defined Types\TDistrict.sql" />
+    <Build Include="User Defined Types\TGUID.sql" />
+    <Build Include="User Defined Types\TInt.sql" />
+    <Build Include="User Defined Types\TPreference.sql" />
+    <Build Include="User Defined Types\TSchool.sql" />
+    <Build Include="User Defined Types\TSchoolUser.sql" />
+    <Build Include="User Defined Types\Tstring.sql" />
+    <Build Include="User Defined Types\TUser.sql" />
+    <Build Include="User Defined Types\TUserLoginInfo.sql" />
+    <Build Include="Stored Procedures\spUpdateMessagingSettings.sql" />
+    <Build Include="Tables\UserLog.sql" />
+    <Build Include="Tables\ApplicationSchoolOption.sql" />
+    <Build Include="Stored Procedures\spBanSchoolsByIds.sql" />
+    <Build Include="User Defined Types\TApplicationSchoolOption.sql" />
+    <Build Include="Stored Procedures\spGetApplicationBanInfo.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Pre-Deploy\002_HasDistricAdminSettingsToHasDistrictAdminSettings.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\003_ApplicationChangeProvidesRecomendedContentToProvidesRecommendedContent.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\004_Paid_apps_cleaning.PreDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Post-Deploy\Insert ABIds and Delete CCStIds in AppStand table.sql" />
+    <None Include="Scripts\Post-Deploy\004_drop_IsNewAssessmentEnabled_In_School.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Chalkable.Database.Master.refactorlog" />
+  </ItemGroup>
+</Project>
