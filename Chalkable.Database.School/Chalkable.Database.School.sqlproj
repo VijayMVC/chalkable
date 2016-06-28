@@ -353,10 +353,10 @@
     <Build Include="User Defined Types\TPersonNationality.sql" />
     <Build Include="Tables\Homeroom.sql" />
     <Build Include="User Defined Types\THomeroom.sql" />
-    <Build Include="Scripts\PostDeploy\001_Drop_GalleryCategoryRef_From_LessonPlan.PostDeploy.sql" />
+    <PostDeploy Include="Scripts\PostDeploy\001_Drop_GalleryCategoryRef_From_LessonPlan.PostDeploy.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
+    <None Include="Script.000.Update sort type in PersonSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
