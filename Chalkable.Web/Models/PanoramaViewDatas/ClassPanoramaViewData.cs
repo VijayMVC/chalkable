@@ -10,7 +10,7 @@ using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Models.Settings;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.PanoramaViewDatas
 {
     public class ClassPanoramaViewData : ClassViewData
     {
@@ -75,7 +75,7 @@ namespace Chalkable.Web.Models
 
             models = models.Where(x =>
             {
-                decimal a = 0;
+                decimal a;
                 return decimal.TryParse(x.Score, out a);
             }).ToList();
 

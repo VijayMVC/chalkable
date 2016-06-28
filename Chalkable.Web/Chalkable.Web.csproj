@@ -387,9 +387,10 @@
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
-    <Compile Include="Models\ClassPanoramaViewData.cs" />
+    <Compile Include="Models\PanoramaViewDatas\ClassPanoramaViewData.cs" />
     <Compile Include="Models\EthnicityViewData.cs" />
     <Compile Include="Models\HomeroomViewData.cs" />
+    <Compile Include="Models\PanoramaViewDatas\StudentPanoramaViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentDetailsViewData.cs" />
     <Compile Include="Models\Settings\AdminPanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />

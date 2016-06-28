@@ -16,6 +16,7 @@ using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ClassesViewData;
+using Chalkable.Web.Models.PanoramaViewDatas;
 using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Controllers
@@ -158,10 +159,8 @@ namespace Chalkable.Web.Controllers
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
             var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
-
-            var now = DateTime.Now;
+            
             var classStudents = SchoolLocator.StudentService.GetClassStudentsDetails(classId, true);
-            System.IO.File.AppendAllText(@"D:\test.txt", (DateTime.Now - now).ToString() + '\n');
 
             var panoramaViewData = ClassPanoramaViewData.Create(classDetails, standardizedTestDetails,
                 panorama, gradingScale, classStudents, selectedStudents, Context.NowSchoolTime);
