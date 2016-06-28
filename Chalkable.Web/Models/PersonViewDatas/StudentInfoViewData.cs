@@ -25,6 +25,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public bool IsForeignExchange { get; set; }
         public string StateIdNumber { get; set; }
         public string AlternateStudentNumber { get; set; }
+        public string StudentNumber { get; set; }
         public DateTime? OriginalEnrollmentDate { get; set; }
         public bool IsRetained { get; set; }
         public IList<StudentCustomAlertDetailViewData> StudentCustomAlertDetails { get; set; }  
@@ -79,9 +80,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.IsForeignExchange = studentDetails.IsForeignExchange;
             res.StateIdNumber = studentDetails.StateIdNumber;
             res.AlternateStudentNumber = studentDetails.AltStudentNumber;
+            res.StudentNumber = studentDetails.StudentNumber;
             res.OriginalEnrollmentDate = studentDetails.OriginalEnrollmentDate;
             res.IsRetained = student.StudentSchoolYears.First(x => x.SchoolYearRef == currentSchoolYearId).IsRetained;
-
+            
             return res;
         }
         
