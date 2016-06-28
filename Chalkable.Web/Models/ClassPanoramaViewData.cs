@@ -273,7 +273,7 @@ namespace Chalkable.Web.Models
         {
             var res = new ClassDistributionSectionViewData();
             if (avgInfos != null)
-                res.AbsencesDistribution = CreateGradeAvgViewData(avgInfos, gradingScaleRanges);
+                res.GradeAverageDistribution = CreateGradeAvgViewData(avgInfos, gradingScaleRanges);
             if (absenceInfos != null)
                 res.AbsencesDistribution = CreateAbsencesViewData(absenceInfos);
             if (infractionInfos != null)
