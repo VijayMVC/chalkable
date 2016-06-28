@@ -147,6 +147,9 @@ NAMESPACE('chlk.services', function () {
                     var a, b;
 
                     if(orderBy_ == chlk.models.profile.ClassPanoramaSortType.ETHNICITY){
+                        if(!s1.getStudent().getEthnicity() || !s2.getStudent().getEthnicity())
+                            return 0;
+
                         a = parseInt(s1.getStudent().getEthnicity().getCode(), 10);
                         b = parseInt(s2.getStudent().getEthnicity().getCode(), 10);
                     }else{
