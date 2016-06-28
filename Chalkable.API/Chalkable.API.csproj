@@ -105,6 +105,7 @@
     <Compile Include="Models\StudentAttendance\StudentDateAttendance.cs" />
     <Compile Include="Models\StudentAttendance\StudentPeriodAttendance.cs" />
     <Compile Include="Models\StudentInfo.cs" />
+    <Compile Include="Models\SupplementalAnnouncement.cs" />
     <Compile Include="OnWebRequestIsCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

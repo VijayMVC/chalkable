@@ -75,8 +75,11 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 if(this.dom.find('#public-check').checked())
                     this.checkTitle_();
-                else
+                else{
                     this.dom.find('.title-block-container').removeClass('with-gallery-id');
+                    this.removeDisabledClass();
+                }
+
                 select.trigger('chosen:updated');
             },
 
