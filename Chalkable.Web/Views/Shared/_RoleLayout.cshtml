@@ -302,6 +302,7 @@
             var gradingComments = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_COMMMENTS));
             var announcementAttributes = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ANNOUNCEMENT_ATTRIBUTES));
             var studyCenterEnabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.STUDY_CENTER_ENABLED)';
+            var assessmentEnabled = @ViewData.GetJsConstantValueOrNull(ViewConstants.ASSESSMENT_ENABLED);
             var leParams = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.LE_PARAMS));
             var messagingDisabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.MESSAGING_DISABLED)';
             var messagingSettings = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.MESSAGING_SETTINGS));

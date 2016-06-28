@@ -64,13 +64,20 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
 
-
             [chlk.controllers.SidebarButton('people')],
-            function indexAction() {
+            function indexStudentAction() {
                 var classId = this.getCurrentClassId();
                 return this.Redirect('students', 'my', [classId]);
             },
 
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.VIEW_STUDENT, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_STUDENTS]
+            ])],
+            [chlk.controllers.SidebarButton('people')],
+            function indexTeacherAction() {
+                var classId = this.getCurrentClassId();
+                return this.Redirect('students', 'my', [classId]);
+            },
 
             function getInfoPageClass(){
                 return chlk.activities.profile.StudentInfoPage;
@@ -93,20 +100,39 @@ NAMESPACE('chlk.controllers', function (){
                 result = result.then(function(users){
                         var usersModel = this.prepareUsersModel(users, 0, true, null, null, isMy);
                         var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
-                        return new chlk.models.teacher.StudentsList(usersModel, topModel, isMy, null, this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS));
+                        return new chlk.models.teacher.StudentsList(usersModel, topModel, isMy, null, this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS),
+                            this.getCurrentRole().isStudent() || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_STUDENT));
                     }, this);
                 return this.PushView(chlk.activities.person.ListPage, result);
             },
 
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.VIEW_STUDENT, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_STUDENTS]
+            ])],
             [chlk.controllers.SidebarButton('people')],
             [[chlk.models.id.ClassId]],
-            function myAction(classId_){
+            function myTeacherAction(classId_){
                 return this.showStudentsList(true, classId_);
             },
 
             [chlk.controllers.SidebarButton('people')],
             [[chlk.models.id.ClassId]],
-            function allAction(classId_){
+            function myStudentAction(classId_){
+                return this.showStudentsList(true, classId_);
+            },
+
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.VIEW_STUDENT]
+            ])],
+            [chlk.controllers.SidebarButton('people')],
+            [[chlk.models.id.ClassId]],
+            function allTeacherAction(classId_){
+                return this.showStudentsList(false, classId_);
+            },
+
+            [chlk.controllers.SidebarButton('people')],
+            [[chlk.models.id.ClassId]],
+            function allStudentAction(classId_){
                 return this.showStudentsList(false, classId_);
             },
 

@@ -39,6 +39,12 @@ namespace Chalkable.Web.Controllers
             MasterLocator.SchoolService.UpdateMessagingSettings(Context.DistrictId, schoolId, studentMessaging, studentToClassOnly, teacherToStudentMessaging, teacherToClassOnly);
             return Json(true);
         }
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            MasterLocator.SchoolService.UpdateAssessmentEnabled(districtId, schoolId, enabled);
+            return Json(true);
+        }
 
         /*[AuthorizationFilter("SysAdmin")]
         public ActionResult Summary(Guid schoolId)

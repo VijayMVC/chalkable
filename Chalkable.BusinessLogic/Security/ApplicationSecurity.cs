@@ -32,5 +32,9 @@ namespace Chalkable.BusinessLogic.Security
         {
             return context.SCEnabled || BaseSecurity.IsSysAdmin(context) || context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id;
         }
-    }
+        public static bool HasAssessmentEnabled(UserContext context)
+        {
+            return context.AssessmentEnabled || context.SCEnabled || BaseSecurity.IsSysAdminOrDeveloper(context)  || BaseSecurity.IsAppTester(context);
+        }
+}
 }

@@ -115,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (appId == ServiceLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId())
             {
-                if (!ApplicationSecurity.HasStudyCenterAccess(Context))
+                if (!ApplicationSecurity.HasAssessmentEnabled(Context) && !ApplicationSecurity.HasStudyCenterAccess(Context))
                     throw new ChalkableSecurityException("Current user has disabled assessment access");
             }
             else if(!ApplicationSecurity.HasStudyCenterAccess(Context))

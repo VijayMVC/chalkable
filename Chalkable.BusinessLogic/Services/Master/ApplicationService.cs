@@ -199,10 +199,12 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public Guid? GetMiniQuizAppicationId()
         {
-            var key = Preference.ASSESSMENT_APLICATION_ID;
+            var key = ApplicationSecurity.HasAssessmentEnabled(Context)
+                    ? Preference.ASSESSMENT_APLICATION_ID
+                    : null;
 
             Guid res;
-            return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;
+            return key != null ? (Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null) : null;
         }
         public Guid? GetAssessmentId()
         {
@@ -211,10 +213,12 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private Guid? InternalGetAssessmentId()
         {
-            var key = Preference.ASSESSMENT_APLICATION_ID;
+            var key = ApplicationSecurity.HasAssessmentEnabled(Context)
+                ? Preference.ASSESSMENT_APLICATION_ID
+                : null;
 
             Guid res;
-            return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;
+            return key != null ? (Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null) : null;
         }
 
         public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)

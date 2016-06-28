@@ -39,7 +39,7 @@ Values(@content, @created, 1, @title)
 set @newLpId = Scope_Identity()
 
 Insert Into LessonPlan
-values (@newLpId, @startDate, @endDate, @classId, null, @visibleForStudent, @schoolYearId, @inGallery, @galleryOwnerRef)
+values (@newLpId, @startDate, @endDate, @classId, null, null, @visibleForStudent, @schoolYearId, @inGallery, @galleryOwnerRef)
 
 Insert Into @newLpIds
 values(@newLpId)

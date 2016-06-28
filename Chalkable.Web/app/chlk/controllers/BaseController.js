@@ -465,7 +465,7 @@ NAMESPACE('chlk.controllers', function (){
                if (!this.checkLEIntegrated_(method, leParams.isLEIntegrated()))
                    throw new chlk.controllers.LEIntegrationDisabledException();
 
-               var isAssessmentEnabled = this.isAssessmentEnabled();
+               var isAssessmentEnabled = this.isAssessmentEnabled() || isStudyCenterEnabled;
                if(!this.checkAssessmentEnabled_(method, isAssessmentEnabled))
                    throw new chlk.controllers.AssessmentEnabledException();
 

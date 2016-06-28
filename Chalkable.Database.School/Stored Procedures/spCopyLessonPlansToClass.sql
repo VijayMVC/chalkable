@@ -126,6 +126,7 @@ Insert Into LessonPlan
 		ToCopy.EndDate,
 		@toClassId,
 		null,
+		null,
 		ToCopy.VisibleForStudent,
 		ToCopy.InGallery,
 		ToCopy.GalleryOwnerRef,

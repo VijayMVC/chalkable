@@ -44,12 +44,12 @@ Begin
  If @roleId = @TEACHER_ROLE
   insert into @lessonPlans
    exec spGetLessonPlans @announcementId, @schoolYearid, @personId, @classId, @roleId, 
-    @personId, null, 1, @fromDate, @toDate, @completeStateNeedsUpdate, null
+    @personId, null, 1, @fromDate, @toDate, @completeStateNeedsUpdate
 
  If @roleId = @STUDENT_ROLE
   insert into @lessonPlans
    exec spGetLessonPlans @announcementId, @schoolYearid, @personId, @classId, @roleId, 
-    null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate, null 
+    null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate 
 
 	if @filterByExpiryDate = 1
 	delete from @lessonPlans

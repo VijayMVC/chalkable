@@ -211,8 +211,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             res.Add(Preference.TWILIO_OAUTH_TOKEN, new PreferenceInfo { Value = "472e1237551255926a9f69b8a26ec050" });
             res.Add(Preference.TWILIO_FROM_PHONE_NUMBER, new PreferenceInfo {Value = "+16464900500"});
             res.Add(Preference.PASSWORD_RESET_FREQUENCY_MINUTES, new PreferenceInfo {Value = "20"});
-
-            res.Add(Preference.PRACTICE_APPLICATION_ID, new PreferenceInfo { Value = "56c14655-2897-4073-bb48-32dfd61264b5" });
+            
             res.Add(Preference.ASSESSMENT_APLICATION_ID, new PreferenceInfo { Value = "E989CCFE-F658-4F89-81E7-F3EFA0251B28" });
             res.Add(Preference.SCHOOL_REGISTRATION_TO_SYSADMIN_EMAIL_BODY, new PreferenceInfo
             {
