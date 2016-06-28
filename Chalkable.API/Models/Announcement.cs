@@ -25,7 +25,7 @@ namespace Chalkable.API.Models
         public string AnnouncementTypeName { get; set; }
 
         [JsonProperty("personid")]
-        public int PersonId { get; set; }
+        public int? PersonId { get; set; }
 
         [JsonProperty("personname")]
         public string PersonName { get; set; }
