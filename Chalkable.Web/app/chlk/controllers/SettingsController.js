@@ -5,12 +5,16 @@ REQUIRE('chlk.activities.settings.PreferencesPage');
 REQUIRE('chlk.activities.settings.StudentPage');
 REQUIRE('chlk.activities.settings.AdminPage');
 REQUIRE('chlk.activities.settings.AppSettingsPage');
+REQUIRE('chlk.activities.settings.AdminPanoramaPage');
+REQUIRE('chlk.activities.settings.AddCourseToPanoramaDialog');
+
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.settings.AdminMessaging');
 REQUIRE('chlk.services.PreferenceService');
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.services.AdminDistrictService');
+REQUIRE('chlk.services.ClassService');
 
 
 NAMESPACE('chlk.controllers', function (){
@@ -30,6 +34,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.AdminDistrictService, 'adminDistrictService',
+
+            [ria.mvc.Inject],
+            chlk.services.ClassService, 'classService',
 
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.SYSADMIN
@@ -115,6 +122,76 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_());
 
                 return this.PushView(chlk.activities.settings.AdminPage, res);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            function panoramaAdminAction() {
+                var res = ria.async.wait([
+                    this.adminDistrictService.getPanoramaSettings(),
+                    this.adminDistrictService.getSettings(),
+                    this.adminDistrictService.getStandardizedTests(),
+                    this.classService.getCourseTypes()
+                ])
+                    .then(function(result){
+                        var model = new chlk.models.settings.AdminPanoramaViewData(result[0], result[1].getApplications(), result[2]);
+                        this.getContext().getSession().set(ChlkSessionConstants.ADMIN_PANORAMA, model);
+                        this.getContext().getSession().set(ChlkSessionConstants.COURSE_TYPES, result[3]);
+                        return model;
+                    }, this)
+                    .attach(this.validateResponse_());
+
+                return this.PushOrUpdateView(chlk.activities.settings.AdminPanoramaPage, res);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            function panoramaSubmitAction(data){
+                if(data.submitType == 'subject'){
+                    this.WidgetStart('settings', 'showCoursesDialog', [JSON.parse(data.excludedIds)])
+                        .then(function(data){
+                            var ids = data.courseTypeIds ? data.courseTypeIds.split(',').map(function(item){return parseInt(item, 10)}) : [],
+                                model = this.getContext().getSession().get(ChlkSessionConstants.ADMIN_PANORAMA, null),
+                                courseTypes = this.getContext().getSession().get(ChlkSessionConstants.COURSE_TYPES, null),
+                                courseTypeDefaultSettings = [];
+
+                            courseTypes = courseTypes.filter(function(item){return ids.indexOf(item.getCourseTypeId().valueOf()) > -1});
+                            courseTypes.forEach(function(courseType){
+                                courseTypeDefaultSettings.push(new chlk.models.panorama.CourseTypeSettingViewData(courseType));
+                            });
+                            model.getPanoramaSettings().setCourseTypeDefaultSettings(courseTypeDefaultSettings);
+                            this.BackgroundUpdateView(chlk.activities.settings.AdminPanoramaPage, model, 'course-types');
+                        }, this);
+
+                    return null;
+                }
+
+                var res = this.adminDistrictService.savePanoramaSettings(JSON.parse(data.filters))
+                    .thenCall(this.adminDistrictService.getPanoramaSettings, [])
+                    .then(function(panoramaSettings){
+                        var model = this.getContext().getSession().get(ChlkSessionConstants.ADMIN_PANORAMA, null);
+                        model.setPanoramaSettings(panoramaSettings);
+                        return model;
+                    }, this)
+                    .attach(this.validateResponse_());
+
+                return this.UpdateView(chlk.activities.settings.AdminPanoramaPage, res);
+            },
+
+            [[String, Array]],
+            function showCoursesDialogWidgetAction(requestId, excludedIds_){
+                var courseTypes = this.getContext().getSession().get(ChlkSessionConstants.COURSE_TYPES, null);
+                var model = new chlk.models.settings.AddCourseToPanoramaViewData(courseTypes, excludedIds_, requestId);
+                return this.ShadeView(chlk.activities.settings.AddCourseToPanoramaDialog, ria.async.DeferredData(model));
+            },
+
+            function addCoursesToPanoramaAction(data){
+                this.WidgetComplete(data.requestId, data);
+                return this.CloseView(chlk.activities.settings.AddCourseToPanoramaDialog);
             },
 
             [chlk.controllers.AccessForRoles([

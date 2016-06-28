@@ -3,6 +3,7 @@
     [GradeLevelRef]    INT NOT NULL,
     [StudentRef]       INT NOT NULL,
     [EnrollmentStatus] INT NOT NULL,
-	[IsRetained]       BIT NOT NULL
+	[IsRetained]       BIT NOT NULL,
+	[HomeroomRef]	   INT
 );
 

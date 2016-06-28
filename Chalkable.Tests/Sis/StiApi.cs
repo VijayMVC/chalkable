@@ -537,7 +537,7 @@ namespace Chalkable.Tests.Sis
             client.Headers.Add("Content-Type", "application/json");
             try
             {
-                var url = connector.BaseUrl + $"sync/tables/PersonNationality/";
+                var url = connector.BaseUrl + $"sync/tables/Homeroom/";
 
                 client.QueryString = new NameValueCollection();
                 var data = client.DownloadData(url);
@@ -553,9 +553,6 @@ namespace Chalkable.Tests.Sis
                     }
                     else
                         reader = new StreamReader(ms);
-
-                    var serializer = new JsonSerializer();
-                    var jsonReader = new JsonTextReader(reader);
                     
                     Debug.WriteLine(reader.ReadToEnd());
 

@@ -179,12 +179,14 @@
     <Compile Include="Services\SyncModelAdapters\GradingPeriodAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\GradingScaleAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\GradingScaleRangeAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\HomeroomAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\InfractionAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\LanguageAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonEmailAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonEthnicityAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonLanguageAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\PersonNationalityAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonTelephoneAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\RoomAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\ScheduledSectionAdapter.cs" />

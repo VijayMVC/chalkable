@@ -59,7 +59,7 @@ NAMESPACE('chlk.controls', function () {
                 node.addClass('current-filter');
             },
 
-            [ria.mvc.DomEventBind('change', '.panorama-filter-ctn .submit-after-change')],
+            [ria.mvc.DomEventBind('change', '.panorama-filter-form .submit-after-change')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function submitItemChange(node, event, selected) {
                 this.formSubmitByNode_(node);

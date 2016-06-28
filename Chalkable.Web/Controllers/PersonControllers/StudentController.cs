@@ -76,7 +76,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             res.SpecialInstructions = studentDetailsInfo.SpecialInstructions;
             res.SpEdStatus = studentDetailsInfo.SpEdStatus;
 
-            //todo : clarify in Zoli ... do we need all contacts or just family members
+      
             var studentContacts = SchoolLocator.ContactService.GetStudentContactDetails(personId);
             res.StudentContacts = StudentContactViewData.Create(studentContacts);
             res.StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(SchoolLocator.StudentCustomAlertDetailService.GetList(personId));
@@ -98,7 +98,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName, int? markingPeriodId)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-            
+       
             int? classMatesToId = null;
             int? teacherId = null;
             if (CoreRoles.STUDENT_ROLE == SchoolLocator.Context.Role)

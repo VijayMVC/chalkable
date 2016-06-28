@@ -349,6 +349,10 @@
     <Build Include="Tables\Country.sql" />
     <Build Include="User Defined Types\TCountry.sql" />
     <Build Include="Stored Procedures\spGetClassGradingScaleRanges.sql" />
+    <Build Include="Tables\PersonNationality.sql" />
+    <Build Include="User Defined Types\TPersonNationality.sql" />
+    <Build Include="Tables\Homeroom.sql" />
+    <Build Include="User Defined Types\THomeroom.sql" />
     <PostDeploy Include="Scripts\PostDeploy\001_Drop_GalleryCategoryRef_From_LessonPlan.PostDeploy.sql" />
   </ItemGroup>
   <ItemGroup>

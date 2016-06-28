@@ -237,6 +237,7 @@
     <Compile Include="SyncModel\GradingPeriod.cs" />
     <Compile Include="SyncModel\GradingScale.cs" />
     <Compile Include="SyncModel\GradingScaleRange.cs" />
+    <Compile Include="SyncModel\Homeroom.cs" />
     <Compile Include="SyncModel\Infraction.cs" />
     <Compile Include="SyncModel\Language.cs" />
     <Compile Include="SyncModel\NullableForeignKey.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="SyncModel\PersonEmail.cs" />
     <Compile Include="SyncModel\PersonEthnicity.cs" />
     <Compile Include="SyncModel\PersonLanguage.cs" />
+    <Compile Include="SyncModel\PersonNationality.cs" />
     <Compile Include="SyncModel\PersonTelephone.cs" />
     <Compile Include="SyncModel\Room.cs" />
     <Compile Include="SyncModel\ScheduledBlock.cs" />

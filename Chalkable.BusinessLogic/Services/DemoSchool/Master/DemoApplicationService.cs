@@ -177,9 +177,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public Guid? GetMiniQuizAppicationId()
         {
-            var id = PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value;
+            var key = ApplicationSecurity.HasAssessmentEnabled(Context)
+                    ? Preference.ASSESSMENT_APLICATION_ID
+                    : null;
+
             Guid res;
-            return Guid.TryParse(id, out res) ? res : (Guid?)null;
+            return key != null ? (Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null) : null;
         }
         public Guid? GetAssessmentId()
         {

@@ -86,6 +86,9 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(Language));
             RegisterType(typeof(PersonLanguage));
             RegisterType(typeof(Country));
+            RegisterType(typeof(PersonNationality));
+
+            RegisterType(typeof(Homeroom));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

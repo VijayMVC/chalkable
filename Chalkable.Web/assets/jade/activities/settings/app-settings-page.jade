@@ -5,6 +5,7 @@
                 +ActionLink('settings', 'dashboardAdmin') Messaging
                 each app in self.getApplications()
                     +ActionLink('settings', 'appSettings', app.getId())(class = app.getId() == self.getApp().getId() ? "pressed" : "" )=app.getName()
+                +ActionLink('settings', 'panoramaAdmin') Panorama
 
     .iframe-wrap.partial-update
         iframe(src=self.getUrl(), width="100%", border=0, style="border: none; min-height: 700px")

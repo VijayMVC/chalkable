@@ -30,6 +30,35 @@ NAMESPACE('chlk.activities.announcement', function () {
         [chlk.activities.lib.PageClass('new-item')],
         'LessonPlanFormDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
+            [ria.mvc.DomEventBind('click', '.attribute-title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function collapseClick(node, event){
+                var parent = node.parent('.attribute-item-container');
+
+                var attrData = parent.find('.mp-data');
+                var container = attrData.find('.attribute-details');
+                jQuery(attrData.valueOf()).animate({
+                    height: parent.hasClass('open') ? 0 : (container.height() + parseInt(container.getCss('margin-bottom'), 10))
+                }, 500);
+
+                if(parent.hasClass('open')){
+                    this.closeBlock(parent);
+                }else{
+                    var item = this.dom.find('.attribute-item-container.open');
+                    jQuery(item.find('.mp-data').valueOf()).animate({
+                        height: 0
+                    }, 500);
+                    this.closeBlock(item);
+                    parent.addClass('open');
+                }
+            },
+
+            function closeBlock(node){
+                setTimeout(function(){
+                    node.removeClass('open');
+                }, 500);
+            },
+
             [ria.mvc.DomEventBind('change', '.gallery-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function addToGalleryChange(node, event, selected_){

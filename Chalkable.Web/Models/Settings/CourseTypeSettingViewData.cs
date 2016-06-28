@@ -18,13 +18,16 @@ namespace Chalkable.Web.Models.Settings
             return new CourseTypeSettingViewData
             {
                 CourseType = ShortCourseTypeViewData.Create(courseType),
-                StandardizedTestFilters = settings.StandardizedTestFilters.Select(StandardizedTestFilterViewData.Create).ToList()
+                StandardizedTestFilters = settings.StandardizedTestFilters?.Select(StandardizedTestFilterViewData.Create).ToList()
             };
         }
 
         public static IList<CourseTypeSettingViewData> Create(IList<CourseTypeSetting> settings, IList<CourseType> courseTypes)
         {
             var res = new List<CourseTypeSettingViewData>();
+
+            if (settings == null)
+                return res;
 
             settings = settings.Where(x => courseTypes.Any(y => x.CourseTypeId == y.Id)).ToList();
             foreach (var courseTypeSetting in settings)

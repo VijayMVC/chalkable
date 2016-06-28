@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services.Master;
+﻿using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -14,6 +9,10 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<Country> models);
         void Edit(IList<Country> models);
         void Delete(IList<Country> models);
+
+        void AddPersonNationality(IList<PersonNationality> models);
+        void EditPersonNationality(IList<PersonNationality> models);
+        void DeletePersonNationality(IList<PersonNationality> models);
     }
 
     public class CountryService : SchoolServiceBase, ICountryService
@@ -37,6 +36,19 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<Country>(u).Insert(models));
         }
 
-        
+        public void AddPersonNationality(IList<PersonNationality> models)
+        {
+            DoUpdate(u => new DataAccessBase<PersonNationality>(u).Insert(models));
+        }
+
+        public void EditPersonNationality(IList<PersonNationality> models)
+        {
+            DoUpdate(u => new DataAccessBase<PersonNationality>(u).Update(models));
+        }
+
+        public void DeletePersonNationality(IList<PersonNationality> models)
+        {
+            DoUpdate(u => new DataAccessBase<PersonNationality>(u).Delete(models));
+        }
     }
 }

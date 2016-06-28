@@ -1007,7 +1007,6 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.attribute-title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function collapseClick(node, event){
-                var nodeT = new ria.dom.Dom(event.target);
                 var parent = node.parent('.attribute-item-container');
 
                 var attrData = parent.find('.mp-data');
