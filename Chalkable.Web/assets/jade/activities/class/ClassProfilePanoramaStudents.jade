@@ -46,7 +46,7 @@ BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add
                             .circle-cnt(
                                 class = info.getDisciplineClass()
                             )=info.getDiscipline()
-                        .cell.ethnicity=info.getEthnicity().getCode()
+                        .cell.ethnicity=info.getEthnicity() ? info.getEthnicity().getCode() : ''
                         .cell.hispanic=info.isHispanic() ? 'Y' : 'N'
                         .cell.iep-active=info.isIEPActive() ? 'Y' : 'N'
                         .cell.retained=info.isRetainedFromPrevSchoolYear() ? 'Y' : 'N'
