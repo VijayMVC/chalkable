@@ -19,16 +19,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<TotalAbsencesPerClassViewData> AttendanceBox { get; set; }
         public StudentHoverBoxViewData<DisciplineTypeSummaryViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummaryGradeViewData> GradesBox { get; set; }
-        public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
-
-        //[SensitiveData]
+        public StudentHoverBoxViewData<StudentSummaryRankViewData> RanksBox { get; set; }
 
         private const string NO_CLASS_SCHEDULED = "No Class Scheduled";
 
         public int? RoomId { get; set; }
         public string RoomName { get; set; }
         public string RoomNumber { get; set; }
-
 
         protected StudentSummaryViewData(StudentDetails student, Room room, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions) : base(student, customAlerts, healthConditions)
@@ -55,7 +52,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     StudentHoverBoxViewData<StudentSummaryGradeViewData>.Create(studentSummary.StudentAnnouncements),
                 RanksBox =
                     studentSummary.ClassRank != null
-                        ? StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank)
+                        ? StudentHoverBoxViewData<StudentSummaryRankViewData>.Create(studentSummary.ClassRank)
                         : null,
                 CurrentClassName = NO_CLASS_SCHEDULED,
             };
@@ -81,9 +78,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class StudentHoverBoxViewData<T> : HoverBoxesViewData<T>
     {
-        public static StudentHoverBoxViewData<StudentSummeryRankViewData> Create(ClassRankInfo rankInfo)
+        public static StudentHoverBoxViewData<StudentSummaryRankViewData> Create(ClassRankInfo rankInfo)
         {
-            var res = new StudentHoverBoxViewData<StudentSummeryRankViewData>();
+            var res = new StudentHoverBoxViewData<StudentSummaryRankViewData>();
             var rank = rankInfo.Rank;
             res.IsPassing = true;
             res.Title = rank.HasValue ? string.Format("{0} of {1}", rankInfo.Rank, rankInfo.ClassSize) : "";
@@ -132,7 +129,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
     }
 
 
-    public class StudentSummeryRankViewData
+    public class StudentSummaryRankViewData
     {
     }
 

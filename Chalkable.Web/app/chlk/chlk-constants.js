@@ -1,10 +1,13 @@
 var ChlkSessionConstants = {
+    ADMIN_PANORAMA: 'adminPanorama',
     ATTACH_OPTIONS: 'attachOptions',
     ATTRIBUTES_WITH_FILES: 'attributesWithFiles',
     CHART_DATE_TYPE: 'chartDateType',
     CLASS_PROFILE_ATTENDANCE_DATA: 'classProfileAttendanceData',
     CLASS_SCHEDULE_DATE_RANGES: 'classScheduleDateRanges',
+    COURSE_TYPES: 'courseTypes',
     CREATED_ANNOUNCEMENTS: 'createdAnnouncements',
+    CURRENT_PANORAMA: 'currentPanorama',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',
     SUPPLEMENTAL_STUDENTS: 'supplementalStudents',

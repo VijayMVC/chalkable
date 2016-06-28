@@ -13,6 +13,7 @@ mixin AttributeAttachment_(attachment)
             else
                 +ActionLink('announcement', 'viewAttributeAttachment', attachment.getAttributeId(), attachment.getAnnouncementType(),
                 attachment.getAnnouncementId()).attachment-name=attachment.getName()
+
             +ActionLink('announcement', 'removeAttributeAttachment', attachment.getAnnouncementType(),
             attachment.getAnnouncementId(), attachment.getAttributeId()).remove-file-attachment
     else

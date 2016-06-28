@@ -28,7 +28,6 @@ NAMESPACE('chlk.templates.discipline',function(){
 
                 return {
                     chart: {
-                        width: 800,
                         height: 200
                     },
 

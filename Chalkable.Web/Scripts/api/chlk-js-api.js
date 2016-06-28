@@ -50,6 +50,7 @@ var CHLK_API = function (window, document, $) {
         POP_ME: 'popMe',
         STANDARD_PICKER: 'showStandardPicker',
         TOPIC_PICKER: 'showTopicsPicker',
+        FILE_UPLOAD: 'showFileUpload',
         ON_PAUSED: 'paused',
         ON_RESUME: 'resume',
         ALERT_BOX: 'showAlertBox',
@@ -196,6 +197,10 @@ var CHLK_API = function (window, document, $) {
         /* data: {} */
         showTopicsPicker: function (data, cb) {
             postAction(data, ChlkActionTypes.TOPIC_PICKER, parentURL, cb);
+        },
+
+        showFileUpload: function (data, cb) {
+            postAction(data, ChlkActionTypes.FILE_UPLOAD, parentURL, cb);
         },
 
         /* data: {text: "", header: ""} */

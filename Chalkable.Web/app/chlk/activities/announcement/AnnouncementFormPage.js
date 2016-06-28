@@ -378,11 +378,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 return false;
             },
 
-            //[ria.mvc.DomEventBind('change', '.extra-credit')],
-            //[[ria.dom.Dom, ria.dom.Event]],
-            //function extraCreditChange(node, event){
-            //},
-
             [[Boolean]],
             function updateFormByNotExistingTitle(){
                 this.dom.find('.title-block').removeClass('exists');

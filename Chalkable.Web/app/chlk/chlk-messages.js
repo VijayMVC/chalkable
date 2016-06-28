@@ -37,6 +37,7 @@ function oneOrMany(text, needE){
 var Msg = {
     //Simple words-----------------------------------------------------
 
+    Absences: 'Absences',
     Accept: 'Accept',
     Accepted: 'Accepted',
     Add: 'Add',
@@ -456,6 +457,7 @@ var Msg = {
     GPA: 'GPA',
     GradeLevel: 'GradeLevel',
     Grade_Avg: 'Grade Avg',
+    Grade_Average: 'Grade Average',
     Grade_book: 'Grade book',
     Grade_Book_Report: 'Grade Book Report',
     Grade_Level: 'Grade Level',

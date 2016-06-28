@@ -28,7 +28,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 GradeLevelRef = x.GradeLevelID ?? 0,
                 SchoolYearRef = x.AcadSessionID,
                 StudentRef = x.StudentID,
-                EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus)
+                EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus),
+                IsRetained = x.IsRetained,
+                HomeroomRef = x.HomeroomID
             };
         }
 

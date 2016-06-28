@@ -110,10 +110,8 @@ namespace Chalkable.Data.Master.Model
         public const string EMAIL_CHANGE_EMAIL_BODY = "emailchangeemailbody";
 
         public const string ATTENDANCE_SYNC_FAIL_EMAIL_BODY = "attendacesyncfailemailbody";
-
-        public const string PRACTICE_APPLICATION_ID = "practice_application_id";
-        public const string ASSESSMENT_APLICATION_ID = "assessment_application_id";
-        public const string NEW_ASSESSMENT_APLICATION_ID = "new_assessment_application_id";
+        
+        public const string ASSESSMENT_APLICATION_ID = "new_assessment_application_id";
 
         //applicatios
         public const string APPLICATION_SUBMITTED_EMAIL_BODY = "application_submitted_email_body";

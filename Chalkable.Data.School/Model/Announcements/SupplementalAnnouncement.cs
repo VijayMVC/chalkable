@@ -43,6 +43,6 @@ namespace Chalkable.Data.School.Model.Announcements
         [NotDbFieldAttr]
         public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.Supplemental;
         [NotDbFieldAttr]
-        public override int OwnereId => PrimaryTeacherRef;
+        public override int? OwnereId => PrimaryTeacherRef;
     }
 }

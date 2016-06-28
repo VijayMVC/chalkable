@@ -11,6 +11,7 @@ namespace Chalkable.StiConnector.SyncModel
         public string GradeLevelName { get; set; }
         public string CurrentEnrollmentStatus { get; set; }
         public string LastEnrollmentActionClass { get; set; }
+        [NullableForeignKey]
         public int? HomeroomID { get; set; }
         public string HomeroomName { get; set; }
         public short? LunchProgramID { get; set; }

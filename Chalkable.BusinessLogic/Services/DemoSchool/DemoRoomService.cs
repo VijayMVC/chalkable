@@ -38,6 +38,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public void AddHomerooms(IList<Homeroom> homerooms)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EditHomerooms(IList<Homeroom> homerooms)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteHomerooms(IList<Homeroom> homerooms)
+        {
+            throw new NotImplementedException();
+        }
+
         public PaginatedList<Room> GetRooms(int start = 0, int count = Int32.MaxValue)
         {
             return GetAll(start, count);

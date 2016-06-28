@@ -2,8 +2,8 @@
   .dialog
     width: 880px
 
-.attach-apps-dialog, .file-cabinet-dialog, .lesson-plan-gallery-dialog
-  .dialog
+.attach-apps-dialog, .file-cabinet-dialog, .lesson-plan-gallery-dialog, .lesson-plan-gallery-page
+  .dialog, .gallery-view
     @each $button in attach-file, attach-attribute, attach-standard, file-cabinet, attach-assessment
       .#{$button}
         +icons-170-sprite($button)

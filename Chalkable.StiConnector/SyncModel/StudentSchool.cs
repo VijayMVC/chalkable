@@ -6,6 +6,7 @@ namespace Chalkable.StiConnector.SyncModel
         public int StudentID { get; set; }
         public int SchoolID { get; set; }
         public int? GradingScaleID { get; set; }
+        [NullableForeignKey]
         public int? CounselorID { get; set; }
         public short? TransportMethodID { get; set; }
         public string ParkingNumber { get; set; }

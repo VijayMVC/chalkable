@@ -12,8 +12,8 @@ NAMESPACE('chlk.controls', function () {
         backgroundColor: 'transparent',
         chart: {
             backgroundColor: 'transparent',
-            width: 630,
-            height: 178,
+            //width: 630,
+            //height: 178,
             style: {
                 fontFamily: 'Arial',
                 fontSize: '10px',
@@ -88,7 +88,7 @@ NAMESPACE('chlk.controls', function () {
                 }
             }
         },
-        colors: ['#d8d8d8'],
+        //colors: ['#d8d8d8'],
 
         series: [{
             name: '',
@@ -116,6 +116,7 @@ NAMESPACE('chlk.controls', function () {
             Object, function processAttrs(attrs) {
                 attrs.id = attrs.id || ria.dom.Dom.GID();
                 var options = attrs['data-options'];
+                options.chart = options.chart || {}
                 if(!options.chart.width && attrs.scroll){
                     var len = options.series[0].data.length;
                     var width = len * 80;
@@ -146,8 +147,8 @@ NAMESPACE('chlk.controls', function () {
                         max = Math.ceil(max/interval) * interval;
                         res.yAxis.max = max;
                     }
-                    if(res.legend.enabled && !options.chart.height)
-                        res.chart.height = 215;
+                    //if(res.legend.enabled && !options.chart.height)
+                        //res.chart.height = 215;
                 }else{
                     res = options;
                 }

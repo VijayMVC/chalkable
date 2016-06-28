@@ -160,6 +160,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachmentSecurityTools.cs" />
     <Compile Include="ChalkableList.cs" />
     <Compile Include="ChlkResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -213,6 +214,12 @@
       <LastGenOutput>ChlkResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.API\Chalkable.API.csproj">
+      <Project>{A7272B5D-DC95-4783-888D-3A36E8922226}</Project>
+      <Name>Chalkable.API</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets" Condition="Exists('..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" />

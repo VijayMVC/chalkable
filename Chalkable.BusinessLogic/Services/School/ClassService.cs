@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.EnumMappers;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.ClassPanorama;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
@@ -69,6 +71,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
         IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
         bool IsTeacherClasses(int teacherId, params int[] classIds);
+        ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -232,6 +235,19 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        {
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+            if (schoolYearIds == null || schoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            standardizedTestFilters = standardizedTestFilters ?? new List<StandardizedTestFilter>();
+            var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
+            var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);
+            var sectionPanorama = ConnectorLocator.PanoramaConnector.GetSectionPanorama(classId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
+
+            return ClassPanorama.Create(sectionPanorama);
+        }
 
         public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)
         {

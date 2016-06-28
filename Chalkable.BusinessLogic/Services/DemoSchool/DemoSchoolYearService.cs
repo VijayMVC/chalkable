@@ -130,6 +130,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return SchoolYearStorage.GetCurrentSchoolYear();
         }
 
+        public IList<SchoolYear> GetPreviousSchoolYears(int count = 1)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true)
         {
             throw new NotImplementedException();
@@ -180,6 +185,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public IList<SchoolYear> GetDescSortedYearsByIds(IList<int> ids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId)
         {
             throw new NotImplementedException();
         }

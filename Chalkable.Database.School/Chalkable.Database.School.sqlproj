@@ -76,7 +76,7 @@
     <Folder Include="User Defined Types\" />
     <Folder Include="Stored Procedures\Announcements Procedures" />
     <Folder Include="Scripts" />
-    <Folder Include="Scripts\Pre-Deploy" />
+    <Folder Include="Scripts\PostDeploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Address.sql" />
@@ -317,6 +317,13 @@
     <Build Include="User Defined Types\TInputClassAnnouncement.sql" />
     <Build Include="Stored Procedures\spUpdateClassAnnouncement.sql" />
     <Build Include="Stored Procedures\spDeleteAnnouncementAttribute.sql" />
+    <Build Include="Tables\StandardizedTest.sql" />
+    <Build Include="Tables\StandardizedTestComponent.sql" />
+    <Build Include="Tables\StandardizedTestScoreType.sql" />
+    <Build Include="User Defined Types\TStandardizedTest.sql" />
+    <Build Include="User Defined Types\TStandardizedTestComponent.sql" />
+    <Build Include="User Defined Types\TStandardizedTestScoreType.sql" />
+    <Build Include="Stored Procedures\spGetStandardizedTestDetails.sql" />
     <Build Include="Stored Procedures\spCopyLessonPlansToClass.sql" />
     <Build Include="User Defined Types\TSisActivityCopyResult.sql" />
     <Build Include="Stored Procedures\spCopyClassAnnouncementsToClass.sql" />
@@ -330,14 +337,31 @@
     <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncements.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByClassName.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByTitle.sql" />
+    <Build Include="Tables\Ethnicity.sql" />
+    <Build Include="Tables\PersonEthnicity.sql" />
+    <Build Include="User Defined Types\TEthnicity.sql" />
+    <Build Include="User Defined Types\TPersonEthnicity.sql" />
+    <Build Include="Stored Procedures\spGetPreviousStudentSchoolYear.sql" />
+    <Build Include="Tables\Language.sql" />
+    <Build Include="User Defined Types\TLanguage.sql" />
+    <Build Include="Tables\PersonLanguage.sql" />
+    <Build Include="User Defined Types\TPersonLanguage.sql" />
+    <Build Include="Tables\Country.sql" />
+    <Build Include="User Defined Types\TCountry.sql" />
+    <Build Include="Stored Procedures\spGetClassGradingScaleRanges.sql" />
+    <Build Include="Tables\PersonNationality.sql" />
+    <Build Include="User Defined Types\TPersonNationality.sql" />
+    <Build Include="Tables\Homeroom.sql" />
+    <Build Include="User Defined Types\THomeroom.sql" />
+    <PostDeploy Include="Scripts\PostDeploy\001_Drop_GalleryCategoryRef_From_LessonPlan.PostDeploy.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <PreDeploy Include="Scripts\Pre-Deploy\Paid_apps_cleaning.PreDeployment.sql" />
+    <None Include="Script.000.Update sort type in PersonSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Chalkable.Database.School.refactorlog" />
   </ItemGroup>
 </Project>

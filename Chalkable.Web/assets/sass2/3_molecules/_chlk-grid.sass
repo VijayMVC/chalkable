@@ -13,7 +13,24 @@
     background: #f7f7f5
 
     .cell
+      position: relative
       font-weight: bold
+
+    .active-sort::before
+      content: " "
+      position: absolute
+      top: 50%
+      margin-top: -3px
+      right: 18px
+      width: 0
+      height: 0
+      border-style: solid
+      border-width: 7px 5px 0 5px
+      border-color: #a19e97 transparent transparent transparent
+
+    .descending::before
+      border-width: 0 5px 7px 5px
+      border-color: transparent transparent #a19e97 transparent
 
   .grid-content
     display: table
@@ -33,6 +50,9 @@
       .cell
         border-bottom: none
 
+    &.highlighted
+      background: #a3b4cc
+
   .cell
     display: table-cell
     height: 50px
@@ -44,6 +64,18 @@
 
     &:last-child
       border-right: none
+
+    .circle-cnt
+      display: inline-block
+      width: 36px
+      height: 26px
+      line-height: 26px
+      border-radius: 13px
+      background: #41b768
+      color: white
+
+      &.red
+        background: #d45151
 
   .footer
     line-height: 50px

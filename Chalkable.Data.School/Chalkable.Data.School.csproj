@@ -115,6 +115,7 @@
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
     <Compile Include="DataAccess\ClassTeacherDataAccess.cs" />
     <Compile Include="DataAccess\GradingPeriodDataAccess.cs" />
+    <Compile Include="DataAccess\GradingScaleDataAccess.cs" />
     <Compile Include="DataAccess\GroupDataAccess.cs" />
     <Compile Include="DataAccess\LPGalleryCategoryDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="DataAccess\PhoneDataAccess.cs" />
     <Compile Include="DataAccess\PrivateMessageDataAccess.cs" />
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
+    <Compile Include="DataAccess\StandardizedTestDataAccess.cs" />
     <Compile Include="DataAccess\StudentContactDataAccess.cs" />
     <Compile Include="DataAccess\StudentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementDataAccess.cs" />
@@ -174,10 +176,18 @@
     <Compile Include="Model\ClassTeacher.cs" />
     <Compile Include="Model\ContactRelationship.cs" />
     <Compile Include="Model\AnnouncementAssignedAttribute.cs" />
+    <Compile Include="Model\Country.cs" />
     <Compile Include="Model\CourseType.cs" />
     <Compile Include="Model\Date.cs" />
+    <Compile Include="Model\Ethnicity.cs" />
+    <Compile Include="Model\Homeroom.cs" />
+    <Compile Include="Model\Language.cs" />
     <Compile Include="Model\LPGalleryCategory.cs" />
+    <Compile Include="Model\PersonEthnicity.cs" />
+    <Compile Include="Model\PersonLanguage.cs" />
+    <Compile Include="Model\PersonNationality.cs" />
     <Compile Include="Model\PersonSetting.cs" />
+    <Compile Include="Model\StandardizedTest.cs" />
     <Compile Include="Model\StudentCustomAlertDetail.cs" />
     <Compile Include="Model\SupplementalAnnouncementRecipient.cs" />
     <Compile Include="Model\SystemSetting.cs" />

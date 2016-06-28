@@ -71,6 +71,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
+        public IList<GradingScaleRange> GetClassGradingScaleRanges(int classId)
+        {
+            throw new NotImplementedException();
+        }
+
         public GradingScaleRange GetByAlphaGradeId(int alphaGradeId)
         {
              return GradingScaleRangeStorage.GetAll().FirstOrDefault(x => x.AlphaGradeRef == alphaGradeId);

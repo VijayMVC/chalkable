@@ -4,15 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.ClassesViewData;
+using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Controllers
 {
@@ -118,6 +122,13 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult CourseTypes(string filter)
+        {
+            var courseTypes = SchoolLocator.CourseTypeService.GetList(true, filter);
+            return Json(ShortCourseTypeViewData.Create(courseTypes).OrderBy(x => x.CoureTypeName));
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
         public ActionResult AllSchoolsActiveClasses()
         {
             var classes = SchoolLocator.ClassService.GetAllSchoolsActiveClasses();
@@ -133,5 +144,47 @@ namespace Chalkable.Web.Controllers
             var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId,(ClassSortType?) sortType);
             return Json(classes.Select(ClassStatsViewData.Create));
         }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents)
+        {
+            if(settings.SchoolYearIds == null)
+                settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSetting>(classId);
+
+            if (settings.SchoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
+            var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
+            var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
+            var classStudents = SchoolLocator.StudentService.GetClassStudents(classId, null, true);
+            var ethnicities = SchoolLocator.EthnicityService.GetAll();
+
+            var panoramaViewData = ClassPanoramaViewData.Create(classDetails, standardizedTestDetails,
+                panorama, gradingScale, classStudents, selectedStudents, ethnicities, Context.NowSchoolTime);
+
+            panoramaViewData.FilterSettings = ClassProfilePanoramaSettingsViewData.Create(settings);
+
+            return Json(panoramaViewData);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult SavePanoramaSettings(int classId, ClassProfilePanoramaSetting setting)
+        {
+            if (setting.SchoolYearIds == null || setting.SchoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            SchoolLocator.PanoramaSettingsService.Save(setting, classId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult RestorePanoramaSettings(int classId)
+        {
+            var settings = SchoolLocator.PanoramaSettingsService.Restore<ClassProfilePanoramaSetting>(classId);
+            return Json(ClassProfilePanoramaSettingsViewData.Create(settings));
+        }
+
     }
 }

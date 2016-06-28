@@ -15,7 +15,8 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             return new Data.School.Model.StudentSchool
             {
                 SchoolRef = x.SchoolID,
-                StudentRef = x.StudentID
+                StudentRef = x.StudentID,
+                CounselorRef = x.CounselorID
             };
         }
 

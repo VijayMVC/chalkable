@@ -11,6 +11,11 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddRooms(IList<Room> rooms);
         void EditRooms(IList<Room> rooms);
         void DeleteRooms(IList<Room> rooms);
+
+        void AddHomerooms(IList<Homeroom> homerooms);
+        void EditHomerooms(IList<Homeroom> homerooms);
+        void DeleteHomerooms(IList<Homeroom> homerooms);
+
         Room WhereIsPerson(int personId, DateTime dateTime);
         Room GetRoomById(int id);
     }
@@ -52,7 +57,19 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<Room>(u).Delete(rooms));
         }
 
+        public void AddHomerooms(IList<Homeroom> homerooms)
+        {
+            DoUpdate(u => new DataAccessBase<Homeroom>(u).Insert(homerooms));
+        }
 
-        
+        public void EditHomerooms(IList<Homeroom> homerooms)
+        {
+            DoUpdate(u => new DataAccessBase<Homeroom>(u).Update(homerooms));
+        }
+
+        public void DeleteHomerooms(IList<Homeroom> homerooms)
+        {
+            DoUpdate(u => new DataAccessBase<Homeroom>(u).Delete(homerooms));
+        }
     }
 }
