@@ -63,6 +63,9 @@ namespace Chalkable.API.Models
         [JsonProperty("adminannouncementdata")]
         public AdminAnnouncement AdminAnnouncement { get; set; }
 
+        [JsonProperty("supplementalannouncementdata")]
+        public SupplementalAnnouncement SupplementalAnnouncement { get; set; }
+
         [JsonProperty("studentannouncements")]
         public StudentAnnouncements StudentAnnouncements { get; set; }
     }
