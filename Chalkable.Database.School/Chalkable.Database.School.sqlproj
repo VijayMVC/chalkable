@@ -354,6 +354,7 @@
     <Build Include="Tables\Homeroom.sql" />
     <Build Include="User Defined Types\THomeroom.sql" />
     <PostDeploy Include="Scripts\PostDeploy\001_Drop_GalleryCategoryRef_From_LessonPlan.PostDeploy.sql" />
+    <Build Include="Tables\AnnouncementComment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />
