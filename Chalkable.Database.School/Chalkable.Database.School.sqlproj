@@ -76,7 +76,7 @@
     <Folder Include="User Defined Types\" />
     <Folder Include="Stored Procedures\Announcements Procedures" />
     <Folder Include="Scripts" />
-    <Folder Include="Scripts\Pre-Deploy" />
+    <Folder Include="Scripts\PostDeploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Address.sql" />
@@ -353,13 +353,10 @@
     <Build Include="User Defined Types\TPersonNationality.sql" />
     <Build Include="Tables\Homeroom.sql" />
     <Build Include="User Defined Types\THomeroom.sql" />
+    <PostDeploy Include="Scripts\PostDeploy\001_Drop_GalleryCategoryRef_From_LessonPlan.PostDeploy.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Scripts\Pre-Deploy\Paid_apps_cleaning.PreDeployment.sql" />
-    <PreDeploy Include="Scripts\Pre-Deploy\001_LessonPlan_GalleryCategoryRef_To_LpGalleryCategoryRef.PreDeployment.sql" />
+    <None Include="Script.000.Update sort type in PersonSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
