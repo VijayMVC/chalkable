@@ -14,7 +14,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         public IList<StudentDailyAbsenceViewData> DailyAttendanceStats { get; set; }
         public IList<StudentInfractionViewData> DisciplineStats { get; set; }
         public IList<DailyStatsViewData> DailyDisciplineStats { get; set; }
-        public StudentProfilePanoramaSetting Settings { get; set; }
+        public StudentProfilePanoramaSetting FilterSettings { get; set; }
+        public IList<StandardizedTestViewData> StandardizedTests { get; set; }
 
         public static StudentPanoramaViewData Create(int studentId, StudentPanoramaInfo panorama, StudentProfilePanoramaSetting settings, IList<StandardizedTestDetails> tests)
         {
@@ -23,7 +24,9 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                 StandardizedTestsStats = StandardizedTestStatsViewData.CreateForStudent(studentId, panorama.StandardizedTests, tests),
                 DailyAttendanceStats = panorama.DailyAbsences?.Select(StudentDailyAbsenceViewData.Create).OrderBy(x => x.Date).ToList(),
                 DisciplineStats = panorama.Infractions?.Select(StudentInfractionViewData.Create).OrderBy(x => x.OccurrenceDate).ToList(),
-                DailyDisciplineStats = panorama.Infractions != null ? CalculateDisciplineStats(panorama.Infractions) : null
+                DailyDisciplineStats = panorama.Infractions != null ? CalculateDisciplineStats(panorama.Infractions) : null,
+                FilterSettings = settings, 
+                StandardizedTests = tests.Select( x => StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList()
             };
         }
 
