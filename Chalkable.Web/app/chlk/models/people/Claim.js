@@ -34,6 +34,7 @@ NAMESPACE('chlk.models.people', function () {
         VIEW_CLASSROOM_LUNCH_COUNT: 'View Classroom Lunch Count',
         VIEW_CLASSROOM_ROSTER: 'View Classroom Roster',
         VIEW_CLASSROOM_STUDENTS: 'View Classroom Students',
+        VIEW_PANORAMA: 'View Panorama',
         MAINTAIN_DISCIPLINE: 'Maintain Discipline',
         VIEW_DISCIPLINE: 'View Discipline',
         CHANGE_ACTIVITY_DATES: 'Change Activity Dates',
@@ -204,6 +205,7 @@ NAMESPACE('chlk.models.people', function () {
                 this.mapper_[this.userPermissionEnum.RECONCILE_GRADE_BOOK.valueOf()] = this.userPermissionEnum.RECONCILE_GRADE_BOOK;
                 this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM;
                 this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_ADMIN.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_ADMIN;
+                this.mapper_[this.userPermissionEnum.VIEW_PANORAMA.valueOf()] = this.userPermissionEnum.VIEW_PANORAMA;
                 this.mapper_[this.userPermissionEnum.MAINTAIN_GRADING.valueOf()] = this.userPermissionEnum.MAINTAIN_GRADING;
                 this.mapper_[this.userPermissionEnum.VIEW_GRADING.valueOf()] = this.userPermissionEnum.VIEW_GRADING;
                 this.mapper_[this.userPermissionEnum.MAINTAIN_LOOKUP.valueOf()] = this.userPermissionEnum.MAINTAIN_LOOKUP;
