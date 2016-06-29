@@ -239,7 +239,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var studentPanorama = SchoolLocator.StudentService.Panorama(studentId, settings.SchoolYearIds, settings.StandardizedTestFilters);
             var standardizedTests = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
 
-            return Json(StudentPanoramaViewData.Create(studentId, studentPanorama, standardizedTests));
+            return Json(StudentPanoramaViewData.Create(studentId, studentPanorama, settings, standardizedTests));
         }
     }
 }

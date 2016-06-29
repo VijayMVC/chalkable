@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Model.StudentPanorama;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -12,9 +13,10 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         public IList<StandardizedTestStatsViewData> StandardizedTestsStats { get; set; }
         public IList<StudentDailyAbsenceViewData> DailyAttendanceStats { get; set; }
         public IList<StudentInfractionViewData> DisciplineStats { get; set; }
-        public IList<DailyStatsViewData> DailyDisciplineStats { get; set; } 
+        public IList<DailyStatsViewData> DailyDisciplineStats { get; set; }
+        public StudentProfilePanoramaSetting Settings { get; set; }
 
-        public static StudentPanoramaViewData Create(int studentId, StudentPanoramaInfo panorama, IList<StandardizedTestDetails> tests)
+        public static StudentPanoramaViewData Create(int studentId, StudentPanoramaInfo panorama, StudentProfilePanoramaSetting settings, IList<StandardizedTestDetails> tests)
         {
             return new StudentPanoramaViewData
             {
