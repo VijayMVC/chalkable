@@ -34,6 +34,9 @@ namespace Chalkable.Data.School.Model.Announcements
         public virtual DateTime Created { get; set; }
         public virtual AnnouncementState State { get; set; }
         public virtual string Title { get; set; }
+        public virtual bool DiscussionEnabled { get; set; }
+        public virtual bool PreviewCommentsEnabled { get; set; }
+        public virtual bool RequireCommentsEnabled { get; set; }
         [NotDbFieldAttr]
         public bool IsOwner { get; set; }
         [NotDbFieldAttr]

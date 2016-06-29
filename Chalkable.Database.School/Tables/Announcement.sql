@@ -4,6 +4,9 @@
     [Created] DATETIME2 (7)  NOT NULL,
     [State]   INT            NOT NULL,
     [Title]   NVARCHAR (101)  NULL,
+	[DiscussionEnabled] BIT NULL,
+	[PreviewCommentsEnabled] BIT NULL,
+	[RequireCommentsEnabled] BIT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
