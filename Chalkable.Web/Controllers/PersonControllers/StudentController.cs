@@ -230,6 +230,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult Panorama(int studentId, StudentProfilePanoramaSetting settings)
         {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to view class panorama");
+
             if (settings.SchoolYearIds == null)
                 settings = SchoolLocator.PanoramaSettingsService.Get<StudentProfilePanoramaSetting>(null);
 

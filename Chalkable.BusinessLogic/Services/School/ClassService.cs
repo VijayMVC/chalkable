@@ -238,6 +238,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
+
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to view class panorama");
+
             if (schoolYearIds == null || schoolYearIds.Count == 0)
                 throw new ChalkableException("School years is required parameter");
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -149,6 +150,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents)
         {
+            if(!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to view class panorama");
+
             if(settings.SchoolYearIds == null)
                 settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSetting>(classId);
 
