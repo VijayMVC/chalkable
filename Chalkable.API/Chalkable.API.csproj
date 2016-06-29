@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A7272B5D-DC95-4783-888D-3A36E8922226}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chalkable.API</RootNamespace>
+    <AssemblyName>Chalkable.API</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsAzure.Acs.Oauth2.Client, Version=1.1.91.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Acs.Oauth2.Client.1.1.91\lib\net40\WindowsAzure.Acs.Oauth2.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionFilters\AuthorizationFilter.cs" />
+    <Compile Include="ActionFilters\AllowCorsPolicyAttribute.cs" />
+    <Compile Include="ChalkableAuthorization.cs" />
+    <Compile Include="ChalkableConnector.cs" />
+    <Compile Include="Configuration\ApplicationConfigurations.cs" />
+    <Compile Include="Configuration\ApplicationEnvironment.cs" />
+    <Compile Include="Configuration\ApplicationEnvironments.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IBaseController.cs" />
+    <Compile Include="Endpoints\AttachmentEndpoint.cs" />
+    <Compile Include="Endpoints\AnnouncementEndpoint.cs" />
+    <Compile Include="Endpoints\AttendanceEndpoint.cs" />
+    <Compile Include="Endpoints\Base.cs" />
+    <Compile Include="Endpoints\CalendarEndpoint.cs" />
+    <Compile Include="Endpoints\GradingEndpoint.cs" />
+    <Compile Include="Endpoints\PersonEndpoint.cs" />
+    <Compile Include="Endpoints\StandardsEndpoint.cs" />
+    <Compile Include="Endpoints\StudyCenterEndpoint.cs" />
+    <Compile Include="Enums\AnnouncementType.cs" />
+    <Compile Include="Exceptions\ChalkableApiException.cs" />
+    <Compile Include="Helpers\HashHelper.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
+    <Compile Include="IConnector.cs" />
+    <Compile Include="Models\AcademicBenchmark\Authority.cs" />
+    <Compile Include="Models\AcademicBenchmark\Document.cs" />
+    <Compile Include="Models\AcademicBenchmark\Standard.cs" />
+    <Compile Include="Models\AcademicBenchmark\StandardRelations.cs" />
+    <Compile Include="Models\AdminAnnouncement.cs" />
+    <Compile Include="Models\AcademicBenchmark\Topic.cs" />
+    <Compile Include="Models\AnnouncementApplication.cs" />
+    <Compile Include="Models\Announcement.cs" />
+    <Compile Include="Models\ApplicationContent.cs" />
+    <Compile Include="Models\Attachment.cs" />
+    <Compile Include="Models\ClassAnnouncement.cs" />
+    <Compile Include="Models\ExceptionViewData.cs" />
+    <Compile Include="Models\LessonPlan.cs" />
+    <Compile Include="Models\PaginatedList.cs" />
+    <Compile Include="Models\CoreRole.cs" />
+    <Compile Include="Models\CoreRoles.cs" />
+    <Compile Include="Models\IntList.cs" />
+    <Compile Include="Models\PersonClaim.cs" />
+    <Compile Include="Models\SchoolPerson.cs" />
+    <Compile Include="Models\StudentAttendance\CheckInCheckOut.cs" />
+    <Compile Include="Models\StudentAttendance\Student.cs" />
+    <Compile Include="Models\StudentAttendance\StudentDailyAttendance.cs" />
+    <Compile Include="Models\StudentAttendance\StudentDateAttendance.cs" />
+    <Compile Include="Models\StudentAttendance\StudentPeriodAttendance.cs" />
+    <Compile Include="Models\StudentInfo.cs" />
+    <Compile Include="Models\SupplementalAnnouncement.cs" />
+    <Compile Include="OnWebRequestIsCreated.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
