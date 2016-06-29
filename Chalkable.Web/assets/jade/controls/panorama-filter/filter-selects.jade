@@ -1,7 +1,5 @@
 -var currentTest = self.getCurrentTest()
 
--console.info(self.getStandardizedTestId().valueOf(), self.getComponentId().valueOf(), self.getScoreTypeId().valueOf())
-
 +Select('component')(data-placeholder = 'Select Component').component-select.filter-select.submit-after-change
     each component  in currentTest.getComponents()
         +Option(component.getId().valueOf(), component.getName(), component.getId() == self.getComponentId().valueOf())
