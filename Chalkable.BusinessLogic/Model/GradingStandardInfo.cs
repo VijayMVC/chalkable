@@ -40,14 +40,14 @@ namespace Chalkable.BusinessLogic.Model
         public static IList<GradingStandardInfo> Create(IList<StandardScore> standardScores, IList<Standard> standards)
         {
             var res = new List<GradingStandardInfo>();
-            foreach (var standardScore in standardScores)
-            {
-                var standard = standards.FirstOrDefault(st => st.Id == standardScore.StandardId);
-                if(standard!=null)
-                    res.Add(Create(standardScore, standard));
-            }
-            return res;
 
+            foreach (var standard in standards)
+            {
+                var standardScoreForStandard = standardScores.Where(x => x.StandardId == standard.Id);
+                res.AddRange(standardScoreForStandard.Select(x => Create(x, standard)).ToList());
+            }
+
+            return res;
         }
     }
 }

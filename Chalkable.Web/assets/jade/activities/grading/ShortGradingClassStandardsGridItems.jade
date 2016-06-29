@@ -20,7 +20,7 @@
             rightPadding=-1,
             elWidth=117
         ).grid-toolbar.i-b.big-arrows
-            each gradingItem in self.getGradingItemsOrdered()
+            each gradingItem in self.getGradingItems()
                 -var stId = gradingItem.standard.standardid
                 .dotted-container.grade-container.with-horizontal-dots
                     .grading-grid-th
