@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -20,24 +24,86 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AnnouncementComment> GetList(int announcementId)
         {
-            throw new NotImplementedException();
+            Trace.Assert(Context.PersonId.HasValue);
+            return DoRead(u => new AnnouncementCommentDataAccess(u).GetList(announcementId, Context.PersonId.Value, Context.RoleId));
         }
 
+        //TODO: check is ClassroomDiscussion enabled 
         public AnnouncementComment PostComment(int announcementId, string text, int? attachmentId)
         {
-            throw new NotImplementedException();
+            EnsureInAnnouncementAccess(announcementId);
+
+            Trace.Assert(Context.PersonId.HasValue);
+            using (var uow = Update())
+            {
+                var da =  new AnnouncementCommentDataAccess(uow);
+                var id = da.InsertWithEntityId(new AnnouncementComment
+                    {
+                        AnnouncementRef = announcementId,
+                        AttachmentRef = attachmentId,
+                        PersonRef = Context.PersonId.Value,
+                        Text = text,
+                        PostedDate = Context.NowSchoolYearTime
+                    });
+                uow.Commit();
+                return da.GetById(id);
+            }
         }
+
+        //TODO: check is ClassroomDiscussion enabled 
         public AnnouncementComment Reply(int toCommentId, string text, int? attachmentId)
         {
-            throw new NotImplementedException();
+            Trace.Assert(Context.PersonId.HasValue);
+            using (var uow = Update())
+            {
+                var da = new AnnouncementCommentDataAccess(uow);
+                var parentComment = da.GetById(toCommentId);
+                //TODO: verify with Jonathan if is only teacher can reply to comment
+                //BaseSecurity.EnsureAdminOrTeacher(Context);
+                EnsureInAnnouncementAccess(parentComment.AnnouncementRef);
+
+                var id = da.InsertWithEntityId(new AnnouncementComment
+                {
+                    AnnouncementRef = parentComment.AnnouncementRef,
+                    AttachmentRef = attachmentId,
+                    PersonRef = Context.PersonId.Value,
+                    Text = text,
+                    PostedDate = Context.NowSchoolYearTime,
+                    ParentCommentRef = toCommentId
+                });
+                uow.Commit();
+                return da.GetById(id);
+            }
         }
         public void SetHidden(int commentId, bool hidden)
         {
-            throw new NotImplementedException();
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+            var comment = GetById(commentId);
+            EnsureInAnnouncementAccess(comment.AnnouncementRef);
+
+            comment.Hiddent = hidden;          
+            DoUpdate(u=> new AnnouncementCommentDataAccess(u).Update(comment));
         }
-        public void Delete(int commnetId)
+        
+        public void Delete(int commentId)
         {
-            throw new NotImplementedException();
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+            var comment = GetById(commentId);
+            EnsureInAnnouncementAccess(comment.AnnouncementRef);
+
+            comment.Deleted = true;
+            DoUpdate(u => new AnnouncementCommentDataAccess(u).Update(comment));
+        }
+
+        private AnnouncementComment GetById(int commentId)
+        {
+            return DoRead(u => new AnnouncementCommentDataAccess(u).GetById(commentId));
+        }
+
+        private void EnsureInAnnouncementAccess(int announcementId, AnnouncementTypeEnum? type = null)
+        {
+            type = type ?? ServiceLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
+            ServiceLocator.GetAnnouncementService(type).GetAnnouncementById(announcementId);
         }
     }
 }
