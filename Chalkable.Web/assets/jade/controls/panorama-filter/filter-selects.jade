@@ -1,11 +1,9 @@
 -var currentTest = self.getCurrentTest()
 
--console.info(self.getStandardizedTestId().valueOf(), self.getComponentId().valueOf(), self.getScoreTypeId().valueOf())
-
 +Select('component')(data-placeholder = 'Select Component').component-select.filter-select.submit-after-change
     each component  in currentTest.getComponents()
-        +Option(component.getId().valueOf(), component.getName(), component.getId() == self.getComponentId().valueOf())
+        +Option(component.getId().valueOf(), component.getName(), component.getId() == (self.getComponentId() && self.getComponentId().valueOf()))
 +Select('scoreType')(data-placeholder = 'Select Score Type').score-type-select.filter-select.submit-after-change
     each scoreType  in currentTest.getScoreTypes()
-        +Option(scoreType.getId().valueOf(), scoreType.getName(), scoreType.getId() == self.getScoreTypeId().valueOf())
+        +Option(scoreType.getId().valueOf(), scoreType.getName(), scoreType.getId() == (self.getScoreTypeId() && self.getScoreTypeId().valueOf()))
 
