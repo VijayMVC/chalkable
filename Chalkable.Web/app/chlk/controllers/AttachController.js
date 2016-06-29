@@ -15,6 +15,7 @@ NAMESPACE('chlk.controllers', function () {
             chlk.services.AttachmentService, 'attachmentService',
 
             [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.SYSADMIN,
                 chlk.models.common.RoleEnum.DISTRICTADMIN,
                 chlk.models.common.RoleEnum.TEACHER,
                 chlk.models.common.RoleEnum.STUDENT,
