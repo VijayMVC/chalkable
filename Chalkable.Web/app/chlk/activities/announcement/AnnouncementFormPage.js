@@ -158,64 +158,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 suggestedAppsTpl.renderTo(suggestedAppsNode);
             },
 
-            [ria.mvc.DomEventBind('click', '#check-title-button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function checkTitleClick(node, event){
-                wasDisabledBtn = this.dom.find('.submit-announcement').hasClass('disabled');
-                this.dom.find('.submit-announcement')
-                    .addClass('disabled');
-            },
-
             [ria.mvc.DomEventBind('keypress', 'input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function inputKeyPress(node, event){
                 if(event.keyCode == ria.dom.Keys.ENTER){
                     event.preventDefault();
                 }
-            },
-
-            [ria.mvc.DomEventBind('click', '.title-text')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function titleClick(node, event){
-                var parent = node.parent('.title-block');
-                parent.addClass('active');
-                setTimeout(function(){
-                    parent.find('input[name=title]').trigger('focus');
-                }, 1)
-            },
-
-            [ria.mvc.DomEventBind('click', '.save-title-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function saveClick(node, event){
-                var input = this.dom.find('input[name=title]'),
-                    value = input.getValue();
-                this.dom.find('.title-text').setHTML(value);
-                input.setData('title', value);
-                this.removeDisabledClass();
-                wasTitleSaved = true;
-                wasExistingTitle = false;
-                setTimeout(function(){
-                    node.setAttr('disabled', true);
-                }, 1);
-            },
-
-            function removeDisabledClass(){
-                this.dom.find('.submit-announcement')
-                    .removeClass('disabled')
-                    .setData('tooltip', false);
-            },
-
-            [ria.mvc.DomEventBind('click', '.submit-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function setTitleOnSubmitClick(node, event){
-                if(this.dom.find('.title-text').exists())
-                this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
-            },
-
-            [ria.mvc.DomEventBind('change', '.announcement-types-combo')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function typesComboClick(node, event){
-
             },
 
             [ria.mvc.DomEventBind('click', '.announcement-type-button:not(.pressed)')],
@@ -245,142 +193,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
                 this.dom.find('#announcement-type-btn').trigger('click');
                 wasTypeChanged = true;
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
-            VOID, function doUpdateTitle(tpl, model, msg_) {
-                if(!wasDisabledBtn || !model.isData() && wasDateChanged)
-                    this.removeDisabledClass();
-                var block = this.dom.find('.title-text:visible'),
-                    saveBtn = this.dom.find('.save-title-btn'),
-                    titleBlock = this.dom.find('.title-block');
-                if(!model.isData() && this.dom.find('input[name=title]').getValue()){
-                    saveBtn.setAttr('disabled', false);
-                    if(block.exists() && this.dom.find('.title-block-container').hasClass('was-empty'))
-                        saveBtn.trigger('click');
-                    this.updateFormByNotExistingTitle();
-
-                }else{
-                    if(block.exists())
-                        this.dom.find('#show-title-popup').trigger('click');
-                    saveBtn.setAttr('disabled', true);
-                    titleBlock.addClass('exists');
-                    var titleInput = titleBlock.find('input[name=title]');
-                    var text = titleInput.getValue();
-                    var oldText = titleInput.getData('title');
-                    if(oldText == text)
-                        this.disableSubmitBtn();
-                }
-                wasDateChanged = false;
-            },
-
-            function disableSubmitBtn(){
-                wasExistingTitle = true;
-                this.dom.find('.submit-announcement')
-                    .addClass('disabled')
-                    .setData('tooltip', Msg.Existing_title_tooltip)
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'title-popup')],
-            VOID, function titlePopUp(tpl, model, msg_) {
-                this.dom.find('.title-text:visible').trigger('click');
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, chlk.activities.lib.DontShowLoader())],
-            VOID, function doSaveTitle(tpl, model, msg_) {
-
-            },
-
-            [ria.mvc.DomEventBind('keydown', 'input[name=title]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function titleKeyDown(node, event){
-                if(event.which == ria.dom.Keys.ENTER.valueOf()){
-                    var btn = this.dom.find('.save-title-btn');
-                    if(!btn.getAttr('disabled'))
-                        btn.trigger('click');
-                    return false;
-                }
-            },
-
-            [ria.mvc.DomEventBind('change', '#expiresdate:not(.supplemental-date)')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function expiresDateChange(node, event){
-                var block = this.dom.find('.title-block-container'),
-                    value = node.getValue(),
-                    titleNode = this.dom.find('input[name=title]');
-                if(value){
-                    if(!block.hasClass('with-date'))
-                        block.addClass('was-empty');
-                    else{
-                        block.removeClass('was-empty');
-                    }
-                    block.addClass('with-date');
-                    titleNode
-                        .addClass('should-check')
-                        .trigger('keyup');
-
-                    setTimeout(function(){
-                        wasDateChanged = true;
-                    }, 1);
-                }
-                else
-                    block.removeClass('with-date').removeClass('was-empty');
-            },
-
-            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function titleKeyUp(node, event){
-                wasDateChanged = false;
-                var dom = this.dom, node = node, value = node.getValue();
-                if(dom.find('.title-block-container').hasClass('with-date')){
-                    if(!value || !value.trim()){
-                        dom.find('.save-title-btn').setAttr('disabled', true);
-                    }else{
-                        if(value == node.getData('title') && !node.hasClass('should-check')){
-                            this.updateFormByNotExistingTitle();
-                            dom.find('.save-title-btn').setAttr('disabled', true);
-                        }else{
-                            titleTimeout && clearTimeout(titleTimeout);
-                            titleTimeout = setTimeout(function(){
-                                if(value == node.getValue())
-                                    dom.find('#check-title-button').trigger('click');
-                            }, 100);
-                        }
-                    }
-                }
-                node.removeClass('should-check');
-            },
-
-
-            [ria.mvc.DomEventBind('keyup', '.max-score-container input[name="maxscore"]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function maxScoreKeyUp(node, event){
-                var value = node.getValue() || '';
-                if(value.length == 0 || !isNaN(parseFloat(value))){
-                    var checkBox = node.parent('.right-block').find('.advanced-options-container .extra-credit.checkbox');
-                    var isAbleUseExtraCredit = checkBox.getData('isableuseextracredit');
-
-                    if(!isAbleUseExtraCredit || value.length == 0 || parseFloat(value) > 0) {
-                        if (!checkBox.hasAttr('disabled')) {
-                            checkBox.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), false);
-                            checkBox.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), true);
-                        }
-                    }
-                    else if(checkBox.hasAttr('disabled')){
-                        checkBox.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), false);
-                    }
-                }
-            },
-
-            [ria.mvc.DomEventBind('click', '.submit-announcement.disabled button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function disabledSubmitClick(node, event){
-                return false;
-            },
-
-            [[Boolean]],
-            function updateFormByNotExistingTitle(){
-                this.dom.find('.title-block').removeClass('exists');
             },
 
             OVERRIDE, VOID, function onRender_(model){
@@ -446,6 +258,188 @@ NAMESPACE('chlk.activities.announcement', function () {
                 BASE();
                 new ria.dom.Dom().off('click.title');
                 new ria.dom.Dom().off('click.save', '.class-button[type=submit]');
+            },
+
+            [ria.mvc.DomEventBind('change', '#expiresdate:not(.supplemental-date)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function expiresDateChange(node, event){
+                var block = this.dom.find('.title-block-container'),
+                    value = node.getValue(),
+                    titleNode = this.dom.find('input[name=title]');
+                if(value){
+                    if(!block.hasClass('with-date'))
+                        block.addClass('was-empty');
+                    else{
+                        block.removeClass('was-empty');
+                    }
+                    block.addClass('with-date');
+                    titleNode
+                        .addClass('should-check')
+                        .trigger('keyup');
+
+                    setTimeout(function(){
+                        wasDateChanged = true;
+                    }, 1);
+                }
+                else
+                    block.removeClass('with-date').removeClass('was-empty');
+            },
+
+            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function titleKeyUp(node, event){
+                wasDateChanged = false;
+                var dom = this.dom, node = node, value = node.getValue();
+                if(dom.find('.title-block-container').hasClass('with-date')){
+                    if(!value || !value.trim()){
+                        dom.find('.save-title-btn').setAttr('disabled', true);
+                    }else{
+                        if(value == node.getData('title') && !node.hasClass('should-check')){
+                            this.updateFormByNotExistingTitle();
+                            dom.find('.save-title-btn').setAttr('disabled', true);
+                        }else{
+                            titleTimeout && clearTimeout(titleTimeout);
+                            titleTimeout = setTimeout(function(){
+                                if(value == node.getValue())
+                                    dom.find('#check-title-button').trigger('click');
+                            }, 100);
+                        }
+                    }
+                }
+                node.removeClass('should-check');
+            },
+
+            [ria.mvc.DomEventBind('keydown', 'input[name=title]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function titleKeyDown(node, event){
+                if(event.which == ria.dom.Keys.ENTER.valueOf()){
+                    var btn = this.dom.find('.save-title-btn');
+                    if(!btn.getAttr('disabled'))
+                        btn.trigger('click');
+                    return false;
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '#check-title-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function checkTitleClick(node, event){
+                wasDisabledBtn = this.dom.find('.submit-announcement').hasClass('disabled');
+                this.dom.find('.submit-announcement')
+                    .addClass('disabled');
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function doUpdateTitle(tpl, model, msg_) {
+                if(!wasDisabledBtn || !model.isData() && wasDateChanged)
+                    this.removeDisabledClass();
+                var block = this.dom.find('.title-text:visible'),
+                    saveBtn = this.dom.find('.save-title-btn'),
+                    titleBlock = this.dom.find('.title-block');
+                if(!model.isData() && this.dom.find('input[name=title]').getValue()){
+                    saveBtn.setAttr('disabled', false);
+                    if(block.exists() && this.dom.find('.title-block-container').hasClass('was-empty'))
+                        saveBtn.trigger('click');
+                    this.updateFormByNotExistingTitle();
+
+                }else{
+                    if(block.exists())
+                        this.dom.find('#show-title-popup').trigger('click');
+                    saveBtn.setAttr('disabled', true);
+                    titleBlock.addClass('exists');
+                    var titleInput = titleBlock.find('input[name=title]');
+                    var text = titleInput.getValue();
+                    var oldText = titleInput.getData('title');
+                    if(oldText == text)
+                        this.disableSubmitBtn();
+                }
+                wasDateChanged = false;
+            },
+
+            function disableSubmitBtn(){
+                wasExistingTitle = true;
+                this.dom.find('.submit-announcement')
+                    .addClass('disabled')
+                    .setData('tooltip', Msg.Existing_title_tooltip)
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'title-popup')],
+            VOID, function titlePopUp(tpl, model, msg_) {
+                this.dom.find('.title-text:visible').trigger('click');
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, chlk.activities.lib.DontShowLoader())],
+            VOID, function doSaveTitle(tpl, model, msg_) {
+
+            },
+
+
+            [ria.mvc.DomEventBind('keyup', '.max-score-container input[name="maxscore"]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function maxScoreKeyUp(node, event){
+                var value = node.getValue() || '';
+                if(value.length == 0 || !isNaN(parseFloat(value))){
+                    var checkBox = node.parent('.right-block').find('.advanced-options-container .extra-credit.checkbox');
+                    var isAbleUseExtraCredit = checkBox.getData('isableuseextracredit');
+
+                    if(!isAbleUseExtraCredit || value.length == 0 || parseFloat(value) > 0) {
+                        if (!checkBox.hasAttr('disabled')) {
+                            checkBox.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), false);
+                            checkBox.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), true);
+                        }
+                    }
+                    else if(checkBox.hasAttr('disabled')){
+                        checkBox.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), false);
+                    }
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.submit-announcement.disabled button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function disabledSubmitClick(node, event){
+                return false;
+            },
+
+            [[Boolean]],
+            function updateFormByNotExistingTitle(){
+                this.dom.find('.title-block').removeClass('exists');
+            },
+
+            [ria.mvc.DomEventBind('click', '.title-text')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function titleClick(node, event){
+                var parent = node.parent('.title-block');
+                parent.addClass('active');
+                setTimeout(function(){
+                    parent.find('input[name=title]').trigger('focus');
+                }, 1)
+            },
+
+            [ria.mvc.DomEventBind('click', '.save-title-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function saveClick(node, event){
+                var input = this.dom.find('input[name=title]'),
+                    value = input.getValue();
+                this.dom.find('.title-text').setHTML(value);
+                input.setData('title', value);
+                this.removeDisabledClass();
+                wasTitleSaved = true;
+                wasExistingTitle = false;
+                setTimeout(function(){
+                    node.setAttr('disabled', true);
+                }, 1);
+            },
+
+            function removeDisabledClass(){
+                this.dom.find('.submit-announcement')
+                    .removeClass('disabled')
+                    .setData('tooltip', false);
+            },
+
+            [ria.mvc.DomEventBind('click', '.submit-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function setTitleOnSubmitClick(node, event){
+                if(this.dom.find('.title-text').exists())
+                    this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
             }
          ]
     );
