@@ -22,6 +22,7 @@
 	[AltStudentNumber]	     NVARCHAR(128)  NULL,
 	[StudentNumber]		     NVARCHAR(128)	NULL,
 	[OriginalEnrollmentDate] DATETIME2(7)	NULL,
+	[Section504Qualification] NVARCHAR(128) NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Student_Person] FOREIGN KEY ([Id]) REFERENCES [dbo].[Person] ([Id])
 );

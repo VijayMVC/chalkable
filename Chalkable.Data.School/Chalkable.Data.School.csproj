@@ -95,6 +95,7 @@
     <Compile Include="DataAccess\AlphaGradeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAssignedAttributeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttributeDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementCommentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AdminAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementDataAccess.cs" />

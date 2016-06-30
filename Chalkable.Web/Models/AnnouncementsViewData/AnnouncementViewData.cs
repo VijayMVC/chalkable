@@ -36,8 +36,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string ApplicationName { get; set; }
         public bool ShowGradingIcon { get; set; }
         public Guid? AssessmentApplicationId { get; set; }
-
-
+        
         protected AnnouncementViewData(Announcement announcementData):base(announcementData)
         {
             ShortAnnouncementViewData annData = null;
