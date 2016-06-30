@@ -10,5 +10,8 @@ namespace Chalkable.Data.School.Model
         public string Name { get; set; }
         public int? TeacherRef { get; set; }
         public int? RoomRef { get; set; }
+
+        [NotDbFieldAttr]
+        public Person Teacher { get; set; }
     }
 }

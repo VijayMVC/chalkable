@@ -11,6 +11,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -71,7 +72,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var today = Context.NowSchoolTime;
             var studentDetailsInfo = SchoolLocator.StudentService.GetStudentDetailsInfo(personId, syId);
-            var res = GetInfo(personId, personInfo => StudentInfoViewData.Create(personInfo, studentDetailsInfo, syId, today));
+            var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(personId);
+            var studentClasses = SchoolLocator.ClassService.GetStudentClasses(syId, personId);
+
+            var res = GetInfo(personId, personInfo => StudentInfoViewData.Create(personInfo, studentDetailsInfo,
+                studentSummaryInfo, studentClasses, syId, today));
             
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
@@ -81,6 +86,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
             res.StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(customAlerts);
+
+            var homeroom = SchoolLocator.RoomService.GetStudentHomeroomOrNull(personId, syId);
+            if(homeroom != null)
+                res.Homeroom = HomeroomViewData.Create(homeroom);
 
             return Json(res);
         }

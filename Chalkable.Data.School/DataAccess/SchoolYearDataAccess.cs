@@ -88,5 +88,19 @@ namespace Chalkable.Data.School.DataAccess
                 return reader.ReadOrNull<StudentSchoolYear>();
             }
         }
+
+        public StudentSchoolYear GetStudentSchoolYear(int studentId, int schoolYearId)
+        {
+            var queryConditions = new AndQueryCondition
+            {
+                {StudentSchoolYear.STUDENT_FIELD_REF_FIELD, studentId, ConditionRelation.Equal },
+                {StudentSchoolYear.SCHOOL_YEAR_REF_FIELD, schoolYearId, ConditionRelation.Equal }
+
+            };
+
+            var dbQuery = Orm.SimpleSelect<StudentSchoolYear>(queryConditions);
+
+            return ReadOneOrNull<StudentSchoolYear>(dbQuery);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {
@@ -21,6 +22,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IdNameViewData<int> Language { get; set; }
         public bool IsImmigrant { get; set; }
         public IdNameViewData<int> Nationality { get; set; }
+        public bool IsHispanic { get; set; }
         public bool Lep { get; set; }
         public bool IsForeignExchange { get; set; }
         public string StateIdNumber { get; set; }
@@ -28,8 +30,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string StudentNumber { get; set; }
         public DateTime? OriginalEnrollmentDate { get; set; }
         public bool IsRetained { get; set; }
+        public ShortPersonViewData Counselor { get; set; }
+        public HomeroomViewData Homeroom { get; set; }
         public IList<StudentCustomAlertDetailViewData> StudentCustomAlertDetails { get; set; }  
         public IList<StudentContactViewData> StudentContacts { get; set; }
+        public StudentHoverBoxViewData<TotalAbsencesPerClassViewData> AttendanceBox { get; set; }
+        public StudentHoverBoxViewData<DisciplineTypeSummaryViewData> DisciplineBox { get; set; }
+        public StudentHoverBoxViewData<StudentSummaryGradeViewData> GradesBox { get; set; }
 
         protected StudentInfoViewData(PersonDetails student):base(student)
         {
@@ -45,7 +52,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             return new StudentInfoViewData(student);
         }
 
-        public static StudentInfoViewData Create(PersonDetails student, StudentDetailsInfo studentDetails, int currentSchoolYearId, DateTime today)
+        public static StudentInfoViewData Create(PersonDetails student, StudentDetailsInfo studentDetails, StudentSummaryInfo studentSummary, 
+            IList<ClassDetails> studentClasses, int currentSchoolYearId, DateTime today)
         {
             var res = Create(student);
 
@@ -58,6 +66,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             if (currentStudentSchoolYear != null)
                 res.GradeLevel = gradeLevels.First(x => x.Id == currentStudentSchoolYear.GradeLevelRef);
 
+            res.IsHispanic = studentDetails.IsHispanic;
             res.HasMedicalAlert = studentDetails.HasMedicalAlert;
             res.IsAllowedInetAccess = studentDetails.IsAllowedInetAccess;
             res.SpecialInstructions = studentDetails.SpecialInstructions;
@@ -83,6 +92,15 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.StudentNumber = studentDetails.StudentNumber;
             res.OriginalEnrollmentDate = studentDetails.OriginalEnrollmentDate;
             res.IsRetained = student.StudentSchoolYears.First(x => x.SchoolYearRef == currentSchoolYearId).IsRetained;
+            res.Counselor = studentDetails.Counselor != null 
+                ? ShortPersonViewData.Create(studentDetails.Counselor)
+                : null;
+
+            res.AttendanceBox = StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance,
+                    studentSummary.Attendances, studentClasses);
+            res.DisciplineBox = StudentHoverBoxViewData<DisciplineTypeSummaryViewData>.Create(studentSummary.InfractionSummaries,
+                    studentSummary.TotalDisciplineOccurrences);
+            res.GradesBox = StudentHoverBoxViewData<StudentSummaryGradeViewData>.Create(studentSummary.StudentAnnouncements);
             
             return res;
         }

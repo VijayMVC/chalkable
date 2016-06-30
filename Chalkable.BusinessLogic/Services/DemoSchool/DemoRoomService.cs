@@ -74,5 +74,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return RoomStorage.GetById(id);
         }
+
+        public Homeroom GetStudentHomeroomOrNull(int studentId, int schoolYearId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
