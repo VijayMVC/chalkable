@@ -177,6 +177,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult SavePanoramaSettings(int classId, ClassProfilePanoramaSetting setting)
         {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
             if (setting.SchoolYearIds == null || setting.SchoolYearIds.Count == 0)
                 throw new ChalkableException("School years is required parameter");
 
@@ -187,6 +190,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult RestorePanoramaSettings(int classId)
         {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
             var settings = SchoolLocator.PanoramaSettingsService.Restore<ClassProfilePanoramaSetting>(classId);
             return Json(ClassProfilePanoramaSettingsViewData.Create(settings));
         }
