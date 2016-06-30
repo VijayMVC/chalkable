@@ -18,6 +18,7 @@ using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.GradingViewData;
 using Chalkable.Web.Models.PanoramaViewDatas;
 using Chalkable.Web.Models.PersonViewDatas;
+using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Controllers.PersonControllers
 {
@@ -252,6 +253,29 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var standardizedTests = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
 
             return Json(StudentPanoramaViewData.Create(studentId, studentPanorama, settings, standardizedTests));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult SavePanoramaSettings(StudentProfilePanoramaSetting setting)
+        {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
+            if (setting.SchoolYearIds == null || setting.SchoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            SchoolLocator.PanoramaSettingsService.Save(setting, null);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult RestorePanoramaSettings()
+        {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
+            var settings = SchoolLocator.PanoramaSettingsService.Restore<StudentProfilePanoramaSetting>(null);
+            return Json(PersonProfilePanoramaSettingViewData.Create(settings));
         }
     }
 }
