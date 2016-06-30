@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     public interface ISupplementalAnnouncementService : IBaseAnnouncementService
     {
         AnnouncementDetails Create(int classId, DateTime expiresDate, int classAnnouncementTypeId);
-        AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? classAnnouncementTypeId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds);
+        AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? classAnnouncementTypeId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds, bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled);
         void SetVisibleForStudent(int supplementalAnnouncementId, bool visible);
         SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementId);
         IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
@@ -204,7 +204,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? classAnnouncementTypeId, string title,
-            string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds)
+            string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds
+            , bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var suppAnnouncement = InternalGetAnnouncementById(supplementalAnnouncementId);
@@ -229,6 +230,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 suppAnnouncement.VisibleForStudent = visibleForStudent;
                 suppAnnouncement.ClassAnnouncementTypeRef = classAnnouncementTypeId;
 
+                suppAnnouncement.DiscussionEnabled = discussionEnabled;
+                suppAnnouncement.RequireCommentsEnabled = requireCommentsEnabled;
+
+                if (previewCommentsEnabled && discussionEnabled && !suppAnnouncement.PreviewCommentsEnabled)
+                {
+                    suppAnnouncement.PreviewCommentsEnabled = true;
+                    new AnnouncementCommentDataAccess(uow).HideAll(suppAnnouncement.Id);
+                }
+                
                 if (suppAnnouncement.IsSubmitted)
                     ValidateSupplementalAnnouncement(suppAnnouncement, da, ServiceLocator, recipientsIds, classId);
 

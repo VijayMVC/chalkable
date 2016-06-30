@@ -18,7 +18,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     {
         AnnouncementDetails Create(int? classId, DateTime? startDate, DateTime? endDate);
         AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId);
-        AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpGalleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery);
+        AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpGalleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent
+            , bool inGallery, bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled);
         PaginatedList<LessonPlan> GetLessonPlansTemplates(int? lpGalleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
@@ -203,7 +204,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpGalleryCategoryId, string title, string content,
-                                        DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery)
+                                        DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery
+            , bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var lessonPlan = GetLessonPlanById(lessonPlanId); // security check 
@@ -230,6 +232,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.VisibleForStudent = visibleForStudent;
                 lessonPlan.InGallery = inGallery;
                 lessonPlan.GalleryOwnerRef = Context.PersonId;
+
+                lessonPlan.DiscussionEnabled = discussionEnabled;
+                lessonPlan.RequireCommentsEnabled = requireCommentsEnabled;
+
+                if (previewCommentsEnabled && discussionEnabled && !lessonPlan.PreviewCommentsEnabled)
+                {
+                    lessonPlan.PreviewCommentsEnabled = true;
+                    new AnnouncementCommentDataAccess(uow).HideAll(lessonPlan.Id);
+                }
 
                 if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
                     lessonPlan.LpGalleryCategoryRef = lpGalleryCategoryId;

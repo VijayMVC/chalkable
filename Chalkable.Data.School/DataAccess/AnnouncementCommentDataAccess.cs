@@ -20,6 +20,11 @@ namespace Chalkable.Data.School.DataAccess
                 ["roleId"] = roleId
             };
             return ExecuteStoredProcedureList<AnnouncementComment>("spGetAnnouncementComments", ps);
-        } 
+        }
+
+        public void HideAll(int announcementId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

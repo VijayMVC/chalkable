@@ -218,6 +218,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 ann.WeightMultiplier = inputAnnData.WeightMultiplier;
                 ann.MayBeDropped = inputAnnData.CanDropStudentScore;
                 ann.VisibleForStudent = !inputAnnData.HideFromStudents;
+
+                ann.DiscussionEnabled = inputAnnData.DiscussionEnabled;
+                ann.RequireCommentsEnabled = inputAnnData.RequireCommentsEnabled;
+
+                if (inputAnnData.PreviewCommentsEnabled && inputAnnData.DiscussionEnabled && !ann.PreviewCommentsEnabled)
+                {
+                    ann.PreviewCommentsEnabled = true;
+                    new AnnouncementCommentDataAccess(uow).HideAll(ann.Id);
+                }
+
                 if (ann.ClassRef != classId)
                 {
                     if (!ann.IsDraft)
