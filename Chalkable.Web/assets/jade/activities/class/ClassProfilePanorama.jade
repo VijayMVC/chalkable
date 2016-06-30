@@ -1,0 +1,20 @@
+-var clazz = self.getClazz()
+
+.profile-page.class-profile.panorama-page
+    h2.page-title=clazz.getName()
+    +ProfileTopBar(self, 'panorama')
+    .summary-view
+        +ActionForm('class', 'panoramaSubmit').class-panorama-form.no-working
+            +Hidden('classId', clazz.getId().valueOf())
+            +Hidden('selectedStudents').selected-students
+            +Hidden('highlightedStudents').highlighted-students
+            BUTTON(type='submit', name="submitType", value="check").x-hidden.submit-by-check
+            +CloseOpen('Filter', !clazz.isShowFilters())
+                +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings(), 'class', 'panorama', [clazz.getId(), true])
+            .charts-part
+                +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)
+
+
+
+
+

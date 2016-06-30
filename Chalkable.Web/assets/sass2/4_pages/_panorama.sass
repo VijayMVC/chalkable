@@ -1,0 +1,84 @@
+.student-panorama
+  .chlk-grid
+    .cell:not(.center)
+      text-align: left
+      padding: 0 10px
+
+.panorama-page
+
+  .highcharts-container
+    &::before
+      content: none
+
+  .cell
+    &.checks
+      width: 5%
+
+    &.name
+      width: 25%
+
+    &.ethnicity, &.hispanic, &.iep-active, &.retained
+      width: 4%
+
+      &.active-sort::before
+        right: 5px
+
+  h3
+    margin-top: 24px
+
+  .chart-content
+    height: 300px
+
+  .chart-container
+    &:not(.small-chart)
+      height: 300px
+    width: 100%
+
+  .tab-headers
+    margin: -15px -20px
+
+  .add-supplemental-btn
+    padding: 0
+    width: 24px
+    height: 24px
+    border: none
+    +box-shadow(none)
+    +icons-24-sprite(supplemental)
+    margin: -10px 0
+
+    &:hover
+      +icons-24-sprite(supplemental)
+
+
+  .add-subject-container
+    margin-top: 20px
+
+  .course-type-header
+    margin-bottom: 10px
+
+  .main-text
+    font-size: 18px
+    margin-right: 10px
+
+  .current-year
+    margin: 0 10px
+    font-style: italic
+    font-size: 14px
+
+  .previous-years
+    LABEL
+      margin: 0 10px
+      font-size: 14px
+      font-weight: 600
+
+.add-course-to-panorama-dialog
+  SELECT
+    width: 265px
+
+  .dialog
+    width: 300px
+
+  .chosen-container
+    display: block
+    margin: 20px auto
+

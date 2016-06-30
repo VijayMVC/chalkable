@@ -1,0 +1,25 @@
+.dialog.report-window
+   +ActionForm('attendance', 'submitSeatingChartReport').seating-chart-report-form.no-working.report-form
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
+
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('seatingChartReport'))
+
+         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+         +Hidden('classId', self.getClassId().valueOf())
+         .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
+            TABLE.report-table
+               TR
+                  TD.item-3
+                     h3 Include
+                     +LabeledCheckbox('Photograph', 'displayStudentPhoto', true)
+                  TD.item-3
+                  TD.item-3
+      .x-window-footer.report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

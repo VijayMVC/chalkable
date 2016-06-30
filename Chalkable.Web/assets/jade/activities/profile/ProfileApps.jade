@@ -1,0 +1,26 @@
+mixin CounterBox(title, value, editable, controller, action)
+    .counter(attributes)
+        label=title
+        span
+            input(name='value', value=value)
+
+mixin AppIcon(app, chlkTplObj)
+    .app-list-item
+        .icon
+            -var appPictureUrl = chlkTplObj.getPictureURL(app.getBigPictureId(), 170, 110)
+            +LoadingImage(src=appPictureUrl)
+        .description
+            .name=app.getName()
+
+mixin AppsList(apps, chlkTplObj)
+    .apps
+        each app in apps
+            +AppIcon(app, chlkTplObj)
+
+mixin AppsBudgetPanel(appsBudget, chlkTplObj)
+    .apps-budget-info
+        h2
+            .budget-info
+                +CounterBox('Balance', appsBudget.getBalance() || 0, true)
+                +CounterBox('School reserve', appsBudget.getReserve() || 0, true)
+        +AppsList(appsBudget.getInstalledApps(), chlkTplObj)

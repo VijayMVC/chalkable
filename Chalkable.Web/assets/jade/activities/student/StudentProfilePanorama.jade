@@ -1,0 +1,98 @@
+mixin HeaderLink_(name, type)
+    .cell.center(attributes)=name
+
+-user = self.getUser()
+-panoramaInfo = user.getPanoramaInfo()
+-statusData = self.getStatusData()
+.profile-page.panorama-page.student-panorama
+    h2.page-title=Msg.Student_profile
+
+    +ProfileTopBar(self, 'panorama')
+    .summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(user, 140, !self.getUserRole().isStudent())
+            #info-panel.central-block.panel-block
+                displayName =user.getDisplayName() || user.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                .status
+                    div(class=statusData.status, data-tooltip=statusData.statusName)
+                    |#{user.getCurrentClassName()}
+                    if(user.getCurrentClassName() && user.getRoomName() && user.getCurrentClassName().toLowerCase() != 'no class now')
+                        |&nbsp;- #{user.getRoomName()}
+            #glance-block-panel.right-block.panel-block
+                .glance-container
+                    if user.getAttendanceBox()
+                        +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, null, true, true)
+                    if user.getDisciplineBox()
+                        +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
+                    if user.getGradesBox()
+                        +GlanceBox(null, null, self.buildGradesGlanceBoxData(), null, null, true, true)
+        +ActionForm('students', 'panoramaSubmit').student-panorama-form.no-working
+            +CloseOpen('Filters', !panoramaInfo.isShowFilters())
+                +PanoramaFilter(panoramaInfo.getSchoolYears(), panoramaInfo.getStandardizedTests(), panoramaInfo.getFilterSettings(), 'students', 'panoramaRestore' ,[user.getId()])
+            +CloseOpen('Graph')
+                .stats-container.standardized-tests-tab
+                    .top-bar
+                        .title Standardized Tests
+                    if self.getTestsChartOptions_()
+                        +Chart()(
+                            data-options = self.getTestsChartOptions_()
+                        ).standardized-tests-chart
+                .stats-container.attendances-tab
+                    .top-bar
+                        .title Attendance
+                    if self.getAbsencesChartOptions_()
+                        +Chart()(
+                            data-options = self.getAbsencesChartOptions_()
+                        ).attendances-chart
+                .stats-container.disciplines-tab
+                    .top-bar
+                        .title Discipline
+                    if self.getDisciplinesChartOptions_()
+                        +Chart()(
+                            data-options = self.getDisciplinesChartOptions_()
+                        ).disciplines-chart
+            +CloseOpen('Attendance', true).panorama-attendance-tab
+                .chlk-calendar.attendance-grid
+                    .grid-top-content.chlk-grid
+                        .grid-content
+                            .grid-header.grid-row
+                                +HeaderLink_('Date').date
+                                +HeaderLink_('Reason').reason
+                                +HeaderLink_('Level').level
+                                +HeaderLink_('Category').category
+                                +HeaderLink_('Periods').periods
+                                +HeaderLink_('Note').note
+                            each item in panoramaInfo.getStudentAbsenceStats()
+                                .grid-row
+                                    .cell.date=item.getDate() && item.getDate().format('D dd/mm/yy')
+                                    .cell.reason=item.getAbsenceReasonName()
+                                    .cell.level=item.getAbsenceLevel()
+                                    .cell.center.category=item.getAbsenceCategory()
+                                    .cell.center.periods=item.getPeriodsText()
+                                    .cell.note
+            +CloseOpen('Discipline', true).panorama-attendance-tab
+                .chlk-calendar.attendance-grid
+                    .grid-top-content.chlk-grid
+                        .grid-content
+                            .grid-header.grid-row
+                                +HeaderLink_('Infraction Date').date
+                                +HeaderLink_('Infraction').infraction
+                                +HeaderLink_('Code').code
+                                +HeaderLink_('Demerits').demerits
+                                +HeaderLink_('Primary').primary
+                                +HeaderLink_('Disposition Date').disposition-date
+                                +HeaderLink_('Disposition').disposition
+                                +HeaderLink_('Note').note
+                            each item in panoramaInfo.getStudentDisciplineStats()
+                                .grid-row
+                                    .cell.date=item.getOccurrenceDate() && item.getOccurrenceDate().format('D dd/mm/yy')
+                                    .cell.infraction=item.getInfractionName()
+                                    .cell.center.code=item.getInfractionStateCode()
+                                    .cell.center.demerits=item.getDemeritsEarned()
+                                    .cell.center.primary=item.isPrimary()
+                                    .cell.disposition-date=item.getDispositionStartDate() && item.getDispositionStartDate().format('D dd/mm/yy')
+                                    .cell.disposition=item.getDispositionName()
+                                    .cell.note=item.getDispositionNote()
