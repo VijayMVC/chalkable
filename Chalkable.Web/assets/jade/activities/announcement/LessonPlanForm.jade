@@ -119,6 +119,8 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     .box-checkbox.circle
                                         +Checkbox('inGallery', !!lessonPlan.isInGallery(), false, true)#public-check.gallery-check
                                     label(for="public-check") Public
+                            else
+                                +Hidden('inGallery', false)
 
 
                 .apps-attachments-bock.attachments-and-applications

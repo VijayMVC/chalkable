@@ -96,6 +96,8 @@
                                     .box-checkbox.circle
                                         +Checkbox('inGallery', isAdmin ? true : !!lessonPlan.isInGallery(), false, true, isAdmin)#public-check.gallery-check
                                     label(for="public-check") Public
+                            else
+                                +Hidden('inGallery', false)
 
 
                 .apps-attachments-bock.attachments-and-applications
