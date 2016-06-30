@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
         IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId);
         void CopyStandardsToAnnouncement(int fromAnnouncementId, int toAnnouncementId, int announcementType);
-        IList<Standard> GetGridStandardsByPacing(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false);
+        IList<Standard> GetGridStandardsByPacing(int? classId, int? gradeLevelId, int? subjectId, int? gradingPeriodId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false);
 
     }
     public class StandardService : SchoolServiceBase, IStandardService
@@ -87,9 +87,9 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Standard> GetGridStandardsByPacing(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false)
+        public IList<Standard> GetGridStandardsByPacing(int? classId, int? gradeLevelId, int? subjectId, int? gradingPeriodId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false)
         {
-            return DoRead(u => new StandardDataAccess(u).GetGridStandardsByPacing(classId, gradeLevelId, subjectId, parentStandardId, allStandards, activeOnly));
+            return DoRead(u => new StandardDataAccess(u).GetGridStandardsByPacing(classId, gradeLevelId, subjectId, gradingPeriodId, parentStandardId, allStandards, activeOnly));
         }
 
         public void AddStandardSubjects(IList<StandardSubject> standardSubjects)

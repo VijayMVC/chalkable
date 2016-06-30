@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (reCalculateStandards && GradebookSecurity.CanReCalculateGradebook(Context, isTeacherClass)) 
                 await ConnectorLocator.GradebookConnector.Calculate(classId);
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
-            var standards = ServiceLocator.StandardService.GetGridStandardsByPacing(classId, null, null);
+            var standards = ServiceLocator.StandardService.GetGridStandardsByPacing(classId, null, null, gradingPeriodId);
             standards = standards.Where(s => s.IsActive || standardScores.Any(ss => ss.StandardId == s.Id && ss.HasScore)).ToList();
             var res = GradingStandardInfo.Create(standardScores, standards);
             return res;

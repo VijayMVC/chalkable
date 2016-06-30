@@ -1,5 +1,15 @@
-﻿CREATE Procedure [dbo].[spGetGridStandardsByPacing] @ClassId int, @GradeLavelId int = null, @StandardSubjectId int, @ParentStandardId int, @AllStandards bit, @IsActive bit
+﻿CREATE Procedure [dbo].[spGetGridStandardsByPacing] @ClassId int, @GradeLavelId int, @GradingPeriodId int, @StandardSubjectId int, @ParentStandardId int, @AllStandards bit, @IsActive bit
 AS
+
+declare @GPStartDate datetime2;
+declare @GPEndDate datetime2;
+
+select 
+	@GPStartDate = StartDate, @GPEndDate = EndDate 
+from 
+	GradingPeriod 
+where 
+	Id = @GradingPeriodId
 
 declare @StandardsForSorting table
 (
@@ -75,7 +85,31 @@ insert into @MinDateForStandard
 		ISNULL(Min(SortDate), '9999-12-31 23:59:59.998') MinDate 
 	From 
 		(
-			Select SFS.Id, Min(StartDate) as SortDate 
+			Select SFS.Id, Min(Expires) as SortDate 
+			From 
+				@StandardsForSorting SFS
+				left join AnnouncementStandard 
+					on SFS.Id = AnnouncementStandard.standardRef
+				left join ClassAnnouncement CA
+					on AnnouncementStandard.AnnouncementRef = CA.Id
+			where CA.Expires >= @GPStartDate AND CA.Expires <= @GPEndDate
+			Group By SFS.Id
+
+			UNION
+
+			Select SFS.Id, '9999-12-31 23:59:59.998' as SortDate 
+			From 
+				@StandardsForSorting SFS
+				left join AnnouncementStandard 
+					on SFS.Id = AnnouncementStandard.standardRef
+				left join ClassAnnouncement CA
+					on AnnouncementStandard.AnnouncementRef = CA.Id
+			where CA.Expires < @GPStartDate AND CA.Expires > @GPEndDate
+			Group By SFS.Id
+
+			UNION
+
+			Select SFS.Id, '9999-12-31 23:59:59.998' as SortDate 
 			From 
 				@StandardsForSorting as SFS
 				left join AnnouncementStandard 
@@ -86,18 +120,7 @@ insert into @MinDateForStandard
 
 			UNION
 
-			Select SFS.Id, Min(Expires) as SortDate 
-			From 
-				@StandardsForSorting SFS
-				left join AnnouncementStandard 
-					on SFS.Id = AnnouncementStandard.standardRef
-				left join ClassAnnouncement 
-					on AnnouncementStandard.AnnouncementRef = ClassAnnouncement.Id
-			Group By SFS.Id
-
-			UNION
-
-			Select SFS.Id, Min(Expires) as SortDate
+			Select SFS.Id, '9999-12-31 23:59:59.998' as SortDate
 			From 
 				@StandardsForSorting SFS
 				left join AnnouncementStandard 
