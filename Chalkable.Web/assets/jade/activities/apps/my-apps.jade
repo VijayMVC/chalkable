@@ -1,0 +1,28 @@
+mixin AppIcon(app)
+    .icon
+        +LoadingImage(src=app.getBannerPictureUrl())
+
+mixin MyAppsIconLink_(app)
+    appId = app.getId().valueOf()
+    -var isBanned = app.isBanned()
+    if(!app.isBannedForCurrentSchool())
+        +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned)(class= self.bannedCssClass(app)).application
+            .wrapper
+                +LoadingImage(src=app.getBannerPictureUrl())
+                .title=app.getName()
+                if(self.canDisableApp())
+                    +ActionButton('apps', 'disableApp', appId).negative-button.disable-app-button Disable
+                BUTTON Open
+    else
+        div(class= self.bannedCssClass(app)).application
+            .wrapper
+                +LoadingImage(src=app.getBannerPictureUrl())
+                .title=app.getName()
+                if(self.canDisableApp())
+                    +ActionButton('apps', 'disableApp', appId).negative-button.disable-app-button Disable
+
+.my-apps
+    h2.page-title Apps
+    .apps
+        each app in self.apps.getItems()
+            +MyAppsIconLink_(app)
