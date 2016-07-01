@@ -188,8 +188,8 @@ namespace Chalkable.Web.Controllers
             return Json(panoramaViewData);
         }
 
-
-        private ClassPanoramaViewData PreparePanoramaViewData(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents) {
+        private ClassPanoramaViewData PreparePanoramaViewData(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents)
+        {
             var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);

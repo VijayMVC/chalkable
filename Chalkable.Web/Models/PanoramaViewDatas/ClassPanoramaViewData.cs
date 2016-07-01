@@ -30,7 +30,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         {
             var res = new ClassPanoramaViewData(cClass)
             {
-                StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList(),
+                StandardizedTests = standardizedTests.Select(x => StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList(),
                 ClassDistributionSection = ClassDistributionSectionViewData.Create(panorama.Grades, panorama.Absences, panorama.Infractions, gradingScaleRanges),
                 StandardizedTestsStatsByClass = StandardizedTestStatsViewData.CreateForClass(panorama.StandardizedTests, standardizedTests),
                 Students = new List<StudentStandardizedTestStats>()
@@ -105,7 +105,11 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                     .GroupBy(y => y.Date, x => decimal.Parse(x.Score));
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)
-                    viewData.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, !studentStTestsInfo.Any() ? 0 : studentStTestsInfo.Average(), "MMM yyyy"));
+                {
+                    var avg = !studentStTestsInfo.Any() ? 0 : decimal.Round(studentStTestsInfo.Average(), 2);
+                    viewData.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, avg, "MMM yyyy"));
+                }
+                    
 
                 res.Add(viewData);
             }
@@ -159,7 +163,10 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                     .GroupBy(y => y.Date, x => decimal.Parse(x.Score));
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)
-                    stats.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, !studentStTestsInfo.Any() ? 0 : studentStTestsInfo.Average(), "MMM yyyy"));
+                {
+                    var avg = !studentStTestsInfo.Any() ? 0 : decimal.Round(studentStTestsInfo.Average(), 2);
+                    stats.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, avg, "MMM yyyy"));
+                }
 
                 res.Add(stats);
             }

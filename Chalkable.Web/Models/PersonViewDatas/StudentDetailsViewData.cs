@@ -32,9 +32,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 Role = RoleViewData.Create(CoreRoles.STUDENT_ROLE),
                 IsHispanic = student.IsHispanic,
                 Ethnicity = student.Ethnicity != null ? EthnicityViewData.Create(student.Ethnicity) : null,
-                Absences = absences?.NumberOfAbsences,
+                Absences = absences != null ? decimal.Round(absences.NumberOfAbsences) : (decimal?)null,
                 Discipline = infractions,
-                GradeAvg = gradeAvg,
+                GradeAvg = gradeAvg.HasValue ? decimal.Round(gradeAvg.Value, 2) : (decimal?) null,
                 IsIEPActive = student.IsIEPActive(currentSchoolTime),
                 IsRetainedFromPrevSchoolYear = false,
                 TotalOfDaysEnrolled = absences?.NumberOfDaysEnrolled

@@ -15,6 +15,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
+        public string CurrentAttandanceLevel { get; set; }
         public bool IsIEPActive { get; set; }
         public bool IsTitle1Eligible { get; set; }
         public bool Section504 { get; set; }
@@ -101,7 +102,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.DisciplineBox = StudentHoverBoxViewData<DisciplineTypeSummaryViewData>.Create(studentSummary.InfractionSummaries,
                     studentSummary.TotalDisciplineOccurrences);
             res.GradesBox = StudentHoverBoxViewData<StudentSummaryGradeViewData>.Create(studentSummary.StudentAnnouncements);
-            
+
+            res.CurrentAttandanceLevel = studentSummary.CurrentAttendanceLevel;
+
             return res;
         }
         
