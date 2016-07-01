@@ -77,7 +77,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             {
                 decimal a;
                 return decimal.TryParse(x.Score, out a);
-            }).ToList();
+            }).OrderBy(x => x.Date).ToList();
 
             foreach (var standardizedTestInfo in models)
             {
@@ -130,7 +130,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             {
                 decimal a;
                 return decimal.TryParse(x.Score, out a);
-            }).ToList();
+            }).OrderBy(x => x.Date).ToList();
 
             if (studentTests.Count == 0)
                 return res;
