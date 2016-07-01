@@ -11,6 +11,28 @@ NAMESPACE('chlk.models.panorama', function () {
 
     var SJX = ria.serialize.SJX;
 
+    /** @class chlk.models.panorama.StudentAttendancesSortType*/
+    ENUM('StudentAttendancesSortType', {
+        DATE: 1,
+        REASON: 2,
+        LEVEL: 3,
+        CATEGORY: 4,
+        PERIODS: 5,
+        NOTE: 6
+    });
+
+    /** @class chlk.models.panorama.StudentDisciplinesSortType*/
+    ENUM('StudentDisciplinesSortType', {
+        DATE: 1,
+        INFRACTION: 2,
+        CODE: 3,
+        DEMERITS: 4,
+        PRIMARY: 5,
+        DISPOSITION_DATE: 6,
+        DISPOSITION: 7,
+        NOTE: 8
+    });
+
     /** @class chlk.models.panorama.StudentDisciplineStatViewData*/
     CLASS(
         UNSAFE, 'StudentDisciplineStatViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
@@ -43,6 +65,7 @@ NAMESPACE('chlk.models.panorama', function () {
             String, 'absenceLevel',
             String, 'absenceCategory',
             ArrayOf(Number), 'periods',
+            String, 'note',
 
             VOID, function deserialize(raw) {
                 this.date = SJX.fromDeserializable(raw.date, chlk.models.common.ChlkDate);
@@ -133,6 +156,12 @@ NAMESPACE('chlk.models.panorama', function () {
             ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
             Boolean, 'showFilters',
 
+            chlk.models.panorama.StudentAttendancesSortType, 'attendancesOrderBy',
+            Boolean, 'attendancesDescending',
+
+            chlk.models.panorama.StudentDisciplinesSortType, 'disciplinesOrderBy',
+            Boolean, 'disciplinesDescending',
+
             VOID, function deserialize(raw) {
                 this.filterSettings = SJX.fromDeserializable(raw.filtersettings, chlk.models.profile.PanoramaSettingsViewData);
                 this.standardizedTests = SJX.fromArrayOfDeserializables(raw.standardizedtests, chlk.models.profile.StandardizedTestViewData);
@@ -140,6 +169,11 @@ NAMESPACE('chlk.models.panorama', function () {
                 this.dailyDisciplines = SJX.fromArrayOfDeserializables(raw.dailydisciplinestats, chlk.models.common.ChartDateItem);
                 this.studentDisciplineStats = SJX.fromArrayOfDeserializables(raw.disciplinestats, chlk.models.panorama.StudentDisciplineStatViewData);
                 this.studentAbsenceStats = SJX.fromArrayOfDeserializables(raw.dailyattendancestats, chlk.models.panorama.StudentAbsenceStatViewData);
+
+                this.attendancesDescending = false;
+                this.disciplinesDescending = false;
+                this.attendancesOrderBy = chlk.models.panorama.StudentAttendancesSortType.DATE;
+                this.disciplinesOrderBy = chlk.models.panorama.StudentDisciplinesSortType.DATE;
             }
         ]);
 });

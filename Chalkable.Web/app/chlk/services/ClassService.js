@@ -105,12 +105,9 @@ NAMESPACE('chlk.services', function () {
             },
 
             ria.async.Future, function restorePanorama(classId) {
-                return this.post('Class/RestorePanoramaSettings.json', chlk.models.profile.ClassPanoramaViewData, {
+                return this.post('Class/RestorePanoramaSettings.json', Object, {
                     classId: classId.valueOf()
-                }).then(function(model){
-                    this.getContext().getSession().set(ChlkSessionConstants.CURRENT_PANORAMA, model);
-                    return model;
-                }, this);
+                });
             },
 
             //[[Object, Object]],

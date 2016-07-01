@@ -1,12 +1,7 @@
-mixin YesNo_(value)
-    .data-info= value ? "Yes" : "No"
+-var user = self.getUser()
+-var panoramaInfo = user.getPanoramaInfo()
+-var statusData = self.getStatusData()
 
-mixin HeaderLink_(name, type)
-    .cell.center(attributes)=name
-
--user = self.getUser()
--panoramaInfo = user.getPanoramaInfo()
--statusData = self.getStatusData()
 .profile-page.panorama-page.student-panorama.info-view
     h2.page-title=Msg.Student_profile
 
@@ -52,134 +47,8 @@ mixin HeaderLink_(name, type)
                     if user.getGradesBox()
                         +GlanceBox(null, null, self.buildGradesGlanceBoxData(), null, null, true, true)
         +ActionForm('students', 'panoramaSubmit').student-panorama-form.no-working
+            +Hidden('studentId', user.getId())
             +CloseOpen('Filters', !panoramaInfo.isShowFilters())
-                +PanoramaFilter(panoramaInfo.getSchoolYears(), panoramaInfo.getStandardizedTests(), panoramaInfo.getFilterSettings(), 'students', 'panoramaRestore' ,[user.getId()])
-            +CloseOpen('Graph')
-                .stats-container.standardized-tests-tab
-                    .top-bar
-                        .title Standardized Tests
-                    if self.getTestsChartOptions_()
-                        +Chart()(
-                            data-options = self.getTestsChartOptions_()
-                        ).standardized-tests-chart
-                .stats-container.attendances-tab
-                    .top-bar
-                        .title Attendance
-                    if self.getAbsencesChartOptions_()
-                        +Chart()(
-                            data-options = self.getAbsencesChartOptions_()
-                        ).attendances-chart
-                .stats-container.disciplines-tab
-                    .top-bar
-                        .title Discipline
-                    if self.getDisciplinesChartOptions_()
-                        +Chart()(
-                            data-options = self.getDisciplinesChartOptions_()
-                        ).disciplines-chart
-            +CloseOpen('Attendance', true).panorama-attendance-tab
-                .chlk-calendar.attendance-grid
-                    .grid-top-content.chlk-grid
-                        .grid-content
-                            .grid-header.grid-row
-                                +HeaderLink_('Date').date
-                                +HeaderLink_('Reason').reason
-                                +HeaderLink_('Level').level
-                                +HeaderLink_('Category').category
-                                +HeaderLink_('Periods').periods
-                                +HeaderLink_('Note').note
-                            each item in panoramaInfo.getStudentAbsenceStats()
-                                .grid-row
-                                    .cell.date=item.getDate() && item.getDate().format('D dd/mm/yy')
-                                    .cell.reason=item.getAbsenceReasonName()
-                                    .cell.level=item.getAbsenceLevel()
-                                    .cell.center.category=item.getAbsenceCategory()
-                                    .cell.center.periods=item.getPeriodsText()
-                                    .cell.note
-            +CloseOpen('Demographics', true).panorama-demographics-tab
-                TABLE
-                    TR
-                        TD
-                            -var bd = user.getBirthDate()
-                            .section-data
-                                .info-title Birth Date
-                                .data-info= bd && bd.format('mm.dd.yy')
-                            .section-data
-                                .info-title Age
-                                .data-info= user.getAge()
-                            .section-data
-                                .info-title Gender
-                                .data-info= user.getGender()
-                            .section-data
-                                .info-title Race
-                                .data-info= user.getEthnicity() && user.getEthnicity().getName()
-                            .section-data
-                                .info-title Hispanic
-                                +YesNo_(user.isHispanic())
-                        TD
-                            .section-data
-                                .info-title Special Ed
-                                +YesNo_(user.isIEPActive())
-                            .section-data
-                                .info-title Title I
-                                +YesNo_(user.isTitle1Eligible())
-                            .section-data
-                                .info-title Section 504
-                                +YesNo_(user.isSection504())
-                            .section-data
-                                .info-title Homeless
-                                +YesNo_(user.isHomeless())
-                        TD
-                            .section-data
-                                .info-title Language
-                                .data-info= user.getLanguage() && user.getLanguage().getName()
-                            .section-data
-                                .info-title Immigrant
-                                +YesNo_(user.isImmigrant())
-                            .section-data
-                                .info-title Nationality
-                                .data-info= user.getNationality() && user.getNationality().getName()
-                            .section-data
-                                .info-title LEP
-                                +YesNo_(user.isLep())
-                            .section-data
-                                .info-title Exchange Student
-                                +YesNo_(user.isForeignExchange())
-                        TD
-                            .section-data
-                                .info-title State ID
-                                .data-info= user.getStateIDNumber()
-                            .section-data
-                                .info-title Alternate ID
-                                .data-info= user.getAlternateStudentNumber()
-                            .section-data
-                                .info-title Student No.
-                                .data-info= user.getStudentNumber()
-                            .section-data
-                                .info-title Entry Date
-                                .data-info= user.getOriginalEnrollmentDate() && user.getOriginalEnrollmentDate().format('mm.dd.yy')
-                            .section-data
-                                .info-title Retained
-                                +YesNo_(user.isRetained())
-            +CloseOpen('Discipline', true).panorama-discipline-tab
-                .chlk-calendar.attendance-grid
-                    .grid-top-content.chlk-grid
-                        .grid-content
-                            .grid-header.grid-row
-                                +HeaderLink_('Infraction Date').date
-                                +HeaderLink_('Infraction').infraction
-                                +HeaderLink_('Code').code
-                                +HeaderLink_('Demerits').demerits
-                                +HeaderLink_('Primary').primary
-                                +HeaderLink_('Disposition Date').disposition-date
-                                +HeaderLink_('Disposition').disposition
-                                +HeaderLink_('Note').note
-                            each item in panoramaInfo.getStudentDisciplineStats()
-                                .grid-row
-                                    .cell.date=item.getOccurrenceDate() && item.getOccurrenceDate().format('D dd/mm/yy')
-                                    .cell.infraction=item.getInfractionName()
-                                    .cell.center.code=item.getInfractionStateCode()
-                                    .cell.center.demerits=item.getDemeritsEarned()
-                                    .cell.center.primary=item.isPrimary()
-                                    .cell.disposition-date=item.getDispositionStartDate() && item.getDispositionStartDate().format('D dd/mm/yy')
-                                    .cell.disposition=item.getDispositionName()
-                                    .cell.note=item.getDispositionNote()
+                +PanoramaFilter(panoramaInfo.getSchoolYears(), panoramaInfo.getStandardizedTests(), panoramaInfo.getFilterSettings(), 'students', 'restorePanorama' ,[user.getId()])
+            .panorama-stats
+                +RenderWith(user, chlk.templates.student.StudentProfilePanoramaStatsTpl)

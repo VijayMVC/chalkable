@@ -8,6 +8,7 @@ REQUIRE('chlk.models.student.StudentGradingInfo');
 REQUIRE('chlk.models.people.Schedule');
 REQUIRE('chlk.models.student.StudentExplorer');
 REQUIRE('chlk.models.people.PersonApps');
+REQUIRE('chlk.models.panorama.StudentPanoramaViewData');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -62,11 +63,125 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            ria.async.Future, function getPanorama(personId, data_) {
-                return this.get('Student/Panorama.json', chlk.models.panorama.StudentPanoramaViewData, {
-                    studentId: personId.valueOf(),
-                    studentProfilePanoramaSetting: data_
+            ria.async.Future, function getPanorama(studentId, data_) {
+                return this.post('Student/Panorama.json', chlk.models.panorama.StudentPanoramaViewData, {
+                    studentId: studentId.valueOf(),
+                    standardizedTestFilters: data_ && data_.standardizedTestFilters,
+                    schoolYearIds: data_ && data_.schoolYearIds
                 });
+            },
+
+            ria.async.Future, function savePanoramaSettings(studentId, data) {
+                return this.post('Student/SavePanoramaSettings.json', Boolean, {
+                    studentId : studentId.valueOf(),
+                    standardizedTestFilters: data.standardizedTestFilters,
+                    schoolYearIds: data.schoolYearIds
+                });
+            },
+
+            ria.async.Future, function restorePanorama() {
+                return this.get('Student/RestorePanoramaSettings.json', Object, {});
+            },
+
+            [[chlk.models.panorama.StudentAttendancesSortType, Boolean]],
+            ria.async.Future, function sortPanoramaAttendances(orderBy_, descending_){
+                orderBy_ = orderBy_ || chlk.models.panorama.StudentAttendancesSortType.DATE;
+                descending_ = descending_ || false;
+                var panorama = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PANORAMA, null).getPanoramaInfo();
+
+                if(!panorama)
+                    throw 'No panorama saved';
+
+                var items = panorama.getStudentAbsenceStats(), propRef, propName,
+                    ref = ria.reflection.ReflectionClass(chlk.models.panorama.StudentAbsenceStatViewData);
+
+                switch (orderBy_){
+                    case chlk.models.panorama.StudentAttendancesSortType.DATE: propName = 'date'; break;
+                    case chlk.models.panorama.StudentAttendancesSortType.REASON: propName = 'absenceReasonName'; break;
+                    case chlk.models.panorama.StudentAttendancesSortType.LEVEL: propName = 'absenceLevel'; break;
+                    case chlk.models.panorama.StudentAttendancesSortType.CATEGORY: propName = 'absenceCategory'; break;
+                    case chlk.models.panorama.StudentAttendancesSortType.PERIODS: propName = 'periods'; break;
+                    case chlk.models.panorama.StudentAttendancesSortType.NOTE: propName = 'note'; break;
+                }
+
+                propRef = ref.getPropertyReflector(propName);
+
+                items = items.sort(function(s1, s2){
+                    var a, b;
+
+                    a = propRef.invokeGetterOn(s1);
+                    b = propRef.invokeGetterOn(s2);
+
+                    if(a && a.getDate && b && b.getDate){
+                        a = a.getDate();
+                        b = b.getDate();
+                    }
+
+                    if(a && Array.isArray(a) && b && Array.isArray(b)){
+                        a = a.length;
+                        b = b.length;
+                    }
+
+                    if (a > b)
+                        return descending_ ? -1 : 1;
+                    if (a < b)
+                        return descending_ ? 1 : -1;
+                    return 0
+                });
+
+                panorama.setAttendancesOrderBy(orderBy_);
+                panorama.setAttendancesDescending(descending_);
+
+                return ria.async.DeferredData(panorama);
+            },
+
+            [[chlk.models.panorama.StudentDisciplinesSortType, Boolean]],
+            ria.async.Future, function sortPanoramaDisciplines(orderBy_, descending_){
+                orderBy_ = orderBy_ || chlk.models.panorama.StudentDisciplinesSortType.DATE;
+                descending_ = descending_ || false;
+                var panorama = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PANORAMA, null).getPanoramaInfo();
+
+                if(!panorama)
+                    throw 'No panorama saved';
+
+                var items = panorama.getStudentDisciplineStats(), propRef, propName,
+                    ref = ria.reflection.ReflectionClass(chlk.models.panorama.StudentDisciplineStatViewData);
+
+                switch (orderBy_){
+                    case chlk.models.panorama.StudentDisciplinesSortType.DATE: propName = 'occurrenceDate'; break;
+                    case chlk.models.panorama.StudentDisciplinesSortType.INFRACTION: propName = 'infractionName'; break;
+                    case chlk.models.panorama.StudentDisciplinesSortType.CODE: propName = 'infractionStateCode'; break;
+                    case chlk.models.panorama.StudentDisciplinesSortType.DEMERITS: propName = 'demeritsEarned'; break;
+                    case chlk.models.panorama.StudentDisciplinesSortType.PRIMARY: propName = 'primary'; break;
+                    case chlk.models.panorama.StudentDisciplinesSortType.DISPOSITION_DATE: propName = 'dispositionStartDate'; break;
+                    case chlk.models.panorama.StudentDisciplinesSortType.DISPOSITION: propName = 'dispositionName'; break;
+                    case chlk.models.panorama.StudentDisciplinesSortType.NOTE: propName = 'dispositionNote'; break;
+                }
+
+                propRef = ref.getPropertyReflector(propName);
+
+                items = items.sort(function(s1, s2){
+                    var a, b;
+
+                    a = propRef.invokeGetterOn(s1);
+                    b = propRef.invokeGetterOn(s2);
+
+                    if(a && a.getDate && b && b.getDate){
+                        a = a.getDate();
+                        b = b.getDate();
+                    }
+
+                    if (a > b)
+                        return descending_ ? -1 : 1;
+                    if (a < b)
+                        return descending_ ? 1 : -1;
+                    return 0
+                });
+
+                panorama.setDisciplinesOrderBy(orderBy_);
+                panorama.setDisciplinesDescending(descending_);
+
+                return ria.async.DeferredData(panorama);
             },
 
             [[chlk.models.id.SchoolPersonId]],
