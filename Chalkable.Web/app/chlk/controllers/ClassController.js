@@ -326,9 +326,9 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [[chlk.models.id.ClassId, Boolean]],
-            function panoramaAction(classId, showFilters_){
+            function panoramaAction(classId, restore_){
                 var res = ria.async.wait([
-                    this.classService.getPanorama(classId),
+                    restore_ ? this.classService.restorePanorama(classId) : this.classService.getPanorama(classId),
                     this.schoolYearService.list()
                 ])
                     .attach(this.validateResponse_())
@@ -336,13 +336,13 @@ NAMESPACE('chlk.controllers', function (){
                         var model = result[0];
                         model.setSchoolYears(result[1]);
                         model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
-                        showFilters_ && model.setShowFilters(showFilters_);
+                        restore_ && model.setShowFilters(true);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
                             this.isAssignedToClass_(classId)
                         );
                     }, this);
-                if(showFilters_)
+                if(restore_)
                     return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res);
 
                 return this.PushView(chlk.activities.classes.ClassPanoramaPage, res);

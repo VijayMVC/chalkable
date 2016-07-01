@@ -159,17 +159,7 @@ namespace Chalkable.Web.Controllers
             if (settings.SchoolYearIds.Count == 0)
                 throw new ChalkableException("School years is required parameter");
 
-            var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
-            var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
-            var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
-            
-            var classStudents = SchoolLocator.StudentService.GetClassStudentsDetails(classId, true);
-
-            var panoramaViewData = ClassPanoramaViewData.Create(classDetails, standardizedTestDetails,
-                panorama, gradingScale, classStudents, selectedStudents, Context.NowSchoolTime);
-
-            panoramaViewData.FilterSettings = ClassProfilePanoramaSettingsViewData.Create(settings);
+            var panoramaViewData = PreparePanoramaViewData(classId, settings, selectedStudents);
 
             return Json(panoramaViewData);
         }
@@ -194,8 +184,25 @@ namespace Chalkable.Web.Controllers
                 throw new ChalkableSecurityException("You are not allowed to change panorama settings");
 
             var settings = SchoolLocator.PanoramaSettingsService.Restore<ClassProfilePanoramaSetting>(classId);
-            return Json(ClassProfilePanoramaSettingsViewData.Create(settings));
+            var panoramaViewData = PreparePanoramaViewData(classId, settings, new List<int>());
+            return Json(panoramaViewData);
         }
 
+
+        private ClassPanoramaViewData PreparePanoramaViewData(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents) {
+            var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
+            var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
+            var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
+
+            var classStudents = SchoolLocator.StudentService.GetClassStudentsDetails(classId, true);
+
+            var panoramaViewData = ClassPanoramaViewData.Create(classDetails, standardizedTestDetails,
+                panorama, gradingScale, classStudents, selectedStudents, Context.NowSchoolTime);
+
+            panoramaViewData.FilterSettings = ClassProfilePanoramaSettingsViewData.Create(settings);
+
+            return panoramaViewData;
+        }
     }
 }

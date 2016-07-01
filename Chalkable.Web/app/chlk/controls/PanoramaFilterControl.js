@@ -71,29 +71,7 @@ NAMESPACE('chlk.controls', function () {
 
                 filters = this.getFiltersObject_(form);
 
-                this.checkRestoreBtn_(form, filters);
-
                 form.trigger('submit');
-            },
-
-            function checkRestoreBtn_(form, currentFilters){
-                var oldFilters = form.getData('filters'),
-                    oldYears = oldFilters.schoolYearIds.sort().join(','),
-                    currentYears = currentFilters.schoolYearIds.sort().join(','),
-                    btn = form.find('.restore-btn');
-
-                var oldMap = oldFilters.standardizedTestFilters.map(function(item){
-                    return [item.standardizedTestId, item.componentId, item.scoreTypeId].join(',')
-                }).join(',');
-
-                var currentMap = currentFilters.standardizedTestFilters.map(function(item){
-                    return [item.standardizedTestId, item.componentId, item.scoreTypeId].join(',')
-                }).join(',');
-
-                if(oldYears == currentYears && oldMap == currentMap)
-                    btn.setAttr('disabled', 'disabled');
-                else
-                    btn.removeAttr('disabled');
             },
 
             function getFiltersObject_(form){

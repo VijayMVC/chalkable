@@ -9,7 +9,7 @@ mixin PanoramaFilter(years, standardizedTests, values, restoreController, restor
                 each year in years
                     +Option(year.getId().valueOf(), year.getName(), yearsIds.filter(function(item){return item == year.getId()}).length > 0)
 
-            +ActionButtonWithPrepend(restoreController, restoreAction, restoreParams)(disabled = "disabled").right.restore-btn Restore
+            +ActionButtonWithPrepend(restoreController, restoreAction, restoreParams).right.restore-btn Restore
             BUTTON(type="submit", name="submitType", value="save").right Save
         .filters-block
             .filters-container
