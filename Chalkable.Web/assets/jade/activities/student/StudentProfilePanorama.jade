@@ -1,10 +1,13 @@
+mixin YesNo_(value)
+    .data-info= value ? "Yes" : "No"
+
 mixin HeaderLink_(name, type)
     .cell.center(attributes)=name
 
 -user = self.getUser()
 -panoramaInfo = user.getPanoramaInfo()
 -statusData = self.getStatusData()
-.profile-page.panorama-page.student-panorama
+.profile-page.panorama-page.student-panorama.info-view
     h2.page-title=Msg.Student_profile
 
     +ProfileTopBar(self, 'panorama')
@@ -21,6 +24,25 @@ mixin HeaderLink_(name, type)
                     |#{user.getCurrentClassName()}
                     if(user.getCurrentClassName() && user.getRoomName() && user.getCurrentClassName().toLowerCase() != 'no class now')
                         |&nbsp;- #{user.getRoomName()}
+                .sections-info
+                    .section-data
+                        .info-title Phone
+                        .data-info= user.getAddress() && user.getAddress().getValue()
+                    .section-data
+                        .info-title Address
+                        .data-info= (user.getPhones() || []).map(function(item){return item.getValue()}).join(',')
+                    .section-data
+                        .info-title Email
+                        .data-info= user.getEmail()
+                    .section-data
+                        .info-title Grade
+                        .data-info= user.getGradeLevel() && user.getGradeLevel().getName()
+                    .section-data
+                        .info-title Homeroom
+                        .data-info= user.getHomeRoom() && user.getHomeRoom().getName()
+                    .section-data
+                        .info-title Counselor
+                        .data-info= user.getCounselor() && user.getCounselor().getDisplayName()
             #glance-block-panel.right-block.panel-block
                 .glance-container
                     if user.getAttendanceBox()
@@ -73,7 +95,72 @@ mixin HeaderLink_(name, type)
                                     .cell.center.category=item.getAbsenceCategory()
                                     .cell.center.periods=item.getPeriodsText()
                                     .cell.note
-            +CloseOpen('Discipline', true).panorama-attendance-tab
+            +CloseOpen('Demographics', true).panorama-demographics-tab
+                TABLE
+                    TR
+                        TD
+                            -var bd = user.getBirthDate()
+                            .section-data
+                                .info-title Birth Date
+                                .data-info= bd && bd.format('mm.dd.yy')
+                            .section-data
+                                .info-title Age
+                                .data-info= user.getAge()
+                            .section-data
+                                .info-title Gender
+                                .data-info= user.getGender()
+                            .section-data
+                                .info-title Race
+                                .data-info= user.getEthnicity() && user.getEthnicity().getName()
+                            .section-data
+                                .info-title Hispanic
+                                +YesNo_(user.isHispanic())
+                        TD
+                            .section-data
+                                .info-title Special Ed
+                                +YesNo_(user.isIEPActive())
+                            .section-data
+                                .info-title Title I
+                                +YesNo_(user.isTitle1Eligible())
+                            .section-data
+                                .info-title Section 504
+                                +YesNo_(user.isSection504())
+                            .section-data
+                                .info-title Homeless
+                                +YesNo_(user.isHomeless())
+                        TD
+                            .section-data
+                                .info-title Language
+                                .data-info= user.getLanguage() && user.getLanguage().getName()
+                            .section-data
+                                .info-title Immigrant
+                                +YesNo_(user.isImmigrant())
+                            .section-data
+                                .info-title Nationality
+                                .data-info= user.getNationality() && user.getNationality().getName()
+                            .section-data
+                                .info-title LEP
+                                +YesNo_(user.isLep())
+                            .section-data
+                                .info-title Exchange Student
+                                +YesNo_(user.isForeignExchange())
+                        TD
+                            .section-data
+                                .info-title State ID
+                                .data-info= user.getStateIDNumber()
+                            .section-data
+                                .info-title Alternate ID
+                                .data-info= user.getAlternateStudentNumber()
+                            .section-data
+                                .info-title Student No.
+                                .data-info= user.getStudentNumber()
+                            .section-data
+                                .info-title Entry Date
+                                .data-info= user.getOriginalEnrollmentDate() && user.getOriginalEnrollmentDate().format('mm.dd.yy')
+                            .section-data
+                                .info-title Retained
+                                +YesNo_(user.isRetained())
+            +CloseOpen('Discipline', true).panorama-discipline-tab
                 .chlk-calendar.attendance-grid
                     .grid-top-content.chlk-grid
                         .grid-content

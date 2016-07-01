@@ -1,8 +1,46 @@
 .student-panorama
+  .panorama-demographics-tab
+    TABLE
+      width: 100%
+
+    TD
+      width: 25%
+      vertical-align: top
+
+    .info-title
+      width: 42%
+      margin-right: 0
+      vertical-align: top
+
+      &:before
+        content: ''
+
+    .data-info
+      width: 58%
+
+  .sections-info
+    margin-top: 7px
+
   .chlk-grid
-    .cell:not(.center)
-      text-align: left
-      padding: 0 10px
+    .cell
+      &:not(.center)
+        text-align: left
+        padding: 0 10px
+
+      &.code
+        width: 5%
+
+      &.periods, &.primary
+        width: 7%
+
+      &.category, &.demerits
+        width: 8%
+
+      &.level, &.date, &.disposition-date, &.infraction, &.disposition
+        width: 14%
+
+      &.reason
+        width: 22%
 
 .panorama-page
 
