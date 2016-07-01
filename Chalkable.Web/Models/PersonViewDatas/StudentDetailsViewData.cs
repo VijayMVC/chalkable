@@ -33,7 +33,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 IsHispanic = student.IsHispanic,
                 Ethnicity = student.Ethnicity != null ? EthnicityViewData.Create(student.Ethnicity) : null,
                 Absences = absences != null ? decimal.Round(absences.NumberOfAbsences) : (decimal?)null,
-                Discipline = infractions,
+                Discipline = infractions ?? 0,
                 GradeAvg = gradeAvg.HasValue ? decimal.Round(gradeAvg.Value, 2) : (decimal?) null,
                 IsIEPActive = student.IsIEPActive(currentSchoolTime),
                 IsRetainedFromPrevSchoolYear = false,
