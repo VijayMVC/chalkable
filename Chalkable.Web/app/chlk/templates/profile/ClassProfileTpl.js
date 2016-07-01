@@ -111,7 +111,7 @@ NAMESPACE('chlk.templates.profile', function(){
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var canViewPanorama = this.getUserRole().isAdmin() || this.hasUserPermission_(permissionEnum.VIEW_PANORAMA) &&
                     teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0;
-                return canViewPanorama && this.isStudyCenterEnabled();
+                return canViewPanorama;
             },
 
             [[String, String, String, chlk.models.id.ClassId]],
