@@ -75,9 +75,17 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var studentDetailsInfo = SchoolLocator.StudentService.GetStudentDetailsInfo(personId, syId);
             var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(personId);
             var studentClasses = SchoolLocator.ClassService.GetStudentClasses(syId, personId);
+            Room currentRoom = null;
+            ClassDetails currentClass = null;
+            if (studentSummaryInfo.CurrentSectionId.HasValue)
+            {
+                currentClass = studentClasses.FirstOrDefault(x => x.Id == studentSummaryInfo.CurrentSectionId.Value);
+                if (currentClass?.RoomRef != null)
+                    currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
+            }
 
             var res = GetInfo(personId, personInfo => StudentInfoViewData.Create(personInfo, studentDetailsInfo,
-                studentSummaryInfo, studentClasses, syId, today));
+                studentSummaryInfo, studentClasses, currentClass, currentRoom, syId, today));
             
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);

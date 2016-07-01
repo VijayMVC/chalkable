@@ -39,6 +39,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<DisciplineTypeSummaryViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummaryGradeViewData> GradesBox { get; set; }
 
+        public string CurrentClassName { get; set; }
+        public int? RoomId { get; set; }
+        public string RoomName { get; set; }
+        public string RoomNumber { get; set; }
+
         protected StudentInfoViewData(PersonDetails student):base(student)
         {
             var gradeLevels = student.StudentSchoolYears
@@ -54,7 +59,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
 
         public static StudentInfoViewData Create(PersonDetails student, StudentDetailsInfo studentDetails, StudentSummaryInfo studentSummary, 
-            IList<ClassDetails> studentClasses, int currentSchoolYearId, DateTime today)
+            IList<ClassDetails> studentClasses, ClassDetails currentClass, Room currentRoom, int currentSchoolYearId, DateTime today)
         {
             var res = Create(student);
 
@@ -104,6 +109,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.GradesBox = StudentHoverBoxViewData<StudentSummaryGradeViewData>.Create(studentSummary.StudentAnnouncements);
 
             res.CurrentAttandanceLevel = studentSummary.CurrentAttendanceLevel;
+
+
 
             return res;
         }

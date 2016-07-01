@@ -3,7 +3,6 @@ using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.Common;
-using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {
