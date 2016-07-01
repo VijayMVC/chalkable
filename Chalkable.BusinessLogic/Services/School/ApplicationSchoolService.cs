@@ -210,8 +210,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     studentId = Context.PersonId;
             }
             var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
+            var adminId = Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? Context.PersonId : null;
             var schoolYear = Context.SchoolYearId.Value;
-            return DoRead(u => new AnnouncementApplicationDataAccess(u).GetAnnouncementApplicationRecipients(studentId, teacherId, appId, schoolYear));
+            return DoRead(u => new AnnouncementApplicationDataAccess(u).GetAnnouncementApplicationRecipients(studentId, teacherId, adminId, appId, schoolYear));
         }
     }
 }

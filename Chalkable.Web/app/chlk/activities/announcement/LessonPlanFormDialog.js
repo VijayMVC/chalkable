@@ -13,8 +13,7 @@ REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
-    var titleTimeout, wasTypeChanged, wasExistingTitle, wasDisabledBtn, wasDateChanged, wasTitleSaved,
-        listLastTimeout;
+    var listLastTimeout;
 
     /** @class chlk.activities.announcement.LessonPlanFormDialog*/
     CLASS(
@@ -59,26 +58,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }, 500);
             },
 
-            [ria.mvc.DomEventBind('change', '.gallery-check')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            function addToGalleryChange(node, event, selected_){
-                var select = this.dom.find('#galleryCategoryId'),
-                    second = node.parent('.box-checkbox').siblings('.box-checkbox').find('.checkbox');
-
-                second.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), !node.checked());
-
-                if(this.dom.find('#public-check').checked())
-                    this.checkTitle_();
-                else
-                    this.dom.find('.title-block-container').removeClass('with-gallery-id');
-                select.trigger('chosen:updated');
-            },
-
-            function checkTitle_(){
-                this.dom.find('.title-block-container').addClass('with-gallery-id');
-                this.dom.find('#check-title-button').trigger('click');
-            },
-
             [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function categoryChange(node, event, selected_){
@@ -87,13 +66,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.trigger('chosen:updated');
                     node.parent('.left-top-container').find('.add-category-btn').trigger('click');
                 }else{
-                    if(this.dom.find('#public-check').checked() && node.getValue() && !node.getData('value')){
-                        this.dom.find('.title-block-container').addClass('with-gallery-id');
-
-                        if(this.dom.find('#title').getValue())
-                            this.dom.find('#check-title-button').trigger('click');
-                    }
-
                     node.setData('value', node.getValue());
                 }
             },
@@ -101,23 +73,6 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],
             VOID, function addToGalleryRule(tpl, model, msg_) {
 
-            },
-
-            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function titleKeyUp(node, event){
-                var dom = this.dom, node = node, value = node.getValue();
-                if(dom.find('.title-block-container').hasClass('with-gallery-id')){
-                    if(!value || !value.trim()){
-                        dom.find('.save-title-btn').setAttr('disabled', true);
-                    }else{
-                        titleTimeout && clearTimeout(titleTimeout);
-                        titleTimeout = setTimeout(function(){
-                            if(value == node.getValue())
-                                dom.find('#check-title-button').trigger('click');
-                        }, 100);
-                    }
-                }
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanCategoriesListTpl, 'right-categories')],
@@ -145,13 +100,9 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             },
 
-
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
                 BASE(model, msg_);
-                if(wasTypeChanged && wasExistingTitle && wasTitleSaved)
-                    this.disableSubmitBtn();
-                wasTypeChanged = false;
                 if(model instanceof chlk.models.announcement.LastMessages){
                     this.dom.find('#content').trigger('focus');
                     var node = this.dom.find('.no-assignments-text');
@@ -161,7 +112,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
 
             },
-
 
             ArrayOf(Object), 'waitingForAppContentListRender',
 
@@ -270,14 +220,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 suggestedAppsTpl.renderTo(suggestedAppsNode);
             },
 
-            [ria.mvc.DomEventBind('click', '#check-title-button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function checkTitleClick(node, event){
-                wasDisabledBtn = this.dom.find('.submit-announcement').hasClass('disabled');
-                this.dom.find('.submit-announcement')
-                    .addClass('disabled');
-            },
-
             [ria.mvc.DomEventBind('keypress', 'input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function inputKeyPress(node, event){
@@ -286,136 +228,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('click', '.title-text')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function titleClick(node, event){
-                var parent = node.parent('.title-block');
-                parent.addClass('active');
-                setTimeout(function(){
-                    parent.find('input[name=title]').trigger('focus');
-                }, 1)
-            },
-
-            [ria.mvc.DomEventBind('click', '.save-title-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function saveClick(node, event){
-                var input = this.dom.find('input[name=title]'),
-                    value = input.getValue();
-                this.dom.find('.title-text').setHTML(value);
-                input.setData('title', value);
-                this.removeDisabledClass();
-                wasTitleSaved = true;
-                wasExistingTitle = false;
-                setTimeout(function(){
-                    node.setAttr('disabled', true);
-                }, 1);
-            },
-
-            function removeDisabledClass(){
-                this.dom.find('.submit-announcement')
-                    .removeClass('disabled')
-                    .setData('tooltip', false);
-            },
-
-            [ria.mvc.DomEventBind('click', '.submit-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function setTitleOnSubmitClick(node, event){
-                if(this.dom.find('.title-text').exists())
-                    this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
-            VOID, function doUpdateTitle(tpl, model, msg_) {
-                if(!wasDisabledBtn || !model.isData() && wasDateChanged)
-                    this.removeDisabledClass();
-                var block = this.dom.find('.title-text:visible'),
-                    saveBtn = this.dom.find('.save-title-btn'),
-                    titleBlock = this.dom.find('.title-block');
-                if(!model.isData() && this.dom.find('input[name=title]').getValue()){
-                    saveBtn.setAttr('disabled', false);
-                    if(block.exists() && this.dom.find('.title-block-container').hasClass('was-empty'))
-                        saveBtn.trigger('click');
-                    this.updateFormByNotExistingTitle();
-
-                }else{
-                    if(block.exists())
-                        this.dom.find('#show-title-popup').trigger('click');
-                    saveBtn.setAttr('disabled', true);
-                    titleBlock.addClass('exists');
-                    var titleInput = titleBlock.find('input[name=title]');
-                    var text = titleInput.getValue();
-                    var oldText = titleInput.getData('title');
-                    if(oldText == text)
-                        this.disableSubmitBtn();
-                }
-                wasDateChanged = false;
-            },
-
-            function disableSubmitBtn(){
-                wasExistingTitle = true;
-                this.dom.find('.submit-announcement')
-                    .addClass('disabled')
-                    .setData('tooltip', Msg.Existing_title_tooltip)
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'title-popup')],
-            VOID, function titlePopUp(tpl, model, msg_) {
-                this.dom.find('.title-text:visible').trigger('click');
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, chlk.activities.lib.DontShowLoader())],
-            VOID, function doSaveTitle(tpl, model, msg_) {
-
-            },
-
-            [ria.mvc.DomEventBind('keydown', 'input[name=title]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function titleKeyDown(node, event){
-                if(event.which == ria.dom.Keys.ENTER.valueOf()){
-                    var btn = this.dom.find('.save-title-btn');
-                    if(!btn.getAttr('disabled'))
-                        btn.trigger('click');
-                    return false;
-                }
-            },
-
-            [ria.mvc.DomEventBind('click', '.submit-announcement.disabled button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function disabledSubmitClick(node, event){
-                return false;
-            },
-
-            [[Boolean]],
-            function updateFormByNotExistingTitle(){
-                this.dom.find('.title-block').removeClass('exists');
-            },
-
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                titleTimeout = wasTypeChanged = wasExistingTitle = wasDisabledBtn = wasDateChanged = wasTitleSaved = undefined;
                 var that = this;
-                new ria.dom.Dom().on('click.title', function(node, event){
-                    var target = new ria.dom.Dom(event.target), dom = that.dom;
-                    if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn')){
-                        var titleBlock = dom.find('.title-block');
-                        var titleInput = titleBlock.find('input[name=title]');
-                        titleBlock.removeClass('active');
-                        var text = titleInput.getValue();
-                        if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == null || text == undefined || text.trim() == '')){
-                            var oldText = titleInput.getData('title');
-                            if(oldText != text){
-                                that.updateFormByNotExistingTitle();
-                                titleInput.setValue(oldText);
-                                titleBlock.find('.title-text').setHTML(oldText);
-                                if(!wasDisabledBtn)
-                                    that.removeDisabledClass();
-                            }
-                        }
-                        if(text && text.trim() && !dom.find('.title-block-container').hasClass('with-date')){
-                            titleBlock.find('.title-text').setHTML(text);
-                        }
-                    }
-                });
 
                 new ria.dom.Dom().on('click.save', '.class-button[type=submit]', function($target, event){
                     if(!that.dom.find('.is-edit').getData('isedit')){
