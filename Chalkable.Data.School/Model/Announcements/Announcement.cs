@@ -116,6 +116,5 @@ namespace Chalkable.Data.School.Model.Announcements
         public IList<AnnouncementStandardDetails> AnnouncementStandards { get; set; }
         public IList<AnnouncementGroup> AnnouncementGroups { get; set; }
     }
-
-
+    
 }
