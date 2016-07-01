@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -18,18 +19,18 @@ namespace Chalkable.Web.Models
         public bool Deleted { get; set; }
         public IList<AnnouncementCommentViewData> SubComments { get; set; } 
 
-        public static AnnouncementCommentViewData Create(AnnouncementComment announcementComment)
+        public static AnnouncementCommentViewData Create(AnnouncementComment announcementComment, AttachmentInfo attachmentInfo, int currentPersonId)
         {
             return new AnnouncementCommentViewData
             {
                 Id = announcementComment.Id,
                 AnnouncementId = announcementComment.AnnouncementRef,
-                //Attachment = AttachmentViewData.Create(announcementComment.Attachment, true),
+                Attachment = attachmentInfo != null ? AttachmentViewData.Create(attachmentInfo, currentPersonId) : null,
                 ParentCommentId = announcementComment.ParentCommentRef,
                 Owner = ShortPersonViewData.Create(announcementComment.Person),
                 PostedDate = announcementComment.PostedDate,
                 Text = announcementComment.Text,
-                Hidden = announcementComment.Hiddent,
+                Hidden = announcementComment.Hidden,
                 Deleted = announcementComment.Deleted
             };
         }

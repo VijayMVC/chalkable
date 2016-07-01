@@ -24,10 +24,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool CanRemoveStandard { get; set; }
         public bool IsAbleUseExtraCredit { get; set; }
         public IList<BaseApplicationViewData> SuggestedApps { get; set; }
-
         public IList<BaseApplicationViewData> AppsWithContent { get; set; } 
-
         public IList<AdminAnnouncementGroupViewData> Recipients { get; set; } 
+        public IList<AnnouncementCommentViewData> AnnouncementComments { get; set; }
 
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements)
             : base(announcementDetails, studentAnnouncements)

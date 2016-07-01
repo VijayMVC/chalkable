@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -14,14 +15,17 @@ namespace Chalkable.Data.School.Model
         public int? ParentCommentRef { get; set; }
         public string Text { get; set; }
         public DateTime PostedDate { get; set; }
-        public bool Hiddent { get; set; }
+        public bool Hidden { get; set; }
         public bool Deleted { get; set; }
 
         [NotDbFieldAttr]
         public AnnouncementComment ParentComment { get; set; }
-        [NotDbFieldAttr]
+        [DataEntityAttr]
         public Attachment Attachment { get; set; }
-        [NotDbFieldAttr]
+        [DataEntityAttr]
         public Person Person { get; set; }
+
+        [NotDbFieldAttr]
+        public IList<AnnouncementComment> SubComments { get; set; }
     }
 }
