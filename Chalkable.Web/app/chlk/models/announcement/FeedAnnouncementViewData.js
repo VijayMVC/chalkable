@@ -124,6 +124,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'grade',
             String, 'comment',
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+            ArrayOf(chlk.models.announcement.AnnouncementComment), 'announcementComments',
 
             Number, 'announcementTypeId',
             ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',

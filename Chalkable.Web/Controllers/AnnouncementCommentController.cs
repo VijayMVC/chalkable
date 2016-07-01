@@ -35,19 +35,19 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult SetHidden(int commentId, bool hidden)
+        public ActionResult SetHidden(int announcementCommentId, bool hidden)
         {
-            var comment = SchoolLocator.AnnouncementCommentService.GetById(commentId);
-            SchoolLocator.AnnouncementCommentService.SetHidden(commentId, hidden);
+            var comment = SchoolLocator.AnnouncementCommentService.GetById(announcementCommentId);
+            SchoolLocator.AnnouncementCommentService.SetHidden(announcementCommentId, hidden);
             var res = PrepareListOfCommentViewData(SchoolLocator.AnnouncementCommentService.GetList(comment.AnnouncementRef), SchoolLocator);
             return Json(res);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Delete(int commentId)
+        public ActionResult Delete(int announcementCommentId)
         {
-            var comment = SchoolLocator.AnnouncementCommentService.GetById(commentId);
-            SchoolLocator.AnnouncementCommentService.Delete(commentId);
+            var comment = SchoolLocator.AnnouncementCommentService.GetById(announcementCommentId);
+            SchoolLocator.AnnouncementCommentService.Delete(announcementCommentId);
             var res = PrepareListOfCommentViewData(SchoolLocator.AnnouncementCommentService.GetList(comment.AnnouncementRef), SchoolLocator);
             return Json(res);
         }
