@@ -37,6 +37,6 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'text',
             Boolean, 'hidden',
 
-            ArrayOf(chlk.models.announcement.AnnouncementComment), 'subComments'
+            ArrayOf(SELF), 'subComments'
         ]);
 });

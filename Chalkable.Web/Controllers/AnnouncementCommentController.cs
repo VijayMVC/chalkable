@@ -32,8 +32,7 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.AnnouncementCommentService.Edit(announcementCommentId, text, attachmentId);
             return Json(PrepareCommentViewData(res, SchoolLocator));
         }
-
-
+        
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SetHidden(int announcementCommentId, bool hidden)
         {

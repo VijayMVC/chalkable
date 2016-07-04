@@ -11,7 +11,6 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'AnnouncementCommentService', EXTENDS(chlk.services.BaseService), [
 
-
             [[chlk.models.id.AnnouncementId, String, chlk.models.id.AttachmentId]],
             ria.async.Future, function postComment(announcementId, text, attachmentId_){
                 return  this.post('AnnouncementComment/PostComment', chlk.models.announcement.AnnouncementComment,{
@@ -26,6 +25,19 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
+            [[chlk.models.id.AnnouncementCommentId, String, chlk.models.id.AttachmentId]],
+            ria.async.Future, function reply(toAnnouncementCommentId, text, attachmentId){
+                return this.post('AnnouncementComment/Reply', chlk.models.announcement.AnnouncementComment, {
+                    toCommentId: toAnnouncementCommentId.valueOf(),
+                    text: text,
+                    attachmentId: attachmentId && attachmentId.valueOf()
+                }).then(function(comment){
+                    var result =this.getAnnouncement_(comment.getAnnouncementId());
+                    var parentComment = this.findComment_(comment.getParentCommentId(), result.getAnnouncementComments());
+                    parentComment.getSubComments(comment);
+                    return result
+                }, this);
+            },
 
             [[chlk.models.id.AnnouncementCommentId, String, chlk.models.id.AttachmentId]],
             ria.async.Future, function edit(announcementCommentId, text, attachmentId){
@@ -71,13 +83,22 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.announcement.AnnouncementComment]],
             Object, function editCacheAnnouncementComments_(comment){
                 var result =this.getAnnouncement_(comment.getAnnouncementId());
-                for (var i = 0; i < result.getAnnouncementComments().length; i++)
-                    if (result.getAnnouncementComments()[i].getId() == comment.getId())
-                    {
-                        result.getAnnouncementComments()[i] = comment;
-                        break;
-                    }
+                var selectedComment = this.findComment_(comment.getId(), result.getAnnouncementComments())
+                selectedComment = comment;
                 return result;
+            },
+
+            chlk.models.announcement.AnnouncementComment, function findComment_(id, comments){
+                if(comments){
+                    for(var i = 0; i < comments.length; i++){
+                        if(comments[i].getId() == id)
+                            return comments[i];
+                        var res = findComment_(id, comments[i].getSubComments());
+                        if(res)
+                            return res;
+                    }
+                }
+                return null;
             },
 
             [[chlk.models.id.AnnouncementId]],
