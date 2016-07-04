@@ -70,8 +70,8 @@ namespace Chalkable.BusinessLogic.Model
                 if (student.PrimaryPersonNationality != null)
                     country = countries.FirstOrDefault(x => x.Id == student.PrimaryPersonNationality.CountryRef);
 
-                var studentSchool = student.StudentSchools.First(x => x.SchoolRef == currentSchoolId);
-                if (studentSchool.CounselorRef.HasValue)
+                var studentSchool = student.StudentSchools.FirstOrDefault(x => x.SchoolRef == currentSchoolId);
+                if (studentSchool?.CounselorRef != null)
                     person = counselors.FirstOrDefault(x => x.Id == studentSchool.CounselorRef.Value);
 
                 res.Add(Create(student, ethnicity, language, country, person, studentSchool));
