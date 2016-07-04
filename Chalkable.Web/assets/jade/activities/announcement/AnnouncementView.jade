@@ -3,10 +3,11 @@ mixin AppAttachmentBlock(item, pictureHref, i)
         .title
             div=item.getName()
 
-mixin AppAttachmentGradingBlock(item, pictureHref)
+mixin AppAttachmentGradingBlock(item, metaText, pictureHref)
     .wrapper
         -var name = (item.getText && item.getText()) || item.getName()
         .title(data-tooltip=name, data-tooltip-type="overflow")= name
+        .shortdesc=metaText
         +LoadingImage(src=pictureHref)
         block
 
@@ -167,6 +168,7 @@ mixin Glue_()
                     div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
                         +Hidden('maxScore', classAnnouncement.getMaxScore())#max-score
                         +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
+                            studentsAnnApplicationMeta = self.getStudentsAnnApplicationMeta(),
                             autoGradeApps = self.getAutoGradeApps(),
                             readonly = !classAnnouncement.isAbleToGrade(),
                             gradeViewApps = self.getGradeViewApps(),

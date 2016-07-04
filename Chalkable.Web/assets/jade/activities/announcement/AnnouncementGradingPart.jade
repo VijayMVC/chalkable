@@ -72,7 +72,7 @@ studentAnnouncements = self.getItems()
                     -var isBanned = false
                     .announcement-item.attachment
                         -var appPictureUrl = (app.getImageUrl && app.getImageUrl()) || self.getPictureURL(app.getBigPictureId(), 170, 110)
-                        +AppAttachmentGradingBlock(app, appPictureUrl).announcement-item.application
+                        +AppAttachmentGradingBlock(app, self.getStudentAnnApplicationMetaText(app.getAnnouncementApplicationId(), student.getId()), appPictureUrl).announcement-item.application
                             +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId(), self.getStandardsUrlComponents()) Open
                         -var grade = self.getAppGrade(app.getAnnouncementApplicationId(), student.getId())
                         if grade

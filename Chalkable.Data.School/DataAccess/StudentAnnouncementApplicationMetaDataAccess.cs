@@ -41,7 +41,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var query = BuildStudentAnnouncementApplicationMetaSelect();
             var conds = new AndQueryCondition { { nameof(AnnouncementApplication.AnnouncementRef), announcementId }, {nameof(AnnouncementApplication.Active), true} };
-            conds.BuildSqlWhere(query, typeof(AnnouncementApplication).Name);
+            conds.BuildSqlWhere(query, nameof(AnnouncementApplication));
             return ReadMany<StudentAnnouncementApplicationMeta>(query, true);
         }
     }

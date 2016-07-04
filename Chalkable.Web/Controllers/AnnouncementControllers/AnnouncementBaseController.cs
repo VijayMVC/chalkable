@@ -58,7 +58,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                     annView.AutoGradeApps = AutoGradeViewData.Create(autoGrades);
                 }
                 var studentAnnouncementApplicationMeta = SchoolLocator.ApplicationSchoolService.GetStudentAnnouncementApplicationMetaByAnnouncementId(ann.Id);
-                annView.StudentAnnouncementApplicationMeta = StudentAnnouncementApplicationMetaViewData.Create(studentAnnouncementApplicationMeta);
+                annView.StudentsAnnouncementApplicationMeta = StudentAnnouncementApplicationMetaViewData.Create(studentAnnouncementApplicationMeta);
             }
             return annView;
         }

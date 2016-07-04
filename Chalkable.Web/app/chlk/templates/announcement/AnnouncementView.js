@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.models.announcement.AnnouncementView');
 REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
+REQUIRE('chlk.models.announcement.StudentAnnouncementApplicationMeta');
 
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -10,6 +11,9 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementView.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementView)],
         'AnnouncementView', EXTENDS(chlk.templates.announcement.AnnouncementAppAttachments), [
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',

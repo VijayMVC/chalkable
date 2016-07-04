@@ -7,6 +7,7 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementView*/
     CLASS(
         'AnnouncementView', EXTENDS(chlk.models.announcement.FeedAnnouncementViewData), [
+
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
             Boolean, 'hasAccessToLE',
@@ -14,6 +15,5 @@ NAMESPACE('chlk.models.announcement', function () {
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
             chlk.models.common.PaginatedList, 'students'
-
         ]);
 });

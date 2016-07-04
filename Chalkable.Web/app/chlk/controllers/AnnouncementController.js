@@ -67,6 +67,8 @@ REQUIRE('chlk.models.announcement.SubmitDroppedAnnouncementViewData');
 
 REQUIRE('chlk.lib.exception.AppErrorException');
 
+REQUIRE('chlk.models.announcement.StudentAnnouncementApplicationMeta');
+
 NAMESPACE('chlk.controllers', function (){
 
 

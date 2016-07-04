@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<StandardViewData> Standards { get; set; }
         public StudentAnnouncementsViewData StudentAnnouncements { get; set; }
         public IList<AutoGradeViewData> AutoGradeApps { get; set; }
-        public IList<StudentAnnouncementApplicationMetaViewData> StudentAnnouncementApplicationMeta { get; set; }
+        public IList<StudentAnnouncementApplicationMetaViewData> StudentsAnnouncementApplicationMeta { get; set; }
 
         public ShortPersonViewData Owner { get; set; }
         public bool Exempt { get; set; }
