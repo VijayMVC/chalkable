@@ -101,7 +101,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public IList<AttendanceStatByClassViewData> StatByClass { get; set; }
         public int TotalAttendanceCount { get; set; }
 
-        private ShortStudentAttendanceViewData(StudentDetails student, IList<string> alerts, IList<AttendanceStatByClassViewData> statByClassView)
+        private ShortStudentAttendanceViewData(Student student, IList<string> alerts, IList<AttendanceStatByClassViewData> statByClassView)
         {
             StudentInfo = StudentViewData.Create(student);
             Alerts = alerts;

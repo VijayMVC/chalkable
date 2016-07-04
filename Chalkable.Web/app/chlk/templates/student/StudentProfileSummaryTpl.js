@@ -28,10 +28,6 @@ NAMESPACE('chlk.templates.student', function () {
                 return this._converter.convert(this.getCurrentAttendanceType());
             },
 
-            String, function getAvatarTitle(){
-                return (getDate().getFullYear() + 12 - this.getUser().getGradeLevelNumber()).toString();
-            },
-
             Object, function getStatusData(){
                 var attType =this.getCurrentAttendanceType();
                 var res = {};
@@ -44,13 +40,6 @@ NAMESPACE('chlk.templates.student', function () {
                     res.status = res.statusName && res.statusName.toLowerCase();
                 }
                 return res;
-            },
-
-            Object, function buildRankGlanceBoxData(){
-                return this.buildGlanceBoxData_(this.getUser().getRankBox()
-                    , function(item){ return item.getRank; }
-                    , function(item){ return  item.getMarkingPeriodName; }
-                    , Msg.Rank, true);
             },
 
             Object, function buildAttendanceGlanceBoxData(){

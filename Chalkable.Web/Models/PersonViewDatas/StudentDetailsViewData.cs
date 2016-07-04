@@ -1,8 +1,8 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.Common;
-using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {
@@ -17,8 +17,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public int? Discipline { get; set; }
         public decimal? TotalOfDaysEnrolled { get; set; }
 
-        public static StudentDetailsViewData Create(StudentDetails student, Ethnicity ethnicity, 
-            decimal? gradeAvg, ShortStudentAbsenceInfo absences, int? infractions, DateTime currentSchoolTime)
+        public static StudentDetailsViewData Create(StudentDetailsInfo student, decimal? gradeAvg, ShortStudentAbsenceInfo absences, int? infractions, 
+            DateTime currentSchoolTime)
         {
             return new StudentDetailsViewData
             {
@@ -30,10 +30,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 Gender = student.Gender,
                 Role = RoleViewData.Create(CoreRoles.STUDENT_ROLE),
                 IsHispanic = student.IsHispanic,
-                Ethnicity = ethnicity != null ? EthnicityViewData.Create(ethnicity) : null,
-                Absences = absences?.NumberOfAbsences,
-                Discipline = infractions,
-                GradeAvg = gradeAvg,
+                Ethnicity = student.Ethnicity != null ? EthnicityViewData.Create(student.Ethnicity) : null,
+                Absences = absences != null ? decimal.Round(absences.NumberOfAbsences) : (decimal?)null,
+                Discipline = infractions ?? 0,
+                GradeAvg = gradeAvg.HasValue ? decimal.Round(gradeAvg.Value, 2) : (decimal?) null,
                 IsIEPActive = student.IsIEPActive(currentSchoolTime),
                 IsRetainedFromPrevSchoolYear = false,
                 TotalOfDaysEnrolled = absences?.NumberOfDaysEnrolled

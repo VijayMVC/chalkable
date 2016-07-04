@@ -10,7 +10,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public ShortPersonViewData Person { get; set; }
         public IList<BaseApplicationViewData> Applications { get; set; }
 
-        public static StudentAppsViewData Create(StudentDetails student, IList<BaseApplicationViewData> apps
+        public static StudentAppsViewData Create(Student student, IList<BaseApplicationViewData> apps
             , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
         {
             return new StudentAppsViewData

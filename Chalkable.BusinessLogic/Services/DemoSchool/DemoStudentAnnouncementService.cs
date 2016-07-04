@@ -243,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
 
                 var student = ServiceLocator.StudentService.GetById(x.StudentId, Context.SchoolYearId.Value);
-                var details = new StudentDetails
+                var details = new Student
                 {
                     BirthDate = student.BirthDate,
                     FirstName = student.FirstName,
@@ -307,7 +307,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (ann.SisActivityId.HasValue)
             {
                 IList<Score> scores = new List<Score>();
-                IList<StudentDetails> persons = new List<StudentDetails>();
+                IList<Student> persons = new List<Student>();
                 if (CoreRoles.STUDENT_ROLE == Context.Role)
                 {
                     scores.Add(ActivityScoreStorage.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));

@@ -154,5 +154,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public void UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<StudentAnnouncementApplicationMeta> GetStudentAnnouncementApplicationMetaByAnnouncementId(int announcementId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

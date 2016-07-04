@@ -48,7 +48,7 @@ namespace Chalkable.Web.Models.GradingViewData
     {
         public decimal? Avg { get; set; }
         public bool Exempt { get; set; }
-        protected ShortStudentGradingViewData(StudentDetails person) : base(person)
+        protected ShortStudentGradingViewData(Student person) : base(person)
         {
         }
 

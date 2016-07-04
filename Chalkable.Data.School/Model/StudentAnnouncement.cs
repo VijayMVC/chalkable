@@ -34,13 +34,9 @@ namespace Chalkable.Data.School.Model
         public bool Withdrawn { get; set; }
         public bool OverMaxScore { get; set; }
 
-
         public AlternateScore AlternateScore { get; set; }
 
-        public bool Dropped
-        {
-            get { return ScoreDropped || AutomaticalyDropped; }
-        }
+        public bool Dropped => ScoreDropped || AutomaticalyDropped;
 
         public bool AutomaticalyDropped
         {
@@ -76,7 +72,7 @@ namespace Chalkable.Data.School.Model
     public class StudentAnnouncementDetails : StudentAnnouncement
     {
         public int ClassId { get; set; }
-        public StudentDetails Student { get; set; }
+        public Student Student { get; set; }
     }
 
     public class StudentAnnouncementGrade : StudentAnnouncement

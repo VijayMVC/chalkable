@@ -70,11 +70,11 @@ namespace Chalkable.BusinessLogic.Model.Attendances
 
     public class StudentAttendanceSummary
     {
-        public StudentDetails Student { get; set; }
+        public Student Student { get; set; }
         public StudentDailyAttendanceSummary DailyAttendanceSummary { get; set; }
         public IList<StudentClassAttendanceSummary> ClassAttendanceSummaries { get; set; }
  
-        public static IList<StudentAttendanceSummary> Create(IList<StudentSectionAbsenceSummary> studentSectionAttendances, IList<StudentDetails> students, IList<ClassDetails> classes)
+        public static IList<StudentAttendanceSummary> Create(IList<StudentSectionAbsenceSummary> studentSectionAttendances, IList<Student> students, IList<ClassDetails> classes)
         {
             var stSectionAttsDic = studentSectionAttendances.GroupBy(x => x.StudentId).ToDictionary(x => x.Key, x => x.ToList());
             var res = new List<StudentAttendanceSummary>();

@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Model
 {
     public class StudentSummaryInfo
     {
-        public StudentDetails StudentInfo { get; set; }
+        public Student StudentInfo { get; set; }
         public ClassRankInfo ClassRank { get; set; }
         public int? CurrentSectionId { get; set; }
         public string CurrentAttendanceLevel { get; set; }
@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Model
         public IList<StudentAnnouncement> StudentAnnouncements { get; set; }
         public IList<ShortStudentClassAttendanceSummary> Attendances { get; set; } 
 
-        public static StudentSummaryInfo Create(StudentDetails student, NowDashboard nowDashboard
+        public static StudentSummaryInfo Create(Student student, NowDashboard nowDashboard
             , IList<Data.School.Model.Infraction> infractions, IList<AnnouncementComplex> anns, IMapper<StudentAnnouncement, Score> mapper)
         {
             var res = new StudentSummaryInfo

@@ -9,5 +9,6 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int SchoolRef { get; set; }
         public int? CounselorRef { get; set; }
+        public bool IsTitle1Eligible { get; set; }
     }
 }

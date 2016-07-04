@@ -31,11 +31,10 @@ NAMESPACE('chlk.templates.classes', function () {
                     return null;
 
                 var data = distribution.getDistributionStats(), classAvg = distribution.getClassAvg(),
-                    categories = [], columnData = [], avgData = [], that = this, useUnSelect = true;
+                    categories = [], columnData = [], that = this, useUnSelect = true;
 
                 data.forEach(function(item){
                     categories.push(item.getSummary());
-                    avgData.push(classAvg);
                     columnData.push(item.getCount());
                 });
 
@@ -98,11 +97,6 @@ NAMESPACE('chlk.templates.classes', function () {
                                 }
                             }
                         }
-                    }, {
-                        type: 'line',
-                        color: '#f8b681',
-                        name: 'Class Mean',
-                        data: avgData
                     }]
                 }
             },

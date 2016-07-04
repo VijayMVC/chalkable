@@ -29,6 +29,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Group> GetGroups(int ownerId);
         IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds);
         GroupExplorer GetGroupExplorerInfo(int groupId);
+
+        IList<Group> GetByIds(IList<int> ids);
     }
 
     public class GroupService : SchoolServiceBase, IGroupService
@@ -96,6 +98,11 @@ namespace Chalkable.BusinessLogic.Services.School
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             return DoRead(u => new GroupDataAccess(u).GetGroupExplorerData(groupId, Context.PersonId.Value, Context.NowSchoolTime.Date));
+        }
+
+        public IList<Group> GetByIds(IList<int> ids)
+        {
+            return DoRead(u => new GroupDataAccess(u).GetByIds(ids));
         }
 
 

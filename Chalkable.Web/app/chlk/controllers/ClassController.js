@@ -325,27 +325,39 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.classes.ClassExplorerPage, res);
             },
 
-            [[chlk.models.id.ClassId, Boolean]],
-            function panoramaAction(classId, showFilters_){
-                var res = ria.async.wait([
-                    this.classService.getPanorama(classId),
-                    this.schoolYearService.list()
-                ])
+            function getPanorama_(classId, restore_){
+                return ria.async.wait([
+                        this.classService.getPanorama(classId),
+                        this.schoolYearService.list()
+                    ])
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var model = result[0];
                         model.setSchoolYears(result[1]);
                         model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
-                        showFilters_ && model.setShowFilters(showFilters_);
+                        restore_ && model.setShowFilters(true);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
                             this.isAssignedToClass_(classId)
                         );
                     }, this);
-                if(showFilters_)
-                    return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res);
+            },
 
-                return this.PushView(chlk.activities.classes.ClassPanoramaPage, res);
+            [[chlk.models.id.ClassId]],
+            function panoramaAction(classId){
+                var result = this.getPanorama_(classId);
+
+                return this.PushView(chlk.activities.classes.ClassPanoramaPage, result);
+            },
+
+            [[chlk.models.id.ClassId]],
+            function restorePanoramaAction(classId){
+                var result = this.classService.restorePanorama(classId)
+                    .then(function(data){
+                        return this.getPanorama_(classId, true);
+                    }, this);
+
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, result);
             },
 
             [[chlk.models.profile.ClassPanoramaSortType, Boolean]],

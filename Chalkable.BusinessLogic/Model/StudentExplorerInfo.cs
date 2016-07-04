@@ -9,10 +9,10 @@ namespace Chalkable.BusinessLogic.Model
 {
     public class StudentExplorerInfo
     {
-        public StudentDetails Student { get; set; }
+        public Student Student { get; set; }
         public IList<StudentClassExplorerInfo> ClassesGradingInfo { get; set; }
 
-        public static StudentExplorerInfo Create(StudentDetails student, IList<ClassDetails> classDetailses, 
+        public static StudentExplorerInfo Create(Student student, IList<ClassDetails> classDetailses, 
             IList<StudentAverage> mostRecentAvgWithGrades, IList<StandardScore> standardScores  
             , IList<AnnouncementComplex> announcements, IList<Standard> standards)
         {

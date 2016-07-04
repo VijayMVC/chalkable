@@ -1,6 +1,6 @@
 ﻿CREATE View [dbo].[vwDistrictSyncStatus]
 as
-	select 
+	select
 		District.*,
 		Pr.ProcessingId,
 		Pr.ProcessingCreated,
@@ -22,11 +22,11 @@ as
 	from 
 		District
 		left join 
-		(select * from 
+		(select top 1 * from 
 			(select
 				DistrictRef,
 				Id as ProcessingId,
-				Started as ProcessingStarted,
+				[Started] as ProcessingStarted,
 				Created as ProcessingCreated,
 				Scheduled as ProcessingScheduled,
 				Rank() over(partition by districtref order by started desc) R
@@ -37,9 +37,10 @@ as
 			) X
 		where
 			R = 1
+		Order By IIF(ProcessingStarted is null,ProcessingCreated,ProcessingStarted) desc
 		) Pr on District.Id = Pr.DistrictRef
 		left join 
-		(select * from 
+		(select top 1 * from 
 			(select
 				DistrictRef,
 				Id as CompletedId,
@@ -55,9 +56,10 @@ as
 			) X
 		where
 			R = 1
+		Order By IIF(CompletedStarted is null, CompletedCreated, CompletedStarted) desc
 		) Cp on District.Id = Cp.DistrictRef
 		left join 
-		(select * from 
+		(select top 1 * from 
 			(select
 				DistrictRef,
 				Id as FailedId,
@@ -73,9 +75,10 @@ as
 			) X
 		where
 			R = 1
+		Order By IIF(FailedStarted is null, FailedCreated, FailedStarted) desc
 		) Fl on District.Id = Fl.DistrictRef
 		left join 
-		(select * from 
+		(select top 1 * from 
 			(select
 				DistrictRef,
 				Id as CanceledId,
@@ -87,13 +90,14 @@ as
 			from 
 			BackgroundTask 
 			where 
-				[State] = 3 and type = 1
+				state = 3 and type = 1
 			) X
 		where
 			R = 1
+		Order By IIF(CanceledStarted is null, CanceledCreated, CanceledStarted) desc
 		) Cl on District.Id = Cl.DistrictRef
 		left join 
-		(select * from 
+		(select top 1 * from 
 			(select
 				DistrictRef,
 				Id as NewId,
@@ -107,4 +111,6 @@ as
 			) X
 		where
 			R = 1
+		Order By NewCreated desc
 		) Nw on District.Id = Nw.DistrictRef
+GO

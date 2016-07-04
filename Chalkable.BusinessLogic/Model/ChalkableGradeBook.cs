@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Model
     public class ChalkableGradeBook
     {
         public GradingPeriod GradingPeriod { get; set; }
-        public IList<StudentDetails> Students { get; set; }
+        public IList<Student> Students { get; set; }
         public IList<AnnouncementDetails> Announcements { get; set; } 
         public IList<ChalkableStudentAverage> Averages { get; set; }
         public ChalkableClassOptions Options { get; set; }
@@ -166,7 +166,7 @@ namespace Chalkable.BusinessLogic.Model
         public ClassDetails Class { get; set; }
         public IList<ShortStudentClassGradesSummary> Students { get; set; } 
 
-        public static ShortClassGradesSummary Create(SectionGradesSummary sectionGrades, ClassDetails cClass, IList<StudentDetails> studentsInfo)
+        public static ShortClassGradesSummary Create(SectionGradesSummary sectionGrades, ClassDetails cClass, IList<Student> studentsInfo)
         {
             return new ShortClassGradesSummary
                 {
@@ -178,12 +178,12 @@ namespace Chalkable.BusinessLogic.Model
 
     public class ShortStudentClassGradesSummary
     {
-        public StudentDetails Student { get; set; }
+        public Student Student { get; set; }
         public int ClassId { get; set; }
         public bool Exempt { get; set; }
         public decimal? Avg { get; set; }
 
-        public static IList<ShortStudentClassGradesSummary> Create(IList<StudentSectionGradesSummary> studentSectionGrades, IList<StudentDetails> students)
+        public static IList<ShortStudentClassGradesSummary> Create(IList<StudentSectionGradesSummary> studentSectionGrades, IList<Student> students)
         {
             var res = new List<ShortStudentClassGradesSummary>();
             foreach (var studentSectionGrade in studentSectionGrades)

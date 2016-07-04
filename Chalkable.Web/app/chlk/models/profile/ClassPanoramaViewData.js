@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.profile', function () {
 
     /** @class chlk.models.profile.ClassPanoramaViewData*/
     CLASS(
-        UNSAFE, 'ClassPanoramaViewData', EXTENDS(chlk.models.classes.Class), [
+        UNSAFE, 'ClassPanoramaViewData', EXTENDS(chlk.models.classes.Class), IMPLEMENTS(ria.serialize.IDeserializable), [
             chlk.models.profile.PanoramaSettingsViewData, 'filterSettings',
             ArrayOf(chlk.models.profile.StandardizedTestViewData), 'standardizedTests',
             chlk.models.profile.ClassDistributionSectionViewData, 'classDistributionSection',

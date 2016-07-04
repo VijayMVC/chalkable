@@ -21,7 +21,9 @@ namespace Chalkable.Data.School.Model
 
 
         [NotDbFieldAttr]
-        public GradeLevel GradeLevel { get; set; }      
+        public GradeLevel GradeLevel { get; set; }
+        [NotDbFieldAttr]
+        public Homeroom Homeroom { get; set; }  
         public bool IsEnrolled => EnrollmentStatus == StudentEnrollmentStatusEnum.CurrentlyEnrolled;
     }
 

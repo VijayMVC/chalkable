@@ -1,4 +1,4 @@
-mixin PanoramaFilter(years, standardizedTests, values, classId)
+mixin PanoramaFilter(years, standardizedTests, values, restoreController, restoreAction, restoreParams)
     -attributes = self.prepare(attributes, standardizedTests)
     -years = years || []
     .panorama-filter-ctn(attributes)
@@ -9,7 +9,7 @@ mixin PanoramaFilter(years, standardizedTests, values, classId)
                 each year in years
                     +Option(year.getId().valueOf(), year.getName(), yearsIds.filter(function(item){return item == year.getId()}).length > 0)
 
-            +ActionButton('class', 'panorama', classId, true)(disabled = "disabled").right.restore-btn Restore
+            +ActionButtonWithPrepend(restoreController, restoreAction, restoreParams).right.restore-btn Restore
             BUTTON(type="submit", name="submitType", value="save").right Save
         .filters-block
             .filters-container

@@ -154,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod,
-                                                  IList<AnnouncementComplex> anns, IList<StudentDetails> students)
+                                                  IList<AnnouncementComplex> anns, IList<Student> students)
         {
             var gradeBook = new ChalkableGradeBook
             {
@@ -166,7 +166,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
             if (!stiGradeBook.Options.IncludeWithdrawnStudents)
             {
-                gradeBook.Students = new List<StudentDetails>();
+                gradeBook.Students = new List<Student>();
                 foreach (var student in students)
                 {
                     var score = stiGradeBook.Scores.FirstOrDefault(x => x.StudentId == student.Id);
@@ -178,7 +178,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         private IList<AnnouncementDetails> PrepareAnnouncementDetailsForGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod
-            , IList<AnnouncementComplex> anns, IList<StudentDetails> students)
+            , IList<AnnouncementComplex> anns, IList<Student> students)
         {
             var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
                                                            && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();
@@ -334,12 +334,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        private IList<StudentDisciplineSummary> GetStudentDisciplineSummaries(IEnumerable<StudentDetails> students, int classId, DateTime startDate, DateTime endDate)
+        private IList<StudentDisciplineSummary> GetStudentDisciplineSummaries(IEnumerable<Student> students, int classId, DateTime startDate, DateTime endDate)
         {
             var classDisciplines = ((DemoDisciplineService)ServiceLocator.DisciplineService).GetSectionDisciplineSummary(classId, startDate, endDate);
             var result = new List<StudentDisciplineSummary>();
 
-            var studentDetailsList = students as IList<StudentDetails> ?? students.ToList();
+            var studentDetailsList = students as IList<Student> ?? students.ToList();
             foreach (var student in studentDetailsList)
             {
                 var infractionsList = classDisciplines.Where(x => x.StudentId == student.Id).SelectMany(x => x.Infractions);

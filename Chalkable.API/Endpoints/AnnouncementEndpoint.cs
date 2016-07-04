@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using Chalkable.API.Enums;
@@ -24,19 +22,19 @@ namespace Chalkable.API.Endpoints
         public async Task<Announcement> GetRead(int announcementId, AnnouncementType announcementType)
         {
             var url = $"/{announcementType}/Read.json";
-            return await Connector.Get<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}");
+            return await Connector.Get<Announcement>($"{url}?announcementId={announcementId}&announcementType={(int)announcementType}");
         }
 
         public async Task<Announcement> UploadAttributeAttachment(int announcementId, AnnouncementType announcementType, int attributeId, string fileName, Stream stream)
         {
             var url = $"/AnnouncementAttribute/UploadAttachment.json";
-            return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}" +
+            return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={(int)announcementType}" +
                                                       $"&assignedAttributeId={attributeId}&filename={fileName}", stream);
         }
         public async Task<Announcement> UploadAnnouncementAttachment(int announcementId, AnnouncementType announcementType, string fileName, Stream stream)
         {
             var url = "/AnnouncementAttachment/UploadAnnouncementAttachment.json";
-            return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}&filename={fileName}", stream);
+            return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={(int)announcementType}&filename={fileName}", stream);
         }
 
         public async Task<bool> UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl, string description)
@@ -56,6 +54,18 @@ namespace Chalkable.API.Endpoints
         {
             var url = "/Application/AnnouncementApplicationRecipients.json";
             return await Connector.Get<IList<AnnouncementApplicationRecipient>>($"{url}?studentId={studentId}");
+        }
+
+        public async Task<bool> UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text)
+        {
+            var url = "/Application/UpdateStudentAnnouncementApplicationMeta.json";
+
+            var nvc = HttpUtility.ParseQueryString(string.Empty);
+            nvc.Add("announcementApplicationId", announcementApplicationId.ToString());
+            nvc.Add("studentId", studentId.ToString());
+            nvc.Add("text", text);
+
+            return await Connector.Post<bool>(url, nvc);
         }
     }
 }

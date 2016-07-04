@@ -90,6 +90,7 @@
     <Compile Include="Models\ApplicationContent.cs" />
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\ClassAnnouncement.cs" />
+    <Compile Include="Models\Ethnicity.cs" />
     <Compile Include="Models\ExceptionViewData.cs" />
     <Compile Include="Models\LessonPlan.cs" />
     <Compile Include="Models\PaginatedList.cs" />

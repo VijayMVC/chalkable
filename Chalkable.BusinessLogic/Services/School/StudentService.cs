@@ -27,18 +27,20 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditStudentSchools(IList<StudentSchool> studentSchools);
         void DeleteStudentSchools(IList<StudentSchool> studentSchools);
 
-        IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId);
+        IList<Student> GetTeacherStudents(int teacherId, int schoolYearId);
         bool IsTeacherStudent(int teacherId, int studentId, int schoolYearId);
-        IList<StudentDetails> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null);
-        PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId);
+        IList<Student> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null);
+        PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId);
+        Student GetById(int id, int schoolYearId);
+        int GetEnrolledStudentsCount();
 
-        StudentDetails GetById(int id, int schoolYearId);
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
         StudentSummaryInfo GetStudentSummaryInfo(int studentId);
         StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
-        //StudentAttendanceDetailsInfo GetStudentAttendanceInfo(int studentId, int markingPeriodId);
-        int GetEnrolledStudentsCount();
         StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
+
+        StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId);
+        IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null);
     }
 
     public class StudentService : SisConnectedService, IStudentService
@@ -81,16 +83,16 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<StudentSchool>(u).Delete(studentSchools));
         }
 
-        public StudentDetails GetById(int id, int schoolYearId)
+        public Student GetById(int id, int schoolYearId)
         {
             using (var uow = Read())
             {
                 var da = new StudentDataAccess(uow);
-                return da.GetDetailsById(id, schoolYearId);
+                return da.GetById(id, schoolYearId);
             }
         }
 
-        public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
+        public IList<Student> GetTeacherStudents(int teacherId, int schoolYearId)
         {
             return DoRead(u => new StudentDataAccess(u).GetTeacherStudents(teacherId, schoolYearId));
         }
@@ -101,12 +103,12 @@ namespace Chalkable.BusinessLogic.Services.School
             return students.Any(s => s.Id == studentId);
         }
 
-        public IList<StudentDetails> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
+        public IList<Student> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
         {
             return DoRead(u => new StudentDataAccess(u).GetStudents(classId, markingPeriodId, isEnrolled));
         }
 
-        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId)
+        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId)
         {
             return DoRead( u => new StudentDataAccess(u).SearchStudents(schoolYearId, classId, teacherId, classmatesToId, filter,
                             orderByFirstName, start, count, markingPeriodId));
@@ -129,27 +131,26 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
-            if (CanGetHealthConditions())
-            {
-                var healthConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
+            if (!CanGetHealthConditions())
+                return new List<StudentHealthCondition>();
 
-                if (healthConditions == null)
-                    return new List<StudentHealthCondition>();
+            var healthConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
 
-                var result = (from studentCondition in healthConditions
-                              where studentCondition != null
-                              select new StudentHealthCondition
-                              {
-                                  Id = studentCondition.Id,
-                                  Name = studentCondition.Name,
-                                  Description = studentCondition.Description,
-                                  IsAlert = studentCondition.IsAlert,
-                                  MedicationType = studentCondition.MedicationType,
-                                  Treatment = studentCondition.Treatment
-                              }).ToList();
-                return result;
-            }
-            return new List<StudentHealthCondition>();
+            if (healthConditions == null)
+                return new List<StudentHealthCondition>();
+
+            var result = (from studentCondition in healthConditions
+                where studentCondition != null
+                select new StudentHealthCondition
+                {
+                    Id = studentCondition.Id,
+                    Name = studentCondition.Name,
+                    Description = studentCondition.Description,
+                    IsAlert = studentCondition.IsAlert,
+                    MedicationType = studentCondition.MedicationType,
+                    Treatment = studentCondition.Treatment
+                }).ToList();
+            return result;
         }
 
         private bool CanGetHealthConditions()
@@ -211,6 +212,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
+
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to view class panorama");
+
             if (schoolYearIds == null || schoolYearIds.Count == 0)
                 throw new ChalkableException("School years is required parameter");
 
@@ -221,6 +226,72 @@ namespace Chalkable.BusinessLogic.Services.School
             var studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
 
             return StudentPanoramaInfo.Create(studentPanorama);
+        }
+
+        public StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            
+            using (var uow = Read())
+            {
+                var studentDetails = new StudentDataAccess(uow).GetDetailsById(studentId, Context.SchoolYearId.Value);
+                Ethnicity ethnicity = null;
+                Country country = null;
+                Language language = null;
+                Person counselor = null;
+
+                if(studentDetails.PrimaryPersonEthnicity != null)
+                    ethnicity = new DataAccessBase<Ethnicity, int>(uow).GetById(studentDetails.PrimaryPersonEthnicity.EthnicityRef);
+
+                if(studentDetails.PrimaryPersonLanguage != null)
+                    language = new DataAccessBase<Language, int>(uow).GetById(studentDetails.PrimaryPersonLanguage.LanguageRef);
+
+                if (studentDetails.PrimaryPersonNationality != null)
+                    country = new DataAccessBase<Country, int>(uow).GetById(studentDetails.PrimaryPersonNationality.CountryRef);
+
+                var studentSchool = studentDetails.StudentSchools.FirstOrDefault(x => x.SchoolRef == Context.SchoolLocalId.Value);
+                if (studentSchool?.CounselorRef != null)
+                    counselor = new PersonDataAccess(uow).GetById(studentSchool.CounselorRef.Value);
+                
+                return StudentDetailsInfo.Create(studentDetails, ethnicity, language, country, counselor, studentSchool);
+            }
+        }
+
+        public IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null)
+        {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            using (var uow = Read())
+            {
+                var studentsDetails = new StudentDataAccess(uow).GetDetailsByClass(classId, isEnrolled);
+                var ethnicitiesIds = studentsDetails
+                    .Where(x => x.PrimaryPersonEthnicity != null)
+                    .Select(x => x.PrimaryPersonEthnicity.EthnicityRef).ToList();
+                var ethnicities = new DataAccessBase<Ethnicity, int>(uow).GetByIds(ethnicitiesIds);
+
+                var languagesIds = studentsDetails
+                    .Where(x => x.PrimaryPersonLanguage != null)
+                    .Select(x => x.PrimaryPersonLanguage.LanguageRef).ToList();
+                var languages = new DataAccessBase<Language, int>(uow).GetByIds(languagesIds);
+
+                var countriesIds = studentsDetails
+                    .Where(x => x.PrimaryPersonNationality != null)
+                    .Select(x => x.PrimaryPersonNationality.CountryRef).ToList();
+                var countries = new DataAccessBase<Country, int>(uow).GetByIds(countriesIds);
+
+                IList<int> counselorsIds = new List<int>();
+
+                foreach (var student in studentsDetails)
+                {
+                    var currentStudentSchool = student.StudentSchools.FirstOrDefault(x => x.SchoolRef == Context.SchoolLocalId);
+                    if (currentStudentSchool?.CounselorRef != null)
+                        counselorsIds.Add(currentStudentSchool.CounselorRef.Value);
+                }
+                var counselors = new PersonDataAccess(uow).GetByIds(counselorsIds);
+                
+                return StudentDetailsInfo.Create(studentsDetails, ethnicities, languages, countries, counselors, Context.SchoolLocalId.Value);
+            }
         }
     }
 }
