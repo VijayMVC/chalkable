@@ -18,12 +18,13 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementCommentId);
                 this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
                 this.parentCommentId = SJX.fromValue(raw.parentcommentid, chlk.models.id.AnnouncementCommentId);
+                this.attachmentId = SJX.fromValue(raw.attachmentId, chlk.models.id.AttachmentId);
                 if(raw.attachment)
                     this.attachment = SJX.fromDeserializable(raw.attachment, chlk.models.attachment.Attachment);
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
                 this.postedDate = SJX.fromDeserializable(raw.posteddate, chlk.models.common.ChlkDate);
-                this.text = SJX.fromDeserializable(raw.text, String);
-                this.hidden = SJX.fromDeserializable(raw.hidden, Boolean);
+                this.text = SJX.fromValue(raw.text, String);
+                this.hidden = SJX.fromValue(raw.hidden, Boolean);
                 if(raw.subcomments)
                     this.subComments = SJX.fromArrayOfDeserializables(raw.subcomments, chlk.models.announcement.AnnouncementComment);
             },
@@ -36,6 +37,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.common.ChlkDate, 'postedDate',
             String, 'text',
             Boolean, 'hidden',
+            chlk.models.id.AttachmentId, 'attachmentId',
 
             ArrayOf(SELF), 'subComments'
         ]);

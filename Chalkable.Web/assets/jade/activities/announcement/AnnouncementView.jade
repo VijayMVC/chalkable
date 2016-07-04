@@ -38,6 +38,11 @@ mixin Glue_()
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
 
+    -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
+    if showPostQuestion || self.getAnnouncementQnAs().length
+        +ActionLink('announcement', 'chat').chat-link=self.getAnnouncementQnAs().length || ''
+
+
     .buttons
         if self.getUserRole().isTeacher() || self.getUserRole().isAdmin() && adminAnnouncement
             +ActionButton('announcement', 'edit', self.getId(), self.getType())(class = self.isAbleEdit() ? "" : "disabled").right Edit
@@ -143,14 +148,9 @@ mixin Glue_()
                                 .title Study Center
                                 +ActionButton('studycenter', 'startPractice', self.getStandards().map(function (_) { return _.getStandardId(); })) Start Practice
 
-
-        -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
-        if showPostQuestion || self.getAnnouncementQnAs().length
-            .questions-and-answers
-                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
-                    userRole = self.getUserRole(),
-                    currentUser = self.getCurrentUser()
-                )
+        if itemForClass && itemForClass.isDiscussionEnabled()
+            +CloseOpen('Discussion')
+                +ActionForm('announcementcomment', 'post')
 
         if classAnnouncement
             if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && classAnnouncement.isGradable()
