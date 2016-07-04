@@ -51,7 +51,8 @@ namespace Chalkable.Data.School.DataAccess
         public void Update(AnnouncementComment entity, bool updateSubComments)
         {
             var toUpdate = new List<AnnouncementComment> {entity};
-            toUpdate.AddRange(entity.AllSubComments);
+            if (updateSubComments) 
+                toUpdate.AddRange(entity.AllSubComments);
             base.Update(toUpdate);
         }
 
