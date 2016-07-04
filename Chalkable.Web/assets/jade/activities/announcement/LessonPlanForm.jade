@@ -44,9 +44,8 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                 .table.top-table
                     .left-block
                         .left-block-container
-                            .title-block-container(class = lessonPlan.getGalleryCategoryId() ? 'with-gallery-id' : '')
+                            .title-block-container
                                 +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
-                                +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
                             .left-top-container
                                 if !state
                                     .categories-container.i-b
@@ -118,11 +117,10 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                 .check-box-container.gallery
                                     label(for="in-gallery-personal-public") Gallery
                                     .box-checkbox.circle
-                                        +Checkbox('inGalleryPersonal', !lessonPlan.isInGallery(), false, true)#personal-check.gallery-check
-                                    label(for="personal-check") Personal
-                                    .box-checkbox.circle
                                         +Checkbox('inGallery', !!lessonPlan.isInGallery(), false, true)#public-check.gallery-check
                                     label(for="public-check") Public
+                            else
+                                +Hidden('inGallery', false)
 
 
                 .apps-attachments-bock.attachments-and-applications
@@ -153,7 +151,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                         name="submitType",
                         value=state ? "submitOnEdit" : "submit"
                     ).special-button.blue-button.submit-btn.submit-announcement.big-button
-                        =(state ? Msg.Save : Msg.Submit)
+                        =Msg.Save
                     if state
                         +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName(), announcement.getType())
                             +Button()(

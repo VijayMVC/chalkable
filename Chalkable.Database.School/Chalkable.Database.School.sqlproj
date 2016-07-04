@@ -356,6 +356,9 @@
     <Build Include="Stored Procedures\spGetStudent.sql" />
     <Build Include="Stored Procedures\spGetStudentsDetailsByClass.sql" />
     <PostDeploy Include="Scripts\PostDeploy\001_Drop_GalleryCategoryRef_From_LessonPlan.PostDeploy.sql" />
+    <Build Include="Stored Procedures\spGetGridStandardsByPacing.sql" />
+    <Build Include="Tables\StudentAnnouncementApplicationMeta.sql" />
+    <Build Include="User Defined Types\TStudentAnnouncementApplicationMeta.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />

@@ -48,39 +48,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.trigger('chosen:updated');
                     node.parent('.left-top-container').find('.add-category-btn').trigger('click');
                 }else{
-                    if(this.dom.find('#public-check').checked() && node.getValue() && !node.getData('value')){
-                        this.dom.find('.title-block-container').addClass('with-gallery-id');
-
-                        if(this.dom.find('#title').getValue())
-                            this.dom.find('#check-title-button').trigger('click');
-                    }
-
                     node.setData('value', node.getValue());
                 }
-
-            },
-
-            function checkTitle_(){
-                this.dom.find('.title-block-container').addClass('with-gallery-id');
-                this.dom.find('#check-title-button').trigger('click');
-            },
-
-            [ria.mvc.DomEventBind('change', '.gallery-check')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            function addToGalleryChange(node, event, selected_){
-                var select = this.dom.find('#galleryCategoryId'),
-                    second = node.parent('.box-checkbox').siblings('.box-checkbox').find('.checkbox');
-
-                second.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), !node.checked());
-
-                if(this.dom.find('#public-check').checked())
-                    this.checkTitle_();
-                else{
-                    this.dom.find('.title-block-container').removeClass('with-gallery-id');
-                    this.removeDisabledClass();
-                }
-
-                select.trigger('chosen:updated');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],

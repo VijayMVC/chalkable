@@ -297,8 +297,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
         //move it somewhere
-        [[String, String]],
-        ria.async.Future, function prepareExternalAttachAppViewData_(mode, appUrlAppend_){
+        [[String, chlk.models.id.SchoolPersonId, String]],
+        ria.async.Future, function prepareExternalAttachAppViewDataForStudent_(mode, studentId, appUrlAppend_){
 
             var appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
 
@@ -314,6 +314,7 @@ NAMESPACE('chlk.controllers', function (){
                     var viewUrl = appData.getUrl() + '?mode=' + mode
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
                         + '&code=' + data.getAuthorizationCode()
+                        + '&studentId=' + studentId.valueOf()
                         + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
@@ -331,7 +332,7 @@ NAMESPACE('chlk.controllers', function (){
             function assessmentProfileAction(personId) {
                 
                 var result = ria.async.wait([
-                    this.prepareExternalAttachAppViewData_("profileview"),
+                    this.prepareExternalAttachAppViewDataForStudent_("profileview", personId),
                     this.prepareStudentProfileSummaryViewData_(personId, chlk.models.student.StudentProfileAssessmentViewData)
                 ])
                 .attach(this.validateResponse_())
