@@ -1,3 +1,4 @@
+import pyodbc
 import re
 import unittest
 import requests
@@ -8,6 +9,7 @@ import time
 import json
 import random
 import ast
+
 
 
 class BaseAuthedTestCase(unittest.TestCase):
@@ -111,6 +113,50 @@ class BaseAuthedTestCase(unittest.TestCase):
         var_grading_periods_cut_off_string = ''.join(var_grading_periods_cut_off_list)
         self.var_grading_periods_final_list = re.findall('[0-9]+', var_grading_periods_cut_off_string)
 
+
+        #gradingComments
+        var_grading_comments_list = re.findall('var gradingComments = .+', page_as_one_string)
+        var_grading_comments_string = ''.join(var_grading_comments_list)
+        var_grading_comments_cut_off_string = var_grading_comments_string[31:-3]
+        dictionary_var_grading_comments_cut_off_string = json.loads(var_grading_comments_cut_off_string)
+        dictionary_var_grading_comments_cut_off_string_data = dictionary_var_grading_comments_cut_off_string['data']
+
+
+        self.one_grading_comment = random.choice(dictionary_var_grading_comments_cut_off_string_data)
+
+        # alphaGrades
+        var_alpha_grades_list = re.findall('var alphaGrades = .+', page_as_one_string)
+        var_alpha_grades_string = ''.join(var_alpha_grades_list)
+        var_alpha_grades_cut_off_string = var_alpha_grades_string[27:-3]
+        dictionary_var_alpha_grades_cut_off_string = json.loads(var_alpha_grades_cut_off_string)
+        dictionary_var_alpha_grades_cut_off_string_data = dictionary_var_alpha_grades_cut_off_string['data']
+
+        # classesAdvancedData getting allowed standards
+        self.dic_for_class_allowed_standard = {}
+        var_classes_advanced_data_list = re.findall('var classesAdvancedData = .+', page_as_one_string)
+        var_classes_advanced_data_string = ''.join(var_classes_advanced_data_list)
+        var_classes_advanced_data_off_string = var_classes_advanced_data_string[35:-3]
+        #print var_classes_advanced_data_off_string, type(var_classes_advanced_data_off_string)
+        dictionary_var_classes_advanced_data_cut_off_string = json.loads(var_classes_advanced_data_off_string)
+        #print dictionary_var_classes_advanced_data_cut_off_string, type(dictionary_var_classes_advanced_data_cut_off_string)
+
+        for i in dictionary_var_classes_advanced_data_cut_off_string['data']:
+            for k in i['alphagradesforstandards']:
+                if not (i['classid'] in self.dic_for_class_allowed_standard):
+                    self.dic_for_class_allowed_standard[i['classid']] = []
+                self.dic_for_class_allowed_standard[i['classid']].append(k['id'])
+
+
+
+
+        dictionary_var_classes_advanced_data_cut_off_string_data = dictionary_var_classes_advanced_data_cut_off_string['data']
+
+
+
+
+
+
+
         # getting marking periods
         var_marking_periods_list = re.findall('var markingPeriods = .+', page_as_one_string)
         var_markingPeriods_string = ''.join(var_marking_periods_list)
@@ -118,9 +164,11 @@ class BaseAuthedTestCase(unittest.TestCase):
         dictionary_var_markingPeriods_cut_off_string = json.loads(var_markingPeriods_cut_off_string)
         self.dict_for_marking_period_date_startdate_endate = {}
         dictionary_var_markingPeriods_cut_off_string_data = dictionary_var_markingPeriods_cut_off_string['data']
+       # print 'dictionary_var_markingPeriods_cut_off_string_data', dictionary_var_markingPeriods_cut_off_string_data
 
         for marking_period in dictionary_var_markingPeriods_cut_off_string_data:
             self.dict_for_marking_period_date_startdate_endate[marking_period['id']] = marking_period['startdate'], marking_period['enddate']
+           # print 'marking_period', marking_period
 
         # getting list of marking periods
         self.list_for_marking_periods = []
@@ -137,6 +185,7 @@ class BaseAuthedTestCase(unittest.TestCase):
         dictionary_var_markingPeriods_cut_off_string_data = dictionary_var_markingPeriods_cut_off_string['data']
 
         for info_for_one_class in dictionary_var_markingPeriods_cut_off_string_data:
+           # print 'info_for_one_class',info_for_one_class
             self.dict_for_clas_marking_period[info_for_one_class['id']] = info_for_one_class['markingperiodsid']
 
         # getting list of classes
@@ -152,6 +201,16 @@ class BaseAuthedTestCase(unittest.TestCase):
         self.session_admin = s_admin
 
         self.session_classmate = s_classmate
+
+    def post_instead_of_get(self, url, params, status=200, success=True):
+        s = self.session
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
+        try:
+            r = s.post(chlk_server_url + url, data=params, headers=headers)
+        except ValueError:
+            self.assertTrue(False, 'Request failed, ' + url)
+            return None
+        return self.verify_response(r, status, success)
 
     def list_of_years(self):
         list_of_years = self.var_years_list
