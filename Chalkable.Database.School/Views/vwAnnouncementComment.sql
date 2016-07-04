@@ -1,6 +1,6 @@
 ﻿CREATE VIEW [dbo].[vwAnnouncementComment]
 As
-Select 
+Select distinct
 	AnnouncementComment.Id as AnnouncementComment_Id,
 	AnnouncementComment.AnnouncementRef as AnnouncementComment_AnnouncementRef,
 	AnnouncementComment.AttachmentRef as AnnouncementComment_AttachmentRef,

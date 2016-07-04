@@ -12,7 +12,27 @@ namespace Chalkable.Data.School.DataAccess
     {
         public AnnouncementCommentDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
-        }
+        } 
+
+        //TODO make sp for this method
+        public AnnouncementComment GetDetailsById(int announcementCommentId, int callerId, int roleId, bool withSubComments = true)
+        {
+            var idColumn = $"{nameof(AnnouncementComment)}_{nameof(AnnouncementComment.Id)}";
+            var conds = new AndQueryCondition {{idColumn, announcementCommentId}};
+            var q = Orm.SimpleSelect(AnnouncementComment.VW_ANNOUNCEMENT_COMMENT, conds);
+            var res = Read(q, r => 
+            {
+                r.Read();
+                return ReadComment(r);
+            });
+
+            if (withSubComments)
+            {
+                var all = GetList(res.AnnouncementRef, callerId, roleId);
+                return BuildSubComments(new List<AnnouncementComment> { res }, all).First();
+            }
+            return res;
+        } 
 
         public IList<AnnouncementComment> GetList(int announcementId, int callerId, int roleId)
         {
@@ -28,9 +48,18 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
+        public void Update(AnnouncementComment entity, bool updateSubComments)
+        {
+            var toUpdate = new List<AnnouncementComment> {entity};
+            toUpdate.AddRange(entity.AllSubComments);
+            base.Update(toUpdate);
+        }
+
         public static IList<AnnouncementComment> ReadCommentsResult(DbDataReader reader)
         {
-            var comments = reader.ReadList<AnnouncementComment>(true);
+            var comments = new List<AnnouncementComment>();
+            while (reader.Read())
+                comments.Add(ReadComment(reader));
             var rootComments = comments.Where(x => !x.ParentCommentRef.HasValue).ToList();
             return BuildSubComments(rootComments, comments);
         } 
@@ -42,7 +71,15 @@ namespace Chalkable.Data.School.DataAccess
                 parent.SubComments = BuildSubComments(subComments, all);
             }
             return parents;
-        } 
+        }
+
+        private static AnnouncementComment ReadComment(DbDataReader reader)
+        {
+            var res = reader.Read<AnnouncementComment>(true);
+            if (res.AttachmentRef.HasValue)
+                res.Attachment = reader.Read<Attachment>(true);
+            return res;
+        }
         
         public void HideAll(int announcementId)
         {

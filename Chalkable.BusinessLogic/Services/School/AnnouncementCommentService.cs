@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
@@ -52,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Hidden = ann.PreviewCommentsEnabled
                     });
                 uow.Commit();
-                return da.GetById(id);
+                return da.GetDetailsById(id, Context.PersonId.Value, Context.RoleId);
             }
         }
         
@@ -79,15 +78,16 @@ namespace Chalkable.BusinessLogic.Services.School
                     Hidden = ann.PreviewCommentsEnabled
                 });
                 uow.Commit();
-                return da.GetById(id);
+                return da.GetDetailsById(id, Context.PersonId.Value, Context.RoleId);
             }
         }
         public AnnouncementComment Edit(int announcementCommentId, string text, int? attachmentId)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
             {
                 var da = new AnnouncementCommentDataAccess(uow);
-                var comment = da.GetById(announcementCommentId);
+                var comment = da.GetDetailsById(announcementCommentId, Context.PersonId.Value, Context.RoleId);
                 EnsureInCreateAccess(comment.AnnouncementRef);
                 if (comment.PersonRef != Context.PersonId)
                     throw  new ChalkableSecurityException("Only owner can edit comment");
@@ -110,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services.School
             EnsureInDeleteAccess(comment);
 
             comment.Hidden = hidden;          
-            DoUpdate(u=> new AnnouncementCommentDataAccess(u).Update(comment));
+            DoUpdate(u=> new AnnouncementCommentDataAccess(u).Update(comment, true));
         }
         public void Delete(int commentId)
         {
@@ -119,19 +119,15 @@ namespace Chalkable.BusinessLogic.Services.School
             EnsureInDeleteAccess(comment);
 
             comment.Deleted = true;
-            DoUpdate(u => new AnnouncementCommentDataAccess(u).Update(comment));
+            DoUpdate(u => new AnnouncementCommentDataAccess(u).Update(comment, true));
         }
 
         public AnnouncementComment GetById(int commentId)
         {
-            return DoRead(u => new AnnouncementCommentDataAccess(u).GetById(commentId));
+            Trace.Assert(Context.PersonId.HasValue);
+            return DoRead(u => new AnnouncementCommentDataAccess(u).GetDetailsById(commentId, Context.PersonId.Value, Context.RoleId));
         }
 
-        private void EnsureInAnnouncementAccess(int announcementId, AnnouncementTypeEnum? type = null)
-        {
-            type = type ?? ServiceLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
-            ServiceLocator.GetAnnouncementService(type).GetAnnouncementById(announcementId);
-        }
 
         private void EnsureInCreateAccess(int announcementId, AnnouncementTypeEnum? type = null)
         {
@@ -154,10 +150,5 @@ namespace Chalkable.BusinessLogic.Services.School
             if(!BaseSecurity.IsDistrictOrTeacher(Context))
                 throw new ChalkableSecurityException();
         }
-
-        //public AnnouncementComment IAnnouncementCommentService.GetById(int announcementCommentId)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }
