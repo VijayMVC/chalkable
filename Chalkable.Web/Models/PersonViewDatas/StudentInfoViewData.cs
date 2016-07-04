@@ -39,6 +39,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<DisciplineTypeSummaryViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummaryGradeViewData> GradesBox { get; set; }
 
+        private const string NO_CLASS_SCHEDULED = "No Class Scheduled";
+
         public string CurrentClassName { get; set; }
         public int? RoomId { get; set; }
         public string RoomName { get; set; }
@@ -109,6 +111,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.GradesBox = StudentHoverBoxViewData<StudentSummaryGradeViewData>.Create(studentSummary.StudentAnnouncements);
 
             res.CurrentAttandanceLevel = studentSummary.CurrentAttendanceLevel;
+
+            res.CurrentClassName = NO_CLASS_SCHEDULED;
+
+            if (currentClass != null)
+                res.CurrentClassName = currentClass.Name;
 
 
 
