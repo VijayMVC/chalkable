@@ -3,24 +3,28 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.GradingViewData;
+using Chalkable.Web.Models.PanoramaViewDatas;
 using Chalkable.Web.Models.PersonViewDatas;
+using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Controllers.PersonControllers
 {
     [RequireHttps, TraceControllerFilter]
     public class StudentController : PersonController
     {
-        //[AuthorizationFilter("DistrictAdmin, Teacher, Student", Preference.API_DESCR_STUDENT_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance, AppPermissionType.Discipline, AppPermissionType.Grade })]
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Summary(int schoolPersonId)
         {
@@ -67,22 +71,37 @@ namespace Chalkable.Web.Controllers.PersonControllers
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             var syId = GetCurrentSchoolYearId();
-            var res = GetInfo(personId, personInfo=> StudentInfoViewData.Create(personInfo, syId));
+            var today = Context.NowSchoolTime;
+            var studentDetailsInfo = SchoolLocator.StudentService.GetStudentDetailsInfo(personId, syId);
+            var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(personId);
+            var studentClasses = SchoolLocator.ClassService.GetStudentClasses(syId, personId);
+            Room currentRoom = null;
+            ClassDetails currentClass = null;
+            if (studentSummaryInfo.CurrentSectionId.HasValue)
+            {
+                currentClass = studentClasses.FirstOrDefault(x => x.Id == studentSummaryInfo.CurrentSectionId.Value);
+                if (currentClass?.RoomRef != null)
+                    currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
+            }
+
+            var res = GetInfo(personId, personInfo => StudentInfoViewData.Create(personInfo, studentDetailsInfo,
+                studentSummaryInfo, studentClasses, currentClass, currentRoom, syId, today));
+            
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
-            var studentDetailsInfo = SchoolLocator.StudentService.GetById(personId, syId);
-            res.HasMedicalAlert = studentDetailsInfo.HasMedicalAlert;
-            res.IsAllowedInetAccess = studentDetailsInfo.IsAllowedInetAccess;
-            res.SpecialInstructions = studentDetailsInfo.SpecialInstructions;
-            res.SpEdStatus = studentDetailsInfo.SpEdStatus;
 
-      
             var studentContacts = SchoolLocator.ContactService.GetStudentContactDetails(personId);
             res.StudentContacts = StudentContactViewData.Create(studentContacts);
-            res.StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(SchoolLocator.StudentCustomAlertDetailService.GetList(personId));
-            return Json(res, 6);
-        }
 
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
+            res.StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(customAlerts);
+
+            var homeroom = SchoolLocator.RoomService.GetStudentHomeroomOrNull(personId, syId);
+            if(homeroom != null)
+                res.Homeroom = HomeroomViewData.Create(homeroom);
+
+            return Json(res);
+        }
         
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Schedule(int personId)
@@ -226,5 +245,45 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res);
         }
 
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
+        public ActionResult Panorama(int studentId, StudentProfilePanoramaSetting settings)
+        {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to view class panorama");
+
+            if (settings.SchoolYearIds == null)
+                settings = SchoolLocator.PanoramaSettingsService.Get<StudentProfilePanoramaSetting>(null);
+
+            if (settings.SchoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            var studentPanorama = SchoolLocator.StudentService.Panorama(studentId, settings.SchoolYearIds, settings.StandardizedTestFilters);
+            var standardizedTests = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
+
+            return Json(StudentPanoramaViewData.Create(studentId, studentPanorama, settings, standardizedTests));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult SavePanoramaSettings(StudentProfilePanoramaSetting setting)
+        {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
+            if (setting.SchoolYearIds == null || setting.SchoolYearIds.Count == 0)
+                throw new ChalkableException("School years is required parameter");
+
+            SchoolLocator.PanoramaSettingsService.Save(setting, null);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult RestorePanoramaSettings()
+        {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
+            var settings = SchoolLocator.PanoramaSettingsService.Restore<StudentProfilePanoramaSetting>(null);
+            return Json(PersonProfilePanoramaSettingViewData.Create(settings));
+        }
     }
 }

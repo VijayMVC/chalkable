@@ -37,7 +37,7 @@ namespace Chalkable.Data.School.Model
         [DataEntityAttr]
         public Group Group { get; set; }
         [DataEntityAttr]
-        public StudentDetails Student { get; set; }
+        public Student Student { get; set; }
     }
 
 
@@ -67,7 +67,7 @@ namespace Chalkable.Data.School.Model
         public int StudentsGroupInGradeLevel { get; set; }
     }
 
-    public class StudentForGroup : StudentDetails
+    public class StudentForGroup : Student
     {
         public int? GroupRef { get; set; }
 

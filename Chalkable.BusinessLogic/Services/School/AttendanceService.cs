@@ -348,7 +348,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 var c = ServiceLocator.ClassService.GetById(classId);
                 var periods = ServiceLocator.PeriodService.GetPeriods(syId);
-                var students = new List<StudentDetails>();
+                var students = new List<Student>();
                 students = mps.Select(mp => ServiceLocator.StudentService.GetClassStudents(classId, mp.Id))
                               .Aggregate(students, (current, items) => current.Union(items).ToList());
 

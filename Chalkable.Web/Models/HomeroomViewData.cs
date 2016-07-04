@@ -1,4 +1,5 @@
-﻿using Chalkable.Web.Models.PersonViewDatas;
+﻿using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
@@ -10,6 +11,12 @@ namespace Chalkable.Web.Models
 
         public ShortPersonViewData Teacher { get; set; }
 
-        //public static HomeroomViewData Create()
+        public static HomeroomViewData Create(Homeroom homeroom)
+        {
+            return new HomeroomViewData(homeroom.Id, homeroom.Name)
+            {
+                Teacher = homeroom.Teacher != null ? ShortPersonViewData.Create(homeroom.Teacher) : null
+            };
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> Lates { get; set; }
         public HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> Presents { get; set; }
 
-        protected StudentAttendanceSummaryViewData(StudentDetails student, IList<StudentCustomAlertDetail> customAlerts,
+        protected StudentAttendanceSummaryViewData(Student student, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions) : base(student, customAlerts, healthConditions)
         {
         }

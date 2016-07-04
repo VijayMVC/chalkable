@@ -109,8 +109,8 @@ NAMESPACE('chlk.templates.profile', function(){
             Boolean, function canViewPanorama_(teacherIds){
                 var currentUserId = this.getCurrentUser().getId();
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
-                var canViewPanorama = this.getUserRole().isAdmin() || this.hasUserPermission_(permissionEnum.VIEW_PANORAMA) &&
-                    teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0;
+                var canViewPanorama = this.getUserRole().isAdmin() && this.hasUserPermission_(permissionEnum.VIEW_PANORAMA)
+                    || this.hasUserPermission_(permissionEnum.VIEW_PANORAMA) && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0;
                 return canViewPanorama && this.isStudyCenterEnabled();
             },
 

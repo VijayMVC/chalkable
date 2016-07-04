@@ -27,7 +27,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string RoomName { get; set; }
         public string RoomNumber { get; set; }
 
-        protected StudentSummaryViewData(StudentDetails student, Room room, IList<StudentCustomAlertDetail> customAlerts,
+        protected StudentSummaryViewData(Student student, Room room, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions) : base(student, customAlerts, healthConditions)
         {
             if (room == null) return;

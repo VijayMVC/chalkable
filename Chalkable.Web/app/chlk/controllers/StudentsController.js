@@ -9,6 +9,7 @@ REQUIRE('chlk.services.MarkingPeriodService');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineCalendarService');
 REQUIRE('chlk.services.ApplicationService');
+REQUIRE('chlk.services.SchoolYearService');
 
 REQUIRE('chlk.activities.person.ListPage');
 REQUIRE('chlk.activities.student.StudentProfileSummaryPage');
@@ -23,6 +24,7 @@ REQUIRE('chlk.activities.student.StudentProfileExplorerPage');
 REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.activities.discipline.StudentDayDisciplinePopup');
 REQUIRE('chlk.activities.student.StudentProfileGradingPopup');
+REQUIRE('chlk.activities.student.StudentProfilePanoramaPage');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -63,6 +65,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
+
+            [ria.mvc.Inject],
+            chlk.services.SchoolYearService, 'schoolYearService',
 
             [chlk.controllers.SidebarButton('people')],
             function indexStudentAction() {
@@ -206,6 +211,80 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.profile.StudentInfoPage, result);
             },
 
+            function getPanorama_(personId, restore_){
+                return ria.async.wait([
+                        this.studentService.getInfoForPanorama(personId),
+                        this.studentService.getPanorama(personId),
+                        this.schoolYearService.list()
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var userData = result[0];
+                        var panorama = result[1];
+                        panorama.setSchoolYears(result[2]);
+                        panorama.setShowFilters(restore_ || false);
+                        userData.setPanoramaInfo(panorama);
+                        var res = new chlk.models.student.StudentProfilePanoramaViewData(this.getCurrentRole(), userData, this.getUserClaims_());
+                        this.getContext().getSession().set(ChlkSessionConstants.CURRENT_PANORAMA, userData);
+                        this.setUserToSession(res);
+                        return res;
+                    }, this);
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function panoramaAction(personId){
+                var result = this.getPanorama_(personId);
+
+                return this.PushView(chlk.activities.student.StudentProfilePanoramaPage, result);
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function restorePanoramaAction(personId){
+                var result = this.studentService.restorePanorama()
+                    .then(function(data){
+                        return this.getPanorama_(personId, true);
+                    }, this);
+
+                return this.UpdateView(chlk.activities.student.StudentProfilePanoramaPage, result);
+            },
+
+            function panoramaSubmitAction(data){
+                var filterValues = data.filterValues ? JSON.parse(data.filterValues) : '',
+                    res, isSave = data.submitType == 'save';
+
+                if(isSave){
+                    res = this.studentService.savePanoramaSettings(data.studentId, filterValues)
+                        .attach(this.validateResponse_());
+                    return this.UpdateView(chlk.activities.student.StudentProfilePanoramaPage, res, 'save-filters');
+                }
+
+                res = this.studentService.getPanorama(data.studentId, filterValues)
+                    .then(function(panorama){
+                        var userData = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PANORAMA, null);
+                        var schoolYears = userData.getPanoramaInfo().getSchoolYears();
+                        panorama.setSchoolYears(schoolYears);
+                        userData.setPanoramaInfo(panorama);
+                        return userData;
+                    }, this)
+                    .attach(this.validateResponse_());
+
+                return this.UpdateView(chlk.activities.student.StudentProfilePanoramaPage, res);
+            },
+
+            [[chlk.models.panorama.StudentAttendancesSortType, Boolean]],
+            function sortPanoramaAttendancesAction(orderBy_, descending_){
+                var res = this.studentService.sortPanoramaAttendances(orderBy_, descending_)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.student.StudentProfilePanoramaPage, res, 'sort-attendances');
+            },
+
+            [[chlk.models.panorama.StudentDisciplinesSortType, Boolean]],
+            function sortPanoramaDisciplinesAction(orderBy_, descending_){
+                var res = this.studentService.sortPanoramaDisciplines(orderBy_, descending_)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.student.StudentProfilePanoramaPage, res, 'sort-disciplines');
+            },
+
             [[chlk.models.id.SchoolPersonId]],
             function detailsStudentAction(personId){
                 /* Student can see ONLY his own profile CHLK-3117, CHLk-3303 */
@@ -218,8 +297,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
         //move it somewhere
-        [[String, String]],
-        ria.async.Future, function prepareExternalAttachAppViewData_(mode, appUrlAppend_){
+        [[String, chlk.models.id.SchoolPersonId, String]],
+        ria.async.Future, function prepareExternalAttachAppViewDataForStudent_(mode, studentId, appUrlAppend_){
 
             var appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
 
@@ -235,6 +314,7 @@ NAMESPACE('chlk.controllers', function (){
                     var viewUrl = appData.getUrl() + '?mode=' + mode
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
                         + '&code=' + data.getAuthorizationCode()
+                        + '&studentId=' + studentId.valueOf()
                         + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
@@ -252,7 +332,7 @@ NAMESPACE('chlk.controllers', function (){
             function assessmentProfileAction(personId) {
                 
                 var result = ria.async.wait([
-                    this.prepareExternalAttachAppViewData_("profileview"),
+                    this.prepareExternalAttachAppViewDataForStudent_("profileview", personId),
                     this.prepareStudentProfileSummaryViewData_(personId, chlk.models.student.StudentProfileAssessmentViewData)
                 ])
                 .attach(this.validateResponse_())

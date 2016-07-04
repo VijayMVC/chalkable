@@ -49,21 +49,46 @@ namespace Chalkable.Data.School.Model
 
             return false;
         }
+
+        public bool? IsWithdrawn { get; set; }
     }
 
     public class StudentDetails : Student
     {
-        public bool? IsWithdrawn { get; set; }
+        [NotDbFieldAttr]
+        public IList<StudentSchool> StudentSchools { get; set; }
 
         [NotDbFieldAttr]
-        public PersonEthnicity PrimaryPersonEthnicity   {
+        public IList<PersonEthnicity> PersonEthnicities { get; set; }
+        public PersonEthnicity PrimaryPersonEthnicity
+        {
             get
             {
                 var primary = PersonEthnicities?.FirstOrDefault(x => x.IsPrimary);
                 return primary;
             }
         }
+
         [NotDbFieldAttr]
-        public IList<PersonEthnicity> PersonEthnicities { get; set; }
+        public IList<PersonNationality> PersonNationalities { get; set; }
+        public PersonNationality PrimaryPersonNationality
+        {
+            get
+            {
+                var nationality = PersonNationalities?.FirstOrDefault(x => x.IsPrimary);
+                return nationality;
+            }
+        }
+
+        [NotDbFieldAttr]
+        public IList<PersonLanguage> PersonLanguages { get; set; }
+        public PersonLanguage PrimaryPersonLanguage
+        {
+            get
+            {
+                var language = PersonLanguages?.FirstOrDefault(x => x.IsPrimary);
+                return language;
+            }
+        }
     }
 }

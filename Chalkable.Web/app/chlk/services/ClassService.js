@@ -55,7 +55,6 @@ NAMESPACE('chlk.services', function () {
             //TODO: refactor
             [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForWeekMask, function getClassAnnouncementInfo(id){
-                //var res = window.classesInfo[id.valueOf()];
                 var res = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_INFO, {})[id.valueOf()];
                 if(!res) {
                     var cls = chlk.models.classes.ClassForWeekMask();
@@ -67,9 +66,6 @@ NAMESPACE('chlk.services', function () {
                     return cls;
                 }
                 return res;
-                //res.classId = id.valueOf();
-                //res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(res, chlk.models.classes.ClassForWeekMask);
-                //return res;
             },
 
             [[ArrayOf(chlk.models.id.ClassId)]],
@@ -106,6 +102,12 @@ NAMESPACE('chlk.services', function () {
                     this.getContext().getSession().set(ChlkSessionConstants.CURRENT_PANORAMA, model);
                     return model;
                 }, this);
+            },
+
+            ria.async.Future, function restorePanorama(classId) {
+                return this.post('Class/RestorePanoramaSettings.json', Object, {
+                    classId: classId.valueOf()
+                });
             },
 
             //[[Object, Object]],

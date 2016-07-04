@@ -21,11 +21,10 @@
                 .table.top-table
                     .left-block
                         .left-block-container
-                            .title-block-container(class = lessonPlan.getGalleryCategoryId() ? 'with-gallery-id' : '')
+                            .title-block-container
                                 +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)(
                                     readonly = !!state
                                 )
-                                +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
                             .left-top-container
                                 .categories-container.i-b
                                     label(for="galleryCategoryId").main-lable Category:
@@ -95,11 +94,10 @@
                                 .check-box-container.gallery
                                     label(for="in-gallery-personal-public") Gallery
                                     .box-checkbox.circle
-                                        +Checkbox('inGalleryPersonal', isAdmin ? false : !lessonPlan.isInGallery(), false, true, isAdmin)#personal-check.gallery-check
-                                    label(for="personal-check") Personal
-                                    .box-checkbox.circle
                                         +Checkbox('inGallery', isAdmin ? true : !!lessonPlan.isInGallery(), false, true, isAdmin)#public-check.gallery-check
                                     label(for="public-check") Public
+                            else
+                                +Hidden('inGallery', false)
 
 
                 .apps-attachments-bock.attachments-and-applications
@@ -133,5 +131,5 @@
                             type="submit",
                             name="submitType",
                             value="submit"
-                        ).special-button.blue-button.submit-btn.submit-announcement.big-button=Msg.Submit
+                        ).special-button.blue-button.submit-btn.submit-announcement.big-button=Msg.Save
                         +ActionLink('announcement', 'discard', announcement.getType(), true).grey-link.not-blue.add-loader-btn=Msg.Discard

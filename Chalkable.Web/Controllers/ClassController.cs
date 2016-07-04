@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -16,6 +17,7 @@ using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ClassesViewData;
+using Chalkable.Web.Models.PanoramaViewDatas;
 using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Controllers
@@ -148,6 +150,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents)
         {
+            if(!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to view class panorama");
+
             if(settings.SchoolYearIds == null)
                 settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSetting>(classId);
 
@@ -158,11 +163,11 @@ namespace Chalkable.Web.Controllers
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
             var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
-            var classStudents = SchoolLocator.StudentService.GetClassStudents(classId, null, true);
-            var ethnicities = SchoolLocator.EthnicityService.GetAll();
+            
+            var classStudents = SchoolLocator.StudentService.GetClassStudentsDetails(classId, true);
 
             var panoramaViewData = ClassPanoramaViewData.Create(classDetails, standardizedTestDetails,
-                panorama, gradingScale, classStudents, selectedStudents, ethnicities, Context.NowSchoolTime);
+                panorama, gradingScale, classStudents, selectedStudents, Context.NowSchoolTime);
 
             panoramaViewData.FilterSettings = ClassProfilePanoramaSettingsViewData.Create(settings);
 
@@ -172,6 +177,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult SavePanoramaSettings(int classId, ClassProfilePanoramaSetting setting)
         {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
             if (setting.SchoolYearIds == null || setting.SchoolYearIds.Count == 0)
                 throw new ChalkableException("School years is required parameter");
 
@@ -182,9 +190,14 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult RestorePanoramaSettings(int classId)
         {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
             var settings = SchoolLocator.PanoramaSettingsService.Restore<ClassProfilePanoramaSetting>(classId);
             return Json(ClassProfilePanoramaSettingsViewData.Create(settings));
         }
+
+
 
     }
 }

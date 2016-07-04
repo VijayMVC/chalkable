@@ -81,12 +81,13 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<AnnouncementApplication>(new DbQuery (sql, ps));
         }
 
-        public IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, int? teacherId, Guid appId, int schoolYear)
+        public IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, int? teacherId, int? adminId, Guid appId, int schoolYear)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
             {
                 {"@teacherId", teacherId},
                 {"@studentId", studentId},
+                {"@adminId", adminId},
                 {"@schoolYearId", schoolYear},
                 {"@appId", appId}
             };

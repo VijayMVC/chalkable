@@ -13,11 +13,12 @@ From
 Where
 	Student.id = @id
 
-Select
-	PersonEthnicity.*
-From 
-	PersonEthnicity
-Where 
-	PersonEthnicity.PersonRef = @id
+Select * From PersonEthnicity Where PersonEthnicity.PersonRef = @id
+
+Select * From PersonLanguage Where PersonLanguage.PersonRef = @id
+
+Select * From PersonNationality Where PersonNationality.PersonRef = @id
+
+Select * From StudentSchool Where StudentRef = @id
 
 GO

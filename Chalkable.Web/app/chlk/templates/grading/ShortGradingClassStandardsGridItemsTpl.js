@@ -33,13 +33,6 @@ NAMESPACE('chlk.templates.grading', function () {
 
             chlk.models.id.ClassId, 'classId',
 
-            Array, function getGradingItemsOrdered() {
-                Assert(Array.isArray(this.gradingItems));
-                return (this.gradingItems || []).sort(function (_1, _2) {
-                    return _1.standard.name < _2.standard.name ? -1 : _1.standard.name > _2.standard.name ? 1 : 0;
-                });
-            },
-
             String, function displayGrade(grade){
                 if(isNaN(parseFloat(grade)))
                     return grade;

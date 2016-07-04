@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod, IList<AnnouncementComplex> anns, IList<StudentDetails> students)
+        private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod, IList<AnnouncementComplex> anns, IList<Student> students)
         {
             var gradeBook = new ChalkableGradeBook
             {
@@ -106,7 +106,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         private IList<AnnouncementDetails> PrepareAnnounceemntDetailsForGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod
-            , IList<AnnouncementComplex> anns, IList<StudentDetails> students, bool inludeWithdrawnStudent)
+            , IList<AnnouncementComplex> anns, IList<Student> students, bool inludeWithdrawnStudent)
         {
             var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
                                                            && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();

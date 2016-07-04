@@ -15,12 +15,12 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
         public string Summary { get; set; }
 
-        protected StudentDisciplineSummaryViewData(StudentDetails student, IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
+        protected StudentDisciplineSummaryViewData(Student student, IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
         {
             Student = StudentProfileViewData.Create(student, customAlerts, healthConditions);
         }
 
-        public static StudentDisciplineSummaryViewData Create(StudentDetails student, IList<InfractionSummaryInfo> infractionsSummary
+        public static StudentDisciplineSummaryViewData Create(Student student, IList<InfractionSummaryInfo> infractionsSummary
             , GradingPeriod currentGradingPeriod, IList<GradingPeriod> gradingPeriods, IList<StudentCustomAlertDetail> customAlerts
             , IList<StudentHealthCondition> healthConditions)
         {

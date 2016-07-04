@@ -87,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             StudentSchoolStorage.Delete(studentSchools);
         }
 
-        public StudentDetails GetById(int id, int schoolYearId)
+        public Student GetById(int id, int schoolYearId)
         {
             var student = StudentStorage.GetById(id);
             var isEnrolled = ServiceLocator.SchoolYearService.GetStudentAssignments().Any(x => x.StudentRef == id
@@ -95,15 +95,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return BuildStudentDetailsData(student, !isEnrolled);
         }
 
-
-        private IList<StudentDetails> PrepareStudentListDetailsData(IEnumerable<Student> students, IDictionary<int, bool> stWithDrawDic)
+        private IList<Student> PrepareStudentListDetailsData(IEnumerable<Student> students, IDictionary<int, bool> stWithDrawDic)
         {
             return students.Select(s => BuildStudentDetailsData(s, stWithDrawDic.ContainsKey(s.Id) ? stWithDrawDic[s.Id] : default(bool?))).ToList();
         }
 
-        public static StudentDetails BuildStudentDetailsData(Student student, bool? isWithdrawn)
+        public static Student BuildStudentDetailsData(Student student, bool? isWithdrawn)
         {
-            return new StudentDetails
+            return new Student
             {
                 Id = student.Id,
                 FirstName = student.FirstName,
@@ -124,7 +123,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<StudentDetails> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
+        public IList<Student> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null)
         {
             var students = StudentStorage.GetAll();
             var stWithDrawDictionary = ServiceLocator.ClassService.GetClassPersons(null, classId, isEnrolled, markingPeriodId)
@@ -133,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return PrepareStudentListDetailsData(students, stWithDrawDictionary);
         }
 
-        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName,
+        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName,
             int start, int count, int? markingPeriod)
         {
             var students = StudentStorage.GetAll().AsEnumerable();
@@ -163,10 +162,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     stWithDrawDic.Add(student.Id, !isEnrolled);
                 else stWithDrawDic[student.Id] = !isEnrolled;
             }
-            return new PaginatedList<StudentDetails>(PrepareStudentListDetailsData(res, stWithDrawDic), start / count, count);
+            return new PaginatedList<Student>(PrepareStudentListDetailsData(res, stWithDrawDic), start / count, count);
         }
         
-        public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
+        public IList<Student> GetTeacherStudents(int teacherId, int schoolYearId)
         {
             var students = StudentStorage.GetAll();
             var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
@@ -184,7 +183,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return StudentHealthConditionStorage.GetStudentHealthConditions(studentId);
         }
 
-        public StudentDetails GetStudentDetails(int studentId, int schoolYearId)
+        public Student GetStudentDetails(int studentId, int schoolYearId)
         {
             var student = StudentStorage.GetById(studentId);
             var isEnrolled = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).IsStudentEnrolled(studentId, schoolYearId);
@@ -283,6 +282,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public StudentPanoramaInfo Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null)
         {
             throw new NotImplementedException();
         }

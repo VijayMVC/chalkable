@@ -205,6 +205,7 @@
     <Compile Include="Model\SeatingChartInfo.cs" />
     <Compile Include="Model\ShortClassInfo.cs" />
     <Compile Include="Model\StudentCommentInfo.cs" />
+    <Compile Include="Model\StudentDetailsInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />
     <Compile Include="Model\StudentPanorama\StudentAbsenceInfo.cs" />
     <Compile Include="Model\StudentPanorama\StudentInfractionInfo.cs" />

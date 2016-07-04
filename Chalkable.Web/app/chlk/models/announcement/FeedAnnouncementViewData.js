@@ -10,6 +10,7 @@ REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.announcement.AdminAnnouncementRecipient');
 REQUIRE('chlk.models.announcement.CategoryViewData');
+REQUIRE('chlk.models.announcement.StudentAnnouncementApplicationMeta');
 
 REQUIRE('chlk.models.announcement.Announcement');
 
@@ -101,9 +102,15 @@ NAMESPACE('chlk.models.announcement', function () {
                     }, this);
                     this.autoGradeApps = autoGradeApps;
                 }
+
+                this.studentsAnnApplicationMeta = SJX.fromArrayOfDeserializables(raw.studentsannouncementapplicationmeta,
+                    chlk.models.announcement.StudentAnnouncementApplicationMeta);
+
+                console.log(raw.studentsannouncementapplicationmeta);
+                console.log(this.studentsAnnApplicationMeta);
             },
 
-
+            ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
             String, 'recipientIds',
             Boolean, 'imported',
             Boolean, 'inGallery',

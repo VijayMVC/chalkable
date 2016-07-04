@@ -25,7 +25,7 @@ namespace Chalkable.Web.Models
         public bool IsDailyAttendancePeriod { get; set; }
 
         public static AttendanceSeatingChartViewData Create(SeatingChartInfo seatingChart
-            , IList<StudentClassAttendanceOldViewData> classAttendance, IList<StudentDetails> students)
+            , IList<StudentClassAttendanceOldViewData> classAttendance, IList<Student> students)
         {
             var res = new AttendanceSeatingChartViewData
                 {

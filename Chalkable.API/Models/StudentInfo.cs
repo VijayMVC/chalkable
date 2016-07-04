@@ -17,9 +17,6 @@ namespace Chalkable.API.Models
         [JsonProperty("gradelevel")]
         public GradeLevelInfo GradeLevel { get; set; }
 
-        [JsonProperty("gradelevels")]
-        public List<GradeLevelInfo>  GradeLevels { get; set; }
-
         [JsonProperty("age")]
         public int Age { get; set; }
 
@@ -48,6 +45,15 @@ namespace Chalkable.API.Models
         public int SchoolId { get; set; }
         
         [JsonProperty("role")]
-        public CoreRole Role { get; set; }        
+        public CoreRole Role { get; set; }
+
+        [JsonProperty("ishispanic")]
+        public bool IsHispanic { get; set; }
+
+        [JsonProperty("ethnicity")]
+        public Ethnicity Ethnicity { get; set; }
+
+        [JsonProperty("isiepactive")]
+        public bool SpecialEducation { get; set; }
     }
 }

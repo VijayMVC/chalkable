@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
@@ -58,10 +59,7 @@ namespace Chalkable.Web.Controllers
             {
                 var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
                 if (assessement != null && assessement.HasDistrictAdminSettings && !allApps.Exists(x => x.Id == assessement.Id))
-                {
-                    //var hasMyApp = MasterLocator.ApplicationService.HasMyApps(assessement);
-                    allApps.Add(BaseApplicationViewData.Create(assessement));
-                }
+                    allApps.Add(BaseApplicationViewData.Create(assessement));               
             }
             else
             {
@@ -75,6 +73,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult PanoramaSettings()
         {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
             var courseTypes = SchoolLocator.CourseTypeService.GetList(true);
             var settings = SchoolLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
             return Json(AdminPanoramaSettingsViewData.Create(settings, courseTypes));
@@ -83,6 +84,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult SavePanoramaSettings(AdminPanoramaSettings settings)
         {
+            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+                throw new ChalkableSecurityException("You are not allowed to change panorama settings");
+
             settings = settings ?? SchoolLocator.PanoramaSettingsService.GetDefaultSettings<AdminPanoramaSettings>();
             SchoolLocator.PanoramaSettingsService.Save(settings, null);
             return Json(true);

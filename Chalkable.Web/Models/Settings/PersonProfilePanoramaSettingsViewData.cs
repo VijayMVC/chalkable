@@ -11,10 +11,7 @@ namespace Chalkable.Web.Models.Settings
         }
         public static PersonProfilePanoramaSettingViewData Create(StudentProfilePanoramaSetting settings)
         {
-            return new PersonProfilePanoramaSettingViewData(settings)
-            {
-                CourseType = settings.CourseTypeId
-            };
+            return new PersonProfilePanoramaSettingViewData(settings);
         }
     }
 }

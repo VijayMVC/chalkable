@@ -11,6 +11,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public bool CanEditLogin { get; set; }
         public string Email { get; set; }
         public int? Age { get; set; }
+        public EthnicityViewData Ethnicity { get; set; }
         [SensitiveData]
         public IList<PhoneViewData> Phones { get; set; }
         [SensitiveData]
@@ -19,20 +20,29 @@ namespace Chalkable.Web.Models.PersonViewDatas
         protected PersonInfoViewData(PersonDetails person) : base(person)
         {
             Email = person.Email;
-            int? age = null;
-            if (person.BirthDate.HasValue)
-                age = DateTime.UtcNow.Year - person.BirthDate.Value.Year; //TODO: think about
 
-            Age = age;
+            if (person.BirthDate.HasValue)
+                Age = CalculateAge(person.BirthDate.Value);
+
             if (person.Address != null)
-                Address = AddressViewData.Create(person.Address);    
-            if(person.Phones != null)
-                Phones = PhoneViewData.Create(person.Phones);
+                Address = AddressViewData.Create(person.Address);
+
+            if (person.Phones != null)
+                Phones = PhoneViewData.Create(person.Phones);           
         }
+
         public static PersonInfoViewData Create(PersonDetails person)
         {
             return new PersonInfoViewData(person);
         }
-        
+
+        private static int CalculateAge(DateTime birthDate)
+        {
+            var age = 0;
+            while ((birthDate = birthDate.AddYears(1)) < DateTime.UtcNow)
+                age++;
+
+            return age;
+        }   
     }
 }

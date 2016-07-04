@@ -55,5 +55,17 @@ namespace Chalkable.API.Endpoints
             var url = "/Application/AnnouncementApplicationRecipients.json";
             return await Connector.Get<IList<AnnouncementApplicationRecipient>>($"{url}?studentId={studentId}");
         }
+
+        public async Task<bool> UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text)
+        {
+            var url = "/Application/UpdateStudentAnnouncementApplicationMeta.json";
+
+            var nvc = HttpUtility.ParseQueryString(string.Empty);
+            nvc.Add("announcementApplicationId", announcementApplicationId.ToString());
+            nvc.Add("studentId", studentId.ToString());
+            nvc.Add("text", text);
+
+            return await Connector.Post<bool>(url, nvc);
+        }
     }
 }

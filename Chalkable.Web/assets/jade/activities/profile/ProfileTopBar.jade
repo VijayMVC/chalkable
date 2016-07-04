@@ -34,8 +34,6 @@ mixin StudentProfileSummaryInfo(tpl, pressedLinkName)
                             |&nbsp;- #{user.getRoomName()}
                 #glance-block-panel.right-block.panel-block
                     .glance-container
-                        if user.getRankBox() && user.isAbleViewTranscript()
-                            +GlanceBox(null, null, tpl.buildRankGlanceBoxData())
                         if user.getAttendanceBox()
                             +GlanceBox(null, null, tpl.buildAttendanceGlanceBoxData(), null, null, true, true)
                         if user.getDisciplineBox()

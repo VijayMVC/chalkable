@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models.GradingViewData
         public IEnumerable<StudentGradings> GradesByGradingPeriod { get; set; } 
         public StudentViewData Student { get; set; }
         
-        public static StudentProfileGradingSummaryViewData Create(StudentDetails student, StudentGrading gradingSummary, GradingPeriod currentGradingPeriod
+        public static StudentProfileGradingSummaryViewData Create(Student student, StudentGrading gradingSummary, GradingPeriod currentGradingPeriod
             , IList<GradingPeriod> gradingPeriods, IList<Class> classes, IEnumerable<int> enrolledClassIds
             , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
         {

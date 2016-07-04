@@ -2,6 +2,7 @@ REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.templates.announcement.StudentAnnouncementsTpl');
+REQUIRE('chlk.models.announcement.StudentAnnouncementApplicationMeta');
 
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -18,6 +19,8 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
+
+            ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
 
             chlk.models.people.User, 'owner',
 
@@ -52,6 +55,15 @@ NAMESPACE('chlk.templates.announcement', function () {
                     return null;
 
                 return student.grade;
+            },
+
+            String, function getStudentAnnApplicationMetaText(announcementApplicationId, studentId){
+                var texts = (this.getStudentsAnnApplicationMeta() || []).filter(function(item){
+                    return item.getAnnouncementApplicationId().valueOf() == announcementApplicationId.valueOf()
+                            && item.getStudentId().valueOf() == studentId.valueOf();
+                });
+
+                return texts[0] ? texts[0].getText() : '';
             }
         ])
 });

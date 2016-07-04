@@ -13,7 +13,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<Ethnicity> models);
         void Edit(IList<Ethnicity> models);
         void Delete(IList<Ethnicity> models);
-        IList<Ethnicity> GetAll(); 
+        IList<Ethnicity> GetAll();
+        Ethnicity GetById(int id);
 
         void AddPersonEthnicities(IList<PersonEthnicity> models);
         void EditPersonEthnicities(IList<PersonEthnicity> models);
@@ -44,6 +45,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<Ethnicity> GetAll()
         {
             return DoRead(u => new DataAccessBase<Ethnicity>(u).GetAll());
+        }
+
+        public Ethnicity GetById(int id)
+        {
+            return DoRead(u => new DataAccessBase<Ethnicity, int>(u).GetById(id));
         }
 
         public void AddPersonEthnicities(IList<PersonEthnicity> models)

@@ -8,7 +8,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
         public IList<StudentCustomAlertDetailViewData> StudentCustomAlertDetails { get; set; }
 
-        protected StudentProfileViewData(StudentDetails student, IList<StudentCustomAlertDetail> customAlerts,
+        protected StudentProfileViewData(Student student, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions) : base(student)
         {
             if(healthConditions != null)
@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(customAlerts);
         }
 
-        public static StudentProfileViewData Create(StudentDetails student, IList<StudentCustomAlertDetail> customAlerts,
+        public static StudentProfileViewData Create(Student student, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions)
         {
             return new StudentProfileViewData(student, customAlerts, healthConditions);

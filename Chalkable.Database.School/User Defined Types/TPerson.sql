@@ -10,5 +10,7 @@
     [LastMailNotification] DATETIME2 (7)  NULL,
     [AddressRef]           INT            NULL,
     [PhotoModifiedDate]    DATETIME2 (7)  NULL,
-    [UserId]               INT            NULL);
+    [UserId]               INT            NULL,
+	[IsHispanic]		   BIT
+);
 

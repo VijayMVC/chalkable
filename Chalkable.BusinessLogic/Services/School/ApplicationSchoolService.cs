@@ -25,6 +25,8 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum type);
         IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying);
         IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId);
+        void UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text);
+        IList<StudentAnnouncementApplicationMeta> GetStudentAnnouncementApplicationMetaByAnnouncementId(int announcementId);
     }
 
     public class ApplicationSchoolService : SchoolServiceBase, IApplicationSchoolService
@@ -210,8 +212,35 @@ namespace Chalkable.BusinessLogic.Services.School
                     studentId = Context.PersonId;
             }
             var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
+            var adminId = Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? Context.PersonId : null;
             var schoolYear = Context.SchoolYearId.Value;
-            return DoRead(u => new AnnouncementApplicationDataAccess(u).GetAnnouncementApplicationRecipients(studentId, teacherId, appId, schoolYear));
+            return DoRead(u => new AnnouncementApplicationDataAccess(u).GetAnnouncementApplicationRecipients(studentId, teacherId, adminId, appId, schoolYear));
+        }
+
+        public void UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text)
+        {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+            using (var uow = Update())
+            {
+                var da = new StudentAnnouncementApplicationMetaDataAccess(uow);
+                var stAnnAppMeta = new StudentAnnouncementApplicationMeta
+                {
+                    AnnouncementApplicationRef = announcementApplicationId,
+                    StudentRef = studentId,
+                    Text = text ?? ""
+                };
+                if (da.Exists(announcementApplicationId, studentId))
+                    da.Update(stAnnAppMeta);
+                else
+                    da.Insert(stAnnAppMeta);
+                uow.Commit();
+            }
+        }
+
+        public IList<StudentAnnouncementApplicationMeta> GetStudentAnnouncementApplicationMetaByAnnouncementId(int announcementId)
+        {
+            return DoRead(uow => new StudentAnnouncementApplicationMetaDataAccess(uow).GetStudentAnnouncementApplicationMetaByAnnouncementId(announcementId));
         }
     }
 }

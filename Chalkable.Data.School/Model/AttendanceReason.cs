@@ -16,10 +16,7 @@ namespace Chalkable.Data.School.Model
         public bool IsActive { get; set; }
 
         [NotDbFieldAttr]
-        public bool IsExcused
-        {
-            get { return Category == "E"; }
-        }
+        public bool IsExcused => Category == "E";
 
         [NotDbFieldAttr]
         public IList<AttendanceLevelReason> AttendanceLevelReasons { get; set; } 
