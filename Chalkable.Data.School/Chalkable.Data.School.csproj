@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C5753C2A-F2BC-4F96-846B-548FC67191B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chalkable.Data.School</RootNamespace>
+    <AssemblyName>Chalkable.Data.School</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'STAGING|AnyCPU'">
+    <OutputPath>bin\STAGING\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.7.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.1.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=6.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccess\AlphaGradeDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementAssignedAttributeDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementAttributeDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementCommentDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\AdminAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementForAdminDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForAdminDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForStudentDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForTeacherDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanDataAccess.cs" />
+    <Compile Include="DataAccess\AttachmentDataAccess.cs" />
+    <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementAttachmentDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\BaseAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementQnADataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementForStudentDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementForTeacherDataAccess.cs" />
+    <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
+    <Compile Include="DataAccess\ClassTeacherDataAccess.cs" />
+    <Compile Include="DataAccess\GradingPeriodDataAccess.cs" />
+    <Compile Include="DataAccess\GradingScaleDataAccess.cs" />
+    <Compile Include="DataAccess\GroupDataAccess.cs" />
+    <Compile Include="DataAccess\LPGalleryCategoryDataAccess.cs" />
+    <Compile Include="DataAccess\NotificationDataAccess.cs" />
+    <Compile Include="DataAccess\DbMaintenanceDataAccess.cs" />
+    <Compile Include="DataAccess\PersonSettingDataAccess.cs" />
+    <Compile Include="DataAccess\ScheduleDataAccess.cs" />
+    <Compile Include="DataAccess\ScheduledTimeSlotVariationDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
+    <Compile Include="DataAccess\StaffDataAccess.cs" />
+    <Compile Include="DataAccess\StandardDataAccess.cs" />
+    <Compile Include="DataAccess\DateDataAccess.cs" />
+    <Compile Include="DataAccess\ClassDataAccess.cs" />
+    <Compile Include="DataAccess\ClassPeriodDataAccess.cs" />
+    <Compile Include="DataAccess\ClassPersonDataAccess.cs" />
+    <Compile Include="DataAccess\MarkingPeriodClassDataAccess.cs" />
+    <Compile Include="DataAccess\MarkingPeriodDataAccess.cs" />
+    <Compile Include="DataAccess\PeriodDataAccess.cs" />
+    <Compile Include="DataAccess\PersonDataAccess.cs" />
+    <Compile Include="DataAccess\PhoneDataAccess.cs" />
+    <Compile Include="DataAccess\PrivateMessageDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
+    <Compile Include="DataAccess\StandardizedTestDataAccess.cs" />
+    <Compile Include="DataAccess\StudentContactDataAccess.cs" />
+    <Compile Include="DataAccess\StudentDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementRecipientDataAccess.cs" />
+    <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
+    <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\AnnouncementComment.cs" />
+    <Compile Include="Model\AnnouncementRecipientData.cs" />
+    <Compile Include="Model\AlphaGrade.cs" />
+    <Compile Include="Model\AlternateScore.cs" />
+    <Compile Include="Model\Announcements\AdminAnnouncement.cs" />
+    <Compile Include="Model\Announcements\Announcement.cs" />
+    <Compile Include="Model\AnnouncementApplication.cs" />
+    <Compile Include="Model\AnnouncementAttachment.cs" />
+    <Compile Include="Model\AnnouncementAttribute.cs" />
+    <Compile Include="Model\AnnouncementQnA.cs" />
+    <Compile Include="Model\AnnouncementGroup.cs" />
+    <Compile Include="Model\AnnouncementStandard.cs" />
+    <Compile Include="Model\Announcements\InputClassAnnouncement.cs" />
+    <Compile Include="Model\Announcements\ClassAnnouncement.cs" />
+    <Compile Include="Model\Announcements\LessonPlan.cs" />
+    <Compile Include="Model\Announcements\SisActivityCopyResult.cs" />
+    <Compile Include="Model\Announcements\SupplementalAnnouncement.cs" />
+    <Compile Include="Model\Attachment.cs" />
+    <Compile Include="Model\AttendanceMonth.cs" />
+    <Compile Include="Model\AttendanceReason.cs" />
+    <Compile Include="Model\AutoGrade.cs" />
+    <Compile Include="Model\BellSchedule.cs" />
+    <Compile Include="Model\Class.cs" />
+    <Compile Include="Model\ClassAnnouncementType.cs" />
+    <Compile Include="Model\ClassDiscipline.cs" />
+    <Compile Include="Model\ClassPeriod.cs" />
+    <Compile Include="Model\ClassPerson.cs" />
+    <Compile Include="Model\ClassroomOption.cs" />
+    <Compile Include="Model\ClassStandard.cs" />
+    <Compile Include="Model\ClassTeacher.cs" />
+    <Compile Include="Model\ContactRelationship.cs" />
+    <Compile Include="Model\AnnouncementAssignedAttribute.cs" />
+    <Compile Include="Model\Country.cs" />
+    <Compile Include="Model\CourseType.cs" />
+    <Compile Include="Model\Date.cs" />
+    <Compile Include="Model\Ethnicity.cs" />
+    <Compile Include="Model\Homeroom.cs" />
+    <Compile Include="Model\Language.cs" />
+    <Compile Include="Model\LPGalleryCategory.cs" />
+    <Compile Include="Model\PersonEthnicity.cs" />
+    <Compile Include="Model\PersonLanguage.cs" />
+    <Compile Include="Model\PersonNationality.cs" />
+    <Compile Include="Model\PersonSetting.cs" />
+    <Compile Include="Model\StandardizedTest.cs" />
+    <Compile Include="Model\StudentCustomAlertDetail.cs" />
+    <Compile Include="Model\SupplementalAnnouncementRecipient.cs" />
+    <Compile Include="Model\SystemSetting.cs" />
+    <Compile Include="Model\GradedItem.cs" />
+    <Compile Include="Model\GradingComment.cs" />
+    <Compile Include="Model\GradingScale.cs" />
+    <Compile Include="Model\GradingScaleRange.cs" />
+    <Compile Include="Model\Group.cs" />
+    <Compile Include="Model\Infraction.cs" />
+    <Compile Include="Model\GradeLevel.cs" />
+    <Compile Include="Model\GradingPeriod.cs" />
+    <Compile Include="Model\GradingStatistic.cs" />
+    <Compile Include="Model\GradingStyle.cs" />
+    <Compile Include="Model\MarkingPeriod.cs" />
+    <Compile Include="Model\MarkingPeriodClass.cs" />
+    <Compile Include="Model\Notification.cs" />
+    <Compile Include="Model\Period.cs" />
+    <Compile Include="Model\Person.cs" />
+    <Compile Include="Model\PersonEmail.cs" />
+    <Compile Include="Model\Phone.cs" />
+    <Compile Include="Model\PracticeGrade.cs" />
+    <Compile Include="Model\PrivateMessage.cs" />
+    <Compile Include="Model\Room.cs" />
+    <Compile Include="Model\DayType.cs" />
+    <Compile Include="Model\ScheduledTimeSlot.cs" />
+    <Compile Include="Model\ScheduledTimeSlotVariation.cs" />
+    <Compile Include="Model\ScheduleItem.cs" />
+    <Compile Include="Model\School.cs" />
+    <Compile Include="Model\SchoolOption.cs" />
+    <Compile Include="Model\SchoolPerson.cs" />
+    <Compile Include="Model\SchoolYear.cs" />
+    <Compile Include="Model\SectionTimeSlotVariation.cs" />
+    <Compile Include="Model\Staff.cs" />
+    <Compile Include="Model\StaffSchool.cs" />
+    <Compile Include="Model\Standard.cs" />
+    <Compile Include="Model\StandardSubject.cs" />
+    <Compile Include="Model\StartupData.cs" />
+    <Compile Include="Model\Student.cs" />
+    <Compile Include="Model\StudentAnnouncement.cs" />
+    <Compile Include="Model\StudentContact.cs" />
+    <Compile Include="Model\StudentSchool.cs" />
+    <Compile Include="Model\StudentSchoolYear.cs" />
+    <Compile Include="Model\StudentParent.cs" />
+    <Compile Include="Model\SyncVersion.cs" />
+    <Compile Include="Model\UserSchool.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
+      <Project>{ceb50b03-b84b-4194-9bee-f1a2ebd17686}</Project>
+      <Name>Chalkable.Data.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

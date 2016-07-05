@@ -1,0 +1,16 @@
+-var standardizedTests = self.getStandardizedTests() || []
+-var testId = self.getStandardizedTestId()
+
+.filter-block
+    +Select('filterType')(data-placeholder = 'Select Standardized Test').filter-type-select.filter-select
+        +Option('', '')
+        each item  in standardizedTests
+            if item.getComponents().length && item.getScoreTypes().length
+                +Option(item.getId().valueOf(), item.getDisplayName(), item.getId() == testId)
+    .additional-filters.i-b
+        if testId
+            -var model = new chlk.models.controls.PanoramaFilterBlockViewData(standardizedTests, testId, self.getScoreTypeId(), self.getComponentId())
+            +RenderWith(model, chlk.templates.controls.PanoramaFilterSelectsTpl)
+    .delete-btn.right
+    .v-line
+

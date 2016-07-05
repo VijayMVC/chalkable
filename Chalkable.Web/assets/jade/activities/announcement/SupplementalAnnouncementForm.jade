@@ -1,0 +1,170 @@
+mixin SupplementalAnnouncementTypeToolBar(types, announcement)
+    -var classId = announcement.getSupplementalAnnouncementData().getClassId()
+    .action-bar
+        .items
+            if !announcement.getState().valueOf()
+                +ActionLink('announcement', 'addClassAnnouncement', classId).item.announcement-type-button.no-save Assignment
+                +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-buttonLesson.no-save Lesson Plan
+            +ActionLink('announcement', 'supplementalAnnouncement', classId).item.announcement-type-button.pressed Supplemental
+
+-var topData = self.getTopData()
+-var announcement = self.getAnnouncement()
+-var announcementItem = announcement && announcement.getSupplementalAnnouncementData()
+-var topItems = topData.getTopItems()
+-var classId = announcement && announcementItem.getClassId() ? announcementItem.getClassId().valueOf() : null
+-var state = announcement && announcement.getState().valueOf()
+-var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+-var userRole = self.getUserRole()
+-var editable = !state.valueOf()
+
+.announcement-form.loader-container
+    if announcement && announcementItem.getClassId()
+        h2.page-title= announcementItem.getClassName()
+        .loader
+        +ActionForm('announcement', 'onSupplementalAnnouncementSave')(onlySubmitValidate=true).no-working
+            +ClassesToolBar(topData, null, null, null, state)(pressAfterClick=!state)
+            .not-transparent(class=(classId ? '' : 'x-hidden'))
+                +SupplementalAnnouncementTypeToolBar(types, announcement)
+            .ann-form-container(class=(state || classId ? '' : 'x-hidden'))
+                +Hidden('announcementTypeId', announcementItem && announcementItem.getAnnouncementTypeId())#announcement-type-id
+                +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
+                +Hidden('id', announcement.getId().valueOf())
+                +Hidden('isedit', !!state)(data-isedit = !!state).is-edit
+                +Hidden('classId', classId)
+                +Hidden('recipientIds').recipient-ids
+                +Hidden('type', announcement.getType())
+
+                -var standards = announcement.getStandards() || []
+                -var needStandardsBlock = (standards.length > 0 || announcement.isCanAddStandard())
+                .table.top-table
+                    .left-block
+                        .left-block-container
+                            .title-block-container
+                                +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+                                +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
+                            .left-top-container
+                                .recipients-container
+                                    label(for="students").main-lable Recipients:
+                                    .types-select-cnt
+                                        -var recipientIds = announcementItem.getRecipients() ? announcementItem.getRecipients().map(function(item){return item.getId()}) : (announcementItem.getSelectedStudentsIds() || [])
+                                        +Select('students')(multiple, data-placeholder="Assign To...").recipients-select
+                                            each student in self.getStudents() || []
+                                                +Option(student.getId().valueOf(), student.getFullName(), recipientIds.indexOf(student.getId()) > -1)
+                                .categories-container
+                                    label(for="type-select").main-lable Category:
+                                    .types-select-cnt
+                                        -var typeId = self.getSelectedTypeId()
+                                        +Select('typeid')#type-select
+                                            each item in types
+                                                if item.getId().valueOf()
+                                                    +Option(item.getId(), item.getName(), typeId== item.getId())(
+                                                    data-typeid=item.getId(),
+                                                    data-typename=item.getName()
+                                                    )
+                    .right-block
+                        .h-1
+                .table
+                    .left-block(class=needStandardsBlock ? 'with-standards' : '')
+                        .left-block-container
+                            +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
+                            if needStandardsBlock
+                                .add-standards-container
+                                    .add-standards
+                                        .standards-list
+                                            +RenderWith(self.prepareStandardsListData(), chlk.templates.standard.AnnouncementStandardsTpl)(
+                                                userRole = userRole
+                                                studyCenterEnabled = self.isStudyCenterEnabled()
+                                                ableToRemoveStandard=announcement.isAbleToRemoveStandard()
+                                            )
+
+                            .drawer-icon
+                        .drop-down-container.popup-bubble.top
+                        input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+                        if !state
+                            input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+                    .right-block
+                        .date-picker-container
+                            label(for="expiresdate") Due Date
+                            +DatePicker('expiresdate', announcementItem.getExpiresDate())(
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true,
+                                    //inCurrentMp: true
+                                    dateRanges: self.getClassScheduleDateRanges()
+                                },
+                                data-value=announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().format('mm/dd/yy') : ''
+                                placeholder=Msg.Due_date,
+                                class='validate[required]'
+                            )#expiresdate.supplemental-date
+                            .calendar-mark ?
+                        .advanced-options
+                            .check-box-container
+                                label(for="ann-hidefromstudents")=Msg.Hide_from_Students
+                                +SlideCheckbox('hidefromstudents', announcementItem.isHiddenFromStudents(), false)(
+                                    data-tooltip-timeout=500,
+                                    data-tooltip=Msg.Hide_From_Student_Tooltip_Message
+                                )
+                            .check-box-container
+                                lable(for="ann-discussionenabled")=Msg.Class_Discussion
+                                +SlideCheckbox('discussionenabled', announcementItem.isDiscussionEnabled(), false, false)(
+                                    data-isdiscussionenabled=announcementItem.isDiscussionEnabled(),
+                                    data-tooltip-timeout=500,
+                                ).discussion-option
+                            .check-box-container
+                                lable(for="ann-previewcommentsenabled")=Msg.Preview_Comments
+                                +SlideCheckbox('previewcommentsenabled', announcementItem.isPreviewCommentsEnabled(), false, !announcementItem.isDiscussionEnabled())(
+                                    data-tooltip-timeout=500,
+                                ).preview-comments-option
+                            .check-box-container
+                                lable(for="ann-requirecommentsenabled")=Msg.Require_Comments
+                                +SlideCheckbox('requirecommentsenabled', announcementItem.isRequireCommentsEnabled(), false, !announcementItem.isDiscussionEnabled())(
+                                    data-tooltip-timeout=500,
+                                ).require-comments-option
+
+                .apps-attachments-bock.attachments-and-applications
+                    ann = announcement
+                    -ann.setNeedButtons(true)
+                    -ann.setNeedDeleteButton(true)
+                    +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
+                        userRole = userRole,
+                        studyCenterEnabled = self.isStudyCenterEnabled()
+                    )
+                .attributes-block
+                    -var attributesList = announcement.getAttributesListViewData();
+                    -attributesList.setReadOnly(false)
+                    +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
+                        userRole = userRole
+                    )
+                .attach-btn-area.attributes-attach-area(class = announcement.getAnnouncementAttributes().length ? '' : 'x-hidden')
+                    +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Add Attribute
+                        span.plus +
+                .apps-with-recommended-contents
+
+                .suggested-apps
+                    if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
+                        +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
+                .bottom-block
+                    +Button()(
+                        type="submit",
+                        name="submitType",
+                        value=state ? "submitOnEdit" : "submit"
+                    ).special-button.blue-button.submit-btn.submit-announcement.big-button
+                        =(state ? Msg.Save : Msg.Submit)
+                    if state
+                        +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName(), announcement.getType())
+                            +Button()(type="button").special-button.red-button.big-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
+                    else
+                        +ActionLink('announcement', 'discard', announcement.getType()).grey-link.not-blue.add-loader-btn=Msg.Discard
+
+            if !classId
+                if topItems.length
+                    .choose-class
+                else
+                    .no-items-text There are no classes for current term
+    else
+        +ClassesToolBar(topData, 'announcement', 'add')
+        if !classId
+            if topItems.length
+                .choose-class
+            else
+                .no-items-text There are no classes for current term
