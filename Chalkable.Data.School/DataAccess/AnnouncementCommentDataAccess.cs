@@ -53,15 +53,7 @@ namespace Chalkable.Data.School.DataAccess
             var res = GetList(announcementId, callerId, roleId);
             return BuildCommentsTree(res);
         }
-
-        public void Update(AnnouncementComment entity, bool updateSubComments)
-        {
-            var toUpdate = new List<AnnouncementComment> {entity};
-            if (updateSubComments) 
-                toUpdate.AddRange(entity.AllSubComments);
-            base.Update(toUpdate);
-        }
-
+        
         private static IList<AnnouncementComment> ReadCommentsResult(DbDataReader reader)
         {
             var comments = new List<AnnouncementComment>();

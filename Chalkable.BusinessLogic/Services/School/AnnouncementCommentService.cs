@@ -105,8 +105,16 @@ namespace Chalkable.BusinessLogic.Services.School
             var comment = GetById(commentId);
             EnsureInDeleteAccess(comment);
 
-            comment.Hidden = hidden;          
-            DoUpdate(u=> new AnnouncementCommentDataAccess(u).Update(comment, true));
+            comment.Hidden = hidden;
+            var toUpdate = new List<AnnouncementComment> {comment};
+            var allSubComments = comment.AllSubComments;
+            if (allSubComments != null)
+                foreach (var subComment in allSubComments)
+                {
+                    subComment.Hidden = true;
+                    toUpdate.Add(subComment);
+                }
+            DoUpdate(u=> new AnnouncementCommentDataAccess(u).Update(toUpdate));
         }
         public void Delete(int commentId)
         {
@@ -115,7 +123,15 @@ namespace Chalkable.BusinessLogic.Services.School
             EnsureInDeleteAccess(comment);
 
             comment.Deleted = true;
-            DoUpdate(u => new AnnouncementCommentDataAccess(u).Update(comment, true));
+            var toUpdate = new List<AnnouncementComment> { comment };
+            var allSubComments = comment.AllSubComments;
+            if (allSubComments != null)
+                foreach (var subComment in allSubComments)
+                {
+                    subComment.Deleted = true;
+                    toUpdate.Add(subComment);
+                }
+            DoUpdate(u => new AnnouncementCommentDataAccess(u).Update(toUpdate));
         }
 
         public AnnouncementComment GetById(int commentId)
