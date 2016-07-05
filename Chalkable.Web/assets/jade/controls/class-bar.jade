@@ -1,0 +1,59 @@
+mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+   -var currentClassId = topBarData.getSelectedItemId() || chlk.models.id.ClassId('')
+   -var data = self.prepareModel(topBarData, includeAll)
+   -attributes.selectedGroupId = data.currentMPId
+   -attributes.selectedItemId = currentClassId
+   -attributes.fixedElementMargin = true
+   -attributes.fixedElementWidth = true
+   -self.processAttrs(attributes)
+   +LeftRightToolbar()(attributes).classes-bar.with-groups.main-classes-bar
+      each group in data
+         .group(data-id = group.id, data-name = group.title)
+            each item in group.items
+               -var id = item.getId()
+               -var params = [id].concat(prepend_ || [])
+               if controller_
+                  +ActionLinkWithPrepend(controller_, action_, params)(
+                     class = id == currentClassId ? "pressed " : "",
+                     data-item-id = id
+                  ).class-button.button-link.item
+                     if showAlerts_
+                        .alerts-icon.small(data-id=id)
+                     +ClassImg(item, 45, 80)
+                     SPAN.text-container= item.getName()
+               else
+                  BUTTON(
+                     classId = id,
+                     class = id == currentClassId ? "pressed " : "",
+                     type = disabled_ ? "button" : "submit",
+                     data-default-announcement-type-id = item.getDefaultAnnouncementTypeId(),
+                     name="submitType",
+                     value="save",
+                     data-tooltip=id ? item.getFullClassName() : '',
+                     data-item-id = id
+                  ).class-button.validate-skip.item
+                     +ClassImg(item, 45, 80).avatar
+                     SPAN.text-container= item.getName()
+               //if id && id.valueOf()
+                   .chat-bubble.absolute.top
+                       .popup-item
+                           .name.i-b.v-m Name:
+                           .value.i-b.v-m=item.getDescription()
+                       .popup-item
+                           .name.i-b.v-m Number:
+                           .value.i-b.v-m=item.getClassNumber()
+                       .popup-item
+                           .name.i-b.v-m Room:
+                           .value.i-b.v-m=item.getRoom() && item.getRoom().getDescription()
+                       .popup-item
+                           .name.i-b.v-m Period:
+                           .value.i-b.v-m=item.getPeriods() && item.getPeriods().join(', ')
+                       .popup-item
+                           .name.i-b.v-m Days:
+                           .value.i-b.v-m=item.getDayTypes() && item.getDayTypes().join(', ')
+
+mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+   +doRender_(false, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)(attributes)
+
+mixin ClassesToolBarWithAll(topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+   +doRender_(true, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)(attributes)
