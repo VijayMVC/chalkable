@@ -1,18 +1,18 @@
 -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
--var currentUser = self.getCurrentUser()
+-var isTeacherOrAdmin=self.getUserRole().isTeacher() || self.getUserRole().isAdmin()
+-var currentUser = self.isAnnOwner() ? self.getAnnouncementQnAs()[0].getQuestion().getPerson() : self.getOwner()
 .announcement-chat-cnt
     .close-btn
     .current-user-block
         .current-user-image.i-b.v-m
             +PersonImg(currentUser, 80)
         .current-user-name.i-b.v-m=currentUser.getDisplayName()
-    -var isTeacherOrAdmin=self.getUserRole().isTeacher() || self.getUserRole().isAdmin()
     .qnas-cnt
         .qnas-cnt-2
             .qnas-cnt-3
                 each item, i in self.getAnnouncementQnAs()
                     -questionMsg = item.getQuestion().getMessage()
-                    .table.row(class = (((i > 0) && !self.isMoreClicked() && isTeacherOrAdmin) ? 'hidden-item ' : '') + (isTeacherOrAdmin ? 'not-owner ' : 'owner ')).question
+                    .table.row(class = isTeacherOrAdmin ? 'not-owner ' : 'owner ').question
                         .avatar-block-left
                             +PersonImg(item.getQuestion().getPerson(), 47)
                         .qna
@@ -34,7 +34,7 @@
 
                     -var answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
                     if answered || isTeacherOrAdmin
-                        .table.row(class = (((i > 0) && !self.isMoreClicked() && isTeacherOrAdmin) ? 'hidden- item ' : '' ) + (isTeacherOrAdmin ? 'owner ' : 'not-owner ') )
+                        .table.row(class = isTeacherOrAdmin ? 'owner' : 'not-owner')
                             -var hideEdit = answered || !self.isAnnOwner()
                             -var answerMsg=''
                             .avatar-block-left
@@ -58,18 +58,10 @@
                                             if answered && self.isAnnOwner() && isAnswerOwner
                                                 a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
                                     br
-                                    +Button()(type="submit").edit-answer-btn.blue-button.submit-btn= (answerMsg ? Msg.Update.toUpperCase() : 'ANSWER')
-
-                if self.getAnnouncementQnAs().length > 1 && !self.isMoreClicked() && isTeacherOrAdmin
-                    .show-more Show more
+                                    //+Button()(type="submit").edit-answer-btn.blue-button.submit-btn= (answerMsg ? Msg.Update.toUpperCase() : 'ANSWER')
 
                 if showPostQuestion
-                    .table.row
-                        .avatar-block-left
-                            +PersonImg(self.getCurrentUser(), 47)
-                        .qna
-                            +ActionForm('announcement', 'askQuestion')
-                                input(type="hidden",name="announcementId", value=self.getId())
-                                .chat-bubble
-                                    input(type="text", name="question", class="validate[required]", placeholder="Ask question")
-                                +Button()(type="submit").blue-button.edit-question-btn Ask
+                    .bottom-block
+                        +ActionForm('announcement', 'askQuestion')
+                            +Hidden("announcementId", self.getId())
+                            TEXTAREA(type="text", name="question", class="validate[required]", placeholder="Type your question here").add-question

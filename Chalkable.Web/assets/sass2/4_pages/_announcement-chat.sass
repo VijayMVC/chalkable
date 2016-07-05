@@ -15,6 +15,22 @@ BODY.chat
   margin: 7px
   height: 100%
 
+  .bottom-block
+    background: #e1dfd8
+    padding: 15px 13px 10px
+
+    TEXTAREA
+      height: 60px
+      width: 327px
+      padding: 9px 17px
+      font-style: italic
+
+  INPUT.edit-answer-input
+    min-height: 22px
+
+  .formError
+    margin-left: -100px !important
+
   .qna
     position: relative
     width: 268px
@@ -36,9 +52,9 @@ BODY.chat
       margin: 0
 
     .chat-bubble + span
-      font-size: 10px
-      line-height: 40px
-      color: #9c9c9c
+      font-size: 13px
+      line-height: 31px
+      color: #54534e
       font-style: italic
 
     .submit-btn
@@ -87,12 +103,17 @@ BODY.chat
 
   .row
     padding-left: 31px
+    margin-bottom: 17px
 
     .avatar-block-left
       padding-right: 13px
 
     .chat-bubble
       padding: 9px 13px
+      box-shadow: 0 0 10px 0px #bbb
+
+      INPUT
+        min-height: 22px
 
       &::before
         +transform(none)
