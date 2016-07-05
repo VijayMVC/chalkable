@@ -304,6 +304,7 @@
     <Compile Include="Services\School\AlternateScoreService.cs" />
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
     <Compile Include="Services\School\AnnouncementAttributeService.cs" />
+    <Compile Include="Services\School\AnnouncementCommentService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\Announcements\AdminAnnouncementService.cs" />
     <Compile Include="Services\School\Announcements\AnnouncementFetchService.cs" />

@@ -38,6 +38,7 @@ REQUIRE('chlk.activities.announcement.AddNewCategoryDialog');
 REQUIRE('chlk.activities.announcement.FileCabinetDialog');
 REQUIRE('chlk.activities.announcement.AttachFilesDialog');
 REQUIRE('chlk.activities.announcement.AnnouncementImportDialog');
+REQUIRE('chlk.activities.announcement.AnnouncementChatPage');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
@@ -1307,9 +1308,16 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .then(function(announcement){
                     this.cacheAnnouncementType(announcement.getType());
-                    return this.prepareAnnouncementForView(announcement);
+                    announcement = this.prepareAnnouncementForView(announcement);
+                    this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, announcement);
+                    return announcement;
                 }, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
+        },
+
+        function chatAction() {
+            var announcement = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
+            return this.StaticView(chlk.activities.announcement.AnnouncementChatPage, ria.async.DeferredData(announcement, 100));
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
@@ -2145,6 +2153,9 @@ NAMESPACE('chlk.controllers', function (){
                     model.isHiddenFromStudents(),
                     model.getAssignedAttributesPostData(),
                     model.getRecipientIds(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled(),
                     model.getAnnouncementTypeId()
                 )
         },
@@ -2213,6 +2224,9 @@ NAMESPACE('chlk.controllers', function (){
                     model.isHiddenFromStudents(),
                     model.getAssignedAttributesPostData(),
                     model.getRecipientIds(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled(),
                     model.getAnnouncementTypeId()
                 )
                 .attach(this.validateResponse_());
@@ -2372,6 +2386,9 @@ NAMESPACE('chlk.controllers', function (){
                     model.getEndDate(),
                     model.isHiddenFromStudents(),
                     model.getAssignedAttributesPostData(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled(),
                     model.isInGallery()
 
                 )
@@ -2394,6 +2411,10 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setAppsWithContent(model.getAppsWithContent());
                         announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
                         announcement.setState(model.getState());
+                        announcement.setDiscussionEnabled(model.isDiscussionEnabled());
+                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled());
+                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled());
+
                         //announcement.setClassName(model.getLessonPlanData().getClassName());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
@@ -2437,6 +2458,9 @@ NAMESPACE('chlk.controllers', function (){
                         model.getEndDate(),
                         model.isHiddenFromStudents(),
                         model.getAssignedAttributesPostData(),
+                        model.isDiscussionEnabled(),
+                        model.isPreviewCommentsEnabled(),
+                        model.isRequireCommentsEnabled(),
                         model.isInGallery()) : ria.async.BREAK;
                 }, this)
                 .attach(this.validateResponse_());
@@ -2518,7 +2542,10 @@ NAMESPACE('chlk.controllers', function (){
                     model.getWeightMultiplier(),
                     model.isHiddenFromStudents(),
                     model.isAbleDropStudentScore(),
-                    model.getAssignedAttributesPostData()
+                    model.getAssignedAttributesPostData(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled()
                 )
                 .attach(this.validateResponse_())
                 .then(function(model){
@@ -2539,6 +2566,10 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setAppsWithContent(model.getAppsWithContent());
                         announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
                         announcement.setState(model.getState());
+                        announcement.setDiscussionEnabled(model.isDiscussionEnabled())
+                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled())
+                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled())
+
                         //announcement.setClassName(model.getClassAnnouncementData().getClassName());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
@@ -2570,7 +2601,10 @@ NAMESPACE('chlk.controllers', function (){
                         model.isHiddenFromStudents(),
                         model.isAbleDropStudentScore(),
                         model.isGradable(),
-                        model.getAssignedAttributesPostData()
+                        model.getAssignedAttributesPostData(),
+                        model.isDiscussionEnabled(),
+                        model.isPreviewCommentsEnabled(),
+                        model.isRequireCommentsEnabled()
                     )
                     .attach(this.validateResponse_());
             else

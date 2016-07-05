@@ -5,6 +5,7 @@ REQUIRE('chlk.models.announcement.AnnouncementAttributeViewData');
 REQUIRE('chlk.models.announcement.AnnouncementAttributeListViewData');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
+REQUIRE('chlk.models.announcement.AnnouncementComment');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.Application');
@@ -37,6 +38,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
                 this.announcementAssignedAttrs = SJX.fromValue(raw.announcementAssignedAttrs, String);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
+                this.announcementComments = SJX.fromArrayOfDeserializables(raw.announcementcomments, chlk.models.announcement.AnnouncementComment);
                 this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
                 this.studentAnnouncements = SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.StudentAnnouncements);
@@ -128,6 +130,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'grade',
             String, 'comment',
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+            ArrayOf(chlk.models.announcement.AnnouncementComment), 'announcementComments',
 
             Number, 'announcementTypeId',
             ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',

@@ -283,6 +283,7 @@
     <Compile Include="Controllers\AcademicBenchmarkController.cs" />
     <Compile Include="Controllers\AdminDistrictController.cs" />
     <Compile Include="Controllers\AnnouncementAttachmentController.cs" />
+    <Compile Include="Controllers\AnnouncementCommentController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\AdminAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\ClassAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\LessonPlanController.cs" />
@@ -360,6 +361,7 @@
     <Compile Include="Models\AlphaGradeViewData.cs" />
     <Compile Include="Models\AlternateScoreViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
+    <Compile Include="Models\AnnouncementCommentViewData.cs" />
     <Compile Include="Models\AnnouncementQnAViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AdminAnnouncementRecipientViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AdminAnnouncementViewData.cs" />

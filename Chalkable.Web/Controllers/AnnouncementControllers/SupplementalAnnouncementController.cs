@@ -29,19 +29,21 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         [AuthorizationFilter("Teacher")]
         public ActionResult Save(int supplementalAnnouncementPlanId, int classId, string title, string content, int? classAnnouncementTypeId,
-            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds)
+            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds,
+            bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Supplemental, supplementalAnnouncementPlanId, attributes);
-            var res = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, classAnnouncementTypeId, title, content, expiresDate, !hideFromStudents, recipientsIds);
+            var res = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, classAnnouncementTypeId, title, content, expiresDate, !hideFromStudents, recipientsIds, discussionEnabled, previewCommentsEnabled, requireCommentsEnabled);
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
         [AuthorizationFilter("Teacher")]
         public ActionResult Submit(int supplementalAnnouncementPlanId, int classId, string title, string content, int? classAnnouncementTypeId,
-            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds)
+            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds,
+            bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Supplemental, supplementalAnnouncementPlanId, attributes);
-            var ann = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, classAnnouncementTypeId, title, content, expiresDate, !hideFromStudents, recipientsIds);
+            var ann = SchoolLocator.SupplementalAnnouncementService.Edit(supplementalAnnouncementPlanId, classId, classAnnouncementTypeId, title, content, expiresDate, !hideFromStudents, recipientsIds, discussionEnabled, previewCommentsEnabled, requireCommentsEnabled);
             SchoolLocator.SupplementalAnnouncementService.Submit(supplementalAnnouncementPlanId);
             var supplementalAnnouncement = SchoolLocator.SupplementalAnnouncementService.GetSupplementalAnnouncementById(supplementalAnnouncementPlanId);
             //TODO delete old drafts 

@@ -39,6 +39,9 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.personId = SJX.fromValue(raw.personid, chlk.models.id.SchoolPersonId);
                 this.personName = SJX.fromValue(raw.personname, String);
                 this.personGender = SJX.fromValue(raw.schoolpersongender, String);
+                this.discussionEnabled = SJX.fromValue(raw.discussionenabled, Boolean);
+                this.previewCommentsEnabled = SJX.fromValue(raw.previewcommentsenabled, Boolean);
+                this.requireCommentsEnabled = SJX.fromValue(raw.requirecommentsenabled, Boolean);
             },
 
             chlk.models.id.AnnouncementId, 'id',
@@ -51,6 +54,9 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.SchoolPersonId, 'personId',
             String, 'personName',
             String, 'personGender',
-            Boolean, 'annOwner'
+            Boolean, 'annOwner',
+            Boolean, 'discussionEnabled',
+            Boolean, 'previewCommentsEnabled',
+            Boolean, 'requireCommentsEnabled'
         ]);
 });
