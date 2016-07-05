@@ -1,0 +1,23 @@
+-var comments = self.getAnnouncementComments()
+.post-comment-block
+    +ActionForm('announcementcomment', 'post')
+        +Hidden('attachmentId').attachment-id
+        +Hidden('announcementid', self.getId())
+        TEXTAREA(name="text").comment-value.new-comment
+        BUTTON().green-button Post
+        BUTTON(type="button").comment-cancel Cancel
+.comments-block
+    h3.comments-count=  comments.length + (comments.length == 1 ? ' comment' : ' comments')
+    each comment in comments
+        .table.row
+            .avatar-block-left
+                +PersonImg(comment.getOwner(), 64)
+            .qna
+                input(type="hidden",name="id", value=comment.getId())
+                input(type="hidden",name="announcementid", value=self.getId())
+                +Hidden('attachmentId').attachment-id
+                .chat-bubble
+                    .top-block
+                        SPAN.time=comment.getPostedDate().getDate().format('M d, Y @ h:i:s A')
+                    p.edit-question-text= comment.getText()
+                    input(type="text",name="text", value=comment.getText()).edit-question-input.x-hidden

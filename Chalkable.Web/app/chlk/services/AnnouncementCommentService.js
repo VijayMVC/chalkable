@@ -56,7 +56,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function setHidden(announcementId, announcementCommentId, hidden){
                 return this.post('AnnouncementComment/SetHidden', ArrayOf(chlk.models.announcement.AnnouncementComment),{
                     announcementCommentId: announcementCommentId.valueOf(),
-                    hidden: hidden,
+                    hidden: hidden
                 })
                 .then(function(comments){
                     var res = this.getAnnouncement_(announcementId);
@@ -66,11 +66,10 @@ NAMESPACE('chlk.services', function () {
             },
 
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId]],
-            ria.async.Future, function deleteComment(announcementId, announcementCommentId){
+            [[chlk.models.id.AnnouncementCommentId]],
+            ria.async.Future, function deleteComment(announcementCommentId){
                 return this.post('AnnouncementComment/Delete', ArrayOf(chlk.models.announcement.AnnouncementComment),{
-                    announcementCommentId: announcementCommentId.valueOf(),
-                    hidden: hidden,
+                    announcementCommentId: announcementCommentId.valueOf()
                 })
                 .then(function(comments){
                     var res = this.getAnnouncement_(announcementId);
@@ -83,7 +82,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.announcement.AnnouncementComment]],
             Object, function editCacheAnnouncementComments_(comment){
                 var result =this.getAnnouncement_(comment.getAnnouncementId());
-                var selectedComment = this.findComment_(comment.getId(), result.getAnnouncementComments())
+                var selectedComment = this.findComment_(comment.getId(), result.getAnnouncementComments());
                 selectedComment = comment;
                 return result;
             },
@@ -93,7 +92,7 @@ NAMESPACE('chlk.services', function () {
                     for(var i = 0; i < comments.length; i++){
                         if(comments[i].getId() == id)
                             return comments[i];
-                        var res = findComment_(id, comments[i].getSubComments());
+                        var res =this.findComment_(id, comments[i].getSubComments());
                         if(res)
                             return res;
                     }
