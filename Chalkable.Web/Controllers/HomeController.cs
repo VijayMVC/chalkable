@@ -332,7 +332,9 @@ namespace Chalkable.Web.Controllers
 
             var schoolOption = startupData.SchoolOption;
             PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
-            var classesList = classes.Select(ClassViewData.Create).ToList();
+
+            var dayTypes = SchoolLocator.DayTypeService.GetDayTypes(classes.SelectMany(x => x.ClassPeriods, (a, b) => b.DayTypeRef).ToList());
+            var classesList = ClassComplexViewData.Create(classes, startupData.Rooms, dayTypes).ToList();
             PrepareJsonData(classesList, ViewConstants.CLASSES);
 
             ProcessMethodAndCallTime(() => PrepareClassesAdvancedData(startupData), timeCallBuilder, "Retrieving Activity Category from Inow");

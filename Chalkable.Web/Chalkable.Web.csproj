@@ -386,6 +386,7 @@
     <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassComplexViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\ClassPanoramaViewData.cs" />
     <Compile Include="Models\EthnicityViewData.cs" />
