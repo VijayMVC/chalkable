@@ -10,6 +10,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [chlk.activities.lib.BodyClass('chat')],
         [ria.mvc.ActivityGroup('ChatPopUp')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementQnAs)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'AnnouncementChatPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.DomEventBind('click', '.close-btn')],
@@ -17,6 +18,39 @@ NAMESPACE('chlk.activities.announcement', function () {
             Boolean, function onCloseBtnClick(node, event) {
                 this.close();
                 return false;
+            },
+
+            [ria.mvc.DomEventBind('keypress', '.add-question')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function enterClick(node, event){
+                if(event.which == ria.dom.Keys.ENTER.valueOf()){
+                    node.parent('form').trigger('submit');
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.edit-answer-link, .edit-question-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function editAnswerClick(node, event){
+                var row = node.parent('.row');
+                row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeOut(function(){
+                    var node = row.find('.edit-answer-input, .edit-question-input');
+                    node.fadeIn(function(){
+                        node.trigger('focus');
+                    });
+                });
+            },
+
+            [ria.mvc.DomEventBind('blur', '.edit-answer-input, .edit-question-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function blurAnswer(node, event){
+                var row = node.parent('.row');
+                //if(node.getValue() && !row.find('.edit-answer-btn:visible, .edit-question-btn:visible').exists())
+                    row.find('.edit-answer-input, .edit-question-input').fadeOut(function(){
+                        setTimeout(function(){
+                            row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeIn();
+                        }, 500);
+
+                    });
             }
 
         ]

@@ -74,12 +74,8 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna')],
             VOID, function updateQnAPart(tpl, model, msg_) {
-                tpl.options({
-                    moreClicked: this.isMoreClicked() || false
-                });
-                var container = this.dom.find('.questions-and-answers');
-                container.empty();
-                tpl.renderTo(container);
+                var len = model.getAnnouncementQnAs().length;
+                this.dom.find('.chat-link').setHTML(len.toString());
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
@@ -123,16 +119,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     block.find('.grade-input').setValue(grade);
                 });
                 return false;
-            },
-
-            [ria.mvc.DomEventBind('click', '.show-more')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function showMoreQnAsClick(node, event){
-                node.parent('.questions-and-answers')
-                    .find('.hidden-item')
-                    .removeClass('hidden-item');
-                node.remove();
-                this.setMoreClicked(true);
             },
 
             [ria.mvc.DomEventBind('click', '.decline-auto-grades')],
@@ -254,42 +240,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.hideDropDown();
                 row.find('.grade-triangle').removeClass('down');
                 //this.setGrade(row.find('.grade-input'));
-            },
-
-            [ria.mvc.DomEventBind('click', '.edit-answer-link, .edit-question-link')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function editAnswerClick(node, event){
-                var row = node.parent('.row');
-                row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeOut(function(){
-                    var node = row.find('.edit-answer-input, .edit-question-input');
-                    node.fadeIn(function(){
-                        node.trigger('focus');
-                    });
-                });
-            },
-
-            [ria.mvc.DomEventBind('keyup', '.edit-answer-input, .edit-question-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function editAnswerKeyUp(node, event){
-                var row = node.parent('.row');
-                var button = row.find('.edit-answer-btn, .edit-question-btn');
-                if(row.find('.edit-answer-text, .edit-question-text').getHTML() == node.getValue())
-                    button.fadeOut();
-                else
-                    button.fadeIn();
-            },
-
-            [ria.mvc.DomEventBind('blur', '.edit-answer-input, .edit-question-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function blurAnswer(node, event){
-                var row = node.parent('.row');
-                if(node.getValue() && !row.find('.edit-answer-btn:visible, .edit-question-btn:visible').exists())
-                    row.find('.edit-answer-input, .edit-answer-btn, .edit-question-input, .edit-question-btn').fadeOut(function(){
-                        setTimeout(function(){
-                            row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeIn();
-                        }, 500);
-
-                    });
             },
 
             [ria.mvc.DomEventBind('click', '.comment-text')],
