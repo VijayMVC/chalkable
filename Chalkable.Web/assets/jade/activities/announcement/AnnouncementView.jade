@@ -40,7 +40,7 @@ mixin Glue_()
         studentAnnouncements = studentAnnouncementsInfo.getItems()
 
     .buttons
-        if self.getUserRole().isTeacher() || self.getUserRole().isAdmin() && adminAnnouncement
+        if self.getUserRole().isTeacher() && self.isAnnOwner() || self.getUserRole().isAdmin() && adminAnnouncement
             +ActionButton('announcement', 'edit', self.getId(), self.getType())(class = self.isAbleEdit() ? "" : "disabled").right Edit
         +ActionButton('feed', 'doToList').back-button Back
         .clear-fix
