@@ -23,18 +23,6 @@
 	[AltStudentNumber]	      NVARCHAR(128)  NULL,
 	[StudentNumber]		      NVARCHAR(128)	 NULL,
 	[OriginalEnrollmentDate]  DATETIME2(7)	 NULL,
-	[Section504Qualification] NVARCHAR(128) NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Student_Person] FOREIGN KEY ([Id]) REFERENCES [dbo].[Person] ([Id])
 );
-
-/* public string GenderDescriptor { get; set; }
-        public string Section504Qualification { get; set; }
-        public bool IsHomeless { get; set; }
-        public bool IsImmigrant { get; set; }
-        public int? LimitedEnglishRef { get; set; }
-        public bool IsForeignExchange { get; set; }
-        public string StateIdNumber { get; set; }
-        public string AltStudentNumber { get; set; }
-        public string StudentNumber { get; set; }
-        public DateTime? OriginalEnrollmentDate { get; set; }*/
