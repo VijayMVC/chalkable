@@ -2686,9 +2686,13 @@ NAMESPACE('chlk.controllers', function (){
         function askQuestionAction(model) {
             var ann = this.announcementQnAService
                 .askQuestion(model.getAnnouncementId(), model.getQuestion())
+                .then(function(model){
+                    this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementViewPage, model, 'update-qna');
+                    return model;
+                }, this)
                 .attach(this.validateResponse_())
                 .catchError(this.handleNoAnnouncementException_, this);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
+            return this.UpdateView(chlk.activities.announcement.AnnouncementChatPage, ann);
         },
 
         [[chlk.models.announcement.QnAForm]],
@@ -2720,7 +2724,11 @@ NAMESPACE('chlk.controllers', function (){
                     .deleteQnA(model.getAnnouncementId(), model.getId())
                     .catchError(this.handleNoAnnouncementException_, this)
                     .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
+            ann = ann.then(function(model){
+                this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementViewPage, model, 'update-qna');
+                return model;
+            }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementChatPage, ann);
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
