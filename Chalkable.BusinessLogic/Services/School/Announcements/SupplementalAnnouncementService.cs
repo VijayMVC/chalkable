@@ -236,7 +236,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 if (previewCommentsEnabled && discussionEnabled && !suppAnnouncement.PreviewCommentsEnabled)
                 {
                     suppAnnouncement.PreviewCommentsEnabled = true;
-                    new AnnouncementCommentDataAccess(uow).HideAll(suppAnnouncement.Id);
+                    if(suppAnnouncement.IsSubmitted)
+                        new AnnouncementCommentDataAccess(uow).HideAll(suppAnnouncement.Id);
                 }
                 
                 if (suppAnnouncement.IsSubmitted)
