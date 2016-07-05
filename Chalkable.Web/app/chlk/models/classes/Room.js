@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.classes', function () {
 
     /** @class chlk.models.classes.Room*/
     CLASS(
-        'Room', [
+        'Room', IMPLEMENTS(ria.serialize.IDeserializable), [
             VOID, function deserialize(raw){
                 this.building = SJX.fromValue(raw.building, Object);
                 this.capacity = SJX.fromValue(raw.capacity, Number);
