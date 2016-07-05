@@ -9,6 +9,7 @@ REQUIRE('chlk.templates.standard.AddStandardsTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementViewStandardsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.announcement.admin.AdminAnnouncementGradingTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementDiscussionTpl');
 
 REQUIRE('chlk.models.grading.AlertsEnum');
 
@@ -52,6 +53,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.row.selected .grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForStudentAttachments, 'update-attachments',
             '#attachments-block', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementDiscussionTpl, 'discussion', '.discussion-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementView, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         //make base page with accordeon support
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
@@ -998,6 +1000,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!model.getItems().length)
                         this.dom.find('#people-list-form').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
                 }.bind(this), 1);
+            },
+
+            // ------- DISCUSSION --------
+
+            [ria.mvc.DomEventBind('click', '.comment-cancel')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function commentCancelClick(node, event){
+                node.parent('form').find('.comment-value').setValue('');
             }
         ]
     );

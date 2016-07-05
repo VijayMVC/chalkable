@@ -1,5 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AnnouncementCommentService');
+REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 
 
 NAMESPACE('chlk.controllers', function (){
@@ -15,19 +16,11 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton],
         [[chlk.models.announcement.AnnouncementComment]],
         function postAction(model){
-            this.accountService
-                .changePassword(model.getOldPassword(), model.getNewPassword(), model.getNewPasswordConfirmation())
-                .attach(this.validateResponse_())
-                .then(function(success){
-                    return success
-                        ? this.ShowAlertBox('Password was changed.')
-                        : this.ShowAlertBox('Change password failed.');
-                }, this)
-                .then(function () {
-                    return this.BackgroundNavigate('settings', 'dashboard', []);
-                }, this);
+            var res = this.announcementCommentService
+                .postComment(model.getAnnouncementId(), model.getText(), model.getAttachmentId())
+                .attach(this.validateResponse_());
 
-            return null;
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'discussion');
         }
 
     ])

@@ -30,7 +30,7 @@
                                         input(type="hidden",name="answer", value=(item.getAnswer() && item.getAnswer().getMessage()))
                                         a(href='javascript:', name='edit-question-link').edit-question-link=Msg.Edit
                                 br
-                                +Button()(type="submit").special-button.blue-button.submit-btn.edit-question-btn=Msg.Update.toUpperCase()
+                                //+Button()(type="submit").special-button.blue-button.submit-btn.edit-question-btn=Msg.Update.toUpperCase()
 
                     -var answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
                     if answered || isTeacherOrAdmin
