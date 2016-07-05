@@ -763,7 +763,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.AnnouncementForm]],
         function getSupplementalAnnouncementFromModel_(model) {
             var classId = model.getAnnouncement().getSupplementalAnnouncementData().getClassId();
-            return this.studentService.getStudents(classId, null, true, true, 0, 999)
+            return this.studentService.getStudents(classId, null, true, true, 0, 999,true)
                 .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                     throw error;
@@ -876,7 +876,7 @@ NAMESPACE('chlk.controllers', function (){
             var result =
                 ria.async.wait(
                     this.supplementalAnnouncementService.create(classId_, date_),
-                    this.studentService.getStudents(classId_, null, true, true, 0, 999)
+                    this.studentService.getStudents(classId_, null, true, true, 0, 999, true)
                 )
                 .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);

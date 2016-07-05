@@ -20,15 +20,16 @@ NAMESPACE('chlk.services', function () {
 
             ArrayOf(chlk.models.grading.ClassPersonGradingInfo), 'classPersonGradingInfo',
 
-            [[chlk.models.id.ClassId, String, Boolean, Boolean, Number, Number]],
-            ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, byLastName_, start_, count_) {
+            [[chlk.models.id.ClassId, String, Boolean, Boolean, Number, Number, Boolean]],
+            ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, byLastName_, start_, count_, enrolledOnly_) {
                 return this.getPaginatedList('Student/GetStudents.json', chlk.models.people.User, {
                     classId: classId_ && classId_.valueOf(),
                     filter: filter_,
                     myStudentsOnly: myStudentsOnly_,
                     byLastName: byLastName_,
                     start: start_,
-                    count: count_
+                    count: count_,
+                    enrolledOnly: enrolledOnly_
                 });
             },
 
