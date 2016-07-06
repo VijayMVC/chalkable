@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Chalkable.StiConnector.Connectors.Model;
@@ -41,9 +42,9 @@ namespace Chalkable.StiConnector.Connectors
             //return Post<IList<ActivityCategory>, int[]>(string.Format("{0}/sections/activities/categories", BaseUrl), sectionIds.ToArray());
         }
 
-        public IList<ActivityCategoryCopyResult> CopyCategories(int fromSectionId, ActivityCategoryCopyOption copyOption)
+        public void CopyCategories(int fromSectionId, ActivityCategoryCopyOption copyOption)
         {
-            return Post<IList<ActivityCategoryCopyResult>, ActivityCategoryCopyOption>($"{BaseUrl}sections/{fromSectionId}/activities/categories/copy", copyOption);
+            Post<Object, ActivityCategoryCopyOption>($"{BaseUrl}sections/{fromSectionId}/activities/categories/copy", copyOption);
         } 
    }
 }

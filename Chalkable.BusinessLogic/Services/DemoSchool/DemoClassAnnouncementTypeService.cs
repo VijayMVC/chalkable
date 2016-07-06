@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }).ToList();
         }
 
-        public IList<int> CopyClassAnnouncementTypes(int fromClassId, int toClassId, IList<int> typeIds)
+        public void CopyClassAnnouncementTypes(int fromClassId, int toClassId, IList<int> typeIds)
         {
             throw new System.NotImplementedException();
         }

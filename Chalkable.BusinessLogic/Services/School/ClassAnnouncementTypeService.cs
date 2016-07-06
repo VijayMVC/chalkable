@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName);
 
         IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses);
-        IList<int> CopyClassAnnouncementTypes(int fromClassId, int toClassId, IList<int> typeIds);
+        void CopyClassAnnouncementTypes(int fromClassId, int toClassId, IList<int> typeIds);
     }
 
     public class ClassClassAnnouncementTypeService : SisConnectedService, IClassAnnouncementTypeService
@@ -150,11 +150,10 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public IList<int> CopyClassAnnouncementTypes(int fromClassId, int toClassId, IList<int> typeIds)
+        public void CopyClassAnnouncementTypes(int fromClassId, int toClassId, IList<int> typeIds)
         {
             var copyOption = new ActivityCategoryCopyOption { CategoryIds = typeIds, CopyToSectionIds = new [] {toClassId}};
-            var copyResult = ConnectorLocator.ActivityCategoryConnnector.CopyCategories(fromClassId, copyOption);
-            return copyResult.Where(x=>x.NewCategoryId.HasValue).Select(x => x.NewCategoryId.Value).ToList();
+            ConnectorLocator.ActivityCategoryConnnector.CopyCategories(fromClassId, copyOption);
         }
     }
 }

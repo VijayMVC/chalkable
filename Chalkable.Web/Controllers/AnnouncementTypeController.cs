@@ -82,8 +82,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Copy(int fromClassId, int toClassId, IntList classAnnouncementTypeIds)
         {
-            var newTypeIds = SchoolLocator.ClassAnnouncementTypeService.CopyClassAnnouncementTypes(fromClassId, toClassId, classAnnouncementTypeIds);
-            return Json(newTypeIds);
+            SchoolLocator.ClassAnnouncementTypeService.CopyClassAnnouncementTypes(fromClassId, toClassId, classAnnouncementTypeIds);
+            return Json(true);
         }
 
         public static IList<ClassAnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, int classId)
