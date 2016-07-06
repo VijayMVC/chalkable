@@ -92,7 +92,7 @@ NAMESPACE('chlk.models.people', function () {
 
             Boolean, function showAlerts(){
                 var res = this.isWithMedicalAlert() || this.isAllowedInetAccess()
-                    || this.getSpecialInstructions() || this.showSpedStatus() || (this.studentCustomAlertDetails.length != 0);
+                    || this.getSpecialInstructions() || this.showSpedStatus() || (this.getStudentCustomAlertDetails().length != 0);
                 return !!res;
             },
 
