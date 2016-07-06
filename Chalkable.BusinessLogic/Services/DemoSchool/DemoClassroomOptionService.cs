@@ -41,6 +41,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return GetClassOption(classroomOption.Id);
         }
 
+        public void CopyClassroomOption(int fromClassId, int toClassId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public ClassroomOption GetClassOption(int classId, bool useInowApi = false)
         {
             return ClassRoomOptionStorage.GetById(classId);

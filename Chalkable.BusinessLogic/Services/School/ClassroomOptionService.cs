@@ -12,6 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(IList<ClassroomOption> classroomOptions);
         ClassroomOption GetClassOption(int classId, bool useInowApi = false);
         ClassroomOption SetUpClassroomOption(ClassroomOption classroomOption);
+        void CopyClassroomOption(int fromClassId, int toClassId);
     }
 
     public class ClassroomOptionService : SisConnectedService, IClassroomOptionService
@@ -54,6 +55,11 @@ namespace Chalkable.BusinessLogic.Services.School
             ConnectorLocator.ClassroomOptionConnector.UpdateClassroomOption(inowClassroomOption.SectionId, inowClassroomOption);
             inowClassroomOption = ConnectorLocator.ClassroomOptionConnector.GetClassroomOption(inowClassroomOption.SectionId);
             return classroomOption;
+        }
+
+        public void CopyClassroomOption(int fromClassId, int toClassId)
+        {
+            ConnectorLocator.ClassroomOptionConnector.CopyClassroomOption(fromClassId, new[] {toClassId});
         }
 
         private ClassroomOption CreateClassroomOption(StiConnector.Connectors.Model.ClassroomOption stiClassoption)

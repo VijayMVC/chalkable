@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
@@ -74,13 +72,6 @@ namespace Chalkable.Web.Controllers
             return Json(ClassAnnouncementTypeViewData.Create(res));
         }
 
-        /*[AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult Delete(int classAnnouncementTypeId)
-        {
-            SchoolLocator.ClassAnnouncementTypeService.DeleteClassAnnouncmentType(classAnnouncementTypeId);
-            return Json(true);
-        }*/
-        
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Delete(IntList classAnnouncementTypeIds)
         {
