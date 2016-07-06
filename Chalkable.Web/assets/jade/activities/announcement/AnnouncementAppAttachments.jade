@@ -1,0 +1,61 @@
+mixin AnnouncementFormAttachmentItem(attachment, i)
+    .announcement-item.attachment
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId(), self.getModel().getType()).close-btn
+        .wrapper
+            if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+                A(href=attachment.getUrl()).download-link Download
+                .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+            else
+                +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
+                .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+                +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId(), self.getType()) Open
+
+mixin AnnouncementFormApplicationItem(app, i, assessmentAppId_)
+    viewUrl = app.getViewUrl()
+    appMode = chlk.models.apps.AppModes.VIEW
+    appUrl = app.getUrl()
+
+    -var isBanned = false
+
+    .announcement-item.application
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteApp', app.getId(), self.getModel().getType(), self.isDialog()).close-btn
+        .wrapper
+            +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
+            .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
+            -var isAssessment = assessmentAppId_ && assessmentAppId_ == app.getApplicationId()
+            +ActionButton('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned, null, self.getStandardsUrlComponents(), isAssessment) Open
+
+attachments = self.getAnnouncementAttachments() || []
+applications = self.getApplications() || []
+items = self.getSortedAppsAndAttachments();
+itemWithClass = self.getLessonPlanData() || self.getClassAnnouncementData()
+classId = itemWithClass && itemWithClass.getClassId()
+
++Hidden('attachments', self.getAttachments())
++Hidden('applicationsids', self.getApplicationsIds())
+if self.needButtons
+    .attach-btn-area
+        +ActionButton(
+            'announcement',
+            'attach',
+            self.getId(),
+            classId,
+            self.getModel().getAnnouncementTypeName(),
+            self.getModel().getType(),
+            self.getStandardsUrlComponents(),
+            self.isDialog()
+        )(type="button")#add-attachments.simple-gray-button Attach
+        +ActionLink('announcement', 'addAttribute', self.getId(), self.getModel().getType(), self.isDialog())(
+            class = (!self.getAnnouncementAttributes() || !self.getAnnouncementAttributes().length) ? '' : 'x-hidden'
+        ).attach-attribute-btn.main-attach-attribute-btn Add Attribute
+            span.plus +
+
+each item, i in items
+    if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
+        -console.log(self.getAssessmentApplicationId())
+        +AnnouncementFormApplicationItem(item, i, self.getAssessmentApplicationId())
+    else
+        if item.isTeachersAttachment() || self.getUserRole().isAdmin()
+            +AnnouncementFormAttachmentItem(item, i)
