@@ -39,6 +39,13 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'hidden',
             chlk.models.id.AttachmentId, 'attachmentId',
 
-            ArrayOf(SELF), 'subComments'
+            ArrayOf(SELF), 'subComments',
+
+            [[chlk.models.attachment.Attachment, chlk.models.id.AnnouncementCommentId]],
+            function $(attachment_, id_){
+                BASE();
+                attachment_ && this.setAttachment(attachment_);
+                id_ && this.setId(id_);
+            }
         ]);
 });

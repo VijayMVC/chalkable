@@ -10,6 +10,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementViewStandardsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.announcement.admin.AdminAnnouncementGradingTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementDiscussionTpl');
+REQUIRE('chlk.templates.LoadingImageTpl');
 
 REQUIRE('chlk.models.grading.AlertsEnum');
 
@@ -73,6 +74,21 @@ NAMESPACE('chlk.activities.announcement', function () {
             Boolean, 'moreClicked',
 
             Array, 'zeroPercentageScores',
+
+            [ria.mvc.PartialUpdateRule(null, 'file-for-comment')],
+            VOID, function updateCommentFile(tpl, model, msg_) {
+                var tpl = new chlk.templates.LoadingImageTpl();
+                var container, attachmentIdNode, attachment = model.getAttachment();
+                tpl.assign(attachment);
+                if(model.getId() && model.getId().valueOf()){
+
+                }else{
+                    container = this.dom.find('.img-cnt.new-comment');
+                    attachmentIdNode = this.dom.find('.attachment-id.new-comment')
+                }
+                tpl.renderTo(container.empty());
+                attachmentIdNode.setValue(attachment.getId().valueOf());
+            },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna')],
             VOID, function updateQnAPart(tpl, model, msg_) {
@@ -1007,7 +1023,10 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.comment-cancel')],
             [[ria.dom.Dom, ria.dom.Event]],
             function commentCancelClick(node, event){
-                node.parent('form').find('.comment-value').setValue('');
+                var form = node.parent('form');
+                form.find('.comment-value').setValue('');
+                form.find('.attachment-id').setValue('');
+                form.find('.img-cnt').setHTML('');
             }
         ]
     );

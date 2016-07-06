@@ -1,9 +1,17 @@
 -var comments = self.getAnnouncementComments()
 .post-comment-block
     +ActionForm('announcementcomment', 'post')
-        +Hidden('attachmentId').attachment-id
+        +Hidden('attachmentId').attachment-id.new-comment
         +Hidden('announcementid', self.getId())
-        TEXTAREA(name="text").comment-value.new-comment
+        .post-comment-text-block.relative
+            +TextArea(name="text", placeholder="Type your comment here").comment-value.new-comment
+            .img-cnt.new-comment
+            br
+            .simple-gray-button.download-link.file.new-comment-download Attach
+                +FileUpload('announcementcomment', 'uploadCommentAttachment')(
+                    dropAreaSelector = '.new-comment',
+                    value = 'Attach'
+                )#add-file-attachment.simple-gray-button
         BUTTON().green-button Post
         BUTTON(type="button").comment-cancel Cancel
 .comments-block
@@ -20,4 +28,6 @@
                     .top-block
                         SPAN.time=comment.getPostedDate().getDate().format('M d, Y @ h:i:s A')
                     p.edit-question-text= comment.getText()
-                    input(type="text",name="text", value=comment.getText()).edit-question-input.x-hidden
+                    if comment.getAttachment()
+                        .img-cnt
+                            +RenderWith(comment.getAttachment(), chlk.templates.LoadingImageTpl)

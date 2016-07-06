@@ -1296,6 +1296,8 @@ NAMESPACE('chlk.controllers', function (){
 
             this.cacheAnnouncement(announcement);
             announcement.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
+
+            this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
             return announcement;
         },
 
@@ -2848,5 +2850,28 @@ NAMESPACE('chlk.controllers', function (){
             this.showAttributesFilesUploadMsg_();
             return null;
         },
+
+        // ------------------ DISCUSSION ------------------------
+
+
+        function prepareCommentAttachment_(attachment, width_, height_){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
+                attachment.setThumbnailUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, width_ || 170, height_ || 110));
+                attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, null, null));
+            }
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
+                attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), true, null, null));
+            }
+        },
+
+        function prepareCommentsAttachments_(comments){
+            var that = this;
+            comments.forEach(function(comment){
+                if(comment.getAttachment())
+                    that.prepareCommentAttachment_(comment.getAttachment());
+                if(comment.getSubComments())
+                    that.prepareCommentsAttachments_(comment.getSubComments())
+            });
+        }
     ])
 });
