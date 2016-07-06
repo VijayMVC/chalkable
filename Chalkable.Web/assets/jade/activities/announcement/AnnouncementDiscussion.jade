@@ -1,33 +1,32 @@
--var comments = self.getAnnouncementComments()
-.post-comment-block
-    +ActionForm('announcementcomment', 'post')
-        +Hidden('attachmentId').attachment-id.new-comment
-        +Hidden('announcementid', self.getId())
+mixin PostCommentForm(announcementId, parentCommentId, commentId, attachment, text)
+    -attributes['data-id']=(commentId && commentId.valueOf()) || (parentCommentId && parentCommentId.valueOf())
+    +ActionForm('announcementcomment', 'post')(attributes).post-comment-form
+        +Hidden('attachmentId', attachment && attachment.getId()).attachment-id
+        +Hidden('announcementid', announcementId)
+        +Hidden('id', commentId)
+        +Hidden('parentcommentid', parentCommentId)
         .post-comment-text-block.relative
-            +TextArea(name="text", placeholder="Type your comment here").comment-value.new-comment
-            .img-cnt.new-comment
+            +TextArea(name="text", placeholder="Type your comment here").comment-value=text
+            if attachment
+                .img-cnt
+                    +RenderWith(attachment, chlk.templates.LoadingImageTpl)
+            else
+                .img-cnt
             br
-            .simple-gray-button.download-link.file.new-comment-download Attach
-                +FileUpload('announcementcomment', 'uploadCommentAttachment')(
-                    dropAreaSelector = '.new-comment',
+            .simple-gray-button.download-link.file Attach
+                +FileUpload('announcementcomment', 'uploadCommentAttachment', [commentId && commentId.valueOf() ? commentId : parentCommentId])(
+                    dropAreaSelector = 'form',
                     value = 'Attach'
-                )#add-file-attachment.simple-gray-button
+                ).add-file-attachment.simple-gray-button
         BUTTON().green-button Post
         BUTTON(type="button").comment-cancel Cancel
-.comments-block
+
+-var comments = self.getAnnouncementComments()
+.post-comment-block
+    +PostCommentForm(self.getId()).new-comment
+.comments-block.main-block
     h3.comments-count=  comments.length + (comments.length == 1 ? ' comment' : ' comments')
-    each comment in comments
-        .table.row
-            .avatar-block-left
-                +PersonImg(comment.getOwner(), 64)
-            .qna
-                input(type="hidden",name="id", value=comment.getId())
-                input(type="hidden",name="announcementid", value=self.getId())
-                +Hidden('attachmentId').attachment-id
-                .chat-bubble
-                    .top-block
-                        SPAN.time=comment.getPostedDate().getDate().format('M d, Y @ h:i:s A')
-                    p.edit-question-text= comment.getText()
-                    if comment.getAttachment()
-                        .img-cnt
-                            +RenderWith(comment.getAttachment(), chlk.templates.LoadingImageTpl)
+    +RenderWith(comments, chlk.templates.announcement.AnnouncementCommentTpl)(
+        userRole = self.getUserRole(),
+        currentUser = self.getCurrentUser()
+    )

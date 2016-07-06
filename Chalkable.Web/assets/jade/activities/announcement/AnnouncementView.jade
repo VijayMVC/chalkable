@@ -152,7 +152,10 @@ mixin Glue_()
         if itemForClass && itemForClass.isDiscussionEnabled()
             +CloseOpen('Discussion')
                 .discussion-block
-                    +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementDiscussionTpl)
+                    +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementDiscussionTpl)(
+                        userRole = self.getUserRole(),
+                        currentUser = self.getCurrentUser()
+                    )
         if classAnnouncement
             if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && classAnnouncement.isGradable()
                 +CloseOpen('Grades')

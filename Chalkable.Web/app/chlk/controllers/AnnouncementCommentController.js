@@ -44,8 +44,52 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton],
         [[chlk.models.announcement.AnnouncementComment]],
         function postAction(model){
+            var method, id;
+            if(model.getId() && model.getId().valueOf()){
+                method = 'edit';
+                id = model.getId();
+            }else{
+                if(model.getParentCommentId() && model.getParentCommentId().valueOf()){
+                    method = 'reply';
+                    id = model.getParentCommentId();
+                }else{
+                    method = 'postComment';
+                    id = model.getAnnouncementId();
+                }
+            }
+            
+            var isEdit = model.getParentCommentId() && model.getParentCommentId().valueOf();
+            var isReply = model.getId() && model.getId().valueOf();
+            var res = this.announcementCommentService[method]
+                (id, model.getText(), model.getAttachmentId())
+                .then(function(announcement){
+                    this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
+                    return announcement;
+                }, this)
+                .attach(this.validateResponse_());
+
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'discussion');
+        },
+
+        [chlk.controllers.NotChangedSidebarButton],
+        [[chlk.models.id.AnnouncementCommentId]],
+        function deleteCommentAction(announcementCommentId){
             var res = this.announcementCommentService
-                .postComment(model.getAnnouncementId(), model.getText(), model.getAttachmentId())
+                .deleteComment(announcementCommentId)
+                .then(function(announcement){
+                    this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
+                    return announcement;
+                }, this)
+                .attach(this.validateResponse_());
+
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'discussion');
+        },
+
+        [chlk.controllers.NotChangedSidebarButton],
+        [[chlk.models.id.AnnouncementCommentId, Boolean]],
+        function setCommentHiddenAction(announcementCommentId, hidden){
+            var res = this.announcementCommentService
+                .setHidden(announcementCommentId, hidden)
                 .then(function(announcement){
                     this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
                     return announcement;
@@ -87,12 +131,12 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
         },
 
-        function uploadCommentAttachmentAction(files) {
+        function uploadCommentAttachmentAction(commentId_, files_) {
             var res = this.attachmentService
-                .uploadAttachment([files[0]])
+                .uploadAttachment([files_[0]])
                 .then(function(attachment){
                     this.prepareCommentAttachment_(attachment);
-                    return new chlk.models.announcement.AnnouncementComment(attachment);
+                    return new chlk.models.announcement.AnnouncementComment(attachment, commentId_);
                 }, this)
                 .attach(this.validateResponse_());
 

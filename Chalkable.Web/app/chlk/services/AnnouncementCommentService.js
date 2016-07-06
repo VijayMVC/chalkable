@@ -34,7 +34,9 @@ NAMESPACE('chlk.services', function () {
                 }).then(function(comment){
                     var result =this.getAnnouncement_(comment.getAnnouncementId());
                     var parentComment = this.findComment_(comment.getParentCommentId(), result.getAnnouncementComments());
-                    parentComment.getSubComments(comment);
+                    var comments = parentComment.getSubComments() || [];
+                    comments.push(comment);
+                    parentComment.setSubComments(comments);
                     return result
                 }, this);
             },
@@ -52,17 +54,17 @@ NAMESPACE('chlk.services', function () {
             },
 
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId, Boolean]],
-            ria.async.Future, function setHidden(announcementId, announcementCommentId, hidden){
+            [[chlk.models.id.AnnouncementCommentId, Boolean]],
+            ria.async.Future, function setHidden(announcementCommentId, hidden){
                 return this.post('AnnouncementComment/SetHidden', ArrayOf(chlk.models.announcement.AnnouncementComment),{
                     announcementCommentId: announcementCommentId.valueOf(),
                     hidden: hidden
                 })
                 .then(function(comments){
-                    var res = this.getAnnouncement_(announcementId);
+                    var res = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
                     res.setAnnouncementComments(comments);
                     return res;
-                });
+                }, this);
             },
 
 
@@ -72,10 +74,10 @@ NAMESPACE('chlk.services', function () {
                     announcementCommentId: announcementCommentId.valueOf()
                 })
                 .then(function(comments){
-                    var res = this.getAnnouncement_(announcementId);
+                    var res = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
                     res.setAnnouncementComments(comments);
                     return res;
-                });
+                }, this);
             },
 
             //TODO rewrite this ... think about recursive
@@ -83,7 +85,10 @@ NAMESPACE('chlk.services', function () {
             Object, function editCacheAnnouncementComments_(comment){
                 var result =this.getAnnouncement_(comment.getAnnouncementId());
                 var selectedComment = this.findComment_(comment.getId(), result.getAnnouncementComments());
-                selectedComment = comment;
+                selectedComment.setAttachment(comment.getAttachment());
+                selectedComment.setText(comment.getText());
+                selectedComment.setHidden(comment.isHidden());
+
                 return result;
             },
 

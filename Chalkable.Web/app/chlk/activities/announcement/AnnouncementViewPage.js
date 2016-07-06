@@ -10,6 +10,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementViewStandardsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.announcement.admin.AdminAnnouncementGradingTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementDiscussionTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementCommentTpl');
 REQUIRE('chlk.templates.LoadingImageTpl');
 
 REQUIRE('chlk.models.grading.AlertsEnum');
@@ -81,10 +82,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var container, attachmentIdNode, attachment = model.getAttachment();
                 tpl.assign(attachment);
                 if(model.getId() && model.getId().valueOf()){
-
+                    var form = this.dom.find('.post-comment-form:visible[data-id=' + model.getId().valueOf() + ']');
+                    container = form.find('.img-cnt');
+                    attachmentIdNode = form.find('.attachment-id')
                 }else{
-                    container = this.dom.find('.img-cnt.new-comment');
-                    attachmentIdNode = this.dom.find('.attachment-id.new-comment')
+                    container = this.dom.find('.new-comment .img-cnt');
+                    attachmentIdNode = this.dom.find('.new-comment .attachment-id');
                 }
                 tpl.renderTo(container.empty());
                 attachmentIdNode.setValue(attachment.getId().valueOf());
@@ -1023,10 +1026,37 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.comment-cancel')],
             [[ria.dom.Dom, ria.dom.Event]],
             function commentCancelClick(node, event){
-                var form = node.parent('form');
+                var form = node.parent('form:not(.edit-form)');
                 form.find('.comment-value').setValue('');
                 form.find('.attachment-id').setValue('');
                 form.find('.img-cnt').setHTML('');
+                node.closest('.qna')
+                    .removeClass('for-reply')
+                    .removeClass('for-edit');
+            },
+
+            [ria.mvc.DomEventBind('click', '.x-remove-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function commentRemoveClick(node, event){
+                node.parent('.chat-bubble').addClass('for-delete');
+            },
+
+            [ria.mvc.DomEventBind('click', '.delete-cancel')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function commentRemoveCancelClick(node, event){
+                node.parent('.for-delete').removeClass('for-delete');
+            },
+
+            [ria.mvc.DomEventBind('click', '.reply-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function replyClick(node, event){
+                node.closest('.qna').addClass('for-reply').removeClass('for-edit');
+            },
+
+            [ria.mvc.DomEventBind('click', '.edit-grey-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function editCommentClick(node, event){
+                node.closest('.qna').addClass('for-edit').removeClass('for-reply');
             }
         ]
     );
