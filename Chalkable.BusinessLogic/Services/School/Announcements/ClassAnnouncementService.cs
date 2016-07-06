@@ -483,7 +483,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
 
             IDictionary<int, int> fromToAnnouncementsIds;
-            IList<Pair<AnnouncementAttachment, AnnouncementAttachment>> annAttachmentsCopyResult;
+            //IList<Pair<AnnouncementAttachment, AnnouncementAttachment>> annAttachmentsCopyResult;
 
             using (var u = Update())
             {
@@ -493,15 +493,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u)
                     .CopyClassAnnouncementsToClass(sisFromToActivityIds, toClassId, Context.NowSchoolTime);
 
-                annAttachmentsCopyResult = AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator);
+                AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator);
                 ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementsIds.Select(x => x.Value).ToList(), u);
 
                 u.Commit();
             }
 
             //Here we copy content
-            var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment).ToList();
-            ServiceLocator.AttachementService.CopyContent(attachmentsToCopy);
+            //var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment).ToList();
+            //ServiceLocator.AttachementService.CopyContent(attachmentsToCopy);
 
             return fromToAnnouncementsIds.Select(x => x.Value).ToList();
         }
