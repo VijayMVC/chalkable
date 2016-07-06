@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
@@ -87,10 +88,18 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Copy(int fromClassId, int toClassId, IntList classAnnouncementTypeIds)
+        {
+            var newTypeIds = SchoolLocator.ClassAnnouncementTypeService.CopyClassAnnouncementTypes(fromClassId, toClassId, classAnnouncementTypeIds);
+            return Json(newTypeIds);
+        }
+
         public static IList<ClassAnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, int classId)
         {
             var classAnnTypes = serviceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId, false).ToList();
             return classAnnTypes;
         }
+        
     }
 }
