@@ -38,6 +38,7 @@ REQUIRE('chlk.activities.announcement.AddNewCategoryDialog');
 REQUIRE('chlk.activities.announcement.FileCabinetDialog');
 REQUIRE('chlk.activities.announcement.AttachFilesDialog');
 REQUIRE('chlk.activities.announcement.AnnouncementImportDialog');
+REQUIRE('chlk.activities.announcement.AnnouncementChatPage');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
@@ -1299,6 +1300,8 @@ NAMESPACE('chlk.controllers', function (){
 
             this.cacheAnnouncement(announcement);
             announcement.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
+
+            this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
             return announcement;
         },
 
@@ -1311,9 +1314,16 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .then(function(announcement){
                     this.cacheAnnouncementType(announcement.getType());
-                    return this.prepareAnnouncementForView(announcement);
+                    announcement = this.prepareAnnouncementForView(announcement);
+                    this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, announcement);
+                    return announcement;
                 }, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
+        },
+
+        function chatAction() {
+            var announcement = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
+            return this.StaticView(chlk.activities.announcement.AnnouncementChatPage, ria.async.DeferredData(announcement, 100));
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
@@ -2151,6 +2161,9 @@ NAMESPACE('chlk.controllers', function (){
                     model.isHiddenFromStudents(),
                     model.getAssignedAttributesPostData(),
                     model.getRecipientIds(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled(),
                     model.getAnnouncementTypeId()
                 )
         },
@@ -2219,6 +2232,9 @@ NAMESPACE('chlk.controllers', function (){
                     model.isHiddenFromStudents(),
                     model.getAssignedAttributesPostData(),
                     model.getRecipientIds(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled(),
                     model.getAnnouncementTypeId()
                 )
                 .attach(this.validateResponse_());
@@ -2381,6 +2397,9 @@ NAMESPACE('chlk.controllers', function (){
                     model.getEndDate(),
                     model.isHiddenFromStudents(),
                     model.getAssignedAttributesPostData(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled(),
                     model.isInGallery()
 
                 )
@@ -2403,6 +2422,10 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setAppsWithContent(model.getAppsWithContent());
                         announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
                         announcement.setState(model.getState());
+                        announcement.setDiscussionEnabled(model.isDiscussionEnabled());
+                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled());
+                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled());
+
                         //announcement.setClassName(model.getLessonPlanData().getClassName());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
@@ -2449,6 +2472,9 @@ NAMESPACE('chlk.controllers', function (){
                         model.getEndDate(),
                         model.isHiddenFromStudents(),
                         model.getAssignedAttributesPostData(),
+                        model.isDiscussionEnabled(),
+                        model.isPreviewCommentsEnabled(),
+                        model.isRequireCommentsEnabled(),
                         model.isInGallery()) : ria.async.BREAK;
                 }, this)
                 .attach(this.validateResponse_());
@@ -2530,7 +2556,10 @@ NAMESPACE('chlk.controllers', function (){
                     model.getWeightMultiplier(),
                     model.isHiddenFromStudents(),
                     model.isAbleDropStudentScore(),
-                    model.getAssignedAttributesPostData()
+                    model.getAssignedAttributesPostData(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled()
                 )
                 .attach(this.validateResponse_())
                 .then(function(model){
@@ -2551,6 +2580,10 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setAppsWithContent(model.getAppsWithContent());
                         announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
                         announcement.setState(model.getState());
+                        announcement.setDiscussionEnabled(model.isDiscussionEnabled())
+                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled())
+                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled())
+
                         //announcement.setClassName(model.getClassAnnouncementData().getClassName());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
@@ -2582,7 +2615,10 @@ NAMESPACE('chlk.controllers', function (){
                         model.isHiddenFromStudents(),
                         model.isAbleDropStudentScore(),
                         model.isGradable(),
-                        model.getAssignedAttributesPostData()
+                        model.getAssignedAttributesPostData(),
+                        model.isDiscussionEnabled(),
+                        model.isPreviewCommentsEnabled(),
+                        model.isRequireCommentsEnabled()
                     )
                     .attach(this.validateResponse_());
             else
@@ -2666,9 +2702,17 @@ NAMESPACE('chlk.controllers', function (){
         function askQuestionAction(model) {
             var ann = this.announcementQnAService
                 .askQuestion(model.getAnnouncementId(), model.getQuestion())
+                .then(function(model){
+                    this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementViewPage, model, 'update-qna');
+                    return model;
+                }, this)
                 .attach(this.validateResponse_())
                 .catchError(this.handleNoAnnouncementException_, this);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
+            return this.UpdateView(chlk.activities.announcement.AnnouncementChatPage, ann);
+        },
+
+        function closeChatAction() {
+            return this.CloseView(chlk.activities.announcement.AnnouncementChatPage);
         },
 
         [[chlk.models.announcement.QnAForm]],
@@ -2700,7 +2744,11 @@ NAMESPACE('chlk.controllers', function (){
                     .deleteQnA(model.getAnnouncementId(), model.getId())
                     .catchError(this.handleNoAnnouncementException_, this)
                     .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
+            ann = ann.then(function(model){
+                this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementViewPage, model, 'update-qna');
+                return model;
+            }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementChatPage, ann);
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
@@ -2818,5 +2866,28 @@ NAMESPACE('chlk.controllers', function (){
             this.showAttributesFilesUploadMsg_();
             return null;
         },
+
+        // ------------------ DISCUSSION ------------------------
+
+
+        function prepareCommentAttachment_(attachment, width_, height_){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
+                attachment.setThumbnailUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, width_ || 170, height_ || 110));
+                attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, null, null));
+            }
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
+                attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), true, null, null));
+            }
+        },
+
+        function prepareCommentsAttachments_(comments){
+            var that = this;
+            comments.forEach(function(comment){
+                if(comment.getAttachment())
+                    that.prepareCommentAttachment_(comment.getAttachment());
+                if(comment.getSubComments())
+                    that.prepareCommentsAttachments_(comment.getSubComments())
+            });
+        }
     ])
 });

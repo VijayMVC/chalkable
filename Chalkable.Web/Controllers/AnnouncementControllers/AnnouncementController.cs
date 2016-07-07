@@ -93,7 +93,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             //------------------------------------------------------------------------
 
             MasterLocator.UserTrackingService.OpenedAnnouncement(Context.Login, res.AnnouncementTypeName, res.Title, res.PersonName);
-            return Json(res, 7);
+            return Json(res, 20);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
