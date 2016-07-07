@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.classes', function () {
     CLASS(
         'Room', IMPLEMENTS(ria.serialize.IDeserializable), [
             VOID, function deserialize(raw){
-                this.building = SJX.fromValue(raw.building, Object);
+                this.building = raw.building == null ? null : raw.building;
                 this.capacity = SJX.fromValue(raw.capacity, Number);
                 this.description = SJX.fromValue(raw.description, String);
                 this.homeRoomNumber = SJX.fromValue(raw.homeroomnumber, Number);
