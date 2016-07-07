@@ -3,7 +3,7 @@ mixin AppAttachmentBlock(item, pictureHref, i)
         .title
             div=item.getName()
 
-mixin AppAttachmentGradingBlock(item, metaText, pictureHref)
+mixin AppAttachmentGradingBlock(item, pictureHref, metaText)
     .wrapper
         -var name = (item.getText && item.getText()) || item.getName()
         .title(data-tooltip=name, data-tooltip-type="overflow")= name
@@ -45,7 +45,7 @@ mixin Glue_()
 
 
     .buttons
-        if self.getUserRole().isTeacher() || self.getUserRole().isAdmin() && adminAnnouncement
+        if self.getUserRole().isTeacher() && self.isAnnOwner() || self.getUserRole().isAdmin() && adminAnnouncement
             +ActionButton('announcement', 'edit', self.getId(), self.getType())(class = self.isAbleEdit() ? "" : "disabled").right Edit
         +ActionButton('feed', 'doToList').back-button Back
         .clear-fix
@@ -203,6 +203,7 @@ mixin Glue_()
                                 infiniteScroll = true
                             )(data-has-access = true).people-list.grading.grades-individual
                                 +RenderWith(students, chlk.templates.announcement.admin.AdminAnnouncementGradingTpl)(
+                                    studentsAnnApplicationMeta = self.getStudentsAnnApplicationMeta(),
                                     userRole = self.getUserRole(),
                                     currentUser = self.getCurrentUser(),
                                     applications = self.getApplications(),
@@ -216,6 +217,7 @@ mixin Glue_()
                     -var pList = new chlk.models.common.PaginatedList(chlk.models.people.User, recipients)
                     +ListView(recipients)()(data-has-access = true).people-list.grading.grades-individual
                         +RenderWith(pList, chlk.templates.announcement.admin.AdminAnnouncementGradingTpl)(
+                            studentsAnnApplicationMeta = self.getStudentsAnnApplicationMeta(),
                             userRole = self.getUserRole(),
                             currentUser = self.getCurrentUser(),
                             applications = self.getApplications(),

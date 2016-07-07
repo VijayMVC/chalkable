@@ -125,6 +125,8 @@
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
     <Compile Include="Connectors\Model\ActivityAttribute.cs" />
     <Compile Include="Connectors\Model\ActivityCategory.cs" />
+    <Compile Include="Connectors\Model\ActivityCategoryCopyOption.cs" />
+    <Compile Include="Connectors\Model\ActivityCategoryCopyResult.cs" />
     <Compile Include="Connectors\Model\ActivityCopyOptions.cs" />
     <Compile Include="Connectors\Model\ActivityCopyResult.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="Connectors\Model\Attendances\StiDailyAbsence.cs" />
     <Compile Include="Connectors\Model\Attendances\StiPeriodAbsence.cs" />
     <Compile Include="Connectors\Model\ClassRank.cs" />
+    <Compile Include="Connectors\Model\ClassroomOptionCopyResult.cs" />
     <Compile Include="Connectors\Model\DisciplineDailySummary.cs" />
     <Compile Include="Connectors\Model\GradingDetailsDashBoard.cs" />
     <Compile Include="Connectors\Model\GradingSummaryDashboard.cs" />
