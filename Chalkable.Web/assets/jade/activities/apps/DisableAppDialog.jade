@@ -1,0 +1,30 @@
+.dialog
+    .x-window-header
+        h1 Disable App
+        SPAN Select one or more schools
+        .close.close-btn
+    +ActionForm('apps', 'submitDisableApp')
+        +Hidden('applicationId', self.getApplicationId())
+        +Hidden('requestId', self.getRequestId())
+        +Hidden('schoolIdsStr', self.getBannedSchoolIdsStr()).school-ids
+        -var allSchoolsStage = self.getAllSchoolsStage()
+        table
+            tr
+                td.name-td
+                    .column.schools
+                        h1.column-cell=Msg.Schools
+                        .column-cell.all-schools
+                            .box-checkbox
+                                +Checkbox('allSchools', allSchoolsStage > 0, false, true)(class= (allSchoolsStage == 1) ? 'partially-checked' : '').all-schools-checkbox
+                            SPAN
+                                .text-container All Schools
+                        each school in self.getSchools()
+                            .column-cell.school-name
+                                .box-checkbox
+                                    +Checkbox('school', school.isBanned(), false, true)(data-id=school.getSchoolId().valueOf()).school-name-checkbox
+                                SPAN
+                                    .text-container.right=school.getSchoolName()
+
+        .buttons-container
+            +Button.special-button2.cancel.close.negative-button Cancel
+            +Button()(type="submit").special-button2.blue-button.add.add-groups Save

@@ -1,0 +1,351 @@
+.chlk-calendar
+  margin: 25px 0
+  border-radius: 5px
+  border: 1px solid #c8c7c3
+  background: #fff
+
+  .day-calendar-list-item
+    >DIV
+      display: inline-block
+      vertical-align: middle
+      overflow: hidden
+
+  .course-icon
+    width: 45px
+    height: 40px
+    overflow: hidden
+    opacity: .5
+
+  .p-container
+    width: 120px
+    font-size: 12px
+    font-style: italic
+    white-space: nowrap
+    line-height: 84px
+
+  .header
+    text-align: center
+    position: relative
+    z-index: 2
+    > *
+      display: inline-block
+      font-weight: 600
+      font-size: 18px
+
+    border-bottom: 1px solid #c8c7c3
+    +box-shadow(transparentize(#000, .91) 0 2px 3px)
+    color: #56554f
+    +text-shadow(transparentize(#fff, .5) 0 2px 1px)
+
+    line-height: 63px
+
+    .current-month-container
+      padding: 0 50px
+
+    .current-month
+      display: inline-block
+      min-width: 100px
+
+  .prev-month, .next-month
+    display: inline-block
+    width: 32px
+    height: 32px
+    opacity: 0.75
+    font-size: 0
+    vertical-align: middle
+
+    &:hover
+      opacity: 1
+
+  .prev-month
+    +icons-32-sprite(arrow-left)
+
+  .next-month
+    +icons-32-sprite(arrow-right)
+
+  .day-names
+    background: #f7f7f5
+    color: #2b2a28
+    +text-shadow(transparentize(#fff, .5) 0 0 1px)
+    display: table
+    width: 100%
+    border-collapse: collapse
+    line-height: 36px
+
+  .calendar-body
+    text-align: center
+
+    .lesson-plan-item
+      position: absolute
+      color: white
+      top: 0
+      left: 0
+      right: 0
+      font-size: 12px
+      line-height: 30px
+
+      .count
+        display: inline-block
+        padding: 3px
+        height: 10px
+        border-radius: 10px
+        width: 10px
+        position: relative
+        line-height: 10px
+        left: 5px
+
+      &.red
+        background: #d45151
+
+        .count
+          background-color: #41b768
+
+      &.green
+        background: #41b768
+
+        .count
+          background-color: #d45151
+
+    .day-names > DIV
+      display: table-cell
+      width: 100 / 7 * 1%
+      border: solid #c8c7c3
+      border-width: 0 1px 1px 1px
+      color: #2b2a28
+
+      &:first-child
+        border-left-width: 0
+
+      &:last-child
+        border-right-width: 0
+
+    .items
+      padding: 1px 0 0 1px
+      font-size: 0
+      display: table
+      width: 100%
+      border-collapse: collapse
+      overflow: hidden
+
+    .items > .row
+      display: table-row
+
+    .items > .row > SPAN, .week-day
+      width: 100 / 7 * 1%
+
+    .items > .row > SPAN
+      display: table-cell
+      height: 116px
+      text-decoration: none
+      margin-left: -1px
+      margin-top: -1px
+      border: solid #ededed
+      border-width: 0 1px 1px 0
+      overflow: hidden
+
+      &.disabled:not(.not-current-month)
+        color: #56554f !important
+
+      &:hover
+        background-color: transparentize(#000, .95)
+
+      &.today:hover
+        background-color: #2f7790
+
+      position: relative
+
+      &.with-anns
+        A:not(.lesson-plan-item):after
+          background: #2f7790
+          content: ' '
+          position: absolute
+          bottom: 9px
+          left: 50%
+          margin-left: -4px
+          border-radius: 50%
+          width: 8px
+          height: 8px
+
+      &.with-anns.with-admin-anns
+        A:not(.lesson-plan-item):after
+          margin-left: 9px
+
+      &.with-admin-anns::before
+        content: ' '
+        position: absolute
+        bottom: 5px
+        left: 50%
+        margin-left: -10px
+        border-radius: 50%
+        +icons-24-sprite(admin-item)
+        width: 24px
+        height: 24px
+
+      &.with-anns.with-admin-anns
+        &::before
+          margin-left: -20px
+
+      &.today.with-anns
+        A::after
+          background: #fff
+
+      &.today.with-anns::after
+        background-color: #fff
+
+      A
+        text-decoration: none
+
+        &:not(.action-link)
+          cursor: default
+
+      .h2
+        margin: 0
+        font-size: 24px
+        line-height: 116px
+        display: block
+
+      &.not-current-month
+        color: #d0d0ce !important
+
+        a
+          color: #d0d0ce
+
+    .today
+      border-color: #13495c
+      background: #2f7790
+      &, *
+        +text-shadow(none)
+        color: #fff
+
+      A:hover
+        background-color: transparentize(#fff, .95) !important
+
+
+      .course-icon
+        position: relative
+        opacity: .8
+        img
+          position: absolute
+          top: auto
+          bottom: 0
+          left: 0
+
+    .week-day
+      $height: 116px - 32px
+      vertical-align: top
+      display: table-cell
+      border-right: 1px solid #ededed
+      &:last-child
+        border-right: none
+
+      UL
+        display: block
+        margin: 0
+        padding: 0
+
+      A
+        display: inline-block
+        height: $height
+        width: 100%
+        position: relative
+        color: inherit
+
+        &:hover
+          background-color: transparentize(#000, .95)
+
+      .announcement-calendar-item
+        margin: 16px
+        max-height: $height - 32px
+        font-size: 12px
+        line-height: 18px
+        overflow: hidden
+        font-style: italic
+        > *
+          display: inline-block
+
+        strong
+          font-weight: 600
+
+    .period-info
+      position: absolute
+      left: -16px
+      top: 58px
+      margin-top: - 16px
+      height: 24px
+      border-radius: 16px
+      background: #fff
+      text-align: center
+      line-height: 24px
+      border: 3px solid #eee
+      color: #000
+      font-size: 13px
+      pointer-events: none
+      padding: 0 2px
+      z-index: 2
+      min-width: 20px
+
+    .items-table
+      display: table
+      width: 100%
+      table-layout: fixed
+
+      .item
+        display: table-row !important
+
+      .cell
+        display: table-cell !important
+        width: 100 / 7 * 1%
+        height: 74px
+        vertical-align: top
+
+        &:not(:first-child)
+          border-left: 1px solid #ededed
+
+        A
+          display: block
+          position: relative
+
+          &:hover
+            background-color: transparentize(#000, .95)
+
+      A .period-info
+        top: 24px
+        margin-top: 0
+
+      .course-icon
+        position: absolute
+        left: 5px
+        top: 50%
+        +transform(translate(0, -50%))
+
+      .p-container
+        margin: 0 5px 0 55px
+        width: auto
+        line-height: 74px
+        vertical-align: middle
+        text-align: left
+
+      .announcement
+        padding: 20px 10px
+        white-space: nowrap
+
+  .whole-day
+    background-color: transparentize(#eee, .5)
+
+
+  .current-section
+    position: relative
+    &::before
+      content: ' '
+      pointer-events: none
+      position: absolute
+      right: 0
+      top: 50%
+      height: 24px
+      width: 24px
+      opacity: .8
+      +icons-32-sprite(people-white, -6px, -6px)
+      +transform(translate(0, -50%))
+
+    .p-container
+      padding-right: 32px
