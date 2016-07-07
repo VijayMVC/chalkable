@@ -10,13 +10,8 @@ NAMESPACE('chlk.models.classes', function () {
     /** @class chlk.models.classes.ClassSummary*/
     CLASS(
         'ClassSummary', EXTENDS(chlk.models.classes.Class), [
-            chlk.models.classes.Room, 'room',
 
             chlk.models.feed.Feed, 'feed',
-
-            ArrayOf(String), 'dayTypes',
-
-            ArrayOf(String), 'periods',
 
             function getStatusText(){
                 var arr = [this.getTeacher().getDisplayName()];
@@ -36,13 +31,6 @@ NAMESPACE('chlk.models.classes', function () {
                     arr.push('Room ' + this.getRoom().getRoomNumber());
 
                 return arr.join('\n');
-            },
-
-            OVERRIDE, VOID, function deserialize(raw){
-                BASE(raw);
-                this.room = SJX.fromDeserializable(raw.room, chlk.models.classes.Room);
-                this.periods = SJX.fromArrayOfValues(raw.periods, String);
-                this.dayTypes = SJX.fromArrayOfValues(raw.daytypes, String);
             }
         ]);
 });

@@ -94,7 +94,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             RegisterApiMethodDefaults<MarkingPeriodController>(x => x.List(DemoSchoolConstants.CurrentSchoolYearId, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<PersonController>(x => x.Me(),ApiMethodCallType.Get);
             RegisterApiMethodDefaults<StudentController>(x => x.Info(DemoSchoolConstants.Student1), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<StudentController>(x => x.GetStudents("", null, null, null, DemoSchoolConstants.AlgebraClassId, null, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<StudentController>(x => x.GetStudents("", null, null, null, DemoSchoolConstants.AlgebraClassId, null, null, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<StudentController>(x => x.Summary(DemoSchoolConstants.Student1), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<TeacherController>(x => x.Summary(DemoSchoolConstants.TeacherId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<TeacherController>(x => x.GetTeachers("", null, null, DemoSchoolConstants.AlgebraClassId, null, null), ApiMethodCallType.Get);

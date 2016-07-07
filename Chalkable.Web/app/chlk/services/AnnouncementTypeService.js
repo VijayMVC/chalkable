@@ -51,6 +51,15 @@ NAMESPACE('chlk.services', function () {
                     classAnnouncementTypeIds: this.arrayToCsv(ids),
                     announcementType: type.valueOf()
                 });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.id.ClassId, ArrayOf]],
+            ria.async.Future, function copyTypes(fromClassId, toClassId, typeIds){
+                return this.post('AnnouncementType/Copy.json', Boolean, {
+                    fromClassId: fromClassId.valueOf(),
+                    toClassId: toClassId.valueOf(),
+                    classAnnouncementTypeIds: this.arrayToCsv(ids)
+                })
             }
         ]);
 });

@@ -105,9 +105,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
                 this.studentsAnnApplicationMeta = SJX.fromArrayOfDeserializables(raw.studentsannouncementapplicationmeta,
                     chlk.models.announcement.StudentAnnouncementApplicationMeta);
-
-                console.log(raw.studentsannouncementapplicationmeta);
-                console.log(this.studentsAnnApplicationMeta);
             },
 
             ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',

@@ -65,14 +65,14 @@ studentAnnouncements = self.getItems()
                                 A(href=attachment.getUrl()).download-link Download
                                 .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")=attachment.getName()
                         else
-                            +AppAttachmentGradingBlock(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
+                            +AppAttachmentGradingBlock(attachment, attachment.getThumbnailUrl()).announcement-item.attachment
                                 +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open
 
                 each app, i in self.getApplications()
                     -var isBanned = false
                     .announcement-item.attachment
                         -var appPictureUrl = (app.getImageUrl && app.getImageUrl()) || self.getPictureURL(app.getBigPictureId(), 170, 110)
-                        +AppAttachmentGradingBlock(app, self.getStudentAnnApplicationMetaText(app.getAnnouncementApplicationId(), student.getId()), appPictureUrl).announcement-item.application
+                        +AppAttachmentGradingBlock(app, appPictureUrl, self.getStudentAnnApplicationMetaText(app.getAnnouncementApplicationId(), student.getId())).announcement-item.application
                             +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId(), self.getStandardsUrlComponents()) Open
                         -var grade = self.getAppGrade(app.getAnnouncementApplicationId(), student.getId())
                         if grade

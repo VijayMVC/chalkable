@@ -301,7 +301,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 IncludeFrom = includeFromDate,
                 IncludeTo = includeToDate,
                 Sort = sortDesc
-            }, (da, q) => da.GetSupplementalAnnouncementOrderedByDate(q));
+            }, (da, q) => da.GetSupplementalAnnouncementOrderedByDate(q), ownedOnly);
         }
 
         public IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle,
@@ -321,7 +321,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 IncludeFrom = includeFromTitle,
                 IncludeTo = includeToTitle,
                 Sort = sortDesc
-            }, (da, q) => da.GetSupplementalAnnouncementOrderedByTitle(q));
+            }, (da, q) => da.GetSupplementalAnnouncementOrderedByTitle(q), ownedOnly);
         }
 
         public IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName,
@@ -343,7 +343,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 FromClassName = fromClassName,
                 ToClassName = toClassName,
                 Sort = sortDesc
-            }, (da, q)=> da.GetSupplementalAnnouncementOrderedByClassName(q));
+            }, (da, q)=> da.GetSupplementalAnnouncementOrderedByClassName(q), ownedOnly);
         }
 
         public IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId)
@@ -366,9 +366,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
 
         private IList<AnnouncementComplex> GetSupplementalAnnouncements(SupplementalAnnouncementQuery query,
-            Func<SupplementalAnnouncementDataAccess, SupplementalAnnouncementQuery, AnnouncementQueryResult> getAnnsMethod)
+            Func<SupplementalAnnouncementDataAccess, SupplementalAnnouncementQuery, AnnouncementQueryResult> getAnnsMethod, bool? ownedOnly = null)
         {
-            var anns = DoRead(u => getAnnsMethod(CreateSupplementalAnnouncementDataAccess(u), query).Announcements);
+            var anns = DoRead(u => getAnnsMethod(CreateSupplementalAnnouncementDataAccess(u, ownedOnly), query).Announcements);
             var classIds = anns.Where(x=>x.ClassRef.HasValue).Select(x => x.ClassRef.Value).Distinct().ToList();
             var types =  ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
             foreach (var ann in anns)
