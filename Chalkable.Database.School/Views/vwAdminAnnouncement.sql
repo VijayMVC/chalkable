@@ -1,0 +1,19 @@
+﻿
+Create View vwAdminAnnouncement
+As
+Select
+	Announcement.Id as Id,
+	Announcement.Created as Created,
+	Announcement.[State] as [State],
+	Announcement.Content as Content,
+	Announcement.Title as [Title],
+	AdminAnnouncement.Expires as Expires,
+	AdminAnnouncement.AdminRef as AdminRef,
+	Person.FirstName + ' ' + Person.LastName as AdminName,
+	Person.Gender as AdminGender
+
+From AdminAnnouncement
+	Join Announcement 
+		on Announcement.Id = AdminAnnouncement.Id
+	Join Person 
+		on Person.Id = AdminAnnouncement.AdminRef
