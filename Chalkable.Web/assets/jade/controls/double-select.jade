@@ -1,0 +1,17 @@
+mixin DoubleSelect(name, items)
+    -attributes = self.processAttrs(attributes);
+    .double-select.chosen-container.chosen-container-single(attributes)
+        +Hidden(name).selected-value
+        +Hidden('copyToYearName').selected-year-name
+        +Hidden('toClassName').selected-class-name
+        a.chosen-single
+            SPAN.value-text
+            DIV
+                B
+        .chosen-drop
+            UL.chosen-results
+                each item in items
+                    LI(data-items=item.values, data-tooltip-type="overflow", data-tooltip=item.name).active-result.first-result= item.name
+        .chosen-drop.second-drop.x-hidden
+            UL.chosen-results.second-results
+

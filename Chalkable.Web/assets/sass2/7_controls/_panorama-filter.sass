@@ -1,0 +1,93 @@
+.panorama-filter-ctn
+  position: relative
+
+  .restore-btn
+    margin-left: 10px
+
+  SELECT.external-items+DIV.chosen-container-multi
+    left: 230px
+    width: 60% !important
+
+    &.chosen-with-drop
+      .chosen-drop
+        left: -230px
+
+    .chosen-drop
+      width: 220px
+
+    .chosen-choices
+      .search-field
+        INPUT
+          width: 220px !important
+          left: -230px
+
+  .chosen-container
+    .chosen-single
+      height: 41px
+      line-height: 41px
+
+      div b
+        background-position: 0 10px
+
+    &.chosen-container-active
+      .chosen-single
+        div b
+          background-position: -18px 10px
+
+  .with-line
+    border-bottom: 1px solid #c8c7c3
+    padding-bottom: 15px
+    margin-bottom: 15px
+
+  .filters-block
+    border-bottom: 1px solid #e7e6e2
+    padding-bottom: 14px
+
+  .filter-block
+    position: relative
+    margin-bottom: 30px
+
+    .delete-btn
+      right: auto
+      top: 3px
+      display: inline-block
+
+    .v-line
+      position: absolute
+      height: 31px
+      left: 18px
+      top: 41px
+      width: 0
+
+    &:last-child
+      .v-line
+        border-left: 1px solid #c8c7c3
+
+    SELECT
+      &+DIV
+        width: 190px !important
+        margin-right: 15px
+
+      &.filter-type-select+DIV
+        width: 220px !important
+
+  .add-circle-btn
+    +background(linear-gradient(top, #fff, #f2f2ee))
+    border: 1px solid #c9c8c4
+    display: inline-block
+    font-size: 32px
+    width: 34px
+    text-align: center
+    line-height: 32px
+    border-radius: 17px
+    height: 34px
+    vertical-align: middle
+    margin-right: 12px
+    cursor: pointer
+    padding: 0
+    font-weight: normal
+    box-shadow: none
+    outline: none
+
+    &:hover
+      +background(linear-gradient(top, #fff, #f2f2ee))
