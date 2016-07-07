@@ -40,6 +40,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.personName = SJX.fromValue(raw.personname, String);
                 this.personGender = SJX.fromValue(raw.schoolpersongender, String);
                 this.discussionEnabled = SJX.fromValue(raw.discussionenabled, Boolean);
+                this.showDiscussionIcon = SJX.fromValue(raw.discussionenabled, Boolean);
                 this.previewCommentsEnabled = SJX.fromValue(raw.previewcommentsenabled, Boolean);
                 this.requireCommentsEnabled = SJX.fromValue(raw.requirecommentsenabled, Boolean);
             },
@@ -56,6 +57,7 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'personGender',
             Boolean, 'annOwner',
             Boolean, 'discussionEnabled',
+            Boolean, 'showDiscussionIcon',
             Boolean, 'previewCommentsEnabled',
             Boolean, 'requireCommentsEnabled'
         ]);
