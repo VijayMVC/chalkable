@@ -293,15 +293,6 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[chlk.models.id.AppId, Number]],
-            ria.async.Future, function getAppReviews(appId, start_){
-                return this
-                    .get('Application/GetAppReviews.json', chlk.models.apps.AppRating, {
-                        applicationId: appId.valueOf(),
-                        start: start_ || 0
-                    });
-            },
-
             ria.async.Future, function getAppAnalytics(appId){
                 return this
                     .post('Application/GetAppAnalytics.json', chlk.models.developer.HomeAnalytics, {
