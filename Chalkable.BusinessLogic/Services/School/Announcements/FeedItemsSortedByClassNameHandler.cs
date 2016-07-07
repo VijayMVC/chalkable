@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             bool? complete, int start, int count, string @from, string to, bool includeFrom, bool includeTo,
             bool? ownedOnly = null)
         {
-            return locator.SupplementalAnnouncementService.GetSupplementalAnnouncementSortedByClassName(fromDate, toDate, @from, to, includeFrom, includeTo, classId, start, count, _sortDesc, ownedOnly);
+            return locator.SupplementalAnnouncementService.GetSupplementalAnnouncementSortedByClassName(fromDate, toDate, @from, to, includeFrom, includeTo, classId, complete, start, count, _sortDesc, ownedOnly);
         }
 
         protected override AnnouncementSortOption SortOption

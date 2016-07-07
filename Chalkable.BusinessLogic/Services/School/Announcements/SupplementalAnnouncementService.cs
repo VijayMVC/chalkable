@@ -20,9 +20,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? classAnnouncementTypeId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds, bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled);
         void SetVisibleForStudent(int supplementalAnnouncementId, bool visible);
         SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementId);
-        IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
-        IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
-        IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
+        IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
+        IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
+        IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
         bool Exists(string title, int? excludeSupplementalAnnouncementId);
         SupplementalAnnouncement GetLastDraft();
@@ -296,7 +296,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
        public IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate,
-            bool includeToDate, int? classId, int start = 0, int count = int.MaxValue, bool sortDesc = false,
+            bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false,
             bool? ownedOnly = null)
         {
 
@@ -311,12 +311,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 RoleId = Context.RoleId,
                 IncludeFrom = includeFromDate,
                 IncludeTo = includeToDate,
-                Sort = sortDesc
+                Sort = sortDesc,
+                Complete = complete
             }, (da, q) => da.GetSupplementalAnnouncementOrderedByDate(q), ownedOnly);
         }
 
         public IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle,
-            bool includeFromTitle, bool includeToTitle, int? classId, int start = 0, int count = int.MaxValue,
+            bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue,
             bool sortDesc = false, bool? ownedOnly = null)
         {
 
@@ -331,12 +332,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 RoleId = Context.RoleId,
                 IncludeFrom = includeFromTitle,
                 IncludeTo = includeToTitle,
-                Sort = sortDesc
+                Sort = sortDesc,
+                Complete = complete
             }, (da, q) => da.GetSupplementalAnnouncementOrderedByTitle(q), ownedOnly);
         }
 
         public IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName,
-            string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, int start = 0,
+            string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0,
             int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null)
         {
 
@@ -353,7 +355,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 IncludeTo = includeToClassName,
                 FromClassName = fromClassName,
                 ToClassName = toClassName,
-                Sort = sortDesc
+                Sort = sortDesc,
+                Complete = complete
             }, (da, q)=> da.GetSupplementalAnnouncementOrderedByClassName(q), ownedOnly);
         }
 
