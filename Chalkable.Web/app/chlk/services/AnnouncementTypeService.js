@@ -53,7 +53,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.id.ClassId, ArrayOf]],
+            [[chlk.models.id.ClassId, chlk.models.id.ClassId, Array]],
             ria.async.Future, function copyTypes(fromClassId, toClassId, typeIds){
                 return this.post('AnnouncementType/Copy.json', Boolean, {
                     fromClassId: fromClassId.valueOf(),
