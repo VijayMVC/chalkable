@@ -49,7 +49,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             .left-top-container
                                 if !state
                                     .categories-container.i-b
-                                        label(for="galleryCategoryId").main-lable Category:
+                                        label(for="galleryCategoryId").main-label Category:
                                         #galleryCategoryForSearchContainer
                                             +Select('galleryCategoryId')#galleryCategoryId
                                                 +Option('', 'Select category', true)
@@ -114,18 +114,18 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     data-tooltip=Msg.Hide_From_Student_Tooltip_Message
                                 )
                             .check-box-container
-                                lable(for="ann-discussionenabled")=Msg.Class_Discussion
+                                label(for="ann-discussionenabled")=Msg.Class_Discussion
                                 +SlideCheckbox('discussionenabled', lessonPlan.isDiscussionEnabled(), false, false)(
                                     data-isdiscussionenabled=lessonPlan.isDiscussionEnabled(),
                                     data-tooltip-timeout=500,
                                 ).discussion-option
                             .check-box-container
-                                lable(for="ann-previewcommentsenabled")=Msg.Preview_Comments
+                                label(for="ann-previewcommentsenabled")=Msg.Preview_Comments
                                 +SlideCheckbox('previewcommentsenabled', lessonPlan.isPreviewCommentsEnabled(), false, !lessonPlan.isDiscussionEnabled())(
                                     data-tooltip-timeout=500,
                                 ).preview-comments-option
                             .check-box-container
-                                lable(for="ann-requirecommentsenabled")=Msg.Require_Comments
+                                label(for="ann-requirecommentsenabled")=Msg.Require_Comments
                                 +SlideCheckbox('requirecommentsenabled', lessonPlan.isRequireCommentsEnabled(), false, !lessonPlan.isDiscussionEnabled())(
                                     data-tooltip-timeout=500,
                                 ).require-comments-option

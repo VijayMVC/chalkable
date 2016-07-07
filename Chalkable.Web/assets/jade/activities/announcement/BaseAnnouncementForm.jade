@@ -44,7 +44,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                     -var typeId = self.getSelectedTypeId()
                     .left-top-container
                         .recipients-container
-                            label(for="type-select").main-lable Category:
+                            label(for="type-select").main-label Category:
                             .types-select-cnt
                                 +Select('typeid')#type-select
                                     each item in types
@@ -154,18 +154,18 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                                 data-tooltip=Msg.Extra_Credit_Tooltip_Message
                             ).extra-credit
                         .check-box-container
-                            lable(for="ann-discussionenabled")=Msg.Class_Discussion
+                            label(for="ann-discussionenabled")=Msg.Class_Discussion
                             +SlideCheckbox('discussionenabled', classAnnouncement.isDiscussionEnabled(), false, false)(
                                 data-isdiscussionenabled=classAnnouncement.isDiscussionEnabled(),
                                 data-tooltip-timeout=500,
                             ).discussion-option
                         .check-box-container
-                            lable(for="ann-previewcommentsenabled")=Msg.Preview_Comments
+                            label(for="ann-previewcommentsenabled")=Msg.Preview_Comments
                             +SlideCheckbox('previewcommentsenabled', classAnnouncement.isPreviewCommentsEnabled(), false, !classAnnouncement.isDiscussionEnabled())(
                                 data-tooltip-timeout=500,
                             ).preview-comments-option
                         .check-box-container
-                            lable(for="ann-requirecommentsenabled")=Msg.Require_Comments
+                            label(for="ann-requirecommentsenabled")=Msg.Require_Comments
                             +SlideCheckbox('requirecommentsenabled', classAnnouncement.isRequireCommentsEnabled(), false, !classAnnouncement.isDiscussionEnabled())(
                                 data-tooltip-timeout=500,
                             ).require-comments-option
