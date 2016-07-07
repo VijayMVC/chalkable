@@ -20,12 +20,14 @@ REQUIRE('chlk.activities.setup.ClassAnnouncementTypeDialog');
 REQUIRE('chlk.activities.setup.CommentsSetupPage');
 REQUIRE('chlk.activities.setup.CommentDialog');
 REQUIRE('chlk.activities.setup.ClassroomOptionSetupPage');
+REQUIRE('chlk.activities.setup.CategoriesImportDialog');
 
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.grading.GradingScale');
 REQUIRE('chlk.models.announcement.CategoriesSubmitViewData');
+REQUIRE('chlk.models.setup.CategoriesImportPostViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -67,6 +69,36 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.SchoolYearService, 'schoolYearService',
+
+            [[chlk.models.id.ClassId]],
+            function showImportDialogAction(classId){
+                var res = this.schoolYearService.listOfSchoolYearClasses()
+                    .then(function(classesByYears){
+                        return new chlk.models.setup.CategoriesImportViewData(classId, classesByYears);
+                    });
+                return this.ShadeView(chlk.activities.setup.CategoriesImportDialog, res);
+            },
+
+            [[chlk.models.setup.CategoriesImportPostViewData]],
+            function importAction(model){
+                var res;
+                if(model.getSubmitType() == 'list')
+                    return null;
+                    /*res = this.calendarService.listByDateRange(null, null, model.getClassId())
+                        .then(function(announcements){
+                            return new chlk.models.announcement.AnnouncementImportViewData(model.getClassId(), null, announcements);
+                        });*/
+                else
+                    return null;
+                    /*res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                        .then(function(createdList){
+                            this.WidgetComplete(model.getRequestId(), createdList);
+                            this.BackgroundCloseView(chlk.activities.announcement.AnnouncementImportDialog);
+                            return ria.async.BREAK;
+                        }, this);*/
+
+                //return this.UpdateView(chlk.activities.announcement.AnnouncementImportDialog, res, 'list-update');
+            },
 
             [[chlk.models.id.SchoolPersonId]],
             function helloAction(personId_){

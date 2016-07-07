@@ -19,6 +19,7 @@ mixin ReportCell(value)
             +ActionLink('setup', 'classroomOptionSetup')=Msg.Options
         .right
             if ableCopy && !noClassId
+                +ActionLink('setup', 'showImportDialog', selectedId)(data-tooltip="Import").import-icon.setup-import
                 a(href="javascript:", data-tooltip="Copy").copy-btn.setup-copy
 
     if noClassId
