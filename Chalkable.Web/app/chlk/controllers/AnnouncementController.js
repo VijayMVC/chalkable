@@ -610,6 +610,7 @@ NAMESPACE('chlk.controllers', function (){
                 if (!typeId)
                     announcementTypeId_ = types[0].getId();
             }
+            var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
             var result = this.classAnnouncementService
                 .addClassAnnouncement(classId_, announcementTypeId_, date_)
                 .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
@@ -632,7 +633,7 @@ NAMESPACE('chlk.controllers', function (){
                         }
                         return this.addEditAction(model, false);
                     }
-                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, date_);
+                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, schoolYear);
                 },this)
                 .attach(this.validateResponse_());
             return this.PushView(this.getAnnouncementFormPageType_(), result);
@@ -676,8 +677,8 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     var classes = this.classService.getClassesForTopBarSync();
                     var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
-
-                    var res = this.classAnnouncementFromModel_(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true));
+                    var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
+                    var res = this.classAnnouncementFromModel_(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, schoolYear));
                     return res;
                 },this);
         },
@@ -809,6 +810,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton],
         function lessonPlanFromGalleryAction() {
+            var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
             var result = ria.async.wait([
                     this.lessonPlanService.addLessonPlan(),
                     this.lpGalleryCategoryService.list()
@@ -830,9 +832,10 @@ NAMESPACE('chlk.controllers', function (){
 
                         model.getAnnouncement().setCategories(result[1]);
                         this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
+                        model.setSchoolYear(schoolYear);
                         return model;
                     }
-                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
+                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, schoolYear);
                 },this)
                 .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.announcement.LessonPlanFormDialog, result);
@@ -900,7 +903,8 @@ NAMESPACE('chlk.controllers', function (){
 
                     var classes = this.classService.getClassesForTopBarSync();
                     var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
+                    var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
+                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, schoolYear);
                 },this)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.announcement.SupplementalAnnouncementFormPage, result);
@@ -1956,7 +1960,8 @@ NAMESPACE('chlk.controllers', function (){
             announcement.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
             announcement.setApplications(this.getCachedAnnouncementApplications());
             announcement.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
-            return chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(announcement);
+            var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
+            return chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(announcement, schoolYear);
         },
 
         [[chlk.models.announcement.FeedAnnouncementViewData]],
@@ -2067,7 +2072,8 @@ NAMESPACE('chlk.controllers', function (){
                 model.setApplications(this.getCachedAnnouncementApplications());
                 model.setCategories(this.lpGalleryCategoryService.getLessonPlanCategoriesSync());
                 model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
-                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
+                var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
+                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model, schoolYear);
                 return this.saveLessonPlanAction(model, announcementForm);
             }
 
@@ -2279,7 +2285,8 @@ NAMESPACE('chlk.controllers', function (){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
                 model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
-                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
+                var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
+                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model, schoolYear);
                 return this.saveSupplementalAnnouncementAction(model, announcementForm);
             }
 
@@ -2292,7 +2299,8 @@ NAMESPACE('chlk.controllers', function (){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
                 model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
-                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
+                var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
+                var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model, schoolYear);
                 return this.saveSupplementalAnnouncementAction(model, announcementForm);
             }
 
@@ -2325,7 +2333,8 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     var classes = this.classService.getClassesForTopBarSync();
                     var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
+                    var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
+                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, schoolYear);
                 }, this);
             return this.PushView(chlk.activities.announcement.LessonPlanFormPage, result);
         },
@@ -2442,9 +2451,12 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
+            var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
 
-            if(!gradingPeriods.filter(function(_){return model.getStartDate().getDate() >= _.getStartDate().getDate() && model.getStartDate().getDate() <= _.getEndDate().getDate()
-                    && model.getEndDate().getDate() >= _.getStartDate().getDate() && model.getEndDate().getDate() <= _.getEndDate().getDate()}).length){
+            if((!model.isInGallery() && !gradingPeriods.filter(function(_){return model.getStartDate().getDate() >= _.getStartDate().getDate() && model.getStartDate().getDate() <= _.getEndDate().getDate()
+                    && model.getEndDate().getDate() >= _.getStartDate().getDate() && model.getEndDate().getDate() <= _.getEndDate().getDate()}).length) ||
+                (model.isInGallery() && !(model.getStartDate().getDate() >= schoolYear.getStartDate().getDate() && model.getStartDate().getDate() <= schoolYear.getEndDate().getDate()
+                && model.getEndDate().getDate() >= schoolYear.getStartDate().getDate() && model.getEndDate().getDate() <= schoolYear.getEndDate().getDate()))){
                 this.ShowMsgBox('Lesson Plan is not valid. Start date and End date can\'t be in different grading periods', 'whoa.');
                 return null;
             }

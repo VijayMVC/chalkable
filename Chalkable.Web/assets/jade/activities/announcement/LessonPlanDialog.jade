@@ -4,6 +4,7 @@
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 -var userRole = self.getUserRole()
 -var isAdmin = userRole.isAdmin()
+-var schoolYearRange = [{start: self.getSchoolYear() && self.getSchoolYear().getStartDate().getDate(), end: self.getSchoolYear() && self.getSchoolYear().getEndDate().getDate()}]
 
 .announcement-form.dialog.attach-dialog
     .x-window-header
@@ -60,7 +61,7 @@
                                 data-options={
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
-                                    dateRanges: self.getClassScheduleDateRanges()
+                                    dateRanges: isAdmin ? schoolYearRange : self.getClassScheduleDateRanges()
                                 },
                                 data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
                                 placeholder=Msg.Start_date,
@@ -74,7 +75,7 @@
                                 data-options={
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
-                                    dateRanges: self.getClassScheduleDateRanges()
+                                    dateRanges: isAdmin ? schoolYearRange : self.getClassScheduleDateRanges()
                                 },
                                 data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
                                 placeholder=Msg.End_date,

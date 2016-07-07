@@ -866,14 +866,12 @@ NAMESPACE('chlk.controllers', function (){
                     var pictureUrl = data.getBannerPictureUrl();
                     return ria.async.wait(
                             this.appsService.getAppAnalytics(data.getId()),
-                            this.appsService.getAppReviews(data.getId()),
                             this.appsService.getDevApps()
                         )
                         .attach(this.validateResponse_())
                         .then(function(res){
-                           var appReviews = res[1];
                            var analytics = res[0];
-                           var devApps = res[2];
+                           var devApps = res[1];
 
                            return new chlk.models.apps.AppGeneralInfoViewData(
                                 data.getName(),

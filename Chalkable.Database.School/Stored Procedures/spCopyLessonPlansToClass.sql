@@ -128,9 +128,9 @@ Insert Into LessonPlan
 		null,
 		null,
 		ToCopy.VisibleForStudent,
+		@toSchoolYearId,
 		ToCopy.InGallery,
-		ToCopy.GalleryOwnerRef,
-		@toSchoolYearId
+		ToCopy.GalleryOwnerRef
 	From 
 		@toCopy as ToCopy join @newAnnIds as NewLp
 			on ToCopy.Id = NewLp.[FromAnnouncementId]

@@ -43,21 +43,31 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 foreach (var toAnnouncemenId in toAnnouncemenIds)
                 {
-                    var attForCopy = annAttForCopy.Attachment;
-                    var content = serviceLocator.AttachementService.GetAttachmentContent(attForCopy).Content;
-                    if (content != null)
+                    //var attForCopy = annAttForCopy.Attachment;
+                    //var content = serviceLocator.AttachementService.GetAttachmentContent(attForCopy).Content;
+                    //if (content != null)
+                    //{
+                    //    var att = AttachmentService.Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
+                    //    var annAtt = new AnnouncementAttachment
+                    //    {
+                    //        AnnouncementRef = toAnnouncemenId,
+                    //        AttachedDate = annAttForCopy.AttachedDate,
+                    //        Order = annAttForCopy.Order,
+                    //        AttachmentRef = att.Id,
+                    //        Attachment = att
+                    //    };
+                    //    annAtts.Add(annAtt);
+                    //}
+
+                    var annAtt = new AnnouncementAttachment
                     {
-                        var att = AttachmentService.Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
-                        var annAtt = new AnnouncementAttachment
-                        {
-                            AnnouncementRef = toAnnouncemenId,
-                            AttachedDate = annAttForCopy.AttachedDate,
-                            Order = annAttForCopy.Order,
-                            AttachmentRef = att.Id,
-                            Attachment = att
-                        };
-                        annAtts.Add(annAtt);
-                    }
+                        AnnouncementRef = toAnnouncemenId,
+                        AttachedDate = annAttForCopy.AttachedDate,
+                        Order = annAttForCopy.Order,
+                        AttachmentRef = annAttForCopy.AttachmentRef,
+                        Attachment = annAttForCopy.Attachment
+                    };
+                    annAtts.Add(annAtt);
 
                 }
             }
@@ -73,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Trace.Assert(serviceLocator.Context.PersonId.HasValue);
 
-            var attachmentDA = new AttachmentDataAccess(unitOfWork);
+            //var attachmentDA = new AttachmentDataAccess(unitOfWork);
 
             var annoncementAttachmentDA = new AnnouncementAttachmentDataAccess(unitOfWork);
             var annAttachmentsToCopy = annoncementAttachmentDA.GetByAnnouncementIds(fromToAnnouncementIds.Select(x=>x.Key).ToList(), attachmentsOwners);
@@ -86,24 +96,24 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 foreach (var annAttachmentToCopy in announcementAttachmentsToCopy)
                 {
-                    var newAttachment = new Attachment
-                    {
-                        Name = annAttachmentToCopy.Attachment.Name,
-                        PersonRef = serviceLocator.Context.PersonId.Value,
-                        Uuid = null,
-                        UploadedDate = serviceLocator.Context.NowSchoolTime,
-                        LastAttachedDate = serviceLocator.Context.NowSchoolTime,
-                    };
+                    //var newAttachment = new Attachment
+                    //{
+                    //    Name = annAttachmentToCopy.Attachment.Name,
+                    //    PersonRef = serviceLocator.Context.PersonId.Value,
+                    //    Uuid = null,
+                    //    UploadedDate = serviceLocator.Context.NowSchoolTime,
+                    //    LastAttachedDate = serviceLocator.Context.NowSchoolTime,
+                    //};
 
-                    newAttachment.Id = attachmentDA.InsertWithEntityId(newAttachment);
+                    //newAttachment.Id = attachmentDA.InsertWithEntityId(newAttachment);
 
                     var newAnnAttachment = new AnnouncementAttachment
                     {
                         AnnouncementRef = announcementPair.Value,
                         AttachedDate = annAttachmentToCopy.AttachedDate,
                         Order = annAttachmentToCopy.Order,
-                        AttachmentRef = newAttachment.Id,
-                        Attachment = newAttachment
+                        AttachmentRef = annAttachmentToCopy.AttachmentRef,
+                        Attachment = annAttachmentToCopy.Attachment
                     };
 
                     fromToAnnAttachments.Add(new Pair<AnnouncementAttachment, AnnouncementAttachment>(annAttachmentToCopy, newAnnAttachment));

@@ -299,8 +299,9 @@ namespace Chalkable.Web.Controllers
             ProcessFirstLogin(person);
             ProcessActive(person, personView);
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
-            var classes = startupData.Classes;
-            PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
+            var dayTypes = SchoolLocator.DayTypeService.GetDayTypes(startupData.Classes.SelectMany(x => x.ClassPeriods, (a, b) => b.DayTypeRef).ToList());
+            var classesVD = ClassComplexViewData.Create(startupData.Classes, startupData.Rooms, dayTypes).ToList();
+            PrepareJsonData(classesVD, ViewConstants.CLASSES);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyStudent(Context.Login, person.FirstName, person.LastName, 
                 district.Name, "", person.FirstLoginDate, Context.DistrictTimeZone, ip, Context.SCEnabled);

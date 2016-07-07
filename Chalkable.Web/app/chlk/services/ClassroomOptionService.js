@@ -34,6 +34,14 @@ NAMESPACE('chlk.services', function () {
                     standardsCalculationRule: standardsCalculationRule_,
                     standardsCalculationWeightMaximumValues: standardsCalculationWeightMaximumValues_
                 });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.id.ClassId]],
+            ria.async.Future, function copyClassroomOption(fromClassId, toClassId){
+                return this.post('ClassroomOption/Copy.json', Boolean, {
+                    fromClassId: fromClassId.valueOf(),
+                    toClassId: toClassId.valueOf()
+                });
             }
         ])
 });
