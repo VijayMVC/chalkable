@@ -1,0 +1,56 @@
+.grid
+  position: relative
+
+  .container
+    display: table
+    border-collapse: collapse
+    width: 100%
+
+  .head, .row
+    display: table-row
+
+  .body
+    display: table-row-group
+
+  .th, .td, .col
+    display: table-cell
+    padding: 2px
+    vertical-align: middle
+    line-height: 20px
+
+  .head
+    font-weight: 600
+    font-size: 15px
+
+    .th
+      background: #eee
+      border: 1px solid white
+      padding: 5px 2px
+
+  .body .row:nth-child(2n)
+    background-color: #eee
+    
+  .action-links
+    white-space: nowrap
+
+    A
+      display: inline-block
+      width: 24px
+      height: 24px
+      vertical-align: middle
+      margin: 0 2px 0 0
+
+      &.profile, &.view
+        +icons-24-sprite(basic-info)
+
+      &.persons
+        +icons-24-sprite(students)
+
+      &.plugin
+        +icons-24-sprite(complete)
+
+      &.computer
+        +icons-24-sprite(computer)
+
+      &.remove
+        +icons-24-sprite(remove)
