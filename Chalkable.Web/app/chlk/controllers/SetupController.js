@@ -27,7 +27,6 @@ REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.grading.GradingScale');
 REQUIRE('chlk.models.announcement.CategoriesSubmitViewData');
-REQUIRE('chlk.models.setup.CategoriesImportPostViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -79,25 +78,26 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.setup.CategoriesImportDialog, res);
             },
 
-            [[chlk.models.setup.CategoriesImportPostViewData]],
+            [[chlk.models.announcement.CategoriesSubmitViewData]],
             function importAction(model){
                 var res;
-                if(model.getSubmitType() == 'list')
-                    return null;
-                    /*res = this.calendarService.listByDateRange(null, null, model.getClassId())
-                        .then(function(announcements){
-                            return new chlk.models.announcement.AnnouncementImportViewData(model.getClassId(), null, announcements);
-                        });*/
-                else
-                    return null;
-                    /*res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
-                        .then(function(createdList){
-                            this.WidgetComplete(model.getRequestId(), createdList);
-                            this.BackgroundCloseView(chlk.activities.announcement.AnnouncementImportDialog);
-                            return ria.async.BREAK;
-                        }, this);*/
+                if(model.getSubmitType() == 'list'){
+                    res = this.announcementTypeService.list([model.getClassId()])
+                        .then(function(types){
+                            return new chlk.models.setup.CategoriesImportViewData(model.getClassId(), null, types);
+                        });
 
-                //return this.UpdateView(chlk.activities.announcement.AnnouncementImportDialog, res, 'list-update');
+                    return this.UpdateView(chlk.activities.setup.CategoriesImportDialog, res, 'list-update');
+                }
+                else{
+                    res = this.announcementTypeService.copy(model.getClassId(), model.getToClassId(), model.getIds())
+                        .then(function(ids){
+                            this.BackgroundNavigate('setup', 'categoriesSetup', [model.getToClassId()]);
+                            return ria.async.BREAK;
+                        }, this);
+
+                    return this.UpdateView(chlk.activities.setup.CategoriesImportDialog, res, 'list-update');
+                }
             },
 
             [[chlk.models.id.SchoolPersonId]],
@@ -203,9 +203,9 @@ NAMESPACE('chlk.controllers', function (){
             function submitClassAnnouncementAction(model){
                 var res;
                 if(model.getId() && model.getId().valueOf())
-                    res = this.updateClassAnnouncementType_(model)
+                    res = this.updateClassAnnouncementType_(model);
                 else
-                    res = this.createClassAnnouncementType_(model)
+                    res = this.createClassAnnouncementType_(model);
                 res.thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
