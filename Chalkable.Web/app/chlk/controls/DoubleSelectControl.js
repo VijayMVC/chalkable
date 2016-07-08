@@ -36,8 +36,11 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('click', '.double-select .second-result')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function secondResultClick(node, event) {
-                var dropDown = node.parent('.double-select ');
+                var dropDown = node.parent('.double-select '),
+                    yearName = dropDown.find('.first-result.active-item').getHTML();
                 dropDown.find('.selected-value').setValue(node.getData('id'));
+                dropDown.find('.selected-year-name').setValue(yearName);
+                dropDown.find('.selected-class-name').setValue(node.getHTML());
                 dropDown.find('.value-text').setText(node.getText());
                 dropDown.find('.second-result.selected-item').removeClass('selected-item');
                 dropDown.find('.first-result.selected-item').removeClass('selected-item');
@@ -94,6 +97,25 @@ NAMESPACE('chlk.controls', function () {
                         new ria.dom.Dom(document).off('click.doubleselect');
                     }*/
                 return attributes;
+            },
+
+            function prepareItems(items){
+                var res = [];
+                items.forEach(function(item){
+                    var classes = item.getClasses();
+                    if(classes.length){
+                        res.push({
+                            name: item.getSchoolYear().getName(),
+                            values: classes.map(function(clazz){
+                                return {
+                                    name: clazz.getFullClassName(),
+                                    id: clazz.getId().valueOf()
+                                }
+                            })
+                        })
+                    }
+                });
+                return res;
             }
         ]);
 });

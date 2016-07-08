@@ -42,11 +42,12 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
                 , chlk.models.common.ChlkDate
                 , Number, Number, Number, Boolean, Boolean,
-                Array
+                Array, Boolean, Boolean, Boolean
             ]],
             ria.async.Future, function saveClassAnnouncement(id, classId_, classAnnouncementTypeId_, title_, content_
                 , expiresdate_, maxScore_, weightAddition_, weighMultiplier_
-                , hideFromStudent_, canDropStudentScore_, attributesListData) {
+                , hideFromStudent_, canDropStudentScore_, attributesListData
+                , discussionEnabled, previewCommentsEnabled, requireCommentsEnabled) {
                 return this.post('ClassAnnouncement/SaveAnnouncement.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId:id.valueOf(),
                     classAnnouncementTypeId:classAnnouncementTypeId_,
@@ -59,17 +60,21 @@ NAMESPACE('chlk.services', function () {
                     weightmultiplier: weighMultiplier_,
                     hidefromstudents: hideFromStudent_ || false,
                     candropstudentscore: canDropStudentScore_ || false,
-                    attributes: attributesListData
+                    attributes: attributesListData,
+                    discussionEnabled: discussionEnabled,
+                    previewCommentsEnabled: previewCommentsEnabled,
+                    requireCommentsEnabled: requireCommentsEnabled
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
                 , chlk.models.common.ChlkDate, Number, Number, Number, Boolean, Boolean,
-                    Boolean, Array
+                    Boolean, Array, Boolean, Boolean, Boolean
             ]],
             ria.async.Future, function submitClassAnnouncement(id, classId_, announcementTypeId_, title_, content_
                 , expiresdate_, maxScore_, weightAddition_, weighMultiplier_
-                , hideFromStudent_, canDropStudentScore_, gradable_, attributesListData) {
+                , hideFromStudent_, canDropStudentScore_, gradable_, attributesListData
+                , discussionEnabled, previewCommentsEnabled, requireCommentsEnabled) {
                 return this.post('ClassAnnouncement/SubmitAnnouncement.json', Boolean, {
                     announcementid:id.valueOf(),
                     classannouncementtypeid:announcementTypeId_,
@@ -82,7 +87,10 @@ NAMESPACE('chlk.services', function () {
                     hidefromstudents: hideFromStudent_ || false,
                     candropstudentscore: canDropStudentScore_ || false,
                     gradable: gradable_ || false,
-                    attributes: attributesListData
+                    attributes: attributesListData,
+                    discussionEnabled: discussionEnabled,
+                    previewCommentsEnabled: previewCommentsEnabled,
+                    requireCommentsEnabled: requireCommentsEnabled
                 });
             },
 

@@ -14,6 +14,13 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
-            chlk.models.common.PaginatedList, 'students'
+            chlk.models.common.PaginatedList, 'students',
+
+            [[chlk.models.id.AnnouncementId, ArrayOf(chlk.models.announcement.AnnouncementComment)]],
+            function $(id_, announcementComments_){
+                BASE();
+                id_ && this.setId(id_);
+                announcementComments_ && this.setAnnouncementComments(announcementComments_);
+            }
         ]);
 });

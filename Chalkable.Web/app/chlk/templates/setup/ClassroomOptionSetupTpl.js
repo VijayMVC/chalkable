@@ -12,6 +12,12 @@ NAMESPACE('chlk.templates.setup', function () {
             ArrayOf(chlk.models.grading.GradingScale), 'scales',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'ableCopy',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.grading.ClassroomOptionViewData, 'classroomOptions'
         ])
 });

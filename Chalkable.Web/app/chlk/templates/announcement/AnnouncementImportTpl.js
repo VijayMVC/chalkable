@@ -21,25 +21,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'requestId',
 
             [ria.templates.ModelPropertyBind],
-            Array, 'classScheduleDateRanges',
-
-            function getClassesForSelect(){
-                var items = this.getClassesByYears(), res = [];
-                items.forEach(function(item){
-                    var classes = item.getClasses();
-                    if(classes.length){
-                        res.push({
-                            name: item.getSchoolYear().getName(),
-                            values: classes.map(function(clazz){
-                                return {
-                                    name: clazz.getFullClassName(),
-                                    id: clazz.getId().valueOf()
-                                }
-                            })
-                        })
-                    }
-                });
-                return res;
-            }
+            Array, 'classScheduleDateRanges'
         ])
 });

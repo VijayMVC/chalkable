@@ -1,5 +1,6 @@
 var ChlkSessionConstants = {
     ADMIN_PANORAMA: 'adminPanorama',
+    ANNOUNCEMENT_FOR_QNAS: 'announcementQnAs',
     ATTACH_OPTIONS: 'attachOptions',
     ATTRIBUTES_WITH_FILES: 'attributesWithFiles',
     CHART_DATE_TYPE: 'chartDateType',

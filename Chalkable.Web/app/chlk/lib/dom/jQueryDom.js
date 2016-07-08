@@ -358,6 +358,10 @@ NAMESPACE('chlk.lib.dom', function () {
                 return new ria.dom.Dom(this._dom.next(selector_));
             },
             [[String]],
+            ria.dom.Dom, function closest(selector_) {
+                return new ria.dom.Dom(this._dom.closest(selector_));
+            },
+            [[String]],
             OVERRIDE, ria.dom.Dom, function previous(selector_) {
                 return new ria.dom.Dom(this._dom.prev(selector_));
             },

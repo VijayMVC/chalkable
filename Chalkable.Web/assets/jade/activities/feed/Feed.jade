@@ -53,7 +53,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                     .right-block.i-b.right
                         .i-b.copy-to-block
                             LABEL.text Copy to:
-                            +DoubleSelect('toClassId', self.getClassesForSelect()).copy-to-select
+                            +DoubleSelect('toClassId', self.getClassesByYears()).copy-to-select
                         +DatePicker('copyStartDate')(
                             data-options={
                                 showOtherMonths: true,

@@ -102,6 +102,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 selectedAnns = selectedAnns.OrderBy(x =>
                 {
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
+                    if (x.SupplementalAnnouncementData != null) return x.SupplementalAnnouncementData.Expires;
                     return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
                 }).ToList();
                 res.AddRange(CreateGroupOfItems(person, schoolName, schoolYear, nowSchoolTime, selectedAnns, c, dayTypes, staffs, apps, appsImages));

@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.profile', function () {
 
     /** @class chlk.models.profile.ShortAnnouncementForProfileViewData*/
     CLASS(
-        UNSAFE, 'ShortAnnouncementForProfileViewData', [
+        UNSAFE, 'ShortAnnouncementForProfileViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
             chlk.models.announcement.ShortStudentAnnouncementsViewData, 'studentAnnouncements',
 
             chlk.models.id.AnnouncementId, 'id',

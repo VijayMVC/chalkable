@@ -20,6 +20,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int? PersonId { get; set; }
         public string PersonName { get; set; }
         public string PersonGender { get; set; }
+        public bool DiscussionEnabled { get; set; }
+        public bool PreviewCommentsEnabled { get; set; }
+        public bool RequireCommentsEnabled { get; set; }
 
         protected ShortAnnouncementViewData(){}
 
@@ -33,6 +36,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             AnnouncementTypeName = announcement.AnnouncementTypeName;
             Type = (int)announcement.Type;
             IsOwner = announcement.IsOwner;
+            DiscussionEnabled = announcement.DiscussionEnabled;
+            PreviewCommentsEnabled = announcement.PreviewCommentsEnabled;
+            RequireCommentsEnabled = announcement.RequireCommentsEnabled;
         } 
 
         public static ShortAnnouncementViewData Create(Announcement announcement)

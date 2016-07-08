@@ -6,6 +6,9 @@
 	Announcement.[State] as [State],
 	Announcement.Content as Content,
 	Announcement.Title as [Title],
+	Announcement.DiscussionEnabled as [DiscussionEnabled],
+	Announcement.PreviewCommentsEnabled as [PreviewCommentsEnabled],
+	Announcement.RequireCommentsEnabled as [RequireCommentsEnabled],
 
 	SupplementalAnnouncement.ClassRef as ClassRef,
 	SupplementalAnnouncement.SchoolYearRef as SchoolYearRef,
