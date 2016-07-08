@@ -77,6 +77,13 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 EndDate = announcement.LessonPlanData.EndDate;
                 IsHidden = !announcement.LessonPlanData.VisibleForStudent;
             }
+            if (announcement.SupplementalAnnouncementData != null)
+            {
+                StartDate = null;
+                EndDate = announcement.SupplementalAnnouncementData.Expires;
+                IsHidden = !announcement.SupplementalAnnouncementData.VisibleForStudent;
+            }
+
             var adminAnn = announcement.AdminAnnouncementData;
             if (adminAnn != null)
             {
@@ -124,6 +131,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 anns = anns.OrderBy(x =>
                 {
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
+                    if (x.SupplementalAnnouncementData != null) return x.SupplementalAnnouncementData.Expires;
                     return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
                 }).ToList();
                 res.AddRange(anns.Select(a=> new ShortFeedExportModel(person, schoolName, sy, nowTime, c, dayTypes, staffs, a)).ToList());
