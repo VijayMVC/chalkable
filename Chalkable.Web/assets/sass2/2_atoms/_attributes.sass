@@ -1,0 +1,283 @@
+.attributes-block
+  margin-right: -20px
+
+
+
+
+  .title-panel
+    position: relative
+    height: 70px
+
+  .attribute-title
+    input[type=text]
+    line-height: 40px
+    display: inline-block
+    vertical-align: top
+
+  .attribute-item
+    margin-bottom: 20px
+
+  .announcement-attr-name
+    width: 340px
+
+
+  .description
+    position: relative
+
+    &.with-file
+      textarea
+        padding-bottom: 50px
+
+    .file-attachment
+      position: absolute
+      bottom: 10px
+      left: 15px
+      right: 15px
+      background-color: lightgray
+      border-radius: 5px
+      height: 20px
+      padding: 7px
+      font-size: 14px
+      font-weight: bold
+      .remove-file-attachment
+        +icons-24-sprite(remove, 0, -3px, -3px)
+        position: absolute
+        right: -30px
+        top: 8px
+        cursor:pointer
+
+      a
+        text-decoration: none
+        font-weight: bold
+        color: #2b2a28
+        display: block
+        margin-right: 30px
+
+  .attribute-access
+    display: inline-block
+    vertical-align: top
+    position: absolute
+    right: 0
+    top: 10px
+
+    .question-mark
+      position: absolute
+      right: 115px
+      top: -2px
+      width: 24px
+      height: 24px
+      bottom: 18px
+      font-size: 0
+      opacity: .5
+      +icons-24-sprite(question)
+
+    .hideLabel
+      width: 228px
+      display: inline-block
+      right: 45px
+      position: absolute
+
+    .slide-checkbox
+      position: absolute
+      right: 45px
+
+
+    .remove-attribute
+      border: none
+      width: 32px
+      height: 32px
+      box-shadow: none
+      +icons-32-sprite(close)
+      position: absolute
+      top: -4px
+      right: 2px
+
+
+  .attribute-file-attachment
+    margin-top: 24px
+    text-align: right
+
+    .attach-doc
+      width: 110px
+      display: inline-block
+
+
+  .right-block
+    min-width: 260px
+
+
+.attributes
+
+  .attribute-item-container
+    overflow: hidden
+
+    .mp-data
+      height: 0px
+
+  .attribute-details
+    padding: 10px 25px
+
+  .header
+    &.attribute-title
+      text-align: left
+      padding-left: 30px
+
+      .attr-is-hidden
+        position: absolute
+        right: 20px
+        font-size: 14px
+
+
+
+
+
+  .attr-name
+    color: #0080c0
+    font-weight: bold
+
+  .attribute-description
+    padding: 15px 45px 80px 15px
+    width: 100%
+    box-sizing: border-box
+    word-wrap: break-word
+    white-space: pre-wrap
+
+  h3
+    border-bottom: 1px solid #c8c7c3
+    font-size: 18px
+    line-height: 36px
+
+
+
+.attribute-attachments
+
+  padding-top: 20px
+  color: #2b2a28
+  text-shadow: rgba(255, 255, 255, 0.5) 0 1px 1px
+  margin: 0 0 24px
+
+  .attribute-attachment
+  IMG
+    position: absolute
+
+  .attribute-attachment
+    border-radius: 5px
+    background: #fff
+    border: 1px solid #c8c7c3
+    display: inline-block
+    margin-right: 20px
+    margin-bottom: 20px
+    $padding: 9px
+    padding: $padding
+    width: 188px - 2 * $padding
+    height: 155px - 2 * $padding
+    position: relative
+    vertical-align: top
+    overflow: hidden
+
+    .icon
+      height: 100%
+      overflow: hidden
+
+    > .wrapper
+      overflow: hidden
+      width: 100%
+      height: 100%
+      position: relative
+
+    &::after
+      content: ' '
+      position: absolute
+      bottom: 0
+      right: 0
+      left: 0
+      height: 36px
+      +background(linear-gradient(top, transparentize(#fff, 1) 0%, #fff 25%, #fff 100%))
+      z-index: 3
+      border-radius: 0 0 5px 5px
+
+    IMG
+      width: 188px - 2 * $padding
+      z-index: 1
+      opacity: 1
+      +transition(opacity .2s ease-in-out)
+
+    &:hover IMG, &:hover .img
+      opacity: 0.1
+
+    .title
+      position: absolute
+      bottom: 0
+      left: 0
+      padding: 0 19px
+      color: #56554f
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      font-size: 13px
+      font-weight: 600
+      line-height: 36px
+      //+transition(bottom, .05s, easy-in-out)
+      z-index: 5
+      width: 188px - 2 * 19px
+      white-space: nowrap
+      text-overflow: ellipsis
+      overflow: hidden
+
+    &:hover .title
+      bottom: 155px - 36px - $padding
+
+    .shortdesc
+      position: absolute
+      top: 40px
+      left: -$padding
+      padding: 0 19px
+      color: #56554f
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      font-size: 12px
+      font-weight: 600
+      line-height: 16px
+      +transition(opacity .2s ease-in-out)
+      z-index: 5
+      width: 188px - 2 * 19px
+      opacity: 0
+
+    &:hover .shortdesc
+      opacity: 1
+
+    BUTTON, .download-link
+      opacity: 0
+      display: none
+      position: absolute
+      bottom: 10px
+      left: 20px
+      width: 148px
+      +transition(opacity .2s ease-in-out)
+      z-index: 5
+
+    .download-link.file
+      width: 125px
+
+    &:hover BUTTON, &:hover .download-link
+      opacity: 1
+      display: block
+      +transition(opacity .2s ease-in-out)
+
+    .download-link
+      text-align: center
+
+    .close-btn
+      display: none
+
+    &:hover .close-btn
+      display: block
+
+    .close-btn
+      opacity: 1
+      border: none
+      width: 32px
+      height: 32px
+      +icons-32-sprite(delete)
+      top: -8px
+      left: 171px
+      box-shadow: none
+      position: absolute
+      background-color: transparent
