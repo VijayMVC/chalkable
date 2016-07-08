@@ -34,23 +34,6 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled
                   ).class-button.validate-skip.item
                      +ClassImg(item, 45, 80).avatar
                      SPAN.text-container= item.getName()
-               //if id && id.valueOf()
-                   .chat-bubble.absolute.top
-                       .popup-item
-                           .name.i-b.v-m Name:
-                           .value.i-b.v-m=item.getDescription()
-                       .popup-item
-                           .name.i-b.v-m Number:
-                           .value.i-b.v-m=item.getClassNumber()
-                       .popup-item
-                           .name.i-b.v-m Room:
-                           .value.i-b.v-m=item.getRoom() && item.getRoom().getDescription()
-                       .popup-item
-                           .name.i-b.v-m Period:
-                           .value.i-b.v-m=item.getPeriods() && item.getPeriods().join(', ')
-                       .popup-item
-                           .name.i-b.v-m Days:
-                           .value.i-b.v-m=item.getDayTypes() && item.getDayTypes().join(', ')
 
 mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
    +doRender_(false, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)(attributes)
