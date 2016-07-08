@@ -1,0 +1,16 @@
+.setup-page.video.loader-container
+    .loader
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .right
+                -action = (self.getType() > 0 ? 'teacherSettings' : 'start');
+                -params = (self.getType() > 0 ? [0] : []);
+                +ActionLinkWithPrepend('setup', action, params)#lets-do-it=Msg.Lets_do_it.toUpperCase()
+    .blue-arrow.right-up-arrow=Msg.Click.toLowerCase()
+    .video-chalkable.center
+        +Video(true)(src=self.getValue() || '', width="610", height="400")
+    .blue-arrow.div.bottom-text.center
+        |Next just setup how you grade
+        br
+        |and you're done!
+

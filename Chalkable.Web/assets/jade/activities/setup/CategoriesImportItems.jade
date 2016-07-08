@@ -1,0 +1,16 @@
+mixin Category_(item)
+    .name-td.check
+        .box-checkbox.circle
+            +Checkbox('items', false, false, true)(data-id = item.getId().valueOf()).item-check
+    .name-td.name= item.getName()
+
+-var categories = self.getCategories()
+
+each category, index in categories
+    if index % 2 == 0
+        -var item1 = categories[index]
+        -var item2 = categories[index + 1]
+        .row-block
+            +Category_(item1)
+            if item2
+                +Category_(item2)
