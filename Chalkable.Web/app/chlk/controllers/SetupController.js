@@ -252,6 +252,7 @@ NAMESPACE('chlk.controllers', function (){
             function submitAnnouncementTypesAction(model){
                 if(model.getSubmitType() == 'copy'){
                     var res = this.announcementTypeService.copy(model.getClassId(), model.getToClassId(), model.getIds())
+                        .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getToClassId()]])
                         .then(function(ids){
                             return model;
                         });
