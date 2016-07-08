@@ -21,6 +21,7 @@ namespace Chalkable.BusinessLogic.Model
                 AltStudentNumber = student.AltStudentNumber,
                 BirthDate = student.BirthDate,
                 FirstName = student.FirstName,
+                MiddleName = student.MiddleName,
                 Gender = student.Gender,
                 GenderDescriptor = student.GenderDescriptor,
                 HasMedicalAlert = student.HasMedicalAlert,
