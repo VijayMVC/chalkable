@@ -1,0 +1,484 @@
+@import "compass/css3/user-interface"
+
+.grading-comments-list
+  position: absolute
+  background: white
+  width: 162px
+  margin-top: -4px
+  box-shadow: 0 0 3px #aaa
+  max-height: 307px
+  overflow: auto
+
+  .item
+    padding: 4px 8px
+    font: bold 12px Arial
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+    text-shadow: none
+    cursor: pointer
+
+    &.selected
+      background: #26647e
+      color: white
+
+.autocomplete-list
+  display: none
+  background: #fff
+  position: absolute
+  z-index: 9999
+  border: 1px solid #d1d1d1
+
+  .autocomplete-item
+    line-height: 28px
+    font-size: 13px
+    text-overflow: ellipsis
+    overflow: hidden
+    padding: 0 2px
+    width: 77px
+    white-space: nowrap
+    cursor: pointer
+    text-align: center
+
+    &:not(:last-child)
+      border-bottom: 1px solid #ececec
+
+    &.hovered
+      background: #f2f2f2
+
+.people-list.grading
+  .row
+    z-index: auto
+
+  .row:not(.readonly) .selected
+    display: none
+
+  .row.selected:not(.readonly)
+    .not-selected
+      display: none
+
+    .selected
+      display: block
+
+    .empty-grade-form
+      .grade-options.selected
+        display: none
+
+  .update-grade-form
+    display: table
+    width: 100%
+    > *
+      display: table-cell
+      vertical-align: top
+
+    .image-container
+      padding-right: 25px
+
+  .name-block
+    position: relative
+    width: 100%
+
+    .wrapper, p
+      display: inline-block
+
+
+    A
+      text-decoration: none
+
+    > A
+      color: #2f7790
+      font-size: 20px
+
+    .grade-options
+      position: absolute
+      bottom: -20px
+      left: 0
+      font-style: italic
+      font-size: 12px
+
+    .small-pop-up
+      position: absolute
+      top: 55px
+      left: 2px
+      display: none
+      border-radius: 5px
+      z-index: 11
+      line-height: 15px
+
+  .grade-triangle
+    position: absolute
+    right: -15px
+    top: 25px
+    width: 24px
+    height: 24px
+    +icons-24-sprite(student-arrow)
+    +single-transition(all, 0.5s)
+
+    &:not(.down)
+      @include transform(rotate(-90deg))
+
+  .grade-block
+    position: relative
+    width: 100px
+    padding-right: 20px
+
+    &.auto-grade
+      .text-value, .grade-input
+        color: #41b768
+
+    .text-value
+      color: #2f7790
+      display: inline-block
+      width: 85px
+      text-align: center
+
+      &.dropped
+        text-decoration: line-through
+
+    .text-value, input[type=text]
+      font-size: 20px
+      font-weight: 600
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)
+
+    input[type=text]
+      width: 75px
+      text-align: center
+      color: #000
+
+      &.error
+        border: 1px solid red
+
+    .letters
+      position: absolute
+      bottom: -20px
+      left: 0
+      font-style: italic
+      font-size: 12px
+      width: 85px
+      text-align: center
+      z-index: -1
+      pointer-events: none
+
+  .attachments-container
+    padding-right: 10px
+
+    .shortdesc
+      top: 23px
+      white-space: pre
+
+.announcement-view-page
+  position: relative
+
+  .discussion-block
+    .comments-block
+      margin-left: -40px
+
+      h3
+        margin-left: 40px
+
+    INPUT, TEXTAREA
+      @include input-placeholder
+        font-style: italic
+
+    .chat-bubble
+      padding: 14px 8px 17px 21px
+      min-height: 50px
+
+      .img-wrapper
+        margin-top: 13px
+
+      .top-block>SPAN
+        font-weight: bold
+        color: #aba9a5
+        font-size: 14px
+
+      .right>*
+        margin-left: 4px
+
+    .qna>FORM.reply-form
+      margin-top: 20px
+
+    .qna:not(.for-reply)
+      >FORM.reply-form
+        display: none
+
+    .qna:not(.for-edit)
+      >FORM.edit-form
+        display: none
+
+    .qna.for-edit
+      >DIV.chat-bubble
+        display: none
+
+    .reply-icon, .edit-grey-icon, .invisible-grey-icon, .visible-icon, .x-remove-icon
+      cursor: pointer
+
+    .for-delete
+      .delete-block
+        display: block
+
+    .delete-block
+      display: none
+      background: rgba(210, 210, 210, 0.9)
+
+      &::before
+        content: ' '
+        position: absolute
+        +rotate(-135deg)
+        top: 17px
+        left: -7px
+        width: 12px
+        height: 12px
+        pointer-events: none
+        border-width: 1px 1px 0 0
+        background: rgba(210, 210, 210, 0.9)
+
+      .delete-content
+        position: absolute
+        top: 50%
+        left: 50%
+        margin-left: -151px
+        margin-top: -34px
+        text-align: center
+
+      .text
+        font-weight: bold
+        font-size: 16px
+        margin-bottom: 16px
+
+
+      .negative-button
+        margin-right: 16px
+
+    .comments-block
+      .comments-block
+        margin-top: 28px
+
+      .row:last-child
+        margin-bottom: 0
+
+    .hidden-comment
+      >DIV.qna>DIV.chat-bubble, >DIV.avatar-block-left
+        opacity: 0.5
+
+    .download-link
+      display: inline-block
+      font-weight: bold
+
+    .comments-count
+      margin: 31px 0 17px
+      font-size: 18px
+
+    .row
+      width: 100%
+      margin-bottom: 28px
+
+    .post-comment-form
+      .post-comment-text-block
+        width: 100%
+        box-sizing: border-box
+        margin-bottom: 14px
+        padding: 8px 10px
+        border-radius: 4px
+        border: 1px solid #c8c7c3
+        +box-shadow(rgba(0, 0, 0, 0.1) 0 1px 3px inset, rgba(255, 255, 255, 0.5) 0 1px 1px)
+        position: relative
+
+      TEXTAREA
+        +box-shadow(none)
+        width: 100%
+        border: none
+        resize: none !important
+
+      .green-button
+        width: 85px
+        margin-right: 15px
+
+
+
+    .avatar-block-left
+      padding-right: 0
+      text-align: center
+      width: 131px
+
+      .avatar-wrapper
+        display: inline-block
+
+  .close-open-control
+    margin-top: 24px
+
+  .details-container
+    .table
+      width: 100%
+      table-layout: fixed
+
+    .avatar-block-left
+      width: 49px
+
+  .description
+    width: 100%
+    display: inline-block
+    font-size: 15px
+    line-height: 22px
+    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+    color: #2b2a28
+
+    h2
+      color: #2f7790
+      margin: 0 0 8px
+      padding: 0
+      font-size: inherit
+
+    p
+      margin: 0
+      white-space: pre-wrap
+
+    .chat-bubble
+      +box-shadow(transparentize(#000, .9) 0 2px 4px)
+
+  .standards-container
+    margin-top: 24px
+
+  .questions-and-answers
+    .row
+      margin-top: 24px
+
+    .hidden-item
+      display: none
+
+    .show-more
+      font-weight: bold
+      cursor: pointer
+      text-align: center
+      border: 1px solid #b4b4b4
+      height: 38px
+      line-height: 35px
+      padding: 0 10px 0 14px
+      border-radius: 4px
+      width: 325px
+      margin-left: 85px
+
+  .student-announcements-top-panel
+    border: 1px solid #c8c7c3
+    border-top-left-radius: 5px
+    border-top-right-radius: 5px
+    line-height: 37px
+    +box-shadow(#fff 0px 1px 0px inset)
+    background: #f7f7f5
+    padding: 19px
+
+    position: relative
+    &::after
+      content: ' '
+      position: absolute
+      bottom: -3px
+      right: 0
+      left: 0
+      height: 3px
+      +background-image(linear-gradient(top, #c8c7c3 0%, transparentize(#c8c7c3, 1) 100%))
+
+    .right
+      float: right
+
+    .section
+      display: inline-block
+      color: #56554f
+      text-transform: uppercase
+      font-weight: 600
+      .drop-unDrop-checkbox
+        position: relative
+        margin-left: 10px
+        vertical-align: middle
+
+    .section + .section
+      padding-left: 40px
+      position: relative
+      &::after, &::before
+        content: ' '
+        position: absolute
+        top: 10px
+        bottom: 10px
+        width: 1px
+
+      &::before
+        left: 20px
+        background-color: #e3e3e1
+      &::after
+        left: 21px
+        background-color: #efefed
+
+
+
+
+  .grade-container
+    .letters
+      bottom: -25px !important
+      z-index: 0 !important
+
+  .grades-individual
+    border: 1px solid #c8c7c3
+
+  .loading .grade-block .text-value
+    font-size: 0
+    background: image-url("images2/loaders/circular-grey.gif") 50% 50% no-repeat
+    height: 20px
+
+  .comment-grade-container
+    background: #f8e6a5
+    border-radius: 5px
+    padding: 16px
+    line-height: 60px - 32px
+    overflow: hidden
+    margin-bottom: 16px
+
+    .grade-value
+      background: #2f7790
+      line-height: 60px
+      padding: 0 20px
+      font-family: 'Reenie Beanie', serif
+      font-size: 34pt
+      color: #fff
+      margin: -16px -16px -16px 0
+
+      &.dropped-with-value
+        text-decoration: line-through
+
+  .auto-grades
+    .accept-decline
+      display: none
+
+    .item
+      background: #f7f7f5
+      border-radius: 5px
+      margin-bottom: 15px
+      line-height: 67px
+      display: table
+      font-size: 16px
+      border: 1px solid #c8c7c3
+
+      .title
+        width: 100%
+
+      .buttons
+        white-space: nowrap
+
+      > *
+        display: table-cell
+        padding: 0 15px
+
+  .app-auto-grade
+    position: absolute
+    bottom: -21px
+    left: 0
+    right: 0
+    text-align: center
+    color: #666
+
+.grading-input-popup.chlk-pop-up-container
+  display: none
+  text-align: left
+  +transform(translate(-50%, 0))
+  left: 60%
+  top: 60px
+  white-space: normal !important
+  line-height: 24px
