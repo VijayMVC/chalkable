@@ -26,7 +26,7 @@ NAMESPACE('chlk.templates.classes', function () {
             },
 
             [[Object, String]],
-            function getDistributionChartOptions_(distribution, color){
+            function getDistributionChartOptions_(distribution, color, discipline_){
                 if(!distribution)
                     return null;
 
@@ -66,7 +66,10 @@ NAMESPACE('chlk.templates.classes', function () {
                         lineWidth: 1,
                         lineColor: '#ebebeb',
                         gridLineColor: '#ebebeb',
-                        gridLineDashStyle: 'solid'
+                        gridLineDashStyle: 'solid',
+                        startOnTick: true,
+                        showFirstLabel: true,
+                        min: 0
                     },
 
                     series: [{
@@ -106,7 +109,7 @@ NAMESPACE('chlk.templates.classes', function () {
             },
 
             function getDisciplineDistributionChartOptions(){
-                return this.getDistributionChartOptions_(this.getClassDistributionSection().getDisciplineDistribution(), '#fb6149');
+                return this.getDistributionChartOptions_(this.getClassDistributionSection().getDisciplineDistribution(), '#fb6149', true);
             },
 
             function getGradeAverageDistributionChartOptions(){
