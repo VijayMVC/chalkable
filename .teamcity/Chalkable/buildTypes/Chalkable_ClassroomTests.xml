@@ -47,7 +47,7 @@
         <parameters>
           <param name="cronExpression_dm" value="*" />
           <param name="cronExpression_dw" value="1-5" />
-          <param name="cronExpression_hour" value="*" />
+          <param name="cronExpression_hour" value="0-8,20-23" />
           <param name="cronExpression_min" value="00" />
           <param name="cronExpression_month" value="*" />
           <param name="cronExpression_sec" value="00" />
