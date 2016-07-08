@@ -1,0 +1,23 @@
+.dialog
+    .x-window-header
+        h1 Import Categories
+        .close.close-btn
+
+    +ActionForm('setup', 'import')
+        +Hidden('toClassId', self.getClassId())
+        +Button(type="submit", name="submitType", value="list").x-hidden.list-update-btn
+        +Hidden('announcementsToCopy').items-to-copy
+
+        .top-container
+            .i-b.copy-to-block
+                LABEL.text Select year:
+                +DoubleSelect('classId', self.getClassesForSelect()).copy-to-select
+
+            .clear-fix
+        .table-block.items-table
+            .items-container
+
+        .buttons-container.grey.right-align
+            Button.cancel.close.negative-button Cancel
+            Button(type="submit", disabled="disabled").blue-button.import-btn Import
+

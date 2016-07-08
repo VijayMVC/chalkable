@@ -1,0 +1,29 @@
+.rating
+  border: none
+  padding: 0
+  margin: 0
+  display: inline-block
+
+  &.all
+    margin-left: 15px
+
+  > input
+    position: absolute
+    clip: rect(0,0,0,0)
+
+  &.editable > label:hover, &.editable > label:hover ~ label, > input:checked ~ label
+    +icons-24-sprite(star-gold, 1)
+    width: 24px
+    height: 23px
+
+  > label
+    float: right
+    cursor: pointer
+    +icons-24-sprite(star-gray, 1)
+    width: 24px
+    height: 23px
+
+  &.editable > label:active
+    position: relative
+    top: 2px
+    left: 2px

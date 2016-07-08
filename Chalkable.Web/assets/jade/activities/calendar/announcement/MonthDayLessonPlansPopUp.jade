@@ -1,0 +1,13 @@
+.calendar-popup.popup-bubble.bottom
+    .items-list
+        h2=Msg.Lesson_Plans
+        ul.day-items
+            each item in self.getLessonPlans()
+                li.items
+                    +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN).pop-up-item
+                        div
+                            +TooltipWithOverflow(item.getTitle()).item-title
+                            +TooltipWithOverflow(item.getClassName()).classname-under
+
+
+
