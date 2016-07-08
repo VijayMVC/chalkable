@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
 REQUIRE('chlk.templates.setup.CategoriesImportTpl');
-//REQUIRE('chlk.templates.setup.CategoriesImportItemsTpl');
+REQUIRE('chlk.templates.setup.CategoriesImportItemsTpl');
 
 NAMESPACE('chlk.activities.setup', function () {
 
@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.setup', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.setup.CategoriesImportTpl)],
-        //[ria.mvc.PartialUpdateRule(chlk.templates.setup.CategoriesImportItemsTpl, 'list-update', '.items-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.setup.CategoriesImportItemsTpl, 'list-update', '.items-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         'CategoriesImportDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
             [ria.mvc.DomEventBind('change', '.item-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],

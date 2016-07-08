@@ -6,12 +6,12 @@
     +ActionForm('setup', 'import')
         +Hidden('toClassId', self.getClassId())
         +Button(type="submit", name="submitType", value="list").x-hidden.list-update-btn
-        +Hidden('announcementsToCopy').items-to-copy
+        +Hidden('ids').items-to-copy
 
         .top-container
             .i-b.copy-to-block
                 LABEL.text Select year:
-                +DoubleSelect('classId', self.getClassesForSelect()).copy-to-select
+                +DoubleSelect('classid', self.getClassesForSelect()).copy-to-select
 
             .clear-fix
         .table-block.items-table
