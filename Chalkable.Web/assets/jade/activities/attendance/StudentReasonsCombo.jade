@@ -1,0 +1,5 @@
+currentReasons = self.getCurrentReasons() || [];
+currentId = self.getCurrentId();
++Select('attendanceReadons')(disabled=!currentReasons.length).attendance-reason-select.grey-select
+    each reason,i in currentReasons
+        +Option(reason.getId(), reason.getDescription(), currentId == reason.getId())
