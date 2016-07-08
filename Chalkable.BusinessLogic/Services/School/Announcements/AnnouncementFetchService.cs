@@ -131,6 +131,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
                 if (!announcementType.HasValue || announcementType == AnnouncementTypeEnum.LessonPlan)
                     res.AddRange(ServiceLocator.LessonPlanService.GetAnnouncementDetailses(fromDate, toDate, classId, complete, onlyOwners));
+
+                if(!announcementType.HasValue || announcementType == AnnouncementTypeEnum.Supplemental)
+                    res.AddRange(ServiceLocator.SupplementalAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, complete, onlyOwners));
             }
             return res;
         }

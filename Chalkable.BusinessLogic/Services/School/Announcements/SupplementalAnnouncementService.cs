@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? classAnnouncementTypeId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds, bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled);
         void SetVisibleForStudent(int supplementalAnnouncementId, bool visible);
         SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementId);
+        IList<AnnouncementComplex> GetSupplementalAnnouncementForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
@@ -36,7 +37,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
-            throw new NotImplementedException();
+            var supAnn = GetSupplementalAnnouncementForFeed(startDate, toDate, classId, complete);
+            return DoRead(u => InternalGetDetailses(CreateSupplementalAnnouncementDataAccess(u), supAnn.Select(sa => sa.Id).ToList(), ownerOnly));
         }
 
         public override IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate)
@@ -264,6 +266,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (anns == null)
                 return null;
 
+            var classIds = anns.Where(x => x.ClassRef.HasValue).Select(x => x.ClassRef.Value).Distinct().ToList();
+            var types = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+            foreach (var ann in anns)
+            {
+                var type = types.FirstOrDefault(x => x.Id == ann.SupplementalAnnouncementData.ClassAnnouncementTypeRef);
+                ann.SupplementalAnnouncementData.ClassAnnouncementTypeName = type?.Name;
+                ann.SupplementalAnnouncementData.ChalkableAnnouncementType = type?.ChalkableAnnouncementTypeRef;
+            }
+
             return PrepareRecipientsData(anns);
         }
 
@@ -295,7 +306,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return InternalGetAnnouncementById(supplementalAnnouncementPlanId);
         }
 
-       public IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate,
+        public IList<AnnouncementComplex> GetSupplementalAnnouncementForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete,
+            int start = 0, int count = int.MaxValue, bool? ownedOnly = null)
+        {
+            return GetSupplementalAnnouncementsSortedByDate(fromDate, toDate, true, true, classId, complete, start, count, ownedOnly: ownedOnly);
+        }
+
+        public IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate,
             bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false,
             bool? ownedOnly = null)
         {
