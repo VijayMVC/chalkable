@@ -21,10 +21,10 @@ BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add
                     +HeaderLink_('Grade Avg', orderByEnum.GRADE_AVG).grade
                     +HeaderLink_('Absences', orderByEnum.ABSENCES).absences
                     +HeaderLink_('Discipline', orderByEnum.DISCIPLINE).discipline
-                    +HeaderLink_('R', orderByEnum.ETHNICITY).ethnicity
-                    +HeaderLink_('H', orderByEnum.HISPANIC).hispanic
-                    +HeaderLink_('SE', orderByEnum.IEP_ACTIVE).iep-active
-                    +HeaderLink_('RT', orderByEnum.RETAINED).retained
+                    +HeaderLink_('R', orderByEnum.ETHNICITY)(data-tooltip="Race").ethnicity
+                    +HeaderLink_('H', orderByEnum.HISPANIC)(data-tooltip="Hispanic").hispanic
+                    +HeaderLink_('SE', orderByEnum.IEP_ACTIVE)(data-tooltip="Special Education").iep-active
+                    +HeaderLink_('RT', orderByEnum.RETAINED)(data-tooltip="Retained").retained
                     each test in tests
                         .cell.test= test.getFullName()
                 each student in students

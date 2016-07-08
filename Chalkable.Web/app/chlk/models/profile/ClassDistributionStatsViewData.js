@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.profile', function () {
 
     /** @class chlk.models.profile.ClassDistributionStatsViewData*/
     CLASS(
-        UNSAFE, 'ClassDistributionStatsViewData', [
+        UNSAFE, 'ClassDistributionStatsViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
             ArrayOf(chlk.models.profile.DistributionItemViewData), 'distributionStats',
             Number, 'classAvg',
 
