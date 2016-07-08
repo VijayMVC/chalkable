@@ -52,7 +52,10 @@ NAMESPACE('chlk.templates.student', function () {
                         lineWidth: 1,
                         lineColor: '#ebebeb',
                         gridLineColor: '#ebebeb',
-                        gridLineDashStyle: 'solid'
+                        gridLineDashStyle: 'solid',
+                        startOnTick: true,
+                        showFirstLabel: true//,
+                        //min: 0
                     },
 
                     series: series
@@ -97,7 +100,10 @@ NAMESPACE('chlk.templates.student', function () {
                             formatter: function () {
                                 return categoriesNames[this.value];
                             }
-                        }
+                        },
+                        startOnTick: true,
+                        showFirstLabel: true//,
+                        //min: 0
                     },
 
                     tooltip: {
@@ -154,7 +160,10 @@ NAMESPACE('chlk.templates.student', function () {
                         lineWidth: 1,
                         lineColor: '#ebebeb',
                         gridLineColor: '#ebebeb',
-                        gridLineDashStyle: 'solid'
+                        gridLineDashStyle: 'solid',
+                        startOnTick: true,
+                        showFirstLabel: true//,
+                        //min: 0
                     },
 
                     series: [{

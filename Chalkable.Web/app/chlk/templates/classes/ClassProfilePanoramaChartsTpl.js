@@ -68,8 +68,8 @@ NAMESPACE('chlk.templates.classes', function () {
                         gridLineColor: '#ebebeb',
                         gridLineDashStyle: 'solid',
                         startOnTick: true,
-                        showFirstLabel: true,
-                        min: 0
+                        showFirstLabel: true//,
+                        //min: 0
                     },
 
                     series: [{
