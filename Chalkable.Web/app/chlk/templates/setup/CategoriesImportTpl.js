@@ -15,25 +15,6 @@ NAMESPACE('chlk.templates.setup', function () {
             ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassId, 'classId',
-
-            function getClassesForSelect(){
-                var items = this.getClassesByYears(), res = [];
-                items.forEach(function(item){
-                    var classes = item.getClasses();
-                    if(classes.length){
-                        res.push({
-                            name: item.getSchoolYear().getName(),
-                            values: classes.map(function(clazz){
-                                return {
-                                    name: clazz.getFullClassName(),
-                                    id: clazz.getId().valueOf()
-                                }
-                            })
-                        })
-                    }
-                });
-                return res;
-            }
+            chlk.models.id.ClassId, 'classId'
         ])
 });

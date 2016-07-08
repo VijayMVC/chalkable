@@ -34,8 +34,8 @@ mixin ReportCell(value)
                 .copy-buttons-block.left-buttons-block
                     .right-block.i-b.right
                         .i-b.copy-to-block
-                            LABEL.text Copy to:
-                            +DoubleSelect('toClassId', self.getClassesForSelect()).copy-to-select
+                            LABEL.text Copy categories to:
+                            +DoubleSelect('toClassId', self.getClassesByYears()).copy-to-select
                         BUTTON(type="button").negative-button.cancel-copy Cancel
                         BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-submit Copy
             .chlk-grid-container

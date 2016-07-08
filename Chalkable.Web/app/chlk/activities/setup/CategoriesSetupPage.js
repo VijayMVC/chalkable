@@ -7,6 +7,7 @@ NAMESPACE('chlk.activities.setup', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.setup.CategoriesSetupTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.setup.CategoriesSetupTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'CategoriesSetupPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.PartialUpdateRule(null, 'copy', '')],
@@ -34,7 +35,7 @@ NAMESPACE('chlk.activities.setup', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function cancelCopyClick(node, event){
                 this.dom.find('.setup-page').removeClass('copy-mode');
-                node.removeClass('active');
+                this.dom.find('.setup-copy').removeClass('active');
             },
 
             [ria.mvc.DomEventBind('change', '.copy-to-select')],

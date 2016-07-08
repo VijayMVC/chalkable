@@ -26,7 +26,7 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.grading.GradingScale');
-REQUIRE('chlk.models.announcement.CategoriesSubmitViewData');
+REQUIRE('chlk.models.common.BaseCopyImportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -78,7 +78,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.setup.CategoriesImportDialog, res);
             },
 
-            [[chlk.models.announcement.CategoriesSubmitViewData]],
+            [[chlk.models.common.BaseCopyImportViewData]],
             function importAction(model){
                 var res;
                 if(model.getSubmitType() == 'list'){
@@ -91,8 +91,10 @@ NAMESPACE('chlk.controllers', function (){
                 }
                 else{
                     res = this.announcementTypeService.copy(model.getClassId(), model.getToClassId(), model.getIds())
+                        .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getToClassId()]])
                         .then(function(ids){
-                            this.BackgroundNavigate('setup', 'categoriesSetup', [model.getToClassId()]);
+                            this.BackgroundNavigate('setup', 'categoriesSetup', [model.getToClassId(), true]);
+                            this.BackgroundCloseView(chlk.activities.setup.CategoriesImportDialog);
                             return ria.async.BREAK;
                         }, this);
 
@@ -246,7 +248,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.Permissions([
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN]
             ])],
-            [[chlk.models.announcement.CategoriesSubmitViewData]],
+            [[chlk.models.common.BaseCopyImportViewData]],
             function submitAnnouncementTypesAction(model){
                 if(model.getSubmitType() == 'copy'){
                     var res = this.announcementTypeService.copy(model.getClassId(), model.getToClassId(), model.getIds())
@@ -344,14 +346,17 @@ NAMESPACE('chlk.controllers', function (){
                     var res =
                         ria.async.wait([
                             this.classroomOptionService.getClassroomOption(classId_),
-                            this.gradingService.getGradingScales()
+                            this.gradingService.getGradingScales(),
+                            this.schoolYearService.listOfSchoolYearClasses()
                         ])
                         .attach(this.validateResponse_())
                         .then(function(data){
                             var options = data[0];
+                            var canCopy = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
                             var gradingScales = data[1];
-                            return new chlk.models.setup.ClassroomOptionSetupViewData(topData, gradingScales, options);
-                        });
+                            var years = data[2];
+                            return new chlk.models.setup.ClassroomOptionSetupViewData(topData, gradingScales, options, canCopy, years);
+                        }, this);
                 else
                     res = new ria.async.DeferredData(new chlk.models.setup.ClassroomOptionSetupViewData(topData));
 
@@ -363,17 +368,41 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.grading.ClassroomOptionViewData]],
             function submitClassroomOptionAction(model){
-                var res = ria.async.wait([
+                var res;
+
+                if(model.getSubmitType() == 'copy'){
+                    res = this.classroomOptionService.copyClassroomOption(model.getClassId(), model.getCopyToClassId())
+                        .then(function(ok){
+                            return model;
+                        });
+
+                    return this.UpdateView(chlk.activities.setup.ClassroomOptionSetupPage, res, 'copy');
+                }
+
+                if(model.getSubmitType() == 'import'){
+                    res = this.classroomOptionService.copyClassroomOption(model.getImportFromClassId(), model.getClassId())
+                        .then(function(ok){
+                            this.BackgroundNavigate('setup', 'classroomOptionSetup', [model.getClassId()]);
+                            return ria.async.BREAK;
+                        }, this);
+
+                    return this.UpdateView(chlk.activities.setup.ClassroomOptionSetupPage, res);
+                }
+
+                res = ria.async.wait([
                         this.classroomOptionService.updateClassroomOption(model.getClassId(), model.getAveragingMethod(),
                             model.isCategoryAveraging(), model.isIncludeWithdrawnStudents(), model.isDisplayStudentAverage(),
                             model.isDisplayTotalPoints(), model.isRoundDisplayedAverages(), model.isDisplayAlphaGrade(), model.getStandardsGradingScaleId(),
                             model.getStandardsCalculationMethod(), model.getStandardsCalculationRule(), model.isStandardsCalculationWeightMaximumValues()),
-                        this.gradingService.getGradingScales()
+                        this.gradingService.getGradingScales(),
+                        this.schoolYearService.listOfSchoolYearClasses()
                     ])
                     .attach(this.validateResponse_())
                     .then(function(data){
                         var topData = new chlk.models.classes.ClassesForTopBar(null, model.getClassId());
-                        return new chlk.models.setup.ClassroomOptionSetupViewData(topData, data[1], data[0]);
+                        var canCopy = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
+                        var years = data[2];
+                        return new chlk.models.setup.ClassroomOptionSetupViewData(topData, data[1], data[0], canCopy, years);
                     });
                 return this.UpdateView(chlk.activities.setup.ClassroomOptionSetupPage, res);
             }

@@ -7,10 +7,74 @@ NAMESPACE('chlk.activities.setup', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.setup.ClassroomOptionSetupTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.setup.ClassroomOptionSetupTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassroomOptionSetupPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             function $() {
                 BASE();
                 this._needPopUp = true;
+            },
+
+            [ria.mvc.PartialUpdateRule(null, 'copy', '')],
+            [[Object, Object, String]],
+            VOID, function copyUpdate(tpl, model, msg_){
+                var text = 'Selected options were copied to ' + model.getCopyToClassName() + ', year ' + model.getCopyToYearName();
+                var cnt = this.dom.find('.green-info-msg');
+                cnt.setHTML(text);
+                cnt.removeClass('x-hidden');
+                this.dom.find('.cancel-copy').trigger('click');
+                setTimeout(function(){
+                    cnt.addClass('x-hidden');
+                }, 5000)
+            },
+
+            [ria.mvc.DomEventBind('click', '.setup-copy')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function copyClick(node, event){
+                this.dom.find('.setup-page').toggleClass('copy-mode');
+                node.toggleClass('active');
+                this.dom.find('.green-info-msg').addClass('x-hidden');
+                this.dom.find('.setup-page').removeClass('import-mode');
+                this.dom.find('.setup-import').removeClass('active');
+            },
+
+            [ria.mvc.DomEventBind('click', '.setup-import')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function importClick(node, event){
+                this.dom.find('.setup-page').toggleClass('import-mode');
+                node.toggleClass('active');
+                this.dom.find('.setup-page').removeClass('copy-mode');
+                this.dom.find('.setup-copy').removeClass('active');
+            },
+
+            [ria.mvc.DomEventBind('click', '.cancel-copy')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelCopyClick(node, event){
+                this.dom.find('.setup-page').removeClass('copy-mode');
+                this.dom.find('.setup-copy').removeClass('active');
+            },
+
+            [ria.mvc.DomEventBind('click', '.cancel-import')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelImportClick(node, event){
+                this.dom.find('.setup-page').removeClass('import-mode');
+                node.removeClass('active');
+            },
+
+            [ria.mvc.DomEventBind('change', '.copy-to-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function classSelect(node, event, selected_){
+                this.updateCopySubmitBtn_();
+            },
+
+            function updateCopySubmitBtn_(){
+                var btn = this.dom.find('.copy-submit:visible, .import-submit:visible');
+                if(this.dom.find('.left-buttons-block:visible').find('[name="copyToClassId"], [name="importFromClassId"]').getValue()){
+                    btn.removeAttr('disabled');
+                    btn.setProp('disabled', false);
+                }else{
+                    btn.setAttr('disabled', 'disabled');
+                    btn.setProp('disabled', true);
+                }
             },
 
             OVERRIDE, VOID, function onRender_(model) {
