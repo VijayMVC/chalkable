@@ -481,10 +481,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (sisCopyResult == null || !sisCopyResult.Any(x => x.NewActivityId.HasValue))
                 return new List<int>();
 
-            var sisFromToActivityIds = sisCopyResult
-                .Where(x => x.NewActivityId.HasValue)
-                .ToDictionary(x => x.SourceActivityId, x => x.NewActivityId.Value);
-
+            
             var announcementApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(classAnnouncementIds, true);
             var applicationIds = announcementApps.Select(x => x.ApplicationRef).ToList();
             //Only simple apps
@@ -498,12 +495,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             using (var u = Update())
             {
-                var attachmentsOwners = new ClassTeacherDataAccess(u).GetClassTeachers(fromClassId, null)
-                    .Select(x => x.PersonRef).ToList();
+                var attachmentsOwners = new ClassTeacherDataAccess(u).GetClassTeachers(fromClassId, null).Select(x => x.PersonRef).ToList();
 
-                fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u)
-                    .CopyClassAnnouncementsToClass(sisFromToActivityIds, toClassId, Context.NowSchoolTime);
+                var sisActivityCopyRes = sisCopyResult
+                    .Where(x => x.NewActivityId.HasValue)
+                    .Select(x=> new SisActivityCopyResult
+                    {
+                        FromActivityId = x.SourceActivityId,
+                        ToActivityId = x.NewActivityId.Value,
+                        ToClassId = x.CopyToSectionId
+                    }).ToList();
 
+                fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u).CopyClassAnnouncementsToClass(sisActivityCopyRes,  Context.NowSchoolTime);
                 AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator);
                 ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementsIds.Select(x => x.Value).ToList(), u);
 
@@ -531,9 +534,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var inowRes = ConnectorLocator.ActivityConnector.CopyActivity(ann.SisActivityId.Value, classIds);
             if (inowRes != null && inowRes.Any(x => x.NewActivityId.HasValue))
             {
-                var activities = inowRes.Where(x => x.NewActivityId.HasValue)
-                    .Select(x => new Activity { Id = x.NewActivityId.Value, SectionId = x.CopyToSectionId })
-                    .ToList();
+                //var activities = inowRes.Where(x => x.NewActivityId.HasValue)
+                //    .Select(x => new Activity { Id = x.NewActivityId.Value, SectionId = x.CopyToSectionId })
+                //    .ToList();
 
                 //get announcementApplications for copying
                 var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(classAnnouncementId, true);
@@ -545,9 +548,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 using (var u = Update())
                 {
                     var da = CreateClassAnnouncementDataAccess(u);
-                    AddActivitiesToChalkable(ServiceLocator, activities, da);
-                    var resAnnIds = da.GetByActivitiesIds(activities.Select(x => x.Id).ToList(), Context.PersonId.Value).Select(x => x.Id).ToList();
+                    var sisCopyResult = inowRes.Where(x => x.NewActivityId.HasValue)
+                        .Select(x => new SisActivityCopyResult
+                        {
+                            FromActivityId = x.SourceActivityId,
+                            ToActivityId = x.NewActivityId.Value,
+                            ToClassId = x.CopyToSectionId
+                        }).ToList();
 
+                    var resAnnIds = da.CopyClassAnnouncementsToClass(sisCopyResult, Context.NowSchoolYearTime).Select(x=>x.Value).ToList();
                     var attOwners = new ClassTeacherDataAccess(u).GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
 
                     AnnouncementAttachmentService.CopyAnnouncementAttachments(classAnnouncementId, attOwners, resAnnIds, u, ServiceLocator, ConnectorLocator);

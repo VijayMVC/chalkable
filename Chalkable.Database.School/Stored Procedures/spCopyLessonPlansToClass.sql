@@ -36,12 +36,16 @@ Declare @toCopy table
 	SchoolYearRef int,
 	InGallery bit,
 	GalleryOwnerRef int,
+	DiscussionEnabled bit,
+	PreviewCommentsEnabled bit,
+	RequireCommentsEnabled bit,
 	TotalSchoolDays int
 )
 
 Insert Into @toCopy
 	Select 
 		Id, Content, StartDate, EndDate, VisibleForStudent, Title, SchoolYearRef, InGallery, GalleryOwnerRef,
+		DiscussionEnabled, PreviewCommentsEnabled, RequireCommentsEnabled,
 		(
 		  Select Count(*) 
 		  From [Date]					   
@@ -114,8 +118,8 @@ Merge Into Announcement
 Using @toCopy as ToCopy
 	On 1 = 0
 When Not Matched Then
-	Insert (Content, Created, [State], Title)
-	Values (ToCopy.Content, @created, 1, ToCopy.Title)
+	Insert (Content, Created, [State], Title, DiscussionEnabled, PreviewCommentsEnabled, RequireCommentsEnabled)
+	Values (ToCopy.Content, @created, 1, ToCopy.Title, ToCopy.DiscussionEnabled, ToCopy.PreviewCommentsEnabled, ToCopy.RequireCommentsEnabled)
 Output Inserted.Id, ToCopy.Id
 	Into @newAnnIds;
 

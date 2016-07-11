@@ -51,8 +51,7 @@ NAMESPACE('chlk.controllers', function () {
                             sortType_ || chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
                             null,
                             categoryType,
-                            filter_,
-                            this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)
+                            filter_
                         );
                     }, this);
                 return this.PushOrUpdateView(chlk.activities.announcement.LessonPlanGalleryPage, result);
@@ -109,8 +108,7 @@ NAMESPACE('chlk.controllers', function () {
                             sortType_ || chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
                             classId_,
                             categoryType_,
-                            filter_,
-                            this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)
+                            filter_
                         );
                     }, this);
 

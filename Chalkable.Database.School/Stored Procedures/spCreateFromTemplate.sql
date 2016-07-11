@@ -7,10 +7,21 @@ Declare @isDraft bit = 0
 Declare @announcementId int
 
 
-Declare @content nvarchar(max), @title nvarchar(max), @startDate datetime2, @endDate datetime2, @visibleForStudent bit
+Declare @content nvarchar(max), 
+		@title nvarchar(max), 
+		@startDate datetime2, 
+		@endDate datetime2, 
+		@visibleForStudent bit,
+		@discussionEnabled bit,
+		@previewComments bit,
+		@requireComments bit
 
-Select Top 1 @announcementId = Id,
-@title = vwLessonPlan.Title
+Select Top 1 
+	@announcementId = Id,
+	@title = vwLessonPlan.Title,
+	@discussionEnabled = vwLessonPlan.DiscussionEnabled,
+	@previewComments = vwLessonPlan.PreviewCommentsEnabled,
+	@requireComments = vwLessonPlan.RequireCommentsEnabled
 From vwLessonPlan
 Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef = @schoolYearId
 Order By Created Desc
@@ -26,38 +37,41 @@ Where Id = @lessonPlanTemplateId
 
 If @announcementId is not null
 Begin
---todo maybe create delete stored procedure for this
-delete from AnnouncementAttachment
-where AnnouncementRef = @announcementId
+	--todo maybe create delete stored procedure for this
+	delete from AnnouncementAttachment
+	where AnnouncementRef = @announcementId
 
-delete from AnnouncementQnA
-where AnnouncementRef = @announcementId
+	delete from AnnouncementQnA
+	where AnnouncementRef = @announcementId
 
-delete from AnnouncementApplication
-where AnnouncementRef = @announcementId
+	delete from AnnouncementApplication
+	where AnnouncementRef = @announcementId
 
-delete from AnnouncementStandard
-where AnnouncementRef = @announcementId
+	delete from AnnouncementStandard
+	where AnnouncementRef = @announcementId
 
-delete from AnnouncementAssignedAttribute
-where AnnouncementRef = @announcementId
+	delete from AnnouncementAssignedAttribute
+	where AnnouncementRef = @announcementId
 
-update Announcement
-set Content = @content, Title = @title
-where Id = @announcementId
+	update Announcement
+	set Content = @content, Title = @title, 
+		DiscussionEnabled = @discussionEnabled, 
+		PreviewCommentsEnabled = @previewComments, 
+		RequireCommentsEnabled = @requireComments
+	where Id = @announcementId
 
-update LessonPlan
-set StartDate = @startDate, EndDate = @endDate, VisibleForStudent = @visibleForStudent
-where Id = @announcementId
+	update LessonPlan
+	set StartDate = @startDate, EndDate = @endDate, VisibleForStudent = @visibleForStudent
+	where Id = @announcementId
 End
 Else Begin
-Insert Into Announcement
-Values(@content, GETDATE(), 0, @title)
+	Insert Into Announcement
+	Values(@content, GETDATE(), 0, @title, @discussionEnabled, @previewComments, @requireComments)
 
-Set @announcementId = SCOPE_IDENTITY()
+	Set @announcementId = SCOPE_IDENTITY()
 
-Insert Into LessonPlan(Id, ClassRef, StartDate, EndDate, LpGalleryCategoryRef, SchoolYearRef, VisibleForStudent, InGallery, GalleryOwnerRef)
-Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, @visibleForStudent, 0, null)
+	Insert Into LessonPlan(Id, ClassRef, StartDate, EndDate, LpGalleryCategoryRef, SchoolYearRef, VisibleForStudent, InGallery, GalleryOwnerRef)
+	Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, @visibleForStudent, 0, null)
 End
 
 Insert Into AnnouncementStandard(AnnouncementRef, StandardRef)

@@ -3,7 +3,9 @@ mixin YesNo_(value)
 
 mixin HeaderDisciplinesLink_(name, type, panoramaInfo)
     +ActionLink('class', 'sortPanoramaDisciplines', type, panoramaInfo.getDisciplinesOrderBy() == type && !panoramaInfo.isDisciplinesDescending())(
-        class = (panoramaInfo.getDisciplinesOrderBy() == type ? "active-sort " : "") + (panoramaInfo.isDisciplinesDescending() ? "descending" : "")
+        class = (panoramaInfo.getDisciplinesOrderBy() == type ? "active-sort " : "") + (panoramaInfo.isDisciplinesDescending() ? "descending" : ""),
+        data-tooltip=name,
+        data-tooltip-type="overflow"
     )(attributes).cell=name
 
 -var user = self.getModel()
