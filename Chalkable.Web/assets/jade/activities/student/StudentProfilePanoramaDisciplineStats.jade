@@ -1,0 +1,30 @@
+mixin HeaderLink_(name, type)
+    +ActionLink('students', 'sortPanoramaDisciplines', type, self.getDisciplinesOrderBy() == type && !self.isDisciplinesDescending())(
+        class = (self.getDisciplinesOrderBy() == type ? "active-sort " : "") + (self.isDisciplinesDescending() ? "descending" : ""),
+        data-tooltip=name,
+        data-tooltip-type="overflow"
+    )(attributes).cell=name
+
+-var disciplinesOrderByEnum = chlk.models.panorama.StudentDisciplinesSortType
+
+.grid-top-content.chlk-grid
+    .grid-content
+        .grid-header.grid-row
+            +HeaderLink_('Infraction Date', disciplinesOrderByEnum.DATE).date
+            +HeaderLink_('Infraction', disciplinesOrderByEnum.INFRACTION).infraction
+            +HeaderLink_('Code', disciplinesOrderByEnum.CODE).code
+            +HeaderLink_('Demerits', disciplinesOrderByEnum.DEMERITS).demerits
+            +HeaderLink_('Primary', disciplinesOrderByEnum.PRIMARY).primary
+            +HeaderLink_('Disposition Date', disciplinesOrderByEnum.DISPOSITION_DATE).disposition-date
+            +HeaderLink_('Disposition', disciplinesOrderByEnum.DISPOSITION).disposition
+            +HeaderLink_('Note', disciplinesOrderByEnum.NOTE).note
+        each item in self.getStudentDisciplineStats()
+            .grid-row
+                .cell.date=item.getOccurrenceDate() && item.getOccurrenceDate().format('D dd/mm/yy')
+                .cell.infraction=item.getInfractionName()
+                .cell.center.code=item.getInfractionStateCode()
+                .cell.center.demerits=item.getDemeritsEarned()
+                .cell.center.primary=item.isPrimary() ? "Y" : "N"
+                .cell.disposition-date=item.getDispositionStartDate() && item.getDispositionStartDate().format('dd/mm/yyyy')
+                .cell.disposition=item.getDispositionName()
+                .cell.note=item.getDispositionNote()
