@@ -20,8 +20,8 @@ NAMESPACE('chlk.controls', function () {
                             src = img.attr('src');
 
                         img
-                            .css('visibility', 'hidden')
                             .on('error', function(){
+                                img.css('visibility', 'hidden');
                                 var timeout = img.data('img-loader.timeout') || 50,
                                     retries = img.data('img-loader.retries') || 0;
 

@@ -17,9 +17,9 @@
                     .reply-icon(data-tooltip="Reply")
                     if !self.getUserRole().isStudent()
                         if self.isHidden()
-                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), false).visible-icon(data-tooltip="Make Invisible")
+                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), false).visible-icon(data-tooltip="Make Visible")
                         else
-                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), true).invisible-grey-icon(data-tooltip="Make Visible")
+                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), true).invisible-grey-icon(data-tooltip="Make Invisible")
                         .x-remove-icon(data-tooltip="Remove")
             p.edit-question-text= self.getText()
             if self.getAttachment()
