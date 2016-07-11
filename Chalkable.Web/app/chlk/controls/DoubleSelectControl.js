@@ -86,7 +86,9 @@ NAMESPACE('chlk.controls', function () {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        new ria.dom.Dom(document).on('click.doubleselect', function(node, event){
+                        var doc = ria.dom.Dom(document);
+                        new doc.off('click.doubleselect');
+                        new doc.on('click.doubleselect', function(node, event){
                             var target = new ria.dom.Dom(event.target);
                             if(!target.isOrInside('.double-select')){
                                 this.hideDropDown_(ria.dom.Dom('.double-select.chosen-container-active'));
@@ -100,12 +102,13 @@ NAMESPACE('chlk.controls', function () {
             },
 
             function prepareItems(items){
-                var res = [];
+                var res = [],
+                    schoolName = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_NAME, null);
                 items.forEach(function(item){
                     var classes = item.getClasses();
                     if(classes.length){
                         res.push({
-                            name: item.getSchoolYear().getName(),
+                            name: schoolName + ' - ' + item.getSchoolYear().getName(),
                             values: classes.map(function(clazz){
                                 return {
                                     name: clazz.getFullClassName(),
