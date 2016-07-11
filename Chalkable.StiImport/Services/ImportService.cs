@@ -251,13 +251,13 @@ namespace Chalkable.StiImport.Services
                 Log.LogException(ex, districtId.ToString(), taskId.ToString());
                 if (!schoolCommited)
                 {
-                    Log.LogInfo("rollback school db");
+                    Log.LogError("rollback school db");
                     schoolDb.Rollback();
                 }
                 else
-                    Log.LogInfo("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");
+                    Log.LogError("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");
                 //TODO.....
-                Log.LogInfo("rollback master db");
+                Log.LogError("rollback master db");
                 masterDb.Rollback();
                 throw;
             }

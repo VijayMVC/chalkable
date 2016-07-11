@@ -53,3 +53,5 @@ mixin App_(app)
                     .attachments-and-applications
                         each app in recommendedApps
                             +App_(app)
+                                - var isBanned = false
+                                +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open

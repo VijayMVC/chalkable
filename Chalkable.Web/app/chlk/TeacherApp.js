@@ -22,6 +22,7 @@ REQUIRE('chlk.controllers.SchoolsController');
 REQUIRE('chlk.services.SearchService');
 REQUIRE('chlk.templates.search.SiteSearch');
 REQUIRE('chlk.controllers.AttachController');
+REQUIRE('chlk.controllers.AnnouncementCommentController');
 
 NAMESPACE('chlk', function (){
 

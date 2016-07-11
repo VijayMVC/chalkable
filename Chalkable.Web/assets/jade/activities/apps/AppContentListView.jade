@@ -13,6 +13,6 @@ if self.hasContent()
                            .title(data-tooltip=appContent.getText(), data-tooltip-type="overflow")= appContent.getText()
                            .shortdesc-content
                               pre=appContent.getDescription()
-                           +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getAnnouncementType(), appContent.getContentId()) Open
+                           +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getAnnouncementId(), self.getAnnouncementType(), appContent.getContentId()) Open
                if self.showMoreContents()
-                  +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getAnnouncementType(), null, self.getStandardsUrlComponents()).load-content-btn More Results
+                  +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getAnnouncementId(), self.getAnnouncementType(), null, self.getStandardsUrlComponents()).load-content-btn More Results

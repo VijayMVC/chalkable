@@ -1,6 +1,8 @@
 mixin HeaderLink_(name, type)
     +ActionLink('class', 'sortPanoramaStudents', type, self.getOrderBy() == type && !self.isDescending())(
-        class = (self.getOrderBy() == type ? "active-sort " : "") + (self.isDescending() ? "descending" : "")
+        class = (self.getOrderBy() == type ? "active-sort " : "") + (self.isDescending() ? "descending" : ""),
+        data-tooltip=name,
+        data-tooltip-type="overflow"
     )(attributes).cell=name
 
 -var orderByEnum = chlk.models.profile.ClassPanoramaSortType
@@ -21,10 +23,10 @@ BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add
                     +HeaderLink_('Grade Avg', orderByEnum.GRADE_AVG).grade
                     +HeaderLink_('Absences', orderByEnum.ABSENCES).absences
                     +HeaderLink_('Discipline', orderByEnum.DISCIPLINE).discipline
-                    +HeaderLink_('R', orderByEnum.ETHNICITY).ethnicity
-                    +HeaderLink_('H', orderByEnum.HISPANIC).hispanic
-                    +HeaderLink_('SE', orderByEnum.IEP_ACTIVE).iep-active
-                    +HeaderLink_('RT', orderByEnum.RETAINED).retained
+                    +HeaderLink_('R', orderByEnum.ETHNICITY)(data-tooltip="Race").ethnicity
+                    +HeaderLink_('H', orderByEnum.HISPANIC)(data-tooltip="Hispanic").hispanic
+                    +HeaderLink_('SE', orderByEnum.IEP_ACTIVE)(data-tooltip="Special Education").iep-active
+                    +HeaderLink_('RT', orderByEnum.RETAINED)(data-tooltip="Retained").retained
                     each test in tests
                         .cell.test= test.getFullName()
                 each student in students
@@ -33,7 +35,8 @@ BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add
                         .cell.checks
                             .box-checkbox.circle
                                 +Checkbox('student', false, false, true)(data-id=info.getId().valueOf()).student-check.student-grid-check
-                        .cell.name=info.getFullName()
+                        .cell.name
+                            +ProfileLink(info)=info.getFullName()
                         .cell.grade
                             .circle-cnt(
                                 class = info.getGradeAvgClass()

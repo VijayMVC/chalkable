@@ -36,7 +36,8 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 OriginalEnrollmentDate = x.OriginalEnrollmentDate,
                 Section504Qualification = x.Section504Qualification,
                 StateIdNumber = x.StateIDNumber,
-                StudentNumber = x.StudentNumber
+                StudentNumber = x.StudentNumber,
+                MiddleName = x.MiddleName ?? ""
             };
         }
 

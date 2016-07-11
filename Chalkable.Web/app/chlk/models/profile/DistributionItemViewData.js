@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.profile', function () {
 
     /** @class chlk.models.profile.DistributionItemViewData*/
     CLASS(
-        UNSAFE, 'DistributionItemViewData', [
+        UNSAFE, 'DistributionItemViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
             Number, 'count',
             String, 'summary',
             Number, 'startInterval',

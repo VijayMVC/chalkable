@@ -13,6 +13,7 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string FirstName { get; set; }
+        public string MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }
         public string Gender { get; set; }
@@ -50,45 +51,20 @@ namespace Chalkable.Data.School.Model
             return false;
         }
 
+        [DataEntityAttr]
         public bool? IsWithdrawn { get; set; }
     }
 
     public class StudentDetails : Student
     {
-        [NotDbFieldAttr]
         public IList<StudentSchool> StudentSchools { get; set; }
-
-        [NotDbFieldAttr]
         public IList<PersonEthnicity> PersonEthnicities { get; set; }
-        public PersonEthnicity PrimaryPersonEthnicity
-        {
-            get
-            {
-                var primary = PersonEthnicities?.FirstOrDefault(x => x.IsPrimary);
-                return primary;
-            }
-        }
-
-        [NotDbFieldAttr]
+        public PersonEthnicity PrimaryPersonEthnicity => PersonEthnicities?.FirstOrDefault(x => x.IsPrimary);
+        
         public IList<PersonNationality> PersonNationalities { get; set; }
-        public PersonNationality PrimaryPersonNationality
-        {
-            get
-            {
-                var nationality = PersonNationalities?.FirstOrDefault(x => x.IsPrimary);
-                return nationality;
-            }
-        }
-
-        [NotDbFieldAttr]
+        public PersonNationality PrimaryPersonNationality => PersonNationalities?.FirstOrDefault(x => x.IsPrimary);
+        
         public IList<PersonLanguage> PersonLanguages { get; set; }
-        public PersonLanguage PrimaryPersonLanguage
-        {
-            get
-            {
-                var language = PersonLanguages?.FirstOrDefault(x => x.IsPrimary);
-                return language;
-            }
-        }
+        public PersonLanguage PrimaryPersonLanguage => PersonLanguages?.FirstOrDefault(x => x.IsPrimary);
     }
 }

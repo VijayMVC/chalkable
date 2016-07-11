@@ -1,6 +1,9 @@
 .setup-page
     -var topData = self.getTopData();
     -var selectedId = topData.getSelectedItemId();
+    -var noClassId = !selectedId || !selectedId.valueOf()
+    -var ableCopy = self.isAbleCopy() && !noClassId
+    -var classesByYears = self.getClassesByYears()
 
     h2.page-title=Msg.Setup
 
@@ -11,12 +14,36 @@
             +ActionLink('setup', 'categoriesSetup')=Msg.Category(true)
             +ActionLink('setup', 'commentsSetup')=Msg.Comment(true)
             +ActionLink('setup', 'classroomOptionSetup').pressed=Msg.Options
+        .right
+            if ableCopy
+                a(href="javascript:", data-tooltip="Import").import-icon.setup-import
+                a(href="javascript:", data-tooltip="Copy").copy-btn.setup-copy
 
-    if !selectedId || !selectedId.valueOf()
+    if noClassId
         .choose-class
     else
         -var options = self.getClassroomOptions()
         +ActionForm('setup', 'submitClassroomOption').submit-form
+            if ableCopy
+                .green-info-msg-cnt
+                    .green-info-msg.x-hidden
+
+                .copy-buttons-block.left-buttons-block
+                    .right-block.i-b.right
+                        .i-b.copy-to-block
+                            LABEL.text Copy options to:
+                            +DoubleSelect('copyToClassId', classesByYears, 'copyToYearName', 'copyToClassName').copy-to-select
+                        BUTTON(type="button").negative-button.cancel-copy Cancel
+                        BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-submit Copy
+
+                .import-buttons-block.left-buttons-block
+                    .right-block.i-b.right
+                        .i-b.import-from-block
+                            LABEL.text Import options from:
+                            +DoubleSelect('importFromClassId', classesByYears, 'importFromYearName', 'importFromClassName').copy-to-select
+                        BUTTON(type="button").negative-button.cancel-import Cancel
+                        BUTTON(type="submit", name="submitType", value="import", disabled="disabled").blue-button.import-submit Import
+
             TABLE.options-table
                 TR
                     TD(colspan = 2)

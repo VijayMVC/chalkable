@@ -4,7 +4,10 @@ As
 Begin Transaction
 -- only teacher can modify lesson plan
 Declare @callerRole int =  2, @schoolYearId int
-Declare @content nvarchar(max), @title nvarchar(max), @startDate datetime2, @endDate datetime2, @visibleForStudent bit, @inGallery bit, @GalleryOwnerRef int
+Declare @content nvarchar(max), @title nvarchar(max), 
+		@discussionEnabled bit, @previewComments bit, @requireComments bit,
+		@startDate datetime2, @endDate datetime2, 
+		@visibleForStudent bit, @inGallery bit, @GalleryOwnerRef int
 
 Select Top 1
 @content = Content,
@@ -14,7 +17,10 @@ Select Top 1
 @title = Title,
 @schoolYearId = SchoolYearRef,
 @inGallery = InGallery,
-@galleryOwnerRef = GalleryOwnerRef
+@galleryOwnerRef = GalleryOwnerRef,
+@discussionEnabled = DiscussionEnabled,
+@previewComments = PreviewCommentsEnabled,
+@requireComments = RequireCommentsEnabled
 From vwLessonPlan
 Where Id = @lessonPlanId
 
@@ -34,7 +40,7 @@ Into @classId
 While @@FETCH_STATUS = 0
 Begin
 Insert Into Announcement
-Values(@content, @created, 1, @title)
+Values(@content, @created, 1, @title, @discussionEnabled, @previewComments, @requireComments)
 
 set @newLpId = Scope_Identity()
 

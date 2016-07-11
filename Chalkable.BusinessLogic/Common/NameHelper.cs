@@ -20,12 +20,14 @@ namespace Chalkable.BusinessLogic.Common
             return ResolveSalutation(gender) + ln;
         }
         
-        public static string FullName(string firstName, string lastName, bool upper = true, string gender = null)
+        public static string FullName(string firstName, string lastName, string middleName, bool upper = true, string gender = null)
         {
             var fn = upper ? firstName.ToUpper() : firstName.CapitalizeFirstLetter();
             var ln = upper ? lastName.ToUpper() : lastName.CapitalizeFirstLetter();
             var gn = string.IsNullOrWhiteSpace(gender) ? "" : ResolveSalutation(gender);
-            return gn + fn + " " + ln;
+            var mn = string.IsNullOrWhiteSpace(middleName) ? "" : middleName;
+            mn = mn.Length > 0 ? mn.Substring(0, 1).ToUpper() : "";
+            return gn + fn + " "+ mn +" " + ln;
         }
 
         public static string TeacherDisplayName(this ScheduleItem staff, bool upper = true)
@@ -38,31 +40,31 @@ namespace Chalkable.BusinessLogic.Common
             return StaffDisplayName(staff.LastName, staff.Gender, upper);
         }
 
-        public static string DisplayName(this Student student, bool upper = true)
+        public static string DisplayName(this Student student, bool upper = true, bool includeMiddleName = false)
         {
-            return FullName(student.FirstName, student.LastName, upper);
+            return FullName(student.FirstName, student.LastName, includeMiddleName ? student.MiddleName : "", upper);
         }
 
         public static string DisplayName(this Person person, bool upper = true)
         {
             if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                return FullName(person.FirstName, person.LastName, upper);
+                return FullName(person.FirstName, person.LastName, "", upper);
             return StaffDisplayName(person.LastName, person.Gender, upper);
         }
 
         public static string FullName(this Staff staff, bool upper = true, bool withSalutation = false)
         {
-            return FullName(staff.FirstName, staff.LastName, upper, withSalutation ? staff.Gender : null);
+            return FullName(staff.FirstName, staff.LastName, "", upper, withSalutation ? staff.Gender : null);
         }
 
-        public static string FullName(this Student student, bool upper = true)
+        public static string FullName(this Student student, bool upper = true, bool includeMiddleName = false)
         {
-            return FullName(student.FirstName, student.LastName, upper);
+            return FullName(student.FirstName, student.LastName, "", upper);
         }
 
         public static string FullName(this Person person, bool upper = true, bool withSalutation = false)
         {
-            return FullName(person.FirstName, person.LastName, upper, withSalutation ? person.Gender : null);
+            return FullName(person.FirstName, person.LastName, "", upper, withSalutation ? person.Gender : null);
         }
 
     }

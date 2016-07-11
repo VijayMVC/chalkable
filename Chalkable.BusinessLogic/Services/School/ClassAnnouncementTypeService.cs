@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
@@ -22,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName);
 
         IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses);
+        void CopyClassAnnouncementTypes(int fromClassId, int toClassId, IList<int> typeIds);
     }
 
     public class ClassClassAnnouncementTypeService : SisConnectedService, IClassAnnouncementTypeService
@@ -149,6 +148,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 res.Add(gradedClassAnnType);
             }
             return res;
+        }
+
+        public void CopyClassAnnouncementTypes(int fromClassId, int toClassId, IList<int> typeIds)
+        {
+            var copyOption = new ActivityCategoryCopyOption { CategoryIds = typeIds, CopyToSectionIds = new [] {toClassId}};
+            ConnectorLocator.ActivityCategoryConnnector.CopyCategories(fromClassId, copyOption);
         }
     }
 }

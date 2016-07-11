@@ -12,6 +12,9 @@ NAMESPACE('chlk.templates.setup', function () {
             ArrayOf(chlk.models.announcement.ClassAnnouncementType), 'categories',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'ableEdit'
+            Boolean, 'ableEdit',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears'
         ])
 });

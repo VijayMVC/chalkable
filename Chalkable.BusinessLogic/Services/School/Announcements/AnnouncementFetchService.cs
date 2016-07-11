@@ -71,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 case AnnouncementTypeEnum.Admin:
                     return _handlers[sortOption].GetAdminAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, null, complete, start, count);
                 case AnnouncementTypeEnum.Supplemental:
-                    return _handlers[sortOption].GetSupplementalAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count);
+                    return _handlers[sortOption].GetSupplementalAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count, true);
             }
             return new List<AnnouncementComplex>();
         }
@@ -131,6 +131,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
                 if (!announcementType.HasValue || announcementType == AnnouncementTypeEnum.LessonPlan)
                     res.AddRange(ServiceLocator.LessonPlanService.GetAnnouncementDetailses(fromDate, toDate, classId, complete, onlyOwners));
+
+                if(!announcementType.HasValue || announcementType == AnnouncementTypeEnum.Supplemental)
+                    res.AddRange(ServiceLocator.SupplementalAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, complete, onlyOwners));
             }
             return res;
         }

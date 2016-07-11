@@ -56,7 +56,8 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriod)
+        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, 
+            bool orderByFirstName, int start, int count, int? markingPeriod, bool enrolledOnly = false)
         {
             var filters = filter?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var ps = new Dictionary<string, object>
@@ -71,7 +72,8 @@ namespace Chalkable.Data.School.DataAccess
                 {"@filter2", filters!=null && filters.Length>1 ? "%"+filters[1]+"%" : null},
                 {"@filter3", filters!=null && filters.Length>2 ? "%"+filters[2]+"%" : null},
                 {"@orderByFirstName", orderByFirstName},
-                {"@markingPeriod", markingPeriod}
+                {"@markingPeriod", markingPeriod},
+                {"@enrolledOnly", enrolledOnly }
             };
             return ExecuteStoredProcedurePaginated<Student>("spSearchStudents", ps, start, count);
         }

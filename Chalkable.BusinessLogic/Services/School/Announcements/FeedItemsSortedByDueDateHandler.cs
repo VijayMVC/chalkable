@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             bool? ownedOnly = null)
         {
             return locator.SupplementalAnnouncementService.GetSupplementalAnnouncementsSortedByDate(from ?? fromDate, to ?? toDate, includeFrom
-                , includeTo, classId, start, count, _sortDesc, ownedOnly);
+                , includeTo, classId, complete, start, count, _sortDesc, ownedOnly);
         }
 
         protected override Func<AnnouncementComplex, DateTime> SortSelector

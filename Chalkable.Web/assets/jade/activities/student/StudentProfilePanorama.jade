@@ -22,10 +22,10 @@
                 .sections-info
                     .section-data
                         .info-title Phone
-                        .data-info= user.getAddress() && user.getAddress().getValue()
+                        .data-info= (user.getPhones() || []).map(function(item){return item.getValue()}).join(',')
                     .section-data
                         .info-title Address
-                        .data-info= (user.getPhones() || []).map(function(item){return item.getValue()}).join(',')
+                        .data-info= user.getAddress() && user.getAddress().getValue()
                     .section-data
                         .info-title Email
                         .data-info= user.getEmail()

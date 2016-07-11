@@ -7,6 +7,10 @@ Select
 	Announcement.[State] as [State],
 	Announcement.Content as Content,
 	Announcement.Title as [Title],
+	Announcement.DiscussionEnabled as [DiscussionEnabled],
+	Announcement.PreviewCommentsEnabled as [PreviewCommentsEnabled],
+	Announcement.RequireCommentsEnabled as [RequireCommentsEnabled],
+
 	AdminAnnouncement.Expires as Expires,
 	AdminAnnouncement.AdminRef as AdminRef,
 	Person.FirstName + ' ' + Person.LastName as AdminName,

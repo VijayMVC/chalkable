@@ -1,3 +1,11 @@
+.categories-import-dialog
+  .dialog
+    width: 605px
+
+  .row-block
+    .name-td:nth-child(2)
+      border-right: 1px solid #ebebeb
+
 body.setup
   #sidebar
     display: none
@@ -55,6 +63,27 @@ body.setup
     margin: 10px 10px 0 0
 
 .setup-page
+  &:not(.copy-mode)
+    .copy-buttons-block
+      display: none
+
+  &:not(.import-mode)
+    .import-buttons-block
+      display: none
+
+  .import-icon
+    margin-right: 20px
+    margin-bottom: 4px
+
+  .copy-btn
+    margin-top: -5px
+
+  .copy-btn, .import-icon
+    opacity: 0.5
+
+    &.active, &:hover
+      opacity: 1
+
   .choose-class
     top: 15px
 

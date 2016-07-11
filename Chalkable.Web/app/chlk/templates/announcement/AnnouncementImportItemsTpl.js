@@ -6,5 +6,12 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementImportViewData)],
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementImportItems.jade')],
-        'AnnouncementImportItemsTpl', EXTENDS(chlk.templates.announcement.AnnouncementImportTpl), [])
+        'AnnouncementImportItemsTpl', EXTENDS(chlk.templates.announcement.AnnouncementImportTpl), [
+            function getDateText(item){
+                if(item.getExpiresDate)
+                    return item.getExpiresDate().toStandardFormat();
+
+                return (item.getStartDate() ? item.getStartDate().toStandardFormat() : '') + ' : ' + (item.getEndDate() ? item.getEndDate().toStandardFormat() : '')
+            }
+        ])
 });

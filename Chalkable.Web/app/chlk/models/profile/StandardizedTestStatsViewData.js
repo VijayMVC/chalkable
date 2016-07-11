@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.profile', function () {
 
     /** @class chlk.models.profile.StandardizedTestStatsViewData*/
     CLASS(
-        UNSAFE, 'StandardizedTestStatsViewData', [
+        UNSAFE, 'StandardizedTestStatsViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
             chlk.models.profile.StandardizedTestViewData, 'standardizedTest',
             chlk.models.profile.StandardizedTestItemViewData, 'component',
             chlk.models.profile.StandardizedTestItemViewData, 'scoreType',

@@ -30,7 +30,7 @@ mixin AnnouncementFormApplicationItem(app, i, assessmentAppId_)
 attachments = self.getAnnouncementAttachments() || []
 applications = self.getApplications() || []
 items = self.getSortedAppsAndAttachments();
-itemWithClass = self.getLessonPlanData() || self.getClassAnnouncementData()
+itemWithClass = self.getLessonPlanData() || self.getClassAnnouncementData() || self.getSupplementalAnnouncementData()
 classId = itemWithClass && itemWithClass.getClassId()
 
 +Hidden('attachments', self.getAttachments())

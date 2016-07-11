@@ -26,6 +26,14 @@
     margin-bottom: 15px
 
 .announcement-import-dialog
+  .dialog
+    width: 750px
+
+  .row-block
+    .name-td:not(.check)
+      border-right: 1px solid #ebebeb
+
+.announcement-import-dialog, .categories-import-dialog
   .double-select
     width: 150px
     margin-left: 4px
@@ -48,9 +56,6 @@
       line-height: 40px
       font-size: 14px
       border-bottom: 1px solid #ebebeb
-
-    .name-td:nth-child(2), .name-td:nth-child(3)
-      border-right: 1px solid #ebebeb
 
   LABEL.text
     font-weight: bold
@@ -89,8 +94,6 @@
         width: 190px
 
   .dialog
-    width: 750px
-
     .buttons-container
       margin: 0
 
@@ -246,7 +249,6 @@
     right: 15px
 
   .standards-list
-    border-top: dashed 3px #e0e0e0
     padding-top: 8px
     max-height: 68px
     overflow: auto
@@ -268,8 +270,12 @@
       font: bold 16px Arial
       top: 7px
 
-  .standards-list, .recipients-list
-    padding-left: 50px
+  .recipients-list
+    padding-left: 40px
+    position: relative
+
+  .standards-list
+    padding-left: 0px
     position: relative
 
     BUTTON
@@ -378,7 +384,7 @@
       display: inline-block
       text-align: left
 
-      &.main-lable
+      &.main-label
         margin-top: 10px
 
   .right-block

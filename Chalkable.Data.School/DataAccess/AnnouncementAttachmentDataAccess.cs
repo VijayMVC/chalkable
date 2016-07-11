@@ -160,9 +160,12 @@ namespace Chalkable.Data.School.DataAccess
             {
                 res.Sql.Append(@" and (Attachment_PersonRef = @callerId 
                                        or (
-                                                exists(select * from ClassPerson cp where cp.PersonRef = @callerId and (cp.ClassRef = LessonPlan.ClassRef or cp.ClassRef = ClassAnnouncement.ClassRef))
-                                            and    
-                                                exists(select * from SupplementalAnnouncementRecipient Where StudentRef = @callerId and SupplementalAnnouncementRef = SupplementalAnnouncement.Id)
+                                            exists(select * from ClassPerson cp 
+                                                    where cp.PersonRef = @callerId and (cp.ClassRef = LessonPlan.ClassRef or cp.ClassRef = ClassAnnouncement.ClassRef 
+                                                                                        or exists(select * from SupplementalAnnouncementRecipient
+                                                                                                    Where StudentRef = @callerId and SupplementalAnnouncementRef = SupplementalAnnouncement.Id)
+                                                                                        )
+                                                    )
                                             and 
                                                 exists(select ct.ClassRef from ClassTeacher ct where ct.PersonRef = Attachment_PersonRef and (ct.ClassRef = LessonPlan.ClassRef or ct.ClassRef = ClassAnnouncement.ClassRef))
                                           )

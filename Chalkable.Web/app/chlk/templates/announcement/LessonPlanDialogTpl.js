@@ -9,6 +9,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/LessonPlanDialog.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementForm)],
         'LessonPlanDialogTpl', EXTENDS(chlk.templates.announcement.AnnouncementFormTpl), [
-
+            [ria.templates.ModelPropertyBind],
+            chlk.models.schoolYear.Year, 'schoolYear'
         ]);
 });

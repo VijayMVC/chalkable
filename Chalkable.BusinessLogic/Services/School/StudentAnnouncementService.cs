@@ -75,51 +75,50 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             Trace.Assert(Context.SchoolYearId.HasValue);
             var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
-            if (ann.SisActivityId.HasValue)
+
+            if (!ann.SisActivityId.HasValue)
+                throw new ChalkableException("Current announcement is not in Inow ");
+
+            IList<Score> scores = new List<Score>();
+            IList<Student> persons = new List<Student>();
+            if (CoreRoles.STUDENT_ROLE == Context.Role)
             {
-                IList<Score> scores = new List<Score>();
-                IList<Student> persons = new List<Student>();
-                if (CoreRoles.STUDENT_ROLE == Context.Role)
-                {
-                    scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));
-                    persons.Add(ServiceLocator.StudentService.GetById(Context.PersonId.Value, Context.SchoolYearId.Value));
-                }
-                else
-                {
-                    scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
-                    var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
-                    bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
-                    var mp = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(ann.Expires);
-                    if (mp == null)
-                    {
-                        throw new ChalkableException("No marking period is scheduled at announcements expiery date.");
-                    }
-                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
-                }
-                var res = new List<StudentAnnouncementDetails>();
-                var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
-                foreach (var score in scores)
-                {
-                    var student = persons.FirstOrDefault(x => x.Id == score.StudentId);
-                    if (student != null)
-                    {
-                        var stAnn = new StudentAnnouncementDetails
-                            {
-                                ClassId = ann.ClassRef,
-                                Student = student,
-                                AnnouncementId = ann.Id
-                            };
-                        MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
-                        if (stAnn.AlternateScoreId.HasValue)
-                            stAnn.AlternateScore = alternateScores.FirstOrDefault(x => x.Id == stAnn.AlternateScoreId.Value);
-                        res.Add(stAnn);    
-                    }
-                }
-                return res;
-
+                scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));
+                persons.Add(ServiceLocator.StudentService.GetById(Context.PersonId.Value, Context.SchoolYearId.Value));
             }
-            throw new ChalkableException("Current announcement is not in Inow ");
+            else
+            {
+                scores = ConnectorLocator.ActivityScoreConnector.GetScores(ann.SisActivityId.Value);
+                var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
+                var enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
+                var mp = ServiceLocator.MarkingPeriodService.GetLastClassMarkingPeriod(ann.ClassRef, ann.Expires);
 
+                if (mp == null)
+                {
+                    throw new ChalkableException("No marking period is scheduled at announcements expiery date.");
+                }
+                persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
+            }
+            var res = new List<StudentAnnouncementDetails>();
+            var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
+            foreach (var score in scores)
+            {
+                var student = persons.FirstOrDefault(x => x.Id == score.StudentId);
+                if (student != null)
+                {
+                    var stAnn = new StudentAnnouncementDetails
+                    {
+                        ClassId = ann.ClassRef,
+                        Student = student,
+                        AnnouncementId = ann.Id
+                    };
+                    MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
+                    if (stAnn.AlternateScoreId.HasValue)
+                        stAnn.AlternateScore = alternateScores.FirstOrDefault(x => x.Id == stAnn.AlternateScoreId.Value);
+                    res.Add(stAnn);    
+                }
+            }
+            return res;
         }
 
         public AutoGrade SetAutoGrade(int announcementApplicationId, int? studentId, string value)

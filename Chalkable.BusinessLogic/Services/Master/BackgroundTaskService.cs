@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 if (message.Length > MAX_MSG_LEN)
                 {
                     message = message.Substring(0, MAX_MSG_LEN);
-                    Trace.TraceWarning("Log massage was truncated");
+                    Trace.TraceWarning("Log message was truncated");
                 }
                 var now = DateTime.UtcNow;
                 items.Add(new BackgroundTaskLogItem

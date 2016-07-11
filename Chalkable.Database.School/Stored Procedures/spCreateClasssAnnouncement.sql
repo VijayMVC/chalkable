@@ -57,8 +57,8 @@ begin transaction
 		end
 		else begin
 		/*INSERT TO ANNOUNCEMENT*/
-		insert into Announcement (Created, Title, Content, [State])
-		values(@created, null, null, @state);
+		insert into Announcement (Created, Title, Content, [State], DiscussionEnabled, PreviewCommentsEnabled, RequireCommentsEnabled)
+		values(@created, null, null, @state, 0 ,0 ,0);
 
 		set @announcementId = SCOPE_IDENTITY()
 

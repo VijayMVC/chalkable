@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -64,6 +65,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             IList<ClassDetails> studentClasses, ClassDetails currentClass, Room currentRoom, int currentSchoolYearId, DateTime today)
         {
             var res = Create(student);
+
+            res.DisplayName = studentDetails.DisplayName(includeMiddleName: true);
 
             var gradeLevels = student.StudentSchoolYears
                 .OrderBy(x => x.SchoolYearRef)

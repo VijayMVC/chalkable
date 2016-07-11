@@ -9,6 +9,10 @@ namespace Chalkable.BusinessLogic.Model
         public int ClassId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+        public bool DiscussionEnabled { get; set; }
+        public bool PreviewCommentsEnabled { get; set; }
+        public bool RequireCommentsEnabled { get; set; }
+
         public DateTime? ExpiresDate { get; set; }
         public int? ClassAnnouncementTypeId { get; set; }
 
@@ -42,7 +46,10 @@ namespace Chalkable.BusinessLogic.Model
                     CanDropStudentScore = announcement.MayBeDropped,
                     HideFromStudents = !announcement.VisibleForStudent,
                     Title = announcement.Title,
-                    Gradable = announcement.IsScored
+                    Gradable = announcement.IsScored,
+                    DiscussionEnabled = announcement.DiscussionEnabled,
+                    PreviewCommentsEnabled = announcement.PreviewCommentsEnabled,
+                    RequireCommentsEnabled = announcement.RequireCommentsEnabled
                 };
         }
     }

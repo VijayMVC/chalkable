@@ -157,8 +157,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
             else
-                conds.Add(LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId);
-            
+                conds.Add(LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId);           
 
             if (lpGalleryCategoryId.HasValue)
                 conds.Add(LessonPlan.LP_GALERRY_CATEGORY_REF_FIELD, lpGalleryCategoryId);

@@ -1,5 +1,6 @@
 ﻿CREATE TYPE [dbo].[TSisActivityCopyResult] AS TABLE
 (
 	[FromActivityId] int,
-	[ToActivityId] int
+	[ToActivityId] int,
+	[ToClassId] int
 )
