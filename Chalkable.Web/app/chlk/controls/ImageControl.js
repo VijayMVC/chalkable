@@ -12,21 +12,31 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             VOID, function onImgError(event){
-                var node = jQuery(event.target);
-                var alternativeSrc = node.attr('alternativeSrc');
-                var defaultSrc = node.attr('defaultSrc');
-                var needAlternative = node.attr('src') != alternativeSrc;
+                var img = jQuery(event.target);
+                var alternativeSrc = img.attr('alternativeSrc');
+                var defaultSrc = img.attr('defaultSrc');
+                var needAlternative = img.attr('src') != alternativeSrc;
                 var src = needAlternative ? alternativeSrc : defaultSrc;
-                node.attr('src', src);
+
                 if(!(needAlternative && defaultSrc))
-                    node.off('error.load');
+                    img.off('error.load');
+
+                var timeout = img.data('img-loader.timeout') || 50,
+                    retries = img.data('img-loader.retries') || 0;
+
+                img.parent().addClass('loading');
+
+                (retries < 25) && setTimeout(function () {
+                    img.attr('src', src)
+                        .data('img-loader.timeout', Math.min(timeout * 2 + Math.random() * 100, 10000) - Math.random() * 50)
+                        .data('img-loader.retries', retries+1);
+                }, timeout);
+
             },
 
             function canShowAlert(person){
                 var user = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
-                if(user.getRole().getName().toLowerCase() ==  'student' && user.getId() != person.getId())
-                    return false;
-                return true;
+                return !(user.getRole().getName().toLowerCase() == 'student' && user.getId() != person.getId());
             },
 
             String, 'alternativeSrc',

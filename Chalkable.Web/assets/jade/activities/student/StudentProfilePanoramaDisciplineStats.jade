@@ -20,11 +20,11 @@ mixin HeaderLink_(name, type)
             +HeaderLink_('Note', disciplinesOrderByEnum.NOTE).note
         each item in self.getStudentDisciplineStats()
             .grid-row
-                .cell.date=item.getOccurrenceDate() && item.getOccurrenceDate().format('D dd/mm/yy')
+                .cell.date=item.getOccurrenceDate() && item.getOccurrenceDate().format('D mm/dd/yy')
                 .cell.infraction=item.getInfractionName()
                 .cell.center.code=item.getInfractionStateCode()
                 .cell.center.demerits=item.getDemeritsEarned()
                 .cell.center.primary=item.isPrimary() ? "Y" : "N"
-                .cell.disposition-date=item.getDispositionStartDate() && item.getDispositionStartDate().format('dd/mm/yyyy')
+                .cell.disposition-date=item.getDispositionStartDate() && item.getDispositionStartDate().format('mm/dd/yyyy')
                 .cell.disposition=item.getDispositionName()
                 .cell.note=item.getDispositionNote()

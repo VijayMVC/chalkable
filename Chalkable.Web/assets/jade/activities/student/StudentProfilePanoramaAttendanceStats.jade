@@ -18,7 +18,7 @@ mixin HeaderLink_(name, type)
             +HeaderLink_('Note', attendancesOrderByEnum.NOTE).note
         each item in self.getStudentAbsenceStats()
             .grid-row
-                .cell.date=item.getDate() && item.getDate().format('D dd/mm/yy')
+                .cell.date=item.getDate() && item.getDate().format('D mm/dd/yy')
                 .cell.reason=item.getAbsenceReasonName()
                 .cell.level=item.getAbsenceLevel()
                 .cell.center.category=item.getAbsenceCategory()
