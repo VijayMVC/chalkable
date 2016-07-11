@@ -1,0 +1,165 @@
+.feed-item
+  .check-cnt
+    display: none
+
+  &.imported
+    border-color: #41b768
+
+  &.lesson-plan
+    .content
+      overflow: visible
+      position: relative
+      margin-right: 40px
+
+    .line
+      height: 4px
+      background-color: #d45151
+      border-radius: 2px
+      margin-top: 38px
+      position: absolute
+      width: 100%
+      overflow: hidden
+
+    .inner-line
+      height: 100%
+      background-color: #41b768
+
+    .right-text
+      position: absolute
+      right: -40px
+      font-style: italic
+
+  border: 1px solid #c8c7c3
+  border-radius: 5px
+  margin: 8px 0 0
+  +box-shadow(transparentize(#000, .91) 0 2px 3px)
+
+  padding: 0 24px 0 63px
+  position: relative
+
+  .star
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    width: 63px
+
+    &::before
+      content: ' '
+      position: absolute
+      left: 18px
+      top: 27px
+      height: 24px
+      width: 24px
+      +icons-24-sprite(todo)
+      opacity: .75
+
+    &:hover::before
+      opacity: 1
+
+    &.complete
+      display: none
+
+      &::before
+        +icons-24-sprite(done)
+
+  &.complete
+    .star
+      display: none
+
+    .star.complete
+      display: block
+
+  &.is-admin
+    .star
+      &::before
+        top: 30px
+        +icons-24-sprite(admin-item-todo)
+
+      &.complete::before
+        +icons-24-sprite(admin-item)
+
+  .announcement-link
+    padding-left: 42.5%
+    position: relative
+    display: block
+    text-decoration: none
+
+    .title
+      left: 0
+      top: 27px
+      width: 41%
+      position: absolute
+      white-space: nowrap
+      vertical-align: middle
+      text-overflow: ellipsis
+      overflow: hidden
+
+      font-size: 20px
+      line-height: 25px
+      font-weight: 700
+      color: #2f7790
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)
+
+      letter-spacing: -1px
+
+    .date
+      left: 0
+      top: 56px
+      width: 262px
+      position: absolute
+
+      font-size: 11px
+      line-height: 15px
+      color: #7b7974
+      +text-shadow(transparentize(#fff, .25) 0 1px 0)
+
+  .attachment
+    height: 80px
+
+    .description
+      top: 53px
+      position: absolute
+      font-size: 13px
+      line-height: 15px
+      color: #2b2a28
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+
+  .attachment, .grades, .visible
+    padding-right: 32px
+    position: relative
+
+    &::before
+      content: ' '
+      position: absolute
+      right: -5px
+      top: 27px
+      height: 24px
+      width: 24px
+      opacity: .5
+
+  .attachment::before
+    +icons-24-sprite(attachment)
+
+  .grades::before
+    +icons-24-sprite(chart)
+
+  .visible::before
+    +icons-24-sprite(invisible)
+
+  &.no-attachments:not(.app-icon) .attachment, &.no-attachment-icon:not(.app-icon) .attachment, &.non-gradable .grades, &.visible-for-students .visible
+    padding-right: 0
+    &::before
+      display: none
+
+  .content
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    word-break: break-all
+    font-size: 13px
+    line-height: 80px
+    color: #2b2a28
+    +text-shadow(transparentize(#fff, .5) 0 1px 0)
