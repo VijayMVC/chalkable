@@ -98,7 +98,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 }
                 EndDate = adminAnn.Expires;
                 IsAdminAnnouncement = true;
-                Owners =  NameHelper.FullName(adminFirstName ?? "", adminLastName ?? "", false, adminAnn.AdminGender);
+                Owners =  NameHelper.FullName(adminFirstName ?? "", adminLastName ?? "", "", false, adminAnn.AdminGender);
                 AdminId = announcement.AdminRef;
             }
         }

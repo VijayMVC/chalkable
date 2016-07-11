@@ -1,6 +1,7 @@
 ﻿CREATE TYPE [dbo].[TStudent] AS TABLE (
     [Id]					 INT            NOT NULL,
     [FirstName]				 NVARCHAR (510) NOT NULL,
+	[MiddleName]			 NVARCHAR (255) NULL,
     [LastName]				 NVARCHAR (510) NOT NULL,
     [BirthDate]				 DATETIME2 (7)  NULL,
     [Gender]				 NVARCHAR (510) NULL,

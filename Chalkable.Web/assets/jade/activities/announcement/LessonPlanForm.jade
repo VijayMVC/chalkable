@@ -47,16 +47,15 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             .title-block-container
                                 +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
                             .left-top-container
-                                if !state
-                                    .categories-container.i-b
-                                        label(for="galleryCategoryId").main-label Category:
-                                        #galleryCategoryForSearchContainer
-                                            +Select('galleryCategoryId')#galleryCategoryId
-                                                +Option('', 'Select category', true)
-                                                each item in announcement.getCategories()
-                                                    +Option(item.getId().valueOf(), item.getName())
-                                                +Option(-1, 'Add Category')
-                                        +ActionButton('lpgallerycategory', 'editCategories').special-button2.add.add-category-btn.x-hidden + Add Category
+                                .categories-container.i-b
+                                    label(for="galleryCategoryId").main-label Category:
+                                    #galleryCategoryForSearchContainer
+                                        +Select('galleryCategoryId')#galleryCategoryId
+                                            +Option('', 'Select category', true)
+                                            each item in announcement.getCategories()
+                                                +Option(item.getId().valueOf(), item.getName())
+                                            +Option(-1, 'Add Category')
+                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add.add-category-btn.x-hidden + Add Category
 
                     .right-block
                         .h-1
