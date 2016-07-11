@@ -73,7 +73,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult PanoramaSettings()
         {
-            if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
+            if (!Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS))
                 throw new ChalkableSecurityException("You are not allowed to change panorama settings");
 
             var courseTypes = SchoolLocator.CourseTypeService.GetList(true);

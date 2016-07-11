@@ -16,7 +16,12 @@ NAMESPACE('chlk.templates.settings', function () {
             ArrayOf(chlk.models.apps.Application), 'applications',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.profile.StandardizedTestViewData), 'standardizedTests'
+            ArrayOf(chlk.models.profile.StandardizedTestViewData), 'standardizedTests',
 
+            function isAdminPanoramaEnabled() {
+                return this.getCurrentUser().getClaims().filter(function(item){
+                        return item.hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
+                    }).length > 0;
+            }
         ])
 });
