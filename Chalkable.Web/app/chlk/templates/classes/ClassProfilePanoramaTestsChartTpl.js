@@ -83,7 +83,10 @@ NAMESPACE('chlk.templates.classes', function () {
                         lineWidth: 1,
                         lineColor: '#ebebeb',
                         gridLineColor: '#ebebeb',
-                        gridLineDashStyle: 'solid'
+                        gridLineDashStyle: 'solid',
+                        startOnTick: true,
+                        showFirstLabel: true//,
+                        //min: 0
                     },
 
                     series: series

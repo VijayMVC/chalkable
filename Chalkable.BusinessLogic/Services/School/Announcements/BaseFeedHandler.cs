@@ -61,13 +61,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             
             var lps = InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeTo, ownedOnly);
-            var res = MerageItems(classAnns, lps);
+            var res = MergeItems(classAnns, lps);
 
-            var supplementalAnns = InternalGetSupplementalAnns(locator, fromDate, toDate, classId, complete, start, count, from, to, includeFrom, includeFrom, ownedOnly);
-            res = MerageItems(res, supplementalAnns);
+            var supplementalAnns = InternalGetSupplementalAnns(locator, fromDate, toDate, classId, complete, start, count, from, to, includeFrom, includeFrom, true);
+            res = MergeItems(res, supplementalAnns);
 
             if (locator.Context.Role == CoreRoles.STUDENT_ROLE)
-                res = MerageItems(res, InternalGetAdminAnns(locator, fromDate, toDate, null, complete, 0, int.MaxValue, from, to, includeFrom, includeTo));
+                res = MergeItems(res, InternalGetAdminAnns(locator, fromDate, toDate, null, complete, 0, int.MaxValue, from, to, includeFrom, includeTo));
 
             return res.ToList();
         }
@@ -99,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        protected virtual IList<AnnouncementComplex> MerageItems(IList<AnnouncementComplex> anns1, IList<AnnouncementComplex> anns2)
+        protected virtual IList<AnnouncementComplex> MergeItems(IList<AnnouncementComplex> anns1, IList<AnnouncementComplex> anns2)
         {
             return anns1.Merge(anns2, SortSelector, SortComparator, _sortDesc).ToList();
         }

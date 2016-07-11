@@ -132,8 +132,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return PrepareStudentListDetailsData(students, stWithDrawDictionary);
         }
 
-        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName,
-            int start, int count, int? markingPeriod)
+        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriod, bool enrolledOnly)
         {
             var students = StudentStorage.GetAll().AsEnumerable();
             if (!string.IsNullOrEmpty(filter))

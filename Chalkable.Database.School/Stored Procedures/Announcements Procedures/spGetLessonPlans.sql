@@ -42,4 +42,4 @@ Where
 	and (@toDate is null or StartDate <= @toDate)
 	and (@complete is null or annRecipientData.Complete = @complete or (@complete = 0 and annRecipientData.Complete is null))
 	and (InGallery = 0)
-	and SchoolYearRef = @schoolYearId
+	and (@classId is null and SchoolYearRef = @schoolYearId)

@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.profile', function () {
 
     /** @class chlk.models.profile.PanoramaSettingsViewData*/
     CLASS(
-        UNSAFE, 'PanoramaSettingsViewData', [
+        UNSAFE, 'PanoramaSettingsViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
             ArrayOf(chlk.models.id.SchoolYearId), 'schoolYearIds',
             ArrayOf(chlk.models.profile.StandardizedTestFilterViewData), 'standardizedTestFilters',
 

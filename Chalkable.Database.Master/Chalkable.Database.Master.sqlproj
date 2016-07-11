@@ -133,7 +133,7 @@
     <Build Include="Tables\ApplicationSchoolOption.sql" />
     <Build Include="Stored Procedures\spBanSchoolsByIds.sql" />
     <Build Include="User Defined Types\TApplicationSchoolOption.sql" />
-    <Build Include="Stored Procedures\spGetApplicationBanInfo.sql" />
+    <Build Include="Stored Procedures\spGetApplicationsBanInfo.sql" />
     <Build Include="Stored Procedures\spUpdateAssessmentEnabled.sql" />
   </ItemGroup>
   <ItemGroup>

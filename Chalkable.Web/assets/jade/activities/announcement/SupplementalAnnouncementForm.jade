@@ -44,14 +44,14 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                                 +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
                             .left-top-container
                                 .recipients-container
-                                    label(for="students").main-lable Recipients:
+                                    label(for="students").main-label Recipients:
                                     .types-select-cnt
                                         -var recipientIds = announcementItem.getRecipients() ? announcementItem.getRecipients().map(function(item){return item.getId()}) : (announcementItem.getSelectedStudentsIds() || [])
                                         +Select('students')(multiple, data-placeholder="Assign To...").recipients-select
                                             each student in self.getStudents() || []
                                                 +Option(student.getId().valueOf(), student.getFullName(), recipientIds.indexOf(student.getId()) > -1)
                                 .categories-container
-                                    label(for="type-select").main-lable Category:
+                                    label(for="type-select").main-label Category:
                                     .types-select-cnt
                                         -var typeId = self.getSelectedTypeId()
                                         +Select('typeid')#type-select
@@ -104,6 +104,22 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                                     data-tooltip-timeout=500,
                                     data-tooltip=Msg.Hide_From_Student_Tooltip_Message
                                 )
+                            .check-box-container
+                                label(for="ann-discussionenabled")=Msg.Class_Discussion
+                                +SlideCheckbox('discussionenabled', announcementItem.isDiscussionEnabled(), false, false)(
+                                    data-isdiscussionenabled=announcementItem.isDiscussionEnabled(),
+                                    data-tooltip-timeout=500,
+                                ).discussion-option
+                            .check-box-container
+                                label(for="ann-previewcommentsenabled")=Msg.Preview_Comments
+                                +SlideCheckbox('previewcommentsenabled', announcementItem.isPreviewCommentsEnabled(), false, !announcementItem.isDiscussionEnabled())(
+                                    data-tooltip-timeout=500,
+                                ).preview-comments-option
+                            .check-box-container
+                                label(for="ann-requirecommentsenabled")=Msg.Require_Comments
+                                +SlideCheckbox('requirecommentsenabled', announcementItem.isRequireCommentsEnabled(), false, !announcementItem.isDiscussionEnabled())(
+                                    data-tooltip-timeout=500,
+                                ).require-comments-option
 
                 .apps-attachments-bock.attachments-and-applications
                     ann = announcement

@@ -44,6 +44,8 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
                         .small-icon.attachment-icon(data-tooltip=item.getAttachmentNames())
                     if supplementalAnnouncement
                         .small-icon.supplemental-icon(data-tooltip=supplementalAnnouncement.getRecipientsTooltip())
+                    if item.isShowDiscussionIcon()
+                        .small-icon.discussion-icon(data-tooltip="Class Discussion")
 
                     if lessonPlan
                         .line(data-tooltip = lessonPlan.getPercents() + '% complete')

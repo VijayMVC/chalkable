@@ -92,14 +92,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult Drop(int announcementId)
         {
             SchoolLocator.ClassAnnouncementService.DropUnDropAnnouncement(announcementId, true);
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult Undrop(int announcementId)
         {
             SchoolLocator.ClassAnnouncementService.DropUnDropAnnouncement(announcementId, false);

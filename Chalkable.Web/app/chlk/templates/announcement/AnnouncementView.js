@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AnnouncementComment), 'announcementComments',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 
             [ria.templates.ModelPropertyBind],

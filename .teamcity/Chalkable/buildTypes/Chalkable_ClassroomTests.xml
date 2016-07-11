@@ -10,6 +10,7 @@
     </options>
     <disabled-settings>
       <setting-ref ref="BUILD_EXT_20" />
+      <setting-ref ref="vcsTrigger" />
     </disabled-settings>
     <parameters>
       <param name="env.AZURE_STORAGE_ACCESS_KEY" value="zxxda1db24a9e0854386ffb9225581b53b11e8068db01aac7fa326fea8c13c7d40c0c8a7535bb0801a9a16d0aa1c6d74044c021f9e34eb150819c6e8c3320f88eff36cd35d4c321162ec3192c5ba9431098e9520b6646dbdf75775d03cbe80d301b" spec="password display='hidden'" />
@@ -47,7 +48,7 @@
         <parameters>
           <param name="cronExpression_dm" value="*" />
           <param name="cronExpression_dw" value="1-5" />
-          <param name="cronExpression_hour" value="*" />
+          <param name="cronExpression_hour" value="0-8,20-23" />
           <param name="cronExpression_min" value="00" />
           <param name="cronExpression_month" value="*" />
           <param name="cronExpression_sec" value="00" />

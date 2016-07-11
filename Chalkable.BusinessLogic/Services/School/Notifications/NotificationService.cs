@@ -182,6 +182,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             if (ann.LessonPlanData != null) classId = ann.LessonPlanData.ClassRef;
             if (ann.ClassAnnouncementData != null) classId = ann.ClassAnnouncementData.ClassRef;
             if (ann.AdminAnnouncementData != null) adminId = ann.AdminAnnouncementData.AdminRef;
+            if (ann.SupplementalAnnouncementData != null) classId = ann.SupplementalAnnouncementData.ClassRef;
 
             if (classId.HasValue)
             {

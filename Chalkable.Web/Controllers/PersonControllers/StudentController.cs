@@ -114,10 +114,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
-        public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName, int? markingPeriodId)
+        public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName, int? markingPeriodId, bool? enrolledOnly)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-       
+
+            enrolledOnly = enrolledOnly ?? false;
+
             int? classMatesToId = null;
             int? teacherId = null;
             if (CoreRoles.STUDENT_ROLE == SchoolLocator.Context.Role)
@@ -138,7 +140,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
                     if (!Context.Claims.HasPermission(ClaimInfo.VIEW_STUDENT))
                         throw new ChalkableException($"User has no required ({ClaimInfo.VIEW_STUDENT}) permission for watch \"Whole Students\"");
             }
-            var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, classMatesToId, filter, byLastName != true, start ?? 0, count ?? 10, markingPeriodId);
+            var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, classMatesToId, filter, 
+                byLastName != true, start ?? 0, count ?? 10, markingPeriodId, enrolledOnly.Value);
             return Json(res.Transform(StudentViewData.Create));
         }
 

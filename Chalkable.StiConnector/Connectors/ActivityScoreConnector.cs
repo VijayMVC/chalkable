@@ -13,7 +13,7 @@ namespace Chalkable.StiConnector.Connectors
         }
 
         
-        public IList<Score> GetSores(int activityId)
+        public IList<Score> GetScores(int activityId)
         {
             return Call<IList<Score>>(string.Format(urlFormat, activityId));
         }

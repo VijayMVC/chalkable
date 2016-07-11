@@ -11,13 +11,17 @@ NAMESPACE('chlk.models.setup', function () {
 
         Boolean, 'ableEdit',
 
-        [[chlk.models.classes.ClassesForTopBar, ArrayOf(chlk.models.announcement.ClassAnnouncementType), Boolean]],
-        function $(classes_, categories_, ableEdit_){
+        ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
+
+        [[chlk.models.classes.ClassesForTopBar, ArrayOf(chlk.models.announcement.ClassAnnouncementType), Boolean, ArrayOf(chlk.models.schoolYear.YearAndClasses)]],
+        function $(classes_, categories_, ableEdit_, classesByYears_){
             BASE(classes_);
             if(categories_)
                 this.setCategories(categories_);
             if(ableEdit_)
                 this.setAbleEdit(ableEdit_);
+            if(classesByYears_)
+                this.setClassesByYears(classesByYears_);
         }
     ]);
 });

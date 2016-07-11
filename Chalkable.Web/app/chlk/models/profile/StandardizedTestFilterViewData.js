@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.profile', function () {
 
     /** @class chlk.models.profile.StandardizedTestFilterViewData*/
     CLASS(
-        UNSAFE, 'StandardizedTestFilterViewData', [
+        UNSAFE, 'StandardizedTestFilterViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
             chlk.models.id.StandardizedTestItemId, 'scoreTypeId',
             chlk.models.id.StandardizedTestItemId, 'componentId',
             chlk.models.id.StandardizedTestId, 'id',

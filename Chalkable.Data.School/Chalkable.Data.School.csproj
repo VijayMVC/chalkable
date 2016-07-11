@@ -95,6 +95,7 @@
     <Compile Include="DataAccess\AlphaGradeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAssignedAttributeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttributeDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementCommentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AdminAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementDataAccess.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementRecipientDataAccess.cs" />
     <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\AnnouncementComment.cs" />
     <Compile Include="Model\AnnouncementRecipientData.cs" />
     <Compile Include="Model\AlphaGrade.cs" />
     <Compile Include="Model\AlternateScore.cs" />
