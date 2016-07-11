@@ -1,3 +1,4 @@
+using System;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.Common;
 using Chalkable.Common.Web;
@@ -7,16 +8,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class StudentViewData : ShortPersonViewData
     {
-        //[SensitiveData]
         public bool HasMedicalAlert { get; set; }
-        //[SensitiveData]
         public bool IsAllowedInetAccess { get; set; }
-        //[SensitiveData]
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
         public bool? IsWithDrawn { get; set; }
 
-        protected StudentViewData(StudentDetails student)
+        protected StudentViewData(Student student)
         {
             Id = student.Id;
             DisplayName = student.DisplayName();
@@ -32,9 +30,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
             IsWithDrawn = student.IsWithdrawn;
         }
 
-        public static StudentViewData Create(StudentDetails student)
+        public static StudentViewData Create(Student student)
         {
             return new StudentViewData(student);
         }
+        
     }
 }

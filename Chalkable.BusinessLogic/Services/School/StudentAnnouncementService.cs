@@ -78,7 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (ann.SisActivityId.HasValue)
             {
                 IList<Score> scores = new List<Score>();
-                IList<StudentDetails> persons = new List<StudentDetails>();
+                IList<Student> persons = new List<Student>();
                 if (CoreRoles.STUDENT_ROLE == Context.Role)
                 {
                     scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));

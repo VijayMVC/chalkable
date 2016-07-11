@@ -7,7 +7,11 @@ set
 	[Content] = [CAs].[Content],
 	[Created] = [CAs].[Created],
 	[State] = [CAs].[State],
-	[Title] = [CAs].[Title]
+	[Title] = [CAs].[Title],
+	[DiscussionEnabled] = [CAs].[DiscussionEnabled],
+	[PreviewCommentsEnabled] = [CAs].PreviewCommentsEnabled,
+	[RequireCommentsEnabled] = [CAs].RequireCommentsEnabled
+	
 from
 	 @classAnnouncements [CAs]
 where 

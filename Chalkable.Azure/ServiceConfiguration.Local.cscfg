@@ -12,6 +12,7 @@
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
+
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" value="localhost,abortConnect=false,ssl=false" />
@@ -71,7 +72,7 @@
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="JBWJoVgOgUP0pdPqxrdKO+OqRGyQ2gb2GdN8POvMgRA=" />
       <!-- other settings -->
-      <Setting name="TaskProcessorDelay" value="-1" />
+      <Setting name="TaskProcessorDelay" value="1" />
       <Setting name="DbBackupServiceUrl" value="" />
       <Setting name="PictureProcessorCount" value="1" />
       <Setting name="AllSchoolRunner.DistrictsPerThread" value="4" />

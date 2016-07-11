@@ -50,6 +50,13 @@ NAMESPACE('chlk.services', function () {
                     })
             },
 
+            ria.async.Future, function getExternalAttachApps() {
+                return this.get('Application/ExternalAttachApps.json', ArrayOf(chlk.models.apps.Application), {
+                        start: 0,
+                        count: 25
+                    })
+            },
+
             [[Boolean]],
             ria.async.Future, function getDevApps(refresh_) {
                 var apps = this.getContext().getSession().get(ChlkSessionConstants.DEV_APPS) || [];
@@ -283,15 +290,6 @@ NAMESPACE('chlk.services', function () {
                 return this
                     .post('Application/UnbanApp.json', null, {
                         applicationId: appId.valueOf()
-                    });
-            },
-
-            [[chlk.models.id.AppId, Number]],
-            ria.async.Future, function getAppReviews(appId, start_){
-                return this
-                    .get('Application/GetAppReviews.json', chlk.models.apps.AppRating, {
-                        applicationId: appId.valueOf(),
-                        start: start_ || 0
                     });
             },
 

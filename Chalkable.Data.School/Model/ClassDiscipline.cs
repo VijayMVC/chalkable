@@ -17,7 +17,7 @@ namespace Chalkable.Data.School.Model
 
     public class ClassDisciplineDetails : ClassDiscipline
     {
-        public StudentDetails Student { get; set; }
+        public Student Student { get; set; }
         public Class Class { get; set; }
     }
 }

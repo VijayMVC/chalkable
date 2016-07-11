@@ -10,7 +10,7 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/close-open.jade')(this);
             },
 
-            VOID, function queueReanimation_(id) {
+            VOID, function queueReanimation_(id, closed_) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id),
@@ -28,14 +28,17 @@ NAMESPACE('chlk.controls', function () {
                             timeout = setTimeout(function(){
                                 node.addClass('co-finished');
                             }, 200)
-                        })
+                        });
+
+                        if(closed_)
+                            node.find('.co-close').trigger('click');
                     }.bind(this));
             },
 
-            [[Object]],
-            Object, function processAttrs(attributes) {
+            [[Object, Boolean]],
+            Object, function processAttrs(attributes, closed_) {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
-                this.queueReanimation_(attributes.id);
+                this.queueReanimation_(attributes.id, closed_);
                 return attributes;
             }
         ]);

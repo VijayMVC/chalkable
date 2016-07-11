@@ -36,11 +36,11 @@ namespace Chalkable.Data.School.DataAccess
                         {Person.ADDRESS_REF_FIELD, person.AddressRef},
                         {Person.USER_ID_FIELD, person.UserId},
                         {Person.BIRTH_DATE, person.BirthDate},
-                        {Person.PHOTO_MODIFIED_DATE, person.PhotoModifiedDate},
+                        {Person.PHOTO_MODIFIED_DATE, person.PhotoModifiedDate}
                     };
                 queries.Add(Orm.SimpleUpdate(person.GetType(), p, new AndQueryCondition
                                      {
-                                         {Person.ID_FIELD, string.Format("{0}_{1}", Person.ID_FIELD, index), person.Id, ConditionRelation.Equal}
+                                         {Person.ID_FIELD, $"{Person.ID_FIELD}_{index}", person.Id, ConditionRelation.Equal}
                                      }, index));
                 index++;
             }
@@ -77,6 +77,7 @@ namespace Chalkable.Data.School.DataAccess
                 studentSchoolYear.GradeLevel = reader.Read<GradeLevel>();
                 res.StudentSchoolYears.Add(studentSchoolYear);
             }
+            
             reader.NextResult();
             res.PersonEmails = reader.ReadList<PersonEmail>();
             return res;

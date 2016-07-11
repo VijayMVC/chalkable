@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.models.announcement.AnnouncementView');
 REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
+REQUIRE('chlk.models.announcement.StudentAnnouncementApplicationMeta');
 
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -12,7 +13,13 @@ NAMESPACE('chlk.templates.announcement', function () {
         'AnnouncementView', EXTENDS(chlk.templates.announcement.AnnouncementAppAttachments), [
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AnnouncementComment), 'announcementComments',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',

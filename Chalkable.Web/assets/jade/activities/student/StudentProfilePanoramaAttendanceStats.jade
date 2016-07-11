@@ -1,0 +1,24 @@
+mixin HeaderLink_(name, type)
+    +ActionLink('students', 'sortPanoramaAttendances', type, self.getAttendancesOrderBy() == type && !self.isAttendancesDescending())(
+        class = (self.getAttendancesOrderBy() == type ? "active-sort " : "") + (self.isAttendancesDescending() ? "descending" : "")
+    )(attributes).cell=name
+
+-var attendancesOrderByEnum = chlk.models.panorama.StudentAttendancesSortType
+
+.grid-top-content.chlk-grid
+    .grid-content
+        .grid-header.grid-row
+            +HeaderLink_('Date', attendancesOrderByEnum.DATE).date
+            +HeaderLink_('Reason', attendancesOrderByEnum.REASON).reason
+            +HeaderLink_('Level', attendancesOrderByEnum.LEVEL).level
+            +HeaderLink_('Category', attendancesOrderByEnum.CATEGORY).category
+            +HeaderLink_('Periods', attendancesOrderByEnum.PERIODS).periods
+            +HeaderLink_('Note', attendancesOrderByEnum.NOTE).note
+        each item in self.getStudentAbsenceStats()
+            .grid-row
+                .cell.date=item.getDate() && item.getDate().format('D dd/mm/yy')
+                .cell.reason=item.getAbsenceReasonName()
+                .cell.level=item.getAbsenceLevel()
+                .cell.center.category=item.getAbsenceCategory()
+                .cell.center.periods=item.getPeriodsText()
+                .cell.note

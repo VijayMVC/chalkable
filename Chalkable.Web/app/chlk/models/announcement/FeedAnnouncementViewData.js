@@ -5,11 +5,13 @@ REQUIRE('chlk.models.announcement.AnnouncementAttributeViewData');
 REQUIRE('chlk.models.announcement.AnnouncementAttributeListViewData');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
+REQUIRE('chlk.models.announcement.AnnouncementComment');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.announcement.AdminAnnouncementRecipient');
 REQUIRE('chlk.models.announcement.CategoryViewData');
+REQUIRE('chlk.models.announcement.StudentAnnouncementApplicationMeta');
 
 REQUIRE('chlk.models.announcement.Announcement');
 
@@ -36,6 +38,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
                 this.announcementAssignedAttrs = SJX.fromValue(raw.announcementAssignedAttrs, String);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
+                this.announcementComments = SJX.fromArrayOfDeserializables(raw.announcementcomments, chlk.models.announcement.AnnouncementComment);
                 this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
                 this.studentAnnouncements = SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.StudentAnnouncements);
@@ -70,8 +73,10 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
                 this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
+                this.inGallery = SJX.fromValue(raw.inGallery, Boolean);
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
                 this.filter = SJX.fromValue(raw.filter, String);
+                this.recipientIds = SJX.fromValue(raw.recipientIds, String);
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
@@ -99,10 +104,15 @@ NAMESPACE('chlk.models.announcement', function () {
                     }, this);
                     this.autoGradeApps = autoGradeApps;
                 }
+
+                this.studentsAnnApplicationMeta = SJX.fromArrayOfDeserializables(raw.studentsannouncementapplicationmeta,
+                    chlk.models.announcement.StudentAnnouncementApplicationMeta);
             },
 
-
+            ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
+            String, 'recipientIds',
             Boolean, 'imported',
+            Boolean, 'inGallery',
             Object, 'createdAnnouncements',
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             String, 'announcementAssignedAttrs',
@@ -120,6 +130,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'grade',
             String, 'comment',
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+            ArrayOf(chlk.models.announcement.AnnouncementComment), 'announcementComments',
 
             Number, 'announcementTypeId',
             ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',
@@ -163,15 +174,11 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
             Boolean, function isExtraCreditEnabled(){
-                if(this.isAbleUseExtraCredit() && this.getClassAnnouncementData().getMaxScore() == 0)
-                    return true;
-                else
-                    return false;
+                return this.isAbleUseExtraCredit() && this.getClassAnnouncementData().getMaxScore() == 0;
             },
 
             function getTitleModel(){
-                var title = this.getClassAnnouncementData() ? this.getClassAnnouncementData().getTitle() :
-                    (this.getLessonPlanData() ? this.getLessonPlanData().getTitle() : this.getAdminAnnouncementData().getTitle());
+                var title = this.getAnnouncementItem().getTitle();
                 return new chlk.models.announcement.AnnouncementTitleViewData(title, this.getType());
             },
 

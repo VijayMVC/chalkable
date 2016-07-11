@@ -73,6 +73,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'attachmentsCount',
 
             [ria.templates.ModelPropertyBind],
+            Number, 'attachmentNames',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'attachmentsSummary',
 
             [ria.templates.ModelPropertyBind],

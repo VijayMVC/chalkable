@@ -45,7 +45,6 @@ namespace Chalkable.BusinessLogic.Common
             paramsBuilder.AppendFormat("{0}={1}&", MODE_PARAM, page);
             if (announcementAppId.HasValue)
                 paramsBuilder.AppendFormat("{0}={1}&", ANNOUNCEMENT_APPLICATION_ID_PARAM, announcementAppId.Value);
-            paramsBuilder.Append($"applicationId={application.Id}");
             
             var fmt = url.Contains("?") ? "{0}&{1}" : "{0}?{1}";
             return paramsBuilder.Length == 0 ? url : string.Format(fmt, url, paramsBuilder);

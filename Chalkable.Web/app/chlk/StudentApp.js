@@ -18,6 +18,8 @@ REQUIRE('chlk.controllers.NotificationController');
 REQUIRE('chlk.controllers.StudyCenterController');
 REQUIRE('chlk.controllers.ReportingController');
 REQUIRE('chlk.controllers.AppsController');
+REQUIRE('chlk.controllers.AttachController');
+REQUIRE('chlk.controllers.AnnouncementCommentController');
 
 REQUIRE('chlk.services.SearchService');
 REQUIRE('chlk.templates.search.SiteSearch');

@@ -6,11 +6,14 @@ namespace Chalkable.Data.School.Model.Announcements
 {
     public class InputClassAnnouncement 
     {
-        public virtual int Id { get; set; }
-        public virtual string Content { get; set; }
-        public virtual DateTime Created { get; set; }
-        public virtual AnnouncementState State { get; set; }
-        public virtual string Title { get; set; }
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public DateTime Created { get; set; }
+        public AnnouncementState State { get; set; }
+        public string Title { get; set; }
+        public bool DiscussionEnabled { get; set; }
+        public bool PreviewCommentsEnabled { get; set; }
+        public bool RequireCommentsEnabled { get; set; }
         public DateTime Expires { get; set; }
         public int? ClassAnnouncementTypeRef { get; set; }
         public int ClassRef { get; set; }
@@ -35,6 +38,9 @@ namespace Chalkable.Data.School.Model.Announcements
                 Created = classAnnouncement.Created,
                 State = classAnnouncement.State,
                 Title = classAnnouncement.Title,
+                DiscussionEnabled = classAnnouncement.DiscussionEnabled,
+                PreviewCommentsEnabled = classAnnouncement.PreviewCommentsEnabled,
+                RequireCommentsEnabled = classAnnouncement.RequireCommentsEnabled,
                 Expires = classAnnouncement.Expires,
                 ClassAnnouncementTypeRef = classAnnouncement.ClassAnnouncementTypeRef,
                 ClassRef = classAnnouncement.ClassRef,

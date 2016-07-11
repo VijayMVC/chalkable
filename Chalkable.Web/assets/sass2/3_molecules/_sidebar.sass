@@ -1,7 +1,7 @@
 #sidebar, #chlk-dialogs .attach-sidebar
   width: 81px
   display: table-cell
-  background: #e7e6e2
+  background: #eee
 
   .apps
     margin-top: 0
@@ -30,7 +30,7 @@
   > A
     display: block
     width: 80px
-    color: #a19f9c
+    color: #56554f
     border: solid #c8c7c3
     border-width: 1px 1px 1px 0
     border-top-color: #f3f3f1
@@ -40,11 +40,12 @@
     text-decoration: none
     line-height: 42px
     padding: 32px 0 4px
-    font-size: 12px
-    font-weight: 300
+    font-size: 13px
+    opacity: .85
 
     &:hover
       background-color: #f1f0ee
+      opacity: 1
       +single-transition(background-color, .15s, ease-in)
       &::before, &::after
         opacity: 1
@@ -67,30 +68,11 @@
       left: 24px
       width: 32px
       height: 32px
-      opacity: .5
+      opacity: .85
 
     &::after
-      opacity: .5
+      opacity: .85
 
-  @each $button in inbox, new-item, apps, messages, people, grades, discipline, attendance, calendar, settings, dashboard, home, study-center, api, finder, home, le, assessment, upload, uploaded, classes, assessment
+  @each $button in inbox, new-item, apps, messages, people, grades, discipline, attendance, calendar, settings, dashboard, home, study-center, api, finder, home, le, assessment, upload, uploaded, classes, assessment, gallery, standard
     .#{$button}::before
       +icons-32-sprite($button)
-
-  .standard::before
-    background: #56554f
-    border-radius: 50%
-    height: 6px
-    width: 6px
-    top: 25px
-    left: 36px
-
-  .standard::after
-    content: ' '
-    position: absolute
-    left: 31px
-    width: 12px
-    height: 12px
-    top: 20px
-    z-index: 1
-    border: 2px solid #56554f
-    border-radius: 50%

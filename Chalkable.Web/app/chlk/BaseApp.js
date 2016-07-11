@@ -38,7 +38,9 @@ REQUIRE('chlk.controls.MultipleSelectControl');
 REQUIRE('chlk.controls.CloseOpenControl');
 REQUIRE('chlk.controls.ClassesBarControl');
 REQUIRE('chlk.controls.GradesBarControl');
+REQUIRE('chlk.controls.PanoramaFilterControl');
 REQUIRE('chlk.controls.DoubleSelectControl');
+REQUIRE('chlk.controls.TabsControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
@@ -68,6 +70,7 @@ REQUIRE('chlk.AppApiHost');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 REQUIRE('chlk.lib.mvc.ChlkView');
 REQUIRE('chlk.controllers.ErrorController');
+REQUIRE('chlk.controllers.AttachController');
 
 NAMESPACE('chlk', function (){
 
@@ -220,9 +223,11 @@ NAMESPACE('chlk', function (){
 
                 ria.templates.ConverterFactories().register(new chlk.ConvertersFactory());
 
+                var tooltipTimeOut;
+
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
-                    if(!jQuery(this).data('wasClick')){
+                    if(!jQuery(this).data('wasClick') && !tooltipTimeOut){
                         var target = jQuery(e.target),
                             tooltip = jQuery('#chlk-tooltip-item');
                         target.off('remove.tooltip');
@@ -243,12 +248,19 @@ NAMESPACE('chlk', function (){
                                 showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
                             }
                             if((value || value === 0) && showTooltip ){
-                                tooltip.show();
+                                var timeout = node.data('tooltip-timeout');
+                                if(timeout){
+                                    tooltipTimeOut = setTimeout(function(){
+                                        tooltip.show();
+                                        tooltipTimeOut = null;
+                                    }, timeout)
+                                }else
+                                    tooltip.show();
+
                                 tooltip.find('.tooltip-content').html(node.data('tooltip'));
                                 tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
                                     .css('top', offset.top - tooltip.height());
                                 clazz && tooltip.addClass(clazz);
-                                e.stopPropagation();
                             }
                         }
                     }
@@ -256,6 +268,8 @@ NAMESPACE('chlk', function (){
                 });
 
                 jQuery(document).on('mouseleave click', '[data-tooltip]', function(e){
+                    clearTimeout(tooltipTimeOut);
+                    tooltipTimeOut = null;
                     var node = jQuery(this);
                     if(e.type == "click"){
                         node.data('wasClick', true);
@@ -369,13 +383,18 @@ NAMESPACE('chlk', function (){
                 var isMessagingDisabled = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_DISABLED, false);
                 var leParams = this.getContext().getSession().get(ChlkSessionConstants.LE_PARAMS, new chlk.models.school.LEParams());
                 var isAssessmentEnabled = this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED, false);
+                var isPeopleEnabled = this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS, []).filter(function(item){
+                        return item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_STUDENT)
+                            || item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_STUDENTS);
+                    }).length > 0;
 
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
                     isLEEnabled: leParams.isLeEnabled(),
                     isLinkEnabled: leParams.isIntegratedSignOn(),
                     isMessagingDisabled: isMessagingDisabled,
-                    isAssessmentEnabled: isAssessmentEnabled
+                    isAssessmentEnabled: isAssessmentEnabled || isStudyCenterEnabled,
+                    isPeopleEnabled: isPeopleEnabled
                 };
 
                 return sidebarOptions;

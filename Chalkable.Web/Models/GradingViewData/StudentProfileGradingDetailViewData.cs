@@ -14,14 +14,14 @@ namespace Chalkable.Web.Models.GradingViewData
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
         public List<ClassAvg> ClassAvgs { get; set; } 
 
-        protected StudentProfileGradingDetailViewData(StudentDetails person, IList<StudentCustomAlertDetail> customAlerts,
+        protected StudentProfileGradingDetailViewData(Student person, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions)
             : base(person, customAlerts, healthConditions)
         {
         }
 
 
-        public static StudentProfileGradingDetailViewData Create(StudentDetails student, StudentGradingDetails gradingDetails, GradingPeriod gp,
+        public static StudentProfileGradingDetailViewData Create(Student student, StudentGradingDetails gradingDetails, GradingPeriod gp,
             IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes
             , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
         {

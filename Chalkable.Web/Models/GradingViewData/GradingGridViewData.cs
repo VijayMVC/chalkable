@@ -256,7 +256,7 @@ namespace Chalkable.Web.Models.GradingViewData
         public bool? IsWithDrawn { get; set; }
         public StudentViewData StudentInfo { get; set; }
 
-        public static GradeStudentViewData Create(StudentDetails person, bool? isWithDrawn)
+        public static GradeStudentViewData Create(Student person, bool? isWithDrawn)
         {
             var res = new GradeStudentViewData { StudentInfo = StudentViewData.Create(person), IsWithDrawn = isWithDrawn };
             res.StudentInfo.IsWithDrawn = isWithDrawn;

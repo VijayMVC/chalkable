@@ -24,7 +24,7 @@ namespace Chalkable.Web.Models
             if (studentAttendance == null)
                 return null;
             var reason = reasons.FirstOrDefault(r => r.Id == studentAttendance.AttendanceReasonId);
-            return new StudentDailyAttendanceViewData()
+            return new StudentDailyAttendanceViewData
             {
                 Date = studentAttendance.Date,
                 Note = studentAttendance.Note,

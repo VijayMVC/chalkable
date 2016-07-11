@@ -6,6 +6,7 @@ using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
@@ -97,7 +98,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
             var attributeType = ServiceLocator.AnnouncementAttributeService.GetAttributeById(attributeTypeId, true);
 
-            var id = -1;
 
             using (var uow = Update())
             {
@@ -120,6 +120,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         var activityAssignedAttr = new ActivityAssignedAttribute();
                         MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(activityAssignedAttr, annAttribute);
+                        activityAssignedAttr.Text = " ";
                         activityAssignedAttr = ConnectorLocator.ActivityAssignedAttributeConnector.CreateActivityAttribute(announcement.SisActivityId.Value, activityAssignedAttr);
                         MapperFactory.GetMapper<AnnouncementAssignedAttribute, ActivityAssignedAttribute>().Map(annAttribute, activityAssignedAttr);
                         annAttribute.Name = attributeType.Name;//activity attr returns null name
@@ -127,7 +128,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 
                 var da = new AnnouncementAssignedAttributeDataAccess(uow);
-                id = da.InsertWithEntityId(annAttribute);
+                var id = da.InsertWithEntityId(annAttribute);
                 uow.Commit();
                 return da.GetById(id);
             }
@@ -324,17 +325,19 @@ namespace Chalkable.BusinessLogic.Services.School
                         Name = attributeForCopying.Name,
                         Text = attributeForCopying.Text,
                         VisibleForStudents = attributeForCopying.VisibleForStudents,
+                        AttachmentRef = attributeForCopying.AttachmentRef,
+                        Attachment = attributeForCopying.Attachment
                     };
-                    if (attributeForCopying.Attachment != null)
-                    {
-                        var attContent = serviceLocator.AttachementService.GetAttachmentContent(attributeForCopying.Attachment);
-                        if (attContent.Content != null)
-                        {
-                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
-                            attribute.AttachmentRef = att.Id;
-                            attribute.Attachment = att;
-                        }
-                    }
+                    //if (attributeForCopying.Attachment != null)
+                    //{
+                    //    var attContent = serviceLocator.AttachementService.GetAttachmentContent(attributeForCopying.Attachment);
+                    //    if (attContent.Content != null)
+                    //    {
+                    //        var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
+                    //        attribute.AttachmentRef = att.Id;
+                    //        attribute.Attachment = att;
+                    //    }
+                    //}
                     attributes.Add(attribute);
                 }
             }
@@ -342,48 +345,55 @@ namespace Chalkable.BusinessLogic.Services.School
             return da.GetLastListByAnnIds(toAnnouncementIds, attributes.Count);
         }
 
-        public static IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(IDictionary<int, int> fromToAnnouncementIds,
+        public static IList<Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>> CopyNonStiAttributes(IDictionary<int, int> fromToAnnouncementIds, 
             UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
         {
-            var da = new AnnouncementAssignedAttributeDataAccess(unitOfWork);
-            var attributesForCopying = da.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Key).ToList(), int.MaxValue)
+            //var attachmentDA = new AttachmentDataAccess(unitOfWork);
+
+            var annAssignedAttributeDA = new AnnouncementAssignedAttributeDataAccess(unitOfWork);
+            var attributesForCopying = annAssignedAttributeDA.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Key).ToList(), int.MaxValue)
                 .Where(x => !x.SisActivityAssignedAttributeId.HasValue).ToList();
 
-            var attributes = new List<AnnouncementAssignedAttribute>();
+            var fromToAttributes = new List<Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>>();
             
-            foreach (var pair in fromToAnnouncementIds)
+            foreach (var announcementPair in fromToAnnouncementIds)
             {
-                var assignedAttToCopy = attributesForCopying.Where(x => x.AnnouncementRef == pair.Key).ToList();
-                foreach (var attribute in assignedAttToCopy)
+                var assignedAttToCopy = attributesForCopying.Where(x => x.AnnouncementRef == announcementPair.Key).ToList();
+                foreach (var attributeToCopy in assignedAttToCopy)
                 {
                     var newAttribute = new AnnouncementAssignedAttribute
                     {
-                        AnnouncementRef = pair.Value,
-                        AttributeTypeId = attribute.AttributeTypeId,
-                        Name = attribute.Name,
-                        Text = attribute.Text,
-                        VisibleForStudents = attribute.VisibleForStudents
+                        AnnouncementRef = announcementPair.Value,
+                        AttributeTypeId = attributeToCopy.AttributeTypeId,
+                        Name = attributeToCopy.Name,
+                        Text = attributeToCopy.Text,
+                        VisibleForStudents = attributeToCopy.VisibleForStudents,
+                        AttachmentRef = attributeToCopy.AttachmentRef,
+                        Attachment = attributeToCopy.Attachment
                     };
 
-                    if (attribute.Attachment != null)
-                    {
-                        var attContent = serviceLocator.AttachementService.GetAttachmentContent(attribute.Attachment);
-                        if (attContent.Content != null)
-                        {
-                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content,
-                                    attContent.Attachment.IsStiAttachment,
-                                    unitOfWork, serviceLocator, connectorLocator, false);
+                    //if (attributeToCopy.Attachment != null)
+                    //{
+                    //    var attachment = new Attachment
+                    //    {
+                    //        Name = attributeToCopy.Attachment.Name,
+                    //        PersonRef = serviceLocator.Context.PersonId.Value,
+                    //        Uuid = null,
+                    //        UploadedDate = serviceLocator.Context.NowSchoolTime,
+                    //        LastAttachedDate = serviceLocator.Context.NowSchoolTime,
+                    //    };
 
-                            newAttribute.AttachmentRef = att?.Id;
-                            newAttribute.Attachment = att;
-                        }
-                    }
-                    attributes.Add(newAttribute);
+                    //    attachment.Id = attachmentDA.InsertWithEntityId(attachment);
+
+                    //    newAttribute.AttachmentRef = attachment.Id;
+                    //    newAttribute.Attachment = attachment;
+                    //}
+                    fromToAttributes.Add(new Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>(attributeToCopy, newAttribute));
                 }
             }
-            
-            da.Insert(attributes);
-            return da.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Value).ToList(), attributes.Count);
+
+            annAssignedAttributeDA.Insert(fromToAttributes.Select(x => x.Second).ToList());
+            return fromToAttributes;
         }
 
         public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId)

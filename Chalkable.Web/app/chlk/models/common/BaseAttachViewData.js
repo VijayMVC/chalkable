@@ -7,6 +7,8 @@ NAMESPACE('chlk.models.common', function () {
     CLASS(
         'BaseAttachViewData', [
 
+            String, 'requestId',
+
             chlk.models.common.AttachOptionsViewData, 'attachOptions',
 
             [[chlk.models.common.AttachOptionsViewData]],

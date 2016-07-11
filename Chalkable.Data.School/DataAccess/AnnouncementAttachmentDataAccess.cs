@@ -94,6 +94,7 @@ namespace Chalkable.Data.School.DataAccess
             res.Sql.AppendFormat(@"		
                                     left join LessonPlan on LessonPlan.Id = Announcement.Id
 		                            left join ClassAnnouncement on ClassAnnouncement.Id = Announcement.Id
+                                    left join SupplementalAnnouncement on SupplementalAnnouncement.Id = Announcement.Id  
 		                            left join AdminAnnouncement on AdminAnnouncement.Id = Announcement.Id
                                 ");
 
@@ -146,7 +147,10 @@ namespace Chalkable.Data.School.DataAccess
                     res.Sql.Append("and (AdminAnnouncement.Id is not null or ");
                     res.Sql.Append(@" exists(select * from ClassTeacher 
                                              where (ClassTeacher.PersonRef = @callerId or Attachment_PersonRef = ClassTeacher.PersonRef)
-                                                    and (ClassTeacher.ClassRef = LessonPlan.ClassRef or ClassTeacher.ClassRef = ClassAnnouncement.ClassRef))");
+                                                    and (ClassTeacher.ClassRef = LessonPlan.ClassRef 
+                                                            or ClassTeacher.ClassRef = ClassAnnouncement.ClassRef 
+                                                            or ClassTeacher.ClassRef = SupplementalAnnouncement.ClassRef)
+                                             )");
                     res.Sql.Append(")");
                 }
                 return res;
@@ -157,6 +161,8 @@ namespace Chalkable.Data.School.DataAccess
                 res.Sql.Append(@" and (Attachment_PersonRef = @callerId 
                                        or (
                                                 exists(select * from ClassPerson cp where cp.PersonRef = @callerId and (cp.ClassRef = LessonPlan.ClassRef or cp.ClassRef = ClassAnnouncement.ClassRef))
+                                            and    
+                                                exists(select * from SupplementalAnnouncementRecipient Where StudentRef = @callerId and SupplementalAnnouncementRef = SupplementalAnnouncement.Id)
                                             and 
                                                 exists(select ct.ClassRef from ClassTeacher ct where ct.PersonRef = Attachment_PersonRef and (ct.ClassRef = LessonPlan.ClassRef or ct.ClassRef = ClassAnnouncement.ClassRef))
                                           )

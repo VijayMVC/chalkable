@@ -9,8 +9,8 @@ namespace Chalkable.Data.School.Model
 {
     public class ClassTeacher
     {
-        public const string PERSON_REF_FIELD = "PersonRef";
-        public const string CLASS_REF_FIELD = "ClassRef";
+        public const string PERSON_REF_FIELD = nameof(PersonRef);
+        public const string CLASS_REF_FIELD = nameof(ClassRef);
 
         [PrimaryKeyFieldAttr]
         public int PersonRef { get; set; }

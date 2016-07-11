@@ -196,7 +196,7 @@ simpleApp = !app.isAdvancedApp()
                         +MyAppsPermission("Will Teachers be", ' ', 'viewing student output?', "short-gd")
                         +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
             .elem
-                lable.hint Settings:
+                label.hint Settings:
                 .my-apps
                     .permission
                         +MyAppsPermission("Can SysAdmin Launch ", app.getName(), "in Settings?", "short")
@@ -205,7 +205,7 @@ simpleApp = !app.isAdvancedApp()
                         +MyAppsPermission("Can District Admin Launch ", app.getName(), "in Settings?", "short")
                         +SlideCheckbox("districtAdminSettingsEnabled", myAppsAccess.isDistrictAdminSettingsEnabled(), self.isReadOnly())
             .elem
-                lable.hint Profile:
+                label.hint Profile:
                 .my-apps
                     .permission
                         +MyAppsPermission("Can Student Launch ", app.getName(), "in Profile?", "short")
@@ -213,7 +213,7 @@ simpleApp = !app.isAdvancedApp()
 
         .section.small.advanced(class = simpleApp ?  "x-hidden" : undefined)
             .elem
-                lable.hint Provides Recommended Content
+                label.hint Provides Recommended Content
                 .my-apps
                     .permission
                         +MyAppsPermission("Does ", app.getName(), ' Provide Recommended Content?', "short")

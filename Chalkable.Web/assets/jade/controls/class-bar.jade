@@ -15,7 +15,6 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled
                if controller_
                   +ActionLinkWithPrepend(controller_, action_, params)(
                      class = id == currentClassId ? "pressed " : "",
-                     data-tooltip=id ? item.getFullClassName() : '',
                      data-item-id = id
                   ).class-button.button-link.item
                      if showAlerts_

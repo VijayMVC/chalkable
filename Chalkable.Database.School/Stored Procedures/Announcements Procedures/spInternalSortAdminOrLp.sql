@@ -1,7 +1,8 @@
-﻿CREATE Procedure [dbo].[spInternalSortAdminOrLp] 
+﻿Create Procedure [dbo].[spInternalSortAdminOrLp] 
 	@lessonPlans TLessonPlan READONLY, 
 	@adminAnn TAdminAnnouncement READONLY, 
-	@annType bit, 
+	@supplementalAnn TSupplementalAnnouncement READONLY,
+	@annType int, 
 	@filterOption int, 
 	@sortOption int, 
 	@sortType bit, 
@@ -27,6 +28,7 @@ declare
 	@SORT_BY_CLASS_NAME int = 2,
 	@LESSON_PLAN_TYPE int  = 0,
 	@ADMIN_ANN_TYPE int = 1,
+	@SUPPLEMENTAL_ANN_TYPE int = 2,
 	@ASC_SORT bit = 0,
 	@DESC_SORT bit = 1,
 	@NOTINCLUDE bit = 0
@@ -67,7 +69,8 @@ If(@annType = @LESSON_PLAN_TYPE)
 						when @SORT_BY_CLASS_NAME then ClassName
 					end
 				from @lessonPlans
-else
+
+If(@annType = @ADMIN_ANN_TYPE)
 	if(@filterOption = @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
 		Insert @t select Id, Expires, Expires from @adminAnn
 	else
@@ -78,6 +81,43 @@ else
 				Insert @t select Id, Title, Expires from @adminAnn
 			else
 				Insert @t select Id, Title, Title from @adminAnn
+
+If(@annType = @SUPPLEMENTAL_ANN_TYPE)
+	if(@filterOption = @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
+		Insert @t select Id, Expires, Expires from @supplementalAnn
+	else
+		if(@filterOption = @SORT_BY_DATE and @sortOption <> @SORT_BY_DATE)
+			Insert @t 
+				select Id, 
+					Expires, 
+					case @sortOption
+						when @SORT_BY_TITLE then Title
+						when @SORT_BY_CLASS_NAME then ClassName
+					end 
+				from @supplementalAnn
+		else
+			if(@filterOption <> @SORT_BY_DATE and @sortOption = @SORT_BY_DATE)
+				Insert @t 
+					select Id, 
+						   case @filterOption
+								when @SORT_BY_TITLE then Title
+								when @SORT_BY_CLASS_NAME then ClassName
+						   end,
+						   Expires
+				from @supplementalAnn
+			else
+				Insert @t 
+					select Id, 
+						case @filterOption
+							when @SORT_BY_TITLE then Title
+							when @SORT_BY_CLASS_NAME then ClassName
+						end,
+						case @sortOption
+							when @SORT_BY_TITLE then Title
+							when @SORT_BY_CLASS_NAME then ClassName
+						end
+					from @supplementalAnn
+
 
 --	cut by sortOprion with includes or no
 	if(@pFrom is not null)
@@ -94,27 +134,44 @@ else
 
 --order and result select
 If(@annType = @LESSON_PLAN_TYPE)
+Begin
+	declare @sortedLP TLessonPlan
+
+	Insert Into @sortedLP
 	select LP.* From @t T
 	Join @lessonPlans LP on LP.Id = T.id
-	order by
-		(case 
-			when @sortType = @ASC_SORT then T.SortedField
-		end) ASC,
-		(case 
-			when @sortType = @DESC_SORT then T.SortedField
-		end) DESC
+	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
+		     (case when @sortType = @DESC_SORT then T.SortedField end) DESC
 		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
-else
+
+	exec spSelectLessonPlans @sortedLP
+End
+
+if(@annType = @ADMIN_ANN_TYPE)
+Begin
+	declare @sortedAA TAdminAnnouncement
+
+	Insert Into @sortedAA 
 	select AA.* From @t T
 	Join @adminAnn AA on AA.Id = T.id
-	order by
-		(case 
-			when @sortType = @ASC_SORT then T.SortedField
-		end) ASC,
-		(case 
-			when @sortType = @DESC_SORT then T.SortedField
-		end) DESC
+	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
+		     (case when @sortType = @DESC_SORT then T.SortedField end) DESC
 		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+
+	exec spSelectAdminAnnoucnement @sortedAA
+End
+
+if(@annType = @SUPPLEMENTAL_ANN_TYPE)
+	declare @sortedSA TSupplementalAnnouncement
+	
+	Insert Into @sortedSA
+	select SA.* From @t T
+	Join @supplementalAnn SA on SA.Id = T.id
+	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
+				(case when @sortType = @DESC_SORT then T.SortedField end) DESC
+		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+
+	exec spSelectSupplementalAnnouncements @sortedSA
 
 GO
 

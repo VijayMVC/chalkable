@@ -2,9 +2,9 @@ namespace Chalkable.StiConnector.SyncModel
 {
     using System;
     
-    public class Ethnicity
+    public class Ethnicity : SyncModel
     {
-        public short EthnicityID { get; set; }
+        public int EthnicityID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -15,5 +15,6 @@ namespace Chalkable.StiConnector.SyncModel
         public bool IsSystem { get; set; }
         public Guid RowVersion { get; set; }
         public Guid DistrictGuid { get; set; }
+        public override int DefaultOrder => 6;
     }
 }

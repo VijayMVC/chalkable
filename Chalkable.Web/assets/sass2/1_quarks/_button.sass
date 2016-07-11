@@ -149,3 +149,39 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
   height: 24px
   display: inline-block
   +icons-24-sprite(import)
+
+.import-small-icon
+  width: 24px
+  height: 24px
+  display: inline-block
+  +icons-24-sprite(import-small)
+
+@each $icon in reply, edit-grey, invisible-grey, visible, x-remove
+  .#{$icon}-icon
+    width: 24px
+    height: 24px
+    display: inline-block
+    +icons-24-sprite($icon)
+
+
+BUTTON .import-small-icon
+  position: relative
+  left: -4px
+
+.add-plus-btn
+  text-decoration: none
+  font-weight: bold
+
+  SPAN
+    display: inline-block
+    width: 24px
+    height: 24px
+    border-radius: 50%
+    background: #41b768
+    font-size: 24px
+    line-height: 22px
+    text-align: center
+    color: white
+    font-weight: normal
+    vertical-align: middle
+    margin-left: 8px

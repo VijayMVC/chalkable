@@ -258,7 +258,10 @@ namespace Chalkable.BusinessLogic.Services.School
             while (currentDate <= endDate)
             {
                 var dailyAtt = stiAttendanceDetails.DailyAbsences.FirstOrDefault(x => x.Date.Date == currentDate.Date && x.StudentId == studentId);
-                var periodAttendances = stiAttendanceDetails.PeriodAbsences.Where(x => x.Date.Date == currentDate.Date && x.StudentId == studentId).ToList();
+                var periodAttendances = stiAttendanceDetails.PeriodAbsences
+                    .Where(x => x.Date.Date == currentDate.Date && x.StudentId == studentId)
+                    .Where(x => classes.Any(y => x.SectionId == y.Id)) // We need to filter attendances by student classes! Very important.
+                    .ToList();
                 var checkIncheckOuts = stiAttendanceDetails.CheckInCheckOuts.Where(x => x.Date == currentDate.Date && x.StudentId == studentId).ToList();
                 var item = new StudentDateAttendance
                     {
@@ -348,7 +351,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 var c = ServiceLocator.ClassService.GetById(classId);
                 var periods = ServiceLocator.PeriodService.GetPeriods(syId);
-                var students = new List<StudentDetails>();
+                var students = new List<Student>();
                 students = mps.Select(mp => ServiceLocator.StudentService.GetClassStudents(classId, mp.Id))
                               .Aggregate(students, (current, items) => current.Union(items).ToList());
 

@@ -20,12 +20,14 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<int> GetYears(); 
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
+        IList<SchoolYear> GetPreviousSchoolYears(int count = 1);
         IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true); 
         IList<StudentSchoolYear> GetStudentAssignments();
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
         void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears);
         IList<SchoolYear> GetDescSortedYearsByIds(IList<int> ids);
+        StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId);
     }
 
     public class SchoolYearService : SisConnectedService, ISchoolYearService
@@ -64,6 +66,11 @@ namespace Chalkable.BusinessLogic.Services.School
             return schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
         }
 
+        public IList<SchoolYear> GetPreviousSchoolYears(int count = 1)
+        {
+            var current = GetCurrentSchoolYear();
+            return DoRead(u => new SchoolYearDataAccess(u).GetPreviousSchoolYears(current.StartDate ?? Context.NowSchoolYearTime, current.SchoolRef, count));
+        }
 
         public SchoolYear GetCurrentSchoolYear()
         {
@@ -137,5 +144,9 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new DataAccessBase<StudentSchoolYear>(u).GetAll());
         }
 
+        public StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId)
+        {
+            return DoRead(u => new SchoolYearDataAccess(u).GetPreviousStudentSchoolYearOrNull(studentId));
+        }
     }
 }

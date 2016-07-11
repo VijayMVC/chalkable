@@ -37,6 +37,7 @@ function oneOrMany(text, needE){
 var Msg = {
     //Simple words-----------------------------------------------------
 
+    Absences: 'Absences',
     Accept: 'Accept',
     Accepted: 'Accepted',
     Add: 'Add',
@@ -370,6 +371,7 @@ var Msg = {
     Class_average: 'Class average',
     Class_Average_Only: 'Class Average Only',
     Class_cost: 'Class cost',
+    Class_Discussion: 'Class Discussion',
     Class_name: 'Class name',
     Class_size: 'Class size',
     Class_flat_rate: 'Class flat rate',
@@ -456,6 +458,7 @@ var Msg = {
     GPA: 'GPA',
     GradeLevel: 'GradeLevel',
     Grade_Avg: 'Grade Avg',
+    Grade_Average: 'Grade Average',
     Grade_book: 'Grade book',
     Grade_Book_Report: 'Grade Book Report',
     Grade_Level: 'Grade Level',
@@ -566,6 +569,7 @@ var Msg = {
     Number_of_rows: 'Number of rows :',
     Password_reset: 'Password reset',
     Parent_info: 'Parent Info',
+    Preview_Comments: 'Preview Comments',
     Public_and_private: 'Public and private',
     Old_Password: 'Old Password',
     One_Per_Page: 'One Per Page',
@@ -586,6 +590,7 @@ var Msg = {
     Reporting_period: 'Reporting period',
     Responsible_for_bill: 'Responsible for Bill',
     Return_to_Homepage: 'Return to Homepage',
+    Require_Comments: 'Require Comments',
     Right_now: 'Right now',
     Room_number: 'Room number',
     Room_shortcut: 'RM',
@@ -671,6 +676,7 @@ var Msg = {
     Students_with_attendance_issues: 'Students with attendance issues',
     Suggested_grade: 'Suggested grade',
     Sum_of_percents: 'Sum of percents is not 100!',
+    Supplemental_announcement: 'Supplemental announcement',
     Suppress_student_name: 'Suppress student name',
     Swipe_or_Search: 'Swipe or Search',
     System_Type: 'System Type',

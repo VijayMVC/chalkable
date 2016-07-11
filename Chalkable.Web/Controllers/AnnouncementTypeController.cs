@@ -5,7 +5,6 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
@@ -73,17 +72,17 @@ namespace Chalkable.Web.Controllers
             return Json(ClassAnnouncementTypeViewData.Create(res));
         }
 
-        /*[AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult Delete(int classAnnouncementTypeId)
-        {
-            SchoolLocator.ClassAnnouncementTypeService.DeleteClassAnnouncmentType(classAnnouncementTypeId);
-            return Json(true);
-        }*/
-        
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Delete(IntList classAnnouncementTypeIds)
         {
             SchoolLocator.ClassAnnouncementTypeService.DeleteClassAnnouncmentTypes(classAnnouncementTypeIds);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Copy(int fromClassId, int toClassId, IntList classAnnouncementTypeIds)
+        {
+            SchoolLocator.ClassAnnouncementTypeService.CopyClassAnnouncementTypes(fromClassId, toClassId, classAnnouncementTypeIds);
             return Json(true);
         }
 
@@ -92,5 +91,6 @@ namespace Chalkable.Web.Controllers
             var classAnnTypes = serviceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId, false).ToList();
             return classAnnTypes;
         }
+        
     }
 }

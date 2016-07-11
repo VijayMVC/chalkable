@@ -5,6 +5,7 @@ REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineTypeService');
+REQUIRE('chlk.services.SchoolYearService');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassScheduleViewData');
@@ -16,6 +17,7 @@ REQUIRE('chlk.activities.classes.ClassProfileAttendanceSeatingChartPage');
 REQUIRE('chlk.activities.classes.ClassProfileAppsPage');
 REQUIRE('chlk.activities.classes.ClassExplorerPage');
 REQUIRE('chlk.activities.classes.ClassProfileDisciplinePage');
+REQUIRE('chlk.activities.classes.ClassPanoramaPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -44,19 +46,24 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.GradingPeriodService, 'gradingPeriodService',
 
+            [ria.mvc.Inject],
+            chlk.services.SchoolYearService, 'schoolYearService',
+
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
                 var result = ria.async.wait([
                     this.classService.getSummary(classId),
                     this.announcementService.getAnnouncements(0, classId, true),
-                    this.gradingPeriodService.getList()
+                    this.gradingPeriodService.getList(),
+                    this.schoolYearService.listOfSchoolYearClasses()
                 ])
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var model = result[0], feedModel = result[1], gradingPeriods = result[2];
+                        var model = result[0], feedModel = result[1], gradingPeriods = result[2], classesByYears = result[3];
                         var teacherIds = model.getTeachersIds(), currentPersonId = this.getCurrentPerson().getId();
                         var staringEnabled = this.userIsTeacher() && teacherIds.filter(function(id){return id == currentPersonId;}).length > 0;
                         feedModel.setGradingPeriods(gradingPeriods);
+                        feedModel.setClassesByYears(classesByYears);
                         feedModel.setImportantOnly(true);
                         feedModel.setInProfile(true);
                         feedModel.setClassId(classId);
@@ -316,6 +323,72 @@ NAMESPACE('chlk.controllers', function (){
                         return data;
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassExplorerPage, res);
+            },
+
+            function getPanorama_(classId, restore_){
+                return ria.async.wait([
+                        this.classService.getPanorama(classId),
+                        this.schoolYearService.list()
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var model = result[0];
+                        model.setSchoolYears(result[1]);
+                        model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
+                        restore_ && model.setShowFilters(true);
+                        return new chlk.models.classes.ClassProfileSummaryViewData(
+                            this.getCurrentRole(), model, this.getUserClaims_(),
+                            this.isAssignedToClass_(classId)
+                        );
+                    }, this);
+            },
+
+            [[chlk.models.id.ClassId]],
+            function panoramaAction(classId){
+                var result = this.getPanorama_(classId);
+
+                return this.PushView(chlk.activities.classes.ClassPanoramaPage, result);
+            },
+
+            [[chlk.models.id.ClassId]],
+            function restorePanoramaAction(classId){
+                var result = this.classService.restorePanorama(classId)
+                    .then(function(data){
+                        return this.getPanorama_(classId, true);
+                    }, this);
+
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, result);
+            },
+
+            [[chlk.models.profile.ClassPanoramaSortType, Boolean]],
+            function sortPanoramaStudentsAction(orderBy_, descending_){
+                var res = this.classService.sortPanoramaStudents(orderBy_, descending_)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, 'sort');
+            },
+
+            function panoramaSubmitAction(data){
+                var filterValues = data.filterValues ? JSON.parse(data.filterValues) : '',
+                    selectedStudents = data.selectedStudents || data.highlightedStudents,
+                    res, isSave = data.submitType == 'save', byCheck = data.submitType == 'check',
+                    byColumn = data.submitType == 'column', isSupplemental = data.submitType == 'supplemental';
+
+                selectedStudents = selectedStudents ? JSON.parse(selectedStudents) : '';
+
+                if(isSupplemental){
+                    return this.Redirect('announcement', 'supplementalAnnouncement', [data.classId, null, selectedStudents]);
+                }
+
+                if(isSave){
+                    res = this.classService.savePanoramaSettings(data.classId, filterValues)
+                        .attach(this.validateResponse_());
+                    return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, 'save-filters');
+                }
+
+                res = this.classService.getPanorama(data.classId, filterValues, selectedStudents)
+                    .attach(this.validateResponse_());
+
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, byCheck ? chlk.activities.lib.DontShowLoader() : '');
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],

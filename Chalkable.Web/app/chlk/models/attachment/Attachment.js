@@ -78,10 +78,16 @@ NAMESPACE('chlk.models.attachment', function () {
             chlk.models.id.SchoolPersonId, 'personId',
             String, 'thumbnailUrl',
             String, 'url',
+            String, 'publicUrl',
+            String, 'pictureId',
             chlk.models.attachment.AttachmentTypeEnum, 'type',
             Boolean, 'teachersAttachment',
             Boolean, 'owner',
             Boolean, 'stiAttachment',
+
+            Number, 'fileIndex',
+            Number, 'total',
+            Number, 'loaded',
 
             VOID, function deserialize(raw){
 
@@ -92,12 +98,23 @@ NAMESPACE('chlk.models.attachment', function () {
                 this.thumbnailUrl = SJX.fromValue(raw.thumbnailurl, String);
                 this.type = SJX.fromValue(raw.type, chlk.models.attachment.AttachmentTypeEnum);
                 this.url = SJX.fromValue(raw.url, String);
+                this.publicUrl = SJX.fromValue(raw.publicurl, String);
                 this.uploadedDate = SJX.fromDeserializable(raw.uploaded, chlk.models.common.ChlkDate);
                 this.lastAttachedDate = SJX.fromDeserializable(raw.lastattached, chlk.models.common.ChlkDate);
                 this.personId = SJX.fromValue(raw.personid, chlk.models.id.SchoolPersonId);
                 this.stiAttachment = SJX.fromValue(raw.stiattachment, Boolean);
             },
 
+            Object, function serialize(){
+                return {
+                    id: this.id.valueOf(),
+                    name: this.name,
+                    thumbnailUrl: this.thumbnailUrl,
+                    type: this.type.valueOf(),
+                    url: this.url,
+                    publicUrl: this.publicUrl
+                }
+            }
     ]);
 
     /** @class  chlk.models.attachment.SortAttachmentType*/

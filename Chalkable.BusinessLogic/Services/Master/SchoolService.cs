@@ -119,14 +119,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(uow => new SchoolDataAccess(uow).UpdateStudyCenterEnabled(districtId, schoolId, enabledTill));
         }
-
-        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
-        {
-            BaseSecurity.EnsureSysAdmin(Context);
-            if(districtId == null && schoolId == null)
-                throw new ChalkableException("Required districtId or schoolId!");
-            DoUpdate(uow => new SchoolDataAccess(uow).UpdateAssessmentEnabled(districtId, schoolId, enabled));
-        }
         
         public void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled)
         {
@@ -162,7 +154,15 @@ namespace Chalkable.BusinessLogic.Services.Master
             return (!districtId.HasValue || districtId == Context.DistrictId)
                    && (BaseSecurity.IsSysAdmin(context) || (BaseSecurity.IsDistrictAdmin(context) && hasPermission));
         }
-    }
+
+        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            BaseSecurity.EnsureSysAdmin(Context);
+            if(districtId == null && schoolId == null)
+                throw new ChalkableException("Required districtId or schoolId!");
+            DoUpdate(uow => new SchoolDataAccess(uow).UpdateAssessmentEnabled(districtId, schoolId, enabled));
+        }
+}
 
     public class SchoolInfo
     {

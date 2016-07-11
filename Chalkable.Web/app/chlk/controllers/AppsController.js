@@ -866,14 +866,12 @@ NAMESPACE('chlk.controllers', function (){
                     var pictureUrl = data.getBannerPictureUrl();
                     return ria.async.wait(
                             this.appsService.getAppAnalytics(data.getId()),
-                            this.appsService.getAppReviews(data.getId()),
                             this.appsService.getDevApps()
                         )
                         .attach(this.validateResponse_())
                         .then(function(res){
-                           var appReviews = res[1];
                            var analytics = res[0];
-                           var devApps = res[2];
+                           var devApps = res[1];
 
                            return new chlk.models.apps.AppGeneralInfoViewData(
                                 data.getName(),
@@ -951,23 +949,6 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.prepareExternalAttachAppViewData_("myview", appUrlAppend_);
             return this.PushView(chlk.activities.apps.AppWrapperPage, result);
         },
-
-
-        [chlk.controllers.AssessmentEnabled()],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DISTRICTADMIN,
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.STUDENT
-        ])],
-        [chlk.controllers.SidebarButton('settings')],
-        [[String]],
-        function assessmentProfileAction(appUrlAppend_) {
-            var result = this.prepareExternalAttachAppViewData_("profileview", appUrlAppend_);
-            return this.PushView(chlk.activities.apps.AppWrapperPage, result);
-        },
-
-
-       
 
         [chlk.controllers.SidebarButton('assessment')],
         [chlk.controllers.AccessForRoles([

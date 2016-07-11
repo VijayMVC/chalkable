@@ -1,3 +1,7 @@
+.lesson-plan-form-dialog
+  .dialog
+    width: 880px
+
 .double-select.chosen-container.chosen-with-drop
   LI.active-result
     overflow: hidden
@@ -22,6 +26,14 @@
     margin-bottom: 15px
 
 .announcement-import-dialog
+  .dialog
+    width: 750px
+
+  .row-block
+    .name-td:not(.check)
+      border-right: 1px solid #ebebeb
+
+.announcement-import-dialog, .categories-import-dialog
   .double-select
     width: 150px
     margin-left: 4px
@@ -44,9 +56,6 @@
       line-height: 40px
       font-size: 14px
       border-bottom: 1px solid #ebebeb
-
-    .name-td:nth-child(2), .name-td:nth-child(3)
-      border-right: 1px solid #ebebeb
 
   LABEL.text
     font-weight: bold
@@ -85,12 +94,30 @@
         width: 190px
 
   .dialog
-    width: 750px
-
     .buttons-container
       margin: 0
 
-.announcement-form-page, .admin-announcement-form-page, .lesson-plan-form-page
+.announcement-form
+  .lesson-plan-import-popup
+    padding: 0
+    right: -49px
+    top: 84px
+    width: 165px
+
+    a
+      display: block
+      padding: 8px 12px
+      text-decoration: none
+      text-align: left
+      font-weight: bold
+      margin: 0
+
+      &:hover
+        background: #f1f1f1
+
+  .h-1
+    min-height: 1px
+    min-width: 225px
 
   .title-block-container
     position: relative
@@ -108,9 +135,6 @@
     top: 0
     line-height: 35px
 
-  .import-icon
-    opacity: 0.5
-
     &:hover
       opacity: 1
 
@@ -118,9 +142,12 @@
     .items
       width: 95%
 
-  .import-icon
+  .import-btn
     float: right
-    margin-top: -6px
+    margin-top: 50px
+    position: absolute
+    white-space: nowrap
+    right: 0px
 
   .attach-btn-area
     margin-bottom: 20px
@@ -175,8 +202,16 @@
     .input-container
       position: relative
       display: inline-block
+      width: 100%
 
-    .title-text, INPUT[type=text]
+      INPUT
+        width: 100%
+        box-sizing: border-box
+
+    .save-title-btn
+      position: absolute
+
+    .title-text
       font-size: 16px
       font-weight: 600
 
@@ -187,6 +222,9 @@
     BUTTON
       vertical-align: top
       margin-left: 3px
+
+  .top-table
+    table-layout: fixed
 
   .table, .left-block
     width: 100%
@@ -211,7 +249,6 @@
     right: 15px
 
   .standards-list
-    border-top: dashed 3px #e0e0e0
     padding-top: 8px
     max-height: 68px
     overflow: auto
@@ -233,8 +270,12 @@
       font: bold 16px Arial
       top: 7px
 
-  .standards-list, .recipients-list
-    padding-left: 50px
+  .recipients-list
+    padding-left: 40px
+    position: relative
+
+  .standards-list
+    padding-left: 0px
     position: relative
 
     BUTTON
@@ -312,11 +353,9 @@
       right: 24px
 
   .left-top-container
-    .add-category
-      margin-bottom: 17px
+    margin-bottom: 17px
 
-    >DIV
-      display: inline-block
+    >DIV.i-b
       margin-right: 15px
 
   .right-block, .left-top-container
@@ -328,8 +367,12 @@
     SELECT
       width: 225px
 
-    .chosen-container
-      width: 217px !important
+    .recipients-select+DIV.chosen-container
+      width: 100% !important
+
+    .i-b
+      .chosen-container
+        width: 217px !important
 
     LABEL[for]
       font-size: 13px
@@ -338,10 +381,14 @@
       color: #56554f
       +text-shadow(transparentize(#fff, .5) 0 1px 1px)
       margin-bottom: 6px
-      display: block
+      display: inline-block
+      text-align: left
+
+      &.main-label
+        margin-top: 10px
 
   .right-block
-    width: 250px
+    width: 243px
 
     > *
       margin-left: 18px
@@ -364,18 +411,48 @@
     .calendar-mark
       +icons-24-sprite(calendar)
 
+  .advanced-options-btn
+    position: absolute
+    right: 0
+    +icons-32-sprite(settings)
+    width: 32px
+    height: 32px
+    margin-top: -9px
+    z-index: 1
+
+  .advanced-options
+    .check-box-container
+      margin: 10px 0
+
+      &>*
+        vertical-align: middle
+
+      &:not(.gallery)>LABEL[FOR]
+        min-width: 165px
+
+      &.gallery
+        >LABEL[FOR]
+          &:not(:last-child)
+            margin-right: 10px
+
+          &:not(:first-child)
+            margin-left: 5px
+            font-weight: normal
+
 
   .advanced-options-container
     position: absolute
     padding: 15px
     +box-shadow(transparentize(#000, .8) 0 2px 16px)
     margin-left: -16px
-    margin-top: 8px
+    margin-top: -4px
     z-index: 11
-    width: 217px
+    width: 227px
+    text-align: left
 
     > *
       position: relative
+      white-space: normal
 
     &.top::before
       +rotate(-45deg)
@@ -399,3 +476,7 @@
       float: right
       position: relative
       right: 16px
+
+.gallery-view
+  #lpGalleryCategoryType, #lp-gallery-sort-type
+    width: 200px

@@ -1,19 +1,21 @@
 ﻿CREATE Procedure [dbo].[spGetAnnouncementApplicationRecipients] 
 	@teacherId int, 
 	@studentId int,
+	@adminId int,
 	@schoolYearId int,
 	@appId uniqueidentifier
 As
-declare @teacherStudents table
+
+declare @selectedStudents table
 	(
-		teacherStudent int
+		selectedStudent int
 	)
 
 declare @teacherClassRefs table
 	(
 		teacherClassRef int,
 		teacherClassName nvarchar(255),
-		teacherStudentCount int
+		selectedStudentCount int
 	)
 
 declare 
@@ -30,7 +32,7 @@ declare
 		ClassName nvarchar(255),
 		StudentCount int
 	)
---Get all announcement application for application
+
 insert into @announcementApp
 select 
 	Id,
@@ -44,7 +46,6 @@ Where
 
 if(@studentId is not null)
 Begin 
-	--get teacher classes by student (prepare data for lesson plans and class announcement)
 	set @teacherId = null
 	insert into @teacherClassRefs
 		select Class_Id, Class_Name, 1
@@ -53,7 +54,6 @@ Begin
 			Class_SchoolYearRef = @schoolYearId
 			and exists(select * from ClassPerson where ClassRef = Class_Id and PersonRef = @studentId)
 
-	--Get data for admin announcement
 	insert into @resultTable 
 		select
 			AnnApp.annAppId, null, 1
@@ -70,7 +70,7 @@ End
 
 if(@teacherId is not null)
 Begin
-	--get teacher classes by teacher (prepare data for lesson plans and class announcement)
+	set @adminId = null;
 	insert into @teacherClassRefs
 	Select 
 		distinct ClassTeacher.ClassRef, Class.Name, (select count(distinct PersonRef) from ClassPerson where ClassRef = ClassTeacher.ClassRef)
@@ -86,8 +86,7 @@ Begin
 		StudentSchoolYear.SchoolYearRef =  @schoolYearId 
 		and ClassTeacher.PersonRef = @teacherId
 
-	--get teacher students (need for admin announcement data)
-	insert into @teacherStudents
+	insert into @selectedStudents
 	select
 		distinct CP.PersonRef
 	from
@@ -98,14 +97,13 @@ Begin
 	where
 		CP.IsEnrolled = 1
 
-	--Get data for admin announcement
 	insert into @resultTable 
 	select
-		AnnApp.annAppId, null, count(distinct TS.teacherStudent) as studentCount
+		AnnApp.annAppId, null, count(distinct SS.selectedStudent) as studentCount
 	from
-		@teacherStudents TS
+		@selectedStudents SS
 		join StudentGroup SG
-			on SG.StudentRef = TS.teacherStudent
+			on SG.StudentRef = SS.selectedStudent
 		join AnnouncementGroup AG
 			on AG.GroupRef = SG.GroupRef
 		join @announcementApp AnnApp
@@ -113,10 +111,42 @@ Begin
 	group by AnnApp.annAppId
 End
 
---Get data for lesson plans
+if(@adminId is not null)
+Begin
+	
+	insert into @selectedStudents
+	select
+		distinct CP.PersonRef
+	from
+		ClassPerson CP
+		join
+		(select distinct StudentRef from [Group] G
+			join StudentGroup SG on G.Id = SG.GroupRef
+			where OwnerRef = @adminId
+		) AdminStudent
+			on AdminStudent.StudentRef = CP.PersonRef
+	where
+		CP.IsEnrolled = 1
+	
+	insert into @resultTable 
+	select
+		AnnApp.annAppId, null, count(distinct SS.selectedStudent) as studentCount
+	from
+		@selectedStudents SS
+		join StudentGroup SG
+			on SG.StudentRef = SS.selectedStudent
+		join AnnouncementGroup AG
+			on AG.GroupRef = SG.GroupRef
+		join @announcementApp AnnApp
+			on AnnApp.announcementId = AG.AnnouncementRef
+	group by AnnApp.annAppId
+	
+End
+
+--Get announcement ids for lesson plans
 insert into @resultTable
 select
-	AnnApp.annAppId, LP.teacherClassName, LP.teacherStudentCount
+	AnnApp.annAppId, LP.teacherClassName, LP.selectedStudentCount
 from
 	@announcementApp as AnnApp
 	join (
@@ -124,7 +154,7 @@ from
 				Id, 
 				TCR.teacherClassName as teacherClassName, 
 				TCR.teacherClassRef as teacherClassRef,
-				TCR.teacherStudentCount as teacherStudentCount
+				TCR.selectedStudentCount as selectedStudentCount
 			from 
 				LessonPlan 
 				join @teacherClassRefs as TCR 
@@ -132,10 +162,10 @@ from
 		) LP
 	on AnnApp.announcementId = LP.Id
 
---Get data for class announcement
+--Get announcement ids for class announcement
 insert into @resultTable
 select
-	AnnApp.annAppId, CA.teacherClassName, CA.teacherStudentCount
+	AnnApp.annAppId, CA.teacherClassName, CA.selectedStudentCount
 from
 	@announcementApp as AnnApp
 	join 
@@ -144,7 +174,7 @@ from
 				Id, 
 				TCR.teacherClassName as teacherClassName, 
 				TCR.teacherClassRef as teacherClassRef,
-				TCR.teacherStudentCount as teacherStudentCount
+				TCR.selectedStudentCount as selectedStudentCount
 			from 
 				ClassAnnouncement 
 				join @teacherClassRefs as TCR 
@@ -152,4 +182,27 @@ from
 		) CA
 	on AnnApp.announcementId = CA.Id
 
+--Get announcement ids for supplemental announcement
+insert into @resultTable
+select
+	AnnApp.annAppId, SU.teacherClassName, SU.selectedStudentCount
+from
+	@announcementApp as AnnApp
+	join 
+		(
+			select 
+				Id, 
+				TCR.teacherClassName as teacherClassName, 
+				TCR.teacherClassRef as teacherClassRef,
+				TCR.selectedStudentCount as selectedStudentCount
+			from 
+				SupplementalAnnouncement 
+				join @teacherClassRefs as TCR 
+					on SupplementalAnnouncement.ClassRef = TCR.teacherClassRef
+		) SU
+	on AnnApp.announcementId = SU.Id
+
+
 select * from @resultTable
+
+GO

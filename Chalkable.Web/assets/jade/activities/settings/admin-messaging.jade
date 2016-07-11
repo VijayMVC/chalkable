@@ -5,6 +5,7 @@
                 a.action-link.pressed Messaging
                 each app in self.getApplications()
                     +ActionLink('settings', 'appSettings', app.getId())=app.getName()
+                +ActionLink('settings', 'panoramaAdmin') Panorama
 
     -var canUpdate = self.isAbleToUpdate();
     -var messagingSettings = self.getMessagingSettings();

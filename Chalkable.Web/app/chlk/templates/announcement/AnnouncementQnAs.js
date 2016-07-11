@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'annOwner',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.people.User, 'owner',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs'
 
         ])

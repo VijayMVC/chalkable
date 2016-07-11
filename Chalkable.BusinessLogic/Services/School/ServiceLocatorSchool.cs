@@ -1,6 +1,8 @@
-﻿using Chalkable.BusinessLogic.Services.Master;
+﻿using System;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
+using Chalkable.BusinessLogic.Services.School.PanoramaSettings;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 
@@ -77,6 +79,14 @@ namespace Chalkable.BusinessLogic.Services.School
         IAttachementService AttachementService { get; } 
         ILEService LeService { get; }
         IStudentCustomAlertDetailService StudentCustomAlertDetailService { get; }
+        IPanoramaSettingsService PanoramaSettingsService { get; }
+        IStandardizedTestService StandardizedTestService { get; }
+        ISupplementalAnnouncementService SupplementalAnnouncementService { get; }
+        IEthnicityService EthnicityService { get; }
+        ILanguageService LanguageService { get; }
+        ICountryService CountryService { get; }
+
+        IAnnouncementCommentService AnnouncementCommentService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -148,6 +158,15 @@ namespace Chalkable.BusinessLogic.Services.School
         private ILEService leService;
         private IAttachementService attachementService;
         private IStudentCustomAlertDetailService studentCustomAlertDetailService;
+        private IPanoramaSettingsService panoramaSettingsService;
+        private IStandardizedTestService standardizedTestService;
+
+        private ISupplementalAnnouncementService supplementalAnnouncementService;
+        private IEthnicityService ethnicityService;
+
+        private ILanguageService languageService;
+        private ICountryService countryService;
+        private IAnnouncementCommentService announcementCommentService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -217,6 +236,13 @@ namespace Chalkable.BusinessLogic.Services.School
             attachementService = new AttachmentService(this);
             personSettingService = new PersonSettingService(this);
             studentCustomAlertDetailService = new StudentCustomAlertDetailService(this);
+            panoramaSettingsService = new PanoramaSettingsService(this);
+            standardizedTestService = new StandardizedTestService(this);
+            supplementalAnnouncementService = new SupplementalAnnouncementService(this);
+            ethnicityService = new EthnicityService(this);
+            languageService = new LanguageService(this);
+            countryService = new CountryService(this);
+            announcementCommentService = new AnnouncementCommentService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -265,19 +291,19 @@ namespace Chalkable.BusinessLogic.Services.School
         public IBellScheduleService BellScheduleService { get { return bellScheduleService; } }
         public IPracticeGradeService PracticeGradeService { get { return practiceGradeService; } }
         public IAttendanceMonthService AttendanceMonthService { get { return attendanceMonthService; } }
-        public IGradedItemService GradedItemService { get { return gradedItemService; } }
-        public IAnnouncementAttributeService AnnouncementAttributeService { get { return announcementAttributeService; } }
-        public IContactService ContactService { get { return contactService; } }
-        public IAnnouncementAssignedAttributeService AnnouncementAssignedAttributeService { get { return announcementAssignedAttributeService; } }
-        public ITeacherCommentService TeacherCommentService { get { return teacherCommentService; } }
-        public IGroupService GroupService { get { return groupService; } }
-        public ICourseTypeService CourseTypeService { get { return courseTypeService; } }
-        public IDbMaintenanceService DbMaintenanceService {get { return dbMaintenanceService; }}
-        public ISettingsService SettingsService { get { return settingsService; } }
-        public ILPGalleryCategoryService LPGalleryCategoryService { get { return lpGalleryCategoryService; } }
-        public ILEService LeService { get { return leService; } }
-        public IAttachementService AttachementService { get { return attachementService; } }
-        public IPersonSettingService PersonSettingService { get { return personSettingService;} }
+        public IGradedItemService GradedItemService => gradedItemService;
+        public IAnnouncementAttributeService AnnouncementAttributeService => announcementAttributeService;
+        public IContactService ContactService => contactService;
+        public IAnnouncementAssignedAttributeService AnnouncementAssignedAttributeService => announcementAssignedAttributeService;
+        public ITeacherCommentService TeacherCommentService => teacherCommentService;
+        public IGroupService GroupService => groupService;
+        public ICourseTypeService CourseTypeService => courseTypeService;
+        public IDbMaintenanceService DbMaintenanceService => dbMaintenanceService;
+        public ISettingsService SettingsService => settingsService;
+        public ILPGalleryCategoryService LPGalleryCategoryService => lpGalleryCategoryService;
+        public ILEService LeService => leService;
+        public IAttachementService AttachementService => attachementService;
+        public IPersonSettingService PersonSettingService => personSettingService;
 
         public IDbService SchoolDbService
         {
@@ -285,12 +311,14 @@ namespace Chalkable.BusinessLogic.Services.School
             protected set { schoolDbService = value; }
         }
 
-        public ILessonPlanService LessonPlanService { get { return lessonPlanService; } }
-        public IClassAnnouncementService ClassAnnouncementService { get { return classAnnouncementService; } }
-        public IAdminAnnouncementService AdminAnnouncementService { get { return adminAnnouncementService; } }
-        public IAnnouncementFetchService AnnouncementFetchService { get { return announcementFetchService; } }
+        public ILessonPlanService LessonPlanService => lessonPlanService;
+        public IClassAnnouncementService ClassAnnouncementService => classAnnouncementService;
+        public IAdminAnnouncementService AdminAnnouncementService => adminAnnouncementService;
+        public IAnnouncementFetchService AnnouncementFetchService => announcementFetchService;
 
-        public IStudentCustomAlertDetailService StudentCustomAlertDetailService { get { return studentCustomAlertDetailService; } }
+        public IStudentCustomAlertDetailService StudentCustomAlertDetailService => studentCustomAlertDetailService;
+        public IPanoramaSettingsService PanoramaSettingsService => panoramaSettingsService;
+        public IStandardizedTestService StandardizedTestService => standardizedTestService;
 
         public IBaseAnnouncementService GetAnnouncementService(AnnouncementTypeEnum? type)
         {
@@ -301,9 +329,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 case AnnouncementTypeEnum.Class: return classAnnouncementService;
                 case AnnouncementTypeEnum.Admin: return adminAnnouncementService;
                 case AnnouncementTypeEnum.LessonPlan: return lessonPlanService;
-                default : throw new ChalkableException("Not supported announcement type"); //todo implement NotSupportedChalkableException
+                case AnnouncementTypeEnum.Supplemental: return supplementalAnnouncementService;
+                default : throw new NotSupportedException("Not supported announcement type");
             }
         }
 
+        public ISupplementalAnnouncementService SupplementalAnnouncementService => supplementalAnnouncementService;
+        public IEthnicityService EthnicityService => ethnicityService;
+        public ILanguageService LanguageService => languageService;
+        public ICountryService CountryService => countryService;
+        public IAnnouncementCommentService AnnouncementCommentService => announcementCommentService;
     }
 }

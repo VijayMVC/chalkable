@@ -7,7 +7,7 @@ namespace Chalkable.BusinessLogic.Model.Attendances
 {
     public class StudentDateAttendance
     {
-        public StudentDetails Student { get; set; }
+        public Student Student { get; set; }
         public DateTime Date { get; set; }
 
         public bool IsAbsent

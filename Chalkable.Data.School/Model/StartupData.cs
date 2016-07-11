@@ -19,5 +19,6 @@ namespace Chalkable.Data.School.Model
         public IDictionary<int, IList<AlphaGrade>> AlphaGradesForClasses { get; set; }
         public IDictionary<int, IList<AlphaGrade>> AlphaGradesForClassStandards { get; set; }
         public IList<AlphaGradeDataAccess.SchoolAlphaGrade> AlphaGradesForSchoolStandards { get; set; } 
+        public IList<Room> Rooms { get; set; } 
     }
 }

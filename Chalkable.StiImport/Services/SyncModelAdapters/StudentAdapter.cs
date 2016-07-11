@@ -23,7 +23,21 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 HasMedicalAlert = x.HasMedicalAlert,
                 IsAllowedInetAccess = x.IsAllowedInetAccess,
                 SpecialInstructions = x.SpecialInstructions,
-                SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : ""
+                SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : "",
+                IsHispanic = x.IsHispanic,
+                IEPBeginDate = x.IEPBeginDate,
+                IEPEndDate = x.IEPEndDate,
+                AltStudentNumber = x.AltStudentNumber,
+                GenderDescriptor = x.GenderDescriptor,
+                IsForeignExchange = x.IsForeignExchange,
+                IsHomeless = x.IsHomeless,
+                IsImmigrant = x.IsImmigrant,
+                LimitedEnglishRef = x.LimitedEnglishID,
+                OriginalEnrollmentDate = x.OriginalEnrollmentDate,
+                Section504Qualification = x.Section504Qualification,
+                StateIdNumber = x.StateIDNumber,
+                StudentNumber = x.StudentNumber,
+                MiddleName = x.MiddleName ?? ""
             };
         }
 

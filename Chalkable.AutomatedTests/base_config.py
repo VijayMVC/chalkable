@@ -4,7 +4,7 @@ user_email = 'teacher@chalkable.com'
 user_pwd = 'qqqq1111'
 
 user_email_student = 'CAYERS@sti.com'
-user_pwd_student = 'Qwerty1@'
+user_pwd_student = 'qqqq1111'
 
 user_email_foreign_student = 'TRACEYBURRIS@chalkable.com'
 user_pwd_foreign_student = 'qqqq1111'

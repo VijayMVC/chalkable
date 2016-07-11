@@ -141,6 +141,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<Group> GetByIds(IList<int> ids)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void AssignStudents(int groupId, IList<int> studentIds)
         {

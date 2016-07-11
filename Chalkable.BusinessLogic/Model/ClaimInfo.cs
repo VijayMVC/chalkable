@@ -18,6 +18,9 @@ namespace Chalkable.BusinessLogic.Model
         public const string AWARD_LE_CREDITS_CLASSROOM = "Award LE Credits (Classroom)";
         public const string AWARD_LE_CREDITS = "Award LE Credits";
         public const string ASSESSMENT_ADMIN = "Assessment Admin";
+        public const string VIEW_STUDENT = "View Student";
+        public const string VIEW_CLASSROOM_STUDENTS = "View Classroom Students";
+        public const string VIEW_PANORAMA = "View Panorama";
 
         public string Type { get; set; }
         public IEnumerable<string> Values { get; set; }
@@ -43,6 +46,11 @@ namespace Chalkable.BusinessLogic.Model
         public static bool HasPermission(this IList<ClaimInfo> claimInfos, string permission)
         {
             return HasPermissions(claimInfos, new List<string> { permission });
+        }
+
+        public static bool HasOneOfPermissions(this IList<ClaimInfo> claimInfos, IList<string> claimsValues)
+        {
+            return claimInfos != null && claimInfos.Any(claim => claimsValues.Any(value => claim.Values.Contains(value)));
         }
     }
 }

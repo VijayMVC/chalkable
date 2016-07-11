@@ -136,6 +136,21 @@ namespace Chalkable.Data.School.DataAccess
             };
             return ExecuteStoredProcedureList<StandardTreeItem>("spGetStandardParentsSubTree", parameters); 
         }
+
+        public IList<Standard> GetGridStandardsByPacing(int? classId, int? gradeLevelId, int? subjectId, int? gradingPeriodId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"@ClassId", classId},
+                {"@GradeLavelId", gradeLevelId},
+                {"@GradingPeriodId", gradingPeriodId},
+                {"@StandardSubjectId", subjectId},
+                {"@ParentStandardId", parentStandardId},
+                {"@AllStandards", allStandards},
+                {"@IsActive", activeOnly}
+            };
+            return ExecuteStoredProcedureList<Standard>("spGetGridStandardsByPacing", parameters);
+        }
     }
 
     public class StandardSubjectDataAccess : DataAccessBase<StandardSubject, int>

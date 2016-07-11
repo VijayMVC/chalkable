@@ -73,6 +73,8 @@ NAMESPACE('chlk.models.announcement', function(){
 
         String, 'name',
 
+        Boolean, 'dialog',
+
         String, 'text',
 
         String, 'uuid',

@@ -181,7 +181,7 @@ namespace Chalkable.Web.Controllers
             return Json(StandardGradingGridViewData.Create(gradingPeriod, gradingStandards, students));
         }
 
-        private IList<StudentDetails> GetStudentsForGrid(int classId, int markingPeriodId)
+        private IList<Student> GetStudentsForGrid(int classId, int markingPeriodId)
         {
             var classRoomOption = SchoolLocator.ClassroomOptionService.GetClassOption(classId);
             bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);

@@ -17,6 +17,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<StandardViewData> Standards { get; set; }
         public StudentAnnouncementsViewData StudentAnnouncements { get; set; }
         public IList<AutoGradeViewData> AutoGradeApps { get; set; }
+        public IList<StudentAnnouncementApplicationMetaViewData> StudentsAnnouncementApplicationMeta { get; set; }
 
         public ShortPersonViewData Owner { get; set; }
         public bool Exempt { get; set; }
@@ -24,10 +25,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool CanRemoveStandard { get; set; }
         public bool IsAbleUseExtraCredit { get; set; }
         public IList<BaseApplicationViewData> SuggestedApps { get; set; }
-
         public IList<BaseApplicationViewData> AppsWithContent { get; set; } 
-
         public IList<AdminAnnouncementGroupViewData> Recipients { get; set; } 
+        public IList<AnnouncementCommentViewData> AnnouncementComments { get; set; }
 
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements)
             : base(announcementDetails, studentAnnouncements)

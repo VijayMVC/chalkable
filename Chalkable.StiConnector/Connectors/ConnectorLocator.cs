@@ -59,6 +59,7 @@ namespace Chalkable.StiConnector.Connectors
             GradingConnector = new GradingConnector(this);
             ClassesDashboardConnector = new ClassesDashboardConnector(this);
             AboutConnector = new AboutConnector(this);
+            PanoramaConnector = new PanoramaConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
@@ -84,6 +85,7 @@ namespace Chalkable.StiConnector.Connectors
         public GradingConnector GradingConnector { get; private set; }
         public ClassesDashboardConnector ClassesDashboardConnector { get; private set; }
         public AboutConnector AboutConnector { get; set; }
+        public PanoramaConnector PanoramaConnector { get; private set; }
 
         public class TokenModel
         {

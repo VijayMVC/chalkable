@@ -36,7 +36,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 this.removeAttachmentFromProgressBar_(model);
                 var countNode = this.dom.find('.files-count');
-                countNode.setHTML((parseInt(countNode.getText(), 10) - 1).toString());
+                countNode.setText((parseInt(countNode.getText(), 10) - 1).toString());
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttachmentTpl, 'cancel-attachment-upload')],
@@ -47,6 +47,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             VOID, function removeAttachmentFromProgressBar_(model){
                 this.dom.find('.attachment-file[data-index=' + model.getFileIndex() + ']').remove();
+                var btn = this.dom.find('#add-file-attachment');
                 if(this.dom.find('#is-for-attribute').getValue()){
                     btn.removeAttr('disabled');
                     btn.setProp('disabled', false);

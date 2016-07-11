@@ -27,6 +27,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return locator.AdminAnnouncementService.GetAdminAnnouncementsSortedByDate(@from, to, includeFrom, includeTo, gradeLevels, complete, start, count, _sortDesc);
         }
 
+        protected override IList<AnnouncementComplex> InternalGetSupplementalAnns(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId,
+            bool? complete, int start, int count, DateTime? from, DateTime? to, bool includeFrom, bool includeTo,
+            bool? ownedOnly = null)
+        {
+            return locator.SupplementalAnnouncementService.GetSupplementalAnnouncementsSortedByDate(from ?? fromDate, to ?? toDate, includeFrom
+                , includeTo, classId, complete, start, count, _sortDesc, ownedOnly);
+        }
+
         protected override Func<AnnouncementComplex, DateTime> SortSelector
         {
             get
@@ -35,7 +43,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 {
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
                     if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
-                    return x.LessonPlanData.StartDate ?? x.Created;
+                    if (x.LessonPlanData != null) return (x.LessonPlanData.StartDate ?? x.Created);
+                    return x.SupplementalAnnouncementData.Expires;
                 };
             }
         }

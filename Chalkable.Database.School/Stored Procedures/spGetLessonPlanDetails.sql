@@ -13,14 +13,14 @@ Declare @complete bit =  cast((Select Top 1 Complete from AnnouncementRecipientD
 If @complete is null 
 	Set @complete = 0
 
-If @callerRole = 2
+If @callerRole = 2 or @callerRole = 10
 Begin
 	insert into @lessonPlan
 	Select 
 		vwLessonPlan.*, @isOwner, @complete, @allCount
 	From vwLessonPlan
 	Where Id = @lessonPlanId and SchoolYearRef  = @schoolYearId
-			and exists(select * from ClassTeacher where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwLessonPlan.ClassRef)   
+			and exists(select * from ClassTeacher where ClassTeacher.PersonRef = @callerId and (vwLessonPlan.ClassRef is null or ClassTeacher.ClassRef = vwLessonPlan.ClassRef))   
 End
 If @callerRole = 3
 Begin
@@ -47,4 +47,4 @@ Select PersonRef From ClassTeacher Where ClassRef = @classId
 
 select * from vwAnnouncementAttachment
 where AnnouncementAttachment_AnnouncementRef = @lessonPlanId
-	  and (@callerRole = 2 or (@callerRole = 3 and (Attachment_PersonRef = @callerId or exists(select * from @teacherIds t where t.value = Attachment_PersonRef))))
+	  and (@callerRole = 2 or @callerRole = 10 or (@callerRole = 3 and (Attachment_PersonRef = @callerId or exists(select * from @teacherIds t where t.value = Attachment_PersonRef))))

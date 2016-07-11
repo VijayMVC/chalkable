@@ -218,6 +218,17 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 ann.WeightMultiplier = inputAnnData.WeightMultiplier;
                 ann.MayBeDropped = inputAnnData.CanDropStudentScore;
                 ann.VisibleForStudent = !inputAnnData.HideFromStudents;
+
+                ann.DiscussionEnabled = inputAnnData.DiscussionEnabled;
+                ann.RequireCommentsEnabled = inputAnnData.RequireCommentsEnabled;
+
+                if (inputAnnData.PreviewCommentsEnabled && inputAnnData.DiscussionEnabled && !ann.PreviewCommentsEnabled)
+                {
+                    ann.PreviewCommentsEnabled = true;
+                    if(ann.IsSubmitted)
+                        new AnnouncementCommentDataAccess(uow).HideAll(ann.Id);
+                }
+
                 if (ann.ClassRef != classId)
                 {
                     if (!ann.IsDraft)
@@ -472,7 +483,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             var sisFromToActivityIds = sisCopyResult
                 .Where(x => x.NewActivityId.HasValue)
-                .ToDictionary(x => x.SourceActivityId, y => y.NewActivityId.Value);
+                .ToDictionary(x => x.SourceActivityId, x => x.NewActivityId.Value);
 
             var announcementApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(classAnnouncementIds, true);
             var applicationIds = announcementApps.Select(x => x.ApplicationRef).ToList();
@@ -483,7 +494,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
 
             IDictionary<int, int> fromToAnnouncementsIds;
-            IList<Attachment> copiedAtts = null;
+            //IList<Pair<AnnouncementAttachment, AnnouncementAttachment>> annAttachmentsCopyResult;
+
             using (var u = Update())
             {
                 var attachmentsOwners = new ClassTeacherDataAccess(u).GetClassTeachers(fromClassId, null)
@@ -492,13 +504,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u)
                     .CopyClassAnnouncementsToClass(sisFromToActivityIds, toClassId, Context.NowSchoolTime);
 
-                copiedAtts = AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator)
-                    .Select(x=>x.Attachment).ToList();
+                AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator);
                 ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementsIds.Select(x => x.Value).ToList(), u);
 
                 u.Commit();
             }
-            ServiceLocator.AttachementService.UploadToCrocodoc(copiedAtts);
+
+            //Here we copy content
+            //var attachmentsToCopy = annAttachmentsCopyResult.Transform(x => x.Attachment).ToList();
+            //ServiceLocator.AttachementService.CopyContent(attachmentsToCopy);
 
             return fromToAnnouncementsIds.Select(x => x.Value).ToList();
         }

@@ -77,6 +77,18 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(SystemSetting));
             RegisterType(typeof(StudentCustomAlertDetail));
             RegisterType(typeof(District));
+            RegisterType(typeof(StandardizedTest));
+            RegisterType(typeof(StandardizedTestComponent));
+            RegisterType(typeof(StandardizedTestScoreType));
+            RegisterType(typeof(Ethnicity));
+            RegisterType(typeof(PersonEthnicity));
+
+            RegisterType(typeof(Language));
+            RegisterType(typeof(PersonLanguage));
+            RegisterType(typeof(Country));
+            RegisterType(typeof(PersonNationality));
+
+            RegisterType(typeof(Homeroom));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)
@@ -89,7 +101,7 @@ namespace Chalkable.StiConnector.SyncModel
                 }
                 else
                 {
-                    throw new Exception(string.Format("There is no such table {0} registered for sync", tableVersion.TableName));   
+                    throw new Exception($"There is no such table {tableVersion.TableName} registered for sync");   
                 }
             }
         }
@@ -140,10 +152,8 @@ namespace Chalkable.StiConnector.SyncModel
                 return new T[0];
             }
         }
-
-
         public long CurrentVersion { get; set; }
-        public string Name { get { return typeof (T).Name; } }
+        public string Name => typeof (T).Name;
 
         public int RowCount
         {

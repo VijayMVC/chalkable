@@ -8,6 +8,8 @@ if self.isAssessmentEnabled
     +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
 +ActionLink('calendar', 'index').calendar(title="View Calendar") Calendar
 +ActionLink('schools', 'classesSummary').classes(title="View Classes") Classes
+if self.isAppStoreEnabled
+    +ActionLink('lessonplangallery', 'gallery').gallery(title="View Gallery") Gallery
 +ActionLink('discipline', 'index').discipline(title="View Discipline") Discipline
 if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
     a(href="/Home/LearningEarnings", target="blank").le(title="View Learning Earnings", target="blank") LE
@@ -15,5 +17,6 @@ if self.isLEEnabled && !self.isLinkEnabled
     +ActionLink('error', 'learningEarningsDisabled').le(title="View Learning Earnings", target="blank") LE
 if !self.isMessagingDisabled
     +ActionLink('message', 'page', false, true).messages(title="View Messages") Messages
-+ActionLink('students', 'index').people(title="View People") People
+if self.isPeopleEnabled
+    +ActionLink('students', 'index').people(title="View People") People
 +ActionLink('settings', 'dashboardTeacher').settings(title="View Settings") Settings

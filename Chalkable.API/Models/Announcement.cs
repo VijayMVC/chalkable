@@ -25,7 +25,7 @@ namespace Chalkable.API.Models
         public string AnnouncementTypeName { get; set; }
 
         [JsonProperty("personid")]
-        public int PersonId { get; set; }
+        public int? PersonId { get; set; }
 
         [JsonProperty("personname")]
         public string PersonName { get; set; }
@@ -62,6 +62,9 @@ namespace Chalkable.API.Models
 
         [JsonProperty("adminannouncementdata")]
         public AdminAnnouncement AdminAnnouncement { get; set; }
+
+        [JsonProperty("supplementalannouncementdata")]
+        public SupplementalAnnouncement SupplementalAnnouncement { get; set; }
 
         [JsonProperty("studentannouncements")]
         public StudentAnnouncements StudentAnnouncements { get; set; }

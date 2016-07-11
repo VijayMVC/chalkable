@@ -6,7 +6,9 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
+using Chalkable.BusinessLogic.Services.School.PanoramaSettings;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -1831,6 +1833,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ILEService LeService { get { throw new NotImplementedException(); } }
 
         public IStudentCustomAlertDetailService StudentCustomAlertDetailService { get { throw new NotImplementedException(); } }
-    }
+        public IPanoramaSettingsService PanoramaSettingsService { get {throw new NotImplementedException();} }
+        public IStandardizedTestService StandardizedTestService { get {throw new NotImplementedException();} }
 
+        public ISupplementalAnnouncementService SupplementalAnnouncementService { get { throw new NotImplementedException(); } }
+        public IEthnicityService EthnicityService { get {throw new NotImplementedException();} }
+        public ILanguageService LanguageService { get {throw new NotImplementedException();} }
+        public ICountryService CountryService { get { throw new NotImplementedException(); } }
+        public IAnnouncementCommentService AnnouncementCommentService { get { throw new NotImplementedException(); } }
+    }
 }

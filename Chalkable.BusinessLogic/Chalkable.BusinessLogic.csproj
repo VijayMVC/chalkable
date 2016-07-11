@@ -164,6 +164,8 @@
     <Compile Include="Model\ClaimInfo.cs" />
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
+    <Compile Include="Model\PanoramaSettings\AdminPanoramaSettings.cs" />
+    <Compile Include="Model\ClassPanorama\ClassPanorama.cs" />
     <Compile Include="Model\ClassStatsInfo.cs" />
     <Compile Include="Model\CopyAnnouncementsInputModel.cs" />
     <Compile Include="Model\CrocodocDocumentStatus.cs" />
@@ -174,6 +176,14 @@
     <Compile Include="Model\GradingStandardInfo.cs" />
     <Compile Include="Model\LEParams.cs" />
     <Compile Include="Model\OAuthUserIdentity.cs" />
+    <Compile Include="Model\PanoramaSettings\BaseSettingModel.cs" />
+    <Compile Include="Model\PanoramaSettings\ClassProfilePanoramaSetting.cs" />
+    <Compile Include="Model\PanoramaSettings\StandardizedTestFilter.cs" />
+    <Compile Include="Model\PanoramaSettings\StudentProfilePanoramaSetting.cs" />
+    <Compile Include="Model\ClassPanorama\ShortStudentAbsenceInfo.cs" />
+    <Compile Include="Model\ClassPanorama\ShortStudentInfractionsInfo.cs" />
+    <Compile Include="Model\ClassPanorama\StudentAverageGradeInfo.cs" />
+    <Compile Include="Model\ClassPanorama\StudentStandardizedTestInfo.cs" />
     <Compile Include="Model\PracticeGradeDetailedInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\Reports\AttendanceRegisterInputModel.cs" />
@@ -195,7 +205,11 @@
     <Compile Include="Model\SeatingChartInfo.cs" />
     <Compile Include="Model\ShortClassInfo.cs" />
     <Compile Include="Model\StudentCommentInfo.cs" />
+    <Compile Include="Model\StudentDetailsInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />
+    <Compile Include="Model\StudentPanorama\StudentAbsenceInfo.cs" />
+    <Compile Include="Model\StudentPanorama\StudentInfractionInfo.cs" />
+    <Compile Include="Model\StudentPanorama\StudentPanoramaInfo.cs" />
     <Compile Include="Model\StudentSummaryInfo.cs" />
     <Compile Include="Model\TeacherComment.cs" />
     <Compile Include="Model\TeacherStatsInfo.cs" />
@@ -290,6 +304,7 @@
     <Compile Include="Services\School\AlternateScoreService.cs" />
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
     <Compile Include="Services\School\AnnouncementAttributeService.cs" />
+    <Compile Include="Services\School\AnnouncementCommentService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\Announcements\AdminAnnouncementService.cs" />
     <Compile Include="Services\School\Announcements\AnnouncementFetchService.cs" />
@@ -300,6 +315,7 @@
     <Compile Include="Services\School\Announcements\FeedItemsSortedByClassNameHandler.cs" />
     <Compile Include="Services\School\Announcements\FeedItemsSortedByDueDateHandler.cs" />
     <Compile Include="Services\School\Announcements\LessonPlanService.cs" />
+    <Compile Include="Services\School\Announcements\SupplementalAnnouncementService.cs" />
     <Compile Include="Services\School\AttachmentService.cs" />
     <Compile Include="Services\School\AttendanceMonthService.cs" />
     <Compile Include="Services\School\BellScheduleService.cs" />
@@ -311,6 +327,7 @@
     <Compile Include="Services\School\ClassroomOptionService.cs" />
     <Compile Include="Services\School\ContactService.cs" />
     <Compile Include="Services\School\AnnouncementAssignedAttributeService.cs" />
+    <Compile Include="Services\School\CountryService.cs" />
     <Compile Include="Services\School\CourseTypeService.cs" />
     <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementQnAService.cs" />
@@ -335,6 +352,7 @@
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Model\FeedReportSettingsInfo.cs" />
+    <Compile Include="Services\School\EthnicityService.cs" />
     <Compile Include="Services\School\GradedItemService.cs" />
     <Compile Include="Services\School\GradingCommentService.cs" />
     <Compile Include="Services\School\GradingScaleService.cs" />
@@ -344,12 +362,15 @@
     <Compile Include="Services\School\GradingPeriodService.cs" />
     <Compile Include="Services\School\GradingStandardService.cs" />
     <Compile Include="Services\School\GradingStatisticService.cs" />
+    <Compile Include="Services\School\LanguageService.cs" />
     <Compile Include="Services\School\LEService.cs" />
     <Compile Include="Services\School\LPGalleryCategoryService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
     <Compile Include="Services\School\Notifications\NotificationService.cs" />
     <Compile Include="Services\School\Notifications\NotificationTemplateProvider.cs" />
+    <Compile Include="Services\School\PanoramaSettings\BasePanoramaSettingsHandler.cs" />
+    <Compile Include="Services\School\PanoramaSettings\PanoramaSettingsService.cs" />
     <Compile Include="Services\School\PeriodService.cs" />
     <Compile Include="Services\School\PersonEmailService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
@@ -368,6 +389,7 @@
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
     <Compile Include="Services\School\SettingsService.cs" />
     <Compile Include="Services\School\StaffService.cs" />
+    <Compile Include="Services\School\StandardizedTestService.cs" />
     <Compile Include="Services\School\StandardService.cs" />
     <Compile Include="Services\School\StudentAnnouncementService.cs" />
     <Compile Include="Services\School\StudentCustomAlertDetailService.cs" />

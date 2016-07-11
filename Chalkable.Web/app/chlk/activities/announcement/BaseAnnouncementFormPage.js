@@ -43,6 +43,17 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             },
 
+            [ria.mvc.DomEventBind('change', '.advanced-options .discussion-option.checkbox')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function discussionOptionChange(node, event){
+                var discussionEnabled = node.checked();
+                var options = node.parent('.advanced-options').find('.preview-comments-option.checkbox,.require-comments-option.checkbox');
+                if(!discussionEnabled){
+                    options.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), false)
+                }
+                options.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), !discussionEnabled);
+            },
+
             [ria.mvc.DomEventBind('submit', '.announcement-form>FORM')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function submitClick(node, event){
@@ -58,7 +69,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var submitType = node.getData('submit-type');
                     if(submitType == "submitOnEdit" || submitType == "submit"){
                         that.dom.find('#save-form-button').remove();
-                        //that.addPartialRefreshLoader();
                         node.setData('submit-type', null);
                     }
                 }, 10);
@@ -68,15 +78,9 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.add-loader-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function addLoaderOnSubmitClick(node, event){
-                //this.addPartialRefreshLoader();
                 this.dom.find('#save-form-button').remove();
             },
 
-            /*[ria.mvc.DomEventBind('click', '#content')],
-             [[ria.dom.Dom, ria.dom.Event]],
-             VOID, function focusContent(node, event){
-             node.triggerEvent('focus');
-             },*/
             [ria.mvc.DomEventBind('click', '.add-standards .title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function addStandardsClick(node, event){
@@ -86,7 +90,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.advanced-options-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function advancedOptionsButtonClick(node, event){
-                var parentNode = node.parent('.advanced-options');
+                var parentNode = this.dom.find('.advanced-options');
                 node.toggleClass('selected');
                 parentNode.find('.separator').toggleClass('x-hidden');
                 parentNode.find('.advanced-options-container').toggleClass('x-hidden');

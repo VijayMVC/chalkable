@@ -3,10 +3,11 @@ mixin AppAttachmentBlock(item, pictureHref, i)
         .title
             div=item.getName()
 
-mixin AppAttachmentGradingBlock(item, pictureHref)
+mixin AppAttachmentGradingBlock(item, pictureHref, metaText)
     .wrapper
         -var name = (item.getText && item.getText()) || item.getName()
         .title(data-tooltip=name, data-tooltip-type="overflow")= name
+        .shortdesc=metaText
         +LoadingImage(src=pictureHref)
         block
 
@@ -26,18 +27,26 @@ mixin Glue_()
     -var lessonPlan = self.getLessonPlanData()
     -var classAnnouncement = self.getClassAnnouncementData()
     -var adminAnnouncement = self.getAdminAnnouncementData()
+    -var supplementalAnnouncement = self.getSupplementalAnnouncementData();
     -var studentAnnouncements = false
     -var studentAnnouncementsInfo = self.getStudentAnnouncements()
     -var applications = self.getApplications()
     -var gradeViewApps = self.getGradeViewApps()
     -var grade = self.getGrade()
-    -var itemWithExpiresDate = classAnnouncement || adminAnnouncement
+    -var itemWithExpiresDate = classAnnouncement || adminAnnouncement || supplementalAnnouncement
+    -var itemForClass = classAnnouncement || lessonPlan || supplementalAnnouncement
     .autocomplete-list.announcement-view
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
 
+    -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
+    if showPostQuestion || self.getAnnouncementQnAs().length
+        +ActionLink('announcement', 'chat').chat-link=self.getAnnouncementQnAs().length || ''
+        +ActionLink('announcement', 'closeChat').close-chat-link.x-hidden
+
+
     .buttons
-        if self.getUserRole().isTeacher() || self.getUserRole().isAdmin() && adminAnnouncement
+        if self.getUserRole().isTeacher() && self.isAnnOwner() || self.getUserRole().isAdmin() && adminAnnouncement
             +ActionButton('announcement', 'edit', self.getId(), self.getType())(class = self.isAbleEdit() ? "" : "disabled").right Edit
         +ActionButton('feed', 'doToList').back-button Back
         .clear-fix
@@ -47,6 +56,8 @@ mixin Glue_()
             +Glue_(self.getTitle() || Msg.Admin_Announcement, "")
         if lessonPlan
             +Glue_(lessonPlan.getClassName(), Msg.Lesson_Plan)
+        if supplementalAnnouncement
+            +Glue_(supplementalAnnouncement.getClassName(), Msg.Supplemental_announcement)
         if classAnnouncement
             +Glue_(self.getAnnouncementTypeName(), classAnnouncement.getClassName())
     .announcement-details-panel
@@ -61,7 +72,7 @@ mixin Glue_()
                         data-tooltip-type = "overflow",
                         data-tooltip-class = "wide"
                     )= self.getComment() || (Msg.Your_grade + ":")
-            if self.getUserRole().isTeacher() && (lessonPlan && lessonPlan.isHiddenFromStudents() || classAnnouncement && classAnnouncement.isHiddenFromStudents())
+            if self.getUserRole().isTeacher() && itemForClass && itemForClass.isHiddenFromStudents()
                 +AnnouncementTooltip().make-visible-container
                     .comment This item is hidden from students.
                     if self.isAnnOwner()
@@ -139,15 +150,13 @@ mixin Glue_()
                                 .title Study Center
                                 +ActionButton('studycenter', 'startPractice', self.getStandards().map(function (_) { return _.getStandardId(); })) Start Practice
 
-
-        -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
-        if showPostQuestion || self.getAnnouncementQnAs().length
-            .questions-and-answers
-                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
-                    userRole = self.getUserRole(),
-                    currentUser = self.getCurrentUser()
-                )
-
+        if itemForClass && itemForClass.isDiscussionEnabled()
+            +CloseOpen('Discussion')
+                .discussion-block
+                    +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementDiscussionTpl)(
+                        userRole = self.getUserRole(),
+                        currentUser = self.getCurrentUser()
+                    )
         if classAnnouncement
             if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && classAnnouncement.isGradable()
                 +CloseOpen('Grades')
@@ -163,6 +172,7 @@ mixin Glue_()
                     div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
                         +Hidden('maxScore', classAnnouncement.getMaxScore())#max-score
                         +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
+                            studentsAnnApplicationMeta = self.getStudentsAnnApplicationMeta(),
                             autoGradeApps = self.getAutoGradeApps(),
                             readonly = !classAnnouncement.isAbleToGrade(),
                             gradeViewApps = self.getGradeViewApps(),
@@ -194,8 +204,23 @@ mixin Glue_()
                                 infiniteScroll = true
                             )(data-has-access = true).people-list.grading.grades-individual
                                 +RenderWith(students, chlk.templates.announcement.admin.AdminAnnouncementGradingTpl)(
+                                    studentsAnnApplicationMeta = self.getStudentsAnnApplicationMeta(),
                                     userRole = self.getUserRole(),
                                     currentUser = self.getCurrentUser(),
                                     applications = self.getApplications(),
                                     standards = self.getStandards()
                                 )
+
+        if supplementalAnnouncement && !self.getUserRole().isStudent()
+            +CloseOpen('Students')
+                .people-list-container
+                    -var recipients = supplementalAnnouncement.getRecipients()
+                    -var pList = new chlk.models.common.PaginatedList(chlk.models.people.User, recipients)
+                    +ListView(recipients)()(data-has-access = true).people-list.grading.grades-individual
+                        +RenderWith(pList, chlk.templates.announcement.admin.AdminAnnouncementGradingTpl)(
+                            studentsAnnApplicationMeta = self.getStudentsAnnApplicationMeta(),
+                            userRole = self.getUserRole(),
+                            currentUser = self.getCurrentUser(),
+                            applications = self.getApplications(),
+                            standards = self.getStandards()
+                        )

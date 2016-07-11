@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public string Comment { get; set; }
 
-        protected StudentCommentViewData(StudentDetails student) : base(student)
+        protected StudentCommentViewData(Student student) : base(student)
         {
         }
 

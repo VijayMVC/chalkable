@@ -13,14 +13,17 @@ namespace Chalkable.Web.Models.CalendarsViewData
         public IList<ClassAnnouncementViewData> Announcements { get; set; }
         public IList<LessonPlanViewData> LessonPlans { get; set; }
         public IList<AdminAnnouncementViewData> AdminAnnouncements { get; set; } 
+        public IList<SupplementalAnnouncementViewData> SupplementalAnnouncements { get; set; } 
 
         protected AnnouncementMonthCalendarViewData(DateTime date, bool isCurrentMonth
-            , IList<ClassAnnouncement> classAnnouncements, IList<LessonPlan> lessonPlans, IList<AdminAnnouncement> adminAnnouncements)
+            , IList<ClassAnnouncement> classAnnouncements, IList<LessonPlan> lessonPlans
+            , IList<AdminAnnouncement> adminAnnouncements, IList<SupplementalAnnouncement> supplementalAnnouncements)
             : base(date, isCurrentMonth)
         {
             Announcements = ClassAnnouncementViewData.Create(classAnnouncements);
             LessonPlans = LessonPlanViewData.Create(lessonPlans);
             AdminAnnouncements = AdminAnnouncementViewData.Create(adminAnnouncements);
+            SupplementalAnnouncements = SupplementalAnnouncementViewData.Create(supplementalAnnouncements);
         }
 
         public static AnnouncementMonthCalendarViewData Create(DateTime dateTime, bool isCurrentMonth, AnnouncementComplexList announcementList
@@ -29,7 +32,8 @@ namespace Chalkable.Web.Models.CalendarsViewData
             var classAnnouncements = announcementList.ClassAnnouncements.Where(x => x.Expires.Date == dateTime).ToList();
             var adminAnnouncements = announcementList.AdminAnnouncements.Where(x =>x.Expires.Date == dateTime).ToList();
             var lessonPlans = announcementList.LessonPlans.Where(x => x.StartDate <= dateTime && x.EndDate >= dateTime).ToList();
-            return new AnnouncementMonthCalendarViewData(dateTime, isCurrentMonth, classAnnouncements, lessonPlans, adminAnnouncements);
+            var supplementaAnns = announcementList.SupplementalAnnouncements.Where(x => x.Expires.Date == dateTime).ToList();
+            return new AnnouncementMonthCalendarViewData(dateTime, isCurrentMonth, classAnnouncements, lessonPlans, adminAnnouncements, supplementaAnns);
         }
     }
 }

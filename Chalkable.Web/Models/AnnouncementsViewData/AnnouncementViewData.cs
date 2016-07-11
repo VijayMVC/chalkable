@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public ShortAnnouncementViewData LessonPlanData { get; set; }
         public ShortAnnouncementViewData AdminAnnouncementData { get; set; }
         public ShortAnnouncementViewData ClassAnnouncementData { get; set; }
+        public ShortAnnouncementViewData SupplementalAnnouncementData { get; set; }
 
         public int? ClassId { get; set; }
         public string ClassName { get; set; }
@@ -28,14 +29,14 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int StudentsCountWithAttachments { get; set; }
         public int StudentsCountWithoutAttachments { get; set; }
         public int GradingStudentsCount { get; set; }
-        
+        public IList<string> AttachmentNames { get; set; }
+
         //Application
         public int ApplicationsCount { get; set; }
         public string ApplicationName { get; set; }
         public bool ShowGradingIcon { get; set; }
         public Guid? AssessmentApplicationId { get; set; }
-
-
+        
         protected AnnouncementViewData(Announcement announcementData):base(announcementData)
         {
             ShortAnnouncementViewData annData = null;
@@ -47,6 +48,15 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 ClassId = lp.ClassRef;
                 ClassName = lp.ClassName;
             }
+            var sup = announcementData as SupplementalAnnouncement;
+            if (sup != null)
+            {
+                SupplementalAnnouncementData = SupplementalAnnouncementViewData.Create(sup);
+                annData = SupplementalAnnouncementData;
+                ClassId = sup.ClassRef;
+                ClassName = sup.ClassName;
+            }
+            
             var adminAnn = announcementData as AdminAnnouncement;
             if (adminAnn != null)
             {
@@ -72,6 +82,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         protected AnnouncementViewData(AnnouncementComplex announcement):this(announcement.AnnouncementData)
         {
             AttachmentsCount = announcement.AttachmentsCount;
+            AttachmentNames = announcement.AttachmentNames;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             Complete = announcement.Complete;
 

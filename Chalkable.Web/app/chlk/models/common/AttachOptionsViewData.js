@@ -26,11 +26,12 @@ NAMESPACE('chlk.models.common', function () {
             chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
             String, 'appUrlAppend',
             ArrayOf(chlk.models.apps.Application), 'externalAttachApps',
+            Boolean, 'dialog',
 
             VOID, function deserialize(raw) {
                 this.assessmentAppId = SJX.fromValue(raw.assessmentapplicationid, chlk.models.id.AppId);
-                -console.log(raw.assessmentapplicationid)
-                -console.log(this.assessmentAppId)
+                //console.log(raw.assessmentapplicationid);
+                //console.log(this.assessmentAppId);
 
                 if(this.assessmentAppId)
                     this.assessmentAttachEnabled = true;
@@ -41,7 +42,7 @@ NAMESPACE('chlk.models.common', function () {
             },
 
             function updateByValues(standardAttachEnabled_, assessmentAttachEnabled_, announcementId_, classId_,
-                                    announcementTypeName_, announcementType_, assignedAttributeId_, appUrlAppend_, ableAttachApps_){
+                                    announcementTypeName_, announcementType_, assignedAttributeId_, appUrlAppend_, ableAttachApps_, isDialog_){
                 if(typeof standardAttachEnabled_ == 'boolean')
                     this.setStandardAttachEnabled(standardAttachEnabled_);
                 if(typeof assessmentAttachEnabled_ == 'boolean')
@@ -60,6 +61,8 @@ NAMESPACE('chlk.models.common', function () {
                     this.setAssignedAttributeId(assignedAttributeId_);
                 if(appUrlAppend_)
                     this.setAppUrlAppend(appUrlAppend_);
+                if(isDialog_)
+                    this.setDialog(isDialog_);
             }
         ]);
 });

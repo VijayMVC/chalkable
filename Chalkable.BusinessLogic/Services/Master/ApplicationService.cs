@@ -166,6 +166,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Start = start,
                     Count = count,
                     Live = true,
+                    OrderBy = nameof(Application.Name),
+                    OrderDesc = false,
                     Ban = !withBanned && !BaseSecurity.IsSysAdminOrDeveloper(Context) ? false : (bool?)null
                 };
              return GetApplications(query);
@@ -200,11 +202,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         public Guid? GetMiniQuizAppicationId()
         {
             var key = ApplicationSecurity.HasAssessmentEnabled(Context)
-                    ? Preference.NEW_ASSESSMENT_APLICATION_ID
-                    : Preference.PRACTICE_APPLICATION_ID;
+                    ? Preference.ASSESSMENT_APLICATION_ID
+                    : null;
 
             Guid res;
-            return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;
+            return key != null ? (Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null) : null;
         }
         public Guid? GetAssessmentId()
         {
@@ -214,11 +216,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         private Guid? InternalGetAssessmentId()
         {
             var key = ApplicationSecurity.HasAssessmentEnabled(Context)
-                ? Preference.NEW_ASSESSMENT_APLICATION_ID
-                : Preference.ASSESSMENT_APLICATION_ID;
+                ? Preference.ASSESSMENT_APLICATION_ID
+                : null;
 
             Guid res;
-            return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;
+            return key != null ? (Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null) : null;
         }
 
         public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)

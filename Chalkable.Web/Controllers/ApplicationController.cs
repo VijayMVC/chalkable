@@ -352,5 +352,20 @@ namespace Chalkable.Web.Controllers
 
             return Json(suggestedApplications.Select(BaseApplicationViewData.Create));
         }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult ExternalAttachApps(int? start, int? count)
+        {
+            var apps = MasterLocator.ApplicationService.GetApplications(live: true).ToList();
+            apps = apps.Where(app => MasterLocator.ApplicationService.HasExternalAttachMode(app)).ToList();
+            return Json(BaseApplicationViewData.Create(apps));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text)
+        {
+            SchoolLocator.ApplicationSchoolService.UpdateStudentAnnouncementApplicationMeta(announcementApplicationId, studentId, text);
+            return Json(true);
+        }
     }
 }

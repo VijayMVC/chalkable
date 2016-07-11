@@ -41,7 +41,7 @@ namespace Chalkable.Data.Master.DataAccess
 	                        School.Id = @{1}
                         ";
             sql = string.Format(sql, School.ID_FIELD);
-            using (var reader = ExecuteReaderParametrized(sql, new Dictionary<string, object> { { School.ID_FIELD, id } }))
+            using (var reader = ExecuteReaderParametrized(sql, new Dictionary<string, object> {{School.ID_FIELD, id}}))
             {
                 var res = reader.Read<School>(true);
                 res.District = reader.Read<District>(true);
@@ -56,7 +56,7 @@ namespace Chalkable.Data.Master.DataAccess
                 conds.Add(School.DISTRICT_REF_FIELD, districtId);
             return PaginatedSelect<School>(conds, School.ID_FIELD, start, count);
         }
-        
+
         public void Delete(IList<Guid> ids)
         {
             SimpleDelete(ids.Select(x => new School {Id = x}).ToList());
@@ -74,27 +74,15 @@ namespace Chalkable.Data.Master.DataAccess
             ExecuteStoredProcedure("spUpdateStudyCenterEnabled", ps);
         }
 
-        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        public void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disabled)
         {
             Trace.Assert(districtId.HasValue != schoolId.HasValue);
             IDictionary<string, object> ps = new Dictionary<string, object>
             {
                 {"@districtId", districtId},
                 {"@schoolId", schoolId},
-                {"@enabled", enabled}
+                {"@disabled", disabled}
             };
-            ExecuteStoredProcedure("spUpdateAssessmentEnabled", ps);
-        }
-        
-        public void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disabled)
-        {
-            Trace.Assert(districtId.HasValue != schoolId.HasValue);
-            IDictionary<string, object> ps = new Dictionary<string, object>
-                {
-                    {"@districtId", districtId},
-                    {"@schoolId", schoolId},
-                    {"@disabled", disabled}
-                };
             ExecuteStoredProcedure("spUpdateMessagingDisabled", ps);
         }
 
@@ -103,14 +91,14 @@ namespace Chalkable.Data.Master.DataAccess
         {
             Trace.Assert(districtId.HasValue != schoolId.HasValue);
             IDictionary<string, object> ps = new Dictionary<string, object>
-                {
-                    {"@districtId", districtId},
-                    {"@schoolId", schoolId},
-                    {"@studentMessaging", studentMessaging},
-                    {"@studentToClassOnly", studentToClassOnly},
-                    {"@teacherToStudentMessaging", teacherToStudentMessaging},
-                    {"@teacherToClassOnly", teacherToClassOnly}
-                };
+            {
+                {"@districtId", districtId},
+                {"@schoolId", schoolId},
+                {"@studentMessaging", studentMessaging},
+                {"@studentToClassOnly", studentToClassOnly},
+                {"@teacherToStudentMessaging", teacherToStudentMessaging},
+                {"@teacherToClassOnly", teacherToClassOnly}
+            };
             ExecuteStoredProcedure("spUpdateMessagingSettings", ps);
 
         }
@@ -119,7 +107,8 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var res = new DbQuery();
             var schoolN = nameof(School);
-            res.Sql.Append($@"Select
+            res.Sql.Append(
+                $@"Select
 	                             cast(Min(cast(School.StudentMessagingEnabled as int)) as bit) as StudentMessagingEnabled,
 	                             cast(Min(cast(School.StudentToClassMessagingOnly as int)) as bit) as StudentToClassMessagingOnly,
 	                             cast(Min(cast(School.TeacherToStudentMessaginEnabled as int)) as bit) as TeacherToStudentMessaginEnabled,
@@ -129,6 +118,20 @@ namespace Chalkable.Data.Master.DataAccess
             new AndQueryCondition {{School.DISTRICT_REF_FIELD, districtId}}.BuildSqlWhere(res, schoolN);
             res.Sql.Append($" Group by {schoolN}.{School.DISTRICT_REF_FIELD}");
             return ReadOne<MessagingSettings>(res);
+        }
+
+        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            Trace.Assert(districtId.HasValue != schoolId.HasValue);
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@districtId", districtId},
+                {
+                    "@schoolId", schoolId
+                },
+                {"@enabled", enabled}
+            };
+            ExecuteStoredProcedure("spUpdateAssessmentEnabled", ps);
         }
     }
 }

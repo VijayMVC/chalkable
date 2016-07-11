@@ -14,8 +14,9 @@ AS
 Begin Transaction
 
 --Announcement types
-declare @LESSON_PLAN int = 3,
-  @ADMIN_ANNOUNCEMENT int = 2;
+declare @ADMIN_ANNOUNCEMENT int = 2,
+	@LESSON_PLAN int = 3,
+	@SUPPLEMENTAL_ANNOUNCEMENT int = 4;
 --Roles ids
 declare @TEACHER_ROLE int = 2,
   @STUDENT_ROLE int = 3,
@@ -24,6 +25,7 @@ declare @TEACHER_ROLE int = 2,
 declare @announcementsToMark table (Id int, Complete bit)
 declare @adminAnnouncements TAdminAnnouncement,
   @lessonPlans TLessonPlan,
+  @supplementalAnnouncements TSupplementalAnnouncement,
   @completeStateNeedsUpdate int = 1 - @complete,
   @gradeLev TInt32;
 
@@ -44,16 +46,28 @@ Begin
  If @roleId = @TEACHER_ROLE
   insert into @lessonPlans
    exec spGetLessonPlans @announcementId, @schoolYearid, @personId, @classId, @roleId, 
-    @personId, null, 1, @fromDate, @toDate, @completeStateNeedsUpdate, null
+    @personId, null, 1, @fromDate, @toDate, @completeStateNeedsUpdate
 
  If @roleId = @STUDENT_ROLE
   insert into @lessonPlans
    exec spGetLessonPlans @announcementId, @schoolYearid, @personId, @classId, @roleId, 
-    null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate, null 
+    null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate 
 
 	if @filterByExpiryDate = 1
 	delete from @lessonPlans
 	where @toDate < EndDate
+End
+Else If @announcementType = @SUPPLEMENTAL_ANNOUNCEMENT
+Begin
+ If @roleId = @TEACHER_ROLE
+  insert into @supplementalAnnouncements
+   exec spGetSupplementalAnnouncements @announcementId, @schoolYearid, @personId, @classId, @roleId, 
+    @personId, null, 1, @fromDate, @toDate, @completeStateNeedsUpdate
+
+ If @roleId = @STUDENT_ROLE
+  insert into @supplementalAnnouncements
+   exec spGetSupplementalAnnouncements @announcementId, @schoolYearid, @personId, @classId, @roleId, 
+    null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate 
 End
 
 declare @announcementsToUpdate table( Id int)
@@ -76,6 +90,15 @@ insert into @announcementsToUpdate
    on Id = AnnouncementRef
  Where AnnouncementRecipientData.PersonRef = @personId
 
+ Union
+
+ select id
+ from
+  @supplementalAnnouncements
+  join AnnouncementRecipientData
+   on Id = AnnouncementRef
+ Where AnnouncementRecipientData.PersonRef = @personId
+
 insert into @announcementsToInsert
  select Id
  from 
@@ -89,6 +112,15 @@ insert into @announcementsToInsert
  select id
  from
   @lessonPlans
+  left join AnnouncementRecipientData
+   on Id = AnnouncementRef and PersonRef = @personid
+ Where AnnouncementRecipientData.Complete is null
+
+  Union
+
+ select id
+ from
+  @supplementalAnnouncements
   left join AnnouncementRecipientData
    on Id = AnnouncementRef and PersonRef = @personid
  Where AnnouncementRecipientData.Complete is null

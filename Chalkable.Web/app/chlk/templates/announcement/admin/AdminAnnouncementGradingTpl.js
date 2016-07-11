@@ -13,12 +13,23 @@ NAMESPACE('chlk.templates.announcement.admin', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.User), 'items',
 
+            ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
+
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
 
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
             String, function getStandardsUrlComponents() {
                 return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&');
+            },
+
+            String, function getStudentAnnApplicationMetaText(announcementApplicationId, studentId){
+                var texts = (this.getStudentsAnnApplicationMeta() || []).filter(function(item){
+                    return item.getAnnouncementApplicationId().valueOf() == announcementApplicationId.valueOf()
+                        && item.getStudentId().valueOf() == studentId.valueOf();
+                });
+
+                return texts[0] ? texts[0].getText() : '';
             }
         ])
 });

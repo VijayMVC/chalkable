@@ -1,6 +1,5 @@
 REQUIRE('chlk.activities.feed.BaseFeedPage');
 REQUIRE('chlk.templates.classes.ClassSummary');
-REQUIRE('chlk.templates.announcement.AnnouncementsByDate');
 REQUIRE('chlk.templates.announcement.FeedItemsTpl');
 REQUIRE('chlk.templates.feed.Feed');
 

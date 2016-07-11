@@ -9,19 +9,22 @@ namespace Chalkable.Data.School.Model
         public const string SCHOOL_YEAR_REF_FIELD = "SchoolYearRef";
         public const string ENROLLMENT_STATUS_FIELD = "EnrollmentStatus";
         
+
         [PrimaryKeyFieldAttr]
         public int SchoolYearRef { get; set; }
         public int GradeLevelRef { get; set; }
         [PrimaryKeyFieldAttr]
         public int StudentRef { get; set; }
         public StudentEnrollmentStatusEnum EnrollmentStatus { get; set; }
+        public bool IsRetained { get; set; }
+        public int? HomeroomRef { get; set; }
+
+
         [NotDbFieldAttr]
         public GradeLevel GradeLevel { get; set; }
-       
-        public bool IsEnrolled
-        {
-            get { return EnrollmentStatus == StudentEnrollmentStatusEnum.CurrentlyEnrolled; }
-        }
+        [NotDbFieldAttr]
+        public Homeroom Homeroom { get; set; }  
+        public bool IsEnrolled => EnrollmentStatus == StudentEnrollmentStatusEnum.CurrentlyEnrolled;
     }
 
     public enum StudentEnrollmentStatusEnum
