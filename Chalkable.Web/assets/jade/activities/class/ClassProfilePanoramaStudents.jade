@@ -1,6 +1,8 @@
 mixin HeaderLink_(name, type)
     +ActionLink('class', 'sortPanoramaStudents', type, self.getOrderBy() == type && !self.isDescending())(
-        class = (self.getOrderBy() == type ? "active-sort " : "") + (self.isDescending() ? "descending" : "")
+        class = (self.getOrderBy() == type ? "active-sort " : "") + (self.isDescending() ? "descending" : ""),
+        data-tooltip=name,
+        data-tooltip-type="overflow"
     )(attributes).cell=name
 
 -var orderByEnum = chlk.models.profile.ClassPanoramaSortType
