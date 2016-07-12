@@ -253,16 +253,14 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
-            [[chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData, chlk.models.id.ClassId]],
-            function prepareItemsGridModel(model, classId, clazz_){
+            [[chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData, chlk.models.id.ClassId, chlk.models.id.SchoolId]],
+            function prepareItemsGridModel(model, classId, schoolId, clazz_){
                 var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
-                var gradingComments = this.getContext().getSession().get(ChlkSessionConstants.GRADING_COMMENTS, []);
                 var gradingPeriod = this.getCurrentGradingPeriod();
                 var canEdit = false;
                 model.setClassId(classId);
                 model.setGradingPeriodId(gradingPeriod.getId());
                 model.setAlternateScores(alternateScores);
-                model.setGradingComments(gradingComments);
                 model.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
                 var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
                 if(model.getCurrentGradingGrid()){
@@ -276,6 +274,14 @@ NAMESPACE('chlk.controllers', function (){
                     this.getContext().getSession().set(ChlkSessionConstants.INCLUDE_WITHDRAWN_STUDENTS, model.getCurrentGradingGrid().isIncludeWithdrawnStudents());
                     studentIds = students.map(function(item){return item.getId().valueOf()});
                 }
+                var gradingComments = this.getContext().getSession().get(ChlkSessionConstants.GRADING_COMMENTS, []);
+
+                if(this.userIsAdmin() && schoolId != null)
+                    for(var i = gradingComments.length - 1; i >= 0; i--)
+                        if(gradingComments[i].getSchoolId() != schoolId)
+                            gradingComments.splice(i, 1);
+
+                model.setGradingComments(gradingComments);
 
                 model.setAbleEdit(canEdit);
             },
@@ -383,7 +389,9 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(result){
                         var gradingModel = result[0], classModel = result[1];
                         gradingModel.setAlphaGrades(classModel.getAlphaGrades() || []);
-                        this.prepareItemsGridModel(gradingModel, classId, classModel);
+                        var schoolYear = classModel && classModel.getSchoolYear();
+                        var schoolId = schoolYear && schoolYear.getSchoolId();
+                        this.prepareItemsGridModel(gradingModel, classId, schoolId, classModel);
                         gradingModel.setInProfile(true);
                         classModel.setGradingPart(gradingModel);
 
@@ -500,7 +508,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.setTopData(topData);
                         model.setAlphaGrades(alphaGrades);
 
-                        this.prepareItemsGridModel(model, classId_);
+                        this.prepareItemsGridModel(model, classId_, null);
 
                         return model;
                     }, this);

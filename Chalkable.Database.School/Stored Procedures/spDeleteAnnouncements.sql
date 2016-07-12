@@ -2,6 +2,9 @@
 as
 Begin Transaction
 
+/*DELETE AnnouncementComments*/
+Delete From AnnouncementComment Where AnnouncementRef in (Select Value From @announcementIdList)
+
 /*DELETE AnnouncementGroups*/
 Delete From AnnouncementGroup Where AnnouncementRef in (Select Value From @announcementIdList)
 
