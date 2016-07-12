@@ -1323,6 +1323,8 @@ NAMESPACE('chlk.controllers', function (){
 
         function chatAction() {
             var announcement = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
+            var clazz = this.classService.getClassById(announcement.getClassId());
+            announcement.setClazz(clazz);
             return this.StaticView(chlk.activities.announcement.AnnouncementChatPage, ria.async.DeferredData(announcement, 100));
         },
 

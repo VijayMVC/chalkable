@@ -1,12 +1,18 @@
 -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
 -var isTeacherOrAdmin=self.getUserRole().isTeacher() || self.getUserRole().isAdmin()
 -var chatWith = self.isAnnOwner() ? self.getAnnouncementQnAs()[0].getQuestion().getPerson() : self.getOwner()
+-var clazz = self.getClazz()
 .announcement-chat-cnt
     .close-btn
     .current-user-block
-        .current-user-image.i-b.v-m
-            +PersonImg(chatWith, 80)
-        .current-user-name.i-b.v-m='Chat with \n' + chatWith.getDisplayName()
+        if self.isAnnOwner()
+            .current-clazz-image.i-b.v-m
+                +ClassImg(clazz, 60, 107)
+            .current-user-name.i-b.v-m='Chat with \n' + clazz.getName()
+        else
+            .current-user-image.i-b.v-m
+                +PersonImg(chatWith, 80)
+            .current-user-name.i-b.v-m='Chat with \n' + chatWith.getDisplayName()
     .qnas-cnt(class = showPostQuestion ? 'with-bottom-block' : '')
         .qnas-cnt-2
             .qnas-cnt-3
