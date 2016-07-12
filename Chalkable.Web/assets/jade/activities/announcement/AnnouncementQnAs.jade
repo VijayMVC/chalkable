@@ -20,7 +20,8 @@
                     -questionMsg = item.getQuestion().getMessage()
                     .table.row(class = isTeacherOrAdmin ? 'not-owner ' : 'owner ').question
                         .avatar-block-left
-                            +PersonImg(item.getQuestion().getPerson(), 47)
+                            -var person1 = item.getQuestion().getPerson()
+                            +PersonImg(person1, 47)(data-tooltip = person1.getDisplayName())
                         .qna
                             +ActionForm('announcement', 'answerQuestion')
                                 input(type="hidden",name="id", value=item.getId())
@@ -44,7 +45,8 @@
                             -var hideEdit = answered || !self.isAnnOwner()
                             -var answerMsg=''
                             .avatar-block-left
-                                +PersonImg(item.getAnswer() ? item.getAnswer().getPerson() : self.getCurrentUser(), 47)
+                                -var person2 = item.getAnswer() ? item.getAnswer().getPerson() : self.getCurrentUser()
+                                +PersonImg(person2, 47)(data-tooltip = person2.getDisplayName())
                             .qna
                                 +ActionForm('announcement', 'answerQuestion')
                                     input(type="hidden",name="id", value=item.getId())
