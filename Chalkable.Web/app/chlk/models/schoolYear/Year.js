@@ -19,6 +19,7 @@ NAMESPACE('chlk.models.schoolYear', function () {
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
                 this.isCurrent = SJX.fromValue(raw.iscurrent, Boolean);
                 this.numberOfMarkingPeriod = SJX.fromValue(raw.numberofmarkingperiod, Number);
+                this.schoolId = SJX.fromValue(raw.schoolid, chlk.models.id.SchoolId);
             },
 
             chlk.models.id.SchoolYearId, 'id',
@@ -27,6 +28,7 @@ NAMESPACE('chlk.models.schoolYear', function () {
             chlk.models.common.ChlkDate, 'startDate',
             chlk.models.common.ChlkDate, 'endDate',
             Boolean, 'isCurrent',
-            Number, 'numberOfMarkingPeriod'
+            Number, 'numberOfMarkingPeriod',
+            chlk.models.id.SchoolId, 'schoolId'
         ]);
 });

@@ -9,6 +9,9 @@ NAMESPACE('chlk.models.grading', function () {
 
             String, 'comment',
 
-            chlk.models.id.AvgCommentId, 'id'
+            chlk.models.id.AvgCommentId, 'id',
+
+            [ria.serialize.SerializeProperty('schoolref')],
+            chlk.models.id.SchoolId, 'schoolId'
         ]);
 });
