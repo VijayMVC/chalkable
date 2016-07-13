@@ -71,17 +71,11 @@ namespace Chalkable.Web.Controllers
             if (applicationInputModel.ForSubmit) //TODO: mixpanel
             {
 
-                MasterLocator.UserTrackingService.SubmittedForApprooval(Context.Login, app.Name, app.ShortDescription,
-                                                      subjects, applicationInputModel.ApplicationPrices.Price, 
-                                                      applicationInputModel.ApplicationPrices.PricePerSchool,
-                                                      applicationInputModel.ApplicationPrices.PricePerClass);
+                MasterLocator.UserTrackingService.SubmittedForApprooval(Context.Login, app.Name, app.ShortDescription, subjects);
             }
             else
             {
-                MasterLocator.UserTrackingService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription,
-                                                      subjects, applicationInputModel.ApplicationPrices.Price, 
-                                                      applicationInputModel.ApplicationPrices.PricePerSchool, 
-                                                      applicationInputModel.ApplicationPrices.PricePerClass);
+                MasterLocator.UserTrackingService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription, subjects);
             }
 
             return Json(PrepareAppInfo(MasterLocator, app, true, true), CONTENT_TYPE);

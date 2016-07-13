@@ -283,15 +283,15 @@ namespace Chalkable.UserTracking
             SendEvent(email, UserTrackingEvents.SelectedLive, properties);
         }
 
-        public void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass)
+        public void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects)
         {
-            var properties = PrepareAppProperties(appName, shortDescription, subjects, price, pricePerSchool, pricePerClass);
+            var properties = PrepareAppProperties(appName, shortDescription, subjects);
             SendEvent(email, UserTrackingEvents.SubmittedAppForApproval, properties);
         }
 
-        public void UpdatedDraft(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass)
+        public void UpdatedDraft(string email, string appName, string shortDescription, string subjects)
         {
-            var properties = PrepareAppProperties(appName, shortDescription, subjects, price, pricePerSchool, pricePerClass);
+            var properties = PrepareAppProperties(appName, shortDescription, subjects);
             SendEvent(email, UserTrackingEvents.UpdatedDraft, properties);
         }
 
@@ -301,38 +301,32 @@ namespace Chalkable.UserTracking
         private const string FREE = "Free";
         private const string APP_PRICE_PER_CLASS = "app-price-per-class";
         private const string APP_PRICE_PER_SCHOOL = "app-price-per-school";
-        private static Dictionary<string, object> PrepareAppProperties(string appName, string shortDescription, string subjects, decimal price,
-                                                       decimal? pricePerSchool, decimal? pricePerClass)
+        private static Dictionary<string, object> PrepareAppProperties(string appName, string shortDescription, string subjects)
         {
             var properties = new Dictionary<string, object>();
             properties[APP_NAME] = appName;
             properties[APP_SHORT_DESCRIPTION] = shortDescription;
             properties[APP_SUBJECTS] = subjects;
-            properties[APP_PRICE] = price > 0 ? price.ToString(CultureInfo.InvariantCulture) : FREE;
 
-            if (pricePerSchool.HasValue)
-            {
-                properties[APP_PRICE_PER_SCHOOL] = pricePerSchool.Value > 0 ? pricePerSchool.Value.ToString(CultureInfo.InvariantCulture) : FREE;
-            }
-            if (pricePerClass.HasValue)
-            {
-                properties[APP_PRICE_PER_CLASS] = pricePerClass.Value > 0 ? pricePerClass.Value.ToString(CultureInfo.InvariantCulture) : FREE;
-            }
             return properties;
         }
 
         public void CreatedApp(string email, string appName)
         {
-            var properties = new Dictionary<string, object>();
-            properties[APP_NAME] = appName;
+            var properties = new Dictionary<string, object>
+            {
+                [APP_NAME] = appName
+            };
             SendEvent(email, UserTrackingEvents.CreatedApp, properties);
         }
 
         private const string CLASSES = "classes";
         public void BoughtApp(string email, string appName, List<string> classes)
         {
-            var properties = new Dictionary<string, object>();
-            properties[APP_NAME] = appName;
+            var properties = new Dictionary<string, object>
+            {
+                [APP_NAME] = appName
+            };
             if (classes.Count > 0) properties[CLASSES] = classes;
             SendEvent(email, UserTrackingEvents.BoughtApp, properties);
         }
@@ -377,11 +371,12 @@ namespace Chalkable.UserTracking
         private const string RECIPIENT = "recipient";
         public void SentMessageTo(string email, string userName)
         {
-            var properties = new Dictionary<string, object>();
-            properties[RECIPIENT] = userName;
+            var properties = new Dictionary<string, object>
+            {
+                [RECIPIENT] = userName            
+            };
             SendEvent(email, UserTrackingEvents.SentMessageTo, properties);
         }
-
 
         private const string TYPE = "type";
         private const string CLASS = "class";
@@ -389,30 +384,36 @@ namespace Chalkable.UserTracking
         private const string DOCS_ATTACHED = "docs-attached";
         public void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached)
         {
-            var properties = new Dictionary<string, object>();
-            properties[TYPE] = type;
-            properties[CLASS] = sClass;
-            properties[APPS_ATTACHED] = appsAttached;
-            properties[DOCS_ATTACHED] = docsAttached;
+            var properties = new Dictionary<string, object>
+            {
+                [TYPE] = type,
+                [CLASS] = sClass,
+                [APPS_ATTACHED] = appsAttached,
+                [DOCS_ATTACHED] = docsAttached
+            };
             SendEvent(email, UserTrackingEvents.CreatedNewItem, properties);
         }
 
         public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
         {
-            var properties = new Dictionary<string, object>();
-            properties[CLASS] = sClass;
-            properties[APPS_ATTACHED] = appsAttached;
-            properties[DOCS_ATTACHED] = docsAttached;
+            var properties = new Dictionary<string, object>
+            {
+                [CLASS] = sClass,
+                [APPS_ATTACHED] = appsAttached,
+                [DOCS_ATTACHED] = docsAttached
+            };
             SendEvent(email, UserTrackingEvents.CreatedNewLessonPlan, properties);
         }
 
         private const string ADMIN = "admin";
         public void CreateNewAdminItem(string email, string adminName,  int appsAttached, int docsAttached)
         {
-            var properties = new Dictionary<string, object>();
-            properties[ADMIN] = adminName;
-            properties[APPS_ATTACHED] = appsAttached;
-            properties[DOCS_ATTACHED] = docsAttached;
+            var properties = new Dictionary<string, object>
+            {
+                [ADMIN] = adminName,
+                [APPS_ATTACHED] = appsAttached,
+                [DOCS_ATTACHED] = docsAttached
+            };
             SendEvent(email, UserTrackingEvents.CreatedNewAdminItem, properties);       
         }
 

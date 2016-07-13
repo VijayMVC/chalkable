@@ -1,4 +1,3 @@
-REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
 REQUIRE('chlk.models.id.SchoolPersonId');
 
