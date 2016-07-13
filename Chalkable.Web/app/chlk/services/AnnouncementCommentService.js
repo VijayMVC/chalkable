@@ -85,7 +85,7 @@ NAMESPACE('chlk.services', function () {
             Object, function editCacheAnnouncementComments_(comment){
                 var result =this.getAnnouncement_(comment.getAnnouncementId());
                 var selectedComment = this.findComment_(comment.getId(), result.getAnnouncementComments());
-                selectedComment.setAttachment(comment.getAttachment());
+                selectedComment.setAttachments(comment.getAttachments());
                 selectedComment.setText(comment.getText());
                 selectedComment.setHidden(comment.isHidden());
 

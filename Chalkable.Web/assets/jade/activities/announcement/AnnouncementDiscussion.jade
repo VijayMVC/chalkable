@@ -1,4 +1,7 @@
-mixin PostCommentForm(announcementId, parentCommentId, commentId, attachments, text)
+mixin PostCommentForm(announcementId, parentCommentId, comment)
+    -var commentId = comment && comment.getId()
+    -var attachments = comment && comment.getAttachments()
+    -var text = comment && comment.getText()
     -attributes['data-id']=(commentId && commentId.valueOf()) || (parentCommentId && parentCommentId.valueOf())
     -var ids = attachments && attachments.map(function(attachment){return attachment.getId().valueOf()}).join(',')
     +ActionForm('announcementcomment', 'post')(attributes).post-comment-form.no-working
@@ -9,8 +12,8 @@ mixin PostCommentForm(announcementId, parentCommentId, commentId, attachments, t
         .post-comment-text-block.relative
             +TextArea(name="text", placeholder="Type your comment here", data-value=text).comment-value=text
             .imgs-cnt
-                if self.getAttachments()
-                    +RenderWith(self.getAttachments(), chlk.templates.announcement.AnnouncementCommentAttachmentsTpl)
+                if attachments
+                    +RenderWith(comment.getModel(), chlk.templates.announcement.AnnouncementCommentAttachmentsTpl)
             br
             .simple-gray-button.download-link.file Attach
                 +FileUpload('announcementcomment', 'uploadCommentAttachment', [commentId && commentId.valueOf() ? commentId : parentCommentId])(

@@ -24,7 +24,7 @@
             p.edit-question-text= self.getText()
             .imgs-cnt
                 if self.getAttachments()
-                    +RenderWith(self.getAttachments(), chlk.templates.announcement.AnnouncementCommentAttachmentsTpl)
+                    +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementCommentAttachmentsTpl)
 
             .delete-block.cover-container
                 .delete-content
@@ -33,7 +33,7 @@
                     BUTTON(type="button").delete-cancel Cancel
 
         if isOwner
-            +PostCommentForm(null, null, self.getId(), self.getAttachments(), self.getText()).edit-form
+            +PostCommentForm(null, null, self).edit-form
         +PostCommentForm(null, self.getId()).reply-form
 
         if self.getSubComments()
