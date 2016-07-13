@@ -48,7 +48,7 @@ mixin ReportCell(value)
                         .cell= Msg.HS_to_drop
                         .cell= Msg.LS_to_drop
                         .cell= Msg.Percent
-                        .cell= Msg.Is_system
+                        .cell
                     each category in self.getCategories()
                         .row
                             div(data-id=category.getId()).cell.check-container
@@ -59,8 +59,9 @@ mixin ReportCell(value)
                             +ReportCell(category.getHighScoresToDrop())
                             +ReportCell(category.getLowScoresToDrop())
                             +ReportCell(category.getPercentage().toFixed(3))
-                            .cell
-                                .text #{category.isSystem() ? '+' : ''}
+                            .cell.lock
+                                if category.isSystem()
+                                    .lock-icon(data-tooltip="Locked")
             +Hidden('categoryIds', '').categoty-ids
             +Hidden('classid', selectedId)
             +Hidden('ids', '').ids-to-delete
