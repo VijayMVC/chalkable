@@ -46,7 +46,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('AnnouncementComment/Edit', chlk.models.announcement.AnnouncementComment, {
                     announcementCommentId: announcementCommentId.valueOf(),
                     text: text,
-                    attachmentIds: this.arrayToCsv(attachmentIds_)
+                    attachmentIds: attachmentIds_
                 })
                 .then(function(comment){
                     return this.editCacheAnnouncementComments_(comment);
