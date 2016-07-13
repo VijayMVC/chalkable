@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models
         public AttachmentViewData Attachment { get; set; }
         public ShortPersonViewData Owner { get; set; }
         public int? ParentCommentId { get; set; }
-        public DateTime PostedDate { get; set; }
+        public DateTime TimePosted { get; set; }
         public string Text { get; set; }
         public bool Hidden { get; set; }
         public bool Deleted { get; set; }
@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models
                 Attachment = attachmentInfo != null ? AttachmentViewData.Create(attachmentInfo, currentPersonId) : null,
                 ParentCommentId = announcementComment.ParentCommentRef,
                 Owner = ShortPersonViewData.Create(announcementComment.Person),
-                PostedDate = announcementComment.PostedDate,
+                TimePosted = announcementComment.PostedDate,
                 Text = announcementComment.Text,
                 Hidden = announcementComment.Hidden,
                 Deleted = announcementComment.Deleted

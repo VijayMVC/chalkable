@@ -22,7 +22,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 if(raw.attachment)
                     this.attachment = SJX.fromDeserializable(raw.attachment, chlk.models.attachment.Attachment);
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
-                this.postedDate = SJX.fromDeserializable(raw.posteddate, chlk.models.common.ChlkDate);
+                this.postedDate = SJX.fromDeserializable(raw.timeposted, chlk.models.common.ChlkDate);
                 this.text = SJX.fromValue(raw.text, String);
                 this.hidden = SJX.fromValue(raw.hidden, Boolean);
                 if(raw.subcomments)
