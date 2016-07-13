@@ -1,0 +1,30 @@
+.settings
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .items
+                a.action-link.pressed Messaging
+                each app in self.getApplications()
+                    +ActionLink('settings', 'appSettings', app.getId())=app.getName()
+                if self.isAdminPanoramaEnabled()
+                    +ActionLink('settings', 'panoramaAdmin') Panorama
+
+    -var canUpdate = self.isAbleToUpdate();
+    -var messagingSettings = self.getMessagingSettings();
+
+    +ActionForm('settings', 'updateMessagingSettings').messaging-block.no-working
+        .check-box-container
+            label(for="settings-studentmessagingenabled").title Allow student to student messaging
+            +SlideCheckbox('studentmessagingenabled', messagingSettings.isAllowedForStudents(), false, !canUpdate)(disabled = !canUpdate).all-students
+        .check-box-container.sub
+            label(for="settings-studenttoclassmessagingonly").title Only allow students in the same classes to message each other
+            +SlideCheckbox('studenttoclassmessagingonly', messagingSettings.isAllowedForStudentsInTheSameClass(), false, !canUpdate || !messagingSettings.isAllowedForStudents())(disabled = !canUpdate || !messagingSettings.isAllowedForStudents()).sudents-in-same-class
+        .check-box-container
+            label(for="settings-teachertostudentmessaginenabled").title Allow teacher to student messaging
+            +SlideCheckbox('teachertostudentmessaginenabled', messagingSettings.isAllowedForTeachersToStudents(), false, !canUpdate)(disabled = !canUpdate).teachers-to-students
+        .check-box-container.sub
+            label(for="settings-teachertoclassmessagingonly").title Only allow teachers to message students in their classes
+            +SlideCheckbox('teachertoclassmessagingonly', messagingSettings.isAllowedForTeachersToStudentsInTheSameClass(), false, !canUpdate || !messagingSettings.isAllowedForTeachersToStudents())(disabled = !canUpdate || !messagingSettings.isAllowedForTeachersToStudents()).teachers-in-same-class
+
+        if !canUpdate
+            .check-box-container.sub
+                .title You don't have right permission to make changes. Only user with Maintain Chalkable District Settings permission can update settings
