@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.API.Models;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
@@ -13,23 +15,23 @@ namespace Chalkable.Web.Controllers
     public class AnnouncementCommentController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult PostComment(int announcementId, string text, int? attachmentId)
+        public ActionResult PostComment(int announcementId, string text, IntList attachmentIds)
         {
-            var res = SchoolLocator.AnnouncementCommentService.PostComment(announcementId, text, attachmentId);
+            var res = SchoolLocator.AnnouncementCommentService.PostComment(announcementId, text, attachmentIds);
             return Json(PrepareCommentViewData(res, SchoolLocator));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Reply(int toCommentId, string text, int? attachmentId)
+        public ActionResult Reply(int toCommentId, string text, IntList attachmentIds)
         {
-            var res = SchoolLocator.AnnouncementCommentService.Reply(toCommentId, text, attachmentId);
+            var res = SchoolLocator.AnnouncementCommentService.Reply(toCommentId, text, attachmentIds);
             return Json(PrepareCommentViewData(res, SchoolLocator));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Edit(int announcementCommentId, string text, int? attachmentId)
+        public ActionResult Edit(int announcementCommentId, string text, IntList attachmentIds)
         {
-            var res = SchoolLocator.AnnouncementCommentService.Edit(announcementCommentId, text, attachmentId);
+            var res = SchoolLocator.AnnouncementCommentService.Edit(announcementCommentId, text, attachmentIds);
             return Json(PrepareCommentViewData(res, SchoolLocator));
         }
         
@@ -58,10 +60,11 @@ namespace Chalkable.Web.Controllers
 
         public static AnnouncementCommentViewData PrepareCommentViewData(AnnouncementComment comment, IServiceLocatorSchool serviceLocator)
         {
-            AttachmentInfo attachmentInfo = null;
-            if (comment.Attachment != null)
-                attachmentInfo = serviceLocator.AttachementService.TransformToAttachmentInfo(comment.Attachment);
+            Trace.Assert(serviceLocator.Context.PersonId.HasValue);
+
+            var attachmentInfo = comment.Attachments?.Select(x=>serviceLocator.AttachementService.TransformToAttachmentInfo(x)).ToList() ?? new List<AttachmentInfo>();
             var res = AnnouncementCommentViewData.Create(comment, attachmentInfo, serviceLocator.Context.PersonId.Value);
+
             if (comment.SubComments != null && comment.SubComments.Count > 0)
             {
                 res.SubComments = new List<AnnouncementCommentViewData>();
