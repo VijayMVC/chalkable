@@ -18,9 +18,8 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementCommentId);
                 this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
                 this.parentCommentId = SJX.fromValue(raw.parentcommentid, chlk.models.id.AnnouncementCommentId);
-                this.attachmentId = SJX.fromValue(raw.attachmentId, chlk.models.id.AttachmentId);
-                if(raw.attachment)
-                    this.attachment = SJX.fromDeserializable(raw.attachment, chlk.models.attachment.Attachment);
+                if(raw.attachments)
+                    this.attachments = SJX.fromArrayOfDeserializables(raw.attachments, chlk.models.attachment.Attachment);
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
                 this.postedDate = SJX.fromDeserializable(raw.posteddate, chlk.models.common.ChlkDate);
                 this.text = SJX.fromValue(raw.text, String);
@@ -32,7 +31,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.AnnouncementCommentId, 'id',
             chlk.models.id.AnnouncementId, 'announcementId',
             chlk.models.id.AnnouncementCommentId, 'parentCommentId',
-            chlk.models.attachment.Attachment, 'attachment',
+            ArrayOf(chlk.models.attachment.Attachment), 'attachments',
             chlk.models.people.User, 'owner',
             chlk.models.common.ChlkDate, 'postedDate',
             String, 'text',
