@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using Chalkable.Data.Common;
@@ -19,14 +18,21 @@ namespace Chalkable.Data.School.DataAccess
         {
             var idColumn = $"{nameof(AnnouncementComment)}_{nameof(AnnouncementComment.Id)}";
             var conds = new AndQueryCondition {{idColumn, announcementCommentId}};
-            var q = Orm.SimpleSelect(AnnouncementComment.VW_ANNOUNCEMENT_COMMENT, conds);
-            var res = Read(q, r => 
-            {
-                r.Read();
-                return ReadComment(r);
-            });
+            var queries = new List<DbQuery> {Orm.SimpleSelect(AnnouncementComment.VW_ANNOUNCEMENT_COMMENT, conds)};
 
-            if (withSubComments)
+            var attsQuery = new DbQuery();
+            attsQuery.Sql.Append($"Select * From {nameof(AnnouncementCommentAttachment)} ")
+                .Append($"Join {nameof(Attachment)} ")
+                .Append($" On {nameof(Attachment)}.{nameof(Attachment.Id)} = ")
+                .Append($" {nameof(AnnouncementCommentAttachment)}.{nameof(AnnouncementCommentAttachment.AttachmentRef)}");
+
+            var attsConds = new AndQueryCondition {{nameof(AnnouncementCommentAttachment.AnnouncementCommentRef), announcementCommentId}};
+            attsConds.BuildSqlWhere(attsQuery, nameof(AnnouncementCommentAttachment));
+
+            queries.Add(attsQuery);
+            var res = Read(new DbQuery(queries), ReadCommentsResult).FirstOrDefault();
+
+            if (withSubComments && res != null)
             {
                 var all = GetList(res.AnnouncementRef, callerId, roleId);
                 return BuildSubComments(new List<AnnouncementComment> { res }, all).First();
@@ -59,6 +65,15 @@ namespace Chalkable.Data.School.DataAccess
             var comments = new List<AnnouncementComment>();
             while (reader.Read())
                 comments.Add(ReadComment(reader));
+
+            reader.NextResult();
+            var annCommentattachments = reader.ReadList<AnnouncementCommentAttachment>();
+            foreach (var comment in comments)
+            {
+                comment.Attachments = annCommentattachments
+                    .Where(x=>x.AnnouncementCommentRef == comment.Id)
+                    .Select(x=>x.Attachment).ToList();
+            }
             return comments;
         }
 
@@ -80,8 +95,6 @@ namespace Chalkable.Data.School.DataAccess
         private static AnnouncementComment ReadComment(DbDataReader reader)
         {
             var res = reader.Read<AnnouncementComment>(true);
-            if (res.AttachmentRef.HasValue)
-                res.Attachment = reader.Read<Attachment>(true);
             return res;
         }
         
@@ -91,6 +104,38 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition {{nameof(AnnouncementComment.AnnouncementRef), announcementId}};
             var ps = new Dictionary<string, object> {{nameof(AnnouncementComment.Hidden), true}};
             var q = Orm.SimpleUpdate<AnnouncementComment>(ps, conds);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+        }
+    }
+
+
+
+    public class AnnouncementCommentAttachmentDataAccess : DataAccessBase<AnnouncementCommentAttachment>
+    {
+        public AnnouncementCommentAttachmentDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+
+        public void PostAttachements(int announcementCommentId, IList<int> attachmentIds)
+        {
+            IList<DbQuery> queries = new List<DbQuery>();
+            var deleteConds = new AndQueryCondition
+            {
+                {nameof(AnnouncementCommentAttachment.AnnouncementCommentRef), announcementCommentId}
+            };
+            queries.Add(Orm.SimpleDelete<AnnouncementCommentAttachment>(deleteConds));
+
+            if (attachmentIds != null)
+            {
+                var annCommentAtts = attachmentIds.Select(x => new AnnouncementCommentAttachment
+                {
+                    AnnouncementCommentRef = announcementCommentId,
+                    AttachmentRef = x
+                }).ToList();
+                queries.Add(Orm.SimpleListInsert(annCommentAtts, false));
+            }
+
+            var q = new DbQuery(queries);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
     }
