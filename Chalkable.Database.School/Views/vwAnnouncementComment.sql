@@ -17,18 +17,9 @@ Select distinct
 	vwPerson.FirstName as Person_FirstName,
 	vwPerson.LastName as Person_LastName,
 	vwPerson.Gender as Person_Gender,
-	vwPerson.RoleRef as Person_RoleRef,
-	Attachment.Id as Attachment_Id,
-	Attachment.Name as Attachment_Name,
-	Attachment.PersonRef as Attachment_PersonRef,
-	Attachment.LastAttachedDate as Attachment_LastAttachedDate,
-	Attachment.RelativeBlobAddress as Attachment_RelativeBlobAddress,
-	Attachment.UploadedDate as Attachment_UploadedDate,
-	Attachment.Uuid as Attachment_Uuid,
-	Attachment.SisAttachmentId as Attachment_SisAttachmentId
+	vwPerson.RoleRef as Person_RoleRef
 From 
 	AnnouncementComment
 Join vwPerson on vwPerson.Id = AnnouncementComment.PersonRef
 Join Announcement on Announcement.Id = AnnouncementComment.AnnouncementRef
-Left Join Attachment on Attachment.Id = AnnouncementComment.AttachmentRef
 
