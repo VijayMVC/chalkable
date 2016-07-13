@@ -28,8 +28,8 @@ namespace Chalkable.UserTracking
         void Clicked(string eventName, string email);
         void OpenedApp(string email, string appName);
         void SelectedLive(string email, string appName);
-        void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass);
-        void UpdatedDraft(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass);
+        void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects);
+        void UpdatedDraft(string email, string appName, string shortDescription, string subjects);
         void CreatedApp(string email, string appName);
         void BoughtApp(string email, string appName, List<string> classes);
         void LaunchedApp(string email, string appName);
