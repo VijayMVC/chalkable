@@ -1,0 +1,33 @@
+mixin PostCommentForm(announcementId, parentCommentId, commentId, attachment, text)
+    -attributes['data-id']=(commentId && commentId.valueOf()) || (parentCommentId && parentCommentId.valueOf())
+    +ActionForm('announcementcomment', 'post')(attributes).post-comment-form.no-working
+        +Hidden('attachmentId', attachment && attachment.getId())(data-value=attachment && attachment.getId()).attachment-id
+        +Hidden('announcementid', announcementId)
+        +Hidden('id', commentId)
+        +Hidden('parentcommentid', parentCommentId)
+        .post-comment-text-block.relative
+            +TextArea(name="text", placeholder="Type your comment here", data-value=text).comment-value=text
+            if attachment
+                .img-cnt
+                    +RenderWith(attachment, chlk.templates.LoadingImageTpl)
+            else
+                .img-cnt
+            br
+            .simple-gray-button.download-link.file Attach
+                +FileUpload('announcementcomment', 'uploadCommentAttachment', [commentId && commentId.valueOf() ? commentId : parentCommentId])(
+                    dropAreaSelector = 'form',
+                    value = 'Attach'
+                ).add-file-attachment.simple-gray-button
+        BUTTON().green-button Post
+        BUTTON(type="button").comment-cancel Cancel
+
+-var comments = self.getAnnouncementComments()
+-var count = self.getCommentsCount()
+.post-comment-block
+    +PostCommentForm(self.getId()).new-comment
+.comments-block.main-block
+    h3.comments-count=  count + (count == 1 ? ' comment' : ' comments')
+    +RenderWith(comments, chlk.templates.announcement.AnnouncementCommentTpl)(
+        userRole = self.getUserRole(),
+        currentUser = self.getCurrentUser()
+    )

@@ -1,0 +1,75 @@
+-var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
+-var isTeacherOrAdmin=self.getUserRole().isTeacher() || self.getUserRole().isAdmin()
+-var chatWith = self.isAnnOwner() ? self.getAnnouncementQnAs()[0].getQuestion().getPerson() : self.getOwner()
+-var clazz = self.getClazz()
+.announcement-chat-cnt
+    .close-btn
+    .current-user-block
+        if self.isAnnOwner()
+            .current-clazz-image.i-b.v-m
+                +ClassImg(clazz, 60, 107)
+            .current-user-name.i-b.v-m='Chat with \n' + clazz.getName()
+        else
+            .current-user-image.i-b.v-m
+                +PersonImg(chatWith, 80)
+            .current-user-name.i-b.v-m='Chat with \n' + chatWith.getDisplayName()
+    .qnas-cnt(class = showPostQuestion ? 'with-bottom-block' : '')
+        .qnas-cnt-2
+            .qnas-cnt-3
+                each item, i in self.getAnnouncementQnAs()
+                    -questionMsg = item.getQuestion().getMessage()
+                    .table.row(class = isTeacherOrAdmin ? 'not-owner ' : 'owner ').question
+                        .avatar-block-left
+                            -var person1 = item.getQuestion().getPerson()
+                            +PersonImg(person1, 47)(data-tooltip = person1.getDisplayName())
+                        .qna
+                            +ActionForm('announcement', 'answerQuestion')
+                                input(type="hidden",name="id", value=item.getId())
+                                input(type="hidden",name="announcementId", value=self.getId())
+                                input(type="hidden",name="updateType", value="editQuestion")
+                                .chat-bubble
+                                    p.edit-question-text= questionMsg
+                                    input(type="text",name="question", value=questionMsg).edit-question-input
+                                span
+                                    = self.convertWith(item.getQuestion().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                                    = ' '
+                                    if self.isAnnOwner()
+                                        input(type="hidden",name="answer", value=(item.getAnswer() && item.getAnswer().getMessage()))
+                                        a(href='javascript:', name='edit-question-link').edit-question-link=Msg.Edit
+                                br
+                                //+Button()(type="submit").special-button.blue-button.submit-btn.edit-question-btn=Msg.Update.toUpperCase()
+
+                    -var answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+                    if answered || isTeacherOrAdmin
+                        .table.row(class = isTeacherOrAdmin ? 'owner' : 'not-owner')
+                            -var hideEdit = answered || !self.isAnnOwner()
+                            -var answerMsg=''
+                            .avatar-block-left
+                                -var person2 = item.getAnswer() ? item.getAnswer().getPerson() : self.getCurrentUser()
+                                +PersonImg(person2, 47)(data-tooltip = person2.getDisplayName())
+                            .qna
+                                +ActionForm('announcement', 'answerQuestion')
+                                    input(type="hidden",name="id", value=item.getId())
+                                    input(type="hidden",name="announcementId", value=self.getId())
+                                    input(type="hidden",name="updateType", value=(!answerMsg ? "answer" : "editAnswer"))
+                                    input(type="hidden",name="question", value=questionMsg)
+                                    .chat-bubble
+                                        if item.getAnswer()
+                                            -answerMsg=item.getAnswer().getMessage()
+                                            -var isAnswerOwner = item.getAnswer().getPerson().getId() == self.getCurrentUser().getId()
+                                            p(style="display: " + (hideEdit ? "block" : "none")).edit-answer-text= answerMsg
+                                        input(type="text",name="answer", value=answerMsg, style="display: " + (hideEdit ? "none" : "block"), class="validate[required]", placeholder="Type your answer here").edit-answer-input
+                                    if item.getAnswer()
+                                        span.edit-btn-block
+                                            = self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                                            = ' '
+                                            if answered && self.isAnnOwner() && isAnswerOwner
+                                                a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
+                                    br
+                                    //+Button()(type="submit").edit-answer-btn.blue-button.submit-btn= (answerMsg ? Msg.Update.toUpperCase() : 'ANSWER')
+
+    if showPostQuestion
+        .bottom-block
+            +ActionForm('announcement', 'askQuestion')
+                +Hidden("announcementId", self.getId())
+                TEXTAREA(type="text", name="question", class="validate[required]", placeholder="Type your question here").add-question
