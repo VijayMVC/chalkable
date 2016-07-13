@@ -23,6 +23,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
                 this.postedDate = SJX.fromDeserializable(raw.posteddate, chlk.models.common.ChlkDate);
                 this.text = SJX.fromValue(raw.text, String);
+                this.attachmentIds = SJX.fromValue(raw.attachmentIds, String);
                 this.hidden = SJX.fromValue(raw.hidden, Boolean);
                 if(raw.subcomments)
                     this.subComments = SJX.fromArrayOfDeserializables(raw.subcomments, chlk.models.announcement.AnnouncementComment);
@@ -36,14 +37,15 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.common.ChlkDate, 'postedDate',
             String, 'text',
             Boolean, 'hidden',
+            String, 'attachmentIds',
             chlk.models.id.AttachmentId, 'attachmentId',
 
             ArrayOf(SELF), 'subComments',
 
-            [[chlk.models.attachment.Attachment, chlk.models.id.AnnouncementCommentId]],
-            function $(attachment_, id_){
+            [[ArrayOf(chlk.models.attachment.Attachment), chlk.models.id.AnnouncementCommentId]],
+            function $(attachments_, id_){
                 BASE();
-                attachment_ && this.setAttachment(attachment_);
+                attachments_ && this.setAttachments(attachments_);
                 id_ && this.setId(id_);
             }
         ]);
