@@ -11,12 +11,12 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'AnnouncementCommentService', EXTENDS(chlk.services.BaseService), [
 
-            [[chlk.models.id.AnnouncementId, String, chlk.models.id.AttachmentId]],
-            ria.async.Future, function postComment(announcementId, text, attachmentId_){
+            [[chlk.models.id.AnnouncementId, String, ArrayOf(chlk.models.id.AttachmentId)]],
+            ria.async.Future, function postComment(announcementId, text, attachmentIds_){
                 return  this.post('AnnouncementComment/PostComment', chlk.models.announcement.AnnouncementComment,{
                     announcementId: announcementId.valueOf(),
                     text: text,
-                    attachmentId: attachmentId_ && attachmentId_.valueOf()
+                    attachmentIds: this.arrayToCsv(attachmentIds_)
                 })
                 .then(function(comment){
                     var res = this.getAnnouncement_(comment.getAnnouncementId());
@@ -25,12 +25,12 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
-            [[chlk.models.id.AnnouncementCommentId, String, chlk.models.id.AttachmentId]],
+            [[chlk.models.id.AnnouncementCommentId, String, ArrayOf(chlk.models.id.AttachmentId)]],
             ria.async.Future, function reply(toAnnouncementCommentId, text, attachmentId){
                 return this.post('AnnouncementComment/Reply', chlk.models.announcement.AnnouncementComment, {
                     toCommentId: toAnnouncementCommentId.valueOf(),
                     text: text,
-                    attachmentId: attachmentId && attachmentId.valueOf()
+                    attachmentIds: this.arrayToCsv(attachmentIds_)
                 }).then(function(comment){
                     var result =this.getAnnouncement_(comment.getAnnouncementId());
                     var parentComment = this.findComment_(comment.getParentCommentId(), result.getAnnouncementComments());
@@ -41,12 +41,12 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
-            [[chlk.models.id.AnnouncementCommentId, String, chlk.models.id.AttachmentId]],
+            [[chlk.models.id.AnnouncementCommentId, String, ArrayOf(chlk.models.id.AttachmentId)]],
             ria.async.Future, function edit(announcementCommentId, text, attachmentId){
                 return this.post('AnnouncementComment/Edit', chlk.models.announcement.AnnouncementComment, {
                     announcementCommentId: announcementCommentId.valueOf(),
                     text: text,
-                    attachmentId: attachmentId && attachmentId.valueOf()
+                    attachmentIds: this.arrayToCsv(attachmentIds_)
                 })
                 .then(function(comment){
                     return this.editCacheAnnouncementComments_(comment);
