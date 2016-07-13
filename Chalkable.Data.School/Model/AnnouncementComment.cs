@@ -12,7 +12,7 @@ namespace Chalkable.Data.School.Model
         [IdentityFieldAttr]
         public int Id { get; set; }
         public int AnnouncementRef { get; set; }
-        public int? AttachmentRef { get; set; }
+        //public int? AttachmentRef { get; set; }
         public int PersonRef { get; set; }
         public int? ParentCommentRef { get; set; }
         public string Text { get; set; }
@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.Model
         public bool Deleted { get; set; }
         
         [NotDbFieldAttr]
-        public Attachment Attachment { get; set; }
+        public IList<Attachment> Attachments { get; set; }
         [DataEntityAttr]
         public Person Person { get; set; }
 
@@ -45,5 +45,17 @@ namespace Chalkable.Data.School.Model
             }    
         } 
 
+    }
+
+
+    public class AnnouncementCommentAttachment
+    {
+        [PrimaryKeyFieldAttr]
+        public int AnnouncementCommentRef { get; set; }
+        [PrimaryKeyFieldAttr]
+        public int AttachmentRef { get; set; }
+
+        [DataEntityAttr]
+        public Attachment Attachment { get; set; }
     }
 }

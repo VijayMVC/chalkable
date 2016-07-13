@@ -58,12 +58,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             ExecuteStoredProcedure("spDeleteAnnouncements", paraments);
         }
 
-        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int callerId)
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start, int count)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {CALLER_ID_PARAM, callerId},
-                    {"announcementId", announcementId}
+                    {"announcementId", announcementId},
+                    {"@start", start},
+                    {"@count", count}
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_ANNOUNCEMENT_RECIPIENT_PERSON, parameters))
             {

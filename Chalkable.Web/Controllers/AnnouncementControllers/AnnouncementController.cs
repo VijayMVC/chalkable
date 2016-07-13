@@ -14,6 +14,7 @@ using Chalkable.UserTracking;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -270,6 +271,13 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 AnnouncementId = x
             }));
             return Json(res);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult GetAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue)
+        {
+            var res = SchoolLocator.LessonPlanService.GetAnnouncementRecipientPersons(announcementId, start, count);
+            return Json(res.Select(ShortPersonViewData.Create));
         }
     }
 

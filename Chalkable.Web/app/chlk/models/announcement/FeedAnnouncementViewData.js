@@ -71,7 +71,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
-                this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
+                this.classId = SJX.fromValue(raw.classId || raw.classid, chlk.models.id.ClassId);
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
                 this.inGallery = SJX.fromValue(raw.inGallery, Boolean);
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
@@ -159,6 +159,8 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.AnnouncementId, 'announcementForTemplateId',
 
             Boolean, 'ableUseExtraCredit',
+
+            chlk.models.classes.Class, 'clazz',
 
 
             [[Object]],

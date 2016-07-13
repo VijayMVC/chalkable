@@ -34,8 +34,11 @@ NAMESPACE('chlk.controllers', function (){
         function prepareCommentsAttachments_(comments){
             var that = this;
             comments.forEach(function(comment){
-                if(comment.getAttachment())
-                    that.prepareCommentAttachment_(comment.getAttachment());
+                if(comment.getAttachments())
+                    comment.getAttachments().forEach(function(attachment){
+                        that.prepareCommentAttachment_(attachment);
+                    });
+
                 if(comment.getSubComments())
                     that.prepareCommentsAttachments_(comment.getSubComments())
             });
@@ -45,7 +48,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.AnnouncementComment]],
         function postAction(model){
 
-            if(!model.getText() && !(model.getAttachmentId() && model.getAttachmentId().valueOf())){
+            if(!model.getText() && !model.getAttachmentIds()){
                 this.ShowMsgBox('Please enter text or add attachment', 'whoa.');
                 return null;
             }
@@ -65,7 +68,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             var res = this.announcementCommentService[method]
-                (id, model.getText(), model.getAttachmentId())
+                (id, model.getText(), model.getAttachmentIds())
                 .then(function(announcement){
                     this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
                     return announcement;
@@ -136,15 +139,24 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function uploadCommentAttachmentAction(commentId_, files_) {
-            var res = this.attachmentService
-                .uploadAttachment([files_[0]])
-                .then(function(attachment){
-                    this.prepareCommentAttachment_(attachment);
-                    return new chlk.models.announcement.AnnouncementComment(attachment, commentId_);
-                }, this)
-                .attach(this.validateResponse_());
+            if(files_){
+                var arr = [], len = files_.length, that = this;
+                for(var i = 0; i < len; i++){
+                    arr.push(this.attachmentService.uploadAttachment([files_[i]]));
+                }
+                var res = ria.async.wait(arr)
+                    .then(function(attachments){
+                        attachments.forEach(function(attachment){
+                            that.prepareCommentAttachment_(attachment);
+                        });
+                        return new chlk.models.announcement.AnnouncementComment(attachments, commentId_);
+                    })
+                    .attach(this.validateResponse_());
 
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'file-for-comment');
+                return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'file-for-comment');
+            }
+
+            return null;
         }
 
     ])

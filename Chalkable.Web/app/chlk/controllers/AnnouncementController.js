@@ -1323,6 +1323,8 @@ NAMESPACE('chlk.controllers', function (){
 
         function chatAction() {
             var announcement = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
+            var clazz = this.classService.getClassById(announcement.getClassId());
+            announcement.setClazz(clazz);
             return this.StaticView(chlk.activities.announcement.AnnouncementChatPage, ria.async.DeferredData(announcement, 100));
         },
 
@@ -2883,8 +2885,11 @@ NAMESPACE('chlk.controllers', function (){
         function prepareCommentsAttachments_(comments){
             var that = this;
             comments.forEach(function(comment){
-                if(comment.getAttachment())
-                    that.prepareCommentAttachment_(comment.getAttachment());
+                if(comment.getAttachments())
+                    comment.getAttachments().forEach(function(attachment){
+                        that.prepareCommentAttachment_(attachment);
+                    });
+
                 if(comment.getSubComments())
                     that.prepareCommentsAttachments_(comment.getSubComments())
             });

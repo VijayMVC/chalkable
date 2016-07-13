@@ -88,8 +88,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, Guid? courseId, bool firstLevelOnly = false)
         {
-            var deepest = firstLevelOnly ? false : (bool?)null;
-            var standards = await _abConnectorLocator.StandardsConnector.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId, courseId, deepest);
+            var standards = await _abConnectorLocator.StandardsConnector.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId, courseId, null);
             if (firstLevelOnly)
                 standards = standards.Where(x => x.Level == 1).ToList();
             return standards.Select(Standard.Create).OrderBy(x=>x.Code).ThenBy(x=>x.Description).ToList();

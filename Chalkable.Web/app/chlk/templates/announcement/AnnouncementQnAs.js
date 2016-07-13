@@ -21,7 +21,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.people.User, 'owner',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs'
+            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.classes.Class, 'clazz'
 
         ])
 });

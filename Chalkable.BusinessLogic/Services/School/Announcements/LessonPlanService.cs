@@ -233,15 +233,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.InGallery = inGallery;
                 lessonPlan.GalleryOwnerRef = Context.PersonId;
 
-                lessonPlan.DiscussionEnabled = discussionEnabled;
-                lessonPlan.RequireCommentsEnabled = requireCommentsEnabled;
-
                 if (previewCommentsEnabled && discussionEnabled && !lessonPlan.PreviewCommentsEnabled)
                 {
-                    lessonPlan.PreviewCommentsEnabled = true;
                     if(lessonPlan.IsSubmitted)
                         new AnnouncementCommentDataAccess(uow).HideAll(lessonPlan.Id);
                 }
+                lessonPlan.DiscussionEnabled = discussionEnabled;
+                lessonPlan.RequireCommentsEnabled = requireCommentsEnabled;
+                lessonPlan.PreviewCommentsEnabled = previewCommentsEnabled;
+
 
                 if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
                     lessonPlan.LpGalleryCategoryRef = lpGalleryCategoryId;

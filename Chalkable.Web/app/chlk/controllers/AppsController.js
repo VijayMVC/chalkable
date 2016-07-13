@@ -262,8 +262,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[Number, Number, String, Object]],
-        function uploadPictureDeveloperAction(width, height, msg, file) {
-            if (!this.isValidFileExtension(file[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
+        function uploadPictureDeveloperAction(width, height, msg, fileList) {
+            if (!this.isValidFileExtension(fileList[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
                 return this.ShowMsgBox("Sorry, this picture format is invalid", 'Error', [{
                     text: 'Ok',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf(),
@@ -273,7 +273,7 @@ NAMESPACE('chlk.controllers', function (){
                 }]), null;
 
             var result = this.appsService
-                .uploadPicture(file, width, height)
+                .uploadPicture(fileList[0], width, height)
                 .attach(this.validateResponse_())
                 .then(function(id){
                     var pictureUrl = this.pictureService.getPictureUrl(id, width, height);
@@ -301,14 +301,14 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[String, Object]],
-        function uploadScreenshotDeveloperAction(screenshots_, file) {
+        function uploadScreenshotDeveloperAction(screenshots_, fileList) {
 
             var screenshotDims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS();
             var width = screenshotDims.width;
             var height = screenshotDims.height;
             var msg = "Screenshots";
 
-            if (!this.isValidFileExtension(file[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
+            if (!this.isValidFileExtension(fileList[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
                 return this.ShowMsgBox("Sorry, this picture format is invalid", 'Error', [{
                     text: 'Ok',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf(),
@@ -318,7 +318,7 @@ NAMESPACE('chlk.controllers', function (){
                 }]), null;
 
             var result = this.appsService
-                .uploadPicture(file, width, height)
+                .uploadPicture(fileList[0], width, height)
                 .attach(this.validateResponse_())
                 .then(function(id){
                     var screenshots = (screenshots_ || "").split(",");
@@ -745,14 +745,6 @@ NAMESPACE('chlk.controllers', function (){
 
              var isSchoolFlatRateEnabled = model.isSchoolFlatRateEnabled();
              var isClassFlatRateEnabled = model.isClassFlatRateEnabled();
-
-             var appPriceInfo = isFreeApp ? new chlk.models.apps.AppPrice()
-                                          :
-                                            new chlk.models.apps.AppPrice(
-                                                model.getCostPerUser(),
-                                                isClassFlatRateEnabled ? model.getCostPerClass() : null,
-                                                isSchoolFlatRateEnabled ? model.getCostPerSchool(): null
-                                            );
             var cats = this.getIdsList(model.getCategories(), chlk.models.id.AppCategoryId);
             var gradeLevels = this.getIdsList(model.getGradeLevels(), chlk.models.id.GradeLevelId);
             var appPermissions = this.getIdsList(model.getPermissions(), chlk.models.apps.AppPermissionTypeEnum);
@@ -801,7 +793,6 @@ NAMESPACE('chlk.controllers', function (){
                      model.getId(),
                      shortAppData,
                      appPermissions,
-                     appPriceInfo,
                      this.getCurrentPerson().getId(),
                      appAccess,
                      cats,

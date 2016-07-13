@@ -1,7 +1,4 @@
-﻿
-
-
-CREATE Procedure [dbo].[spDeletePersons]
+﻿Create Procedure [dbo].[spDeletePersons]
 @personIds TInt32 readonly
 as
 Delete From AnnouncementAttachment
@@ -40,7 +37,7 @@ or QuestionPersonRef in (Select value from @personIds as ids)
 Delete From LPGalleryCategory where OwnerRef in (Select value from @personIds as ids)
 Delete From AnnouncementGroup where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
 
-
+Delete AnnouncementComment where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
 Delete AnnouncementStandard where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
 Delete AnnouncementApplication where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
 Delete [Notification] where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
@@ -54,3 +51,6 @@ Delete From AdminAnnouncement where AdminRef in (Select value from @personIds as
 Delete From Attachment Where PersonRef in (Select value From @personIds as ids)
 
 Delete from Person Where Id in (Select value From @personIds as ids)
+GO
+
+

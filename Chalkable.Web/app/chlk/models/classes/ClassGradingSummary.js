@@ -14,12 +14,15 @@ NAMESPACE('chlk.models.classes', function(){
                 BASE(raw);
                 this.alphaGrades = SJX.fromArrayOfDeserializables(raw.alphagrades, chlk.models.grading.AlphaGrade);
                 this.alphaGradesForStandards = SJX.fromArrayOfDeserializables(raw.alphagradesforstandards, chlk.models.grading.AlphaGrade);
+                this.schoolYear = SJX.fromDeserializable(raw.schoolyear, chlk.models.schoolYear.Year);
             },
 
             TItem, 'gradingPart',
 
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
-            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGradesForStandards'
+            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGradesForStandards',
+
+            chlk.models.schoolYear.Year, 'schoolYear'
     ]);
 });
