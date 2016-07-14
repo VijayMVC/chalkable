@@ -1,0 +1,187 @@
+button, input[type=button], input[type=submit], input[type=reset], input[type="file"], .file, .button-like
+  font-family: 'Open Sans', sans-serif
+  font-size: 13px
+  line-height: 28px
+  font-weight: 600
+  +text-shadow(transparentize(#fff, .5) 0 1px 0px)
+  text-align: center
+  padding: 0 10px
+  +transition(background-color .1s ease-in)
+
+  outline: none
+  cursor: pointer
+  border-radius: 3px
+  border: 1px solid #c8c7c3
+
+  &
+    border-color: #C8C7C3
+    color: #56554F
+    +text-shadow(transparentize(#C8C7C3, .5) 0 1px 1px)
+    background-color: #FEFEFE
+    +background-image(linear-gradient(top, #FEFEFE 0%, #F9F9F7 50%, #F3F2EE 100%))
+    +box-shadow(transparentize(#000, .55) 0 1px 3px, #FFFFFF 0 1px 0px inset)
+
+    &:not(.same-on-hover)
+      &:hover
+        background: #FFFFFF
+
+      &:active, &.pressed, &.pressed:hover
+        background: #F2F1ED
+
+  &.blue-button
+    border-color: #29596E
+    color: #fff
+    +text-shadow(transparentize(#29596E, .5) 0 1px 1px)
+    background-color: #548BA5
+    +background-image(linear-gradient(top, #558CA6 0%, #447B94 50%, #30677E 100%))
+    +box-shadow(transparentize(#000, .55) 0 1px 3px, #82A3B0 0 1px 0px inset)
+
+    &:not(.same-on-hover)
+      &:hover
+        background: #568EA8
+
+      &:active, &.pressed, &.pressed:hover
+        background: #2E657C
+
+  &.green-button
+    border-color: #327e30
+    color: #fff
+    +text-shadow(transparentize(#327E30, .5) 0 1px 1px)
+    background-color: #6BBA71
+    +background-image(linear-gradient(top, #6BBA71 0%, #4D9B54 50%, #327E30 100%))
+    +box-shadow(transparentize(#000, .55) 0 1px 3px, #82B086 0 1px 0px inset)
+
+    &:not(.same-on-hover)
+      &:hover
+        background: #6DBB72
+
+      &:active, &.pressed, &.pressed:hover
+        background: #2E7C35
+
+  &.negative-button
+    border-color: #C84747
+    color: #fff
+    +text-shadow(transparentize(#C84747, .5) 0 1px 1px)
+    background-color: #DC5D5A
+    +background-image(linear-gradient(top, #DC5D5A 0%,#D15352 50%, #C74A4A 100%))
+    +box-shadow(transparentize(#000, .55) 0 1px 3px, #EA9E9D 0 1px 0px inset)
+
+    &:not(.same-on-hover)
+      &:hover
+        background: #DC5E5B
+
+      &:active, &.pressed, &.pressed:hover
+        background: #C74949
+
+
+  &.disabled, &[disabled]
+    &, &:active, &:hover
+      cursor: default
+      background-color: #999
+      color: #888
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      border-color: #666
+      +background-image(linear-gradient(top, #ccc 0%, transparentize(#ccc, 1) 100%))
+      +box-shadow(transparentize(#000, .5) 0 1px 3px, transparentize(#fff, .22) 0 1px 0px inset)
+
+  &.mid-button
+    line-height: 40px
+    width: 174px
+    text-transform: uppercase
+    font-size: 15px
+
+    &+.grey-link, &+button, &+.action-link
+      margin-left: 17px
+
+  &.big-button
+    line-height: 52px
+    width: 218px
+    text-transform: uppercase
+    font-size: 17px
+
+    &+.grey-link, &+button, &+.action-link
+      margin-left: 21px
+
+.grey-link
+  font-style: italic
+
+.file
+  position: relative
+  z-index: 0
+  overflow: hidden
+  cursor: pointer
+
+  INPUT
+    opacity: 0
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 1
+    cursor: pointer
+
+.remove-red-btn
+  position: absolute
+  top: -8px
+  cursor: pointer
+  right: -8px
+  +icons-24-sprite(remove, 0, -3px, -3px)
+  width: 17px
+  height: 17px
+  z-index: 3
+  border-radius: 8px
+
+.print-btn, .copy-btn, .tools-btn
+  width: 32px
+  height: 32px
+  display: inline-block
+
+.print-btn
+  +icons-32-sprite(print)
+
+.copy-btn
+  +icons-32-sprite(copy)
+
+.tools-btn
+  +icons-32-sprite(tools)
+
+.import-icon
+  width: 24px
+  height: 24px
+  display: inline-block
+  +icons-24-sprite(import)
+
+.import-small-icon
+  width: 24px
+  height: 24px
+  display: inline-block
+  +icons-24-sprite(import-small)
+
+@each $icon in reply, edit-grey, invisible-grey, visible, x-remove
+  .#{$icon}-icon
+    width: 24px
+    height: 24px
+    display: inline-block
+    +icons-24-sprite($icon)
+
+
+BUTTON .import-small-icon
+  position: relative
+  left: -4px
+
+.add-plus-btn
+  text-decoration: none
+  font-weight: bold
+
+  SPAN
+    display: inline-block
+    width: 24px
+    height: 24px
+    border-radius: 50%
+    background: #41b768
+    font-size: 24px
+    line-height: 22px
+    text-align: center
+    color: white
+    font-weight: normal
+    vertical-align: middle
+    margin-left: 8px
