@@ -1,0 +1,152 @@
+.grading-summary
+
+  .grading-stats
+    .glance-box
+      margin-right: 10px
+  .students-line
+    position: relative
+    display: none
+    border-top: 1px solid #969696
+    border-bottom: 1px solid #bebebe
+    box-shadow: 0 1px 0 white
+    margin: -1px 78px 48px
+
+    >SPAN
+      position: absolute
+      color: #989898
+      top: 10px
+      font-size: 12px
+
+      &.n-0
+        left: -1px
+
+      &.n-100
+        right: -9px
+
+    .student-pic-container
+      position: absolute
+      text-align: center
+      top: -13px
+
+      .student-pic
+        display: inline-block
+        width: 16px
+        height: 21px
+
+      .student-triangle
+        display: none
+        width: 8px
+        height: 6px
+        margin: 0 auto
+        margin-top: -2px
+
+      .student-pic
+        +icons-24-sprite(smal-pic-grey)
+
+      .student-triangle
+        +icons-24-sprite(smal-pic-triangle-grey)
+
+      &.trouble
+        .student-pic
+          +icons-24-sprite(smal-pic-red)
+
+        .student-triangle
+          +icons-24-sprite(smal-pic-triangle-red)
+
+      &.well
+        .student-pic
+          +icons-24-sprite(smal-pic-blue)
+
+        .student-triangle
+          +icons-24-sprite(smal-pic-triangle-blue)
+
+      &.hovered, &:hover
+        z-index: 10
+        .student-triangle
+          display: block
+
+  .chlk-calendar
+    text-align: center
+
+  .image-container
+    border-radius: 50%
+    border: 2px solid #fff
+
+    &:not(:hover):not(.hovered)
+      +box-shadow(0 1px 1px grey)
+
+      &.trouble
+        +box-shadow(0 1px 3px #d68383)
+
+      &.well
+        +box-shadow(0 1px 3px #73b4ca)
+
+  .chlk-calendar .header > a
+    font-size: 14px
+    font-weight: bold
+    text-decoration: none
+    text-transform: uppercase
+
+  .show-less
+    color: #989898
+    text-shadow: 1px 1px 0 white
+    font: normal 12px Arial
+    text-transform: uppercase
+    float: right
+    display: none
+    cursor: pointer
+    position: absolute
+    right: 82px
+    top: 25px
+
+  .students-block
+    width: 670px
+    text-align: left
+    margin: 28px auto
+
+    .student-item:not(.trouble):not(.well)
+      display: none
+
+    >A
+      display: inline-block
+      margin: 0 8px 7px 0
+      vertical-align: top
+
+      &.empty-container
+        width: 53px
+
+      &:last-child
+        margin-right: 0
+
+    .person-avatar-m-47, .person-avatar-w-47
+      width: 49px
+      height: 49px
+
+    .all-button
+      width: 58px
+      height: 54px
+      margin-right: 8px
+
+  .class-block.active
+    .students-line
+      display: block
+
+    .students-block
+      width: auto
+      margin: 28px 70px
+      display: inline-block
+
+    .student-item:not(.trouble):not(.well)
+      display: inline-block
+
+    .show-less
+      display: inline-block
+      text-decoration: none
+
+      span
+        font: bold 14px Arial
+        display: inline-block
+        margin-right: 4px
+
+    .all-button
+      display: none
