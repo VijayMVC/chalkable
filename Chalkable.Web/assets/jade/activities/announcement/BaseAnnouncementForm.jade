@@ -158,16 +158,19 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                             +SlideCheckbox('discussionenabled', classAnnouncement.isDiscussionEnabled(), false, false)(
                                 data-isdiscussionenabled=classAnnouncement.isDiscussionEnabled(),
                                 data-tooltip-timeout=500,
+                                data-tooltip=Msg.Class_Discussion_Tooltip_Message
                             ).discussion-option
                         .check-box-container
                             label(for="ann-previewcommentsenabled")=Msg.Preview_Comments
                             +SlideCheckbox('previewcommentsenabled', classAnnouncement.isPreviewCommentsEnabled(), false, !classAnnouncement.isDiscussionEnabled())(
                                 data-tooltip-timeout=500,
+                                data-tooltip=Msg.Class_Discussion_Preview_Comments_Tooltip_Message
                             ).preview-comments-option
                         .check-box-container
                             label(for="ann-requirecommentsenabled")=Msg.Require_Comments
                             +SlideCheckbox('requirecommentsenabled', classAnnouncement.isRequireCommentsEnabled(), false, !classAnnouncement.isDiscussionEnabled())(
                                 data-tooltip-timeout=500,
+                                data-tooltip=Msg.Class_Discussion_Require_Comments_Tooltip_Message
                             ).require-comments-option
 
     .apps-attachments-bock.attachments-and-applications
