@@ -145,7 +145,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 {
                     AdminAnnouncements = new List<AdminAnnouncement>(),
                     ClassAnnouncements = new List<ClassAnnouncement>(),
-                    LessonPlans = new List<LessonPlan>()
+                    LessonPlans = new List<LessonPlan>(),
+                    SupplementalAnnouncements = new List<SupplementalAnnouncement>()
                 };
 
             if (classId.HasValue || studentId.HasValue || teacherId.HasValue || !BaseSecurity.IsDistrictAdmin(Context))
