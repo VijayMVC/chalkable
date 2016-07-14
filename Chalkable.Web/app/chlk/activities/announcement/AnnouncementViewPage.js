@@ -1082,10 +1082,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     editForm = parent.find('>FORM.edit-form'),
                     idNode = editForm.find('.attachment-id'),
                     textArea = editForm.find('.comment-value'),
-                    imgCnt = editForm.find('.img-cnt');
+                    imgCnt = editForm.find('.imgs-cnt');
                 idNode.setValue(idNode.getData('value'));
                 textArea.setValue(textArea.getData('value'));
-                imgCnt.setHTML(parent.find('>DIV.chat-bubble').find('.img-cnt').getHTML());
+                imgCnt.setHTML(parent.find('>DIV.chat-bubble').find('.imgs-cnt').getHTML());
             }
         ]
     );
