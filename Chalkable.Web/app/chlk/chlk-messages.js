@@ -708,8 +708,8 @@ var Msg = {
     Weeks_ago: function(n){
         String.format('{0} week{1} ago', n, (n==1 ? '' : 's'));
     },
-    Weight_Addition: 'Weight Addition',
-    Weight_Multiplier:'Weight Multiplier',
+    Weight_Addition: 'Wt. Addition',
+    Weight_Multiplier:'Wt. Multiplier',
     Working_filter: 'Working filter',
     Worksheet_Report: 'Worksheet Report',
     Whole_day: 'Whole day',
