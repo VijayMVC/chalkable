@@ -255,7 +255,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if(additionalParams == null)
                 additionalParams = new Dictionary<string, object>();
             
-            additionalParams.Add("schoolYearId", schoolYearId);
+            additionalParams.Add("schoolYearId", query.ClassId.HasValue ? (int?)null : schoolYearId);
             additionalParams.Add("classId", query.ClassId);
 
             return InternalGetAnnouncements<LessonPlansQuery>(procedureName, query, additionalParams);
