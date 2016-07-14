@@ -99,8 +99,16 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna')],
             VOID, function updateQnAPart(tpl, model, msg_) {
-                var len = model.getAnnouncementQnAs().length;
-                this.dom.find('.chat-link').setHTML(len.toString());
+                var res = 0;
+
+                model.getAnnouncementQnAs().forEach(function(item){
+                    if(item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+                        res+=1;
+
+                    res+=1;
+                });
+
+                this.dom.find('.chat-link').setHTML(res ? res.toString() : '');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
