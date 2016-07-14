@@ -28,7 +28,10 @@ BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add
                     +HeaderLink_('SE', orderByEnum.IEP_ACTIVE)(data-tooltip="Special Education").iep-active
                     +HeaderLink_('RT', orderByEnum.RETAINED)(data-tooltip="Retained").retained
                     each test in tests
-                        .cell.test= test.getFullName()
+                        .cell.test(
+                            data-tooltip=test.getFullName(),
+                            data-tooltip-type="overflow"
+                        )= test.getFullName()
                 each student in students
                     -var info = student.getStudent()
                     .grid-row(data-id=info.getId().valueOf())
