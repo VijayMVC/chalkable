@@ -64,7 +64,7 @@ NAMESPACE('chlk.models.panorama', function () {
             String, 'absenceReasonName',
             String, 'absenceLevel',
             String, 'absenceCategory',
-            ArrayOf(Number), 'periods',
+            ArrayOf(String), 'periods',
             String, 'note',
 
             VOID, function deserialize(raw) {
@@ -72,7 +72,7 @@ NAMESPACE('chlk.models.panorama', function () {
                 this.absenceReasonName = SJX.fromValue(raw.absencereasonname, String);
                 this.absenceLevel = SJX.fromValue(raw.absencelevel, String);
                 this.absenceCategory = SJX.fromValue(raw.absencecategory, String);
-                this.periods = SJX.fromArrayOfValues(raw.periods, Number);
+                this.periods = SJX.fromArrayOfValues(raw.periods, String);
             },
 
             function getPeriodsText(){

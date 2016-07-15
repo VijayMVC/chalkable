@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             var res = new ClassProfilePanoramaSetting
             {
                 SchoolYearIds = previousSchoolYear.Select(x => x.Id).ToList(),
-                StandardizedTestFilters = adminPanoramaSettings.CourseTypeDefaultSettings.FirstOrDefault(x => x.CourseTypeId == @class.Id)?.StandardizedTestFilters
+                StandardizedTestFilters = adminPanoramaSettings.CourseTypeDefaultSettings?.FirstOrDefault(x => x.CourseTypeId == @class.Id)?.StandardizedTestFilters
                     ?? new List<StandardizedTestFilter>()
             };
 

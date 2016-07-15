@@ -99,8 +99,16 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna')],
             VOID, function updateQnAPart(tpl, model, msg_) {
-                var len = model.getAnnouncementQnAs().length;
-                this.dom.find('.chat-link').setHTML(len.toString());
+                var res = 0;
+
+                model.getAnnouncementQnAs().forEach(function(item){
+                    if(item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+                        res+=1;
+
+                    res+=1;
+                });
+
+                this.dom.find('.chat-link').setHTML(res ? res.toString() : '');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
@@ -1082,10 +1090,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     editForm = parent.find('>FORM.edit-form'),
                     idNode = editForm.find('.attachment-id'),
                     textArea = editForm.find('.comment-value'),
-                    imgCnt = editForm.find('.img-cnt');
+                    imgCnt = editForm.find('.imgs-cnt');
                 idNode.setValue(idNode.getData('value'));
                 textArea.setValue(textArea.getData('value'));
-                imgCnt.setHTML(parent.find('>DIV.chat-bubble').find('.img-cnt').getHTML());
+                imgCnt.setHTML(parent.find('>DIV.chat-bubble').find('.imgs-cnt').getHTML());
             }
         ]
     );

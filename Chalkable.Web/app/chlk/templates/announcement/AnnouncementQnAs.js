@@ -18,6 +18,12 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'annOwner',
 
             [ria.templates.ModelPropertyBind],
+            String, 'title',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'type',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.people.User, 'owner',
 
             [ria.templates.ModelPropertyBind],

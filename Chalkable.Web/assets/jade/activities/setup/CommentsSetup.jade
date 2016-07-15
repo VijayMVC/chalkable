@@ -18,7 +18,7 @@ mixin ReportCell(value)
                     .cell
                         +Checkbox('allchecks', false).all-checkboxes
                     .cell= Msg.Comment
-                    .cell= Msg.Is_system
+                    .cell= ''
                 each comment in self.getComments()
                     -var disabledClick = !comment.isEditable() || !self.isAbleEdit()
                     .row
@@ -26,8 +26,9 @@ mixin ReportCell(value)
                             +Checkbox('commentyId', false, disabledClick).item-check
                         .cell
                             +ActionLink('setup', 'addEditComment', comment.getCommentId())(disabled=disabledClick ? "disabled" : null, data-tooltip=comment.getComment(), data-tooltip-type="overflow").text=comment.getComment()
-                        .cell
-                            .text #{comment.isSystem() ? '+' : ''}
+                        .cell.lock
+                            if comment.isSystem()
+                                .lock-icon(data-tooltip="Locked")
         +Hidden('ids', '').ids-to-delete
         .buttons-block
             +ActionButton('setup', 'addEditComment')(type="button", disabled = !self.isAbleEdit()).chlk-button.blue-button=Msg.Add

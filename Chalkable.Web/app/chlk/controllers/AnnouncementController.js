@@ -1323,8 +1323,10 @@ NAMESPACE('chlk.controllers', function (){
 
         function chatAction() {
             var announcement = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
-            var clazz = this.classService.getClassById(announcement.getClassId());
-            announcement.setClazz(clazz);
+            if(announcement.getType() != chlk.models.announcement.AnnouncementTypeEnum.ADMIN){
+                var clazz = this.classService.getClassById(announcement.getClassId());
+                announcement.setClazz(clazz);
+            }
             return this.StaticView(chlk.activities.announcement.AnnouncementChatPage, ria.async.DeferredData(announcement, 100));
         },
 
@@ -1368,7 +1370,9 @@ NAMESPACE('chlk.controllers', function (){
                     var announcement = res[0], students = this.prepareUsers(res[1]);
                     announcement.setStudents(students);
                     this.cacheAnnouncementType(announcement.getType());
-                    return this.prepareAnnouncementForView(announcement);
+                    announcement = this.prepareAnnouncementForView(announcement);
+                    this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, announcement);
+                    return announcement;
                 }, this);
 
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
