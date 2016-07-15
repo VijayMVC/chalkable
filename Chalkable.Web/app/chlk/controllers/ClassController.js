@@ -347,6 +347,8 @@ NAMESPACE('chlk.controllers', function (){
             function panoramaAction(classId){
                 var result = this.getPanorama_(classId);
 
+                this.userTrackingService.viewClassPanorama();
+
                 return this.PushView(chlk.activities.classes.ClassPanoramaPage, result);
             },
 

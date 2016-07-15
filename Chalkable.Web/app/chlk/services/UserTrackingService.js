@@ -21,6 +21,26 @@ NAMESPACE('chlk.services', function () {
                 this.sendTrackEvent_("Took Assessment", {});
             },
 
+            VOID, function viewClassPanorama(){
+                this.sendTrackEvent_("View Class Panorama", {});
+            },
+
+            VOID, function viewStudentPanorama(){
+                this.sendTrackEvent_("View Student Panorama", {});
+            },
+
+            VOID, function viewGallery(){
+                this.sendTrackEvent_("View Gallery", {});
+            },
+
+            VOID, function copiedActivities(){
+                this.sendTrackEvent_("Copied Activities", {});
+            },
+
+            VOID, function importActivities(){
+                this.sendTrackEvent_("Import Activities", {});
+            },
+
             [[String]],
             VOID, function clickedAction(actionName){
                 this.sendTrackEvent_("performed action: " + actionName, {});
