@@ -444,7 +444,7 @@ NAMESPACE('chlk.controllers', function (){
                 appUrlAppend_ += 'contentId=' + contentId;
             if(standardsUrlComponents_)
                 appUrlAppend_ += '&' + standardsUrlComponents_;
-            return this.tryToAttachAction('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
+            return this.tryToAttachAction(annId, appId, announcementType, appUrlAppend_);
         },
 
         [chlk.controllers.StudyCenterEnabled()],
@@ -454,7 +454,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function openSuggestedAppTeacherAction(appId, annId, announcementType, appUrlAppend_){
-            return this.tryToAttachAction('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
+            return this.tryToAttachAction(annId, appId, announcementType, appUrlAppend_);
         },
 
 
