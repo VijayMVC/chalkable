@@ -21,12 +21,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             Trace.Assert(Context.PersonId.HasValue);
 
             var draft = SchoolLocator.ClassAnnouncementService.GetLastDraft();
-            var classAnnType = classAnnouncementTypeId.HasValue
+            var classAnnType = classAnnouncementTypeId.HasValue 
                 ? SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypeById(classAnnouncementTypeId.Value)
                 : null;
 
-            if (classAnnType != null && classAnnType.ClassRef != classId) classAnnType = null;
-            
+            if (classAnnType?.ClassRef != classId)
+                classAnnType = null;
+
+            if (classAnnType == null && draft?.ClassAnnouncementTypeRef != null && draft.ClassRef == classId)
+                classAnnType = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypeById(draft.ClassAnnouncementTypeRef.Value);
+
             if (classAnnType == null)
             {
                 var classAnnTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
@@ -34,7 +38,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                     throw new NoClassAnnouncementTypeException("Item can't be created. Current Class doesn't have classAnnouncementTypes");
                 classAnnType = classAnnTypes.First();
             }
-            if (classAnnType != null && draft != null && (draft.ClassAnnouncementTypeRef != classAnnType.Id || draft.ClassRef != classId))
+
+            if (draft != null && draft.ClassAnnouncementTypeRef != classAnnType.Id)
             {
                 draft.ClassAnnouncementTypeRef = classAnnType.Id;
                 var classAnnInfo = ClassAnnouncementInfo.Create(draft);
@@ -42,20 +47,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 SchoolLocator.ClassAnnouncementService.Edit(classAnnInfo);
             }
 
-            if (classAnnType != null)
-            {
-                var annExpiredDate = GenerateDefaultExpiresDate(expiresDate);
-                var annDetails = SchoolLocator.ClassAnnouncementService.Create(classAnnType, classId, annExpiredDate);
-                var classAnn = annDetails.ClassAnnouncementData;
+            var annExpiredDate = GenerateDefaultExpiresDate(expiresDate);
+            var annDetails = SchoolLocator.ClassAnnouncementService.Create(classAnnType, classId, annExpiredDate);
+            var classAnn = annDetails.ClassAnnouncementData;
                 
-                // annExporedDate was assigned to have a correct announcements orderings, lets clear it if not user-provided
-                if (!expiresDate.HasValue && classAnn.Expires == annExpiredDate)
-                    classAnn.Expires = DateTime.MinValue;
+            // annExporedDate was assigned to have a correct announcements orderings, lets clear it if not user-provided
+            if (!expiresDate.HasValue && classAnn.Expires == annExpiredDate)
+                classAnn.Expires = DateTime.MinValue;
 
-                Debug.Assert(Context.PersonId.HasValue);
-                return Json(PrepareCreateAnnouncementViewData(annDetails));
-            }
-            return Json(null, 7);
+            Debug.Assert(Context.PersonId.HasValue);
+            return Json(PrepareCreateAnnouncementViewData(annDetails));
         }
 
 
