@@ -54,6 +54,9 @@ NAMESPACE('chlk.controllers', function () {
                             filter_
                         );
                     }, this);
+
+                this.userTrackingService.viewGallery();
+
                 return this.PushOrUpdateView(chlk.activities.announcement.LessonPlanGalleryPage, result);
             },
 

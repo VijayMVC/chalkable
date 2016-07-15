@@ -171,6 +171,7 @@ NAMESPACE('chlk.controllers', function (){
             else
                 res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
                     .then(function(createdList){
+                        this.userTrackingService.importActivities();
                         this.WidgetComplete(model.getRequestId(), createdList);
                         this.BackgroundCloseView(chlk.activities.announcement.AnnouncementImportDialog);
                         return ria.async.BREAK;
