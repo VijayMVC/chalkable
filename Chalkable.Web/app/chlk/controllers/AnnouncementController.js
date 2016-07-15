@@ -2587,9 +2587,10 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setAppsWithContent(model.getAppsWithContent());
                         announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
                         announcement.setState(model.getState());
-                        announcement.setDiscussionEnabled(model.isDiscussionEnabled())
-                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled())
-                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled())
+                        announcement.setAbleUseExtraCredit(model.isAbleUseExtraCredit());
+                        announcement.setDiscussionEnabled(model.isDiscussionEnabled());
+                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled());
+                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled());
 
                         //announcement.setClassName(model.getClassAnnouncementData().getClassName());
                         form_.setAnnouncement(announcement);
