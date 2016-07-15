@@ -1,0 +1,44 @@
+-var isOwner = self.getOwner() && self.getOwner().getId() == self.getCurrentUser().getId()
+
+.table.row(class=self.isHidden() ? 'hidden-comment' : '')
+    .avatar-block-left
+        +PersonImg(self.getOwner(), 47)
+        br
+        SPAN=self.getOwner() && self.getOwner().getFullName()
+    .qna
+        input(type="hidden",name="id", value=self.getId())
+        +Hidden('attachmentId').attachment-id
+        .chat-bubble.relative
+            .top-block
+                SPAN.time=self.getPostedDate() && self.getPostedDate().getDate().format('M d, Y @ h:i:s A')
+                .right
+                    if isOwner
+                        .edit-grey-icon(data-tooltip="Edit")
+                    .reply-icon(data-tooltip="Reply")
+                    if !self.getUserRole().isStudent()
+                        if self.isHidden()
+                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), false).visible-icon(data-tooltip="Make Visible")
+                        else
+                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), true).invisible-grey-icon(data-tooltip="Make Invisible")
+                        .x-remove-icon(data-tooltip="Remove")
+            p.edit-question-text= self.getText()
+            if self.getAttachment()
+                .img-cnt
+                    +RenderWith(self.getAttachment(), chlk.templates.LoadingImageTpl)
+
+            .delete-block.cover-container
+                .delete-content
+                    .text Do you want to delete this comment ?
+                    +ActionButton('announcementcomment', 'deleteComment', self.getId()).negative-button Delete
+                    BUTTON(type="button").delete-cancel Cancel
+
+        if isOwner
+            +PostCommentForm(null, null, self.getId(), self.getAttachment(), self.getText()).edit-form
+        +PostCommentForm(null, self.getId()).reply-form
+
+        if self.getSubComments()
+            .comments-block
+                +RenderWith(self.getSubComments(), chlk.templates.announcement.AnnouncementCommentTpl)(
+                    userRole = self.getUserRole(),
+                    currentUser = self.getCurrentUser()
+                )
