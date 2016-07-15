@@ -11,6 +11,7 @@ REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.announcement.admin.AdminAnnouncementGradingTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementDiscussionTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementCommentTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementCommentAttachmentsTpl');
 REQUIRE('chlk.templates.LoadingImageTpl');
 
 REQUIRE('chlk.models.grading.AlertsEnum');
@@ -78,25 +79,36 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(null, 'file-for-comment')],
             VOID, function updateCommentFile(tpl, model, msg_) {
-                var tpl = new chlk.templates.LoadingImageTpl();
-                var container, attachmentIdNode, attachment = model.getAttachment();
-                tpl.assign(attachment);
+                var tpl = new chlk.templates.announcement.AnnouncementCommentAttachmentsTpl(), attachments = model.getAttachments(),
+                    attachmentIdNode, ids = attachments.map(function(attachment){return attachment.getId().valueOf()}),
+                    oldIds, container;
+                tpl.assign(model);
                 if(model.getId() && model.getId().valueOf()){
                     var form = this.dom.find('.post-comment-form:visible[data-id=' + model.getId().valueOf() + ']');
-                    container = form.find('.img-cnt');
-                    attachmentIdNode = form.find('.attachment-id')
+                    container = form.find('.imgs-cnt');
+                    attachmentIdNode = form.find('.attachment-id');
                 }else{
-                    container = this.dom.find('.new-comment .img-cnt');
+                    container = this.dom.find('.new-comment .imgs-cnt');
                     attachmentIdNode = this.dom.find('.new-comment .attachment-id');
                 }
-                tpl.renderTo(container.empty());
-                attachmentIdNode.setValue(attachment.getId().valueOf());
+                tpl.renderTo(container);
+                oldIds = attachmentIdNode.getValue() ? attachmentIdNode.getValue().split(',') : [];
+                ids = oldIds.concat(ids);
+                attachmentIdNode.setValue(ids.join(','));
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna')],
             VOID, function updateQnAPart(tpl, model, msg_) {
-                var len = model.getAnnouncementQnAs().length;
-                this.dom.find('.chat-link').setHTML(len.toString());
+                var res = 0;
+
+                model.getAnnouncementQnAs().forEach(function(item){
+                    if(item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+                        res+=1;
+
+                    res+=1;
+                });
+
+                this.dom.find('.chat-link').setHTML(res ? res.toString() : '');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
@@ -1060,6 +1072,17 @@ NAMESPACE('chlk.activities.announcement', function () {
                 node.closest('.qna').addClass('for-edit').removeClass('for-reply');
             },
 
+            [ria.mvc.DomEventBind('click', '.delete-attachment')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function deleteCommentAttachmentClick(node, event){
+                var idsNode = node.parent('form').find('.attachment-id'),
+                    ids = idsNode.getValue().split(','), currentId = node.getData('id').toString();
+
+                ids.splice(ids.indexOf(currentId), 1);
+                idsNode.setValue(ids.length ? ids.join(',') : '');
+                node.parent('.img-cnt').removeSelf();
+            },
+
             [ria.mvc.DomEventBind('click', '.edit-form .comment-cancel')],
             [[ria.dom.Dom, ria.dom.Event]],
             function editCancelClick(node, event){
@@ -1067,10 +1090,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     editForm = parent.find('>FORM.edit-form'),
                     idNode = editForm.find('.attachment-id'),
                     textArea = editForm.find('.comment-value'),
-                    imgCnt = editForm.find('.img-cnt');
+                    imgCnt = editForm.find('.imgs-cnt');
                 idNode.setValue(idNode.getData('value'));
                 textArea.setValue(textArea.getData('value'));
-                imgCnt.setHTML(parent.find('>DIV.chat-bubble').find('.img-cnt').getHTML());
+                imgCnt.setHTML(parent.find('>DIV.chat-bubble').find('.imgs-cnt').getHTML());
             }
         ]
     );

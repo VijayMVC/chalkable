@@ -154,7 +154,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
 
             MasterLocator.UserTrackingService.UsedStandardsExplorer(Context.Login, "student explorer");
-            var res = StudentExplorerViewData.Create(studentExplorerInfo, stHealsConditions, customAlerts);
+            var res = StudentExplorerViewData.Create(studentExplorerInfo, stHealsConditions, customAlerts, Context.Claims);
             return Json(res);
         }
 
@@ -244,7 +244,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
 
-            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements, classAnnouncementTypes, customAlerts, stHealsConditions);
+            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements, classAnnouncementTypes, customAlerts, 
+                stHealsConditions, Context.Claims);
             return Json(res);
         }
 

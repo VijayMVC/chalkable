@@ -232,16 +232,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 suppAnnouncement.VisibleForStudent = visibleForStudent;
                 suppAnnouncement.ClassAnnouncementTypeRef = classAnnouncementTypeId;
 
-                suppAnnouncement.DiscussionEnabled = discussionEnabled;
-                suppAnnouncement.RequireCommentsEnabled = requireCommentsEnabled;
-
                 if (previewCommentsEnabled && discussionEnabled && !suppAnnouncement.PreviewCommentsEnabled)
                 {
-                    suppAnnouncement.PreviewCommentsEnabled = true;
                     if(suppAnnouncement.IsSubmitted)
                         new AnnouncementCommentDataAccess(uow).HideAll(suppAnnouncement.Id);
                 }
-                
+                suppAnnouncement.DiscussionEnabled = discussionEnabled;
+                suppAnnouncement.RequireCommentsEnabled = requireCommentsEnabled;
+                suppAnnouncement.PreviewCommentsEnabled = previewCommentsEnabled;
+
+
                 if (suppAnnouncement.IsSubmitted)
                     ValidateSupplementalAnnouncement(suppAnnouncement, da, ServiceLocator, recipientsIds, classId);
 

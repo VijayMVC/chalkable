@@ -17,14 +17,14 @@
                     .reply-icon(data-tooltip="Reply")
                     if !self.getUserRole().isStudent()
                         if self.isHidden()
-                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), false).visible-icon(data-tooltip="Make Visible")
+                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), false).invisible-grey-icon(data-tooltip="Make Visible")
                         else
-                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), true).invisible-grey-icon(data-tooltip="Make Invisible")
+                            +ActionLink('announcementcomment', 'setCommentHidden', self.getId(), true).visible-icon(data-tooltip="Make Invisible")
                         .x-remove-icon(data-tooltip="Remove")
             p.edit-question-text= self.getText()
-            if self.getAttachment()
-                .img-cnt
-                    +RenderWith(self.getAttachment(), chlk.templates.LoadingImageTpl)
+            .imgs-cnt
+                if self.getAttachments()
+                    +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementCommentAttachmentsTpl)
 
             .delete-block.cover-container
                 .delete-content
@@ -33,7 +33,7 @@
                     BUTTON(type="button").delete-cancel Cancel
 
         if isOwner
-            +PostCommentForm(null, null, self.getId(), self.getAttachment(), self.getText()).edit-form
+            +PostCommentForm(null, null, self).edit-form
         +PostCommentForm(null, self.getId()).reply-form
 
         if self.getSubComments()

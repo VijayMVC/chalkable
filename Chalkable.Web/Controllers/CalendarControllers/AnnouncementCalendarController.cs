@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -43,7 +44,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              }
              var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, true, start, end);
              return Json(PrepareMonthCalendar(start, end, date.Value, (dateTime, isCurrentMonth) => 
-                 AnnouncementMonthCalendarViewData.Create(dateTime, isCurrentMonth, announcementList, days)));
+                 AnnouncementMonthCalendarViewData.Create(dateTime, isCurrentMonth, announcementList, days, Context.Claims)));
          }
 
          [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
@@ -52,9 +53,9 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              //todo : investigate where this method is used
              var annList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(startDate, endDate, false, classId, filterByStartDate: false);
              var res = new List<AnnouncementViewData>();
-             res.AddRange(annList.LessonPlans.Select(AnnouncementViewData.Create));
-             res.AddRange(annList.ClassAnnouncements.Select(AnnouncementViewData.Create));
-             res.AddRange(annList.AdminAnnouncements.Select(AnnouncementViewData.Create));
+             res.AddRange(annList.LessonPlans.Select(x => AnnouncementViewData.Create(x, Context.Claims)));
+             res.AddRange(annList.ClassAnnouncements.Select(x => AnnouncementViewData.Create(x, Context.Claims)));
+             res.AddRange(annList.AdminAnnouncements.Select(x => AnnouncementViewData.Create(x, Context.Claims)));
              return Json(res);
          }
 
@@ -62,26 +63,26 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          public ActionResult ListClassAnnsByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
          {
              var res = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(startDate, endDate, classId, null, null);
-             return Json(ClassAnnouncementViewData.Create(res));
+             return Json(ClassAnnouncementViewData.Create(res, Context.Claims));
          }
 
          [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
          public ActionResult Week(DateTime? date, int? classId, int? personId)
          {
 
-             var res = BuildDayAnnCalendar(SchoolLocator, date, classId, personId, GetCurrentSchoolYearId());
+             var res = BuildDayAnnCalendar(SchoolLocator, date, classId, personId, GetCurrentSchoolYearId(), Context.Claims);
              return Json(res, 8);
          }
 
          [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Schedule })]
          public ActionResult Day(DateTime? date, int? personId)
          {
-             var res = BuildDayAnnCalendar(SchoolLocator, date, null, personId, GetCurrentSchoolYearId());
+             var res = BuildDayAnnCalendar(SchoolLocator, date, null, personId, GetCurrentSchoolYearId(), Context.Claims);
              return Json(res, 8);
          }
 
          public static IList<AnnouncementCalendarWeekViewData> BuildDayAnnCalendar(IServiceLocatorSchool locator, DateTime? date,
-             int? classId, int? personId, int schoolYearId)
+             int? classId, int? personId, int schoolYearId, IList<ClaimInfo> claims)
          {
 
              DateTime start, end;
@@ -107,7 +108,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  var adminAnns = announcementList.AdminAnnouncements.Where(x => x.Expires.Date == d).ToList();
                  var supplementalAnns = announcementList.SupplementalAnnouncements.Where(x => x.Expires.Date == d).ToList();
                  var daySchedule = schedule.Where(x => x.Day == d).ToList();
-                 var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, classAnns, lessonPlans, supplementalAnns, locator.Context.NowSchoolTime);
+                 var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, classAnns, lessonPlans, supplementalAnns, locator.Context.NowSchoolTime, claims);
                  res.Add(AnnouncementCalendarWeekViewData.Create(d, annPeriods, adminAnns));
              }
              return res;

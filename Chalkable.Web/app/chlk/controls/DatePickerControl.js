@@ -225,6 +225,9 @@ NAMESPACE('chlk.controls', function () {
                                 }
 
                                 that.updateValue(node);
+
+                                if(date)
+                                    node.trigger('change');
                             }
                         });
 

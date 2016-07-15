@@ -169,7 +169,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 standards = da.SearchStandards(filter, activeOnly);
                 if (classId.HasValue)
                 {
-                    var standardsByClass = da.GetStandards(new StandardQuery {ClassId = classId, ActiveOnly = activeOnly});
+                    var standardsByClass = da.GetStandards(new StandardQuery {ClassId = classId, ActiveOnly = activeOnly, AllStandards = true});
                     standards = standards.Where(s => standardsByClass.Any(s2 => s2.Id == s.Id)).ToList();
                 }
                 if (deepest.HasValue)

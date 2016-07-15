@@ -26,25 +26,28 @@ NAMESPACE('chlk.models.announcement', function () {
                 var days = 0;
                 var expTxt = "";
                 var expires = this.getExpiresDate();
-                var expiresDate = expires.getDate();
-                var date = expires.format('(D m/d)');
-                this.setExpiresDateColor('blue');
-
-                if(formatDate(now, 'dd-mm-yy') == expires.format('dd-mm-yy')){
+                if(expires){
+                    var expiresDate = expires.getDate();
+                    var date = expires.format('(D m/d)');
                     this.setExpiresDateColor('blue');
-                    this.setExpiresDateText(Msg.Due_today);
-                }else{
-                    if(now > expires.getDate()){
-                        this.setExpiresDateColor('red');
-                        days = getDateDiffInDays(expiresDate, now);
-                        expTxt = days == 1 ? Msg.Due_yesterday + " " + date : Msg.Due_days_ago(days) + " " + date;
 
+                    if(formatDate(now, 'dd-mm-yy') == expires.format('dd-mm-yy')){
+                        this.setExpiresDateColor('blue');
+                        this.setExpiresDateText(Msg.Due_today);
                     }else{
-                        days = getDateDiffInDays(now, expiresDate);
-                        expTxt = days == 1 ? Msg.Due_tomorrow + " " + date : Msg.Due_in_days(days) + " " + date;
+                        if(now > expires.getDate()){
+                            this.setExpiresDateColor('red');
+                            days = getDateDiffInDays(expiresDate, now);
+                            expTxt = days == 1 ? Msg.Due_yesterday + " " + date : Msg.Due_days_ago(days) + " " + date;
+
+                        }else{
+                            days = getDateDiffInDays(now, expiresDate);
+                            expTxt = days == 1 ? Msg.Due_tomorrow + " " + date : Msg.Due_in_days(days) + " " + date;
+                        }
+                        this.setExpiresDateText(expTxt);
                     }
-                    this.setExpiresDateText(expTxt);
                 }
+
             }
         ]);
 });

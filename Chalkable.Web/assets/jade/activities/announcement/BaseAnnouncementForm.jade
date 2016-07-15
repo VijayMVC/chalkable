@@ -113,7 +113,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                 .advanced-options
                     .separator.x-hidden
                     .advanced-options-container.x-hidden.popup-bubble.top
-                        .weight-multiplier.new-input-container
+                        .weight-multiplier.new-input-container.i-b.v-m
                             label(for="ann-weightmultiplier")= Msg.Weight_Multiplier
                             input#ann-weightmultiplier(
                                 data-tooltip=Msg.Weight_Multiplier_Tooltip_Message,
@@ -124,7 +124,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                                 placeholder="1.00",
                                 value=classAnnouncement.getWeightMultiplier() || 1.00
                             )
-                        .weight-addition.new-input-container
+                        .weight-addition.new-input-container.i-b.v-m
                             label(for="ann-weightaddition")=Msg.Weight_Addition
                             input#ann-weightaddition(
                                 data-tooltip=Msg.Weight_Addition_Tooltip_Message,
@@ -133,12 +133,6 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                                 class="validate[required,custom[double],min[0]]",
                                 placeholder="0.00",
                                 value=classAnnouncement.getWeightAddition() || 0.00
-                            )
-                        .check-box-container
-                            label(for="ann-hidefromstudents")=Msg.Hide_from_Students
-                            +SlideCheckbox('hidefromstudents', classAnnouncement.isHiddenFromStudents(), false)(
-                                data-tooltip-timeout=500,
-                                data-tooltip=Msg.Hide_From_Student_Tooltip_Message
                             )
                         .check-box-container
                             label(for="ann-candropstudentscore")=Msg.Can_drop_student_score
@@ -154,20 +148,29 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                                 data-tooltip=Msg.Extra_Credit_Tooltip_Message
                             ).extra-credit
                         .check-box-container
+                            label(for="ann-hidefromstudents")=Msg.Hide_from_Students
+                            +SlideCheckbox('hidefromstudents', classAnnouncement.isHiddenFromStudents(), false)(
+                                data-tooltip-timeout=500,
+                                data-tooltip=Msg.Hide_From_Student_Tooltip_Message
+                            )
+                        .check-box-container
                             label(for="ann-discussionenabled")=Msg.Class_Discussion
                             +SlideCheckbox('discussionenabled', classAnnouncement.isDiscussionEnabled(), false, false)(
                                 data-isdiscussionenabled=classAnnouncement.isDiscussionEnabled(),
                                 data-tooltip-timeout=500,
+                                data-tooltip=Msg.Class_Discussion_Tooltip_Message
                             ).discussion-option
                         .check-box-container
                             label(for="ann-previewcommentsenabled")=Msg.Preview_Comments
                             +SlideCheckbox('previewcommentsenabled', classAnnouncement.isPreviewCommentsEnabled(), false, !classAnnouncement.isDiscussionEnabled())(
                                 data-tooltip-timeout=500,
+                                data-tooltip=Msg.Class_Discussion_Preview_Comments_Tooltip_Message
                             ).preview-comments-option
                         .check-box-container
                             label(for="ann-requirecommentsenabled")=Msg.Require_Comments
                             +SlideCheckbox('requirecommentsenabled', classAnnouncement.isRequireCommentsEnabled(), false, !classAnnouncement.isDiscussionEnabled())(
                                 data-tooltip-timeout=500,
+                                data-tooltip=Msg.Class_Discussion_Require_Comments_Tooltip_Message
                             ).require-comments-option
 
     .apps-attachments-bock.attachments-and-applications

@@ -74,7 +74,9 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 SchoolLocator.LessonPlanService.Submit(lessonPlanId);
                 var lessonPlan = SchoolLocator.LessonPlanService.GetLessonPlanById(lessonPlanId);
                 //TODO delete old drafts 
-                TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount));
+
+                var includeDiscussion = lessonPlan.DiscussionEnabled;
+                TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount, includeDiscussion));
             }
 
             if (inGallery)

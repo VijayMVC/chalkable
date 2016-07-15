@@ -1,22 +1,18 @@
-﻿CREATE Procedure [dbo].[spGetGridStandardsByPacing] @ClassId int, @GradeLavelId int, @GradingPeriodId int, @StandardSubjectId int, @ParentStandardId int, @AllStandards bit, @IsActive bit
+﻿Create Procedure [dbo].[spGetGridStandardsByPacing] @ClassId int, @GradeLavelId int, @GradingPeriodId int, @StandardSubjectId int, @ParentStandardId int, @AllStandards bit, @IsActive bit
 AS
 
 declare @GPStartDate datetime2;
 declare @GPEndDate datetime2;
 
-select 
-	@GPStartDate = StartDate, @GPEndDate = EndDate 
-from 
-	GradingPeriod 
-where 
-	Id = @GradingPeriodId
+Select 	@GPStartDate = StartDate, @GPEndDate = EndDate 
+From GradingPeriod Where Id = @GradingPeriodId
 
 declare @StandardsForSorting table
 (
 	Id int,
 	ParentStandardRef int,
 	Name nvarchar(100),
-	Description nvarchar(MAX),
+	[Description] nvarchar(MAX),
 	StandardSubjectRef int,
 	LowerGradeLevelRef int,
 	UpperGradeLevelRef int,
@@ -79,67 +75,25 @@ Where
 	)
 )
 
-insert into @MinDateForStandard
-	Select 
-		Id,
-		ISNULL(Min(SortDate), '9999-12-31 23:59:59.998') MinDate 
-	From 
-		(
-			Select SFS.Id, Min(Expires) as SortDate 
-			From 
-				@StandardsForSorting SFS
-				left join AnnouncementStandard 
-					on SFS.Id = AnnouncementStandard.standardRef
-				left join ClassAnnouncement CA
-					on AnnouncementStandard.AnnouncementRef = CA.Id
-			where CA.Expires >= @GPStartDate AND CA.Expires <= @GPEndDate
-			Group By SFS.Id
 
-			UNION
-
-			Select SFS.Id, '9999-12-31 23:59:59.998' as SortDate 
-			From 
-				@StandardsForSorting SFS
-				left join AnnouncementStandard 
-					on SFS.Id = AnnouncementStandard.standardRef
-				left join ClassAnnouncement CA
-					on AnnouncementStandard.AnnouncementRef = CA.Id
-			where CA.Expires < @GPStartDate AND CA.Expires > @GPEndDate
-			Group By SFS.Id
-
-			UNION
-
-			Select SFS.Id, '9999-12-31 23:59:59.998' as SortDate 
-			From 
-				@StandardsForSorting as SFS
-				left join AnnouncementStandard 
-					on SFS.Id = AnnouncementStandard.standardRef
-				left join LessonPlan 
-					on AnnouncementStandard.AnnouncementRef = LessonPlan.Id
-			Group By SFS.Id
-
-			UNION
-
-			Select SFS.Id, '9999-12-31 23:59:59.998' as SortDate
-			From 
-				@StandardsForSorting SFS
-				left join AnnouncementStandard 
-					on SFS.Id = AnnouncementStandard.standardRef
-				left join SupplementalAnnouncement 
-					on AnnouncementStandard.AnnouncementRef = SupplementalAnnouncement.Id
-			Group By SFS.Id
-		) as x
-	Group By 
-		Id
-			
-select
-	* 
-from 
-	@StandardsForSorting SFS
-join (select MDS.Id, MDS.MinDate from @MinDateForStandard MDS) SA
-	on SFS.Id = SA.Id
-order by 
-	MinDate, 
-	Name
+Insert Into @MinDateForStandard
+Select 
+	AnnouncementStandard.StandardRef as Id,
+	Min(CA.Expires) as  MinDate
+From 
+	AnnouncementStandard 
+Join ClassAnnouncement CA 
+		on AnnouncementStandard.AnnouncementRef = CA.Id
+Where CA.Expires >= @GPStartDate AND CA.Expires <= @GPEndDate And CA.ClassRef = @ClassId
+Group By AnnouncementStandard.StandardRef
+ 
+Declare @MAX_DATETIME datetime2 = cast('9999-12-31 23:59:59.998' as datetime2)
+ 			
+Select MDS.MinDate, SFS.*
+From @StandardsForSorting SFS
+Left Join @MinDateForStandard MDS on MDS.Id = SFS.Id 
+Order By 
+	(case when MDS.MinDate is not null then MDS.MinDate else @MAX_DATETIME end), 
+	SFS.Name
 
 GO

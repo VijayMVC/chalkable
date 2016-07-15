@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -17,23 +18,23 @@ namespace Chalkable.Web.Models.CalendarsViewData
 
         protected AnnouncementMonthCalendarViewData(DateTime date, bool isCurrentMonth
             , IList<ClassAnnouncement> classAnnouncements, IList<LessonPlan> lessonPlans
-            , IList<AdminAnnouncement> adminAnnouncements, IList<SupplementalAnnouncement> supplementalAnnouncements)
+            , IList<AdminAnnouncement> adminAnnouncements, IList<SupplementalAnnouncement> supplementalAnnouncements, IList<ClaimInfo> claims)
             : base(date, isCurrentMonth)
         {
-            Announcements = ClassAnnouncementViewData.Create(classAnnouncements);
+            Announcements = ClassAnnouncementViewData.Create(classAnnouncements, claims);
             LessonPlans = LessonPlanViewData.Create(lessonPlans);
             AdminAnnouncements = AdminAnnouncementViewData.Create(adminAnnouncements);
             SupplementalAnnouncements = SupplementalAnnouncementViewData.Create(supplementalAnnouncements);
         }
 
         public static AnnouncementMonthCalendarViewData Create(DateTime dateTime, bool isCurrentMonth, AnnouncementComplexList announcementList
-            , IList<Date> dates)
+            , IList<Date> dates, IList<ClaimInfo> claims)
         {
             var classAnnouncements = announcementList.ClassAnnouncements.Where(x => x.Expires.Date == dateTime).ToList();
             var adminAnnouncements = announcementList.AdminAnnouncements.Where(x =>x.Expires.Date == dateTime).ToList();
             var lessonPlans = announcementList.LessonPlans.Where(x => x.StartDate <= dateTime && x.EndDate >= dateTime).ToList();
             var supplementaAnns = announcementList.SupplementalAnnouncements.Where(x => x.Expires.Date == dateTime).ToList();
-            return new AnnouncementMonthCalendarViewData(dateTime, isCurrentMonth, classAnnouncements, lessonPlans, adminAnnouncements, supplementaAnns);
+            return new AnnouncementMonthCalendarViewData(dateTime, isCurrentMonth, classAnnouncements, lessonPlans, adminAnnouncements, supplementaAnns, claims);
         }
     }
 }

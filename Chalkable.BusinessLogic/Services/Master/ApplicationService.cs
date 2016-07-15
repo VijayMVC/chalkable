@@ -168,6 +168,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Live = true,
                     OrderBy = nameof(Application.Name),
                     OrderDesc = false,
+                    MyApps = myApps,
                     Ban = !withBanned && !BaseSecurity.IsSysAdminOrDeveloper(Context) ? false : (bool?)null
                 };
              return GetApplications(query);

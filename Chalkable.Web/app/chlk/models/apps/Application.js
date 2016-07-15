@@ -5,7 +5,6 @@ REQUIRE('chlk.models.id.PictureId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.AppGradeLevelId');
 
-REQUIRE('chlk.models.apps.AppPrice');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppPermission');
 REQUIRE('chlk.models.apps.AppPlatform');
@@ -51,7 +50,6 @@ NAMESPACE('chlk.models.apps', function () {
                 this.developerId = SJX.fromValue(raw.developerid, chlk.models.id.SchoolPersonId);
                 this.developerInfo = SJX.fromDeserializable(raw.developer, chlk.models.developer.DeveloperInfo);
                 this.liveAppId = SJX.fromValue(raw.liveappid, chlk.models.id.AppId);
-                this.applicationPrice = SJX.fromDeserializable(raw.applicationprice, chlk.models.apps.AppPrice);
                 this.screenshotIds = SJX.fromArrayOfValues(raw.picturesid, chlk.models.id.PictureId);
                 this.appAccess = SJX.fromDeserializable(raw.applicationaccess, chlk.models.apps.AppAccess);
                 this.permissions = SJX.fromArrayOfDeserializables(raw.permissions, chlk.models.apps.AppPermission);
@@ -100,7 +98,6 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.SchoolPersonId, 'developerId',
             chlk.models.developer.DeveloperInfo, 'developerInfo',
             chlk.models.id.AppId, 'liveAppId',
-            chlk.models.apps.AppPrice, 'applicationPrice',
             ArrayOf(chlk.models.id.PictureId), 'screenshotIds',
             chlk.models.apps.AppAccess, 'appAccess',
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',

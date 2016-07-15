@@ -3,7 +3,6 @@ REQUIRE('chlk.models.id.PictureId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.AppGradeLevelId');
 
-REQUIRE('chlk.models.apps.AppPrice');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppPermission');
 REQUIRE('chlk.models.apps.AppPlatform');

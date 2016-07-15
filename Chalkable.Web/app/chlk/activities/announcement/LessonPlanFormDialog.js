@@ -29,6 +29,17 @@ NAMESPACE('chlk.activities.announcement', function () {
         [chlk.activities.lib.PageClass('new-item')],
         'LessonPlanFormDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
+            [ria.mvc.DomEventBind('change', '.advanced-options .discussion-option.checkbox')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function discussionOptionChange(node, event){
+                var discussionEnabled = node.checked();
+                var options = node.parent('.advanced-options').find('.preview-comments-option.checkbox,.require-comments-option.checkbox');
+                if(!discussionEnabled){
+                    options.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), false)
+                }
+                options.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), !discussionEnabled);
+            },
+
             [ria.mvc.DomEventBind('click', '.attribute-title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function collapseClick(node, event){

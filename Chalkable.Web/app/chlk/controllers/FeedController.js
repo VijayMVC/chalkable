@@ -112,9 +112,20 @@ NAMESPACE('chlk.controllers', function (){
             return this.listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, true);
         },
 
+        function parseEnumValue_(enumType, valToParse_){
+            if(!(valToParse_ instanceof enumType )){
+                var val = parseInt(valToParse_, 10);
+                if(val || val === 0)
+                    valToParse_ = new enumType(valToParse_);
+                else
+                    valToParse_ = null;
+            }
+            return valToParse_;
+        },
+
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.id.ClassId, Boolean, Boolean, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            chlk.models.id.GradingPeriodId, Object, chlk.models.announcement.FeedSortTypeEnum, Boolean, Boolean, Object]],
+            chlk.models.id.GradingPeriodId, Object, Object, Boolean, Boolean, Object]],
         function listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_) {
 
             //todo : think about go to inow part
@@ -130,7 +141,8 @@ NAMESPACE('chlk.controllers', function (){
                 }], 'center'), null;
             }
 
-            annType_ = annType_ instanceof chlk.models.announcement.AnnouncementTypeEnum ? annType_ : null;
+            sortType_ = this.parseEnumValue_(chlk.models.announcement.FeedSortTypeEnum, sortType_);
+            annType_ = this.parseEnumValue_(chlk.models.announcement.AnnouncementTypeEnum, annType_);
 
             var result = this
                 .getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_)
@@ -144,7 +156,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('inbox')],
         [[String, Boolean, Boolean, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
-            Object, chlk.models.announcement.FeedSortTypeEnum, Boolean]],
+            Object, Object, Boolean]],
         function listDistrictAdminAction(gradeLevels_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_) {
 
             //todo : think about go to inow part
@@ -160,7 +172,8 @@ NAMESPACE('chlk.controllers', function (){
                 }], 'center'), null;
             }
 
-            annType_ = annType_ instanceof chlk.models.announcement.AnnouncementTypeEnum ? annType_ : null;
+            sortType_ = this.parseEnumValue_(chlk.models.announcement.FeedSortTypeEnum, sortType_);
+            annType_ = this.parseEnumValue_(chlk.models.announcement.AnnouncementTypeEnum, annType_);
 
             var result = this.getAdminFeedItems(postback_, importantOnly_, gradeLevels_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_)
                 .attach(this.validateResponse_());
@@ -177,7 +190,11 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
             if(model.getSubmitType() == 'copy'){
-                var res = this.announcementService.copy(model.getClassId(), model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate());
+                var res = this.announcementService.copy(model.getClassId(), model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                    .then(function(model){
+                        this.userTrackingService.copiedActivities();
+                        return model;
+                    }, this);
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
             }
 

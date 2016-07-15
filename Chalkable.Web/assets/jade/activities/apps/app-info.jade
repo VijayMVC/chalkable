@@ -50,52 +50,8 @@ mixin ExternalAttachPermissions(appsAccess, appName, readOnly)
             +SlideCheckbox("adminExternalAttachEnabled", myAppsAccess.isAdminExternalAttachEnabled(), readOnly)
 
 
-
-mixin AppPricing(appPrice, isReadOnly)
-    isFreeApp = (appPrice.getPrice() || appPrice.getPricePerSchool() || appPrice.getPricePerClass() || 0 ) == 0
-    isSchoolFlatRateEnabled =  appPrice.getPricePerSchool() > 0
-    isClassFlatRateEnabled =  appPrice.getPricePerClass() > 0
-    .app-pricing
-        .elem
-            label.hint Pricing:
-            +SlideCheckbox("free", isFreeApp, isReadOnly).price-checkbox
-        .prices(class = isFreeApp ?  "x-hidden" : undefined)
-            .elem.cost-per-user
-                label.hint.grey Cost per user:
-                +Textbox('costPerUser', appPrice.getPrice(), isReadOnly, "required, funcCall[chlkPrice]", "$0.00").price-box
-            .elem
-                label.wide.hint School flat rate:
-                .price-elem
-                    span Is there a flat rate for whole school purchases?
-                    +SlideCheckbox("schoolFlatRateEnabled",isSchoolFlatRateEnabled , isReadOnly)
-            .elem.school-flat-rate(class = !isSchoolFlatRateEnabled ?  "x-hidden" : undefined)
-                label.hint.grey School cost:
-                +Textbox('costPerSchool', appPrice.getPricePerSchool(), isReadOnly, "required, funcCall[chlkPrice]", "$0.00").price-box
-            .elem
-                label.wide.hint Class flat rate:
-                .price-elem
-                    span Is there a flat rate for whole class purchases?
-                    +SlideCheckbox("classFlatRateEnabled", isClassFlatRateEnabled, isReadOnly)
-            .elem.class-flat-rate(class = !isClassFlatRateEnabled ?  "x-hidden" : undefined)
-                label.hint.grey Class cost:
-                +Textbox('costPerClass', appPrice.getPricePerClass(), isReadOnly, "required, funcCall[chlkPrice]", "$0.00").price-box
-            .elem.paypal
-                label.hint Get Paid:
-                .price-elem
-                    span Add your PayPal account info in settings
-                    +ActionLink('settings', 'dashboard').paypal-button
-
-
-
-
-
-
-
 app = self.app
 myAppsAccess = app.getAppAccess()
-
-
-appPrice = app.getApplicationPrice()
 
 selectedAppCategories = {}
 selectedAppGradeLevels = {}
@@ -263,8 +219,6 @@ simpleApp = !app.isAdvancedApp()
             .elem
                 label.wide.hint Video Demo:
                 +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly(), "custom[url]")
-        .section
-            +AppPricing(appPrice, self.isReadOnly())
         .section.short
             .elem
                 label.hint Works on:

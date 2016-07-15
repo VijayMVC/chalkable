@@ -9,6 +9,7 @@ namespace Chalkable.Web.Models.GradingViewData
         public int Id { get; set; }
         public string Code { get; set; }
         public string Comment { get; set; }
+        public int SchoolRef { get; set; }
 
         public static GradingCommentViewData Create(GradingComment gradingComment)
         {
@@ -16,8 +17,9 @@ namespace Chalkable.Web.Models.GradingViewData
                 {
                     Id = gradingComment.Id,
                     Code = gradingComment.Code,
-                    Comment = gradingComment.Comment
-                };
+                    Comment = gradingComment.Comment,
+                    SchoolRef = gradingComment.SchoolRef
+            };
         }
         public static IList<GradingCommentViewData> Create(IList<GradingComment> gradingComments)
         {

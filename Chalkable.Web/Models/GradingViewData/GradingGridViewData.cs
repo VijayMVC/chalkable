@@ -33,11 +33,11 @@ namespace Chalkable.Web.Models.GradingViewData
         public IList<ClassAnnouncementTypeViewData> ClassAnnouncementTypes { get; set; }
 
         public static GradingGridsViewData Create(ChalkableGradeBook grid, IList<GradingPeriod> gradingPeriods
-            , IList<Standard> standards, IList<ClassAnnouncementType> classAnnouncementTypes)
+            , IList<Standard> standards, IList<ClassAnnouncementType> classAnnouncementTypes, IList<ClaimInfo> claims)
         {
             return new GradingGridsViewData
                 {
-                    CurrentGradingGrid = grid != null ? GradingGridViewData.Create(grid) : null,
+                    CurrentGradingGrid = grid != null ? GradingGridViewData.Create(grid, claims) : null,
                     GradingPeriods = gradingPeriods.Select(GradingPeriodViewData.Create).ToList(),
                     Standards = StandardViewData.Create(standards),
                     ClassAnnouncementTypes = ClassAnnouncementTypeViewData.Create(classAnnouncementTypes)
@@ -64,7 +64,7 @@ namespace Chalkable.Web.Models.GradingViewData
 
         public IList<TotalPointViewData> TotalPoints { get; set; }
         
-        public static GradingGridViewData Create(ChalkableGradeBook gradeBook)
+        public static GradingGridViewData Create(ChalkableGradeBook gradeBook, IList<ClaimInfo> claims)
         {
             var res = new GradingGridViewData(gradeBook) {Students = new List<GradeStudentViewData>()};
             if (gradeBook.Options != null)
@@ -91,7 +91,7 @@ namespace Chalkable.Web.Models.GradingViewData
             
             res.GradingItems = gradeBook.Announcements
                                         .OrderByDescending(x=>x.ClassAnnouncementData.Expires)
-                                        .Select(x => ShortAnnouncementGradeViewData.Create(x.ClassAnnouncementData, x.StudentAnnouncements, stIds))
+                                        .Select(x => ShortAnnouncementGradeViewData.Create(x.ClassAnnouncementData, x.StudentAnnouncements, stIds, claims))
                                         .ToList();
 
             return res;
@@ -113,9 +113,9 @@ namespace Chalkable.Web.Models.GradingViewData
         }
 
 
-        public static IList<GradingGridViewData> Create(IList<ChalkableGradeBook> gradeBooks)
+        public static IList<GradingGridViewData> Create(IList<ChalkableGradeBook> gradeBooks, IList<ClaimInfo> claims)
         {
-            return gradeBooks.Select(Create).ToList();
+            return gradeBooks.Select(x => Create(x, claims)).ToList();
         }
     }
 
@@ -293,24 +293,24 @@ namespace Chalkable.Web.Models.GradingViewData
     {
         public ShortStudentsAnnouncementsViewData StudentAnnouncements { get; set; }
 
-        protected ShortAnnouncementGradeViewData(ClassAnnouncement announcement) : base(announcement)
+        protected ShortAnnouncementGradeViewData(ClassAnnouncement announcement, IList<ClaimInfo> claims) : base(announcement, claims)
         {
         }
 
         public static ShortAnnouncementGradeViewData Create(ClassAnnouncement announcement, 
-            IList<StudentAnnouncementDetails> studentAnnouncements, IList<int> studentIds)
+            IList<StudentAnnouncementDetails> studentAnnouncements, IList<int> studentIds, IList<ClaimInfo> claims)
         {
             studentAnnouncements = studentAnnouncements.Where(x => x.AnnouncementId == announcement.Id).ToList();
-            return new ShortAnnouncementGradeViewData(announcement)
+            return new ShortAnnouncementGradeViewData(announcement, claims)
                 {
                     StudentAnnouncements = ShortStudentsAnnouncementsViewData.Create(studentAnnouncements, studentIds)
                 };
         }
 
         public static ShortAnnouncementGradeViewData Create(ClassAnnouncement announcement,
-            IList<StudentAnnouncement> studentAnnouncements, int studentId)
+            IList<StudentAnnouncement> studentAnnouncements, int studentId, IList<ClaimInfo> claims)
         {
-            return new ShortAnnouncementGradeViewData(announcement)
+            return new ShortAnnouncementGradeViewData(announcement, claims)
             {
                 StudentAnnouncements = ShortStudentsAnnouncementsViewData.Create(studentAnnouncements, studentId)
             };

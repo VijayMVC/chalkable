@@ -171,6 +171,7 @@ NAMESPACE('chlk.controllers', function (){
             else
                 res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
                     .then(function(createdList){
+                        this.userTrackingService.importActivities();
                         this.WidgetComplete(model.getRequestId(), createdList);
                         this.BackgroundCloseView(chlk.activities.announcement.AnnouncementImportDialog);
                         return ria.async.BREAK;
@@ -1323,6 +1324,10 @@ NAMESPACE('chlk.controllers', function (){
 
         function chatAction() {
             var announcement = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
+            if(announcement.getType() != chlk.models.announcement.AnnouncementTypeEnum.ADMIN){
+                var clazz = this.classService.getClassById(announcement.getClassId());
+                announcement.setClazz(clazz);
+            }
             return this.StaticView(chlk.activities.announcement.AnnouncementChatPage, ria.async.DeferredData(announcement, 100));
         },
 
@@ -1366,7 +1371,9 @@ NAMESPACE('chlk.controllers', function (){
                     var announcement = res[0], students = this.prepareUsers(res[1]);
                     announcement.setStudents(students);
                     this.cacheAnnouncementType(announcement.getType());
-                    return this.prepareAnnouncementForView(announcement);
+                    announcement = this.prepareAnnouncementForView(announcement);
+                    this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, announcement);
+                    return announcement;
                 }, this);
 
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
@@ -2580,9 +2587,10 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setAppsWithContent(model.getAppsWithContent());
                         announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
                         announcement.setState(model.getState());
-                        announcement.setDiscussionEnabled(model.isDiscussionEnabled())
-                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled())
-                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled())
+                        announcement.setAbleUseExtraCredit(model.isAbleUseExtraCredit());
+                        announcement.setDiscussionEnabled(model.isDiscussionEnabled());
+                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled());
+                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled());
 
                         //announcement.setClassName(model.getClassAnnouncementData().getClassName());
                         form_.setAnnouncement(announcement);
@@ -2883,8 +2891,11 @@ NAMESPACE('chlk.controllers', function (){
         function prepareCommentsAttachments_(comments){
             var that = this;
             comments.forEach(function(comment){
-                if(comment.getAttachment())
-                    that.prepareCommentAttachment_(comment.getAttachment());
+                if(comment.getAttachments())
+                    comment.getAttachments().forEach(function(attachment){
+                        that.prepareCommentAttachment_(attachment);
+                    });
+
                 if(comment.getSubComments())
                     that.prepareCommentsAttachments_(comment.getSubComments())
             });

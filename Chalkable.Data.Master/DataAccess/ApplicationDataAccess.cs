@@ -114,6 +114,8 @@ namespace Chalkable.Data.Master.DataAccess
                         conditions.Add(nameof(Application.HasStudentMyApps), query.MyApps, ConditionRelation.Equal);
                     if (query.Role == CoreRoles.TEACHER_ROLE.Id)
                         conditions.Add(nameof(Application.HasTeacherMyApps), query.MyApps, ConditionRelation.Equal);
+                    if (query.Role == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
+                        conditions.Add(nameof(Application.HasAdminMyApps), query.MyApps, ConditionRelation.Equal);
                 }
             }
 

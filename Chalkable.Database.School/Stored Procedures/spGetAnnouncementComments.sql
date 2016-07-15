@@ -12,12 +12,24 @@ If @STUDENT_ROLE = @roleId
 	select @currentStudentPosts = Count(*) From AnnouncementComment Where AnnouncementRef = @announcementId and PersonRef = @callerId
 
 
-Select *
-From vwAnnouncementComment
-Where AnnouncementComment_AnnouncementRef = @announcementId 
-	  and Announcement_DiscussionEnabled = 1
-	  and AnnouncementComment_Deleted = 0
+Declare @commentIds table (Id int)
+
+Insert Into @commentIds
+Select AnnouncementComment.Id 
+From AnnouncementComment
+Join Announcement 
+	on Announcement.Id = AnnouncementComment.AnnouncementRef
+Where AnnouncementRef = @announcementId 
+	  and Announcement.DiscussionEnabled = 1
+	  and Deleted = 0
 	  and (@TEACHER_ROLE = @roleId or 
-			(@STUDENT_ROLE = @roleId and AnnouncementComment_Hidden = 0 and (Announcement_RequireCommentsEnabled = 1 or @currentStudentPosts > 0) or AnnouncementComment_PersonRef = @callerId)
+			(@STUDENT_ROLE = @roleId and Hidden = 0 and (RequireCommentsEnabled = 0 or @currentStudentPosts > 0) or AnnouncementComment.PersonRef = @callerId)
 		  )
-	
+
+Select * From vwAnnouncementComment Where AnnouncementComment_Id in (Select Id From @commentIds)
+
+Select * 
+From AnnouncementCommentAttachment
+Join Attachment 
+	on Attachment.Id = AnnouncementCommentAttachment.AttachmentRef
+Where AnnouncementCommentRef In (Select Id From @commentIds)

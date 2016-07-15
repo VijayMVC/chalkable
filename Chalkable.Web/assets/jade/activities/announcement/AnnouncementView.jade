@@ -41,7 +41,7 @@ mixin Glue_()
 
     -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
     if showPostQuestion || self.getAnnouncementQnAs().length
-        +ActionLink('announcement', 'chat').chat-link=self.getAnnouncementQnAs().length || ''
+        +ActionLink('announcement', 'chat').chat-link=self.getChatCount()
         +ActionLink('announcement', 'closeChat').close-chat-link.x-hidden
 
 

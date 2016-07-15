@@ -65,7 +65,7 @@ NAMESPACE('chlk.templates.student', function () {
             function getAbsencesChartOptions_(){
                 var stats = this.getModel().getPanoramaInfo().getStudentAbsenceStats() || [],
                     columnData = [], absenceLevels = ['Absent', 'Half Day', 'All Day'],
-                    categoriesNames = ['A', 'H', 'D'];
+                    categoriesNames = ['0.0', '0.5', '1.0'];
 
                 if(!stats.length)
                     return null;
@@ -113,7 +113,6 @@ NAMESPACE('chlk.templates.student', function () {
                     },
 
                     series: [{
-                        type: 'area',
                         data: columnData,
                         color: '#41b768'
                     }]
@@ -134,14 +133,6 @@ NAMESPACE('chlk.templates.student', function () {
                 return {
                     chart:{
                         height: 200
-                    },
-
-                    plotOptions:{
-                        line: {
-                            marker: {
-                                symbol: 'triangle-down'
-                            }
-                        }
                     },
 
                     xAxis: {
@@ -167,7 +158,6 @@ NAMESPACE('chlk.templates.student', function () {
                     },
 
                     series: [{
-                        type: 'area',
                         data: columnData,
                         color: '#f8e6a5'
                     }]

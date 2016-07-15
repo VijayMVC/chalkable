@@ -21,6 +21,14 @@ NAMESPACE('chlk.templates.classes', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'descending',
 
+            function getTestTooltip(test){
+                var item = test.getDailyStats()[0],
+                    res = [test.getStandardizedTest().getDisplayName(), item.getDate().getDate().format('m.d.Y'), test.getComponent().getName(),
+                    test.getScoreType().getName(), item.getNumber()];
+
+                return res.join(' | ');
+            },
+
             function getStudentChartOptions(test){
                 var data = [];
 
@@ -35,11 +43,19 @@ NAMESPACE('chlk.templates.classes', function () {
 
                     plotOptions:{
                         area:{
-                            enableMouseTracking:false,
                             lineWidth:1,
                             shadow:false,
-                            marker:{
-                                enabled: false
+                            marker: {
+                                enabled: false,
+                                states: {
+                                    hover: {
+                                        fillColor: '#2F7790',
+                                        radius: 2,
+                                        lineWidth: 0,
+                                        enabled: true,
+                                        lineColor: '#2F7790'
+                                    }
+                                }
                             }
                         }
                     },
@@ -65,8 +81,18 @@ NAMESPACE('chlk.templates.classes', function () {
                         }
                     },
 
-                    tooltip:{
-                        enabled:false
+                    tooltip: {
+                        formatter: function () {
+                            var res = [];
+
+                            res.push(test.getStandardizedTest().getDisplayName(), new Date(this.x).format('m.d.Y'), test.getComponent().getName(), test.getScoreType().getName(), this.y);
+
+                            return res.join(' | ');
+                        },
+
+                        positioner: function (labelWidth, labelHeight, point) {
+                            return { x: point.plotX - labelWidth/2 + 10, y: point.plotY - labelHeight/2 - 25 };
+                        }
                     },
 
                     series: [{

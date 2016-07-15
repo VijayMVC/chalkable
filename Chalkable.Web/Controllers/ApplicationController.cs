@@ -71,17 +71,11 @@ namespace Chalkable.Web.Controllers
             if (applicationInputModel.ForSubmit) //TODO: mixpanel
             {
 
-                MasterLocator.UserTrackingService.SubmittedForApprooval(Context.Login, app.Name, app.ShortDescription,
-                                                      subjects, applicationInputModel.ApplicationPrices.Price, 
-                                                      applicationInputModel.ApplicationPrices.PricePerSchool,
-                                                      applicationInputModel.ApplicationPrices.PricePerClass);
+                MasterLocator.UserTrackingService.SubmittedForApprooval(Context.Login, app.Name, app.ShortDescription, subjects);
             }
             else
             {
-                MasterLocator.UserTrackingService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription,
-                                                      subjects, applicationInputModel.ApplicationPrices.Price, 
-                                                      applicationInputModel.ApplicationPrices.PricePerSchool, 
-                                                      applicationInputModel.ApplicationPrices.PricePerClass);
+                MasterLocator.UserTrackingService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription, subjects);
             }
 
             return Json(PrepareAppInfo(MasterLocator, app, true, true), CONTENT_TYPE);
@@ -300,7 +294,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult MyApps(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? start, int? count)
         {
-            var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter, start ?? 0, count ?? DEFAULT_PAGE_SIZE, withBanned: true);
+            var myAppsOnly = !BaseSecurity.IsDistrictAdmin(Context) ? true : (bool?) null;
+            var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter, start ?? 0, count ?? DEFAULT_PAGE_SIZE, withBanned: true, myApps: myAppsOnly);
 
             if (!BaseSecurity.IsDistrictAdmin(Context))
                 return Json(apps.Transform(BaseApplicationViewData.Create));

@@ -212,11 +212,18 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         }
         private static ClassDistributionStatsViewData CreateAbsencesViewData(IList<ShortStudentAbsenceInfo> models)
         {
-            var res = new ClassDistributionStatsViewData();
+            var res = new ClassDistributionStatsViewData
+            {
+                ClassAvg = 0,
+                DistributionStats = new List<DistributionItemViewData>()
+            };
             var absencePersents = models.Where(x => x.NumberOfDaysEnrolled != 0)
                 .Select(x => new { Persent = (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled*100), x.StudentId})
                 .OrderBy(x => x.Persent).ToList();
-            
+
+            if (absencePersents.Count == 0)
+                return res;
+
             var maxPersent = absencePersents.Max(x => x.Persent);
 
             res.DistributionStats = new List<DistributionItemViewData>();
@@ -245,6 +252,9 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                 DistributionStats = new List<DistributionItemViewData>()
             };
             models = models.OrderBy(x => x.NumberOfInfractions).ToList();
+
+            if (models.Count == 0)
+                return res;
 
             var maxInfractionCount = models.Max(x => x.NumberOfInfractions);
             if(maxInfractionCount % 3 != 0)

@@ -80,7 +80,7 @@ namespace Chalkable.Web.Controllers
             var annApps = schoolL.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(annsIdsWithApp, true);
             var apps = schoolL.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(annApps.Select(x => x.ApplicationRef).ToList());
             annApps = annApps.Where(x => apps.Any(a => a.Id == x.ApplicationRef)).ToList();
-            return AnnouncementViewData.Create(announcements, annApps, apps);
+            return AnnouncementViewData.Create(announcements, annApps, apps, schoolL.Context.Claims);
         }
     }
 }

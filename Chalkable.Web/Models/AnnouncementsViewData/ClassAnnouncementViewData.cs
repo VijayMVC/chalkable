@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -27,7 +28,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public decimal? WeightMultiplier { get; set; }
         public decimal? WeightAddition { get; set; }
 
-        protected ClassAnnouncementViewData(ClassAnnouncement announcement)
+        protected ClassAnnouncementViewData(ClassAnnouncement announcement, IList<ClaimInfo> claims)
             : base(announcement)
         {
             DefaultTitle = announcement.DefaultTitle;
@@ -47,20 +48,20 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             CanDropStudentScore = announcement.MayBeDropped;
             MayBeExempt = announcement.MayBeExempt;
             Gradable = announcement.IsScored;
-            CanGrade = Gradable && IsOwner && announcement.IsScored ;
+            CanGrade = (IsOwner || claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN)) && announcement.IsScored;
             DepartmentId = announcement.DepartmentId;
             HideFromStudents = !announcement.VisibleForStudent;
             WeightAddition = announcement.WeightAddition;
             WeightMultiplier = announcement.WeightMultiplier;
         }
 
-        public static ClassAnnouncementViewData Create(ClassAnnouncement announcement)
+        public static ClassAnnouncementViewData Create(ClassAnnouncement announcement, IList<ClaimInfo> claims)
         {
-            return new ClassAnnouncementViewData(announcement);
+            return new ClassAnnouncementViewData(announcement, claims);
         }
-        public static IList<ClassAnnouncementViewData> Create(IList<ClassAnnouncement> announcements)
+        public static IList<ClassAnnouncementViewData> Create(IList<ClassAnnouncement> announcements, IList<ClaimInfo> claims)
         {
-            return announcements.Select(Create).ToList();
+            return announcements.Select(x => Create(x, claims)).ToList();
         }
     }
 

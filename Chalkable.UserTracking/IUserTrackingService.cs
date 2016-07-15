@@ -28,8 +28,8 @@ namespace Chalkable.UserTracking
         void Clicked(string eventName, string email);
         void OpenedApp(string email, string appName);
         void SelectedLive(string email, string appName);
-        void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass);
-        void UpdatedDraft(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass);
+        void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects);
+        void UpdatedDraft(string email, string appName, string shortDescription, string subjects);
         void CreatedApp(string email, string appName);
         void BoughtApp(string email, string appName, List<string> classes);
         void LaunchedApp(string email, string appName);
@@ -40,9 +40,12 @@ namespace Chalkable.UserTracking
             DateTime? firstLoginDate, string timeZoneId, string role, bool isStudyCenterEnabled);
         void SentMessageTo(string email, string userName);
 
-        void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached);
-        void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached);
+        void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached, bool includeDiscussion);
+        void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached, bool includeDiscussion);
+        void CreateNewSupplemental(string email, string sClass, int studentsCount, int appsAttached, int docsAttached, bool includeDiscussion);
         void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached);
+        void CopyItems(string email, string toClass, int itemsCount);
+        void ImportItems(string email, string fromClass, int itemsCount);
         void CreatedReport(string email, string reportType);
         void SetDiscipline(string login, int? classId, DateTime date, string description, int studentId);
         void SetFinalGrade(string login, int classId, int studentId, int gradingPeriodId, string averageValue, bool exempt, string note);
