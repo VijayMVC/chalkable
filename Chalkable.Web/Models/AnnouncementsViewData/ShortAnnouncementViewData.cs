@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -54,23 +55,23 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int GradedStudentCount { get; set; }
         public int? Grade { get; set; } //TODO: think about this
 
-        protected AnnouncementShortGradeViewData(ClassAnnouncement ann)
-            : base(ann)
+        protected AnnouncementShortGradeViewData(ClassAnnouncement ann, IList<ClaimInfo> claims)
+            : base(ann, claims)
         {
 
         }
-        public static AnnouncementShortGradeViewData Create(AnnouncementComplex announcementComplex, int? studentGrade = null)
+        public static AnnouncementShortGradeViewData Create(AnnouncementComplex announcementComplex, IList<ClaimInfo> claims, int? studentGrade = null)
         {
             var annData = announcementComplex.ClassAnnouncementData;
-            return new AnnouncementShortGradeViewData(annData)
+            return new AnnouncementShortGradeViewData(annData, claims)
                 {
                     GradedStudentCount = announcementComplex.GradingStudentsCount,
                     Grade = studentGrade
                 };
         }
-        public static IList<AnnouncementShortGradeViewData> Create(IList<AnnouncementComplex> announcements)
+        public static IList<AnnouncementShortGradeViewData> Create(IList<AnnouncementComplex> announcements, IList<ClaimInfo> claims)
         {
-            return announcements.Select(x => Create(x)).ToList();
+            return announcements.Select(x => Create(x, claims)).ToList();
         }
     }
 }

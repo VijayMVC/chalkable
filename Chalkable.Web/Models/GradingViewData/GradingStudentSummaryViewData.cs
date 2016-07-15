@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -13,9 +14,10 @@ namespace Chalkable.Web.Models.GradingViewData
         public IList<GradingStatsByDateViewData> TotalAvgPerDate { get; set; }
         public IList<GradingStatsByDateViewData> PeersAvgPerDate { get; set; }
 
-        public static GradingStudentSummaryViewData Create(IList<AnnouncementComplex> announcements, IList<StudentGradeAvgPerDate> studentStats)
+        public static GradingStudentSummaryViewData Create(IList<AnnouncementComplex> announcements, IList<StudentGradeAvgPerDate> studentStats,
+            IList<ClaimInfo> claims)
         {
-            var res = new GradingStudentSummaryViewData {Announcements = AnnouncementViewData.Create(announcements)};
+            var res = new GradingStudentSummaryViewData {Announcements = AnnouncementViewData.Create(announcements, claims)};
             if (studentStats != null)
             {
                 res.TotalAvgPerDate = studentStats.Select(GradingStatsByDateViewData.Create).ToList();

@@ -190,7 +190,11 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
             if(model.getSubmitType() == 'copy'){
-                var res = this.announcementService.copy(model.getClassId(), model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate());
+                var res = this.announcementService.copy(model.getClassId(), model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                    .then(function(model){
+                        this.userTrackingService.copiedActivities();
+                        return model;
+                    }, this);
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
             }
 

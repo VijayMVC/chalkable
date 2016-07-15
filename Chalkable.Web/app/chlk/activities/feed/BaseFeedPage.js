@@ -44,14 +44,16 @@ NAMESPACE('chlk.activities.feed', function () {
                     this.dom.find('.to-set').setValue('true');
             },
 
-            [ria.mvc.DomEventBind('change', '.start-end-picker')],
+            [ria.mvc.DomEventBind('change keypress', '.start-end-picker')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function dateSelect(node, event, selected_){
-                var btn = this.dom.find('#date-ok-button');
-                if(!this.dom.find('#toDate').getValue() || !this.dom.find('#toDate').getValue())
-                    btn.setAttr('disabled', true);
-                else
-                    btn.removeAttr('disabled');
+                if(event.type == 'change' || event.which == ria.dom.Keys.ENTER.valueOf()){
+                    var btn = this.dom.find('#date-ok-button');
+                    if(!this.dom.find('#toDate').getValue() || !this.dom.find('#toDate').getValue())
+                        btn.setAttr('disabled', true);
+                    else
+                        btn.removeAttr('disabled');
+                }
             },
 
             [ria.mvc.DomEventBind('change', '.gradingPeriodSelect')],

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 
@@ -14,19 +15,19 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<SupplementalAnnouncementViewData> SupplementalAnnouncements { get; set; }
          
         public static AnnouncementPeriodViewData Create(ScheduleItem scheduleItem, IList<ClassAnnouncement> classAnnouncements,
-            IList<LessonPlan> lessonPlans, IList<SupplementalAnnouncement> supplementalAnnouncements, DateTime nowSchoolTime)
+            IList<LessonPlan> lessonPlans, IList<SupplementalAnnouncement> supplementalAnnouncements, DateTime nowSchoolTime, IList<ClaimInfo> claims)
         {
             return new AnnouncementPeriodViewData
             {
                 Period =  ScheduleItemViewData.Create(scheduleItem, nowSchoolTime),
-                Announcements = ClassAnnouncementViewData.Create(classAnnouncements),
+                Announcements = ClassAnnouncementViewData.Create(classAnnouncements, claims),
                 LessonPlans = LessonPlanViewData.Create(lessonPlans),
                 SupplementalAnnouncements = SupplementalAnnouncementViewData.Create(supplementalAnnouncements)
             };
         }
         
         public static IList<AnnouncementPeriodViewData> Create(IList<ScheduleItem> schedule, IList<ClassAnnouncement> classAnnouncements, 
-            IList<LessonPlan> lessonPlans, IList<SupplementalAnnouncement> supplementalAnnouncements, DateTime nowSchoolTime)
+            IList<LessonPlan> lessonPlans, IList<SupplementalAnnouncement> supplementalAnnouncements, DateTime nowSchoolTime, IList<ClaimInfo> claims)
         {
             var res = new List<AnnouncementPeriodViewData>();
             foreach (var scheduleItem in schedule)
@@ -34,7 +35,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 var annItems = classAnnouncements.Where(x => scheduleItem.ClassId == x.ClassRef).ToList();
                 var lsPlans = lessonPlans.Where(x => scheduleItem.ClassId == x.ClassRef).ToList();
                 var suppAnns = supplementalAnnouncements.Where(x => scheduleItem.ClassId == x.ClassRef).ToList();
-                res.Add(Create(scheduleItem, annItems, lsPlans, suppAnns, nowSchoolTime));
+                res.Add(Create(scheduleItem, annItems, lsPlans, suppAnns, nowSchoolTime, claims));
             }
             return res;
         }

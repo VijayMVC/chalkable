@@ -12,12 +12,10 @@ namespace Chalkable.UserTracking
     public class MixPanelService:IUserTrackingService
     {
         
-
-
-        private bool IsDisabled { get { return string.IsNullOrEmpty(MixPanelToken); } }
+        private bool IsDisabled => string.IsNullOrEmpty(MixPanelToken);
 
         private const string MIXPANEL_USER_PREFIX = "mixpanel-user-";
-        private string MixPanelToken { get; set; }
+        private string MixPanelToken { get; }
 
 
         public MixPanelService(string mixToken)
@@ -382,27 +380,44 @@ namespace Chalkable.UserTracking
         private const string CLASS = "class";
         private const string APPS_ATTACHED = "apps-attached";
         private const string DOCS_ATTACHED = "docs-attached";
-        public void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached)
+        private const string NUMBER_OF_STUDENTS = "number-of-students";
+        private const string CLASS_DISCUSSION = "class-discussion";
+        public void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached, bool includeDiscussion)
         {
             var properties = new Dictionary<string, object>
             {
                 [TYPE] = type,
                 [CLASS] = sClass,
                 [APPS_ATTACHED] = appsAttached,
-                [DOCS_ATTACHED] = docsAttached
+                [DOCS_ATTACHED] = docsAttached,
+                [CLASS_DISCUSSION] = includeDiscussion
             };
             SendEvent(email, UserTrackingEvents.CreatedNewItem, properties);
         }
 
-        public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
+        public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached, bool includeDiscussion)
         {
             var properties = new Dictionary<string, object>
             {
                 [CLASS] = sClass,
                 [APPS_ATTACHED] = appsAttached,
-                [DOCS_ATTACHED] = docsAttached
+                [DOCS_ATTACHED] = docsAttached,
+                [CLASS_DISCUSSION] = includeDiscussion
             };
             SendEvent(email, UserTrackingEvents.CreatedNewLessonPlan, properties);
+        }
+
+        public void CreateNewSupplemental(string email, string sClass, int studentsCount, int appsAttached, int docsAttached, bool includeDiscussion)
+        {
+            var properties = new Dictionary<string, object>
+            {
+                [NUMBER_OF_STUDENTS] = studentsCount,
+                [CLASS] = sClass,
+                [APPS_ATTACHED] = appsAttached,
+                [DOCS_ATTACHED] = docsAttached,
+                [CLASS_DISCUSSION] = includeDiscussion
+            };
+            SendEvent(email, UserTrackingEvents.CreateNewSupplemental, properties);
         }
 
         private const string ADMIN = "admin";
@@ -415,6 +430,29 @@ namespace Chalkable.UserTracking
                 [DOCS_ATTACHED] = docsAttached
             };
             SendEvent(email, UserTrackingEvents.CreatedNewAdminItem, properties);       
+        }
+
+        private const string NUMBER_OF_ITEMS = "number-of-items";
+        private const string FROM_CLASS = "from-class";
+        private const string TO_CLASS = "to-class";
+        public void CopyItems(string email, string toClass, int itemsCount)
+        {
+            var properties = new Dictionary<string, object>
+            {
+                [NUMBER_OF_ITEMS] = itemsCount,
+                [TO_CLASS] = toClass
+            };
+            SendEvent(email, UserTrackingEvents.CopyItems, properties);
+        }
+
+        public void ImportItems(string email, string fromClass, int itemsCount)
+        {
+            var properties = new Dictionary<string, object>
+            {
+                [NUMBER_OF_ITEMS] = itemsCount,
+                [FROM_CLASS] = fromClass
+            };
+            SendEvent(email, UserTrackingEvents.ImportItems, properties);
         }
 
         private const string REPORT_TYPE = "report-type";

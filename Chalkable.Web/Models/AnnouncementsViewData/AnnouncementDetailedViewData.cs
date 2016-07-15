@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -29,8 +30,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<AdminAnnouncementGroupViewData> Recipients { get; set; } 
         public IList<AnnouncementCommentViewData> AnnouncementComments { get; set; }
 
-        private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements)
-            : base(announcementDetails, studentAnnouncements)
+        private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IList<ClaimInfo> claims)
+            : base(announcementDetails, studentAnnouncements, claims)
         {
             if (announcementDetails.AnnouncementQnAs != null)
                 AnnouncementQnAs = AnnouncementQnAViewData.Create(announcementDetails.AnnouncementQnAs);
@@ -46,17 +47,17 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                                 || studentAnnouncements.All(x => string.IsNullOrEmpty(x.ScoreValue));
         }
 
-        private AnnouncementDetailedViewData(AnnouncementComplex announcement)
-            : base(announcement)
+        private AnnouncementDetailedViewData(AnnouncementComplex announcement, IList<ClaimInfo> claims)
+            : base(announcement, claims)
         {
         }
 
-        public static AnnouncementDetailedViewData CreateEmpty(AnnouncementComplex announcement)
+        public static AnnouncementDetailedViewData CreateEmpty(AnnouncementComplex announcement, IList<ClaimInfo> claims)
         {
-            return new AnnouncementDetailedViewData(announcement);
+            return new AnnouncementDetailedViewData(announcement, claims);
         }
 
-        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId)
+        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<ClaimInfo> claims)
         {
             var studentAnnouncements = announcementDetails.StudentAnnouncements.Select(x => new StudentAnnouncement
             {
@@ -69,12 +70,13 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 NumericScore = x.NumericScore,
                 IsWithdrawn = x.Student.IsWithdrawn
             }).ToList();
-            return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements);
+            return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements, claims);
         }
 
-        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos, IList<AttachmentInfo> attrAttachmentInfos)
+        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, 
+            IList<AnnouncementAttachmentInfo> attachmentInfos, IList<AttachmentInfo> attrAttachmentInfos, IList<ClaimInfo> claims)
         {
-            var res = Create(announcementDetails, currentSchoolPersonId);
+            var res = Create(announcementDetails, currentSchoolPersonId, claims);
             res.AnnouncementAttachments = AnnouncementAttachmentViewData.Create(attachmentInfos, currentSchoolPersonId);
 
             if (announcementDetails.AnnouncementAttributes != null)

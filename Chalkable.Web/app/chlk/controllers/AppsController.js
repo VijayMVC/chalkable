@@ -444,7 +444,7 @@ NAMESPACE('chlk.controllers', function (){
                 appUrlAppend_ += 'contentId=' + contentId;
             if(standardsUrlComponents_)
                 appUrlAppend_ += '&' + standardsUrlComponents_;
-            return this.tryToAttachAction('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
+            return this.tryToAttachAction(annId, appId, announcementType, appUrlAppend_);
         },
 
         [chlk.controllers.StudyCenterEnabled()],
@@ -454,13 +454,13 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function openSuggestedAppTeacherAction(appId, annId, announcementType, appUrlAppend_){
-            return this.tryToAttachAction('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
+            return this.tryToAttachAction(annId, appId, announcementType, appUrlAppend_);
         },
 
 
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean, String]],
-        function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned, appUrlSuffix_){
+        [[chlk.models.id.AppId, String, String, Boolean, String]],
+        function openSuggestedAppFromExplorerAction(appId, appUrl, viewUrl, isBanned, appUrlSuffix_){
             if(viewUrl){
                 this.userTrackingService.openedAppFrom(appUrl, "explorer");
                 return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, null, appUrlSuffix_);

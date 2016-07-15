@@ -81,7 +81,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var annDetails = SchoolLocator.ClassAnnouncementService.Edit(classAnnouncementInfo);
             SchoolLocator.ClassAnnouncementService.Submit(annDetails.Id);
             SchoolLocator.ClassAnnouncementService.DeleteAnnouncements(classAnnouncementInfo.ClassId, annDetails.ClassAnnouncementData.ClassAnnouncementTypeRef, AnnouncementState.Draft);
-            TrackNewItemCreate(annDetails, (s, appsCount, doscCount)=> s.CreatedNewItem(Context.Login, annDetails.ClassAnnouncementData.ClassAnnouncementTypeName, annDetails.ClassAnnouncementData.ClassName, appsCount, doscCount));
+            var includeDiscussion = annDetails.DiscussionEnabled;
+            TrackNewItemCreate(annDetails, (s, appsCount, doscCount)=> s.CreatedNewItem(Context.Login, annDetails.ClassAnnouncementData.ClassAnnouncementTypeName, annDetails.ClassAnnouncementData.ClassName, appsCount, doscCount, includeDiscussion));
             return Json(true, 5);
         }
 

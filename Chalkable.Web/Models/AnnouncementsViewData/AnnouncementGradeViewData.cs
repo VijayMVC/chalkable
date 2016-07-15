@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 
@@ -12,20 +13,20 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public decimal? Grade { get; set; }
         public string Comment { get; set; }
 
-        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements)
-            : base(announcement)
+        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IList<ClaimInfo> claims)
+            : base(announcement, claims)
         {
             PrepareGradingInfo(this, studentAnnouncements);
         }
 
-        protected AnnouncementGradeViewData(AnnouncementComplex announcement)
-            : base(announcement)
+        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<ClaimInfo> claims)
+            : base(announcement, claims)
         {
         }
 
-        public static AnnouncementGradeViewData Create(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements)
+        public static AnnouncementGradeViewData Create(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IList<ClaimInfo> claims)
         {
-           return new AnnouncementGradeViewData(announcement, studentAnnouncements);
+           return new AnnouncementGradeViewData(announcement, studentAnnouncements, claims);
         }
 
         private static void PrepareGradingInfo(AnnouncementGradeViewData res,  IList<StudentAnnouncement> studentAnnouncements)

@@ -23,7 +23,8 @@ namespace Chalkable.Web.Models.GradingViewData
 
         public static StudentProfileGradingDetailViewData Create(Student student, StudentGradingDetails gradingDetails, GradingPeriod gp,
             IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes
-            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions,
+            IList<ClaimInfo> claims)
         {
             var classAnnouncementGroups = announcements.GroupBy(x => x.ClassRef).Select(y => new
             {
@@ -66,7 +67,7 @@ namespace Chalkable.Web.Models.GradingViewData
                         Items = categoryType.Items.Select(x => ShortAnnouncementGradeViewData.Create(
                             x.ClassAnnouncementData, 
                             studentAnnouncements.Where(sa=>sa.ActivityId == x.ClassAnnouncementData.SisActivityId).ToList(), 
-                            student.Id)).ToList(),
+                            student.Id, claims)).ToList(),
                         Avg = avg
                     };
 

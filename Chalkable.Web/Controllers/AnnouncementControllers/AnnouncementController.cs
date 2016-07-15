@@ -83,7 +83,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult Read(int announcementId, int? announcementType)
         {
             var res = PrepareFullAnnouncementViewData(announcementId, announcementType, true);
-
+            
             //TODO: implement this later
             /*
             Currently admin has no rigths to edit lessonplans and activities even
@@ -92,6 +92,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             if((res.LessonPlanData != null || res.ClassAnnouncementData != null || res.SupplementalAnnouncementData != null) && BaseSecurity.IsDistrictAdmin(Context))
                 res.IsOwner = false;
             //------------------------------------------------------------------------
+            
 
             MasterLocator.UserTrackingService.OpenedAnnouncement(Context.Login, res.AnnouncementTypeName, res.Title, res.PersonName);
             return Json(res, 20);

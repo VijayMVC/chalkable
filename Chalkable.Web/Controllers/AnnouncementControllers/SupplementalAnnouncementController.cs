@@ -47,14 +47,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             SchoolLocator.SupplementalAnnouncementService.Submit(supplementalAnnouncementPlanId);
             var supplementalAnnouncement = SchoolLocator.SupplementalAnnouncementService.GetSupplementalAnnouncementById(supplementalAnnouncementPlanId);
             //TODO delete old drafts 
-            //TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, supplementalAnnouncement.ClassName, appsCount, doscCount));
+            var studentsCount = supplementalAnnouncement.Recipients.Count;
+            var includeDiscussion = supplementalAnnouncement.DiscussionEnabled;
+            TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewSupplemental(Context.Login, supplementalAnnouncement.ClassName, studentsCount, appsCount, doscCount, includeDiscussion));
             return Json(true, 5);
         }
 
         [AuthorizationFilter("Teacher")]
         public ActionResult EditTitle(int supplementalAnnouncementPlanId, string title)
         {
-            return EditTitle(supplementalAnnouncementPlanId, AnnouncementTypeEnum.Supplemental, title, t => SchoolLocator.LessonPlanService.ExistsInGallery(t, supplementalAnnouncementPlanId));
+            return EditTitle(supplementalAnnouncementPlanId, AnnouncementTypeEnum.Supplemental, title, t => SchoolLocator.SupplementalAnnouncementService.Exists(t, supplementalAnnouncementPlanId));
         }
 
         [AuthorizationFilter("Teacher")]
