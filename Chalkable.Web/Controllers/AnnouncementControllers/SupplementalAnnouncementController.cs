@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         [AuthorizationFilter("Teacher")]
         public ActionResult Save(int supplementalAnnouncementPlanId, int classId, string title, string content, int? classAnnouncementTypeId,
-            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds,
+            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IList<int> recipientsIds,
             bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Supplemental, supplementalAnnouncementPlanId, attributes);
@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         [AuthorizationFilter("Teacher")]
         public ActionResult Submit(int supplementalAnnouncementPlanId, int classId, string title, string content, int? classAnnouncementTypeId,
-            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IntList recipientsIds,
+            DateTime? expiresDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes, IList<int> recipientsIds,
             bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Supplemental, supplementalAnnouncementPlanId, attributes);
