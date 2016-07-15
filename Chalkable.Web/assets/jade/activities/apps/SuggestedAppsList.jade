@@ -14,6 +14,6 @@
                                     -var pictureUrl = app.getBannerPictureUrl()
                                     +LoadingImage(src=pictureUrl, id="loading-image-" + i)
                                     .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
-                                    +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getAnnouncementType(), self.getStandardsUrlComponents()) Open
+                                    +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getAnnouncementId(), self.getAnnouncementType(), self.getStandardsUrlComponents()) Open
     else
         .title No recommended apps
