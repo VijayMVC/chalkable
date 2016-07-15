@@ -1,7 +1,7 @@
 mixin AppItem(app)
    div.app-icon-link-container
        -var isBanned = false
-       +ActionLink('apps', 'openSuggestedAppFromExplorer', app.getId(), self.getClassId(), app.getUrl(), app.getMyAppsUrl(), isBanned, self.getStandardUrlComponents()).app-link
+       +ActionLink('apps', 'openSuggestedAppFromExplorer', app.getId(), app.getUrl(), app.getMyAppsUrl(), isBanned, self.getStandardUrlComponents()).app-link
            div(data-tooltip='').icon
                pictureUrl = app.getBannerPictureUrl()
            img(src=pictureUrl)
