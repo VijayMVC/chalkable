@@ -114,6 +114,11 @@ namespace Chalkable.UserTracking
         {
         }
 
+        public void ImportItems(string email, string fromClass, int itemsCount)
+        {
+            throw new NotImplementedException();
+        }
+
         public void CreatedReport(string email, string reportType)
         {
         }
@@ -177,6 +182,10 @@ namespace Chalkable.UserTracking
         }
 
         public void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached)
+        {
+        }
+
+        public void CopyItems(string email, string toClass, int itemsCount)
         {
         }
     }
