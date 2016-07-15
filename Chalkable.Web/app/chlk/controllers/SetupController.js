@@ -404,7 +404,7 @@ NAMESPACE('chlk.controllers', function (){
                         var canCopy = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
                         var years = data[2];
                         return new chlk.models.setup.ClassroomOptionSetupViewData(topData, data[1], data[0], canCopy, years);
-                    });
+                    }, this);
                 return this.UpdateView(chlk.activities.setup.ClassroomOptionSetupPage, res);
             }
         ])
