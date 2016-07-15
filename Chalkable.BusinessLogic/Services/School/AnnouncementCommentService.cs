@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -11,9 +12,9 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAnnouncementCommentService
     {
         IList<AnnouncementComment> GetList(int announcementId); 
-        AnnouncementComment PostComment(int announcementId, string text, int? attachmentId);
-        AnnouncementComment Reply(int toCommentId, string text, int? attachmentId);
-        AnnouncementComment Edit(int announcementCommentId, string text, int? attachmentId);
+        AnnouncementComment PostComment(int announcementId, string text, IList<int> attachmentIds);
+        AnnouncementComment Reply(int toCommentId, string text, IList<int> attachmentIds);
+        AnnouncementComment Edit(int announcementCommentId, string text, IList<int> attachmentIds);
         void SetHidden(int commentId, bool hidden);
         void Delete(int commnetId);
         AnnouncementComment GetById(int announcementCommentId);
@@ -30,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new AnnouncementCommentDataAccess(u).GetCommentsTree(announcementId, Context.PersonId.Value, Context.RoleId));
         }
 
-        public AnnouncementComment PostComment(int announcementId, string text, int? attachmentId)
+        public AnnouncementComment PostComment(int announcementId, string text, IList<int> attachmentIds)
         {
             var type = ServiceLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
             var ann = ServiceLocator.GetAnnouncementService(type).GetAnnouncementById(announcementId);
@@ -43,18 +44,18 @@ namespace Chalkable.BusinessLogic.Services.School
                 var id = da.InsertWithEntityId(new AnnouncementComment
                     {
                         AnnouncementRef = announcementId,
-                        AttachmentRef = attachmentId,
                         PersonRef = Context.PersonId.Value,
                         Text = text,
                         PostedDate = Context.NowSchoolYearTime,
                         Hidden = ann.PreviewCommentsEnabled
                     });
+                new AnnouncementCommentAttachmentDataAccess(uow).PostAttachements(id, attachmentIds);
                 uow.Commit();
                 return da.GetDetailsById(id, Context.PersonId.Value, Context.RoleId);
             }
         }
         
-        public AnnouncementComment Reply(int toCommentId, string text, int? attachmentId)
+        public AnnouncementComment Reply(int toCommentId, string text, IList<int> attachmentIds)
         {
             Trace.Assert(Context.PersonId.HasValue);
             
@@ -69,18 +70,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 var id = da.InsertWithEntityId(new AnnouncementComment
                 {
                     AnnouncementRef = parentComment.AnnouncementRef,
-                    AttachmentRef = attachmentId,
                     PersonRef = Context.PersonId.Value,
                     Text = text,
                     PostedDate = Context.NowSchoolYearTime,
                     ParentCommentRef = toCommentId,
                     Hidden = ann.PreviewCommentsEnabled
                 });
+
+                new AnnouncementCommentAttachmentDataAccess(uow).PostAttachements(id, attachmentIds);
                 uow.Commit();
                 return da.GetDetailsById(id, Context.PersonId.Value, Context.RoleId);
             }
         }
-        public AnnouncementComment Edit(int announcementCommentId, string text, int? attachmentId)
+        public AnnouncementComment Edit(int announcementCommentId, string text, IList<int> attachmentIds)
         {
             Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
@@ -92,13 +94,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw  new ChalkableSecurityException("Only owner can edit comment");
 
                 comment.Text = text;
-                comment.AttachmentRef = attachmentId;
                 da.Update(comment);
+
+                new AnnouncementCommentAttachmentDataAccess(uow).PostAttachements(announcementCommentId, attachmentIds);
                 uow.Commit();
-                return comment;
+                return da.GetDetailsById(announcementCommentId, Context.PersonId.Value, Context.RoleId);
             }
         }
 
+        
         public void SetHidden(int commentId, bool hidden)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);

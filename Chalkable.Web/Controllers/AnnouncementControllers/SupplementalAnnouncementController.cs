@@ -5,8 +5,8 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
-using Chalkable.API.Models;
 using Chalkable.Common.Exceptions;
+using Chalkable.Common;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {

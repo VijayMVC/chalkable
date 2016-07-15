@@ -1,21 +1,24 @@
-mixin PostCommentForm(announcementId, parentCommentId, commentId, attachment, text)
+mixin PostCommentForm(announcementId, parentCommentId, comment)
+    -var commentId = comment && comment.getId()
+    -var attachments = comment && comment.getAttachments()
+    -var text = comment && comment.getText()
     -attributes['data-id']=(commentId && commentId.valueOf()) || (parentCommentId && parentCommentId.valueOf())
+    -var ids = attachments && attachments.map(function(attachment){return attachment.getId().valueOf()}).join(',')
     +ActionForm('announcementcomment', 'post')(attributes).post-comment-form.no-working
-        +Hidden('attachmentId', attachment && attachment.getId())(data-value=attachment && attachment.getId()).attachment-id
+        +Hidden('attachmentIds', ids)(data-value=ids).attachment-id
         +Hidden('announcementid', announcementId)
         +Hidden('id', commentId)
         +Hidden('parentcommentid', parentCommentId)
         .post-comment-text-block.relative
             +TextArea(name="text", placeholder="Type your comment here", data-value=text).comment-value=text
-            if attachment
-                .img-cnt
-                    +RenderWith(attachment, chlk.templates.LoadingImageTpl)
-            else
-                .img-cnt
+            .imgs-cnt
+                if attachments
+                    +RenderWith(comment.getModel(), chlk.templates.announcement.AnnouncementCommentAttachmentsTpl)
             br
             .simple-gray-button.download-link.file Attach
                 +FileUpload('announcementcomment', 'uploadCommentAttachment', [commentId && commentId.valueOf() ? commentId : parentCommentId])(
                     dropAreaSelector = 'form',
+                    multiple = true,
                     value = 'Attach'
                 ).add-file-attachment.simple-gray-button
         BUTTON().green-button Post

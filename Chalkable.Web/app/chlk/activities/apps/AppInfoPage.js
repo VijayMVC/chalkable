@@ -39,13 +39,6 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.onFormChange(node, event);
             },
 
-            [ria.mvc.DomEventBind('change', 'input.price-checkbox')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function toggleAppPaymentInfo(node, event){
-                var appPricing = this.dom.find('.prices');
-                appPricing.toggleClass(HIDDEN_CLASS, node.checked());
-            },
-
             [ria.mvc.DomEventBind('change', 'input.toggle-standarts')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleStandarts(node, event){

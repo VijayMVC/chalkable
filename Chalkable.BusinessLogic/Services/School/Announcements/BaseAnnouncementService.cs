@@ -42,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         Standard RemoveStandard(int announcementId, int standardId);
         void RemoveAllAnnouncementStandards(int standardId);
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
-        IList<Person> GetAnnouncementRecipientPersons(int announcementId);
+        IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start = 0, int count = int.MaxValue);
         IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
     }
@@ -79,10 +79,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             });
         }
 
-        public IList<Person> GetAnnouncementRecipientPersons(int announcementId)
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start, int count)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateDataAccess(u).GetAnnouncementRecipientPersons(announcementId, Context.PersonId.Value));
+            return DoRead(u => CreateDataAccess(u).GetAnnouncementRecipientPersons(announcementId, start, count));
         }
 
         

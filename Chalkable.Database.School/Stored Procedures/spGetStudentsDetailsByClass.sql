@@ -22,17 +22,18 @@ Declare @students table
 Insert Into @students
 	Select Distinct
 		Student.Id,
-		Cast(Case When ClassPerson.IsEnrolled = 1 and StudentSchoolYear.EnrollmentStatus = 0 
+		Cast(Case When cs.IsEnrolled = 1 and StudentSchoolYear.EnrollmentStatus = 0 
 				Then 0
 				Else 1
 				End As bit) As IsWithdrawn
 	From
 		Student
-		join ClassPerson       On Student.Id = ClassPerson.PersonRef
-		join StudentSchoolYear On ClassPerson.PersonRef = StudentSchoolYear.StudentRef
+		join StudentSchoolYear On Student.Id = StudentSchoolYear.StudentRef
+		left join (select * from ClassPerson join Class on ClassPerson.ClassRef = Class.Id) as cs
+			on Student.Id = cs.PersonRef and StudentSchoolYear.SchoolYearRef = cs.SchoolYearRef
 	Where
-		ClassPerson.ClassRef = @classId
-		and (@isEnrolled is null or ClassPerson.IsEnrolled = @isEnrolled)
+		cs.ClassRef = @classId
+		and (@isEnrolled is null or cs.IsEnrolled = @isEnrolled)
 		and (@isEnrolled is null or StudentSchoolYear.EnrollmentStatus = @enrollmentStatus)
 
 Select Student.*, IsWithdrawn

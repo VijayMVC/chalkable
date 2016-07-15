@@ -104,7 +104,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function uploadPicture(file, width_, height_) {
 
                 //switched width and height intentionally
-                return this.uploadFiles('Application/UploadPicture', file, chlk.models.id.PictureId, {
+                return this.uploadFiles('Application/UploadPicture', [file], chlk.models.id.PictureId, {
                     width: height_,
                     height: width_
                 });
@@ -221,7 +221,6 @@ NAMESPACE('chlk.services', function () {
                 chlk.models.id.AppId,
                 chlk.models.apps.ShortAppInfo,
                 ArrayOf(chlk.models.apps.AppPermissionTypeEnum),
-                chlk.models.apps.AppPrice,
                 chlk.models.id.SchoolPersonId,
                 chlk.models.apps.AppAccess,
                 ArrayOf(chlk.models.id.AppCategoryId),
@@ -232,13 +231,12 @@ NAMESPACE('chlk.services', function () {
                 ArrayOf(chlk.models.id.ABStandardId)
             ]],
             ria.async.Future, function updateApp(
-                appId, shortAppInfo, permissionIds, appPricesInfo, devId, appAccess, categories, pictures_,
+                appId, shortAppInfo, permissionIds, devId, appAccess, categories, pictures_,
                 gradeLevels, platforms, forSubmit, standards){
                 return this.post('Application/Update.json', chlk.models.apps.Application,  {
                     applicationId: appId.valueOf(),
                     shortApplicationInfo: shortAppInfo.getPostData(),
                     permissions: this.arrayToIds(permissionIds),
-                    applicationPrices: appPricesInfo.getPostData(),
                     developerId: devId.valueOf(),
                     applicationAccessInfo: appAccess.getPostData(),
                     categories: this.arrayToIds(categories),

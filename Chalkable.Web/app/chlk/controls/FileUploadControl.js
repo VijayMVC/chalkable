@@ -45,6 +45,10 @@ NAMESPACE('chlk.controls', function () {
                                     state.setPublic(false);
                                     that.context.stateUpdated();
                                 }
+
+                                setTimeout(function(){
+                                    node.setValue('');
+                                }, 1)
                             });
 
                             var $dropArea = dropAreaSelector ? node.$.closest(dropAreaSelector) : node.$;

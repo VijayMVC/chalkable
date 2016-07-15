@@ -19,7 +19,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.id.AnnouncementCommentId, 'parentCommentId',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.attachment.Attachment, 'attachment',
+            ArrayOf(chlk.models.attachment.Attachment), 'attachments',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.people.User, 'owner',

@@ -69,13 +69,11 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects, decimal price,
-            decimal? pricePerSchool, decimal? pricePerClass)
+        public void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects)
         {
         }
 
-        public void UpdatedDraft(string email, string appName, string shortDescription, string subjects, decimal price,
-            decimal? pricePerSchool, decimal? pricePerClass)
+        public void UpdatedDraft(string email, string appName, string shortDescription, string subjects)
         {
         }
 
