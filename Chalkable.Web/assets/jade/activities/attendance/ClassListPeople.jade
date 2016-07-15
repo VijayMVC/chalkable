@@ -1,0 +1,78 @@
+-var selectedId = self.getClassId()
+-var valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+
+.saved-pop-up
+.not-saved-pop-up
++ActionForm('attendance', 'setClassAttendanceList').set-attendance-list-form.header
+    input(name="attendancesJson", type="hidden")
+    +Hidden('date', self.getDate().toStandardFormat())
+    +Hidden('classList', true)
+    +Hidden('classId', selectedId && selectedId.valueOf())
+    +Hidden('inProfile', self.isInProfile())
+    items = self.getItems()
+    .table
+        .l(class="wide")
+            +SummaryInfo(self.getPresentStudents().length, items.length)
+            +ActionLink('attendance', 'attendanceProfileReport', selectedId).report-link
+        if self.getItems().length > 0 && self.canPost()
+            .l &nbsp;
+        if self.isLEIntegrated()
+            .le
+                +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+        .title
+            span.date-text= self.getDate().toString('MM dd, yy')
+            -var params = selectedId ? [selectedId.valueOf()] : null
+            +DatePicker('attendanceDate', self.getDate())#attendance-date.tb-date-picker.tr(
+                data-options={
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                    inCurrentGradingPeriods: true,
+                    underOverlay: true
+                },
+                data-controller= self.isInProfile() ? "class" : "attendance",
+                data-action=self.isInProfile() ? "classListForDate" : "classList",
+                data-params=params
+            )
+        if self.getItems().length > 0 && self.canPost()
+            .r
+                -var student = self.getItems()[0]
+                +ActionLinkWithPrepend('attendance', 'markAll',
+                    [selectedId.valueOf(), self.getDate().toStandardFormat(), self.isInProfile(), student && student.isDailyAttendancePeriod()]
+                )#all-present-link=Msg.Mark_all_Present
+        .r
+            if self.canPost()
+                BUTTON#submit-attendance-button.blue-button POST IT
+            else if self.getReadOnlyReason()
+                .readonly-banner= self.getReadOnlyReason()
+    .action-bar.buttons.filter.x-hidden
+        .container.panel-bg
+            .left
+                +ActionLinkWithPrepend('attendance', 'sortStudents', ['false'])(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
+                +ActionLinkWithPrepend('attendance', 'sortStudents', [true])(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
+.grid-container.loader-container
+    +ListView(self.getItems())#class-attendance-list-panel.people-list
+        needSuggestion = self.getItems().filter(function(item){return item.getType() > valuesEnum.NA.valueOf()}).length == 0;
+        each item, i in self.getItems()
+            needPresent = (i == 0 && item.getType() == valuesEnum.NA.valueOf());
+            .row(index=i)
+                .student-attendance-container.right
+                    len = self.getItems().length;
+                    if (needSuggestion && (i== 5 || (i == len - 1 && len < 6 && len > 2)))
+                        .keyboard-suggestion
+                    div(class="container-" + item.getStudentId().valueOf())
+                        -item.setReasons(self.getReasons());
+                        +RenderWith(item, self.getItemClassType())(
+                            needPresent = needPresent
+                        )
+                if needPresent
+                    -item.setType(valuesEnum.PRESENT.valueOf());
+                student = item.getStudent();
+                +ProfileLink(student, 'student').left.image-container.white.shadow.person-img-container
+                    +PersonImg(student, 47)
+                .user-name-container.i-b.relative
+                    SPAN.name=student.getFullName()
+                    if student.isWithdrawn()
+                        div(data-tooltip=Msg.Withdrawn).withdrawn
+                    if item.isAbsentPreviousDay()
+                        SPAN(data-tooltip=Msg.Absent_yesterday).absent-yesterday
+                .clear-fix
