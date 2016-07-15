@@ -42,7 +42,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
                 this.studentAnnouncements = SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.StudentAnnouncements);
-                this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, Object);
+                this.autoGradeApps = raw.autogradeapps;
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
                 this.exempt = SJX.fromValue(raw.exempt, Boolean);
                 this.ableToRemoveStandard = SJX.fromValue(raw.canremovestandard, Boolean);
@@ -83,7 +83,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.imported = SJX.fromValue(raw.imported, Boolean);
 
                 if(raw.createdAnnouncements)
-                    this.createdAnnouncements = SJX.fromValue(JSON.parse(raw.createdAnnouncements), Object);
+                    this.createdAnnouncements = JSON.parse(raw.createdAnnouncements);
 
                 if(this.autoGradeApps && this.autoGradeApps.length){
                     var autoGradeApps = [];

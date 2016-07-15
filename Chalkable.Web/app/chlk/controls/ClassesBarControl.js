@@ -127,8 +127,6 @@ NAMESPACE('chlk.controls', function () {
                                 var left = node.offset().left - main.offset().left + 120;
                                 popupHolder.setCss('left', left);
                                 popupHolder.setCss('top', top);
-                                popupHolder.setCss('position', 'absolute');
-                                popupHolder.setCss('z-index', 1000);
                                 popUpTpl.renderTo(popupHolder.setHTML(''));
                             }
 

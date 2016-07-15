@@ -252,6 +252,8 @@
     padding-top: 8px
     max-height: 68px
     overflow: auto
+    padding-left: 0px
+    position: relative
 
     .add-standards .title
       color: #e0e0e0
@@ -263,6 +265,9 @@
       text-align: center
 
   .recipients-list
+    padding-left: 40px
+    position: relative
+
     &::before
       content: 'To :'
       position: absolute
@@ -270,13 +275,7 @@
       font: bold 16px Arial
       top: 7px
 
-  .recipients-list
-    padding-left: 40px
-    position: relative
-
-  .standards-list
-    padding-left: 0px
-    position: relative
+  .standards-list, .recipients-list
 
     BUTTON
       min-width: 35px
@@ -449,6 +448,17 @@
     z-index: 11
     width: 227px
     text-align: left
+
+    .new-input-container
+      width: 107px
+      text-align: center
+
+      &:first-child
+        margin-right: 11px
+
+      INPUT[type=text]
+        width: 100%
+        margin-bottom: 0
 
     > *
       position: relative

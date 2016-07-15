@@ -33,15 +33,14 @@ namespace Chalkable.Web.Models
         public IList<ShortAverageViewData> Averages { get; set; }
         public IList<StudentFinalGradeViewData> StudentFinalGrades { get; set; }
         
-        public static GradingPeriodFinalGradeViewData Create(FinalGradeInfo finalGrade
-            ,  ChalkableAverage average)
+        public static GradingPeriodFinalGradeViewData Create(FinalGradeInfo finalGrade, ChalkableAverage average, IList<ClaimInfo> claims)
         {
             return new GradingPeriodFinalGradeViewData
                 {
                     GradingPeriod = GradingPeriodViewData.Create(finalGrade.GradeBook.GradingPeriod),
                     Averages = ShortAverageViewData.Create(finalGrade.Averages),
                     CurrentAverage = average != null ? ShortAverageViewData.Create(average) : null,
-                    StudentFinalGrades = StudentFinalGradeViewData.Create(finalGrade, average)
+                    StudentFinalGrades = StudentFinalGradeViewData.Create(finalGrade, average, claims)
                 };
         }
     }
@@ -55,7 +54,7 @@ namespace Chalkable.Web.Models
         public FinalStudentAttendanceViewData Attendance { get; set; }
         public IList<DisciplineTypeSummaryViewData> Disciplines { get; set; } 
 
-        public static IList<StudentFinalGradeViewData> Create(FinalGradeInfo finalGrade, ChalkableAverage average)
+        public static IList<StudentFinalGradeViewData> Create(FinalGradeInfo finalGrade, ChalkableAverage average, IList<ClaimInfo> claims)
         {
             var res = new List<StudentFinalGradeViewData>();
             var gradeBook = finalGrade.GradeBook;
@@ -72,7 +71,7 @@ namespace Chalkable.Web.Models
                 IList<StudentAnnouncementDetails> stAnns = gradeBook.Announcements
                     .Where(a => a.StudentAnnouncements.Any(stAnn => stAnn.StudentId == student.Id))
                     .Select(a => a.StudentAnnouncements.First(stAnn => stAnn.StudentId == student.Id)).ToList();
-                studentFinalGrade.StatsByType = StudentGradingByTypeStatsViewData.Create(gradeBook.Announcements.Select(x=>x.ClassAnnouncementData).ToList(), stAnns);
+                studentFinalGrade.StatsByType = StudentGradingByTypeStatsViewData.Create(gradeBook.Announcements.Select(x=>x.ClassAnnouncementData).ToList(), stAnns, claims);
                 var currentStAttendance = finalGrade.Attendances.FirstOrDefault(x => x.StudentId == student.Id);
                 studentFinalGrade.Attendance = FinalStudentAttendanceViewData.Create(currentStAttendance, finalGrade.Attendances);
                 var disciplines = finalGrade.Disciplines.Where(x => x.StudentId == student.Id).ToList();
@@ -133,7 +132,7 @@ namespace Chalkable.Web.Models
         public IList<StudentGradingStatsViewData> StudentGradingStats { get; set; }
 
         public static IList<StudentGradingByTypeStatsViewData> Create(IList<ClassAnnouncement> announcements
-            , IList<StudentAnnouncementDetails> studentAnnouncements)
+            , IList<StudentAnnouncementDetails> studentAnnouncements, IList<ClaimInfo> claims)
         {
             var res = new List<StudentGradingByTypeStatsViewData>();
             announcements = announcements.Where(x => x.ClassAnnouncementTypeRef.HasValue).ToList();
@@ -146,7 +145,7 @@ namespace Chalkable.Web.Models
                     {
                         ClassAnnouncementTypeId = ann.ClassAnnouncementTypeRef.Value,
                         ClassAnnouncementTypeName = ann.ClassAnnouncementTypeName,
-                        StudentGradingStats = StudentGradingStatsViewData.Create(typeAnns.Value, studentAnnouncements)
+                        StudentGradingStats = StudentGradingStatsViewData.Create(typeAnns.Value, studentAnnouncements, claims)
                     });
             }
             return res;
@@ -160,7 +159,7 @@ namespace Chalkable.Web.Models
         public decimal? Grade { get; set; }
 
         public static IList<StudentGradingStatsViewData> Create(IList<ClassAnnouncement> announcements
-            , IList<StudentAnnouncementDetails> studentAnnouncements)
+            , IList<StudentAnnouncementDetails> studentAnnouncements, IList<ClaimInfo> claims)
         {
             var res = new List<StudentGradingStatsViewData>();
             studentAnnouncements = studentAnnouncements.Where(x => x.NumericScore.HasValue).ToList();
@@ -174,7 +173,7 @@ namespace Chalkable.Web.Models
                 var item = new StudentGradingStatsViewData
                     {
                         Date = dateAnn.Key,
-                        AnnouncementGrades = dateAnn.Value.Select(x => ShortAnnouncementGradeViewData.Create(x, stAnns, stIds)).ToList()
+                        AnnouncementGrades = dateAnn.Value.Select(x => ShortAnnouncementGradeViewData.Create(x, stAnns, stIds, claims)).ToList()
                     };
                 if (stAnns.Any())
                     item.Grade = (stAnns.Max(x => x.NumericScore) + stAnns.Min(x => x.NumericScore)) / 2;

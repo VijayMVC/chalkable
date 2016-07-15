@@ -5,14 +5,17 @@
 .announcement-chat-cnt
     .close-btn
     .current-user-block
-        if self.isAnnOwner()
-            .current-clazz-image.i-b.v-m
-                +ClassImg(clazz, 60, 107)
-            .current-user-name.i-b.v-m='Chat with \n' + clazz.getName()
+        if self.getType() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN
+            .current-user-name.i-b.v-m=self.getTitle()
         else
-            .current-user-image.i-b.v-m
-                +PersonImg(chatWith, 80)
-            .current-user-name.i-b.v-m='Chat with \n' + chatWith.getDisplayName()
+            if self.isAnnOwner()
+                .current-clazz-image.i-b.v-m
+                    +ClassImg(clazz, 60, 107)
+                .current-user-name.i-b.v-m='Chat with \n' + clazz.getName()
+            else
+                .current-user-image.i-b.v-m
+                    +PersonImg(chatWith, 80)
+                .current-user-name.i-b.v-m='Chat with \n' + chatWith.getDisplayName()
     .qnas-cnt(class = showPostQuestion ? 'with-bottom-block' : '')
         .qnas-cnt-2
             .qnas-cnt-3

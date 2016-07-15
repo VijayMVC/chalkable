@@ -23,7 +23,7 @@ Where AnnouncementRef = @announcementId
 	  and Announcement.DiscussionEnabled = 1
 	  and Deleted = 0
 	  and (@TEACHER_ROLE = @roleId or 
-			(@STUDENT_ROLE = @roleId and Hidden = 0 and (RequireCommentsEnabled = 1 or @currentStudentPosts > 0) or AnnouncementComment.PersonRef = @callerId)
+			(@STUDENT_ROLE = @roleId and Hidden = 0 and (RequireCommentsEnabled = 0 or @currentStudentPosts > 0) or AnnouncementComment.PersonRef = @callerId)
 		  )
 
 Select * From vwAnnouncementComment Where AnnouncementComment_Id in (Select Id From @commentIds)

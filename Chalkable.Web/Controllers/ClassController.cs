@@ -88,7 +88,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassSchedule(int classId, DateTime? date)
         {
             var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var schedule = AnnouncementCalendarController.BuildDayAnnCalendar(SchoolLocator, date, classId, null, GetCurrentSchoolYearId());
+            var schedule = AnnouncementCalendarController.BuildDayAnnCalendar(SchoolLocator, date, classId, null, GetCurrentSchoolYearId(), Context.Claims);
             return Json(ClassScheduleViewData.Create(clazz, schedule), 13);
         }
         

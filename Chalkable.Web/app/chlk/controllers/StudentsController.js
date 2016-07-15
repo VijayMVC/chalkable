@@ -235,6 +235,8 @@ NAMESPACE('chlk.controllers', function (){
             function panoramaAction(personId){
                 var result = this.getPanorama_(personId);
 
+                this.userTrackingService.viewStudentPanorama();
+
                 return this.PushView(chlk.activities.student.StudentProfilePanoramaPage, result);
             },
 
