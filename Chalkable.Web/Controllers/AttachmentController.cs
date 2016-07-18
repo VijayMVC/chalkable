@@ -176,5 +176,44 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.AttachementService.TransformToAttachmentInfo(attachment, new List<int> { Context.PersonId.Value });
             return AttachmentViewData.Create(res, Context, true);
         }
+
+
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        public ActionResult StartViewSession(int attachmentId)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var att = SchoolLocator.AttachementService.GetAttachmentById(attachmentId);
+            if (att == null)
+            {
+                Response.StatusCode = 404;
+                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
+                return null;
+            }
+            try
+            {
+                bool isOwner = (Context.PersonId == att.PersonRef);
+                var canAnnotate = isOwner;
+                var person = SchoolLocator.PersonService.GetPerson(Context.PersonId.Value);
+                string name = person.FirstName;
+                if (string.IsNullOrEmpty(name))
+                {
+                    name = Context.Login;
+                }
+                var res = SchoolLocator.CrocodocService.StartViewSession(new StartViewSessionRequestModel
+                {
+                    Uuid = att.Uuid,
+                    CanAnnotate = canAnnotate,
+                    PersonId = Context.PersonId.Value,
+                    PersonName = name,
+                    IsOwner = isOwner
+                });
+                return Json(res.session);
+            }
+            catch (Exception exception)
+            {
+                return HandleAttachmentException(exception);
+            }
+        }
+
     }
 }
