@@ -28,6 +28,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AttachmentId]],
+            ria.async.Future, function startViewSession(attachmentId) {
+                return this.get('Attachment/StartViewSession', String, {
+                    attachmentId: attachmentId.valueOf()
+                });
+            },
+
             [[ArrayOf(chlk.models.id.AttachmentId)]],
             ria.async.Future, function getByIds(ids){
                 return this.getPaginatedList('Attachment/List.json', chlk.models.attachment.Attachment, {

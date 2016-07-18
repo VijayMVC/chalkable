@@ -1,7 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AnnouncementCommentService');
 REQUIRE('chlk.services.AttachmentService');
-REQUIRE('chlk.services.AnnouncementAttachmentService');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 
 
@@ -17,9 +16,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.AttachmentService, 'attachmentService',
-
-        [ria.mvc.Inject],
-        chlk.services.AnnouncementAttachmentService, 'announcementAttachmentService',
 
         function prepareCommentAttachment_(attachment, width_, height_){
             if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
@@ -125,7 +121,7 @@ NAMESPACE('chlk.controllers', function (){
                 res = new ria.async.DeferredData(attachmentViewData);
             }else{
                 var buttons = [downloadAttachmentButton];
-                res = this.announcementAttachmentService
+                res = this.attachmentService
                     .startViewSession(attachmentId)
                     .then(function(session){
                         return new chlk.models.common.attachments.BaseAttachmentViewData(
