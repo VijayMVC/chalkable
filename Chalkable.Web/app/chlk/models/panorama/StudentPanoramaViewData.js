@@ -76,7 +76,7 @@ NAMESPACE('chlk.models.panorama', function () {
             },
 
             function getPeriodsText(){
-                var values = this.getPeriods(), first, last, resArr = [], fIndex, fName, lName;
+                var values = this.getPeriods().sort(), first, last, resArr = [], fIndex, fName, lName;
 
                 if(values.length){
 
