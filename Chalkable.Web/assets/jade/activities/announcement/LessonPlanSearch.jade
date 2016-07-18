@@ -1,0 +1,5 @@
++Select('galleryCategoryForSearch')#galleryCategoryForSearch
+    +Option('', 'Select category', true)
+    each item in self.getCategories()
+        +Option(item.getId(), item.getName())
+    +Option(-1, 'Add Category')
