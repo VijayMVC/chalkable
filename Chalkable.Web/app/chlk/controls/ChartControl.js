@@ -140,15 +140,14 @@ NAMESPACE('chlk.controls', function () {
                         var max = 0;
                         res.series.forEach(function(s){
                             s.data.forEach(function(item){
-                                if(item > max)
-                                    max = item;
+                                var value = Array.isArray(item) ? item[1] : item;
+                                if(value > max)
+                                    max = value;
                             });
                         });
                         max = Math.ceil(max/interval) * interval;
                         res.yAxis.max = max;
                     }
-                    //if(res.legend.enabled && !options.chart.height)
-                        //res.chart.height = 215;
                 }else{
                     res = options;
                 }
