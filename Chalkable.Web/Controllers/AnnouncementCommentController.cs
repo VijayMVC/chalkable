@@ -18,21 +18,21 @@ namespace Chalkable.Web.Controllers
         public ActionResult PostComment(int announcementId, string text, IntList attachmentIds)
         {
             var res = SchoolLocator.AnnouncementCommentService.PostComment(announcementId, text, attachmentIds);
-            return Json(PrepareCommentViewData(res, SchoolLocator));
+            return Json(GetList(res.AnnouncementRef));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Reply(int toCommentId, string text, IntList attachmentIds)
         {
             var res = SchoolLocator.AnnouncementCommentService.Reply(toCommentId, text, attachmentIds);
-            return Json(PrepareCommentViewData(res, SchoolLocator));
+            return Json(GetList(res.AnnouncementRef));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Edit(int announcementCommentId, string text, IntList attachmentIds)
         {
             var res = SchoolLocator.AnnouncementCommentService.Edit(announcementCommentId, text, attachmentIds);
-            return Json(PrepareCommentViewData(res, SchoolLocator));
+            return Json(GetList(res.AnnouncementRef));
         }
         
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
@@ -40,8 +40,7 @@ namespace Chalkable.Web.Controllers
         {
             var comment = SchoolLocator.AnnouncementCommentService.GetById(announcementCommentId);
             SchoolLocator.AnnouncementCommentService.SetHidden(announcementCommentId, hidden);
-            var res = PrepareListOfCommentViewData(SchoolLocator.AnnouncementCommentService.GetList(comment.AnnouncementRef), SchoolLocator);
-            return Json(res, 20);
+            return Json(GetList(comment.AnnouncementRef), 20);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
@@ -49,15 +48,18 @@ namespace Chalkable.Web.Controllers
         {
             var comment = SchoolLocator.AnnouncementCommentService.GetById(announcementCommentId);
             SchoolLocator.AnnouncementCommentService.Delete(announcementCommentId);
-            var res = PrepareListOfCommentViewData(SchoolLocator.AnnouncementCommentService.GetList(comment.AnnouncementRef), SchoolLocator);
-            return Json(res);
+            return Json(GetList(comment.AnnouncementRef));
         }
+
+        private IList<AnnouncementCommentViewData> GetList(int announcementId)
+        {
+            return PrepareListOfCommentViewData(SchoolLocator.AnnouncementCommentService.GetList(announcementId), SchoolLocator);
+        } 
 
         public static IList<AnnouncementCommentViewData> PrepareListOfCommentViewData(IEnumerable<AnnouncementComment> comments, IServiceLocatorSchool serviceLocator)
         {
             return comments.Select(x=>PrepareCommentViewData(x, serviceLocator)).ToList();
         }
-
         public static AnnouncementCommentViewData PrepareCommentViewData(AnnouncementComment comment, IServiceLocatorSchool serviceLocator)
         {
             Trace.Assert(serviceLocator.Context.PersonId.HasValue);
