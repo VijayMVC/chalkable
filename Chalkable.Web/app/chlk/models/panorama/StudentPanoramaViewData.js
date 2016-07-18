@@ -151,6 +151,7 @@ NAMESPACE('chlk.models.panorama', function () {
             ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'standardizedTestsStats',
             ArrayOf(chlk.models.profile.StandardizedTestViewData), 'standardizedTests',
             ArrayOf(chlk.models.common.ChartDateItem), 'dailyDisciplines',
+            ArrayOf(chlk.models.common.ChartDateItem), 'attendancesStats',
             ArrayOf(chlk.models.panorama.StudentDisciplineStatViewData), 'studentDisciplineStats',
             ArrayOf(chlk.models.panorama.StudentAbsenceStatViewData), 'studentAbsenceStats',
             ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
@@ -167,8 +168,9 @@ NAMESPACE('chlk.models.panorama', function () {
                 this.standardizedTests = SJX.fromArrayOfDeserializables(raw.standardizedtests, chlk.models.profile.StandardizedTestViewData);
                 this.standardizedTestsStats = SJX.fromArrayOfDeserializables(raw.standardizedtestsstats, chlk.models.profile.StandardizedTestStatsViewData);
                 this.dailyDisciplines = SJX.fromArrayOfDeserializables(raw.dailydisciplinestats, chlk.models.common.ChartDateItem);
+                this.attendancesStats = SJX.fromArrayOfDeserializables(raw.attendancestats, chlk.models.common.ChartDateItem);
                 this.studentDisciplineStats = SJX.fromArrayOfDeserializables(raw.disciplinestats, chlk.models.panorama.StudentDisciplineStatViewData);
-                this.studentAbsenceStats = SJX.fromArrayOfDeserializables(raw.dailyattendancestats, chlk.models.panorama.StudentAbsenceStatViewData);
+                this.studentAbsenceStats = SJX.fromArrayOfDeserializables(raw.absences, chlk.models.panorama.StudentAbsenceStatViewData);
 
                 this.attendancesDescending = false;
                 this.disciplinesDescending = false;
