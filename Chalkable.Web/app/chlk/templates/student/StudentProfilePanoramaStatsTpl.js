@@ -63,15 +63,20 @@ NAMESPACE('chlk.templates.student', function () {
             },
 
             function getAbsencesChartOptions_(){
-                var stats = this.getModel().getPanoramaInfo().getStudentAbsenceStats() || [],
-                    columnData = [], absenceLevels = ['Absent', 'Half Day', 'All Day'],
-                    categoriesNames = ['0.0', '0.5', '1.0'];
+                var stats = this.getModel().getPanoramaInfo().getAttendancesStats() || [],
+                    columnData = [],
+                    absenceLevels = {
+                        0: "All Day",
+                        0.5: "Half Day",
+                        1.0: "Present"
+                    };
+
 
                 if(!stats.length)
                     return null;
 
                 stats.forEach(function(item, index){
-                    columnData.push([item.getDate().getDate().getTime(), absenceLevels.indexOf(item.getAbsenceLevel())]);
+                    columnData.push([item.getDate().getDate().getTime(), item.getNumber()]);
                 });
 
                 return {
@@ -98,12 +103,13 @@ NAMESPACE('chlk.templates.student', function () {
                         gridLineDashStyle: 'solid',
                         labels: {
                             formatter: function () {
-                                return categoriesNames[this.value];
+                                return this.value.toFixed(1);
                             }
                         },
                         startOnTick: true,
-                        showFirstLabel: true//,
-                        //min: 0
+                        showFirstLabel: true,
+                        min: 0,
+                        max: 1
                     },
 
                     tooltip: {
@@ -153,8 +159,9 @@ NAMESPACE('chlk.templates.student', function () {
                         gridLineColor: '#ebebeb',
                         gridLineDashStyle: 'solid',
                         startOnTick: true,
-                        showFirstLabel: true//,
-                        //min: 0
+                        showFirstLabel: true,
+                        min: 0,
+                        tickInterval: 1
                     },
 
                     series: [{
