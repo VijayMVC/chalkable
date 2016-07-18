@@ -200,7 +200,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if(recipientsIds == null || recipientsIds.Count == 0)
                 throw new ChalkableException("You can't create Supplemented Announcements without students");
 
-            var classStudents = serviceLocator.ClassService.GetClassPersons(null, classId, true, null);
+            var classStudents = serviceLocator.ClassService.GetClassPersons(null, classId, null, null);
             if (!recipientsIds.All(x => classStudents.Any(y => y.PersonRef == x)))
                 throw new ChalkableException("You can create Supplemented Announcements only for students of current class");
         }
