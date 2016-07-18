@@ -18,7 +18,7 @@ mixin HeaderLink_(name, type)
             +HeaderLink_('Disposition Date', disciplinesOrderByEnum.DISPOSITION_DATE).disposition-date
             +HeaderLink_('Disposition', disciplinesOrderByEnum.DISPOSITION).disposition
             +HeaderLink_('Note', disciplinesOrderByEnum.NOTE).note
-        each item in self.getStudentDisciplineStats()
+        each item in self.getStudentDisciplineStats() || []
             .grid-row
                 .cell.date=item.getOccurrenceDate() && item.getOccurrenceDate().format('D mm/dd/yy')
                 .cell.infraction=item.getInfractionName()
