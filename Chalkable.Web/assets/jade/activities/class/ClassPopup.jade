@@ -1,0 +1,16 @@
+.class-popup.chat-bubble.absolute.top
+   .popup-item
+      .name.i-b.v-m Name:
+      .value.i-b.v-m=self.getDescription()
+   .popup-item
+      .name.i-b.v-m Number:
+      .value.i-b.v-m=self.getClassNumber()
+   .popup-item
+      .name.i-b.v-m Room:
+      .value.i-b.v-m=self.getRoom() ? self.getRoom().getDescription() : ''
+   .popup-item
+      .name.i-b.v-m Period:
+      .value.i-b.v-m=self.getPeriods() ? self.getPeriods().join(', ') : ''
+   .popup-item
+      .name.i-b.v-m Days:
+      .value.i-b.v-m=self.getDayTypes() ? self.getDayTypes().join(', ') : ''
