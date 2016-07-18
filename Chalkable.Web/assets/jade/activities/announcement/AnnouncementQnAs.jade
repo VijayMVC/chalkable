@@ -24,7 +24,8 @@
                     .table.row(class = isTeacherOrAdmin ? 'not-owner ' : 'owner ').question
                         .avatar-block-left
                             -var person1 = item.getQuestion().getPerson()
-                            +PersonImg(person1, 47)(data-tooltip = person1.getDisplayName())
+                            +PersonImg(person1, 47)
+                            .person-name(data-tooltip=person1.getDisplayName(), data-tooltip-type="overflow")=person1.getDisplayName()
                         .qna
                             +ActionForm('announcement', 'answerQuestion')
                                 input(type="hidden",name="id", value=item.getId())
@@ -49,7 +50,8 @@
                             -var answerMsg=''
                             .avatar-block-left
                                 -var person2 = item.getAnswer() ? item.getAnswer().getPerson() : self.getCurrentUser()
-                                +PersonImg(person2, 47)(data-tooltip = person2.getDisplayName())
+                                +PersonImg(person2, 47)
+                                .person-name(data-tooltip=person2.getDisplayName(), data-tooltip-type="overflow")=person2.getDisplayName()
                             .qna
                                 +ActionForm('announcement', 'answerQuestion')
                                     input(type="hidden",name="id", value=item.getId())
