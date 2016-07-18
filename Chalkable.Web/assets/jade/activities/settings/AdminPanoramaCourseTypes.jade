@@ -1,0 +1,19 @@
+-var panoramaSettings = self.getPanoramaSettings()
+-var standardizedTests = self.getStandardizedTests()
+
+each item in panoramaSettings.getCourseTypeDefaultSettings() || []
+    .course-type-block(data-id = item.getCourseType().getCourseTypeId().valueOf())
+        h3.course-type-header= item.getCourseType().getCourseTypeName()
+        .filters-block
+            .filters-container
+                each filter in item.getStandardizedTestFilters() || []
+                    -var model = new chlk.models.controls.PanoramaFilterBlockViewData(standardizedTests, filter.getId(), filter.getScoreTypeId(), filter.getComponentId())
+                    +RenderWith(model, chlk.templates.controls.PanoramaFilterBlockTpl)
+            .add-filter-container
+                .add-circle-btn.add-filter-btn +
+                span.light-grey Add filter
+
+
+
+
+

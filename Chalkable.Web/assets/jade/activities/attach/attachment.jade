@@ -1,0 +1,16 @@
+.attachment-file(data-index = self.getFileIndex(), class=self.getId() ? '' : 'pending')
+    -console.log(self)
+    .icon
+        +LoadingImage(src=self.getThumbnailUrl() ? self.getThumbnailUrl().replace('110x170', '33x51') : '')
+    .name(data-tooltip=self.getName(), data-tooltip-type="overflow")=self.getName()
+        span.size &#32;(#{self.getSize()})
+    .progress-wrapper
+        if self.getLoaded()
+            .progress(style="width:" + self.getLoaded() * 100 / self.getTotal() + "%")
+        else
+            .progress(style="width:" + (self.getId() ? "100%" : "0"))
+    .img-loader
+
+    if self.getId()
+        +Hidden('id.' + self.getFileIndex(), self.getId())
+        a.close-btn.delete-attachment
