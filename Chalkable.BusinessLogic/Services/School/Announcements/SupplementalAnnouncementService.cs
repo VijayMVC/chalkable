@@ -224,6 +224,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     suppAnnouncement.ClassRef = classId;
                     new AnnouncementApplicationDataAccess(uow).DeleteByAnnouncementId(suppAnnouncement.Id);
                     new AnnouncementStandardDataAccess(uow).DeleteNotAssignedToClass(suppAnnouncement.Id, classId);
+                    new SupplementalAnnouncementRecipientDataAccess(uow).DeleteByAnnouncementId(supplementalAnnouncementId);
                 }
 
                 suppAnnouncement.Title = title;
