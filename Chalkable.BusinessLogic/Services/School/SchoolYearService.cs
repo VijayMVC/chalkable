@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<int> GetYears(); 
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
-        IList<SchoolYear> GetPreviousSchoolYears(int count = 1);
+        IList<SchoolYear> GetPreviousSchoolYears(int fromSchoolYearid, int count = 1);
         IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true); 
         IList<StudentSchoolYear> GetStudentAssignments();
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
@@ -66,9 +66,9 @@ namespace Chalkable.BusinessLogic.Services.School
             return schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
         }
 
-        public IList<SchoolYear> GetPreviousSchoolYears(int count = 1)
+        public IList<SchoolYear> GetPreviousSchoolYears(int fromSchoolYearId, int count = 1)
         {
-            var current = GetCurrentSchoolYear();
+            var current = GetSchoolYearById(fromSchoolYearId);
             return DoRead(u => new SchoolYearDataAccess(u).GetPreviousSchoolYears(current.StartDate ?? Context.NowSchoolYearTime, current.SchoolRef, count));
         }
 

@@ -43,29 +43,23 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton],
         [[chlk.models.announcement.AnnouncementComment]],
         function postAction(model){
-
             if(!model.getText() && !model.getAttachmentIds()){
                 this.ShowMsgBox('Please enter text or add attachment', 'whoa.');
                 return null;
             }
 
-            var method, id;
+            var res;
             if(model.getId() && model.getId().valueOf()){
-                method = 'edit';
-                id = model.getId();
+                res = this.announcementCommentService.edit(model.getAnnouncementId(), model.getId(), model.getText(), model.getAttachmentIds());
             }else{
                 if(model.getParentCommentId() && model.getParentCommentId().valueOf()){
-                    method = 'reply';
-                    id = model.getParentCommentId();
+                    res = this.announcementCommentService.reply(model.getAnnouncementId(), model.getParentCommentId(), model.getText(), model.getAttachmentIds());
                 }else{
-                    method = 'postComment';
-                    id = model.getAnnouncementId();
+                    res = this.announcementCommentService.postComment(model.getAnnouncementId(), model.getText(), model.getAttachmentIds());
                 }
             }
 
-            var res = this.announcementCommentService[method]
-                (id, model.getText(), model.getAttachmentIds())
-                .then(function(announcement){
+            var res = res.then(function(announcement){
                     this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
                     return announcement;
                 }, this)
@@ -75,10 +69,10 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton],
-        [[chlk.models.id.AnnouncementCommentId]],
-        function deleteCommentAction(announcementCommentId){
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId]],
+        function deleteCommentAction(announcementId, announcementCommentId){
             var res = this.announcementCommentService
-                .deleteComment(announcementCommentId)
+                .deleteComment(announcementId, announcementCommentId)
                 .then(function(announcement){
                     this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
                     return announcement;

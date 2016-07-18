@@ -13,68 +13,67 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, String, String]],
             ria.async.Future, function postComment(announcementId, text, attachmentIds_){
-                return  this.post('AnnouncementComment/PostComment', chlk.models.announcement.AnnouncementComment,{
+                return  this.post('AnnouncementComment/PostComment', ArrayOf(chlk.models.announcement.AnnouncementComment),{
                     announcementId: announcementId.valueOf(),
                     text: text,
                     attachmentIds: attachmentIds_
                 })
-                .then(function(comment){
-                    var res = this.getAnnouncement_(comment.getAnnouncementId());
-                    res.getAnnouncementComments().push(comment);
+                .then(function(comments){
+                    var res = this.getAnnouncement_(announcementId);
+                    res.setAnnouncementComments(comments);
                     return res;
                 }, this);
             },
 
-            [[chlk.models.id.AnnouncementCommentId, String, String]],
-            ria.async.Future, function reply(toAnnouncementCommentId, text, attachmentIds_){
-                return this.post('AnnouncementComment/Reply', chlk.models.announcement.AnnouncementComment, {
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId, String, String]],
+            ria.async.Future, function reply(announcementId, toAnnouncementCommentId, text, attachmentIds_){
+                return this.post('AnnouncementComment/Reply', ArrayOf(chlk.models.announcement.AnnouncementComment), {
                     toCommentId: toAnnouncementCommentId.valueOf(),
                     text: text,
                     attachmentIds: attachmentIds_
-                }).then(function(comment){
-                    var result =this.getAnnouncement_(comment.getAnnouncementId());
-                    var parentComment = this.findComment_(comment.getParentCommentId(), result.getAnnouncementComments());
-                    var comments = parentComment.getSubComments() || [];
-                    comments.push(comment);
-                    parentComment.setSubComments(comments);
-                    return result
+                }).then(function(comments){
+                    var res = this.getAnnouncement_(announcementId);
+                    res.setAnnouncementComments(comments);
+                    return res;
                 }, this);
             },
 
-            [[chlk.models.id.AnnouncementCommentId, String, String]],
-            ria.async.Future, function edit(announcementCommentId, text, attachmentIds_){
-                return this.post('AnnouncementComment/Edit', chlk.models.announcement.AnnouncementComment, {
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId, String, String]],
+            ria.async.Future, function edit(announcementId, announcementCommentId, text, attachmentIds_){
+                return this.post('AnnouncementComment/Edit', ArrayOf(chlk.models.announcement.AnnouncementComment), {
                     announcementCommentId: announcementCommentId.valueOf(),
                     text: text,
                     attachmentIds: attachmentIds_
                 })
-                .then(function(comment){
-                    return this.editCacheAnnouncementComments_(comment);
-                }, this);
-            },
-
-
-            [[chlk.models.id.AnnouncementCommentId, Boolean]],
-            ria.async.Future, function setHidden(announcementCommentId, hidden){
-                return this.post('AnnouncementComment/SetHidden', ArrayOf(chlk.models.announcement.AnnouncementComment),{
-                    announcementCommentId: announcementCommentId.valueOf(),
-                    hidden: hidden
-                })
                 .then(function(comments){
-                    var res = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
+                    var res = this.getAnnouncement_(announcementId);
                     res.setAnnouncementComments(comments);
                     return res;
                 }, this);
             },
 
 
-            [[chlk.models.id.AnnouncementCommentId]],
-            ria.async.Future, function deleteComment(announcementCommentId){
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId, Boolean]],
+            ria.async.Future, function setHidden(announcementId, announcementCommentId, hidden){
+                return this.post('AnnouncementComment/SetHidden', ArrayOf(chlk.models.announcement.AnnouncementComment),{
+                    announcementCommentId: announcementCommentId.valueOf(),
+                    hidden: hidden
+                })
+                .then(function(comments){
+                    var res = this.getAnnouncement_(announcementId);
+                    res.setAnnouncementComments(comments);
+                    return res;
+                }, this);
+            },
+
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId]],
+            ria.async.Future, function deleteComment(announcementId, announcementCommentId){
                 return this.post('AnnouncementComment/Delete', ArrayOf(chlk.models.announcement.AnnouncementComment),{
                     announcementCommentId: announcementCommentId.valueOf()
                 })
                 .then(function(comments){
-                    var res = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
+                    var res = this.getAnnouncement_(announcementId);
                     res.setAnnouncementComments(comments);
                     return res;
                 }, this);
@@ -106,8 +105,8 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AnnouncementId]],
-            chlk.models.announcement.AnnouncementView, function getAnnouncement_(id){
-                return this.getContext().getService(chlk.services.AnnouncementService).getAnnouncementSync(id);
+            function getAnnouncement_(id){
+                return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_FOR_QNAS, null);
             }
         ]);
 });

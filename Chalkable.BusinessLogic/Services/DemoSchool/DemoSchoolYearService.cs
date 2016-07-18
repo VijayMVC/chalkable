@@ -130,7 +130,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return SchoolYearStorage.GetCurrentSchoolYear();
         }
 
-        public IList<SchoolYear> GetPreviousSchoolYears(int count = 1)
+        public IList<SchoolYear> GetPreviousSchoolYears(int fromSchoolYearId, int count = 1)
         {
             throw new NotImplementedException();
         }
