@@ -62,8 +62,8 @@ NAMESPACE('chlk.services', function () {
                     candropstudentscore: canDropStudentScore_ || false,
                     attributes: attributesListData,
                     discussionEnabled: discussionEnabled,
-                    previewCommentsEnabled: previewCommentsEnabled,
-                    requireCommentsEnabled: requireCommentsEnabled
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             },
 
@@ -89,8 +89,8 @@ NAMESPACE('chlk.services', function () {
                     gradable: gradable_ || false,
                     attributes: attributesListData,
                     discussionEnabled: discussionEnabled,
-                    previewCommentsEnabled: previewCommentsEnabled,
-                    requireCommentsEnabled: requireCommentsEnabled
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             },
 

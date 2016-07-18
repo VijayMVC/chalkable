@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
@@ -250,7 +251,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("Teacher, DistrictAdmin")]
-        public ActionResult Panorama(int studentId, StudentProfilePanoramaSetting settings)
+        public async Task<ActionResult> Panorama(int studentId, StudentProfilePanoramaSetting settings)
         {
             if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to view class panorama");
@@ -261,9 +262,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (settings.SchoolYearIds.Count == 0)
                 throw new ChalkableException("School years is required parameter");
 
-            var studentPanorama = SchoolLocator.StudentService.Panorama(studentId, settings.SchoolYearIds, settings.StandardizedTestFilters);
+            var studentPanorama = await SchoolLocator.StudentService.Panorama(studentId, settings.SchoolYearIds, settings.StandardizedTestFilters);
             var standardizedTests = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
-
+            
             return Json(StudentPanoramaViewData.Create(studentId, studentPanorama, settings, standardizedTests));
         }
 

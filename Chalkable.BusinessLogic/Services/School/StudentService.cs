@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
@@ -37,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
         StudentSummaryInfo GetStudentSummaryInfo(int studentId);
         StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
-        StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
+        Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
 
         StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId);
         IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null);
@@ -209,7 +210,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new StudentDataAccess(u).GetEnrolledStudentsCount());
         }
 
-        public StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        public async Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
 
@@ -223,9 +224,15 @@ namespace Chalkable.BusinessLogic.Services.School
             var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
             var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);
 
+            var tasks = new List<Task<IList<Date>>>();
+            foreach (var syId in schoolYearIds)
+            {
+                tasks.Add(Task.Run(() => ServiceLocator.CalendarDateService.GetLastDays(syId, true, null, Context.NowSchoolYearTime)));
+            }
             var studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
 
-            return StudentPanoramaInfo.Create(studentPanorama);
+            var days = (await Task.WhenAll(tasks)).SelectMany(x => x).OrderBy(x=>x.Day).ToList();
+            return StudentPanoramaInfo.Create(studentPanorama, days);
         }
 
         public StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId)
