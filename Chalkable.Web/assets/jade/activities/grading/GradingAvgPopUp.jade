@@ -1,0 +1,4 @@
+if self.isMayBeExempt()
+    +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), addCallBack = true).with-value.exempt-checkbox.main-check
+else
+    +Hidden('isexempt', self.isExempt())

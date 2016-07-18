@@ -1,0 +1,27 @@
+.students-list
+    -var topData = self.getTopData();
+    -var selectedId = topData.getSelectedItemId();
+
+    h2.page-title People
+
+    +ClassesToolBarWithAll(topData, 'students', 'my')
+
+    if !selectedId || !selectedId.valueOf()
+        .action-bar
+            .items
+                +ActionLink('students', 'my')(class=self.isMy() ? "pressed" : "")
+                    =self.getUserRole().isStudent() ? Msg.Classmates :Msg.My_Students
+                +ActionLink('students', 'all')(class=(self.isMy() ? "" : "pressed ") + (self.isHasAccessToAll() ? "" : "disabled" ))
+                    =self.getUserRole().isStudent() ? Msg.My_Teachers :Msg.Whole_School
+    +ActionForm('students', 'updateList')#people-list-form
+        input(type="hidden", name="my", value=(self.isMy() ? 'true' : 'false')))
+        input(type="hidden", name="classId", value=selectedId))
+        .users-list-container
+            if self.isLEIntegrated() && self.isHasAccessToLE()
+                .le-link
+                    +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+            +RenderWith(self.getUsersList(), chlk.templates.people.UsersListTpl)(
+                my = self.isMy(),
+                userRole = self.getUserRole(),
+                LEIntegrated = self.isLEIntegrated() && self.isHasAccessToLE()
+            )
