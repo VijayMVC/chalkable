@@ -1,0 +1,7 @@
+mixin ShortPersonInfoSection(person, imageSize)
+    .person-info.standard-short-info
+        .avarar-container.standard-small-container
+            .img-container
+                +PersonImg(person, imageSize, true)
+        h1.profile-person-name=person.getDisplayName()
+        block
