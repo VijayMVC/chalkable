@@ -1,0 +1,48 @@
+mixin LessonPlanIcon_(tpl, lessonPlan, classId)
+   .announcement-item.application
+       -var canRemove = tpl.getUserRole().isAdmin() || lessonPlan.getGalleryOwnerRef() == tpl.getCurrentUser().getId()
+       if canRemove
+            +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId(), classId).close-btn
+       .wrapper
+           .attach-assessment.img
+           .title(data-tooltip=lessonPlan.getTitle(), data-tooltip-type="overflow")= lessonPlan.getTitle()
+           .shortdesc
+           +ActionButton('announcement', 'createFromTemplate', lessonPlan.getId(), classId) Open
+
+.dialog.attach-dialog
+   .x-window-header
+      h1 LESSON PLAN GALLERY
+      a.close.close-btn
+   .x-window-body
+
+       -var lessonPlans = self.getLessonPlans()
+       +ActionForm('lessonplangallery', 'lessonPlanListFilter')#lp-gallery-filter
+           +Hidden('start', lessonPlans.getPageIndex() * lessonPlans.getPageSize())
+           +Hidden('count', lessonPlans.getPageSize())
+           +Hidden('classId', self.getClassId())
+           .buttons.filter
+                .left
+                    .sort
+                        +Select('lpGalleryCategoryType')(id="lpGalleryCategoryType", data-placeholder = "Category...")
+                            +Option('', 'Category...', true)
+                            each item in self.getCategories()
+                                +Option(item.getId().valueOf(), item.getName(), item.getId() == self.getCategoryType())
+                        span &nbsp;
+                        +Select('lpGallerySortType')(data-placeholder = "Sort...")#lp-gallery-sort-type
+                            -var sortTypeEnum = chlk.models.attachment.SortAttachmentType
+                            +Option(sortTypeEnum.NEWEST_UPLOADED.valueOf(), 'Newest Uploaded', sortTypeEnum.NEWEST_UPLOADED == self.getSortType())
+                            +Option(sortTypeEnum.OLDEST_UPLOADED.valueOf(), 'Oldest Uploaded', sortTypeEnum.OLDEST_UPLOADED == self.getSortType())
+               .right.wrapper
+                    .lesson-plan-gallery-search-container
+                        input(type="text", placeholder='Search...', name="filter", value=self.getFilter()).lp-gallery-search.search-input
+                        .search-glass
+               .clear-fix
+           .attachments-and-applications
+               if !self.isEmpty()
+                   each lessonPlan in lessonPlans.getItems()|| []
+
+                       +LessonPlanIcon_(self, lessonPlan, self.getClassId())
+               else
+                   .no-lesson-plans No Lesson Plans Uploaded
+    .paging
+        +Paginator2('lessonplangallery', 'lessonPlanTemplatesList',lessonPlans, [self.getClassId(), self.getCategoryType(),  self.getFilter(), self.getSortType() ])

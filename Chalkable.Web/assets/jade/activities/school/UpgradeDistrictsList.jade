@@ -1,0 +1,18 @@
+.districts-list.loader-container
+   .people-list-container.not-transparent
+      .grid-container.districts-individual.loader-container
+         +ListView(self.getDistricts())#class-district-list-panel.people-list
+            each item, i in self.getDistricts().getItems()
+               .district-info
+                  .row(index=i)
+                     span.title.district-name= 'District ' +  item.getName()
+                     +ActionLink('schools', 'showSchoolsForUpgrade', item.getId()).show-schools-link.x-hidden
+                     .assessment-option
+                        span Assessment Access
+                        +ActionButton('schools', 'enableAssessment', item.getId()).special-button.blue-button.upgrade-district-btn Enable
+                        +ActionButton('schools', 'disableAssessment', item.getId()).negative-button.special-button.red-button Disable
+                     span.upgraded-date
+                     +ActionButton('schools', 'upgradeDistrict', item.getId()).special-button.blue-button.upgrade-district-btn Upgrade District
+                     +ActionButton('schools', 'downgradeDistrict', item.getId()).negative-button.special-button.red-button Un-upgrade District
+
+                  .schools-list-container(data-districtId=item.getId().valueOf())
