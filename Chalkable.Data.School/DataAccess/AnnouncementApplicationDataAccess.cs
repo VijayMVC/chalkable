@@ -22,6 +22,10 @@ namespace Chalkable.Data.School.DataAccess
                         {
                             {AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD, key}
                         }),
+                    Orm.SimpleDelete<StudentAnnouncementApplicationMeta>(new AndQueryCondition
+                        {
+                            {StudentAnnouncementApplicationMeta.ANNOUNCEMENT_APPLICATION_REF_FIELD, key }
+                        }),
                     Orm.SimpleDelete<AnnouncementApplication>(new AndQueryCondition
                         {
                             {nameof(AnnouncementApplication.Id), key}

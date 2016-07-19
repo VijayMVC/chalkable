@@ -40,7 +40,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                         return Redirect<ClassAnnouncementController>(c => c.CreateClassAnnouncement(classAnnType, classId.Value, null));
                 }
                 if (draft is LessonPlan)
+                {
                     classId = classId ?? (draft as LessonPlan).ClassRef;
+                    return Redirect<LessonPlanController>(x => x.CreateLessonPlan(classId));
+                }
+                
                 if (draft is SupplementalAnnouncement)
                 {
                     var supplementedAnn = draft as SupplementalAnnouncement;
@@ -53,7 +57,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 }
             }
             if(classId.HasValue)
-                return Redirect<LessonPlanController>(c => c.CreateLessonPlan(classId.Value));
+                return Redirect<ClassAnnouncementController>(c => c.CreateClassAnnouncement(null, classId.Value, null));
             return Json(null, 7);
         }
 

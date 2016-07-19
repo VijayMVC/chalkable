@@ -26,6 +26,9 @@ Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRe
 Union
 Select Id From vwClassAnnouncement
 Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef = @schoolYearId
+Union 
+Select Id from vwSupplementalAnnouncement
+Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef = @schoolYearId
 
 
 /*Delete Lesson Plans datas*/

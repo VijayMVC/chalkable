@@ -39,12 +39,16 @@ begin transaction
 	insert into @annIdT
 	select Id from vwClassAnnouncement
 	Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId)
-	AND ClassAnnouncementTypeRef = @classAnnouncementTypeId AND [State] = 0
-	and SchoolYearRef  = @schoolYearId
+		 AND [State] = 0
+		 and SchoolYearRef  = @schoolYearId
 	Union
 	Select Id From vwLessonPlan
 	Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) And [State] = 0
-	and SchoolYearRef  = @schoolYearId
+		and SchoolYearRef  = @schoolYearId
+	Union 
+	Select Id from vwSupplementalAnnouncement
+	Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 
+		  and SchoolYearRef = @schoolYearId
 
 	exec spDeleteAnnouncements @annIdT
 
