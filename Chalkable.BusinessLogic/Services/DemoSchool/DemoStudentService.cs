@@ -183,6 +183,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return StudentHealthConditionStorage.GetStudentHealthConditions(studentId);
         }
 
+        public StudentSummaryInfo GetStudentSummaryInfo(int studentId, int schoolYearId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Student GetStudentDetails(int studentId, int schoolYearId)
         {
             var student = StudentStorage.GetById(studentId);

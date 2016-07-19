@@ -38,8 +38,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 var student = SchoolLocator.PersonService.GetPerson(schoolPersonId);
                 return Json(ShortPersonViewData.Create(student));
             }
-            var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(schoolPersonId);
-            var classes = SchoolLocator.ClassService.GetStudentClasses(Context.SchoolYearId.Value, schoolPersonId).ToList();
+
+            var currentSchoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYearByStudent(schoolPersonId);
+            var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(schoolPersonId, currentSchoolYear.Id);
+            var classes = SchoolLocator.ClassService.GetStudentClasses(currentSchoolYear.Id, schoolPersonId).ToList();
             var classPersons = SchoolLocator.ClassService.GetClassPersons(schoolPersonId, true);
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
             var schedule = SchoolLocator.ClassPeriodService.GetSchedule(null, studentSummaryInfo.StudentInfo.Id, null,
@@ -69,12 +71,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
         public ActionResult Info(int personId)
         {
-            Trace.Assert(Context.SchoolYearId.HasValue);
-
-            var syId = GetCurrentSchoolYearId();
+            var currentSchoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYearByStudent(personId);
+            var syId = currentSchoolYear.Id;
             var today = Context.NowSchoolTime;
             var studentDetailsInfo = SchoolLocator.StudentService.GetStudentDetailsInfo(personId, syId);
-            var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(personId);
+            var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(personId, syId);
             var studentClasses = SchoolLocator.ClassService.GetStudentClasses(syId, personId);
             Room currentRoom = null;
             ClassDetails currentClass = null;
@@ -84,8 +85,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 if (currentClass?.RoomRef != null)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
             }
-
-            var res = GetInfo(personId, personInfo => StudentInfoViewData.Create(personInfo, studentDetailsInfo,
+            var res = GetInfo(personId, currentSchoolYear.SchoolRef, personInfo => StudentInfoViewData.Create(personInfo, studentDetailsInfo,
                 studentSummaryInfo, studentClasses, currentClass, currentRoom, syId, today));
             
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);

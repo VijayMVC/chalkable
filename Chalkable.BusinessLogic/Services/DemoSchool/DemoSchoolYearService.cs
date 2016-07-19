@@ -194,6 +194,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<SchoolYear> GetSchoolYearsByStudent(int studentId, StudentEnrollmentStatusEnum? enrollmentStatus, DateTime? date)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SchoolYear GetCurrentSchoolYearByStudent(int studentId)
+        {
+            var sys = ServiceLocator.SchoolYearService.GetSchoolYearsByStudent(studentId, StudentEnrollmentStatusEnum.CurrentlyEnrolled, Context.NowSchoolTime);
+            return sys.Count > 0 ? sys[0] : ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+        }
+
         public IList<SchoolYear> GetSortedYears()
         {
             return SchoolYearStorage.GetAll();
