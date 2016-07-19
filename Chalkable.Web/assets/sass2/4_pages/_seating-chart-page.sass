@@ -1,0 +1,197 @@
+
+.seating-chart-popup, .class-list-page .attendance-combo .combo-list, .class-profile-attendance-list-page .attendance-combo .combo-list
+  padding: 0
+  width: 200px
+  position: absolute
+  display: none
+  z-index: 999
+  +box-shadow(transparentize(#000, .8) 0 0 16px)
+
+  .combo-list-container
+    overflow-y: scroll
+    max-height: 600px
+
+  .item
+    position: relative
+    padding: 9px 9px 9px 32px
+    font: bold 15px 'Open Sans'
+    cursor: pointer
+    margin: 0
+    overflow: hidden
+    text-overflow: ellipsis
+
+    .text
+      overflow: hidden
+      text-overflow: ellipsis
+
+    &.selected, &:hover
+      background: #f5f5f5
+
+    &:not(:last-child)
+      border: 1px solid #ededed
+
+  .late
+    .student-seating-type
+      background: #f0ca19
+
+  .absent
+    .student-seating-type
+      background: #d45151
+
+  .student-seating-type
+    position: absolute
+    top: 15px
+    left: 13px
+    width: 10px
+    height: 10px
+    border-radius: 5px
+    background: #41b768
+
+  .absent-part, .late-part
+    display: none
+
+  &.absent
+    .absent-part
+      display: block
+
+  &.late
+    .late-part
+      display: block
+
+  &.absent, &.late
+    .first-part
+      display: none
+
+.seating-chart-content, .seating-chart-people
+  .remove-red-btn
+    display: none
+
+.seating-chart-content
+  .header
+    position: relative
+
+    .report-link
+      left: 30px
+      z-index: 10
+
+  position: relative
+
+  .table
+    width: 100%
+
+  .title
+    position: relative
+
+  .l
+    width: 120px
+  .r
+    width: 120px
+    text-align: right
+
+  .tr
+    opacity: 0
+    position: absolute
+    top: 0
+    left: 50%
+    margin-left: -130px
+    width: 260px
+    height: 100%
+    z-index: 5
+    cursor: pointer
+
+
+  .buttons
+    padding: 10px 25px 0
+
+  //.third-container
+    display: block !important
+
+  .seating-chart-container
+    padding: 25px
+
+    > .table
+      width: 100%
+
+  .seating-row
+    display: block
+
+    > div
+      display: inline-block
+      width: 75px
+
+  .attendance-data
+    position: relative
+    display: block
+
+  .reason-container
+    position: absolute
+    bottom: 1px
+    right: 3px
+    width: 16px
+    height: 16px
+    border-radius: 50%
+    background: #41b768
+    border: 1px solid silver
+    font-size: 0
+    +box-shadow(#fff 0 0 0 3px)
+
+  .absent .reason-container
+    background: #d45151
+
+  .late .reason-container
+    background: #f0ca19
+
+  .empty-box
+    &.absolute
+      margin-left: -85px
+
+    .empty
+      height: 64px
+      width: 64px
+      border-radius: 50%
+      border: 3px dashed transparent
+
+  .ui-droppable
+    .remove-red-btn
+      display: block
+
+    .empty-box .empty
+      border-color: silver
+
+  .student-block
+    margin: 25px 10px
+    vertical-align: top
+    height: 70px
+
+    &.draggable
+      z-index: 10
+
+  #submit-chart
+    display: none
+
+  .show-edit-grid-form
+    display: inline
+
+.student-seating-name
+  text-align: center
+
+.seating-chart-people
+  display: none
+  position: fixed
+  bottom: 0
+  padding: 0 15px
+  background: white
+  left: 0
+  right: 0
+  border-top: 1px solid #c8c7c3
+  z-index: 299
+  +box-shadow(transparentize(#000, .8) 0 2px 16px)
+
+  .student-block
+    display: inline-block
+    margin: 15px 10px 25px
+    vertical-align: top
+    height: 70px
+
+  &.demo
+    bottom: 72px
