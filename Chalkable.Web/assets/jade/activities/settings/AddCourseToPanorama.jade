@@ -1,0 +1,19 @@
+-var excludeIds = self.getExcludeIds() || []
+
+.dialog.course-types
+    .x-window-header
+        h1 Add Subject
+        .close.close-btn
+
+    +ActionForm('settings', 'addCoursesToPanorama')
+        +Hidden('requestId', self.getRequestId())
+        +Hidden('courseTypeIds', self.getRequestId()).course-types-ids
+        .courses-container
+            +Select('courseTypes')(multiple, data-placeholder="Course Types...").course-type-select
+                each item in self.getCourseTypes() || []
+                    +Option(item.getCourseTypeId().valueOf(), item.getCourseTypeName())(
+                        disabled = excludeIds.indexOf(item.getCourseTypeId().valueOf()) > -1
+                    )
+        .buttons-container
+            +Button.special-button2.cancel.close Cancel
+            +Button()(type="submit").special-button2.blue-button Add

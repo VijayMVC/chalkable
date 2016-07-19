@@ -1,0 +1,31 @@
+-var user = self.getUser()
+-var currentGp = user.getCurrentGradingPeriod()
+.profile-page
+    h2.page-title=Msg.Student_profile
+    +ProfileTopBar(self, 'discipline')
+    .summary-view
+        #top-panel
+            table
+                tr
+                    td
+                        #avatar-photo-conainer.left-block.panel-block
+                            .img-container
+                                +PersonImg(user, 140, !self.getUserRole().isStudent())
+                        #info-panel.central-block.panel-block
+                            displayName =user.getDisplayName() || user.getFullName()
+                            h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                            .status=user.getSummary()
+                            +Select('markingPeriodSelect', 'students', 'discipline', [user.getId().valueOf()]).mp-select
+                                each gp,i in user.getGradingPeriods()
+                                    +Option(gp.getId().valueOf(), gp.getName(), gp.getId() == currentGp.getId())(data-additional-params = [gp.getStartDate().format('mm-dd-yy')])
+                    td
+                        #glance-block-panel.right-block.panel-block
+                            .glance-container
+                                -var boxesData = self.buildGlanceBoxesData()
+                                .glance-container
+                                    each boxData in boxesData
+                                        +GlanceBox(null, null, boxData, null, null)
+        .calendar-panel
+            +RenderWith(self.getDisciplineCalendar(), chlk.templates.calendar.discipline.StudentDisciplineMonthCalendarTpl)(
+                userRole = self.getUserRole()
+            )
