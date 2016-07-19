@@ -15,15 +15,17 @@ If @STUDENT_ROLE = @roleId
 Declare @commentIds table (Id int)
 
 Insert Into @commentIds
-Select AnnouncementComment.Id 
+Select Distinct AnnouncementComment.Id 
 From AnnouncementComment
 Join Announcement 
 	on Announcement.Id = AnnouncementComment.AnnouncementRef
+Join vwPerson
+	on AnnouncementComment.PersonRef = vwPerson.Id
 Where AnnouncementRef = @announcementId 
 	  and Announcement.DiscussionEnabled = 1
 	  and Deleted = 0
 	  and (@TEACHER_ROLE = @roleId or 
-			(@STUDENT_ROLE = @roleId and Hidden = 0 and (RequireCommentsEnabled = 0 or @currentStudentPosts > 0) or AnnouncementComment.PersonRef = @callerId)
+			(@STUDENT_ROLE = @roleId and Hidden = 0 and (RequireCommentsEnabled = 0 or @currentStudentPosts > 0 or RoleRef != @STUDENT_ROLE) or AnnouncementComment.PersonRef = @callerId)
 		  )
 
 Select * From vwAnnouncementComment Where AnnouncementComment_Id in (Select Id From @commentIds)
