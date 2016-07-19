@@ -21,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementTypeEnum GetAnnouncementType(int announcementId);
         void SetSettingsForFeed(FeedSettingsInfo settings);
         FeedSettingsInfo GetSettingsForFeed();
+        FeedSettingsInfo GetSettingsForClassFeed(int classId);
         IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, AnnouncementTypeEnum? announcementType);
     }
     
@@ -104,6 +105,17 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 res.ToDate = Context.SchoolYearEndDate;
             }
             return res;
+        }
+
+        public FeedSettingsInfo GetSettingsForClassFeed(int classId)
+        {
+            var c = ServiceLocator.ClassService.GetClassDetailsById(classId);
+            return new FeedSettingsInfo
+            {
+                AnyDate = true,
+                FromDate = c.SchoolYear.StartDate,
+                ToDate = c.SchoolYear.EndDate
+            };
         }
 
         public void SetSettingsForFeed(FeedSettingsInfo settings)

@@ -94,6 +94,24 @@ NAMESPACE('chlk.services', function () {
                 }
             },
 
+
+            [[chlk.models.id.ClassId, Number, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
+                chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum]],
+            ria.async.Future, function getAnnouncementsForClassProfile(classId, start_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_){
+                return this.get('Feed/ClassFeed.json', chlk.models.feed.Feed,{
+                    classId: classId.valueOf(),
+                    start: start_ || 0,
+                    count: 10,
+                    complete: importantOnly_ ? false : null,
+                    //settings data
+                    announcementType: annType_ && annType_.valueOf(),
+                    sortType: sortType_ && sortType_.valueOf(),
+                    fromDate: startDate_ && startDate_.toStandardFormat(),
+                    toDate: endDate_ && endDate_.toStandardFormat(),
+                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
+                });
+            },
+
             [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
                 chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean]],
             ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_) {

@@ -249,9 +249,18 @@ NAMESPACE('chlk.controllers', function (){
         [[Boolean, Boolean, chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
             chlk.models.id.GradingPeriodId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean, Boolean, Object]],
         function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_){
+
+            var annsList = isProfile_ && classId_
+                ? this.announcementService.getAnnouncementsForClassProfile(classId_, start_ | 0, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_)
+                : this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, createdAnnouncements_)
+
+            var gps = isProfile_ && classId_
+                ? this.gradingPeriodService.getListByClassId(classId_)
+                : this.gradingPeriodService.getList()
+
             return ria.async.wait([
-                this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, createdAnnouncements_),
-                this.gradingPeriodService.getList(),
+                annsList,
+                gps,
                 this.schoolYearService.listOfSchoolYearClasses()
             ])
                 .attach(this.validateResponse_())
