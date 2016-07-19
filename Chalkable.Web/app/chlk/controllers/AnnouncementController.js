@@ -795,7 +795,6 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(list){
-                    this.lpGalleryCategoryService.cacheLessonPlanCategories(list);
                     this.cacheLessonPlanClassId(model.getAnnouncement().getLessonPlanData().getClassId());
                     model.getAnnouncement().setCategories(list);
                     return model;
@@ -832,7 +831,6 @@ NAMESPACE('chlk.controllers', function (){
                         this.getListOfAppRecommendedContents_(announcement, true);
 
                         model.getAnnouncement().setCategories(result[1]);
-                        this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                         model.setSchoolYear(schoolYear);
                         return model;
                     }
@@ -863,7 +861,6 @@ NAMESPACE('chlk.controllers', function (){
                     var model = result[0];
                     var resModel =  this.addEditAction(model, false);
                     resModel.getAnnouncement().setCategories(result[1]);
-                    this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                     return resModel;
                 },this)
                 .attach(this.validateResponse_());
@@ -1350,7 +1347,6 @@ NAMESPACE('chlk.controllers', function (){
                     this.getListOfAppRecommendedContents_(announcement, true);
 
                     model.getAnnouncement().setCategories(result[1]);
-                    this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                     return model;
                 },this)
                 .attach(this.validateResponse_());
@@ -2334,7 +2330,6 @@ NAMESPACE('chlk.controllers', function (){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
                         resModel.getAnnouncement().setCategories(result[1]);
-                        this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                         this.cacheLessonPlanClassId(resModel.getAnnouncement().getLessonPlanData().getClassId());
                         return resModel;
                     }

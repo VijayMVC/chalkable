@@ -93,7 +93,7 @@ NAMESPACE('chlk.services', function () {
                 if(!panorama)
                     throw 'No panorama saved';
 
-                var items = panorama.getStudentAbsenceStats(), propRef, propName,
+                var items = panorama.getStudentAbsenceStats() || [], propRef, propName,
                     ref = ria.reflection.ReflectionClass(chlk.models.panorama.StudentAbsenceStatViewData);
 
                 switch (orderBy_){
@@ -145,7 +145,7 @@ NAMESPACE('chlk.services', function () {
                 if(!panorama)
                     throw 'No panorama saved';
 
-                var items = panorama.getStudentDisciplineStats(), propRef, propName,
+                var items = panorama.getStudentDisciplineStats() || [], propRef, propName,
                     ref = ria.reflection.ReflectionClass(chlk.models.panorama.StudentDisciplineStatViewData);
 
                 switch (orderBy_){

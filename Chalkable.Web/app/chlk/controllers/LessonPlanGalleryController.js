@@ -44,7 +44,6 @@ NAMESPACE('chlk.controllers', function () {
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var lessonPlans = result[0], lessonPlanCategories = result[1];
-                        this.lpGalleryCategoryService.cacheLessonPlanCategories(lessonPlanCategories);
                         return new chlk.models.announcement.LessonPlanGalleryViewData(
                             lessonPlans,
                             lessonPlanCategories,
