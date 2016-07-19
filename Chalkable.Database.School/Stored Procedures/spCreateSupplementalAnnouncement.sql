@@ -28,30 +28,22 @@ Begin
 		Created Desc
 
 	If @announcementId is not null
-		update 
-			Announcement 
-		Set 
-			[State] = -1 
-		Where 
-			Id = @announcementId
+		update Announcement 
+		Set [State] = -1 
+		Where Id = @announcementId
 End
 
 Declare @annIdT TInt32
 
 Insert Into @annIdT
-	Select 
-		Id 
-	From 
-		vwSupplementalAnnouncement
-	Where 
-		ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef = @schoolYearId
-	Union
-		Select 
-			Id 
-		From 
-			vwClassAnnouncement
-		Where 
-			ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef = @schoolYearId
+Select Id From vwLessonPlan
+Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef = @schoolYearId
+Union
+Select Id From vwClassAnnouncement
+Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef = @schoolYearId
+Union 
+Select Id from vwSupplementalAnnouncement
+Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef = @schoolYearId
 
 
 /*Delete Lesson Plans datas*/
