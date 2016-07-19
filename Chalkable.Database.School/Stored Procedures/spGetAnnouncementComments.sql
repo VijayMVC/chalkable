@@ -9,7 +9,7 @@ Declare @STUDENT_ROLE int = 3
 Declare @DISTRICT_ADMIN_ROLE int = 10 
 Declare @currentStudentPosts int = 0
 If @STUDENT_ROLE = @roleId
-	select @currentStudentPosts = Count(*) From AnnouncementComment Where AnnouncementRef = @announcementId and PersonRef = @callerId
+	select @currentStudentPosts = Count(*) From AnnouncementComment Where AnnouncementRef = @announcementId and PersonRef = @callerId and Deleted = 0
 
 
 Declare @commentIds table (Id int)
