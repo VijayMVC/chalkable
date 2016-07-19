@@ -102,5 +102,20 @@ namespace Chalkable.Data.School.DataAccess
 
             return ReadOneOrNull<StudentSchoolYear>(dbQuery);
         }
+
+        public IList<SchoolYear> GetSchoolYearsByStudent(int studentId, StudentEnrollmentStatusEnum? enrollmentStatus)
+        {
+            var conds = new AndQueryCondition
+            {
+                {StudentSchoolYear.STUDENT_FIELD_REF_FIELD, studentId},
+            };
+            if (enrollmentStatus.HasValue)
+                conds.Add(StudentSchoolYear.ENROLLMENT_STATUS_FIELD, (int) enrollmentStatus.Value);
+            var query = Orm.SimpleSelect<StudentSchoolYear>(conds);
+            var studentSys = ReadMany<StudentSchoolYear>(query);
+            return studentSys.Count > 0 
+                ? GetByIds(studentSys.Select(x => x.SchoolYearRef).ToList()) 
+                : new List<SchoolYear>();
+        }
     }
 }

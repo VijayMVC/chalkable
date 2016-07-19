@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
@@ -26,14 +27,17 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         
         private static ClassProfilePanoramaSetting GetDefaultClassPanoramaSettings(IServiceLocatorSchool serviceLocator, int? classId)
         {
-            var currentSchoolYear = serviceLocator.SchoolYearService.GetCurrentSchoolYear();
             if (!classId.HasValue)
-                return new ClassProfilePanoramaSetting {SchoolYearIds = new List<int> {currentSchoolYear.Id}};
-
-            var adminPanoramaSettings = serviceLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
+            {
+                Trace.Assert(serviceLocator.Context.SchoolYearId.HasValue);
+                return new ClassProfilePanoramaSetting { SchoolYearIds = new List<int> { serviceLocator.Context.SchoolYearId.Value } };
+            }
             var @class = serviceLocator.ClassService.GetById(classId.Value);
+
+            var currentSchoolYearId = @class.SchoolYearRef ?? serviceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             
-            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(adminPanoramaSettings.PreviousYearsCount);
+            var adminPanoramaSettings = serviceLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
+            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(currentSchoolYearId, adminPanoramaSettings.PreviousYearsCount);
 
             var res = new ClassProfilePanoramaSetting
             {
@@ -42,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
                     ?? new List<StandardizedTestFilter>()
             };
 
-            res.SchoolYearIds.Add(currentSchoolYear.Id);
+            res.SchoolYearIds.Add(currentSchoolYearId);
 
             return res;
         }
@@ -51,7 +55,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         {
             var currentSchoolYear = serviceLocator.SchoolYearService.GetCurrentSchoolYear();
             var adminPanoramaSettings = serviceLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
-            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(adminPanoramaSettings.PreviousYearsCount);
+            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(currentSchoolYear.Id, adminPanoramaSettings.PreviousYearsCount);
 
             var res = new StudentProfilePanoramaSetting
             {

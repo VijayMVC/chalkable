@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
@@ -20,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<int> GetYears(); 
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
-        IList<SchoolYear> GetPreviousSchoolYears(int count = 1);
+        IList<SchoolYear> GetPreviousSchoolYears(int fromSchoolYearid, int count = 1);
         IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true); 
         IList<StudentSchoolYear> GetStudentAssignments();
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
@@ -28,6 +29,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears);
         IList<SchoolYear> GetDescSortedYearsByIds(IList<int> ids);
         StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId);
+        IList<SchoolYear> GetSchoolYearsByStudent(int studentId, StudentEnrollmentStatusEnum? enrollmentStatus, DateTime? date);
+        SchoolYear GetCurrentSchoolYearByStudent(int studentId);
     }
 
     public class SchoolYearService : SisConnectedService, ISchoolYearService
@@ -66,9 +69,9 @@ namespace Chalkable.BusinessLogic.Services.School
             return schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
         }
 
-        public IList<SchoolYear> GetPreviousSchoolYears(int count = 1)
+        public IList<SchoolYear> GetPreviousSchoolYears(int fromSchoolYearId, int count = 1)
         {
-            var current = GetCurrentSchoolYear();
+            var current = GetSchoolYearById(fromSchoolYearId);
             return DoRead(u => new SchoolYearDataAccess(u).GetPreviousSchoolYears(current.StartDate ?? Context.NowSchoolYearTime, current.SchoolRef, count));
         }
 
@@ -147,6 +150,21 @@ namespace Chalkable.BusinessLogic.Services.School
         public StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId)
         {
             return DoRead(u => new SchoolYearDataAccess(u).GetPreviousStudentSchoolYearOrNull(studentId));
+        }
+
+        public IList<SchoolYear> GetSchoolYearsByStudent(int studentId, StudentEnrollmentStatusEnum? enrollmentStatus, DateTime? date)
+        {
+            var res = DoRead(u => new SchoolYearDataAccess(u).GetSchoolYearsByStudent(studentId, enrollmentStatus));
+            return res.Where(x => x.StartDate <= date && x.EndDate >= date).ToList();
+        }
+
+        public SchoolYear GetCurrentSchoolYearByStudent(int studentId)
+        {
+            var sys = ServiceLocator.SchoolYearService.GetSchoolYearsByStudent(studentId, StudentEnrollmentStatusEnum.CurrentlyEnrolled, Context.NowSchoolTime);
+            var res = (sys.FirstOrDefault(x => x.Id == Context.SchoolYearId) ??
+                       sys.FirstOrDefault(x => x.SchoolRef == Context.SchoolLocalId)) ??
+                      (sys.Count > 0 ? sys[0] : ServiceLocator.SchoolYearService.GetCurrentSchoolYear());
+            return res;
         }
     }
 }

@@ -39,7 +39,7 @@ BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add
                             .box-checkbox.circle
                                 +Checkbox('student', false, false, true)(data-id=info.getId().valueOf()).student-check.student-grid-check
                         .cell.name
-                            +ProfileLink(info)=info.getFullName()
+                            +ActionLink('students', 'panorama', info.getId())=info.getFullName()
                         .cell.grade
                             .circle-cnt(
                                 class = info.getGradeAvgClass()

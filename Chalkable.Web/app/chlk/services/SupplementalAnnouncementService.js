@@ -79,8 +79,8 @@ NAMESPACE('chlk.services', function () {
                     recipientsIds: recipientsIds ? recipientsIds.split(',') : [],
                     classAnnouncementTypeId: classAnnouncementTypeId_,
                     discussionEnabled: discussionEnabled,
-                    previewCommentsEnabled: previewCommentsEnabled,
-                    requireCommentsEnabled: requireCommentsEnabled
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             },
 
@@ -101,8 +101,8 @@ NAMESPACE('chlk.services', function () {
                     recipientsIds: recipientsIds ? recipientsIds.split(',') : [],
                     classAnnouncementTypeId: classAnnouncementTypeId_,
                     discussionEnabled: discussionEnabled,
-                    previewCommentsEnabled: previewCommentsEnabled,
-                    requireCommentsEnabled: requireCommentsEnabled
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             }
         ])

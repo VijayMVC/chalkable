@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
@@ -182,6 +183,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return StudentHealthConditionStorage.GetStudentHealthConditions(studentId);
         }
 
+        public StudentSummaryInfo GetStudentSummaryInfo(int studentId, int schoolYearId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Student GetStudentDetails(int studentId, int schoolYearId)
         {
             var student = StudentStorage.GetById(studentId);
@@ -280,7 +286,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public StudentPanoramaInfo Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        public Task<StudentPanoramaInfo> Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             throw new NotImplementedException();
         }

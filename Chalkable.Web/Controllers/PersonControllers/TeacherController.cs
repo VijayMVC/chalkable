@@ -24,7 +24,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Info(int personId)
         {
-            var res = GetInfo(personId, TeacherInfoViewData.Create);
+            var res = GetInfo(personId, null, TeacherInfoViewData.Create);
             return Json(res);
         }
 
