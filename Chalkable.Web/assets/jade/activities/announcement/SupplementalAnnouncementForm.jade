@@ -4,7 +4,7 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
         .items
             if !announcement.getState().valueOf()
                 +ActionLink('announcement', 'addClassAnnouncement', classId).item.announcement-type-button.no-save Assignment
-                +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-buttonLesson.no-save Lesson Plan
+                +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-button.no-save Lesson Plan
             +ActionLink('announcement', 'supplementalAnnouncement', classId).item.announcement-type-button.pressed Supplemental
 
 -var topData = self.getTopData()
