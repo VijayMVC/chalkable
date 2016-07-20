@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     AnnouncementRef = parentComment.AnnouncementRef,
                     PersonRef = Context.PersonId.Value,
                     Text = text,
-                    PostedDate = Context.NowSchoolYearTime,
+                    PostedDate = Context.NowSchoolTime,
                     ParentCommentRef = toCommentId,
                     Hidden = ann.PreviewCommentsEnabled
                 });
@@ -94,6 +94,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw  new ChalkableSecurityException("Only owner can edit comment");
 
                 comment.Text = text;
+                comment.PostedDate = Context.NowSchoolTime;
                 da.Update(comment);
 
                 new AnnouncementCommentAttachmentDataAccess(uow).PostAttachements(announcementCommentId, attachmentIds);
