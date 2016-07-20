@@ -53,8 +53,8 @@ NAMESPACE('chlk.controllers', function (){
             function detailsAction(classId){
                 var result = ria.async.wait([
                     this.classService.getSummary(classId),
-                    this.announcementService.getAnnouncements(0, classId, true),
-                    this.gradingPeriodService.getList(),
+                    this.announcementService.getAnnouncementsForClassProfile(classId, 0, true),
+                    this.gradingPeriodService.getListByClassId(classId),
                     this.schoolYearService.listOfSchoolYearClasses()
                 ])
                     .attach(this.validateResponse_())

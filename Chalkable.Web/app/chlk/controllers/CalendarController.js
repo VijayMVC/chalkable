@@ -49,7 +49,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     model.setNoPlusButton(this.userIsStudent() || (this.userIsTeacher() && !this.getCurrentGradingPeriod().isDateInPeriod(date)));
 
-                    var annCount = model.getAnnouncements().length;
+                    var annCount = model.getAnnouncements().length + model.getSupplementalAnnouncements().length;
                     var adminAnnCount = model.getAdminAnnouncements().length;
                     if(!annCount && !adminAnnCount && model.isNoPlusButton())
                         return ria.async.BREAK;

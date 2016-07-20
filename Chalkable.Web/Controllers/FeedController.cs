@@ -23,6 +23,13 @@ namespace Chalkable.Web.Controllers
             return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, settings, createdAnnouncements));
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult ClassFeed(int classId, int? start, int? count, bool? complete, FeedSettingsInfo settings)
+        {
+            //settings = SchoolLocator.AnnouncementFetchService.GetSettingsForClassFeed(classId);
+            return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, settings, new List<AnnouncementToCopyInputModel>()));
+        }
+
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult DistrictAdminFeed(IntList gradeLevelIds, bool? complete, int? start, int? count)
         {
@@ -31,7 +38,7 @@ namespace Chalkable.Web.Controllers
             
             return Json(PrepareFeedComplexViewData(SchoolLocator, announcements, settings, null));
         }
-
+        
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SetSettings(FeedSettingsInfo settings)
         {

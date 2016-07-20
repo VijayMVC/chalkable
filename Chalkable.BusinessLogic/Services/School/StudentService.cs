@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
@@ -35,9 +36,9 @@ namespace Chalkable.BusinessLogic.Services.School
         int GetEnrolledStudentsCount();
 
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
-        StudentSummaryInfo GetStudentSummaryInfo(int studentId);
+        StudentSummaryInfo GetStudentSummaryInfo(int studentId, int schoolYearId);
         StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
-        StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
+        Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
 
         StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId);
         IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null);
@@ -114,16 +115,16 @@ namespace Chalkable.BusinessLogic.Services.School
                             orderByFirstName, start, count, markingPeriodId, enrolledOnly));
         }
 
-        public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
+        public StudentSummaryInfo GetStudentSummaryInfo(int studentId, int schoolYearId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
-            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId, Context.NowSchoolTime);
-            var student = ServiceLocator.StudentService.GetById(studentId, syId);
+            
+            var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(schoolYearId, studentId, Context.NowSchoolTime);
+            var student = ServiceLocator.StudentService.GetById(studentId, schoolYearId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
-            var anns = DoRead(uow => new ClassAnnouncementForTeacherDataAccess(uow, syId).GetByActivitiesIds(activitiesIds, Context.PersonId.Value));
+            var anns = DoRead(uow => new ClassAnnouncementForTeacherDataAccess(uow, schoolYearId).GetByActivitiesIds(activitiesIds, Context.PersonId.Value));
             anns = anns.Where(x => x.ClassAnnouncementData.VisibleForStudent).ToList();
             var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
@@ -209,7 +210,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new StudentDataAccess(u).GetEnrolledStudentsCount());
         }
 
-        public StudentPanoramaInfo Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        public async Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
 
@@ -223,19 +224,23 @@ namespace Chalkable.BusinessLogic.Services.School
             var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
             var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);
 
+            var tasks = new List<Task<IList<Date>>>();
+            foreach (var syId in schoolYearIds)
+            {
+                tasks.Add(Task.Run(() => ServiceLocator.CalendarDateService.GetLastDays(syId, true, null, Context.NowSchoolYearTime)));
+            }
             var studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
 
-            return StudentPanoramaInfo.Create(studentPanorama);
+            var days = (await Task.WhenAll(tasks)).SelectMany(x => x).OrderBy(x=>x.Day).ToList();
+            return StudentPanoramaInfo.Create(studentPanorama, days);
         }
 
         public StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId)
         {
-            Trace.Assert(Context.SchoolYearId.HasValue);
-            Trace.Assert(Context.SchoolLocalId.HasValue);
-            
+            var sy = ServiceLocator.SchoolYearService.GetSchoolYearById(syId);
             using (var uow = Read())
             {
-                var studentDetails = new StudentDataAccess(uow).GetDetailsById(studentId, Context.SchoolYearId.Value);
+                var studentDetails = new StudentDataAccess(uow).GetDetailsById(studentId, syId);
                 Ethnicity ethnicity = null;
                 Country country = null;
                 Language language = null;
@@ -250,7 +255,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (studentDetails.PrimaryPersonNationality != null)
                     country = new DataAccessBase<Country, int>(uow).GetById(studentDetails.PrimaryPersonNationality.CountryRef);
 
-                var studentSchool = studentDetails.StudentSchools.FirstOrDefault(x => x.SchoolRef == Context.SchoolLocalId.Value);
+                var studentSchool = studentDetails.StudentSchools.FirstOrDefault(x => x.SchoolRef == sy.SchoolRef);
                 if (studentSchool?.CounselorRef != null)
                     counselor = new PersonDataAccess(uow).GetById(studentSchool.CounselorRef.Value);
                 

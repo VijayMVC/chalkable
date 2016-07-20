@@ -48,12 +48,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return PersonScheduleViewData.Create(person, classes);
         }
 
-        protected T GetInfo<T>(int id, Func<PersonDetails, T> vdCreator) where T: PersonInfoViewData
+        protected T GetInfo<T>(int id, int? schoolId, Func<PersonDetails, T> vdCreator) where T: PersonInfoViewData
         {
             if (!CanGetInfo(id))
                 throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
             
-            var person = SchoolLocator.PersonService.GetPersonDetails(id);
+            var person = SchoolLocator.PersonService.GetPersonDetails(id, schoolId);
             var res = vdCreator(person);
             PrepareUserLoginData(res, person);
             return res;
@@ -92,7 +92,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (!string.IsNullOrEmpty(errorMessage))
                 return Json(new ChalkableException(errorMessage));
 
-            var res = GetInfo(personId, PersonInfoViewData.Create);
+            var res = GetInfo(personId, null, PersonInfoViewData.Create);
             return Json(res);
         }
     }

@@ -150,8 +150,8 @@ NAMESPACE('chlk.services', function () {
                     attributes: attributesListData,
                     inGallery: inGallery_,
                     discussionEnabled: discussionEnabled,
-                    previewCommentsEnabled: previewCommentsEnabled,
-                    requireCommentsEnabled: requireCommentsEnabled
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             },
 
@@ -172,8 +172,8 @@ NAMESPACE('chlk.services', function () {
                     attributes: attributesListData,
                     inGallery: inGallery_,
                     discussionEnabled: discussionEnabled,
-                    previewCommentsEnabled: previewCommentsEnabled,
-                    requireCommentsEnabled: requireCommentsEnabled
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             }
         ])

@@ -123,7 +123,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     announcementId: this.getAnnouncementId(),
                     ableDropStudentScore : this.isAbleDropStudentScore(),
                     gradable: this.isAbleToGrade(),//this.isGradable(),
-                    dropped: this.isDropped()
+                    dropped: this.isDropped(),
+                    maxScore: this.getMaxScore()
                 });
                 var container = this.dom.find('.grading-part');
                 container.empty();

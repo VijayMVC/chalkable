@@ -1,7 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AnnouncementCommentService');
 REQUIRE('chlk.services.AttachmentService');
-REQUIRE('chlk.services.AnnouncementAttachmentService');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 
 
@@ -17,9 +16,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.AttachmentService, 'attachmentService',
-
-        [ria.mvc.Inject],
-        chlk.services.AnnouncementAttachmentService, 'announcementAttachmentService',
 
         function prepareCommentAttachment_(attachment, width_, height_){
             if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
@@ -47,29 +43,23 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton],
         [[chlk.models.announcement.AnnouncementComment]],
         function postAction(model){
-
             if(!model.getText() && !model.getAttachmentIds()){
                 this.ShowMsgBox('Please enter text or add attachment', 'whoa.');
                 return null;
             }
 
-            var method, id;
+            var res;
             if(model.getId() && model.getId().valueOf()){
-                method = 'edit';
-                id = model.getId();
+                res = this.announcementCommentService.edit(model.getAnnouncementId(), model.getId(), model.getText(), model.getAttachmentIds());
             }else{
                 if(model.getParentCommentId() && model.getParentCommentId().valueOf()){
-                    method = 'reply';
-                    id = model.getParentCommentId();
+                    res = this.announcementCommentService.reply(model.getAnnouncementId(), model.getParentCommentId(), model.getText(), model.getAttachmentIds());
                 }else{
-                    method = 'postComment';
-                    id = model.getAnnouncementId();
+                    res = this.announcementCommentService.postComment(model.getAnnouncementId(), model.getText(), model.getAttachmentIds());
                 }
             }
 
-            var res = this.announcementCommentService[method]
-                (id, model.getText(), model.getAttachmentIds())
-                .then(function(announcement){
+            var res = res.then(function(announcement){
                     this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
                     return announcement;
                 }, this)
@@ -79,10 +69,10 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton],
-        [[chlk.models.id.AnnouncementCommentId]],
-        function deleteCommentAction(announcementCommentId){
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId]],
+        function deleteCommentAction(announcementId, announcementCommentId){
             var res = this.announcementCommentService
-                .deleteComment(announcementCommentId)
+                .deleteComment(announcementId, announcementCommentId)
                 .then(function(announcement){
                     this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
                     return announcement;
@@ -125,7 +115,7 @@ NAMESPACE('chlk.controllers', function (){
                 res = new ria.async.DeferredData(attachmentViewData);
             }else{
                 var buttons = [downloadAttachmentButton];
-                res = this.announcementAttachmentService
+                res = this.attachmentService
                     .startViewSession(attachmentId)
                     .then(function(session){
                         return new chlk.models.common.attachments.BaseAttachmentViewData(

@@ -235,7 +235,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return PersonStorage.GetById(id);
         }
 
-        public PersonDetails GetPersonDetails(int personId)
+        public PersonDetails GetPersonDetails(int personId, int? schoolId)
         {
             var person = GetPersons(new PersonQuery()
             {

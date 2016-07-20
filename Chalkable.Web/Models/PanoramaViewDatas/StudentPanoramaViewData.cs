@@ -11,7 +11,9 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
     public class StudentPanoramaViewData
     {
         public IList<StandardizedTestStatsViewData> StandardizedTestsStats { get; set; }
-        public IList<StudentDailyAbsenceViewData> DailyAttendanceStats { get; set; }
+        public IList<StudentDailyAbsenceViewData> Absences { get; set; }
+
+        public IList<DailyStatsViewData> AttendanceStats { get; set; }
         public IList<StudentInfractionViewData> DisciplineStats { get; set; }
         public IList<DailyStatsViewData> DailyDisciplineStats { get; set; }
         public StudentProfilePanoramaSetting FilterSettings { get; set; }
@@ -22,19 +24,39 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             return new StudentPanoramaViewData
             {
                 StandardizedTestsStats = StandardizedTestStatsViewData.CreateForStudent(studentId, panorama.StandardizedTests, tests),
-                DailyAttendanceStats = panorama.DailyAbsences?.Select(StudentDailyAbsenceViewData.Create).OrderBy(x => x.Date).ToList(),
+                Absences = panorama.DailyAbsences?.Select(StudentDailyAbsenceViewData.Create).OrderBy(x => x.Date).ToList(),
                 DisciplineStats = panorama.Infractions?.Select(StudentInfractionViewData.Create).OrderBy(x => x.OccurrenceDate).ToList(),
-                DailyDisciplineStats = panorama.Infractions != null ? CalculateDisciplineStats(panorama.Infractions) : null,
+                AttendanceStats = BuildAttendanceStats(panorama.DailyAbsences, panorama.AllSchoolDays),
+                DailyDisciplineStats = BuildDisciplineStats(panorama.Infractions, panorama.AllSchoolDays),
                 FilterSettings = settings, 
                 StandardizedTests = tests.Select( x => StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList()
             };
         }
 
-        private static IList<DailyStatsViewData> CalculateDisciplineStats(IList<StudentInfractionInfo> studentInfractions)
+        private static IList<DailyStatsViewData> BuildDisciplineStats(IList<StudentInfractionInfo> studentInfractions, IList<Date> allSchoolDays)
         {
-            var enumerator = studentInfractions.GroupBy(x => x.OccurrenceDate).OrderBy(x => x.Key);
-            return enumerator.Select(source => DailyStatsViewData.Create(source.Key, source.Count(), "MMM yyyy")).ToList();
-        }
+            var res = new List<DailyStatsViewData>();
+            foreach (var day in allSchoolDays.Select(d=>d.Day))
+            {
+                var infractionsCount = studentInfractions?.Count(x => x.OccurrenceDate == day.Date) ?? 0;
+                res.Add(DailyStatsViewData.Create(day.Date, infractionsCount, "MMM yyyy"));
+            }
+            return res;
+        } 
+
+        private static IList<DailyStatsViewData> BuildAttendanceStats(IList<StudentAbsenceInfo> absences, IList<Date> allSchoolDays)
+        {
+            var res = new List<DailyStatsViewData>();
+            foreach (var day in allSchoolDays.Select(x=>x.Day))
+            {
+                var absent = absences?.FirstOrDefault(x => x.Date == day.Date);
+                decimal number = 1;
+                if (absent?.AbsenceLevel == "All Day") number = 0;
+                if (absent?.AbsenceLevel == "Half Day") number = 0.5m;
+                res.Add(DailyStatsViewData.Create(day.Date, number, "MMM yyyy"));
+            }
+            return res;
+        } 
     }
 
     public class StudentDailyAbsenceViewData
