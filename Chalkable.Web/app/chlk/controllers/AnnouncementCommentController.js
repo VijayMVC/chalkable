@@ -29,15 +29,15 @@ NAMESPACE('chlk.controllers', function (){
 
         function prepareCommentsAttachments_(comments){
             var that = this;
-            comments.forEach(function(comment){
-                if(comment.getAttachments())
-                    comment.getAttachments().forEach(function(attachment){
-                        that.prepareCommentAttachment_(attachment);
-                    });
-
-                if(comment.getSubComments())
-                    that.prepareCommentsAttachments_(comment.getSubComments())
-            });
+            if(comments != null)
+                comments.forEach(function(comment){
+                    if(comment.getAttachments())
+                        comment.getAttachments().forEach(function(attachment){
+                            that.prepareCommentAttachment_(attachment);
+                        });
+                    if(comment.getSubComments())
+                        that.prepareCommentsAttachments_(comment.getSubComments())
+                });
         },
 
         [chlk.controllers.NotChangedSidebarButton],
