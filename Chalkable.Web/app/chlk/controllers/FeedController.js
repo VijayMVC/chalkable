@@ -229,7 +229,7 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
 
             if(model.getSubmitType() == 'sort')
-                return this.Redirect('feed', 'list', [model.getGradeLevels(), null, true, 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet()]);
+                return this.Redirect('feed', 'list', [model.getGradeLevels(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet()]);
 
             var result = this.announcementService
                 .getAnnouncementsForAdmin(model.getStart(), model.getGradeLevels(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet())
