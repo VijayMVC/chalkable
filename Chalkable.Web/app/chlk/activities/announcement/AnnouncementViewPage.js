@@ -258,8 +258,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.grades-individual')],
-            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
-            function selectStudent(node, event, row, index){
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number, Boolean]],
+            function selectStudent(node, event, row, index, noScroll_){
                 clearTimeout(slideTimeout);
                 slideTimeout = setTimeout(function(){
                     node.find('.attachments-container:eq(' + index + ').with-data').slideDown(500);

@@ -22,8 +22,8 @@ NAMESPACE('chlk.activities.discipline', function(){
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.disciplines-individual')],
-            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
-            function selectStudent(node, event, row, index){
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number, Boolean]],
+            function selectStudent(node, event, row, index, noScroll_){
                 clearTimeout(this._slideTimeout);
                 this._slideTimeout = setTimeout(function(){
                     node.find('.discipline-form-block:eq(' + index + ')').slideDown(500);
