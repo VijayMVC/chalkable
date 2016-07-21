@@ -11,7 +11,7 @@
                 .img-container
                     +PersonImg(self.getStudentExplorer(), 140, !self.getUserRole().isStudent())
                     .grades-container
-            #student-info-panel.right-block.panel-block
+            #student-info-panel.right-block.panel-block.central-block
                 displayName =self.getStudentExplorer().getDisplayName() || self.getStudentExplorer().getFullName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
     .explorer-view(class=canPressStandards ? 'can-press-standards' : '')
