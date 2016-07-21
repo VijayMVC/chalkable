@@ -26,4 +26,6 @@
                     ).distribution-chart.discipline
 +CloseOpen('Students')
     .panorama-students-tab
-        +RenderWith(self.getModel(), chlk.templates.classes.ClassProfilePanoramaStudentsTpl)
+        +RenderWith(self.getModel(), chlk.templates.classes.ClassProfilePanoramaStudentsTpl)(
+            userRole=self.getUserRole()
+        )

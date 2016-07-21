@@ -7,7 +7,8 @@ mixin HeaderLink_(name, type)
 
 -var orderByEnum = chlk.models.profile.ClassPanoramaSortType
 
-BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add Supplemental Assignment').v-hidden.add-supplemental-btn.right
+if self.getUserRole().isTeacher()
+    BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add Supplemental Assignment').v-hidden.add-supplemental-btn.right
 .clear-fix
 .chlk-calendar.students-grid
     .grid-top-content.chlk-grid
