@@ -132,7 +132,7 @@ NAMESPACE('chlk.controls', function () {
 
                         }.bind(this));
 
-                        classesBar.on('mouseleave', '.group .class-button', function(node,event){
+                        classesBar.on('mouseleave  click', '.group .class-button', function(node,event){
                             var popupHolder = new ria.dom.Dom('#chlk-class-bar-popup-container');
                             popupHolder.setHTML('');
                         }.bind(this));

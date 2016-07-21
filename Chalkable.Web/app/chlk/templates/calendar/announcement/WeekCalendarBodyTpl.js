@@ -22,8 +22,8 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
                         var res = [].concat.apply([], periodItems.map(function (periodItem) {
                             var classId = periodItem.getPeriod().getClassId();
 
-                            if (!periodItem.getPeriod().getStartTime() || !periodItem.getPeriod().getClassName())
-                                return [];
+                            //if (!periodItem.getPeriod().getStartTime() || !periodItem.getPeriod().getClassName())
+                                //return [];
 
                             var announcements = periodItem.getAnnouncements().filter(function (ann) {
                                 return ann.getClassId() == classId;
@@ -33,7 +33,11 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
                                 return ann.getClassId() == classId;
                             });
 
-                            return announcements.concat(supplementalAnnouncements);
+                            var lpAnnouncements = periodItem.getLessonPlans().filter(function (ann) {
+                                return ann.getClassId() == classId;
+                            });
+
+                            return announcements.concat(lpAnnouncements).concat(supplementalAnnouncements);
                         }));
 
                         res.day = day;
