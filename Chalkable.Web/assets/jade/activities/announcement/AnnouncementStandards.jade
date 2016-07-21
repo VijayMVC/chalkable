@@ -1,0 +1,6 @@
+-var standards = self.getItemStandards() || []
+each standard in standards
+    .grey-button.same-on-hover.button-like(data-tooltip = standard.getDescription())
+        = standard.getName()
+        if self.isAbleToRemoveStandard()
+            +ActionLink('announcement', 'removeStandard', self.getAnnouncementId(), standard.getStandardId()).remove-standard
