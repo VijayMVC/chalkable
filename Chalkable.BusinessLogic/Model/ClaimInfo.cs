@@ -21,6 +21,8 @@ namespace Chalkable.BusinessLogic.Model
         public const string VIEW_STUDENT = "View Student";
         public const string VIEW_CLASSROOM_STUDENTS = "View Classroom Students";
         public const string VIEW_PANORAMA = "View Panorama";
+        public const string MAINTAIN_GRADE_BOOK_AVG_METHOD = "Maintain Grade Book Averaging Method";
+        public const string MAINTAIN_STANDARDS_OPTIONS = "Maintain Standards Options";
 
         public string Type { get; set; }
         public IEnumerable<string> Values { get; set; }
