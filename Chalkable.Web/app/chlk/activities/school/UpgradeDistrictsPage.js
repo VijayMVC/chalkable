@@ -25,8 +25,8 @@ NAMESPACE('chlk.activities.school', function () {
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.districts-individual')],
-            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
-            function selectDistrict(node, event, row, index){
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number, Boolean]],
+            function selectDistrict(node, event, row, index, noScroll_){
                 if(row.hasClass('school-info'))  return false;
 
                 clearTimeout(this._slideTimeout);

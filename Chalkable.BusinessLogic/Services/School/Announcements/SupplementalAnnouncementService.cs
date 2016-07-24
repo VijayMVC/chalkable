@@ -9,14 +9,13 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
-using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
     public interface ISupplementalAnnouncementService : IBaseAnnouncementService
     {
-        AnnouncementDetails Create(int classId, DateTime expiresDate, int classAnnouncementTypeId);
+        AnnouncementDetails Create(int classId, DateTime? expiresDate, int classAnnouncementTypeId);
         AnnouncementDetails Edit(int supplementalAnnouncementId, int classId, int? classAnnouncementTypeId, string title, string content, DateTime? expiresDate, bool visibleForStudent, IList<int> recipientsIds, bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled);
         void SetVisibleForStudent(int supplementalAnnouncementId, bool visible);
         SupplementalAnnouncement GetSupplementalAnnouncementById(int supplementalAnnouncementId);
@@ -185,7 +184,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
               schoolYearId, personId, roleId, false, classId, startDate, endDate, filterByExpiryDate));
         }
 
-        public AnnouncementDetails Create(int classId, DateTime expiresDate, int classAnnouncementTypeId)
+        public AnnouncementDetails Create(int classId, DateTime? expiresDate, int classAnnouncementTypeId)
         {
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u => CreateSupplementalAnnouncementDataAccess(u).Create(classId, Context.NowSchoolTime, expiresDate, Context.PersonId.Value, classAnnouncementTypeId));

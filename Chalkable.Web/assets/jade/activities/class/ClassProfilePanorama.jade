@@ -12,7 +12,9 @@
             +CloseOpen('Filter', !clazz.isShowFilters())
                 +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings(), 'class', 'restorePanorama', [clazz.getId()])
             .charts-part
-                +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)
+                +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)(
+                    userRole=self.getUserRole()
+                )
 
 
 

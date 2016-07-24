@@ -17,7 +17,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult CreateLessonPlan(int? classId)
         {
-            var res = SchoolLocator.LessonPlanService.Create(classId, Context.NowSchoolTime, Context.NowSchoolTime);
+            var date = DateTime.MinValue;
+            var res = SchoolLocator.LessonPlanService.Create(classId, null, null);
             return Json(PrepareCreateAnnouncementViewData(res));
         }
 

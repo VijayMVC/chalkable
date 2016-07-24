@@ -209,15 +209,24 @@ NAMESPACE('chlk.controllers', function (){
                 return this.Redirect('feed', model.isInProfile() ? 'listForProfile' : 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(),
                     model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet()]);
 
-            var result = this.announcementService
-                .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(),
-                    model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet())
+
+            var result = this.getAnnouncements_(model)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     return new chlk.models.feed.FeedItems(model.getItems());
                 });
             return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
         },
+
+        [[chlk.models.feed.Feed]],
+        function getAnnouncements_(model){
+            return model.isInProfile() && model.getClassId()
+                ? this.announcementService.getAnnouncementsForClassProfile(model.getClassId(), model.getStart() | 0,
+                    model.isImportantOnly(), model.getStartDate(),  model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.getSortType())
+                : this.announcementService.getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(),
+                    model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet());
+        },
+
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.FeedAdmin]],
@@ -229,7 +238,7 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
 
             if(model.getSubmitType() == 'sort')
-                return this.Redirect('feed', 'list', [model.getGradeLevels(), null, true, 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet()]);
+                return this.Redirect('feed', 'list', [model.getGradeLevels(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet()]);
 
             var result = this.announcementService
                 .getAnnouncementsForAdmin(model.getStart(), model.getGradeLevels(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet())

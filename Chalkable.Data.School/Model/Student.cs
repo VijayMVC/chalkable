@@ -26,8 +26,8 @@ namespace Chalkable.Data.School.Model
         public bool IsHispanic { get; set; }
         public DateTime? IEPBeginDate { get; set; }
         public DateTime? IEPEndDate { get; set; }
-        public string GenderDescriptor { get; set; }
         public string Section504Qualification { get; set; }
+        public string GenderDescriptor { get; set; }
         public bool IsHomeless { get; set; }
         public bool IsImmigrant { get; set; }
         public int? LimitedEnglishRef { get; set; }

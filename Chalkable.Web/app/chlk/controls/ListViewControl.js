@@ -154,8 +154,8 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.chlk-grid')],
-            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
-            VOID, function selectRow(node, event, row, index) {
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number, Boolean]],
+            VOID, function selectRow(node, event, row, index, noScroll_) {
                 this.setGrid(node);
                 if(row.exists()){
                     var selectedRow = node.find('.row.selected');
@@ -164,7 +164,8 @@ NAMESPACE('chlk.controls', function () {
 
                     row.addClass(selectedRowClass);
                     this.setCurrentIndex(index || parseInt(row.getAttr('index'), 10));
-                    this.scrollToElement();
+                    if(!noScroll_)
+                        this.scrollToElement();
                     this.focusGrid();
                     node.trigger(chlk.controls.GridEvents.AFTER_ROW_SELECT.valueOf(), [row, index]);
                 }
@@ -376,7 +377,7 @@ NAMESPACE('chlk.controls', function () {
                     }else{
                         var grid = node.parent('.chlk-grid');
                         var index = parseInt(node.getAttr('index'), 10);
-                        grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [node, parseInt(node.getAttr('index'), 10)]);
+                        grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [node, parseInt(node.getAttr('index'), 10), true]);
                     }
 
                 }
@@ -403,33 +404,34 @@ NAMESPACE('chlk.controls', function () {
 
             [[ria.dom.Dom]],
             VOID, function focusGrid(target_) {
-                //if(!new ria.dom.Dom(':focus').exists()){
-                    var node;
-                    if(target_){
-                        if(target_.hasClass(otherInputWithFocusClass) || target_.hasClass('grid-focus'))
-                            return;
-                        node = target_.parent('.chlk-grid');
-                        this.setGrid(node);
-                    }else{
-                        node = this.getGrid();
-                    }
-
-                    var row = node.find('.row.selected');
-                    if(target_ && (target_.hasClass(otherInputWithFocusClass) || target_.hasClass('grid-focus')))
+                var node;
+                if(target_){
+                    if(target_.hasClass(otherInputWithFocusClass) || target_.hasClass('grid-focus'))
                         return;
-                    if(row.exists()){
-                        var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
-                        if(focusNode.exists()){
-                            focusNode.trigger('focus');
-                            if(focusNode.hasClass('select-text') && focusNode.getValue())
-                                focusNode.valueOf()[0].setSelectionRange(0, focusNode.getValue().length);
-                        }else{
-                            node.find('.grid-focus').valueOf()[0].focus();
-                        }
+                    node = target_.parent('.chlk-grid');
+                    this.setGrid(node);
+                }else{
+                    node = this.getGrid();
+                }
+
+                var row = node.find('.row.selected');
+                if(target_ && (target_.hasClass(otherInputWithFocusClass) || target_.hasClass('grid-focus')))
+                    return;
+
+                var x = window.scrollX, y = window.scrollY;
+                if(row.exists()){
+                    var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
+                    if(focusNode.exists()){
+                        focusNode.trigger('focus');
+                        if(focusNode.hasClass('select-text') && focusNode.getValue())
+                            focusNode.valueOf()[0].setSelectionRange(0, focusNode.getValue().length);
                     }else{
                         node.find('.grid-focus').valueOf()[0].focus();
                     }
-                //}
+                }else{
+                    node.find('.grid-focus').valueOf()[0].focus();
+                }
+                window.scrollTo(x, y);
             },
 
             VOID, function scrollToElement(){

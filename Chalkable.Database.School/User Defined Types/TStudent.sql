@@ -14,6 +14,7 @@
 	[IsHispanic]			 BIT			NOT NULL,
 	[IEPBeginDate]			 DATETIME2(7)	NULL,
 	[IEPEndDate]			 DATETIME2(7)	NULL,
+	[Section504Qualification] NVARCHAR(128)  NULL,
 	[GenderDescriptor]		 NVARCHAR(128)  NULL,
 	[IsHomeless]	    	 BIT			NOT NULL DEFAULT 0,
 	[IsImmigrant]			 BIT			NOT NULL DEFAULT 0,
