@@ -369,6 +369,7 @@
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />
     <None Include="User Defined Types\TAnnouncementComment.sql" />
+    <None Include="User Defined Types\TAnnouncementAssignedAttribute.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
