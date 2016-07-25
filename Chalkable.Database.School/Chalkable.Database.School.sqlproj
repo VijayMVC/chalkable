@@ -363,6 +363,7 @@
     <Build Include="Stored Procedures\spGetAnnouncementComments.sql" />
     <Build Include="Views\vwAnnouncementComment.sql" />
     <Build Include="Tables\AnnouncementCommentAttachment.sql" />
+    <Build Include="User Defined Types\TPersonSetting.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />

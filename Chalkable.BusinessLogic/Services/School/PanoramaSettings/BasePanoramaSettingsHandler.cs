@@ -51,11 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
 
     public class AdminPanoramaSettingsHandler : BasePanoramaSettingsHandler<AdminPanoramaSettings>
     {
-        public AdminPanoramaSettingsHandler(string settingKey)
-        {
-            SettingKey = settingKey;
-        }
-        protected override string SettingKey { get; }
+        protected override string SettingKey => PersonSetting.ADMIN_PANORAMA_SETTINGS;
         public override AdminPanoramaSettings GetDefault(IServiceLocatorSchool serviceLocator, int? classId)
         {
             return new AdminPanoramaSettings
