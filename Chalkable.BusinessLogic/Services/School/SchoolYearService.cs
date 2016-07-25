@@ -155,16 +155,29 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<SchoolYear> GetSchoolYearsByStudent(int studentId, StudentEnrollmentStatusEnum? enrollmentStatus, DateTime? date)
         {
             var res = DoRead(u => new SchoolYearDataAccess(u).GetSchoolYearsByStudent(studentId, enrollmentStatus));
-            return res.Where(x => x.StartDate <= date && x.EndDate >= date).ToList();
+
+            if(date.HasValue)
+                res = res.Where(x => x.StartDate <= date && x.EndDate >= date).ToList();
+
+            return res;
         }
 
         public SchoolYear GetCurrentSchoolYearByStudent(int studentId)
         {
-            var sys = ServiceLocator.SchoolYearService.GetSchoolYearsByStudent(studentId, StudentEnrollmentStatusEnum.CurrentlyEnrolled, Context.NowSchoolTime);
-            var res = (sys.FirstOrDefault(x => x.Id == Context.SchoolYearId) ??
-                       sys.FirstOrDefault(x => x.SchoolRef == Context.SchoolLocalId)) ??
-                      (sys.Count > 0 ? sys[0] : ServiceLocator.SchoolYearService.GetCurrentSchoolYear());
-            return res;
+            var sys = ServiceLocator.SchoolYearService.GetSchoolYearsByStudent(studentId, StudentEnrollmentStatusEnum.CurrentlyEnrolled, null);
+
+            //sys = sys.Intersect(GetSchoolYears()).ToList();
+
+            sys = sys.OrderByDescending(x => x.EndDate).ToList();
+
+            var res = sys.FirstOrDefault(x => x.Id == Context.SchoolYearId);
+            if (res == null)
+                res = sys.FirstOrDefault(x => x.StartDate <= Context.NowSchoolTime && x.EndDate >= Context.NowSchoolTime);
+            if (res == null)
+                res = sys.FirstOrDefault(x => x.SchoolRef == Context.SchoolLocalId);
+            if (res == null)
+                res = sys.FirstOrDefault();
+            return res ?? GetCurrentSchoolYear();
         }
     }
 }
