@@ -1,0 +1,15 @@
+-var attributes = self.getAnnouncementAttributes() || []
+if !self.isReadOnly()
+    +Hidden('announcementAssignedAttrs', '')
+
+
+each attribute, index in attributes
+    -attribute.setIndex(index)
+    -attribute.setReadOnly(self.isReadOnly())
+    -attribute.setAnnouncementType(self.getAnnouncementType())
+    -attribute.setAnnouncementId(self.getAnnouncementId())
+    -attribute.setDialog(!!self.isDialog())
+    +RenderWith(attribute, chlk.templates.announcement.AnnouncementAttributeTpl)(
+        userRole = self.getUserRole()
+    )
+
