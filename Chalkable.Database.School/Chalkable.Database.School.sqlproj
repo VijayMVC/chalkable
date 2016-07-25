@@ -364,9 +364,11 @@
     <Build Include="Views\vwAnnouncementComment.sql" />
     <Build Include="Tables\AnnouncementCommentAttachment.sql" />
     <Build Include="User Defined Types\TPersonSetting.sql" />
+    <Build Include="User Defined Types\TAnnouncementCommentAttachment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />
+    <None Include="User Defined Types\TAnnouncementComment.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
