@@ -136,7 +136,7 @@ namespace Chalkable.Data.Common
                                 }
                                 else
                                 {
-                                    var fields = Orm.Orm.Fields(g, false);
+                                    var fields = Orm.Orm.Fields(g);
                                     var table = new DataTable();
                                     var props = new PropertyInfo[fields.Count];
                                     var isEnum = new bool[fields.Count];

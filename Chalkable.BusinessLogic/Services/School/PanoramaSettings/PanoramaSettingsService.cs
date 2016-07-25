@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             },
             {
                 typeof(AdminPanoramaSettings),
-                new AdminPanoramaSettingsHandler(PersonSetting.ADMIN_PANORAMA_SETTINGS)
+                new AdminPanoramaSettingsHandler()
             }
         };
 
