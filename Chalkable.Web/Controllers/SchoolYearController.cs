@@ -25,11 +25,11 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult ListOfSchoolYearClasses()
+        public ActionResult ListOfSchoolYearClasses(int? schoolId)
         {
             Trace.Assert(Context.PersonId.HasValue);
 
-            var schoolYears = SchoolLocator.SchoolYearService.GetSchoolYears();
+            var schoolYears = SchoolLocator.SchoolYearService.GetSchoolYears(0, int.MaxValue, schoolId ?? Context.SchoolLocalId);
             var schoolYearsClasses =
                 SchoolLocator.ClassService.GetClassesBySchoolYearIds(schoolYears.Select(x => x.Id).ToList(), Context.PersonId.Value);
 

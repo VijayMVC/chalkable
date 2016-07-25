@@ -369,8 +369,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[chlk.models.id.SchoolId, String, chlk.models.id.SchoolYearId, Number, String]],
-        function teachersSummaryAction(schoolId, schoolName, schoolYearId_, sortType_, filter_){
+        [[chlk.models.id.SchoolId, String, Number, chlk.models.id.SchoolYearId, String]],
+        function teachersSummaryAction(schoolId, schoolName, sortType_, schoolYearId_, filter_){
             sortType_ = sortType_ || chlk.models.admin.TeacherSortTypeEnum.TEACHER_ASC.valueOf();
             var result = this.schoolYearService.list(schoolId)
                 .then(function(years){

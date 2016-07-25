@@ -1,16 +1,17 @@
-﻿CREATE TYPE [dbo].[TSchool] AS TABLE(
-	[Id] [uniqueidentifier] NOT NULL,
-	[DistrictRef] [uniqueidentifier] NOT NULL,
-	[Name] [nvarchar](256) NOT NULL,
-	[LocalId] [int] NOT NULL,
-	[IsChalkableEnabled] [bit] NOT NULL,	
-	[IsLEEnabled] [bit] NOT NULL,
-	[IsLESyncComplete] [bit] NOT NULL,
-	[StudyCenterEnabledTill] [datetime2](7) NULL,	
-	[IsMessagingDisabled] [bit] NOT NULL,
-	[IsAssessmentEnabled] [bit] NOT NULL,
-	[StudentMessagingEnabled] [bit] NOT NULL,
-	[StudentToClassMessagingOnly] [bit] NOT NULL,
-	[TeacherToStudentMessaginEnabled] [bit] NOT NULL,
-	[TeacherToClassMessagingOnly] [bit] NOT NULL	
-)
+﻿CREATE TYPE [dbo].[TSchool] AS TABLE (
+    [Id]                     UNIQUEIDENTIFIER NOT NULL,
+    [DistrictRef]            UNIQUEIDENTIFIER NOT NULL,
+    [Name]                   NVARCHAR (256)   NOT NULL,
+    [LocalId]                INT              NOT NULL,
+    [IsChalkableEnabled]     BIT              NOT NULL,
+    [IsLEEnabled]            BIT              NOT NULL,
+    [IsLESyncComplete]       BIT              NOT NULL,
+    [StudyCenterEnabledTill] DATETIME2 (7)    NULL,
+	[IsMessagingDisabled]             BIT              NOT NULL,
+	[IsAssessmentEnabled]             BIT              NOT NULL,
+    [StudentMessagingEnabled]         BIT              NOT NULL,
+    [StudentToClassMessagingOnly]     BIT              NOT NULL,
+    [TeacherToStudentMessaginEnabled] BIT              NOT NULL,
+    [TeacherToClassMessagingOnly]     BIT              NOT NULL
+);
+
