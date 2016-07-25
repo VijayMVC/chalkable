@@ -351,5 +351,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
            throw new NotImplementedException();
         }
+
+        public IList<User> GetAll(Guid districtId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

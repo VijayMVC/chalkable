@@ -136,8 +136,15 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("download data to restore");
             DownloadSyncData();
             Log.LogInfo("remove user records");
-            context.GetSyncResult<StiConnector.SyncModel.User>().Inserted = new StiConnector.SyncModel.User[0];
-            context.GetSyncResult<StiConnector.SyncModel.User>().Rows = new StiConnector.SyncModel.User[0];
+            var all = ServiceLocatorMaster.UserService.GetAll(districtId);
+            var allIds = new HashSet<int>(all.Select(x => x.SisUserId.Value));
+            var newUsers = new List<StiConnector.SyncModel.User>();
+            var rows = context.GetSyncResult<StiConnector.SyncModel.User>().Rows;
+            foreach (var r in rows)
+                if (!allIds.Contains(r.UserID))
+                    newUsers.Add(r);
+            context.GetSyncResult<StiConnector.SyncModel.User>().Inserted = null;
+            context.GetSyncResult<StiConnector.SyncModel.User>().Rows = newUsers.ToArray();
             context.GetSyncResult<StiConnector.SyncModel.User>().Updated = null;
             context.GetSyncResult<StiConnector.SyncModel.User>().Deleted = null;
             Log.LogInfo("do initial sync");
