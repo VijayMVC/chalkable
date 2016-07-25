@@ -65,8 +65,6 @@ namespace Chalkable.Data.Master.Model
         public Guid DistrictRef { get; set; }
         public string Name { get; set; }
         public int LocalId { get; set; }
-        [NotDbFieldAttr]
-        public District District { get; set; }
         public bool IsChalkableEnabled { get; set; }
         public bool IsLEEnabled { get; set; }
         public bool IsLESyncComplete { get; set; }
@@ -78,6 +76,9 @@ namespace Chalkable.Data.Master.Model
         public bool StudentToClassMessagingOnly { get; set; }
         public bool TeacherToStudentMessaginEnabled { get; set; }
         public bool TeacherToClassMessagingOnly { get; set; }
+
+        [NotDbFieldAttr]
+        public District District { get; set; }
     }
 
     public class MessagingSettings
