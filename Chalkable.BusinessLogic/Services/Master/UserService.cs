@@ -49,6 +49,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void Edit(IList<User> users);
         void Add(IList<User> users);
         void CreateUserLoginInfos(IList<Guid> ids);
+        IList<User> GetAll(Guid districtId);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -579,6 +580,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
+        public IList<User> GetAll(Guid districtId)
+        {
+            using (var uow = Read())
+            {
+                var conds = new AndQueryCondition { { User.DISTRICT_REF_FIELD, districtId } };                
+                return new UserDataAccess(uow).GetAll(conds);
+            }
+        }
 
         public string GetUserEmailById(Guid id)
         {
