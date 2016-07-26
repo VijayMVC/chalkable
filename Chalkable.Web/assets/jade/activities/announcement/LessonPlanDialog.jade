@@ -11,7 +11,7 @@
         h1 LESSON PLAN
         a.close.close-btn
     .x-window-body
-        +ActionForm('announcement', 'onLessonPlanTemplateSave')(onlySubmitValidate=true).no-working
+        +ActionForm('announcement', 'onLessonPlanTemplateSave')(onlySubmitValidate=true).no-working.main-form
             .ann-form-container
                 +Hidden('id', announcement.getId().valueOf())
                 +Hidden('isedit', !!state)(data-isedit = !!state).is-edit

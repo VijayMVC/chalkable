@@ -89,6 +89,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return SchoolStorage.GetAll();
         }
 
+        public IList<Data.School.Model.School> GetSchoolsByIds(IList<int> schoolIds)
+        {
+            throw new NotImplementedException();
+        }
+
         public Data.School.Model.School GetSchool(int schoolId)
         {
             if (!(BaseSecurity.IsDistrictAdmin(Context) || Context.SchoolLocalId == schoolId))

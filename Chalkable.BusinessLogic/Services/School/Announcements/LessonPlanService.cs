@@ -203,12 +203,20 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 .Cast<AnnouncementComplex>().ToList();
         }
 
-        public AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpGalleryCategoryId, string title, string content,
-                                        DateTime? startDate, DateTime? endDate, bool visibleForStudent, bool inGallery
-            , bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
+        public AnnouncementDetails Edit(int lessonPlanId, int? classId, int? lpGalleryCategoryId, string title, string content, DateTime? startDate, 
+            DateTime? endDate, bool visibleForStudent, bool inGallery, bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var lessonPlan = GetLessonPlanById(lessonPlanId); // security check 
+            var lessonPlan = GetLessonPlanById(lessonPlanId); // security check
+
+            if (inGallery && !lessonPlan.IsDraft)
+            {
+                if (!Context.SCEnabled)
+                    throw new ChalkableException("Cannot create lesson plan template, Study Center disabled!");
+                if (lpGalleryCategoryId == null)
+                    throw new ChalkableException("Cannot create lesson plan template without category!");
+            }
+
             using (var uow = Update())
             {
                 var da = CreateLessonPlanDataAccess(uow);
@@ -243,8 +251,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.PreviewCommentsEnabled = previewCommentsEnabled;
 
 
-                if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
-                    lessonPlan.LpGalleryCategoryRef = lpGalleryCategoryId;
+                lessonPlan.LpGalleryCategoryRef = lpGalleryCategoryId;
 
                 if (lessonPlan.IsSubmitted)
                     ValidateLessonPlan(lessonPlan, da);
@@ -281,11 +288,21 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override void Submit(int announcementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            
             using (var u = Update())
             {
                 var da = CreateLessonPlanDataAccess(u);
                 var res = InternalGetDetails(da, announcementId); // da.GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
                 var ln = res.LessonPlanData;
+
+                if (ln.InGallery)
+                {
+                    if (!Context.SCEnabled)
+                        throw new ChalkableException("Cannot create lesson plan template, Study Center disabled!");
+                    if (ln.LpGalleryCategoryRef == null)
+                        throw new ChalkableException("Cannot create lesson plan template without category!");
+                }
+
                 AnnouncementSecurity.EnsureInModifyAccess(res, Context);
                 ValidateLessonPlan(ln, da);
                 if (ln.IsDraft)

@@ -269,7 +269,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 node.parent().find('.hasDatepicker').trigger('focus');
             },
 
-            [ria.mvc.DomEventBind('submit', '.announcement-form>FORM')],
+            [ria.mvc.DomEventBind('submit', '.main-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function submitClick(node, event){
 

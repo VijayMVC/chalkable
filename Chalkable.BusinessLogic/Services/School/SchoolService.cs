@@ -41,6 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<Data.School.Model.School> schools);
         void Delete(IList<Data.School.Model.School> schools);
         IList<Data.School.Model.School> GetSchools();
+        IList<Data.School.Model.School> GetSchoolsByIds(IList<int> schoolIds);
         Data.School.Model.School GetSchool(int schoolId);
         void AddSchoolOptions(IList<SchoolOption> schoolOptions);
         void EditSchoolOptions(IList<SchoolOption> schoolOptions);
@@ -49,6 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StartupData GetStartupData();
         IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter, SchoolSortType? sortType);
         int GetSchoolsCount(string filter = null);
+
     }
 
     public class SchoolService : SisConnectedService, ISchoolService
@@ -71,6 +73,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new SchoolDataAccess(uow);
                 return da.GetAll();
             }
+        }
+
+        public IList<Data.School.Model.School> GetSchoolsByIds(IList<int> schoolIds)
+        {
+            return DoRead(u => new SchoolDataAccess(u).GetByIds(schoolIds));
         }
 
         public Data.School.Model.School GetSchool(int schoolId)

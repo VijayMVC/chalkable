@@ -102,13 +102,12 @@ NAMESPACE('chlk.controls', function () {
             },
 
             function prepareItems(items){
-                var res = [],
-                    schoolName = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_NAME, null);
+                var res = []
                 items.forEach(function(item){
                     var classes = item.getClasses();
                     if(classes.length){
                         res.push({
-                            name: schoolName + ' - ' + item.getSchoolYear().getName(),
+                            name: item.getSchoolName() + ' - ' + item.getSchoolYear().getName(),
                             values: classes.map(function(clazz){
                                 return {
                                     name: clazz.getFullClassName(),
