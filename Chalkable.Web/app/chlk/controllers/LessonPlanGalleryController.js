@@ -38,7 +38,10 @@ NAMESPACE('chlk.controllers', function () {
                 var state = chlk.models.announcement.StateEnum.SUBMITTED,
                     categoryType = categoryType_ || this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, null);
                 var result = ria.async.wait([
-                    this.lessonPlanService.getLessonPlanTemplatesList(categoryType, filter_, sortType_, state, start_, count_),
+                    this.lessonPlanService.getLessonPlanTemplatesList(
+                        categoryType, filter_,
+                        sortType_ || chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
+                        state, start_, count_),
                     this.lpGalleryCategoryService.list()
                 ])
                     .attach(this.validateResponse_())
