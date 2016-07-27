@@ -42,15 +42,6 @@ namespace Chalkable.Web
             ModelBinders.Binders.Add(typeof(ListOfStringList), new StringConstructedObjectBinder<ListOfStringList>());
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
 
-
-            if (Settings.WindowsAzureOAuthRelyingPartyRealm != null && Settings.WindowsAzureOAuthServiceNamespace != null && Settings.WindowsAzureOAuthSwtSigningKey != null)
-            {
-                OauthAuthenticate.InitFromConfig();
-            }
-            else
-            {
-                throw new ArgumentException("To enable OAuth2 support for your web project, configure WindowsAzure.OAuth.RelyingPartyRealm, WindowsAzure.OAuth.ServiceNamespace and WindowsAzure.OAuth.SwtSigningKey in your applications's appSettings.");
-            }
             ConfigureDiagnostics();
             PrepareBaseServiceData();
             

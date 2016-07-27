@@ -151,10 +151,6 @@
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
-      <Project>{3051f268-b03f-42ae-a06c-1d8dd751bdbf}</Project>
-      <Name>WindowsAzure.Acs.Oauth2</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataAccess\School\" />

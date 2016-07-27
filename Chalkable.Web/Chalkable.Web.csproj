@@ -278,7 +278,6 @@
     <Compile Include="Authentication\ChalkableIdentity.cs" />
     <Compile Include="Authentication\ChalkablePrincipal.cs" />
     <Compile Include="Authentication\DeveloperAuthentication.cs" />
-    <Compile Include="Authentication\OauthAuthenticate.cs" />
     <Compile Include="Common\UrlFormats.cs" />
     <Compile Include="Common\ViewConstants.cs" />
     <Compile Include="Controllers\AcademicBenchmarkController.cs" />
@@ -636,10 +635,6 @@
     <ProjectReference Include="..\Chalkable.UserTracking\Chalkable.UserTracking.csproj">
       <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
       <Name>Chalkable.UserTracking</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
-      <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
-      <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
