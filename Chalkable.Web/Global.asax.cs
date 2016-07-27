@@ -155,6 +155,37 @@ namespace Chalkable.Web
 
             // Get the exception object.
             Exception exc = Server.GetLastError();
+            
+            if (Context.Request.IsApiRequest() || Context.Request.IsAjaxRequest())
+            {
+                Context.ClearError();
+
+                Context.Response.TrySkipIisCustomErrors = true;
+                if (exc is HttpException)
+                {
+                    Context.Response.StatusCode = (exc as HttpException).GetHttpCode();
+                    Context.Response.SuppressFormsAuthenticationRedirect = true;
+                }
+                else
+                {
+                    Context.Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+
+                Context.Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Context.Response.StatusCode);
+
+                var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(exc))
+                {
+                    Success = false
+                };                
+
+                var serializer = new MagicJsonSerializer(true) {MaxDepth = 4};
+                var result = serializer.Serialize(jsonResponse);
+
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(result);
+
+                return;
+            }
 
             // Handle HTTP errors
             if (exc is HttpException)
@@ -166,39 +197,11 @@ namespace Chalkable.Web
                 if (exc.Message.Contains("NoCatch") || exc.Message.Contains("maxUrlLength"))
                     // ReSharper disable once RedundantJumpStatement
                     return;
-            } 
+            }
 
 #if !DEBUG
                 RaygunClient.SendInBackground(exc);
 #endif
-            var request = HttpContext.Current?.Request;
-            if (HttpContext.Current != null && (request.IsApiRequest() || request.IsAjaxRequest()))
-            {
-                //filterContext.ExceptionHandled = true;
-                HttpContext.Current.Response.TrySkipIisCustomErrors = true;
-                if (exc is HttpException)
-                {
-                    HttpContext.Current.Response.StatusCode =
-                        (exc as HttpException).GetHttpCode();
-                    HttpContext.Current.Response.SuppressFormsAuthenticationRedirect = true;
-                }
-                else
-                {
-                    HttpContext.Current.Response.StatusCode = (int)HttpStatusCode.OK;
-                }
-
-                HttpContext.Current.Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(HttpContext.Current.Response.StatusCode);
-
-                var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(exc))
-                {
-                    Success = false
-                };                
-
-                var serializer = new MagicJsonSerializer(true) {MaxDepth = 4};
-                var result = serializer.Serialize(jsonResponse);
-
-                HttpContext.Current.Response.Write(result);
-            }
 
         }
     }
