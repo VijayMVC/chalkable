@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
-using WindowsAzure.Acs.Oauth2.Client;
-using WindowsAzure.Acs.Oauth2.Client.Protocol;
 using Chalkable.API.Configuration;
 using Chalkable.API.Exceptions;
 using Chalkable.API.Helpers;
@@ -12,25 +11,6 @@ using Newtonsoft.Json;
 
 namespace Chalkable.API
 {
-    internal class SimpleOAuth2ClientInternal : SimpleOAuth2Client
-    {
-        public AccessTokenResponse CurrentAccessTokenPublic
-        {
-            get { return CurrentAccessToken; }
-            set { CurrentAccessToken = value; }
-        }
-
-        public DateTime LastAccessTokenRefreshPublic
-        {
-            get { return LastAccessTokenRefresh; }
-            set { LastAccessTokenRefresh = value; }
-        }
-
-        public SimpleOAuth2ClientInternal(Uri authorizeUri, Uri accessTokenUri, string clientId, string clientSecret, string scope, Uri redirectUri, ClientMode mode = ClientMode.ThreeLegged) : base(authorizeUri, accessTokenUri, clientId, clientSecret, scope, redirectUri, mode)
-        {            
-        }
-    }
-
     public class ChalkableAuthorization
     {
         public string ApiRoot { get; }
@@ -52,7 +32,30 @@ namespace Chalkable.API
 
         public void SignRequest(HttpWebRequest request)
         {
-            
+            var ts = DateTime.UtcNow.ToString("s");
+            var appSecret = Configuration.AppSecret;
+
+            var query = HttpUtility.ParseQueryString(request.RequestUri.Query);
+            var keys = query.AllKeys
+                .OrderBy(x => x)
+                .Select(key => $"_{key}={query[key]}")
+                .JoinString("_");
+
+            var signatureBase = $"{request.Method.ToLowerInvariant()}_{request.RequestUri.AbsolutePath}_{Token}_{ts}_{keys}_{appSecret}";
+
+            var signatureHash = HashHelper.HexOfCumputedHash(signatureBase);
+
+            var signatureJson = JsonConvert.SerializeObject(new
+            {
+                token = Token,
+                ts,
+                signature = signatureHash
+            });
+
+            var signatureBytes = System.Text.Encoding.UTF8.GetBytes(signatureJson);
+            var signature = Convert.ToBase64String(signatureBytes);
+
+            request.Headers.Add("Authorization", "Signature:" + signature);
         }
 
         public void AuthorizeQueryRequest(string token, IList<string> identityParams)
