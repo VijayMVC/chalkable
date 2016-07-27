@@ -1,0 +1,360 @@
+.stats-container
+  padding: 15px 20px
+  border: 1px solid #c8c7c3
+  margin: 0 auto
+  border-radius: 3px
+  box-shadow: 0 0 3px #ddd
+  height: 291px
+
+  &:not(:last-child)
+    margin-bottom: 20px
+
+  .top-bar
+    margin: -15px -20px 41px
+    padding: 15px 20px
+    border-bottom: 1px solid #f0f0f0
+    height: 34px
+    position: relative
+
+    .chosen-container
+      float: right
+
+    select
+      width: 150px
+
+    .title
+      display: inline-block
+      font-size: 14px
+      font-weight: bold
+      margin: 6px 14px
+
+.class-profile
+
+  .highcharts-container
+    &::before
+      content: none
+
+  .highcharts-tooltip
+    >SPAN
+      color: white !important
+      padding: 7px 4px
+      border-radius: 5px
+      white-space: pre !important
+      text-align: left
+
+    >SPAN::BEFORE
+      width: 10px
+      height: 10px
+      bottom: -6px
+      margin-left: -5px
+
+    >SPAN, >SPAN::BEFORE
+      background: #393939
+
+  .stats-container
+    .chart-top-legend
+      position: absolute
+      bottom: -32px
+      right: 54px
+
+      SPAN
+        display: inline-block
+        vertical-align: middle
+
+    .chart-legend-item
+      float: right
+      font-size: 12px
+      color: #7b7974
+      margin-left: 15px
+
+    .circle
+      width: 8px
+      height: 8px
+      border-radius: 6px
+      border: 2px solid #347a93
+      background: #347a93
+      display: inline-block
+      vertical-align: middle
+      margin-right: 9px
+
+      &.green
+        border-color: #41b768
+        background: #41b768
+
+      &.yellow
+        border-color: #f8e6a5
+        background: #f8e6a5
+
+      &.red
+        border-color: #d45151
+        background: #d45151
+
+.student-profile-discipline-page
+  #top-panel
+    white-space: nowrap
+
+  #info-panel
+    white-space: normal
+    width: 164px
+    
+  table
+    table-layout: fixed
+    width: 100%
+    
+    td:first-child
+      width: 400px
+
+    td:last-child
+      overflow-x: auto
+
+.profile-page
+  font-family: "Open Sans", sanf-serif
+
+  .mp-select
+    width: 100px
+
+  &.view-mode
+    .info-edit
+      display: none
+
+  &.edit-mode
+    .info-view
+      display: none
+
+  #top-panel
+    margin-bottom: 84px
+    margin-top: 48px
+
+    .left-panels, .right-panels
+      display: inline-block
+
+  .class-image
+    width: 140px
+    height: 140px
+    border-radius: 70px
+    background: #3f7d96
+    text-align: center
+
+    .class-img-wrapper
+      margin-top: 24px
+
+  h1
+    font-size: 30px
+    font-weight: normal
+
+    &.display-name
+      width: 225px
+      overflow: hidden
+      text-overflow: ellipsis
+
+  .panel-block
+    vertical-align: top
+    display: inline-block
+
+  .central-block
+    margin: 0 29px 0 17px
+
+  pre.status
+    font-family: "Open Sans", sanf-serif
+    margin: 2px 0 0 0
+
+  .status
+    font-size: 14px
+    color: #7b7974
+    margin-top: 2px
+
+    >DIV
+      display: inline-block
+      height: 13px
+      width: 13px
+      vertical-align: middle
+      border-radius: 7px
+      margin: 0 7px 0 -3px
+      position: relative
+      border: 1px solid #c9b47a
+
+      &.absent
+        background: #d45151
+        border-color: #d45151
+
+      &.present
+        background: #40e900
+        border-color: #40e900
+
+      &.excused
+        background: #79c9f1
+        border-color: #79c9f1
+
+      &.late
+        background: #f3f006
+        border-color: #f3f006
+
+.info-view, .info-edit
+  h3
+    font-size: 22px
+    margin-top: 43px
+
+  .section-data
+    >DIV
+      display: inline-block
+      font-size: 14px
+
+    .info-title
+      font-weight: bold
+      color: #3f7d96
+      margin-right: 16px
+      position: relative
+
+      &::before
+        position: absolute
+        content: ':'
+        right: -6px
+
+    .info-title-large
+      color: #333
+      font-size: 18px
+      font-weight: bold
+      margin-right: 16px
+      position: relative
+
+    .info-title-secondary
+      color: #555
+      font-style: italic
+
+    .info-title-small
+      @extend .info-title
+      font-size: 14px
+      width: 135px
+
+    .data-info-small
+      margin-right: 16px
+      width: 35px
+
+
+
+
+  .section-buttons
+    margin: 0 10px 0 10px
+    float: right
+
+    button
+      margin: 0 10px 0 0
+
+
+.class-item
+  white-space: normal
+  width: 103px
+  overflow: hidden
+  vertical-align: top
+  display: inline-block
+
+.announcement-types-info
+  transition-property: all
+  transition-duration: .5s
+  overflow: hidden
+  height: 0
+
+  .glance-box
+    width: 82px
+    height: 82px
+    margin: 16px 9px 0
+
+    .value
+      height: 55px
+      font-size: 41px
+      line-height: 75px
+
+.gp-container
+  margin-top: 30px
+
+  .icon
+    position: absolute
+    display: inline-block
+    width: 17px
+    height: 17px
+    right: 0
+    background-image: inline-image("images2/common/classesbar-arrow-left.png")
+    background-repeat: no-repeat
+    background-position: center center
+    +transition(all 0.2s)
+    +rotate(-90deg)
+
+  &.opened
+    .icon
+      +rotate(90deg)
+
+  .class-item
+    margin-right: 12px
+
+    .grades-avg-by-type-no-data
+      text-align: center
+      margin-top: 30px
+      font-size: 12px
+
+  .announcement-types-info-2
+    .type-link:first-child
+      .glance-box
+        margin-top: 26px
+
+  .gp-link
+    text-decoration: none
+    font-weight: bold
+    display: block
+
+  .lr-toolbar .arrow
+    top: 48px
+
+  .type-link
+    display: block
+
+.grading-popup.popup-bubble
+  padding: 0
+  width: 253px
+
+  >.items-list
+    margin: 0
+    max-height: 400px
+    overflow: auto
+
+  .pop-up-item
+    text-align: left
+    display: block
+    padding: 0 15px 0 45px
+    height: 42px
+    position: relative
+
+    .icon
+      width: 24px
+      height: 24px
+      position: absolute
+      top: 9px
+      left: 14px
+      +icons-24-sprite(document)
+
+    &:not(:last-child)
+      border-bottom: 1px solid #f2f2ed
+
+    &:hover
+      background: #f7f7f5
+
+    .name
+      display: inline-block
+      width: 108px
+      font-size: 15px
+
+    .value
+      float: right
+      font-size: 18px
+      font-weight: bold
+      color: #3f7d96
+
+      &.dropped
+        text-decoration: line-through
+        color: #a0a0a0
+
+    .name, .value
+      line-height: 38px
+
+
+
+
