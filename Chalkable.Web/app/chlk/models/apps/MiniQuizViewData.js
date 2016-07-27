@@ -20,8 +20,8 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('recommendedapplications')],
             ArrayOf(chlk.models.apps.Application), 'recommendedApplications',
 
-            [ria.serialize.SerializeProperty('authorizationcode')],
-            String, 'authorizationCode',
+            [ria.serialize.SerializeProperty('token')],
+            String, 'token',
 
             String, 'standardIds'
         ]);

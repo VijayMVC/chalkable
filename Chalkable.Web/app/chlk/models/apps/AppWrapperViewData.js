@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.apps', function () {
             [[chlk.models.apps.Application, chlk.models.apps.AppModes, chlk.models.announcement.AnnouncementTypeEnum]],
             function $(app, mode, announcementType_){
 
-                var fullUrl = app.getCurrentModeUrl() + "&code=" + app.getOauthCode();
+                var fullUrl = app.getCurrentModeUrl() + "&token=" + app.getToken();
 
                 this.setApp(app);
                 this.setAppMode(mode);
