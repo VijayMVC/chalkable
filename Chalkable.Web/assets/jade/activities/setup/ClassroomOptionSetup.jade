@@ -66,8 +66,11 @@
                                         id = id,
                                         value = i,
                                         name = 'averagingmethod',
-                                        checked = i == options.getAveragingMethod()
+                                        checked = i == options.getAveragingMethod(),
+                                        disabled = !self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADE_BOOK_AVERAGING_METHOD)
                                     )
+                                    if !self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADE_BOOK_AVERAGING_METHOD)
+                                        input(type="hidden", name="averagingmethod", value=options.getAveragingMethod())
                                     label(for=id)=item
                 TR
                     TD(colspan = 2)
@@ -75,26 +78,36 @@
                 TR
                     TD
                         h3
-                        +LabeledCheckbox(Msg.Standard_Calculate_Weight_Maximum_Values, 'standardscalculationweightmaximumvalues', options.isStandardsCalculationWeightMaximumValues())
+                        +LabeledCheckbox(
+                            Msg.Standard_Calculate_Weight_Maximum_Values,
+                            'standardscalculationweightmaximumvalues',
+                            options.isStandardsCalculationWeightMaximumValues(),
+                            !self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_STANDARDS_OPTIONS)
+                        )
                     TD
                         h3=Msg.Standards_scale
-                        +Select('standardsgradingscaleid').scales-select
-                            +Option('', '------------no scales-----------', !options.getStandardsGradingScaleId() )
+                        +Select('standardsgradingscaleid')(disabled=!self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_STANDARDS_OPTIONS)).scales-select
+                            +Option('', '-----------no scales-----------', !options.getStandardsGradingScaleId() )
                             each scale in self.getScales()
-                                +Option(scale.getId().valueOf(), scale.getName(), scale.getId() == options.getStandardsGradingScaleId() )
+                                +Option(scale.getId().valueOf(), scale.getName(), scale.getId() == options.getStandardsGradingScaleId())
+                        if !self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_STANDARDS_OPTIONS)
+                            input(type="hidden", name="standardsgradingscaleid", value=options.getStandardsGradingScaleId())
                 TR
                     TD
                         h3=Msg.Standards_calculate_rule
-                        +Select('standardscalculationrule').rules-select
+                        +Select('standardscalculationrule')(disabled=!self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_STANDARDS_OPTIONS)).rules-select
                             each rule in ['Current Grading Period', 'Running Section', 'Running Term']
                                 -var ruleValue = rule.replace(/\s/g, '')
                                 +Option(ruleValue ,rule , ruleValue == options.getStandardsCalculationRule())
+                        if !self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_STANDARDS_OPTIONS)
+                            input(type="hidden", name="standardscalculationrule", value=options.getStandardsCalculationRule())
                     TD
                         h3=Msg.Standards_calculate_method
-                        +Select('standardscalculationmethod').method-select
+                        +Select('standardscalculationmethod')(disabled=!self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_STANDARDS_OPTIONS)).method-select
                             each method in ['Averaging', 'Points']
                                 +Option(method, method, method == options.getStandardsCalculationMethod())
-
+                        if !self.getCurrentUser().hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_STANDARDS_OPTIONS)
+                            input(type="hidden", name="standardscalculationmethod", value=options.getStandardsCalculationMethod())
 
             +Hidden('classid', selectedId)
             .buttons-block

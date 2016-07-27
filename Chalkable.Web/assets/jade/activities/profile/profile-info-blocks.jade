@@ -11,7 +11,7 @@ mixin ProfileInfoView(tpl)
                 .img-container
                     +PersonImg(model, 140, !userRole.isStudent())
                     .grades-container
-            #student-info-panel.right-block.panel-block
+            #student-info-panel.right-block.panel-block.central-block
                 displayName =model.getDisplayName() || model.getFullName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
 
@@ -72,7 +72,7 @@ mixin ProfileInfoForm(controller, tpl)
                 .img-container
                     +PersonImg(model, 140, !userRole.isStudent())
                     .grades-container
-            #student-info-panel.right-block.panel-block
+            #student-info-panel.right-block.panel-block.central-block
                 displayName =model.getDisplayName() || model.getFullName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
 

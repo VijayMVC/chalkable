@@ -23,7 +23,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 classAnnouncementTypeId = classAnnTypes.First().Id;
             }
 
-            var res = SchoolLocator.SupplementalAnnouncementService.Create(classId, GenerateDefaultExpiresDate(expiresDate), classAnnouncementTypeId.Value);
+            var res = SchoolLocator.SupplementalAnnouncementService.Create(classId, expiresDate, classAnnouncementTypeId.Value);
             return Json(PrepareCreateAnnouncementViewData(res));
         }
 

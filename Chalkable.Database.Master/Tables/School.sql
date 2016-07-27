@@ -17,6 +17,3 @@
     CONSTRAINT [FK_School_District] FOREIGN KEY ([DistrictRef]) REFERENCES [dbo].[District] ([Id]),
     CONSTRAINT [UQ_School_DistrictRef_LocalId] UNIQUE NONCLUSTERED ([LocalId] ASC, [DistrictRef] ASC)
 );
-
-
-

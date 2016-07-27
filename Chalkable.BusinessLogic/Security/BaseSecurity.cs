@@ -124,5 +124,11 @@ namespace Chalkable.BusinessLogic.Security
             if(!context.SCEnabled)
                 throw new StudyCenterDisabledException();
         }
+
+        public static void EnsureHavingClaim(string claim, UserContext context)
+        {
+            if (!context.Claims.HasPermission(claim))
+                throw new ChalkableException("Current user doesn't have \"" + claim + "\" permission");
+        }
     }
 }

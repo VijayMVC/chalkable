@@ -32,8 +32,10 @@ namespace Chalkable.Web.Controllers
             var schoolYears = SchoolLocator.SchoolYearService.GetSchoolYears();
             var schoolYearsClasses =
                 SchoolLocator.ClassService.GetClassesBySchoolYearIds(schoolYears.Select(x => x.Id).ToList(), Context.PersonId.Value);
+            var schools = SchoolLocator.SchoolService.GetSchoolsByIds(schoolYears.Select(x => x.SchoolRef).ToList());
 
-            return Json(SchoolYearClassesViewData.Create(schoolYears, schoolYearsClasses));
+
+            return Json(SchoolYearClassesViewData.Create(schoolYears, schoolYearsClasses, schools));
         }
     }
 }

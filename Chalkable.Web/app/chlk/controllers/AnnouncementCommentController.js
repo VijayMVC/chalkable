@@ -83,10 +83,10 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton],
-        [[chlk.models.id.AnnouncementCommentId, Boolean]],
-        function setCommentHiddenAction(announcementCommentId, hidden){
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementCommentId, Boolean]],
+        function setCommentHiddenAction(announcementId, announcementCommentId, hidden){
             var res = this.announcementCommentService
-                .setHidden(announcementCommentId, hidden)
+                .setHidden(announcementId, announcementCommentId, hidden)
                 .then(function(announcement){
                     this.prepareCommentsAttachments_(announcement.getAnnouncementComments());
                     return announcement;

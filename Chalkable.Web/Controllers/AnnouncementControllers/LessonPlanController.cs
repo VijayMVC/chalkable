@@ -17,7 +17,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult CreateLessonPlan(int? classId)
         {
-            var res = SchoolLocator.LessonPlanService.Create(classId, Context.NowSchoolTime, Context.NowSchoolTime);
+            var date = DateTime.MinValue;
+            var res = SchoolLocator.LessonPlanService.Create(classId, null, null);
             return Json(PrepareCreateAnnouncementViewData(res));
         }
 
@@ -59,14 +60,6 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             DateTime? startDate, DateTime? endDate, bool hideFromStudents, bool inGallery, IList<AssignedAttributeInputModel> attributes
             , bool discussionEnabled, bool previewCommentsEnabled, bool requireCommentsEnabled)
         {
-            if (inGallery)
-            {
-                if (!Context.SCEnabled)
-                    throw new ChalkableException("Cannot create lesson plan template, Study Center disabled!");
-                if (lpGalleryCategoryId == null)
-                    throw new ChalkableException("Cannot create lesson plan template without category!");
-            }
-
             if (Context.Role == CoreRoles.TEACHER_ROLE)
             {
                 SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);

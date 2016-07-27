@@ -33,7 +33,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
             var classAnnouncements = announcementList.ClassAnnouncements.Where(x => x.Expires.Date == dateTime).ToList();
             var adminAnnouncements = announcementList.AdminAnnouncements.Where(x =>x.Expires.Date == dateTime).ToList();
             var lessonPlans = announcementList.LessonPlans.Where(x => x.StartDate <= dateTime && x.EndDate >= dateTime).ToList();
-            var supplementaAnns = announcementList.SupplementalAnnouncements.Where(x => x.Expires.Date == dateTime).ToList();
+            var supplementaAnns = announcementList.SupplementalAnnouncements.Where(x => x.Expires.HasValue && x.Expires.Value.Date == dateTime).ToList();
             return new AnnouncementMonthCalendarViewData(dateTime, isCurrentMonth, classAnnouncements, lessonPlans, adminAnnouncements, supplementaAnns, claims);
         }
     }

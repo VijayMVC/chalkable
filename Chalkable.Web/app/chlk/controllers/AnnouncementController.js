@@ -2089,7 +2089,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.Redirect('announcement', 'createFromTemplate', [model.getAnnouncementForTemplateId(), classId]);
             }
 
-            var res = this.submitLessonPlan(model);
+            var res = this.trySubmitLessonPlan(model);
             if(res){
                 res = res.then(function(saved){
                     if(saved){
@@ -2121,7 +2121,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.saveLessonPlanAction(model);
             }
 
-            var res = this.submitLessonPlan(model)
+            var res = this.trySubmitLessonPlan(model)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     this.BackgroundNavigate('lessonplangallery', 'gallery');
@@ -2441,7 +2441,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.announcement.FeedAnnouncementViewData]],
-        function submitLessonPlan(model){
+        function trySubmitLessonPlan(model){
             if(model.getStartDate().compare(model.getEndDate()) == 1){
                 this.ShowMsgBox('Lesson Plan is not valid. Start date is greater the end date', 'whoa.');
                 return null;
@@ -2463,25 +2463,36 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
-            var res = this.checkLessonPlanTitle_(model)
-                .then(function(result){
-                    return result ? this.lessonPlanService.submitLessonPlan(model.getId(),
-                        model.getClassId(),
-                        model.getTitle(),
-                        model.getContent(),
-                        model.getGalleryCategoryId(),
-                        model.getStartDate(),
-                        model.getEndDate(),
-                        model.isHiddenFromStudents(),
-                        model.getAssignedAttributesPostData(),
-                        model.isDiscussionEnabled(),
-                        model.isPreviewCommentsEnabled(),
-                        model.isRequireCommentsEnabled(),
-                        model.isInGallery()) : ria.async.BREAK;
-                }, this)
-                .attach(this.validateResponse_());
+            var res;
+
+            if(model.isInGallery())
+                res = this.checkLessonPlanTitle_(model)
+                    .then(function(result){
+                        return result ? this.submitLessonPlan_(model) : ria.async.BREAK;
+                    }, this)
+                    .attach(this.validateResponse_());
+            else
+                res = this.submitLessonPlan_(model)
+                    .attach(this.validateResponse_());
 
             return res;
+        },
+
+        [[chlk.models.announcement.FeedAnnouncementViewData]],
+        function submitLessonPlan_(model){
+            return this.lessonPlanService.submitLessonPlan(model.getId(),
+                    model.getClassId(),
+                    model.getTitle(),
+                    model.getContent(),
+                    model.getGalleryCategoryId(),
+                    model.getStartDate(),
+                    model.getEndDate(),
+                    model.isHiddenFromStudents(),
+                    model.getAssignedAttributesPostData(),
+                    model.isDiscussionEnabled(),
+                    model.isPreviewCommentsEnabled(),
+                    model.isRequireCommentsEnabled(),
+                    model.isInGallery());
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

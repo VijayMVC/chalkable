@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var lps = InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeTo, ownedOnly);
             var res = MergeItems(classAnns, lps);
 
-            var supplementalAnns = InternalGetSupplementalAnns(locator, fromDate, toDate, classId, complete, start, count, from, to, includeFrom, includeFrom, true);
+            var supplementalAnns = InternalGetSupplementalAnns(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeFrom, true);
             res = MergeItems(res, supplementalAnns);
 
             if (locator.Context.Role == CoreRoles.STUDENT_ROLE)

@@ -106,7 +106,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  var classAnns = announcementList.ClassAnnouncements.Where(x => x.Expires.Date == d).ToList();
                  var lessonPlans = announcementList.LessonPlans.Where(x => x.StartDate <= d && x.EndDate >= d).ToList();
                  var adminAnns = announcementList.AdminAnnouncements.Where(x => x.Expires.Date == d).ToList();
-                 var supplementalAnns = announcementList.SupplementalAnnouncements.Where(x => x.Expires.Date == d).ToList();
+                 var supplementalAnns = announcementList.SupplementalAnnouncements.Where(x => x.Expires.HasValue && x.Expires.Value.Date == d).ToList();
                  var daySchedule = schedule.Where(x => x.Day == d).ToList();
                  var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, classAnns, lessonPlans, supplementalAnns, locator.Context.NowSchoolTime, claims);
                  res.Add(AnnouncementCalendarWeekViewData.Create(d, annPeriods, adminAnns));

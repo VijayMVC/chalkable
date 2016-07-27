@@ -27,8 +27,8 @@ NAMESPACE('chlk.models.student', function(){
         Boolean, 'foreignExchange',
         Boolean, 'retained',
         Number, 'stateIDNumber',
-        Number, 'alternateStudentNumber',
-        Number, 'studentNumber',
+        String, 'alternateStudentNumber',
+        String, 'studentNumber',
         chlk.models.common.NameId, 'language',
         chlk.models.common.NameId, 'nationality',
         chlk.models.common.NameId, 'homeRoom',
@@ -51,8 +51,8 @@ NAMESPACE('chlk.models.student', function(){
             this.foreignExchange = SJX.fromValue(raw.isforeignexchange, Boolean);
             this.stateIDNumber = SJX.fromValue(raw.isforeignexchange, Number);
             this.retained = SJX.fromValue(raw.isretained, Boolean);
-            this.alternateStudentNumber = SJX.fromValue(raw.alternatestudentnumber, Number);
-            this.studentNumber = SJX.fromValue(raw.studentnumber, Number);
+            this.alternateStudentNumber = SJX.fromValue(raw.alternatestudentnumber, String);
+            this.studentNumber = SJX.fromValue(raw.studentnumber, String);
             this.language = SJX.fromDeserializable(raw.language, chlk.models.common.NameId);
             this.homeRoom = SJX.fromDeserializable(raw.homeroom, chlk.models.common.NameId);
             this.nationality = SJX.fromDeserializable(raw.nationality, chlk.models.common.NameId);
