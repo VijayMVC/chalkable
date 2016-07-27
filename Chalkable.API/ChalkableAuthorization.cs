@@ -43,7 +43,7 @@ namespace Chalkable.API
             await Task.FromResult(true);
         }
 
-        public static string ComputeSignature(string method, Uri requestUri, long ts, string token, string appSecret)
+        public static string ComputeSignature(string method, Uri requestUri, long contentLength, long ts, string token, string appSecret)
         {
             var query = HttpUtility.ParseQueryString(requestUri.Query);
             var keys = query.AllKeys
@@ -51,11 +51,11 @@ namespace Chalkable.API
                 .Select(key => $"_{key}={query[key]}")
                 .JoinString("_");
 
-            var signatureBase = $"{method.ToLowerInvariant()}_{requestUri.AbsolutePath}_{token}_{ts}_{keys}_{appSecret}";
+            var signatureBase = $"{method.ToLowerInvariant()}_{requestUri.AbsolutePath}_{token}_{ts}_{Math.Max(0, contentLength)}_{keys}_{appSecret}";
 
             return HashHelper.HexOfCumputedHash(signatureBase);
         }
-
+        
         public static double DateTimeToUnixTimestamp(DateTime dateTime)
         {
             return (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
@@ -70,7 +70,7 @@ namespace Chalkable.API
             {
                 AppToken = Token,
                 Timestamp = ts,
-                Signature = ComputeSignature(request.Method, request.RequestUri, ts, Token, appSecret)
+                Signature = ComputeSignature(request.Method, request.RequestUri, request.ContentLength, ts, Token, appSecret)
             });
 
             var signatureBytes = System.Text.Encoding.UTF8.GetBytes(signatureJson);

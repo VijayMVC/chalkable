@@ -115,8 +115,8 @@ namespace Chalkable.API
             {
                 webRequest.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
                 webRequest.Accept = "application/json";
-                Authorization?.SignRequest(webRequest);
                 onCreated?.Invoke(webRequest);
+                Authorization?.SignRequest(webRequest);
                 var response = await webRequest.GetResponseAsync();
                 using (var stream = response.GetResponseStream())
                 {

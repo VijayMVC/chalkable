@@ -74,8 +74,8 @@ namespace Chalkable.Web.Authentication
             if (app == null)
                 throw new ChalkableSecurityException("Invalid auth app token");
 
-            var hash = ChalkableAuthorization.ComputeSignature(requestContext.HttpContext.Request.HttpMethod
-                , requestContext.HttpContext.Request.Url, info.Timestamp, info.AppToken, app.SecretKey);
+            var hash = ChalkableAuthorization.ComputeSignature(requestContext.HttpContext.Request.HttpMethod, requestContext.HttpContext.Request.Url
+                , requestContext.HttpContext.Request.ContentLength, info.Timestamp, info.AppToken, app.SecretKey);
 
             if (string.CompareOrdinal(hash, info.Signature) != 0)
                 throw new ChalkableSecurityException("Auth token has invalid signature");
