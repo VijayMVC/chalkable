@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
@@ -7,6 +8,9 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Common.Web;
+using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic.ApiExplorer;
 using Chalkable.Web.Models.Binders;
@@ -162,11 +166,40 @@ namespace Chalkable.Web
                 if (exc.Message.Contains("NoCatch") || exc.Message.Contains("maxUrlLength"))
                     // ReSharper disable once RedundantJumpStatement
                     return;
-            }
+            } 
 
 #if !DEBUG
                 RaygunClient.SendInBackground(exc);
 #endif
+            var request = HttpContext.Current?.Request;
+            if (HttpContext.Current != null && (request.IsApiRequest() || request.IsAjaxRequest()))
+            {
+                //filterContext.ExceptionHandled = true;
+                HttpContext.Current.Response.TrySkipIisCustomErrors = true;
+                if (exc is HttpException)
+                {
+                    HttpContext.Current.Response.StatusCode =
+                        (exc as HttpException).GetHttpCode();
+                    HttpContext.Current.Response.SuppressFormsAuthenticationRedirect = true;
+                }
+                else
+                {
+                    HttpContext.Current.Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+
+                HttpContext.Current.Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(HttpContext.Current.Response.StatusCode);
+
+                var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(exc))
+                {
+                    Success = false
+                };                
+
+                var serializer = new MagicJsonSerializer(true) {MaxDepth = 4};
+                var result = serializer.Serialize(jsonResponse);
+
+                HttpContext.Current.Response.Write(result);
+            }
+
         }
     }
 

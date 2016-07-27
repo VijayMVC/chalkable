@@ -273,6 +273,7 @@
     <Compile Include="ActionFilters\HandleErrorFilter.cs" />
     <Compile Include="ActionFilters\AuthorizationFilter.cs" />
     <Compile Include="ActionFilters\TraceControllerFilter.cs" />
+    <Compile Include="Authentication\ApplicationAuthentification.cs" />
     <Compile Include="Authentication\ChalkableAuthentication.cs" />
     <Compile Include="Authentication\ChalkableIdentity.cs" />
     <Compile Include="Authentication\ChalkablePrincipal.cs" />

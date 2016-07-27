@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Model
             return JsonConvert.SerializeObject(this);
         }
 
-        public AuthorizationUserInfo FromString(string json)
+        public static AuthorizationUserInfo FromString(string json)
         {
             return JsonConvert.DeserializeObject<AuthorizationUserInfo>(json);
         }

@@ -11,8 +11,21 @@ using Newtonsoft.Json;
 
 namespace Chalkable.API
 {
+    public class TokenAuthenticationInfo
+    {
+        [JsonProperty("token")]
+        public string AppToken { get; set; }
+        [JsonProperty("ts")]
+        public long Timestamp { get; set; }
+        [JsonProperty("sig")]
+        public string Signature { get; set; }
+    }
+
     public class ChalkableAuthorization
     {
+        public const string AuthenticationHeaderName = "Authorization";
+        public const string AuthenticationSignature = "Signature";
+
         public string ApiRoot { get; }
         private string Token { get; set; }
         public ApplicationEnvironment Configuration { get; }
@@ -30,32 +43,40 @@ namespace Chalkable.API
             await Task.FromResult(true);
         }
 
-        public void SignRequest(HttpWebRequest request)
+        public static string ComputeSignature(string method, Uri requestUri, long ts, string token, string appSecret)
         {
-            var ts = DateTime.UtcNow.ToString("s");
-            var appSecret = Configuration.AppSecret;
-
-            var query = HttpUtility.ParseQueryString(request.RequestUri.Query);
+            var query = HttpUtility.ParseQueryString(requestUri.Query);
             var keys = query.AllKeys
                 .OrderBy(x => x)
                 .Select(key => $"_{key}={query[key]}")
                 .JoinString("_");
 
-            var signatureBase = $"{request.Method.ToLowerInvariant()}_{request.RequestUri.AbsolutePath}_{Token}_{ts}_{keys}_{appSecret}";
+            var signatureBase = $"{method.ToLowerInvariant()}_{requestUri.AbsolutePath}_{token}_{ts}_{keys}_{appSecret}";
 
-            var signatureHash = HashHelper.HexOfCumputedHash(signatureBase);
+            return HashHelper.HexOfCumputedHash(signatureBase);
+        }
 
-            var signatureJson = JsonConvert.SerializeObject(new
+        public static double DateTimeToUnixTimestamp(DateTime dateTime)
+        {
+            return (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+        }
+
+        public void SignRequest(HttpWebRequest request)
+        {
+            var ts = (long)DateTimeToUnixTimestamp(DateTime.UtcNow);
+            var appSecret = Configuration.AppSecret;
+
+            var signatureJson = JsonConvert.SerializeObject(new TokenAuthenticationInfo
             {
-                token = Token,
-                ts,
-                signature = signatureHash
+                AppToken = Token,
+                Timestamp = ts,
+                Signature = ComputeSignature(request.Method, request.RequestUri, ts, Token, appSecret)
             });
 
             var signatureBytes = System.Text.Encoding.UTF8.GetBytes(signatureJson);
             var signature = Convert.ToBase64String(signatureBytes);
 
-            request.Headers.Add("Authorization", "Signature:" + signature);
+            request.Headers.Add(AuthenticationHeaderName, $"{AuthenticationSignature}:{signature}");
         }
 
         public void AuthorizeQueryRequest(string token, IList<string> identityParams)
