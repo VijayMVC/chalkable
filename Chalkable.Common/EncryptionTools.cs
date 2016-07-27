@@ -10,7 +10,7 @@ namespace Chalkable.Common
 {
     public static class EncryptionTools
     {
-        public static string AesEncript(string data, string key)
+        public static string AesEncrypt(string data, string key)
         {
             var aesProvider = new AesCryptoServiceProvider
             {
@@ -62,20 +62,6 @@ namespace Chalkable.Common
                     }
                 }
             }
-        }
-
-        public static string DecryptBytes(SymmetricAlgorithm symAlg, byte[] inBytes)
-        {
-            MemoryStream memoryStream = new MemoryStream(inBytes);
-            CryptoStream cryptoStream = new CryptoStream(memoryStream, symAlg.CreateDecryptor(), CryptoStreamMode.Read);
-
-            StreamReader reader = new StreamReader(cryptoStream, Encoding.UTF8);
-
-            string plainText = reader.ReadToEnd();
-
-            memoryStream.Close();
-            cryptoStream.Close();
-            return plainText;
         }
     }
 }
