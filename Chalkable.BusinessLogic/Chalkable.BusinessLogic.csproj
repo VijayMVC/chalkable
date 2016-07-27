@@ -157,6 +157,7 @@
     <Compile Include="Model\Attendances\StudentClassAttendance.cs" />
     <Compile Include="Model\Attendances\StudentClassAttendanceSummary.cs" />
     <Compile Include="Model\Attendances\StudentDailyAttendance.cs" />
+    <Compile Include="Model\AuthorizationUserInfo.cs" />
     <Compile Include="Model\BlobContainerInfo.cs" />
     <Compile Include="Model\BlobInfo.cs" />
     <Compile Include="Model\ChalkableAnnouncementType.cs" />

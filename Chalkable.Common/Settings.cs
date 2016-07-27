@@ -172,5 +172,7 @@ namespace Chalkable.Common
 
         public static int DefaultMinWorkerThreads => int.Parse(Get("Threads.DefaultMinWorkerThreads"));
         public static int DefaultMinIoThreads => int.Parse(Get("Threads.DefaultMinIoThreads"));
+
+        public static string AesSecretKey => Get("AesSecretKey");
     }
 }

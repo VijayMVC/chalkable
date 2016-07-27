@@ -171,6 +171,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="CoreRole.cs" />
     <Compile Include="DateTimeTools.cs" />
+    <Compile Include="EncryptionTools.cs" />
     <Compile Include="Exceptions\BlobNotFoundException.cs" />
     <Compile Include="Exceptions\ChalkableException.cs" />
     <Compile Include="Exceptions\ChalkableSecurityException.cs" />

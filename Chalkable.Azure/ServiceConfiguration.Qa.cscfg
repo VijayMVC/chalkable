@@ -45,6 +45,8 @@
       <!--SetMinThreads params-->
       <Setting name="Threads.DefaultMinWorkerThreads" value="25"/>
       <Setting name="Threads.DefaultMinIoThreads" value="25"/>
+      <!--AES Settings-->
+      <Setting name="AesSecretKey" value="5E9F42ED7A2E51D39CD63EA9BDE5AAD9DA2B86532CC57DABC2636F8B3A95D48E"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="A0EDC440D203C991E3739E5121061E10B03044E7" thumbprintAlgorithm="sha1" />

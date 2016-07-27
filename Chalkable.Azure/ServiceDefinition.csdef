@@ -60,6 +60,8 @@
       <!--SetMinThreads params-->
       <Setting name="Threads.DefaultMinWorkerThreads"/>
       <Setting name="Threads.DefaultMinIoThreads"/>
+      <!--AES Settings-->
+      <Setting name="AesSecretKey"/>
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Medium">

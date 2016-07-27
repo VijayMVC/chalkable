@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -209,10 +210,10 @@ namespace Chalkable.Web.Controllers
             var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
             return Json(AnnouncementApplicationViewData.Create(res, app, null, announcementType));
         }
-
+        
         [AuthorizationFilter]
         public ActionResult GetOauthCode(string applicationUrl, Guid? applicationId)
-        {
+        {   
             if ((User.IsInRole("SysAdmin") && !Context.PersonId.HasValue) || User.IsInRole("AppTester"))
                 return GetOauthCodeForSysAdmin(applicationUrl, applicationId);
 

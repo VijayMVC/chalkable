@@ -716,7 +716,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
+    <CodeAnalysisDictionary Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
     <Content Include="Reports\FeedReport\FeedShortReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
