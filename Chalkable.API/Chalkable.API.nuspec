@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Chalkable.API</id>
-    <version>0.7.0.2487-rc</version>
+    <version>$version$</version>
     <title>Chalkable.API</title>
     <authors>Volodymyr Iatsyshyn</authors>
     <owners>Chalkable Inc</owners>
