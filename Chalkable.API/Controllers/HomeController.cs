@@ -13,7 +13,7 @@ namespace Chalkable.API.Controllers
     public abstract class HomeController: BaseController
     {
         [AllowCorsPolicy]
-        public virtual async Task<ActionResult> Index(string mode, string code, string apiRoot, int? announcementApplicationId,
+        public virtual async Task<ActionResult> Index(string mode, string token, string apiRoot, int? announcementApplicationId,
             int? studentId, int? announcementId, int? announcementType, int? attributeId, int? start, int? count, string contentId)
         {
 
@@ -40,10 +40,10 @@ namespace Chalkable.API.Controllers
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(code))
+            if (string.IsNullOrWhiteSpace(token))
                 return new EmptyResult();
 
-            await ChalkableAuthorization.AuthorizeAsync(code);
+            await ChalkableAuthorization.AuthorizeAsync(token);
 
             if (string.IsNullOrWhiteSpace(mode))
                 mode = Settings.MY_VIEW_MODE;
@@ -66,7 +66,7 @@ namespace Chalkable.API.Controllers
             var token = Request.Headers["Authorization"];
             if (string.IsNullOrWhiteSpace(token))
                 throw new ChalkableApiException("Security error. Missing token");
-            token = token.Replace("Bearer:", "").Trim();
+            token = token.Replace("Signature:", "").Trim();
 
             var identityParams = GetQueryIdentityParams();
             ChalkableAuthorization.AuthorizeQueryRequest(token, identityParams);

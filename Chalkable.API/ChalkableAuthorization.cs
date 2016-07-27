@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using WindowsAzure.Acs.Oauth2.Client;
 using WindowsAzure.Acs.Oauth2.Client.Protocol;
 using Chalkable.API.Configuration;
@@ -32,9 +34,8 @@ namespace Chalkable.API
     public class ChalkableAuthorization
     {
         public string ApiRoot { get; }
+        private string Token { get; set; }
         public ApplicationEnvironment Configuration { get; }
-        public SimpleOAuth2Client OauthClient { get; private set; }
-        private string RefreshToken { get; set; }
 
         public ChalkableAuthorization(string apiRoot, ApplicationEnvironment configuration = null)
         {
@@ -43,22 +44,15 @@ namespace Chalkable.API
         }
 
 
-        public async Task AuthorizeAsync(string refreshToken)
+        public async Task AuthorizeAsync(string token)
         {
-            if (RefreshToken == refreshToken)
-                return;
+            Token = token;
+            await Task.FromResult(true);
+        }
 
-            OauthClient = new SimpleOAuth2ClientInternal(
-                authorizeUri: new Uri(ApiRoot + "/authorize/index"),
-                accessTokenUri: new Uri(Configuration.AcsUri),
-                clientId: Configuration.ClientId,
-                clientSecret: Configuration.AppSecret,
-                scope: Configuration.Scope,
-                redirectUri: new Uri(Configuration.RedirectUri));
-
-            await Task.Run(() => OauthClient.Authorize(refreshToken));
-
-            RefreshToken = refreshToken;
+        public void SignRequest(HttpWebRequest request)
+        {
+            
         }
 
         public void AuthorizeQueryRequest(string token, IList<string> identityParams)
@@ -76,60 +70,22 @@ namespace Chalkable.API
         public class ChalkableAuthorizationSerialized
         {
             public string ApiRoot { get; set; }
-            public IDictionary<string, string> AccessTokenParams { get; set; }
-            public Uri AccessTokenBase { get; set; }
-            public DateTime AccessTokenRefreshed { get; set; }
-            public string RefreshToken { get; set; }
+            public string Token { get; set; }
         }
 
         private ChalkableAuthorization(ChalkableAuthorizationSerialized data, ApplicationEnvironment configuration = null)
         {
             ApiRoot = data.ApiRoot;
             Configuration = configuration ?? Settings.GetConfiguration(ApiRoot);
-
-            var client = new SimpleOAuth2ClientInternal(
-                authorizeUri: new Uri(ApiRoot + "/authorize/index"),
-                accessTokenUri: new Uri(Configuration.AcsUri),
-                clientId: Configuration.ClientId,
-                clientSecret: Configuration.AppSecret,
-                scope: Configuration.Scope,
-                redirectUri: new Uri(Configuration.RedirectUri))
-            {
-                LastAccessTokenRefreshPublic = data.AccessTokenRefreshed,
-                CurrentAccessTokenPublic = new AccessTokenResponse(data.AccessTokenBase)
-            };
-
-            foreach (var pair in data.AccessTokenParams)
-            {
-                client.CurrentAccessTokenPublic.Parameters.Add(pair.Key, pair.Value);
-            }
-
-            OauthClient = client;
-
-            RefreshToken = data.RefreshToken;
+            Token = data.Token;
         }
 
         public string Serialize()
         {
-            var client = OauthClient as SimpleOAuth2ClientInternal;
-
-            if (client == null)
-                throw new Exception("Serialization failed");
-
-            var s = client.CurrentAccessTokenPublic.Parameters;
-            var p = new Dictionary<string, string>();
-            foreach (var key in s.AllKeys)
-            {
-                p[key] = s[key];
-            }
-            
             return JsonConvert.SerializeObject(new ChalkableAuthorizationSerialized
             {
                 ApiRoot = ApiRoot,
-                AccessTokenParams = p,
-                AccessTokenBase = client.CurrentAccessTokenPublic.BaseUri,
-                AccessTokenRefreshed = client.LastAccessTokenRefreshPublic,
-                RefreshToken = RefreshToken
+                Token = Token
             });
         }
 

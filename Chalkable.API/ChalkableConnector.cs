@@ -116,7 +116,7 @@ namespace Chalkable.API
             {
                 webRequest.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
                 webRequest.Accept = "application/json";
-                OauthClient?.AppendAccessTokenTo(webRequest);
+                Authorization?.SignRequest(webRequest);
                 onCreated?.Invoke(webRequest);
                 var response = await webRequest.GetResponseAsync();
                 using (var stream = response.GetResponseStream())
@@ -186,13 +186,12 @@ namespace Chalkable.API
             }
         }
 
-        private SimpleOAuth2Client OauthClient { get; }
-        private string ApiRoot { get; }
+        private ChalkableAuthorization Authorization { get; set; }
+        private string ApiRoot => Authorization?.ApiRoot;
 
         public ChalkableConnector(ChalkableAuthorization authorization)
         {
-            OauthClient = authorization.OauthClient;
-            ApiRoot = authorization.ApiRoot;
+            Authorization = authorization;
         }
     }
 }
