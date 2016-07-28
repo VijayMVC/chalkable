@@ -186,6 +186,15 @@ namespace Chalkable.Tests.Sis
             }
             Debug.WriteLine("---------------------------------");
         }
+
+        private void Print(IEnumerable<PersonLanguage> items)
+        {
+            foreach (var item in items)
+            {
+                Debug.WriteLine($"{item.LanguageID} {item.PersonID} {item.IsPrimary} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
+            }
+            Debug.WriteLine("---------------------------------");
+        }
     }
 
 }

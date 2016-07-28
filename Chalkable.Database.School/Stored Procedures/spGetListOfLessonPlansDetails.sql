@@ -27,7 +27,7 @@ Where
 	and (@callerRole = @ADMIN_ROLE_ID or  SchoolYearRef = @schoolYearId)
 	and (
 		 @onlyOwner = 0
-		 or (@callerRole = @ADMIN_ROLE_ID or @callerRole = @TEACHER_ROLE_ID)  AND exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwLP.ClassRef)
+		 or (@callerRole = @ADMIN_ROLE_ID or @callerRole = @TEACHER_ROLE_ID)  AND (exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwLP.ClassRef) or InGallery = 1)
 		 or @callerRole = @STUDENT_ROLE_ID And exists(Select * From ClassPerson Where ClassPerson.PersonRef = @callerId and ClassPerson.ClassRef = vwLP.ClassRef)
 			And vwLP.VisibleForStudent = 1
 		)
@@ -135,4 +135,3 @@ Where AnnouncementAttachment_AnnouncementRef in(Select Id From @lessonPlans)
 		or (@callerRole = @STUDENT_ROLE_ID 
 		and (Attachment_PersonRef = @callerId 
 		or exists(Select * From @teacherIds t Where t.id = Attachment_PersonRef))))
-

@@ -37,18 +37,36 @@ using User = Chalkable.StiConnector.SyncModel.User;
 using UserSchool = Chalkable.StiConnector.SyncModel.UserSchool;
 using BellSchedule = Chalkable.StiConnector.SyncModel.BellSchedule;
 using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
+using PersonLanguage = Chalkable.StiConnector.SyncModel.PersonLanguage;
 
 
 namespace Chalkable.Tests.Sis
 {
     public partial class StiApi : TestBase
     {
+        private SyncResult<T> GetTableData<T>(Guid districtId, long? version) where T : SyncModel
+        {
+            var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
+
+            District d;
+            IList<Data.Master.Model.User> existingUsers;
+            using (var uow = new UnitOfWork(mcs, false))
+            {
+                var da = new DistrictDataAccess(uow);
+                d = da.GetById(districtId);
+                var conds = new SimpleQueryCondition("DistrictRef", districtId, ConditionRelation.Equal);
+                existingUsers = (new UserDataAccess(uow)).GetAll(conds);
+            }
+            var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
+            var items = (cl.SyncConnector.GetDiff(typeof(T), null) as SyncResult<T>);
+            return items;
+        }
+
         [Test]
         public void SyncTest()
         {
-            var cl = ConnectorLocator.Create("Chalkable", "g5Hk4By4V", "https://inowhome.dcs.edu/Api/");
-            var items = (cl.SyncConnector.GetDiff(typeof(Infraction), null) as SyncResult<Infraction>);
-            Print(items.All.Where(x=>x.VisibleInClassroom == true));
+            var items = GetTableData<PersonLanguage>(Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"), null);
+            Print(items.All);
             //Print(items.Updated);
             //Print(items.Deleted);
         }
