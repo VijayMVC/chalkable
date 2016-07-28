@@ -1,4 +1,4 @@
-﻿CREATE Procedure [dbo].[spCreateLessonPlan] @schoolYearId int, @classId int, @personId int, @created datetime2, @startDate datetime2, @endDate datetime2, @state int, @callerRole int
+﻿Create Procedure [dbo].[spCreateLessonPlan] @schoolYearId int, @classId int, @personId int, @created datetime2, @startDate datetime2, @endDate datetime2, @state int, @callerRole int
 As
 Begin Transaction
 --Only Teacher can create Lesson Plan--
@@ -63,6 +63,11 @@ Else
 		--update Announcement Set Content = @prevContent Where Id = @announcementId
 	End
 
-Exec spGetLessonPlanDetails @announcementId, @personId, @callerRole, @schoolYearId
+
+Declare @ids TInt32
+Insert Into @ids
+values(@announcementId)
+
+Exec spGetListOfLessonPlansDetails @ids, @personId, @callerRole, @schoolYearId, 0
 
 Commit
