@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.student', function(){
         Boolean, 'lep',
         Boolean, 'foreignExchange',
         Boolean, 'retained',
-        Number, 'stateIDNumber',
+        String, 'stateIDNumber',
         String, 'alternateStudentNumber',
         String, 'studentNumber',
         chlk.models.common.NameId, 'language',
@@ -49,7 +49,7 @@ NAMESPACE('chlk.models.student', function(){
             this.immigrant = SJX.fromValue(raw.isimmigrant, Boolean);
             this.lep = SJX.fromValue(raw.lep, Boolean);
             this.foreignExchange = SJX.fromValue(raw.isforeignexchange, Boolean);
-            this.stateIDNumber = SJX.fromValue(raw.isforeignexchange, Number);
+            this.stateIDNumber = SJX.fromValue(raw.stateidnumber, String);
             this.retained = SJX.fromValue(raw.isretained, Boolean);
             this.alternateStudentNumber = SJX.fromValue(raw.alternatestudentnumber, String);
             this.studentNumber = SJX.fromValue(raw.studentnumber, String);
