@@ -66,15 +66,17 @@ namespace Chalkable.API
 
         protected async Task<T> Call<T>(string endpoint, Stream stream, string method = null, string contentType = null)
         {
-            return await Call<T>(endpoint,
-                wr =>
+            return await Call<T>(endpoint, method,
+                onCreated: wr =>
                 {
-                    wr.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
                     wr.KeepAlive = true;
                     wr.Credentials = CredentialCache.DefaultCredentials;
                     wr.ContentLength = stream.Length;
                     if (!string.IsNullOrWhiteSpace(contentType))
                         wr.ContentType = contentType;
+                }, 
+                onBeforeSend: wr =>
+                {
                     stream.CopyTo(wr.GetRequestStream());
                     stream.Dispose();
                 });
@@ -102,21 +104,26 @@ namespace Chalkable.API
             public string ExceptionType { get; set; }
         }
 
-        protected async Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null, string method = null)
+        protected async Task<T> Call<T>(string endpoint, string method = null, OnWebRequestIsCreated onCreated = null, OnWebRequestIsSent onBeforeSend = null)
         {
             var url = ApiRoot + endpoint;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             Debug.WriteLine("Request on: " + url);
-            Debug.WriteLine("Request on: " + url);
             var webRequest = (HttpWebRequest)WebRequest.Create(url);
             try
             {
                 webRequest.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
                 webRequest.Accept = "application/json";
+                webRequest.AllowAutoRedirect = false;
+
                 onCreated?.Invoke(webRequest);
+
                 Authorization?.SignRequest(webRequest);
+
+                onBeforeSend?.Invoke(webRequest);
+
                 var response = await webRequest.GetResponseAsync();
                 using (var stream = response.GetResponseStream())
                 {
