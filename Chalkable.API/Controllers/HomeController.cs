@@ -63,10 +63,10 @@ namespace Chalkable.API.Controllers
 
         private void AuthorizeQueryRequest()
         {
-            var token = Request.Headers["Authorization"];
+            var token = Request.Headers[ChalkableAuthorization.AuthenticationHeaderName];
             if (string.IsNullOrWhiteSpace(token))
                 throw new ChalkableApiException("Security error. Missing token");
-            token = token.Replace("Signature:", "").Trim();
+            token = token.Replace($"{ChalkableAuthorization.AuthenticationSignature}:", "").Trim();
 
             var identityParams = GetQueryIdentityParams();
             ChalkableAuthorization.AuthorizeQueryRequest(token, identityParams);
