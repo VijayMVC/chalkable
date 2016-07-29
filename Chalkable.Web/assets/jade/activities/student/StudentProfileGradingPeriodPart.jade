@@ -8,7 +8,8 @@
                         .announcement-types-info-2
                             each typeItem in gradingsByAnnouncementTypes
                                 +ActionLink('students', 'showGradingActivitiesForStudent', typeItem.getAnnouncementType().getId(), classGrading.getClazz().getId()).type-link
-                                    +GlanceBox(null, null, {value: typeItem.getStudentItemTypeAvg(), title: typeItem.getAnnouncementType().getName()}).small
+                                    -var val = typeItem.getStudentItemTypeAvg()
+                                    +GlanceBox(null, null, {value: (val || val === 0 ? val : '--'), title: typeItem.getAnnouncementType().getName()}).small
                 else
                     .grades-avg-by-type-no-data No Data Available
 
