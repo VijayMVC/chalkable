@@ -1,0 +1,6 @@
+div
+    actions = {currentAction: 'week', day: 'day', week: 'week', month: 'month'}
+    -var topData = self.getTopData()
+    -var param = topData.getSelectedItemId()
+    +ClassesToolBarWithAll(topData, 'calendar', 'week', [self.getCurrentDate().format('mm-dd-yy')])
+    +Calendar(self, chlk.templates.calendar.announcement.WeekCalendarBodyTpl, self.getModel(), 'calendar', actions, param ? [param] : [''])
