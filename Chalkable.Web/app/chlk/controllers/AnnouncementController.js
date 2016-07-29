@@ -686,7 +686,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.apps.Application, Boolean]],
         function getAppRecommendedContents_(ann, app, isDialog_){
-            if(ann.getStandards().length > 0)
+            if(this.isStudyCenterEnabled() && ann.getStandards().length > 0)
                 var emptyModel = new  chlk.models.apps.AppContentListViewData();
                 this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), emptyModel,  'before-app-contents-loaded');
                 this.applicationService.getApplicationContents(
@@ -716,7 +716,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function getListOfAppRecommendedContents_(announcement, isDialog_){
-            if(announcement.getStandards().length > 0)
+            if(this.isStudyCenterEnabled() && announcement.getStandards().length > 0)
                 (announcement.getAppsWithContent() || [])
                     .forEach(function(app) {
                         this.getAppRecommendedContents_(announcement, app, isDialog_);
