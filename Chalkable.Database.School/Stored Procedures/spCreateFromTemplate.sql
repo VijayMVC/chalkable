@@ -1,5 +1,4 @@
-﻿
-CREATE Procedure [dbo].[spCreateFromTemplate] @lessonPlanTemplateId int, @schoolYearId int, @personId int, @classId int
+﻿Create Procedure [dbo].[spCreateFromTemplate] @lessonPlanTemplateId int, @schoolYearId int, @personId int, @classId int
 As
 Begin Transaction
 Declare @callerRole int =2
@@ -82,5 +81,9 @@ Join Class on Class.Id = ClassStandard.ClassRef or Class.CourseRef = ClassStanda
 Where AnnouncementRef = @lessonPlanTemplateId AND Class.Id = @classId
 
 
-exec spGetLessonPlanDetails @announcementId, @personId, @callerRole, @schoolYearId
+Declare @ids TInt32
+Insert Into @ids
+values(@announcementId)
+
+exec spGetListOfLessonPlansDetails @ids, @personId, @callerRole, @schoolYearId, 0
 Commit

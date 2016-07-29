@@ -84,7 +84,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.SpEdStatus = studentDetails.SpEdStatus;
             res.IsIEPActive = studentDetails.IsIEPActive(today);
             res.IsTitle1Eligible = studentDetails.StudentSchool.IsTitle1Eligible;
-            res.Section504 = !string.IsNullOrWhiteSpace(studentDetails.Section504Qualification) && studentDetails.Section504Qualification != "NA";
+            res.Section504 = !string.IsNullOrWhiteSpace(studentDetails.Section504Qualification) 
+                             && studentDetails.Section504Qualification.Trim() != "NA";
             res.IsHomeless = studentDetails.IsHomeless;
             res.IsImmigrant = studentDetails.IsImmigrant;
             res.Language = studentDetails.Language != null
