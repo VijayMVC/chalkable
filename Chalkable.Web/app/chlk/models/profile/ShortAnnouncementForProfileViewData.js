@@ -16,9 +16,11 @@ NAMESPACE('chlk.models.profile', function () {
             String, 'title',
             Boolean, 'owner',
             chlk.models.announcement.AnnouncementTypeEnum, 'type',
+            Number, 'maxScore',
 
             VOID, function deserialize(raw) {
                 this.id = SJX.fromValue(Number(raw.id), chlk.models.id.AnnouncementId);
+                this.maxScore = SJX.fromValue(raw.maxscore, Number);
                 this.title = SJX.fromValue(raw.title, String);
                 this.type = SJX.fromValue(raw.type, chlk.models.announcement.AnnouncementTypeEnum);
                 this.owner = SJX.fromValue(raw.isowner, Boolean);

@@ -14,13 +14,14 @@ NAMESPACE('chlk.templates.student', function(){
             ArrayOf(chlk.models.profile.ShortAnnouncementForProfileViewData), 'announcements',
 
             Object, function getNormalValue(announcement){
-                var studentAnnouncement = announcement.getStudentAnnouncements().getItems()[0];
-                var value = studentAnnouncement.getGradeValue();
+                var studentAnnouncement = announcement.getStudentAnnouncements().getItems()[0],
+                    max = announcement.getMaxScore(),
+                    value = studentAnnouncement.getGradeValue();
                 if(studentAnnouncement.isDropped() && !value)
                     return Msg.Dropped;
                 if(studentAnnouncement.isExempt())
                     return Msg.Exempt;
-                return value;
+                return max ? ((value || value === 0) ? value : '--') + '/' + max : '';
             }
         ]);
 });
