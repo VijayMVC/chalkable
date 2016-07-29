@@ -28,6 +28,8 @@ namespace Chalkable.Data.School.Model.Announcements
         public int? GalleryOwnerRef { get; set; }
 
         [NotDbFieldAttr]
+        public string CategoryName { get; set; }
+        [NotDbFieldAttr]
         public int? PrimaryTeacherRef { get; set; }
         [NotDbFieldAttr]
         public string PrimaryTeacherGender { get; set; }

@@ -27,7 +27,7 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
         +ActionLink('announcement', 'view', item.getId(), item.getType())(class = disabled ? 'disabled' : '').announcement-link
             .title: +Glue_(item.getTitle(), "")
             if lessonPlan
-                .date= (lessonPlan.getStartDate() && lessonPlan.getStartDate().format(timeFormat)) + " - " + (lessonPlan.getEndDate() && lessonPlan.getEndDate().format(timeFormat)) + '  Lesson Plan  ' + lessonPlan.getCategoryName()
+                .date= (lessonPlan.getStartDate() && lessonPlan.getStartDate().format(timeFormat)) + " - " + (lessonPlan.getEndDate() && lessonPlan.getEndDate().format(timeFormat)) + '  Lesson Plan  ' + (lessonPlan.getCategoryName() || '')
             else
                 .date= (announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().toString(timeFormat) : '') + '  ' + announcementItem.getAnnouncementTypeName()
             .attachment
