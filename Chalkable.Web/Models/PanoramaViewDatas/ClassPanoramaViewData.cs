@@ -82,7 +82,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             foreach (var standardizedTestInfo in models)
             {
                 var test = res.FirstOrDefault(x => x.StandardizedTest.Id == standardizedTestInfo.StandardizedTestId
-                                                   && x.Component.Id == standardizedTestInfo.StandardizedTestComponentId);
+                                                   && x.Component.Id == standardizedTestInfo.StandardizedTestComponentId
+                                                   && x.ScoreType.Id == standardizedTestInfo.StandardizedTestScoreTypeId);
 
                 if (test != null)
                     continue;
@@ -140,7 +141,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             foreach (var test in studentTests)
             {
                 var currentTest = res.FirstOrDefault(x => x.StandardizedTest.Id == test.StandardizedTestId
-                                                       && x.Component.Id == test.StandardizedTestComponentId);
+                                                       && x.Component.Id == test.StandardizedTestComponentId 
+                                                       && x.ScoreType.Id == test.StandardizedTestScoreTypeId);
 
                 if (currentTest != null)
                     continue;
