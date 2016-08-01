@@ -34,13 +34,6 @@
       <!-- CDN and content settings-->
       <Setting name="Domain" />
       <Setting name="ScriptsRoot" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" />
       <!-- API Explorer -->
       <Setting name="api.explorer.client-id" />
       <Setting name="api.explorer.secret" />
@@ -77,13 +70,7 @@
       <Setting name="ChalkableSchoolDbServers" />
       <Setting name="ChalkableSchoolTemplateDbName" />
       <Setting name="DbUpdateTimeout" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" />
+      <Setting name="Domain" />
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" />
       <Setting name="DbBackupServiceUrl" />
@@ -111,13 +98,7 @@
       <Setting name="ChalkableSchoolDbServers" />
       <Setting name="ChalkableSchoolTemplateDbName" />
       <Setting name="DbUpdateTimeout" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" />
+      <Setting name="Domain" />
       <!-- Task settings -->
       <Setting name="TaskProducer.SisImportProducer.Interval" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" />

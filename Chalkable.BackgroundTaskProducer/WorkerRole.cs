@@ -39,7 +39,7 @@ namespace Chalkable.BackgroundTaskProducer
 #if !DEBUG
                     try
                     {
-                        raygunClient.SendInBackground(ex, new []{ Settings.WindowsAzureOAuthRelyingPartyName, "task-producer" });
+                        raygunClient.SendInBackground(ex, new []{ Settings.Domain, "task-producer" });
                     }
                     catch (Exception) { }
 #else
