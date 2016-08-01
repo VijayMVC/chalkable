@@ -1,5 +1,4 @@
-﻿
-CREATE Procedure [dbo].[spGetSchedule]
+﻿CREATE Procedure [dbo].[spGetSchedule]
 @schoolYearId int,
 @teacherId int,
 @studentId int,
@@ -11,6 +10,10 @@ as
 
 declare @mpId int
 set @mpId = (select top 1 id from MarkingPeriod where StartDate <= @to and SchoolYearRef = @schoolYearId order by StartDate desc)
+
+declare @teachingClasses TInt32
+insert into @teachingClasses
+select ClassRef from ClassTeacher where PersonRef = @callerId
 
 
 select
@@ -32,7 +35,7 @@ Room.Id as RoomId,
 Room.RoomNumber,
 IsNull (V.StartTime, ScheduledTimeSlot.StartTime) as StartTime,
 IsNull (V.EndTime, ScheduledTimeSlot.EndTime) as EndTime,
-cast ((case when @callerId = C.PrimaryTeacherRef then 1 else 0 end) as bit) as CanCreateItem,
+cast ((case when @callerId = C.PrimaryTeacherRef or exists(select * from @teachingClasses cId where cId.Value = C.Id) then 1 else 0 end) as bit) as CanCreateItem,
 C.PrimaryTeacherRef as TeacherId,
 C.FirstName as TeacherFirstName,
 C.LastName as TeacherLastName,

@@ -12,6 +12,13 @@ NAMESPACE('chlk.activities.lib', function () {
         bottom: 'popup-bottom'
     };
 
+    var bubbleClasses = {
+        top: 'top',
+        left: 'left',
+        right: 'right',
+        bottom: 'bottom'
+    };
+
 
     /** @class chlk.activities.lib.PopupClass */
     ANNOTATION(
@@ -83,7 +90,7 @@ NAMESPACE('chlk.activities.lib', function () {
                 BASE(model);
                 var target = model.getTarget();
                 Assert(target, 'There is no target for Popup activity');
-                var offset = target.offset();
+                var offset = target.offset(), bubbleClass;
                 if(offset){
                     this._popupHolder = model.getContainer() || this._popupHolder;
                     this._popupClass && this._popupHolder.addClass(this._popupClass);
@@ -95,6 +102,8 @@ NAMESPACE('chlk.activities.lib', function () {
                     var popupWidth = container.width() + parseInt(container.getCss('padding-left'), 10) + parseInt(container.getCss('padding-right'), 10),
                         popupHeight = container.height() + parseInt(container.getCss('padding-top'), 10) + parseInt(container.getCss('padding-bottom'), 10);
 
+                    var bubble = this._popupHolder.find('.popup-bubble:eq(0)');
+
 
                     var container = this.getContainer(), res;
                     if(this._isHorizontal){
@@ -104,9 +113,11 @@ NAMESPACE('chlk.activities.lib', function () {
                         //if(this._isTopLeft && (container.offset().left + container.width()) > (this._popupHolder.offset().left + this._popupHolder.width())){
                             this._popupHolder.setCss('left', notOver ? offset.left - 10 - popupWidth : 0);
                             res = positionClasses.left;
+                            bubbleClass = bubbleClasses.right;
                         }else{
                             this._popupHolder.setCss('left', offset.left + 10 + target.width());
                             res = positionClasses.right;
+                            bubbleClass = bubbleClasses.left;
                         }
                     }else{
                         if(popupWidth > target.width())
@@ -119,13 +130,20 @@ NAMESPACE('chlk.activities.lib', function () {
 
                             this._popupHolder.setCss('top', notOver ? offset.top - 10 - popupHeight : 0);
                             res = positionClasses.top;
+                            bubbleClass = bubbleClasses.bottom;
                         }else{
                             this._popupHolder.setCss('top', offset.top + 10 + target.height());
                             res = positionClasses.bottom;
+                            bubbleClass = bubbleClasses.top;
                         }
                     }
                     this._popupHolder.addClass(res);
                     this.setCurrentClass(res);
+                    bubble.removeClass(bubbleClasses.top);
+                    bubble.removeClass(bubbleClasses.bottom);
+                    bubble.removeClass(bubbleClasses.left);
+                    bubble.removeClass(bubbleClasses.right);
+                    bubble.addClass(bubbleClass);
                 }
 
             },
