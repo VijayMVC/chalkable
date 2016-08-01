@@ -19,13 +19,6 @@
       <!-- CDN and content settings-->
       <Setting name="Domain" value="" />
       <Setting name="ScriptsRoot" value="" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="" />
       <!-- API Explorer -->
       <Setting name="api.explorer.client-id" value="" />
       <Setting name="api.explorer.secret" value="" />
@@ -66,13 +59,7 @@
       <Setting name="ChalkableSchoolDbServers" value="" />
       <Setting name="ChalkableSchoolTemplateDbName" value="" />
       <Setting name="DbUpdateTimeout" value="" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="" />
+      <Setting name="Domain" value="" />
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" value="-1" />
       <Setting name="DbBackupServiceUrl" value="" />
@@ -101,13 +88,7 @@
       <Setting name="ChalkableSchoolDbServers" value="" />
       <Setting name="ChalkableSchoolTemplateDbName" value="" />
       <Setting name="DbUpdateTimeout" value="" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="" />
+      <Setting name="Domain" value="" />
       <!-- Task settings -->
       <Setting name="TaskProducer.SisImportProducer.Interval" value="600" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />
