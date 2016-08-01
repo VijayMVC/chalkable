@@ -33,6 +33,7 @@ NAMESPACE('chlk.models.period', function () {
                 this.teacherDisplayName = SJX.fromValue(raw.teacherdisplayname, String);
                 this.teaching = SJX.fromValue(raw.teaching, Boolean);
                 this.currentSection = SJX.fromValue(raw.iscurrentsection, Boolean);
+                this.ableCreateItem = SJX.fromValue(raw.cancreateitem, Boolean);
             },
 
             chlk.models.id.PeriodId, 'id',
@@ -66,6 +67,8 @@ NAMESPACE('chlk.models.period', function () {
             String, 'teacherDisplayName',
 
             Boolean, 'currentSection',
+
+            Boolean, 'ableCreateItem',
 
             String, function getSerialOrder(){
                 var order = this.getOrder();

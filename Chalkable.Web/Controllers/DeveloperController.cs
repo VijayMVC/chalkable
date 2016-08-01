@@ -74,17 +74,9 @@ namespace Chalkable.Web.Controllers
             return Json(result, 8);
         }
 
-        private const string AcsUrlFormat = "https://{0}.accesscontrol.windows.net/v2/OAuth2-13/";
-
         private string GetAccessTokenFor(string userName, int? schoolYearId, CoreRole role)
         {
-            var clientId = Settings.ApiExplorerClientId;
-            var clientSecret = Settings.ApiExplorerSecret;
-            var redirectUri = Settings.ApiExplorerRedirectUri;
-            var accessTokenUri = string.Format(AcsUrlFormat, Settings.WindowsAzureOAuthServiceNamespace);
-            var scope = Settings.ApiExplorerScope;
-            var userInfo = OAuthUserIdentityInfo.Create(userName, role, schoolYearId, null);
-            return MasterLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userInfo, scope);
+            throw new NotImplementedException();
         }
 
         public ActionResult DeveloperDocs(bool InFrame = false)

@@ -63,7 +63,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult ItemGradingStat(int announcementId)
         {
             var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
-            return Json(ItemGradigStatViewData.Create(studentAnns, announcementId));
+            var ann = SchoolLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
+            return Json(ItemGradigStatViewData.Create(studentAnns, ann.MaxScore, announcementId));
         }
 
 
@@ -192,15 +193,24 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public async Task<ActionResult> ClassStandardSummary(int classId)
         {
-            var gradingStandardsTask = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null);
-            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(null, null, classId, null, null);
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetailsByClassId(classId);
             var res = new List<GradingStandardClassSummaryViewData>();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetailsByClassId(classId);
+
+            bool recalculate = true;
+            var tasks = gradingPeriods.Select(gp =>
+            {
+                var s = SchoolLocator.GradingStandardService.GetGradingStandards(classId, gp.Id, recalculate);
+                recalculate = false;
+                return s;
+            }).ToList();
+            
+            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(null, null, classId, null, null);
             var annSts = SchoolLocator.ClassAnnouncementService.GetAnnouncementStandards(classId);
-            var gradingStandards = await gradingStandardsTask;
+            var gradingStandards = (await Task.WhenAll(tasks)).SelectMany(x => x).ToList();
+
             foreach (var gradingPeriod in gradingPeriods)
             {
-                var gs = gradingStandards.Where(x => gradingPeriod.Id == x.GradingPeriodId).ToList();
+                var gs = gradingStandards.Where(x => x.GradingPeriodId == gradingPeriod.Id).ToList();
                 var announcements = anns.Where(x => x.Expires >= gradingPeriod.StartDate && x.Expires <= gradingPeriod.EndDate).ToList();
                 res.Add(GradingStandardClassSummaryViewData.Create(gradingPeriod, gs, announcements, annSts, Context.Claims));
             }

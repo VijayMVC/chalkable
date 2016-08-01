@@ -22,7 +22,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         IApplicationService ApplicationService { get; }
         ICategoryService CategoryService { get; }
         IApplicationUploadService ApplicationUploadService { get; }
-        IAccessControlService AccessControlService { get; }
         IEmailService EmailService { get; }
         IDeveloperService DeveloperService { get; }
         IDbService DbService { get; }
@@ -62,7 +61,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             districtService = new DistrictService(this);
             applicationService = new ApplicationService(this);
             categoryService = new CategoryService(this);
-            AccessControlService = new AccessControlService(this);
             applicationUploadService = new ApplicationUploadService(this);
             EmailService = new EmailService(this);
             developerService = new DeveloperService(this);
@@ -84,7 +82,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IApplicationService ApplicationService { get { return applicationService; } }
         public ICategoryService CategoryService { get { return categoryService; } }
         public IApplicationUploadService ApplicationUploadService => applicationUploadService;
-        public IAccessControlService AccessControlService { get; protected set; }
         public IEmailService EmailService { get; protected set; }
         public IDeveloperService DeveloperService => developerService;
         public IPictureService ApplicationPictureService => applicationPictureService;

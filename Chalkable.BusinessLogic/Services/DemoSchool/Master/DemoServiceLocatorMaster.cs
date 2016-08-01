@@ -44,7 +44,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             preferenceService = new PreferenceService(this);
             personPictureService = new PersonPictureService(this);
             departmentIconService = new DepartmentIconService(this);
-            AccessControlService = new AccessControlService(this);
             applicationPictureService = new ApplicationPictureService(this);
             dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
             userTrackingService = new NullTrackingService();
@@ -72,7 +71,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public IApplicationService ApplicationService { get { return applicationService; } }
         public ICategoryService CategoryService { get { return categoryService; } }
         public IApplicationUploadService ApplicationUploadService { get { return applicationUploadService; } }
-        public IAccessControlService AccessControlService { get; protected set; }
 
         public IEmailService EmailService
         {

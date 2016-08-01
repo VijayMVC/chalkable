@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
@@ -7,6 +8,9 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Common.Web;
+using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic.ApiExplorer;
 using Chalkable.Web.Models.Binders;
@@ -38,15 +42,6 @@ namespace Chalkable.Web
             ModelBinders.Binders.Add(typeof(ListOfStringList), new StringConstructedObjectBinder<ListOfStringList>());
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
 
-
-            if (Settings.WindowsAzureOAuthRelyingPartyRealm != null && Settings.WindowsAzureOAuthServiceNamespace != null && Settings.WindowsAzureOAuthSwtSigningKey != null)
-            {
-                OauthAuthenticate.InitFromConfig();
-            }
-            else
-            {
-                throw new ArgumentException("To enable OAuth2 support for your web project, configure WindowsAzure.OAuth.RelyingPartyRealm, WindowsAzure.OAuth.ServiceNamespace and WindowsAzure.OAuth.SwtSigningKey in your applications's appSettings.");
-            }
             ConfigureDiagnostics();
             PrepareBaseServiceData();
             
@@ -151,6 +146,37 @@ namespace Chalkable.Web
 
             // Get the exception object.
             Exception exc = Server.GetLastError();
+            
+            if (Context.Request.IsApiRequest() || Context.Request.IsAjaxRequest())
+            {
+                Context.ClearError();
+
+                Context.Response.TrySkipIisCustomErrors = true;
+                if (exc is HttpException)
+                {
+                    Context.Response.StatusCode = (exc as HttpException).GetHttpCode();
+                    Context.Response.SuppressFormsAuthenticationRedirect = true;
+                }
+                else
+                {
+                    Context.Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+
+                Context.Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Context.Response.StatusCode);
+
+                var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(exc))
+                {
+                    Success = false
+                };                
+
+                var serializer = new MagicJsonSerializer(true) {MaxDepth = 4};
+                var result = serializer.Serialize(jsonResponse);
+
+                Context.Response.ContentType = "application/json";
+                Context.Response.Write(result);
+
+                return;
+            }
 
             // Handle HTTP errors
             if (exc is HttpException)
@@ -167,6 +193,7 @@ namespace Chalkable.Web
 #if !DEBUG
                 RaygunClient.SendInBackground(exc);
 #endif
+
         }
     }
 

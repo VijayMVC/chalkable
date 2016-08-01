@@ -101,22 +101,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 application.GradeLevels = da.UpdateGradeLevels(application.Id, applicationInfo.GradeLevels);
                 application.Permissions = da.UpdatePermissions(application.Id, applicationInfo.PermissionIds);
                 application.ApplicationStandards = da.UpdateApplicationStandards(application.Id, applicationInfo.StandardsIds);
-                if (addToOauth)
-                {
-                    if (!string.IsNullOrEmpty(application.Url))
-                    {
-                        var clientId = application.Url;
-                        var appName = application.Name;
-                        if (ServiceLocator.AccessControlService.GetApplication(clientId) == null)
-                            ServiceLocator.AccessControlService.RegisterApplication(clientId, application.SecretKey, application.Url, appName);
-                        else
-                        {
-                            ServiceLocator.AccessControlService.RemoveApplication(clientId);
-                            ServiceLocator.AccessControlService.RegisterApplication(clientId, application.SecretKey, application.Url, appName);
-                            //todo: looks like applicationRegistrationService.UpdateApplicationRedirectUri() doesn't work :(
-                        }
-                    }
-                }
                 uow.Commit();
             }
             application.Developer = ServiceLocator.DeveloperService.GetById(application.DeveloperRef);

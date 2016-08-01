@@ -233,11 +233,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected DbQuery SelectLessonPlan(QueryCondition condition, int? callerId = null)
         {
             var dbQuery = new DbQuery();
-            var classTeacherSql = !callerId.HasValue ? "cast(0 as bit)" :
-                            string.Format(@"(select cast(case when count(*) > 0 then 1 else 0 end as bit)
-                                                     from [{0}] where [{0}].[{1}] = {2}  and [{0}].[{3}] = [{4}].[{5}])",
+            var classTeacherSql = "cast(0 as bit)";
+            if (callerId.HasValue)
+            {
+                classTeacherSql = string.Format(@"(select count(*) from [{0}] where [{0}].[{1}] = {2}  and [{0}].[{3}] = [{4}].[{5}])",
                               "ClassTeacher", ClassTeacher.PERSON_REF_FIELD, callerId, ClassTeacher.CLASS_REF_FIELD,
                               LessonPlan.VW_LESSON_PLAN_NAME, LessonPlan.CLASS_REF_FIELD);
+
+                classTeacherSql = $"cast(case when {nameof(LessonPlan.GalleryOwnerRef)} = {callerId} or {classTeacherSql} > 0 then 1 else 0 end as bit)";
+            }
 
             var selectSet = $"{LessonPlan.VW_LESSON_PLAN_NAME}.*, {classTeacherSql} as IsOwner";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, LessonPlan.VW_LESSON_PLAN_NAME);

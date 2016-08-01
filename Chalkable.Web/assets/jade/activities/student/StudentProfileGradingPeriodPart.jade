@@ -1,14 +1,16 @@
 +LeftRightToolbar()(baseMargin = 10)
         each classGrading in self.getStudentGradings()
             .class-item
-                +GlanceBox(null, null, {value: classGrading.getStudentAvg().getCalculatedAvg(), title: classGrading.getClazz().getName()})
+                -var val = classGrading.getStudentAvg().getCalculatedAvg()
+                +GlanceBox(null, null, {value: (val || val === 0 ? val : '--'), title: classGrading.getClazz().getName()})
                 -var gradingsByAnnouncementTypes = classGrading.getGradingByAnnouncementTypes() || []
                 if gradingsByAnnouncementTypes.length > 0
                     .announcement-types-info
                         .announcement-types-info-2
                             each typeItem in gradingsByAnnouncementTypes
                                 +ActionLink('students', 'showGradingActivitiesForStudent', typeItem.getAnnouncementType().getId(), classGrading.getClazz().getId()).type-link
-                                    +GlanceBox(null, null, {value: typeItem.getStudentItemTypeAvg(), title: typeItem.getAnnouncementType().getName()}).small
+                                    -var val2 = typeItem.getStudentItemTypeAvg()
+                                    +GlanceBox(null, null, {value: (val2 || val2 === 0 ? val2 : '--'), title: typeItem.getAnnouncementType().getName()}).small
                 else
                     .grades-avg-by-type-no-data No Data Available
 

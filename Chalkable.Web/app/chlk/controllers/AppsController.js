@@ -497,7 +497,7 @@ NAMESPACE('chlk.controllers', function (){
             var mode = chlk.models.apps.AppModes.ATTACH;
 
             var result = this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .getAccessToken(this.getCurrentPerson().getId(), null, appId)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 })
@@ -507,7 +507,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
+                        + '&token=' + encodeURIComponent(data.getToken())
                         + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
                         + '&announcementType=' + encodeURIComponent(announcementType.valueOf())
                         + (attributeId_ ? '&attributeId=' + encodeURIComponent(attributeId_.valueOf()) : '')
@@ -539,7 +539,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(app){
                     var viewUrl = app.getEditUrl()
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + app.getOauthCode()
+                        + '&token=' + encodeURIComponent(app.getToken())
                         + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
@@ -573,7 +573,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
             var result = this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), url)
+                .getAccessToken(this.getCurrentPerson().getId(), url)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 }, this)
@@ -605,7 +605,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var app = new chlk.models.apps.AppAttachment.$create(
                         viewUrl,
-                        data.getAuthorizationCode(),
+                        data.getToken(),
                         announcementAppId_,
                         appData
                     );
@@ -911,7 +911,7 @@ NAMESPACE('chlk.controllers', function (){
             var appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
 
             return this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .getAccessToken(this.getCurrentPerson().getId(), null, appId)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 })
@@ -921,7 +921,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var viewUrl = appData.getUrl() + '?mode=' + mode
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
+                        + '&token=' + encodeURIComponent(data.getToken())
                         + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');

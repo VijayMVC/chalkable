@@ -186,7 +186,7 @@ NAMESPACE('chlk.services', function () {
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({
                         "Content-Type": "application/json; charset=utf-8",
-                        "Authorization": "Bearer:" + token
+                        "Authorization": "Signature:" + token
                     }))
                     .run();
             },
@@ -196,7 +196,7 @@ NAMESPACE('chlk.services', function () {
                 return  new chlk.lib.ajax.ChlkJsonGetTask(url)
                     .params(gParams)
                     .requestHeaders({
-                        "Authorization": "Bearer:" + token
+                        "Authorization": "Signature:" + token
                     })
                     .run()
                     .then(function(response){

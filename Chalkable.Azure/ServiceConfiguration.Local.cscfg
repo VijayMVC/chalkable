@@ -20,13 +20,6 @@
       <!-- CDN and content settings-->
       <Setting name="Domain" value="local.chalkable.com" />
       <Setting name="ScriptsRoot" value="//local.chalkable.com:5001" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://localhost/chalkable/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-local-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="JBWJoVgOgUP0pdPqxrdKO+OqRGyQ2gb2GdN8POvMgRA=" />
       <!-- API Explorer -->
       <Setting name="api.explorer.client-id" value="https://localhost/chalkable" />
       <Setting name="api.explorer.secret" value="Qwerty1@Local" />
@@ -46,6 +39,8 @@
       <!--SetMinThreads params-->
       <Setting name="Threads.DefaultMinWorkerThreads" value="4"/>
       <Setting name="Threads.DefaultMinIoThreads" value="4"/>
+      <!--AES Settings-->
+      <Setting name="AesSecretKey" value="5E9F42ED7A2E51D39CD63EA9BDE5AAD9DA2B86532CC57DABC2636F8B3A95D48E"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
@@ -64,13 +59,9 @@
       <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
       <Setting name="DbUpdateTimeout" value="3600" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://localhost/chalkable/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-local-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="JBWJoVgOgUP0pdPqxrdKO+OqRGyQ2gb2GdN8POvMgRA=" />
+
+      <Setting name="Domain" value="local.chalkable.com" />
+
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" value="1" />
       <Setting name="DbBackupServiceUrl" value="" />
@@ -98,13 +89,7 @@
       <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
       <Setting name="DbUpdateTimeout" value="3600" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://localhost/chalkable/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-local-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="JBWJoVgOgUP0pdPqxrdKO+OqRGyQ2gb2GdN8POvMgRA=" />
+      <Setting name="Domain" value="local.chalkable.com" />
       <!-- Task settings -->
       <Setting name="TaskProducer.SisImportProducer.Interval" value="600" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />

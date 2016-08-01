@@ -13,10 +13,12 @@ namespace Chalkable.Web.Models
         public IList<ItemGradingGraphViewData> GraphPoints { get; set; }
         public IList<StudentAnnouncementDetails> StudentAnnouncements { get; set; }
 
+        public decimal? MaxScore { get; set; }
+
         private const int INTERVALS_COUNT = 4;
         //private const int MAX_GRADE = 100;
 
-        public static ItemGradigStatViewData Create(IList<StudentAnnouncementDetails> studentAnnouncements, int announcementId)
+        public static ItemGradigStatViewData Create(IList<StudentAnnouncementDetails> studentAnnouncements, decimal? maxScore, int announcementId)
         {
             var res = new ItemGradigStatViewData();
             if (studentAnnouncements.Count > 0)
@@ -49,6 +51,7 @@ namespace Chalkable.Web.Models
                 }
                 res.AnnouncementId = announcementId;
                 res.GraphPoints = graphPoints;
+                res.MaxScore = maxScore;
             }
             res.StudentAnnouncements = studentAnnouncements;
             return res;

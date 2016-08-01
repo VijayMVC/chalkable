@@ -208,7 +208,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 var result = ria.async.wait([
                     this.adminDistrictService.getSettings(),
-                    this.appsService.getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                    this.appsService.getAccessToken(this.getCurrentPerson().getId(), null, appId)
                 ])
                     .attach(this.validateResponse_())
                     .then(function(result){
@@ -218,7 +218,7 @@ NAMESPACE('chlk.controllers', function (){
 
                         var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
                             + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                            + '&code=' + data.getAuthorizationCode();
+                            + '&token=' + encodeURIComponent(data.getToken());
 
                         return new chlk.models.settings.AppSettingsViewData(null, appData, viewUrl, '', applications);
                     }, this);

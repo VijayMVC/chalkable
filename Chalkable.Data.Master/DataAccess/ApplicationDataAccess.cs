@@ -441,7 +441,7 @@ namespace Chalkable.Data.Master.DataAccess
         {
             Start = 0;
             Count = int.MaxValue;
-            OrderBy = nameof(Application.Id);
+            OrderBy = nameof(Application.Name);
             OrderDesc = true;
             IncludeInternal = false;
             Live = null;

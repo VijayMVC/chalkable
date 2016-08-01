@@ -171,19 +171,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId,
-            bool filterByExpiryDate)
+            bool filterByExpiryDate, bool complete)
         {
             DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.Supplemental,
-              schoolYearId, personId, roleId, true, classId, startDate, endDate, filterByExpiryDate));
+              schoolYearId, personId, roleId, complete, classId, startDate, endDate, filterByExpiryDate));
         }
-
-        protected override void SetUnComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId,
-            bool filterByExpiryDate)
-        {
-            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.Supplemental,
-              schoolYearId, personId, roleId, false, classId, startDate, endDate, filterByExpiryDate));
-        }
-
+        
         public AnnouncementDetails Create(int classId, DateTime? expiresDate, int classAnnouncementTypeId)
         {
             Trace.Assert(Context.PersonId.HasValue);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
@@ -30,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds);
         void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds);
         IList<ApplicationSchoolBan> GetApplicationSchoolBans(Guid districtId, Guid applicationId);
+        string GetAccessToken(Guid applicationId, string session);
     }
 
 
@@ -233,6 +235,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IList<ApplicationSchoolBan> GetApplicationSchoolBans(Guid districtId, Guid applicationId)
         {
             return DoRead(u => new ApplicationSchoolOptionDataAccess(u).GetApplicationSchoolBans(districtId, applicationId));
+        }
+
+        public string GetAccessToken(Guid applicationId, string session)
+        {
+            var model = AuthorizationUserInfo.Create(session, applicationId);
+
+            return EncryptionTools.AesEncrypt(model.ToString(), Settings.AesSecretKey);
         }
     }
 

@@ -154,9 +154,9 @@ NAMESPACE('chlk.services', function () {
                         announcementType: announcementType.valueOf()
                     })
                     .then(function(attachment){
-                        return this.getOauthCode(personId, attachment.getUrl())
+                        return this.getAccessToken(personId, attachment.getUrl())
                             .then(function(data){
-                                attachment.setOauthCode(data.getAuthorizationCode());
+                                attachment.setToken(data.getToken());
                                 return attachment;
                             });
                     }, this);
@@ -172,9 +172,9 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.SchoolPersonId, String, chlk.models.id.AppId]],
-            ria.async.Future, function getOauthCode(personId, appUrl_, appId_){
+            ria.async.Future, function getAccessToken(personId, appUrl_, appId_){
                 var forEdit = false;
-                return this.get('Application/GetOauthCode.json', chlk.models.apps.ApplicationAuthorization, {
+                return this.get('Application/GetAccessToken.json', chlk.models.apps.ApplicationAuthorization, {
                     applicationUrl: appUrl_,
                     applicationId: appId_ ? appId_.valueOf() : undefined
                 }).transform(function (applicationAuthorization) {

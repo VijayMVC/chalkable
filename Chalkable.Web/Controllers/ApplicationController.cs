@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
@@ -209,35 +211,9 @@ namespace Chalkable.Web.Controllers
             var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
             return Json(AnnouncementApplicationViewData.Create(res, app, null, announcementType));
         }
-
+        
         [AuthorizationFilter]
-        public ActionResult GetOauthCode(string applicationUrl, Guid? applicationId)
-        {
-            if ((User.IsInRole("SysAdmin") && !Context.PersonId.HasValue) || User.IsInRole("AppTester"))
-                return GetOauthCodeForSysAdmin(applicationUrl, applicationId);
-
-            Trace.Assert(Context.PersonId.HasValue);
-
-            var app = !string.IsNullOrWhiteSpace(applicationUrl) 
-                    ? MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl) : 
-                applicationId.HasValue 
-                    ? MasterLocator.ApplicationService.GetApplicationById(applicationId.Value) : null;
-
-            if (app == null)
-                throw new ChalkableException("Application not found");
-
-            var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
-            authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-            
-            return Json(new
-            {
-                AuthorizationCode = authorizationCode,
-                ApplicationInfo = BaseApplicationViewData.Create(app)
-            });
-        }
-
-        private ActionResult GetOauthCodeForSysAdmin(string applicationUrl, Guid? applicationId)
+        public ActionResult GetAccessToken(string applicationUrl, Guid? applicationId)
         {
             var app = !string.IsNullOrWhiteSpace(applicationUrl)
                     ? MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl) :
@@ -247,14 +223,12 @@ namespace Chalkable.Web.Controllers
             if (app == null)
                 throw new ChalkableException("Application not found");
 
-            var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, null, ChalkableAuthentication.GetSessionKey());
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
-            authorizationCode = HttpUtility.UrlEncode(authorizationCode);
+            var token = MasterLocator.ApplicationService.GetAccessToken(app.Id, ChalkableAuthentication.GetSessionKey());
             
             return Json(new
             {
-                AuthorizationCode = authorizationCode,
-                ApplicationInfo = app
+                Token = token,
+                ApplicationInfo = BaseApplicationViewData.Create(app)
             });
         }
 

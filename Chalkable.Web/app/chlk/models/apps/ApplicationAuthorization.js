@@ -12,11 +12,11 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         UNSAFE,  'ApplicationAuthorization', IMPLEMENTS(ria.serialize.IDeserializable), [
             VOID, function deserialize(raw){
-                this.authorizationCode = SJX.fromValue(raw.authorizationcode, String);
+                this.token = SJX.fromValue(raw.token, String);
                 this.application = SJX.fromDeserializable(raw.applicationinfo, chlk.models.apps.Application);
             },
 
-            String, 'authorizationCode',
+            String, 'token',
             chlk.models.apps.Application, 'application'
         ]);
 });

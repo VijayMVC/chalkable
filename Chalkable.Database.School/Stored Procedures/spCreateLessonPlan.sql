@@ -48,8 +48,15 @@ Else
 
 		Set @announcementId = SCOPE_IDENTITY()
 
+		Declare @galleryOwnerId int, @inGallery bit = 0
+		If @classId is null 
+		Begin
+			Set @galleryOwnerId = @personId
+			Set @inGallery = 1
+		End					
+
 		Insert Into LessonPlan (Id, ClassRef, StartDate, EndDate, LPGalleryCategoryRef, SchoolYearRef, VisibleForStudent, InGallery, GalleryOwnerRef)
-		Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, 0, 0, null);
+		Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, 0, @inGallery, @galleryOwnerId);
 
 
 		/*GET CONTENT FROM PREV ANNOUNCEMENT*/

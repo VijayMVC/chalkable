@@ -86,15 +86,6 @@ namespace Chalkable.Common
 
         public static string MixPanelToken { get { return Get("mixpanel-token"); } }
 
-        /* WindowsAzure.OAuth */
-
-        public static string WindowsAzureOAuthSwtSigningKey { get { return Get("WindowsAzure.OAuth.SwtSigningKey"); } }
-        public static string WindowsAzureOAuthRelyingPartyRealm { get { return Get("WindowsAzure.OAuth.RelyingPartyRealm"); } }
-        public static string WindowsAzureOAuthRelyingPartyName { get { return Get("WindowsAzure.OAuth.RelyingPartyName"); } }
-        public static string WindowsAzureOAuthServiceNamespace { get { return Get("WindowsAzure.OAuth.ServiceNamespace"); } }
-        public static string WindowsAzureOAuthServiceNamespaceManagementUserName { get { return Get("WindowsAzure.OAuth.ServiceNamespaceManagementUserName"); } }
-        public static string WindowsAzureOAuthServiceNamespaceManagementUserKey { get { return Get("WindowsAzure.OAuth.ServiceNamespaceManagementUserKey"); } }
-
         /* STI */
 
         public static string StiApplicationKey { get { return ConfigurationManager.AppSettings["sti.application.key"]; } }
@@ -172,5 +163,7 @@ namespace Chalkable.Common
 
         public static int DefaultMinWorkerThreads => int.Parse(Get("Threads.DefaultMinWorkerThreads"));
         public static int DefaultMinIoThreads => int.Parse(Get("Threads.DefaultMinIoThreads"));
+
+        public static string AesSecretKey => Get("AesSecretKey");
     }
 }

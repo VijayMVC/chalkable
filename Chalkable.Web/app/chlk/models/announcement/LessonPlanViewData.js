@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
                 this.galleryCategoryId = SJX.fromValue(raw.lpgallerycategoryid, chlk.models.id.LpGalleryCategoryId);
-                this.categoryName = SJX.fromValue(raw.gallerycategoryname, String);
+                this.categoryName = SJX.fromValue(raw.categoryname, String);
                 this.inGallery = SJX.fromValue(raw.ingallery, Boolean);
                 this.galleryOwnerRef = SJX.fromValue(raw.galleryownerref, chlk.models.id.SchoolPersonId);
             },
