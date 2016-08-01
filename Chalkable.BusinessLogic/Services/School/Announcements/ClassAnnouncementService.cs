@@ -788,24 +788,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate, bool complete)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             if (CoreRoles.TEACHER_ROLE == Context.Role)
-                ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, classId, true, startDate, endDate);
+                ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, classId, complete, startDate, endDate);
             if (CoreRoles.STUDENT_ROLE == Context.Role)
-                ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, classId, true, startDate, endDate);
-        }
-
-        protected override void SetUnComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            if (CoreRoles.TEACHER_ROLE == Context.Role)
-                ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, classId, false, startDate, endDate);
-            if (CoreRoles.STUDENT_ROLE == Context.Role)
-                ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, classId, false, startDate, endDate);
+                ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, classId, complete, startDate, endDate);
         }
     }
 }
