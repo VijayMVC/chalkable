@@ -16,6 +16,7 @@
     [VisibleForStudent]    BIT              NULL,
 	[InGallery]			   BIT				NOT NULL,
 	[GalleryOwnerRef]	   INT		        NULL,
+	[CategoryName]		   NVARCHAR (MAX)   NULL,
     [PrimaryTeacherName]   NVARCHAR (MAX)   NULL,
     [PrimaryTeacherGender] NVARCHAR (MAX)   NULL,
     [ClassName]            NVARCHAR (30)   NULL,

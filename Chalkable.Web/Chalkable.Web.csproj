@@ -171,8 +171,8 @@
       <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.2.0\lib\net40\Mindscape.Raygun4Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Observable.TraceEventSession, Version=1.0.50929.0, Culture=neutral, processorArchitecture=MSIL">
@@ -273,11 +273,11 @@
     <Compile Include="ActionFilters\HandleErrorFilter.cs" />
     <Compile Include="ActionFilters\AuthorizationFilter.cs" />
     <Compile Include="ActionFilters\TraceControllerFilter.cs" />
+    <Compile Include="Authentication\ApplicationAuthentification.cs" />
     <Compile Include="Authentication\ChalkableAuthentication.cs" />
     <Compile Include="Authentication\ChalkableIdentity.cs" />
     <Compile Include="Authentication\ChalkablePrincipal.cs" />
     <Compile Include="Authentication\DeveloperAuthentication.cs" />
-    <Compile Include="Authentication\OauthAuthenticate.cs" />
     <Compile Include="Common\UrlFormats.cs" />
     <Compile Include="Common\ViewConstants.cs" />
     <Compile Include="Controllers\AcademicBenchmarkController.cs" />
@@ -636,10 +636,6 @@
       <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
       <Name>Chalkable.UserTracking</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
-      <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
-      <Name>WindowsAzure.Acs.Oauth2</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\SysAdmin.cshtml" />
@@ -716,7 +712,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
+    <CodeAnalysisDictionary Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
     <Content Include="Reports\FeedReport\FeedShortReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>

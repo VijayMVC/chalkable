@@ -1,5 +1,5 @@
-each student in self.getItems()
-    -var index = student.getIndex()
+each student, i in self.getItems()
+    -var index = student.getIndex() || student.getIndex() == 0 ? student.getIndex() : i
     .row(index=index)
         +ProfileLink(student, 'student').left.image-container.white.shadow.person-img-container
             +PersonImg(student, 47)

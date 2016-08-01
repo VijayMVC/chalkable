@@ -64,10 +64,10 @@ namespace Chalkable.Web.Controllers
 
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(miniQuizApp.Url, userInfo);
+            var token = MasterLocator.ApplicationService.GetAccessToken(miniQuizApp.Id, ChalkableAuthentication.GetSessionKey());
             
             return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps.Select(BaseApplicationViewData.Create).ToList(), allApps, 
-                hasMyAppDic, Context.PersonId, authorizationCode));
+                hasMyAppDic, Context.PersonId, token));
         }
     }
 }

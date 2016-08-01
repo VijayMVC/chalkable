@@ -63,7 +63,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult ItemGradingStat(int announcementId)
         {
             var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
-            return Json(ItemGradigStatViewData.Create(studentAnns, announcementId));
+            var ann = SchoolLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
+            return Json(ItemGradigStatViewData.Create(studentAnns, ann.MaxScore, announcementId));
         }
 
 

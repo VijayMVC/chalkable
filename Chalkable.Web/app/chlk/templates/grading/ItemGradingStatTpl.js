@@ -15,6 +15,11 @@ NAMESPACE('chlk.templates.grading', function () {
                 return res < 0 ? 0 : res;
             },
 
+            function getMaxScore()
+            {
+                return this.getValue().maxscore;
+            },
+
             function l(x,j,XY,len){
                 var res= 1,i;
                 for(i=0;i<=len;i++)

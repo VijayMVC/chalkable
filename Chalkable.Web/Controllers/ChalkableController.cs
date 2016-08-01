@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,10 +14,8 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
-using Microsoft.IdentityModel.Claims;
 
 namespace Chalkable.Web.Controllers
 {
@@ -26,7 +23,6 @@ namespace Chalkable.Web.Controllers
     {
 
         protected const int DEFAULT_PAGE_SIZE = 10;
-        private const string ACTOR_SUFFIX = "actor";
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -125,25 +121,21 @@ namespace Chalkable.Web.Controllers
             var chalkablePrincipal = User as ChalkablePrincipal;
             UserContext context = null;
 
-            bool isAuthenticatedByToken = OauthAuthenticate.Instance.TryAuthenticateByToken(requestContext);
-            if (isAuthenticatedByToken)
+            AuthorizationUserInfo authAppInfo;
+            Application app;
+            if (ApplicationAuthentification.AuthenticateByToken(requestContext, ServiceLocatorFactory.CreateMasterSysAdmin().ApplicationService,
+                out authAppInfo, out app))
             {
-                var userData = OAuthUserIdentityInfo.CreateFromString(User.Identity.Name);
-                
-                var user = ChalkableAuthentication.GetUser(userData.SessionKey);
+                var user = ChalkableAuthentication.GetUser(authAppInfo.SessionKey);
                 InitServiceLocators(user.Context);
 
                 SchoolLocator.Context.IsOAuthUser = true;
-                
-                var claims = (User.Identity as ClaimsIdentity).Claims;
-                var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value.Split(',').FirstOrDefault();
-                var app = MasterLocator.ApplicationService.GetApplicationByUrl(actor);
-                SchoolLocator.Context.IsInternalApp = app != null && app.IsInternal;
-                SchoolLocator.Context.OAuthApplication = actor;
-                SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(actor);
+                SchoolLocator.Context.IsInternalApp = app.IsInternal;
+                SchoolLocator.Context.OAuthApplication = app.Url;
+                SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(app.Url);
 
                 return;
-            }
+            }            
 
             if (chalkablePrincipal != null && chalkablePrincipal.Identity.IsAuthenticated
                 && !string.IsNullOrEmpty(chalkablePrincipal.Identity.Name))

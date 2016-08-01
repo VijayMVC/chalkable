@@ -23,5 +23,6 @@ user = self.getUser()
                         +LeftRightToolbar()(baseMargin = 10)
                             each classGrading in gpStats.getStudentGradings()
                                 .class-item
-                                    +GlanceBox(null, null, {value: classGrading.getStudentAvg().getCalculatedAvg(), title: classGrading.getClazz().getName()})
+                                    -var val = classGrading.getStudentAvg().getCalculatedAvg()
+                                    +GlanceBox(null, null, {value: (val || val === 0 ? val : '--'), title: classGrading.getClazz().getName()})
 

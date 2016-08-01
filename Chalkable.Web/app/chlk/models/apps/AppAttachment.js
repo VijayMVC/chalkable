@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.editUrl = SJX.fromValue(raw.editurl, String);
                 this.gradingViewUrl = SJX.fromValue(raw.gradingviewurl, String);
                 this.order = SJX.fromValue(raw.order, Number);
-                this.oauthCode = SJX.fromValue(raw.oauthcode, String);
+                this.token = SJX.fromValue(raw.token, String);
                 this.currentModeUrl = SJX.fromValue(raw.currentmodeurl, String);
                 this.imageUrl = SJX.fromValue(raw.imageurl, String);
                 this.text = SJX.fromValue(raw.text, String);
@@ -36,16 +36,16 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'editUrl',
             String, 'gradingViewUrl',
             Number, 'order',
-            String, 'oauthCode',
+            String, 'token',
             String, 'currentModeUrl',
             String, 'imageUrl',
             String, 'text',
 
             [[String, String, chlk.models.id.AnnouncementApplicationId, chlk.models.apps.Application]],
-            function $create(currentModeUrl, oauthCode, announcementAppId_, appData_){
+            function $create(currentModeUrl, token, announcementAppId_, appData_){
                 BASE();
                 this.setCurrentModeUrl(currentModeUrl);
-                this.setOauthCode(oauthCode);
+                this.setToken(token);
                 this.setAnnouncementApplicationId(announcementAppId_ || new chlk.models.id.AnnouncementApplicationId(''));
                 if (!this.getAnnouncementId()){
                     this.setAnnouncementId(new chlk.models.id.AnnouncementId(''));

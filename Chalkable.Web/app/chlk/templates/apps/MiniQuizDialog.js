@@ -25,7 +25,7 @@ NAMESPACE('chlk.templates.apps', function () {
             ArrayOf(chlk.models.apps.Application), 'recommendedApplications',
 
             [ria.templates.ModelPropertyBind],
-            String, 'authorizationCode',
+            String, 'token',
 
             chlk.models.standard.Standard, function getCurrentStandard() {
                 var c = this.getCurrentStandardId();

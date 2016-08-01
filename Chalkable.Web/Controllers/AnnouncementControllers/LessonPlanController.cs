@@ -55,6 +55,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
+        //TODO : rewrite this whole logic 
         [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult Submit(int lessonPlanId, int? classId, string title, string content, int? lpGalleryCategoryId,
             DateTime? startDate, DateTime? endDate, bool hideFromStudents, bool inGallery, IList<AssignedAttributeInputModel> attributes

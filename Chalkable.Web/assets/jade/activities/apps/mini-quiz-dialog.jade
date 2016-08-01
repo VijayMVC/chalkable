@@ -30,7 +30,7 @@ mixin App_(app)
         h2.practice: span Practice
         if self.getApplicationInfo() && self.getCurrentStandard().getAcademicBenchmarkId()
             .iframe-wrap.partial-update
-                iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents() + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
+                iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&token=' + encodeURIComponent(self.getToken()) + '&' + self.getCurrentStandard().getUrlComponents() + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
         else
             .iframe-wrap.partial-update
                 .banner Practice is not possible

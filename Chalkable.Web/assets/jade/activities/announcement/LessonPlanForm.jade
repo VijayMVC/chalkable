@@ -51,9 +51,9 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     label(for="galleryCategoryId").main-label Category:
                                     #galleryCategoryForSearchContainer
                                         +Select('galleryCategoryId')#galleryCategoryId
-                                            +Option('', 'Select category', true)
+                                            +Option('', 'Select category', !lessonPlan.getGalleryCategoryId())
                                             each item in announcement.getCategories()
-                                                +Option(item.getId().valueOf(), item.getName())
+                                                +Option(item.getId().valueOf(), item.getName(), item.getId() == lessonPlan.getGalleryCategoryId())
                                             +Option(-1, 'Add Category')
                                     +ActionButton('lpgallerycategory', 'editCategories').special-button2.add.add-category-btn.x-hidden + Add Category
 

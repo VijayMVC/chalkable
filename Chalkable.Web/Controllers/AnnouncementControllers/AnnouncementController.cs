@@ -133,44 +133,30 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Done(int? classId, int option, int? annType)
         {
-            MarkDoneOptions mdo = (MarkDoneOptions) option;
-            if (!annType.HasValue)
-            {
-                SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo);
-                SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
-                SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
-            }
-            else
-            {
-                if((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.Class)
-                    SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
-                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.LessonPlan)
-                    SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
-            }
-
-
+            SetCompleteByOptions(classId, option, annType, true);
             return Json(true);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult UnDone(int? classId, int option, int? annType)
         {
+            SetCompleteByOptions(classId, option, annType, false);
+            return Json(true);
+        }
+
+        private void SetCompleteByOptions(int? classId, int option, int? annType, bool complete)
+        {
             MarkDoneOptions mdo = (MarkDoneOptions)option;
             if (!annType.HasValue)
             {
-                SchoolLocator.AdminAnnouncementService.SetUnComplete(classId, mdo);
-                SchoolLocator.LessonPlanService.SetUnComplete(classId, mdo);
-                SchoolLocator.ClassAnnouncementService.SetUnComplete(classId, mdo);
+                SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo, complete);
+                SchoolLocator.LessonPlanService.SetComplete(classId, mdo, complete);
+                SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo, complete);
+                SchoolLocator.SupplementalAnnouncementService.SetComplete(classId, mdo, complete);
             }
-            else
-            {
-                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.Class)
-                    SchoolLocator.ClassAnnouncementService.SetUnComplete(classId, mdo);
-                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.LessonPlan)
-                    SchoolLocator.LessonPlanService.SetUnComplete(classId, mdo);
-            }
-            return Json(true);
+            else SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum)annType).SetComplete(classId, mdo, complete);
         }
+
 
         [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult SubmitStandardsToAnnouncement(int announcementId, int? announcementType, IntList standardIds)
