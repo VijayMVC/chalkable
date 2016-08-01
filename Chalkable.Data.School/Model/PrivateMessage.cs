@@ -17,14 +17,10 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int FromPersonRef { get; set; }
-        //public int ToPersonRef { get; set; }
         public DateTime? Sent { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
-        //public bool Read { get; set; }
         public bool DeletedBySender { get; set; }
-        //public bool DeletedByRecipient { get; set; }
-
         [NotDbFieldAttr]
         public Person Sender { get; set; }
     }
