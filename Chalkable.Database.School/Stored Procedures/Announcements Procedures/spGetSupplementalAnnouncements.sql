@@ -41,3 +41,4 @@ Where
 	and (@fromDate is null or Expires >= @fromDate)
 	and (@toDate is null or Expires <= @toDate)
 	and (@complete is null or annRecipientData.Complete = @complete or (@complete = 0 and annRecipientData.Complete is null))
+	and (@schoolYearId is null or SchoolYearRef = @schoolYearId)

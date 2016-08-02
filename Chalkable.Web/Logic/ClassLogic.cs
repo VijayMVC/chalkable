@@ -38,7 +38,7 @@ namespace Chalkable.Web.Logic
         private static IDictionary<DatePeriodTypeEnum, IDailyStatsHandler> handlers
                     = new Dictionary<DatePeriodTypeEnum, IDailyStatsHandler>
                     {
-                        [DatePeriodTypeEnum.Year] = new DailyStatsForYearHangler(),
+                        [DatePeriodTypeEnum.Year] = new DailyStatsForYearHandler(),
                         [DatePeriodTypeEnum.GradingPeriod] = new DailyStatsForGradingPeriodHandler(),
                         [DatePeriodTypeEnum.LastMonth] = new DefaultDailyStatsHandler("MMM dd", 30),
                         [DatePeriodTypeEnum.LastWeek] = new DefaultDailyStatsHandler("ddd", 6)
@@ -90,15 +90,18 @@ namespace Chalkable.Web.Logic
             var res = new List<DailyStatsViewData>();
             while (currentDate <= endDate)
             {
-                var sum = dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
-                res.Add(DailyStatsViewData.Create(currentDate, sum, dateFormat));
+                if (dailyStats.ContainsKey(currentDate))
+                {
+                    var sum = dailyStats[currentDate];
+                    res.Add(DailyStatsViewData.Create(currentDate, sum, dateFormat));
+                }
                 currentDate = currentDate.AddDays(1).Date;
             }
             return res;
         }
     }
 
-    public class DailyStatsForYearHangler : IDailyStatsHandler
+    public class DailyStatsForYearHandler : IDailyStatsHandler
     {
         public void GetDateRange(out DateTime startDate, out DateTime endDate, IServiceLocatorSchool serviceLocator)
         {
