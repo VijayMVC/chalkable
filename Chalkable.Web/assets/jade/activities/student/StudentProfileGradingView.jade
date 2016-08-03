@@ -1,0 +1,28 @@
+user = self.getUser()
+
+.profile-page
+    h2.page-title=Msg.Student_profile
+
+    +ProfileTopBar(self, 'grading')
+    .summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(user, 140, !self.getUserRole().isStudent())
+            #info-panel.central-block.panel-block
+                -var displayName =user.getDisplayName() || user.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+
+        .grading-stats
+            each gpStats in user.getGradesByGradingPeriod()
+                .close-open-control.co-opened.gp-container
+                    h3
+                        +ActionLink('students', 'loadGradingDetails', user.getId(), gpStats.getGradingPeriod().getId()).gp-link=gpStats.getGradingPeriod().getName()
+                            .icon
+                    div(data-id=gpStats.getGradingPeriod().getId()).gp-items
+                        +LeftRightToolbar()(baseMargin = 10)
+                            each classGrading in gpStats.getStudentGradings()
+                                .class-item
+                                    -var val = classGrading.getStudentAvg().getCalculatedAvg()
+                                    +GlanceBox(null, null, {value: (val || val === 0 ? val : '--'), title: classGrading.getClazz().getName()})
+
