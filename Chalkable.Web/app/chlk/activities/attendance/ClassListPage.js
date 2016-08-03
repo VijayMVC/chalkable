@@ -349,6 +349,20 @@ NAMESPACE('chlk.activities.attendance', function () {
                 attendancesNode.setValue(JSON.stringify(this.getAttendances_()));
                 this._needPopUp = false;
                 node.parent('form').trigger('submit');
+            },
+
+            [ria.mvc.DomEventBind('click', '#all-present-link:not(.disabled)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function allPresentClick(node, event){
+                this._needPopUp = true;
+                var that = this;
+                this._classAttendances.forEach(function(att){
+                    att.setType(chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf());
+                    att.setLevel(null);
+                    att.setAttendanceReasonId(null);
+                    att.setAttendanceReason(null);
+                    that.renderStudentAttendance_(att);
+                })
             }
         ]);
 });

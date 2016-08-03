@@ -102,17 +102,6 @@ NAMESPACE('chlk.activities.attendance', function () {
                     return false;
                 }
                 return true;
-            },
-
-            /*[ria.mvc.DomEventBind('click', '#all-present-link')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function allPresentClick(node, event){
-                this._needPopUp = false;
-            }*/
-
-            [ria.mvc.PartialUpdateRule(null, 'mark-all')],
-            VOID, function markAllUpdate(tpl, model, msg_){
-                this._needPopUp = false;
             }
         ])
 });

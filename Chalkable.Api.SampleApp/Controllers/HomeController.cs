@@ -7,6 +7,7 @@ using System.Web.Routing;
 using Chalkable.Api.SampleApp.Logic;
 using Chalkable.API;
 using Chalkable.API.Models;
+using Chalkable.API.Models.AcademicBenchmark;
 
 namespace Chalkable.Api.SampleApp.Controllers
 {
@@ -104,10 +105,33 @@ namespace Chalkable.Api.SampleApp.Controllers
             start = start ?? 0;
             count = count ?? int.MaxValue;
 
+            var standards = Task.Run(() => PrepareCommonCores(standardInfos)).Result;
+            
             var res = ContentStorage.GetStorage().GetContents().OrderBy(x=>x.ContentId).ToList();
             return new PaginatedList<ApplicationContent>(res, start.Value, count.Value);
         }
-      
+
+
+        protected async Task<IList<StandardRelations>> PrepareCommonCores(IEnumerable<StandardInfo> standardInfos)
+        {
+            var connector = new ChalkableConnector(ChalkableAuthorization);
+            IList<Guid> standardsGuids = new List<Guid>();
+            if (standardInfos != null)
+            {
+                foreach (var standardInfo in standardInfos)
+                {
+                    Guid parsedGuidTmp;
+                    if (Guid.TryParse(standardInfo.StandardId, out parsedGuidTmp))
+                        standardsGuids.Add(parsedGuidTmp);
+                }
+                if (standardsGuids.Count > 0)
+                {
+                    return await connector.Standards.GetListOfStandardRelations(standardsGuids);
+                }
+            }
+            return new List<StandardRelations>();
+        }
+
 
     }
 }

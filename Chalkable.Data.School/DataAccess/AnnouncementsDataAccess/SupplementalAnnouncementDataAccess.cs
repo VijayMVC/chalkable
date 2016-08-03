@@ -102,7 +102,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if (additionalParams == null)
                 additionalParams = new Dictionary<string, object>();
             
-            additionalParams.Add("schoolYearId", _schoolYearId);
+            additionalParams.Add("schoolYearId", query.ClassId.HasValue ? (int?)null : _schoolYearId);
             additionalParams.Add("classId", query.ClassId);
             additionalParams.Add("teacherId", query.TeacherId);
             additionalParams.Add("studentId", query.StudentId);

@@ -323,7 +323,9 @@ NAMESPACE('chlk.controls', function () {
                         scrollPosition = window.pageYOffset;
                         configs = this.getConfigs();
                         if(!configs.isPaggingModel || configs.totalCount > configs.currentStart){
-                            if($(window).scrollTop() > $(document).height() - $(window).height() - 500){
+                            var zoom = parseFloat(ria.dom.Dom('html').getCss('zoom')) || 1,
+                                docHeight = $(document).height() * zoom, toBottom = 500 * zoom;
+                            if($(window).scrollTop() > docHeight - $(window).height() - toBottom){
                             //if((contentHeight - pageHeight - scrollPosition) < 1000){
                                 this.scrollAction_(grid);
                                 //this.removeLoaderWithInterval_(grid);
