@@ -14,11 +14,21 @@ NAMESPACE('chlk.controllers', function () {
             [ria.mvc.Inject],
             chlk.services.AttachmentService, 'attachmentService',
 
+            function prepareAttachment_(attachment, width_, height_){
+                if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
+                    attachment.setThumbnailUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, width_ || 170, height_ || 110));
+                    attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, null, null));
+                }
+                if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
+                    attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), true, null, null));
+                }
+            },
+
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.SYSADMIN,
                 chlk.models.common.RoleEnum.DISTRICTADMIN,
                 chlk.models.common.RoleEnum.TEACHER,
-                chlk.models.common.RoleEnum.STUDENT,
+                chlk.models.common.RoleEnum.STUDENT
             ])],
             [[
                 String,
@@ -63,6 +73,7 @@ NAMESPACE('chlk.controllers', function () {
                         .catchError(this.handleExceptions_)
                         .attach(this.validateResponse_())
                         .then(function (model) {
+                            this.prepareAttachment_(model, 51, 33);
                             model.setFileIndex(fileIndex + index);
                             model.setTotal(file.size);
                             model.setLoaded(file.size);
