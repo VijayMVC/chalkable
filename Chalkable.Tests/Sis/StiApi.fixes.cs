@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
@@ -151,5 +153,65 @@ namespace Chalkable.Tests.Sis
                 uow.Commit();
             }
         }
+
+
+        public void FixUserSync(Guid districtid)
+        {
+            StringBuilder log = new StringBuilder();
+            try
+            {
+                var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
+
+                District d;
+                IList<Data.Master.Model.User> chalkableUsers;
+                using (var uow = new UnitOfWork(mcs, true))
+                {
+                    var da = new DistrictDataAccess(uow);
+                    d = da.GetById(districtid);
+                    var conds = new SimpleQueryCondition("DistrictRef", districtid, ConditionRelation.Equal);
+                    chalkableUsers = (new UserDataAccess(uow)).GetAll(conds);
+                }
+                //var cs = String.Format("Data Source={0};Initial Catalog={1};UID=chalkableadmin;Pwd=Hellowebapps1!", d.ServerUrl, d.Id);
+
+                var cl = ConnectorLocator.Create("Chalkable", d.SisPassword, d.SisUrl);
+                var inowUsers = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
+                var st = new HashSet<int>(chalkableUsers.Select(x => x.SisUserId.Value).ToList());
+
+                IList<Data.Master.Model.User> users = new List<Data.Master.Model.User>();
+                foreach (var sisu in inowUsers)
+                    if (!st.Contains(sisu.UserID))
+                    {
+                        Data.Master.Model.User u = new Data.Master.Model.User
+                        {
+                            Id = Guid.NewGuid(),
+                            DistrictRef = districtid,
+                            FullName = sisu.FullName,
+                            Login = String.Format("user{0}_{1}@chalkable.com", sisu.UserID, districtid),
+                            Password = "1Ztq1N1GZ95sasjFa54ikw==",
+                            SisUserName = sisu.UserName,
+                            SisUserId = sisu.UserID
+                        };
+                        users.Add(u);
+                        log.AppendLine(sisu.UserID.ToString());
+                    }
+
+                using (var uow = new UnitOfWork(mcs, true))
+                {
+
+                    (new UserDataAccess(uow)).Insert(users);
+                    uow.Commit();
+                }
+                log.AppendLine($"{users.Count} users were added");
+            }
+            catch (Exception ex)
+            {
+                log.AppendLine(ex.Message);
+                log.AppendLine(ex.StackTrace);
+            }
+
+            File.WriteAllText($"c:\\tmp\\logs\\{districtid}.txt", log.ToString());
+        }
+
+
     }
 }

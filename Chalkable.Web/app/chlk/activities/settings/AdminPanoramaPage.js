@@ -97,7 +97,7 @@ NAMESPACE('chlk.activities.settings', function () {
             [ria.mvc.DomEventBind('click', '.delete-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             function deleteClick(node, event) {
-                var form = node.parent('form'), block = node.parent('.filter-block');
+                var block = node.closest('.filter-block, .course-type-block');
                 block.removeSelf();
             },
 

@@ -102,7 +102,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
 
                 var studentStTestsInfos = models
                     .Where(x => x.StandardizedTestId == standardizedTestInfo.StandardizedTestId
-                                && x.StandardizedTestComponentId == standardizedTestInfo.StandardizedTestComponentId)
+                                && x.StandardizedTestComponentId == standardizedTestInfo.StandardizedTestComponentId
+                                && x.StandardizedTestScoreTypeId == standardizedTestInfo.StandardizedTestScoreTypeId)
                     .GroupBy(y => y.Date, x => decimal.Parse(x.Score));
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)
@@ -161,7 +162,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
 
                 var studentStTestsInfos = models
                     .Where(x => x.StandardizedTestId == test.StandardizedTestId
-                                && x.StandardizedTestComponentId == test.StandardizedTestComponentId)
+                                && x.StandardizedTestComponentId == test.StandardizedTestComponentId
+                                && x.StandardizedTestScoreTypeId == test.StandardizedTestScoreTypeId)
                     .GroupBy(y => y.Date, x => decimal.Parse(x.Score));
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)

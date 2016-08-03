@@ -63,6 +63,7 @@ namespace Chalkable.API
 
         public void SignRequest(HttpWebRequest request)
         {
+            if(string.IsNullOrWhiteSpace(Token)) return;
             var ts = (long)DateTimeToUnixTimestamp(DateTime.UtcNow);
             var appSecret = Configuration.AppSecret;
 

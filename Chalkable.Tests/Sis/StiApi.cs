@@ -63,6 +63,58 @@ namespace Chalkable.Tests.Sis
         }
 
         [Test]
+        public void DisableStudentSchoolYearHomeroomConstraint()
+        {
+            var districtIds = new List<Guid>
+            {
+                Guid.Parse("341D63DB-49AE-4057-A06D-714E9A3D31EB"),
+                Guid.Parse("aa707676-1548-4cdc-af84-2a15257c95bd"),
+                //Guid.Parse("53d7cbd7-cd3e-4a50-9258-8c1f6daedb61"),
+                //Guid.Parse("6c801aac-4d1c-4a70-8e06-d82ef6846a31"),
+                //Guid.Parse("c9c9ad32-1576-45e6-8f92-39de929f4554"),
+                //Guid.Parse("26a3a198-e329-4a34-a6e0-814c76ad45cb"),
+                //Guid.Parse("747BC5D3-C453-42F3-AF54-868351ACFEE4"),
+                //Guid.Parse("27e81a8d-772c-430f-8886-24b3b3d21df8"),
+                //Guid.Parse("509138b6-db56-45ee-8c26-592abe4e1c5a"),
+                //Guid.Parse("77a5f7c0-a97e-448f-b619-72799719dc78"),
+                //Guid.Parse("ef4f14b7-13d0-4710-95c3-124537284880"),
+                //Guid.Parse("0972d700-06c4-49f9-9b69-ad76e07a76f8"),
+            };
+            ForEachDistrict(districtIds, delegate(District d, UnitOfWork u)
+            {
+                var c = u.GetTextCommand("ALTER TABLE StudentSchoolYear NOCHECK CONSTRAINT FK_StudentSchoolYear_Homeroom");
+                //ALTER TABLE StudentSchoolYear WITH CHECK CHECK CONSTRAINT FK_StudentSchoolYear_Homeroom
+                c.ExecuteNonQuery();
+            });
+            //
+        }
+
+        [Test]
+        public void FixGradeLevelNumber()
+        {
+            var districtIds = new List<Guid>
+            {
+                Guid.Parse("18c60c7d-c931-4e6f-90ac-2dc85e958efd"),
+
+                Guid.Parse("6afa2170-6a18-43d2-b4a0-81a42c6a75dd"),
+
+                Guid.Parse("1ebcbf07-bcad-4c75-b692-6298a164f9b9"),
+
+                //Guid.Parse("667416fc-7ece-40bb-b931-1273c495280d"),
+
+                //Guid.Parse("9067d336-bfbd-410d-856c-ba5ea5ae91fa"),
+
+                
+            };
+            ForEachDistrict(districtIds, delegate (District d, UnitOfWork u)
+            {
+                var c = u.GetTextCommand("Update GradeLevel set Number = Number + 100");
+                c.ExecuteNonQuery();
+            });
+            //
+        }
+
+        [Test]
         public void SyncTest()
         {
             var items = GetTableData<PersonLanguage>(Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"), null);
@@ -76,9 +128,12 @@ namespace Chalkable.Tests.Sis
         {
             var ids = new List<Guid>
             {
-                Guid.Parse("628F4CA2-7232-418F-A42E-F859286E912A"),
-                Guid.Parse("9209de50-0bbe-40f4-8e50-cf52ce39cb2b"),
+                Guid.Parse("27e81a8d-772c-430f-8886-24b3b3d21df8"),
+                //Guid.Parse("1ebcbf07-bcad-4c75-b692-6298a164f9b9"),
+                //Guid.Parse("42bf4a08-5a1a-488a-9a41-812421e21df8"),
+                //Guid.Parse("76ec8972-ca7a-4faf-adb2-f9c48adfeed6"),
                 
+
             };
             foreach (var guid in ids)
             {
@@ -91,8 +146,10 @@ namespace Chalkable.Tests.Sis
         {
             var ids = new List<Guid>
             {
-                Guid.Parse("ccf4b45d-3357-43ae-9ee8-66949e64279e"),
-
+                Guid.Parse("e02c0198-b69b-47f6-871e-c4de3ecbbe1e"),
+                Guid.Parse("f754b2e4-d360-4922-8c9a-d5e21fc3007c"),
+                Guid.Parse("cdb64b27-54e4-40b4-8807-c4037867e751"),
+                //Guid.Parse("f754b2e4-d360-4922-8c9a-d5e21fc3007c"),
             };
             foreach (var guid in ids)
             {
@@ -107,17 +164,26 @@ namespace Chalkable.Tests.Sis
         {
             var ids = new List<Guid>
             {
-                Guid.Parse("F14ABF1C-102B-4B4E-ACC3-1367F6F31069"),
+                Guid.Parse("66B7AA33-2F40-4568-A222-4A99AB62955B"),
+                Guid.Parse("FC507B44-64C3-40B6-8082-9FDC4B0EA33A"),
+                Guid.Parse("6C801AAC-4D1C-4A70-8E06-D82EF6846A31"),
 
-                //Guid.Parse("428CA1B1-BC79-4096-981A-955EF5B2A74B"),
+                //Guid.Parse("12628575-A1F2-4DB7-B421-D2DE7DAC343F"),
+                //Guid.Parse("0B55D8F2-6FD7-45FE-8944-EE4EDC86DA79"),
+                //Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
 
-                //Guid.Parse("77A5F7C0-A97E-448F-B619-72799719DC78"), //!!!!!!!!!!!! constantly repeats
 
-                //Guid.Parse("E02C0198-B69B-47F6-871E-C4DE3ECBBE1E")
             };
             foreach (var guid in ids)
             {
-                FixUserSchoolSync(guid);
+                try
+                {
+                    FixUserSchoolSync(guid);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
             }
         }
 
@@ -167,64 +233,6 @@ namespace Chalkable.Tests.Sis
                 threads[i].Join();
         }
 
-        public void FixUserSync(Guid districtid)
-        {
-            StringBuilder log = new StringBuilder();
-            try
-            {
-                var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
-
-                District d;
-                IList<Data.Master.Model.User> chalkableUsers;
-                using (var uow = new UnitOfWork(mcs, true))
-                {
-                    var da = new DistrictDataAccess(uow);
-                    d = da.GetById(districtid);
-                    var conds = new SimpleQueryCondition("DistrictRef", districtid, ConditionRelation.Equal);
-                    chalkableUsers = (new UserDataAccess(uow)).GetAll(conds);
-                }
-                //var cs = String.Format("Data Source={0};Initial Catalog={1};UID=chalkableadmin;Pwd=Hellowebapps1!", d.ServerUrl, d.Id);
-
-                var cl = ConnectorLocator.Create("Chalkable", d.SisPassword, d.SisUrl);
-                var inowUsers = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
-                var st = new HashSet<int>(chalkableUsers.Select(x => x.SisUserId.Value).ToList());
-
-                IList<Data.Master.Model.User> users = new List<Data.Master.Model.User>();
-                foreach (var sisu in inowUsers)
-                    if (!st.Contains(sisu.UserID))
-                    {
-                        Data.Master.Model.User u = new Data.Master.Model.User
-                        {
-                            Id = Guid.NewGuid(),
-                            DistrictRef = districtid,
-                            FullName = sisu.FullName,
-                            Login = String.Format("user{0}_{1}@chalkable.com", sisu.UserID, districtid),
-                            Password = "1Ztq1N1GZ95sasjFa54ikw==",
-                            SisUserName = sisu.UserName,
-                            SisUserId = sisu.UserID
-                        };
-                        users.Add(u);
-                        log.AppendLine(sisu.UserID.ToString());
-                    }
-
-                using (var uow = new UnitOfWork(mcs, true))
-                {
-
-                    (new UserDataAccess(uow)).Insert(users);
-                    uow.Commit();
-                }
-                log.AppendLine($"{users.Count} users were added");
-            }
-            catch (Exception ex)
-            {
-                log.AppendLine(ex.Message);
-                log.AppendLine(ex.StackTrace);
-            }
-            
-            File.WriteAllText($"c:\\tmp\\logs\\{districtid}.txt", log.ToString());
-        }
-
-        
 
         [Test]
         public void Test4()

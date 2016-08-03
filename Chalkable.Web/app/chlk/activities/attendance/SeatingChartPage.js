@@ -346,9 +346,10 @@ NAMESPACE('chlk.activities.attendance', function () {
                     buttons.addClass('disabled');
             },
 
-            [ria.mvc.PartialUpdateRule(null, 'mark-all')],
-            OVERRIDE, VOID, function markAllUpdate(tpl, model, msg_){
-                BASE(tpl, model, msg_);
+            [ria.mvc.DomEventBind('click', '#all-present-link:not(.disabled)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function allPresentClick(node, event){
+                this._needPopUp = true;
                 new ria.dom.Dom('.student-block').forEach(function(node){
                     var container = node.find('.not-empty');
                     if(container.exists()){
@@ -364,11 +365,6 @@ NAMESPACE('chlk.activities.attendance', function () {
                         dataNode.setData('old-reason-id', null);
                     }
                 });
-                setTimeout(function(){
-                    if(!this.isAbleRePost()){
-                        this.dom.find('#submit-attendance-button, #all-present-link').remove();
-                    }
-                }.bind(this));
             },
 
             function recalculateChartInfo(){

@@ -36,9 +36,7 @@
         if self.getItems().length > 0 && self.canPost()
             .r
                 -var student = self.getItems()[0]
-                +ActionLinkWithPrepend('attendance', 'markAll',
-                    [selectedId.valueOf(), self.getDate().toStandardFormat(), self.isInProfile(), student && student.isDailyAttendancePeriod()]
-                )#all-present-link=Msg.Mark_all_Present
+                A(href="javascript:")#all-present-link=Msg.Mark_all_Present
         .r
             if self.canPost()
                 BUTTON#submit-attendance-button.blue-button POST IT
