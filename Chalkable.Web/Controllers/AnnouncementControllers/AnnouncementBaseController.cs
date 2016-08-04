@@ -90,9 +90,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
             if (annView.ClassAnnouncementData != null && annView.ClassId.HasValue)
             {
-                var options = SchoolLocator.ClassroomOptionService.GetClassOption(annView.ClassId.Value);
+                var options = SchoolLocator.ClassroomOptionService.GetClassOption(annView.ClassId.Value, true);
                 annView.IsAbleUseExtraCredit = options != null && options.IsAveragingMethodPoints;
-
             }
             return annView;
         }
