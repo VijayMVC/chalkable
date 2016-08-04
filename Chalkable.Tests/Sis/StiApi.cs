@@ -49,7 +49,6 @@ namespace Chalkable.Tests.Sis
             var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
 
             District d;
-            IList<Data.Master.Model.User> existingUsers;
             using (var uow = new UnitOfWork(mcs, false))
             {
                 var da = new DistrictDataAccess(uow);

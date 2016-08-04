@@ -336,17 +336,7 @@ namespace Chalkable.StiImport.Services
                 if (sr.Updated != null)
                     models.AddRange(sr.Updated.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Update, x)));
                 if (sr.Deleted != null)
-                    foreach (var syncModel in sr.Deleted)
-                    {
-                        models.Add(SyncModelWrapper.Create(syncModel.SYS_CHANGE_VERSION, PersistOperationType.Delete, syncModel));
-                        if (fkProps.Count != 0)
-                        {
-                            var m = syncModel.Clone();
-                            foreach (var propertyInfo in fkProps)
-                                propertyInfo.SetValue(m, null);
-                            models.Add(SyncModelWrapper.Create(0, PersistOperationType.Update, m));
-                        }
-                    }
+                    models.AddRange(sr.Deleted.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Delete, x)));
             }
             models.Sort();
             IList<SyncModelWrapper> batch = new List<SyncModelWrapper>();
