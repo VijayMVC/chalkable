@@ -353,7 +353,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition
                 {
                     {Announcement.TITLE_FIELD, title},
-                    {LessonPlan.LP_GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual}
+                    {nameof(LessonPlan.InGallery), true }
                 };
             if (excludedLessonPlanId.HasValue)
                 conds.Add(Announcement.ID_FIELD, excludedLessonPlanId, ConditionRelation.NotEqual);
