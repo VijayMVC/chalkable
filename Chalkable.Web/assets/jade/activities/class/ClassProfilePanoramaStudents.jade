@@ -1,0 +1,71 @@
+mixin HeaderLink_(name, type)
+    +ActionLink('class', 'sortPanoramaStudents', type, self.getOrderBy() == type && !self.isDescending())(
+        class = (self.getOrderBy() == type ? "active-sort " : "") + (self.isDescending() ? "descending" : ""),
+        data-tooltip=name,
+        data-tooltip-type="overflow"
+    )(attributes).cell=name
+
+-var orderByEnum = chlk.models.profile.ClassPanoramaSortType
+
+if self.getUserRole().isTeacher()
+    BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add Supplemental Assignment').v-hidden.add-supplemental-btn.right
+.clear-fix
+.chlk-calendar.students-grid
+    .grid-top-content.chlk-grid
+        .district-summary-grid
+            .grid-content
+                -var students = self.getStudents()
+                -var tests = self.getStandardizedTestsStatsByClass()
+                .grid-header.grid-row
+                    .cell.checks
+                        .box-checkbox.circle
+                            +Checkbox('allStudents', false, false, true).all-students-check.student-grid-check
+                    +HeaderLink_('Name', orderByEnum.NAME).name
+                    +HeaderLink_('Grade Avg', orderByEnum.GRADE_AVG).grade
+                    +HeaderLink_('Absences', orderByEnum.ABSENCES).absences
+                    +HeaderLink_('Discipline', orderByEnum.DISCIPLINE).discipline
+                    +HeaderLink_('R', orderByEnum.ETHNICITY)(data-tooltip="Race").ethnicity
+                    +HeaderLink_('H', orderByEnum.HISPANIC)(data-tooltip="Hispanic").hispanic
+                    +HeaderLink_('SE', orderByEnum.IEP_ACTIVE)(data-tooltip="Special Education").iep-active
+                    +HeaderLink_('RT', orderByEnum.RETAINED)(data-tooltip="Retained").retained
+                    each test in tests
+                        .cell.test(
+                            data-tooltip=test.getFullName(),
+                            data-tooltip-type="overflow"
+                        )= test.getFullName()
+                each student in students
+                    -var info = student.getStudent()
+                    .grid-row(data-id=info.getId().valueOf())
+                        .cell.checks
+                            .box-checkbox.circle
+                                +Checkbox('student', false, false, true)(data-id=info.getId().valueOf()).student-check.student-grid-check
+                        .cell.name
+                            +ActionLink('students', 'panorama', info.getId())=info.getFullName()
+                        .cell.grade
+                            .circle-cnt(
+                                class = info.getGradeAvgClass()
+                            )=info.getGradeAvg()
+                        .cell.absences
+                            .circle-cnt(
+                                class = info.getAbsencesClass()
+                            )=info.getAbsences()
+                        .cell.discipline
+                            .circle-cnt(
+                                class = info.getDisciplineClass()
+                            )=info.getDiscipline()
+                        .cell.ethnicity=info.getEthnicity() ? info.getEthnicity().getCode() : ''
+                        .cell.hispanic=info.isHispanic() ? 'Y' : 'N'
+                        .cell.iep-active=info.isIEPActive() ? 'Y' : 'N'
+                        .cell.retained=info.isRetainedFromPrevSchoolYear() ? 'Y' : 'N'
+                        -var studentTests = student.getStandardizedTestsStats();
+                        each test in tests
+                            .cell.test
+                                if studentTests
+                                    -var studentTest = studentTests.filter(function(item){return item.getStandardizedTest().getId() == test.getStandardizedTest().getId()})[0]
+                                    if studentTest
+                                        if test.getDailyStats().length == 1
+                                            SPAN(data-tooltip=self.getTestTooltip(test))=test.getDailyStats()[0].getNumber()
+                                        else
+                                            +Chart()(
+                                                data-options = self.getStudentChartOptions(test)
+                                            ).small-chart
