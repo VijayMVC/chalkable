@@ -1,0 +1,52 @@
+REQUIRE('ria.serialize.SJX');
+REQUIRE('chlk.models.id.SchoolYearId');
+REQUIRE('chlk.models.profile.StandardizedTestViewData');
+REQUIRE('chlk.models.profile.ClassDistributionSectionViewData');
+REQUIRE('chlk.models.profile.PanoramaSettingsViewData');
+REQUIRE('chlk.models.profile.StandardizedTestStatsViewData');
+REQUIRE('chlk.models.panorama.StudentStandardizedTestStats');
+REQUIRE('chlk.models.schoolYear.Year');
+
+NAMESPACE('chlk.models.profile', function () {
+    "use strict";
+
+    var SJX = ria.serialize.SJX;
+
+    /** @class chlk.models.profile.ClassPanoramaSortType*/
+    ENUM('ClassPanoramaSortType', {
+        NAME: 1,
+        GRADE_AVG: 2,
+        ABSENCES: 3,
+        DISCIPLINE: 4,
+        ETHNICITY: 5,
+        HISPANIC: 6,
+        IEP_ACTIVE: 7,
+        RETAINED: 8
+    });
+
+    /** @class chlk.models.profile.ClassPanoramaViewData*/
+    CLASS(
+        UNSAFE, 'ClassPanoramaViewData', EXTENDS(chlk.models.classes.Class), IMPLEMENTS(ria.serialize.IDeserializable), [
+            chlk.models.profile.PanoramaSettingsViewData, 'filterSettings',
+            ArrayOf(chlk.models.profile.StandardizedTestViewData), 'standardizedTests',
+            chlk.models.profile.ClassDistributionSectionViewData, 'classDistributionSection',
+            ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'standardizedTestsStatsByClass',
+            ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'selectStandardizedTestsStats',
+            ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
+            ArrayOf(chlk.models.panorama.StudentStandardizedTestStats), 'students',
+            Boolean, 'showFilters',
+
+            chlk.models.profile.ClassPanoramaSortType, 'orderBy',
+            Boolean, 'descending',
+
+            OVERRIDE, VOID, function deserialize(raw) {
+                BASE(raw);
+                this.filterSettings = SJX.fromDeserializable(raw.filtersettings, chlk.models.profile.PanoramaSettingsViewData);
+                this.standardizedTests = SJX.fromArrayOfDeserializables(raw.standardizedtests, chlk.models.profile.StandardizedTestViewData);
+                this.classDistributionSection = SJX.fromDeserializable(raw.classdistributionsection, chlk.models.profile.ClassDistributionSectionViewData);
+                this.standardizedTestsStatsByClass = SJX.fromArrayOfDeserializables(raw.standardizedtestsstatsbyclass, chlk.models.profile.StandardizedTestStatsViewData);
+                this.selectStandardizedTestsStats = SJX.fromArrayOfDeserializables(raw.selectstandardizedtestsstats, chlk.models.profile.StandardizedTestStatsViewData);
+                this.students = SJX.fromArrayOfDeserializables(raw.students, chlk.models.panorama.StudentStandardizedTestStats);
+            }
+        ]);
+});
