@@ -1,0 +1,14 @@
++ApiCallList('apiCalls')
+    items = self.getElements()
+
+    each item in items
+        if !item.isSeparator()
+            .tree-node.way-item(data-param=item.getName())
+                span.title=item.getIndex()+ ". " + item.getName()
+                    each param in item.getRequiredParams()
+                        span.param=param
+        else
+            .tree-node.separator
+                span.way-arrow
+div.api-list-control-btn.left-btn#api_list_prev <
+div.api-list-control-btn.right-btn#api_list_next >
