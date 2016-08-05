@@ -712,7 +712,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
+    <Content Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
     <Content Include="Reports\FeedReport\FeedShortReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
