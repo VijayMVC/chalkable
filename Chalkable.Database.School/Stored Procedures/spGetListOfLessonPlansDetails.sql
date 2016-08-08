@@ -37,8 +37,8 @@ Declare @count int = (Select count(*) From @lessonPlans)
 Update @lessonPlans
 Set AllCount = @count
 
---Select lesson plans was changed for ordering properly LPs.
---Here we don't need ordering, so we pass fake table.
+--This procedure was changed to make ordered selects
+--Here we don't need to order, so we create fake table
 Declare @emptyFake TAnnouncementOrder
 Exec spSelectLessonPlans @lessonPlans, @emptyFake, 0, 0, 0
 

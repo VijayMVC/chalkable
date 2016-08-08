@@ -1,4 +1,4 @@
-﻿Create Procedure [dbo].[spInternalSortAdminOrLp] 
+﻿CREATE PROCEDURE [dbo].[spInternalSortAdminOrLp] 
 	@lessonPlans TLessonPlan READONLY, 
 	@adminAnn TAdminAnnouncement READONLY, 
 	@supplementalAnn TSupplementalAnnouncement READONLY,
@@ -12,15 +12,9 @@
 	@count int,
 	@includeFrom bit,
 	@includeTo bit
-
 AS
 
-declare @t Table
-	(
-		Id int,
-		FilteredField sql_variant,
-		SortedField sql_variant
-	)
+declare @t TAnnouncementOrder
 
 declare 
 	@SORT_BY_DATE int = 0,
@@ -132,33 +126,15 @@ If(@annType = @SUPPLEMENTAL_ANN_TYPE)
 		else 
 			delete from @t where FilteredField > @pTo
 
---order and result select
+--result select
 If(@annType = @LESSON_PLAN_TYPE)
 Begin
-	declare @sortedLP TLessonPlan
-
-	Insert Into @sortedLP
-	select LP.* From @t T
-	Join @lessonPlans LP on LP.Id = T.id
-	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
-		     (case when @sortType = @DESC_SORT then T.SortedField end) DESC
-		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
-
-	exec spSelectLessonPlans @sortedLP
+	exec spSelectLessonPlans @lessonPlans, @t, @sortType, @start, @count
 End
 
 if(@annType = @ADMIN_ANN_TYPE)
 Begin
-	declare @sortedAA TAdminAnnouncement
-
-	Insert Into @sortedAA 
-	select AA.* From @t T
-	Join @adminAnn AA on AA.Id = T.id
-	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
-		     (case when @sortType = @DESC_SORT then T.SortedField end) DESC
-		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
-
-	exec spSelectAdminAnnoucnement @sortedAA
+	exec spSelectAdminAnnoucnement @adminAnn, @t, @sortType, @start, @count
 End
 
 if(@annType = @SUPPLEMENTAL_ANN_TYPE)
@@ -166,13 +142,10 @@ if(@annType = @SUPPLEMENTAL_ANN_TYPE)
 	
 	Insert Into @sortedSA
 	select SA.* From @t T
-	Join @supplementalAnn SA on SA.Id = T.id
+	Join @supplementalAnn SA on SA.Id = T.Id
 	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
 				(case when @sortType = @DESC_SORT then T.SortedField end) DESC
 		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
 	exec spSelectSupplementalAnnouncements @sortedSA
-
 GO
-
-
