@@ -138,14 +138,5 @@ Begin
 End
 
 if(@annType = @SUPPLEMENTAL_ANN_TYPE)
-	declare @sortedSA TSupplementalAnnouncement
-	
-	Insert Into @sortedSA
-	select SA.* From @t T
-	Join @supplementalAnn SA on SA.Id = T.Id
-	order by (case when @sortType = @ASC_SORT then T.SortedField end) ASC,
-				(case when @sortType = @DESC_SORT then T.SortedField end) DESC
-		OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
-
-	exec spSelectSupplementalAnnouncements @sortedSA
+	exec spSelectSupplementalAnnouncements @supplementalAnn, @t, @sortType, @start, @count
 GO
