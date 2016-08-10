@@ -178,13 +178,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return PrepareStudentListDetailsData(students, stWithDrawDic);
         }
 
-        public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
+        public async Task<IList<StudentHealthCondition>> GetStudentHealthConditions(int studentId)
         {
+            await Task.Delay(0);
             return StudentHealthConditionStorage.GetStudentHealthConditions(studentId);
         }
 
-        public StudentSummaryInfo GetStudentSummaryInfo(int studentId, int schoolYearId)
+        public Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId)
         {
+            throw new NotImplementedException();
+        }
+
+        public async Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId)
+        {
+            await Task.Delay(0);
             throw new NotImplementedException();
         }
 
@@ -247,8 +254,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        public StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId)
+        public async Task<StudentExplorerInfo> GetStudentExplorerInfo(int studentId, int schoolYearId)
         {
+            await Task.Delay(0);
             Trace.Assert(Context.SchoolLocalId.HasValue);
             var student = GetById(studentId, schoolYearId);
             var classes = ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId).ToList();

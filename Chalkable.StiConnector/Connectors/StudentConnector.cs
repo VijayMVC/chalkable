@@ -22,29 +22,29 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
         
-        public IList<StudentCondition> GetStudentConditions(int studentId)
+        public async Task<IList<StudentCondition>> GetStudentConditions(int studentId)
         {
             var url = $"{BaseUrl}chalkable/students/{studentId}/conditions";
-            return Call<IList<StudentCondition>>(url);
+            return await CallAsync<IList<StudentCondition>>(url);
         }
         
-        public NowDashboard GetStudentNowDashboard(int acadSessionId, int studentId, DateTime nowSchoolTime)
+        public async Task<NowDashboard> GetStudentNowDashboard(int acadSessionId, int studentId, DateTime nowSchoolTime)
         {
             var nvc = new NameValueCollection
             {
                 [DATE_PARAM] = nowSchoolTime.ToString(DATE_TIME_FORMAT, CultureInfo.InvariantCulture)
             };
             var url = $"{BaseUrl}chalkable/{acadSessionId}/students/{studentId}/dashboard/now";
-            return Call<NowDashboard>(url, nvc);
+            return await CallAsync<NowDashboard>(url, nvc);
         }
         
-        public StudentExplorerDashboard GetStudentExplorerDashboard(int acadSessionId, int studentId, DateTime? date = null)
+        public async Task<StudentExplorerDashboard> GetStudentExplorerDashboard(int acadSessionId, int studentId, DateTime? date = null)
         {
             var nvc = new NameValueCollection();
             if(date.HasValue)
                 nvc.Add(DATE_PARAM, date.Value.ToString(Constants.DATE_FORMAT));
             var url = $"{BaseUrl}chalkable/{acadSessionId}/students/{studentId}/dashboard/explorer";
-            return Call<StudentExplorerDashboard>(url, nvc);
+            return await CallAsync<StudentExplorerDashboard>(url, nvc);
         }
         
         public StudentAttendanceSummaryDashboard GetStudentAttendanceSummary(int studentId, int acadSessionId, int? termId)
@@ -95,9 +95,9 @@ namespace Chalkable.StiConnector.Connectors
         {
            await PostAsync<Object>($"{BaseUrl}students/{studentId}/healthForms/{studentHealthFormId}/readReceipts", formReadReceipts);
         }
-        public async Task<byte[]> GetStudentHealthFormDocument(int studentId)
+        public async Task<byte[]> GetStudentHealthFormDocument(int studentId, int healthFormId)
         {
-            return await CallAsync<byte[]>($"{BaseUrl}students/{studentId}/healthForms");
+            return await CallAsync<byte[]>($"{BaseUrl}students/{studentId}/healthForms/{healthFormId}");
         }
     }
 }

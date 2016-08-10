@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         PracticeGrade Add(int standardId, int studentId, Guid applicationId, string score);
         IList<PracticeGrade> GetPracticeGrades(int studentId, int? standardId);
-        IList<PracticeGradesDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId);
+        Task<IList<PracticeGradesDetailedInfo>> GetPracticeGradesDetails(int classId, int studentId, int? standardId);
     }
     public class PracticeGradeService : SisConnectedService, IPracticeGradeService
     {
@@ -69,15 +69,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     }));
         }
 
-        public IList<PracticeGradesDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
+        public async Task<IList<PracticeGradesDetailedInfo>> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
         {
+            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var studentExplorerTask = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(sy.Id, studentId, Context.NowSchoolTime);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
             if (standardId.HasValue)
                 standards = standards.Where(x => x.Id == standardId).ToList();
             var practiceGrades = GetPracticeGrades(studentId, standardId);
-            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            var standardsScores = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(sy.Id, studentId, Context.NowSchoolTime)
-                .Standards.ToList();
+            var standardsScores =  (await studentExplorerTask).Standards.ToList();
             var res = new List<PracticeGradesDetailedInfo>();
             foreach (var standard in standards)
             {
