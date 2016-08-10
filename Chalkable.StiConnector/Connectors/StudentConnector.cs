@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Runtime.Remoting.Contexts;
+using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
@@ -84,6 +85,19 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
             var url = $"{BaseUrl}chalkable/{acadSessionId}/students/{studentId}/dashboard/discipline/detail";
             return Call<DisciplineDetailDashboard>(url, nvc);
+        }
+
+        public async Task<IList<StudentHealthForm>> GetStudentHealthForms(int studentId)
+        {
+            return await CallAsync<IList<StudentHealthForm>>($"{BaseUrl}students/{studentId}/healthForms");
+        }
+        public async Task SetStudentHealthFormReadReceipts(int studentId, int studentHealthFormId, StudentHealthFormReadReceipt formReadReceipts)
+        {
+           await PostAsync<Object>($"{BaseUrl}students/{studentId}/healthForms/{studentHealthFormId}/readReceipts", formReadReceipts);
+        }
+        public async Task<byte[]> GetStudentHealthFormDocument(int studentId)
+        {
+            return await CallAsync<byte[]>($"{BaseUrl}students/{studentId}/healthForms");
         }
     }
 }
