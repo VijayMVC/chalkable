@@ -36,7 +36,9 @@ namespace Chalkable.BusinessLogic.Services.School
         int GetEnrolledStudentsCount();
 
         Task<IList<StudentHealthCondition>> GetStudentHealthConditions(int studentId);
-        Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId); 
+        Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId);
+        byte[] DownloadStudentHealthFormDocument(int studentId, int healthFormId);
+        Task VerifyStudentHealthForm(int studentId, int healthFormId);
         Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId);
         Task<StudentExplorerInfo> GetStudentExplorerInfo(int studentId, int schoolYearId);
         Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
@@ -116,7 +118,8 @@ namespace Chalkable.BusinessLogic.Services.School
                             orderByFirstName, start, count, markingPeriodId, enrolledOnly));
         }
 
-        
+
+       
         public async Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
@@ -167,6 +170,29 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId);
             return StudentHealthFormInfo.Create(healthForms);
+        }
+
+        public async Task VerifyStudentHealthForm(int studentId, int healthFormId)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+
+            var formReadReceipts = new StudentHealthFormReadReceipt
+            {
+                AcadSessionId = Context.SchoolYearId.Value,
+                StaffId = Context.PersonId.Value,
+                StudentHealthFormId = healthFormId,
+                VerifiedDate = Context.NowSchoolTime,
+                StudentId = studentId
+            };
+            await ConnectorLocator.StudentConnector.SetStudentHealthFormReadReceipts(studentId, healthFormId, formReadReceipts);
+        }
+
+        public byte[] DownloadStudentHealthFormDocument(int studentId, int healthFormId)
+        {
+            return ConnectorLocator.StudentConnector.GetStudentHealthFormDocument(studentId, healthFormId);
         }
 
 

@@ -95,9 +95,9 @@ namespace Chalkable.StiConnector.Connectors
         {
            await PostAsync<Object>($"{BaseUrl}students/{studentId}/healthForms/{studentHealthFormId}/readReceipts", formReadReceipts);
         }
-        public async Task<byte[]> GetStudentHealthFormDocument(int studentId, int healthFormId)
+        public byte[] GetStudentHealthFormDocument(int studentId, int healthFormId)
         {
-            return await CallAsync<byte[]>($"{BaseUrl}students/{studentId}/healthForms/{healthFormId}");
+            return Download($"{BaseUrl}students/{studentId}/healthForms/{healthFormId}");
         }
     }
 }

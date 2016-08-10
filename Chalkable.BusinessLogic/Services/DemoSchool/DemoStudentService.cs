@@ -189,6 +189,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public byte[] DownloadStudentHealthFormDocument(int studentId, int healthFormId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task VerifyStudentHealthForm(int studentId, int healthFormId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId)
         {
             await Task.Delay(0);

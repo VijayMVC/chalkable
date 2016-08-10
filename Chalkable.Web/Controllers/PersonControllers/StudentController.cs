@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Common.Web;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
@@ -26,6 +28,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
     [RequireHttps, TraceControllerFilter]
     public class StudentController : PersonController
     {
+
+        private const string CONTENT_DISPOSITION = "Content-Disposition";
+        private const string HEADER_FORMAT = "inline; filename={0}";
+
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public async Task<ActionResult> Summary(int schoolPersonId)
         {
@@ -110,6 +116,22 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 res.Homeroom = HomeroomViewData.Create(homeroom);
 
             return Json(res);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public async Task<ActionResult> VerifyStudentHealthForm(int studentId, int healthFormId)
+        {
+            await SchoolLocator.StudentService.VerifyStudentHealthForm(studentId, healthFormId);
+            var res = await SchoolLocator.StudentService.GetStudentHealthForms(studentId);
+            return Json(StudentHealthFormViewData.Create(res));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult DownloadHealthFormDocument(int studentId, int healthFormId)
+        {
+            var file = SchoolLocator.StudentService.DownloadStudentHealthFormDocument(studentId, healthFormId);
+            Response.AddHeader(CONTENT_DISPOSITION, string.Format(HEADER_FORMAT, "StudentHealthForm.pdf"));
+            return File(file, MimeHelper.GetContentTypeByExtension("pdf"));
         }
         
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
