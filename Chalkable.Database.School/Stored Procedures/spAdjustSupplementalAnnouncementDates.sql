@@ -29,8 +29,13 @@ Insert Into @toAdjust
 Declare @minAnnDate datetime2;
 Set		@minAnnDate = (Select Min([ExpiresDate]) From @toAdjust);
 
+--to save distance beween supp announcements
 Update @toAdjust
 Set [ExpiresDate] = DateAdd(d, DateDiff(d, @minAnnDate, [ExpiresDate]), @startDate)
+
+--move to nearest class day
+Update @toAdjust
+Set [ExpiresDate] =(Select Min([Day]) From @classDays Where [Day] >= [ExpiresDate])
 
 --Getting last school day of School Year
 Declare @schoolYearEndDate datetime2;
