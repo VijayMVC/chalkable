@@ -151,7 +151,7 @@ namespace Chalkable.Web.Controllers
                 string name = attContentInfo.Attachment.Name;
                 SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementTypeEnum)announcementType, bin, name);
             }
-            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType);
+            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType, true);
             return Json(res, 6);
         }
 
