@@ -168,17 +168,21 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public async Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId)
         {
+            if (!CanGetHealthConditions())
+                return new List<StudentHealthFormInfo>();
             var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId);
             //return StudentHealthFormInfo.Create(healthForms);
             return healthForms == null ? new List<StudentHealthFormInfo>() : StudentHealthFormInfo.Create(healthForms);
         }
-
+        
         public async Task VerifyStudentHealthForm(int studentId, int healthFormId)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
 
             BaseSecurity.EnsureAdminOrTeacher(Context);
+            if (!CanGetHealthConditions())
+                throw new ChalkableSecurityException();
 
             var formReadReceipts = new StudentHealthFormReadReceipt
             {
