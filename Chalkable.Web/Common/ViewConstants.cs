@@ -66,5 +66,7 @@
 
         public const string SCHOOL_NAME = "schoolName";
         public const string ASSESSMENT_ENABLED = "AssessmentEnabled";
+
+        public const string USER_LOGIN = "UserLogin";
     }
 }
