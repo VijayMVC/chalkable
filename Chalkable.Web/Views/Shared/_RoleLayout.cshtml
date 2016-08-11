@@ -1,6 +1,7 @@
 ﻿@using Chalkable.Common
 @using Chalkable.Web.Common
 @using Chalkable.Web.Models.PersonViewDatas
+@using Chalkable.Web.Tools
 
 @{
     var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
@@ -366,6 +367,16 @@
     @ChlkHelpers.RaygunInit()
     
     @ChlkHelpers.GoogleAnalytics()
-    @ChlkHelpers.MixPanel() 
-</body> 
+    @ChlkHelpers.MixPanel()
+    <!--Register user to mixpanel-->
+    <script type="text/javascript">
+        if(window.mixpanel) {
+            window.mixpanel.register({
+                "login": @ViewData.GetJsConstantValueOrNull(ViewConstants.USER_LOGIN),
+                "distinct_id": "mixpanel-user-" +  @ViewData.GetJsConstantValueOrNull(ViewConstants.USER_LOGIN),
+                "role": currentChlkPerson.role.name
+            });
+        }
+    </script>
+</body>
 </html>
