@@ -36,7 +36,7 @@ namespace Chalkable.Web.Models
                     IsScheduled = classAttendance.Count > 0,
                     IsDailyAttendancePeriod = classAttendance.Count > 0 && classAttendance.First().IsDailyAttendancePeriod
             };
-            var notSeatingStudents = students.Where(x => seatingChart.SeatingList.All(y => y.All(z => x.Id != z.StudentId))).ToList();
+            var notSeatingStudents = students.Where(x => seatingChart.SeatingList.All(y => y.All(z => x.Id != z.StudentId))).OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
             foreach (var notSeatingStudent in notSeatingStudents)
             {
                 var classAtt = classAttendance.FirstOrDefault(x => x.Student.Id == notSeatingStudent.Id) ??
