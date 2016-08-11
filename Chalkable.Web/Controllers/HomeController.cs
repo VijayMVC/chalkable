@@ -253,6 +253,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.MESSAGING_DISABLED] = Context.MessagingDisabled;
             ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
             ViewData[ViewConstants.SIS_API_VERSION] = Context.SisApiVersion;
+            ViewData[ViewConstants.USER_LOGIN] = Context.Login;
 
             var leParams = SchoolLocator.LeService.GetLEParams();
 
