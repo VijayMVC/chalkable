@@ -4,6 +4,7 @@ REQUIRE('chlk.models.student.StudentContact');
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.people.EthnicityViewData');
+REQUIRE('chlk.models.student.StudentHealthFormViewData');
 
 NAMESPACE('chlk.models.student', function(){
     "use strict";
@@ -35,10 +36,33 @@ NAMESPACE('chlk.models.student', function(){
         chlk.models.common.ChlkDate, 'originalEnrollmentDate',
         chlk.models.people.ShortUserInfo, 'counselor',
         chlk.models.people.EthnicityViewData, 'ethnicity',
+        ArrayOf(chlk.models.student.StudentHealthFormViewData), 'healthForms',
+
+        function hasNoVerifiedForm(){
+            var notVerified = this.getHealthForms() ? this.getHealthForms().filter(function(item){
+                return !item.getVerifiedDate()
+            }) : [];
+
+            return !!notVerified.length
+        },
 
         OVERRIDE, VOID, function deserialize(raw) {
             BASE(raw);
             this.studentContacts = SJX.fromArrayOfDeserializables(raw.studentcontacts, chlk.models.student.StudentContact);
+
+            raw.healthForms = [{
+                verifieddate: "6/16/2016 09:15:01 AM",
+                id: 1,
+                name: 'Asthma',
+                studentid: 5327
+            }, {
+                verifieddate: null,
+                id: 2,
+                name: 'Allergy',
+                studentid: 5327
+            }];
+
+            this.healthForms = SJX.fromArrayOfDeserializables(raw.healthForms, chlk.models.student.StudentHealthFormViewData);
             this.gradeLevel = SJX.fromDeserializable(raw.gradelevel, chlk.models.grading.GradeLevel);
             this.age = SJX.fromValue(raw.age, Number);
             this.hispanic = SJX.fromValue(raw.hispanic, Boolean);
