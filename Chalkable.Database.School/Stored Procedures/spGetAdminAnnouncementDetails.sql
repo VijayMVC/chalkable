@@ -38,8 +38,10 @@ End
 Declare @adminId int
 Select @adminId = t.AdminRef, @adminAnnouncementId = t.Id From @adminAnnouncement t
 
-
-Exec spSelectAdminAnnoucnement @adminAnnouncement
+--This procedure was changed to make ordered selects
+--Here we don't need to order, so we create fake table
+Declare @emptyFake TAnnouncementOrder
+Exec spSelectAdminAnnoucnement @adminAnnouncement, @emptyFake, 0, 0, 0
 Exec spSelectAnnouncementAddionalData @adminAnnouncementId, @adminId, @callerId, null
 
 

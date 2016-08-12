@@ -32,8 +32,10 @@ Where
 			And vwSA.VisibleForStudent = 1
 		)
 
-
-Exec spSelectSupplementalAnnouncements @supplementalAnnouncements
+--This procedure was changed to make ordered selects
+--Here we don't need to order, so we create fake table
+Declare @emptyFake TAnnouncementOrder
+Exec spSelectSupplementalAnnouncements @supplementalAnnouncements, @emptyFake, 0, 0, 0
 
 Declare @saSchool Table (id int, classId int, schoolId int)
 

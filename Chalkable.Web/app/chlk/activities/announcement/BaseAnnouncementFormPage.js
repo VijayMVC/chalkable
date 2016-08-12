@@ -59,9 +59,6 @@ NAMESPACE('chlk.activities.announcement', function () {
             VOID, function submitClick(node, event){
 
                 var that = this;
-                var maxScoreNode = this.dom.find('[name="maxscore"]');
-                if(maxScoreNode.exists() && !maxScoreNode.getValue())
-                    maxScoreNode.setValue('100');
 
                 this.saveAttributes_();
 

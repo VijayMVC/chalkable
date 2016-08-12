@@ -262,7 +262,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             additionalParams.Add("schoolYearId", query.ClassId.HasValue ? (int?)null : schoolYearId);
             additionalParams.Add("classId", query.ClassId);
 
-            return InternalGetAnnouncements<LessonPlansQuery>(procedureName, query, additionalParams);
+            var res = InternalGetAnnouncements<LessonPlansQuery>(procedureName, query, additionalParams);
+
+            return res;
         }
         public AnnouncementQueryResult GetLessonPlansOrderedByDate(LessonPlansQuery query)
         {
