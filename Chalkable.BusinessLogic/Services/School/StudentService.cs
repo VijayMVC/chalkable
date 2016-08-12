@@ -168,12 +168,17 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public async Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId)
         {
-            if (!CanGetHealthConditions())
+            if (!await HasHealthFormAccess())
                 return new List<StudentHealthFormInfo>();
             var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId);
             //return StudentHealthFormInfo.Create(healthForms);
             return healthForms == null ? new List<StudentHealthFormInfo>() : StudentHealthFormInfo.Create(healthForms);
         }
+
+        private async Task<bool> HasHealthFormAccess()
+        {
+            return CanGetHealthConditions() && await ConnectorLocator.StudentConnector.HasHealthLicenses();
+        } 
         
         public async Task VerifyStudentHealthForm(int studentId, int healthFormId)
         {

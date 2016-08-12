@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using Chalkable.Common;
@@ -89,15 +91,37 @@ namespace Chalkable.StiConnector.Connectors
 
         public async Task<IList<StudentHealthForm>> GetStudentHealthForms(int studentId)
         {
-            return await CallAsync<IList<StudentHealthForm>>($"{BaseUrl}students/{studentId}/healthForms");
+            return await CallAsync<IList<StudentHealthForm>>($"{BaseUrl}health/students/{studentId}/healthForms");
         }
         public async Task SetStudentHealthFormReadReceipts(int studentId, int studentHealthFormId, StudentHealthFormReadReceipt formReadReceipts)
         {
-           await PostAsync<Object>($"{BaseUrl}students/{studentId}/healthForms/{studentHealthFormId}/readReceipts", formReadReceipts);
+           await PostAsync<Object>($"{BaseUrl}health/students/{studentId}/healthForms/{studentHealthFormId}/readReceipts", formReadReceipts);
         }
+
+        public async Task<bool> HasHealthLicenses()
+        {
+            try
+            {
+                await InitWebClient().DownloadDataTaskAsync($"{BaseUrl}moduleLicenses/Health");
+                return true;
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response is HttpWebResponse)
+                {
+                    HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
+                    if (status == HttpStatusCode.NotFound)
+                        return false;
+                }
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
+            }
+        }
+
         public byte[] GetStudentHealthFormDocument(int studentId, int healthFormId)
         {
-            return Download($"{BaseUrl}students/{studentId}/healthForms/{healthFormId}");
+            return Download($"{BaseUrl}health/students/{studentId}/healthForms/{healthFormId}");
         }
     }
 }
