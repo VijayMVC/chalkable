@@ -1,0 +1,17 @@
+mixin Select(name, controller, action, params)
+    -attributes.name = name
+    -attributes = self.processAttrs(attributes);
+    -attributes['data-controller'] = controller
+    -attributes['data-action'] = action
+    -attributes['data-params'] = params
+    select(attributes).control-input
+        if(attributes.items)
+            each item in attributes.items
+                +Option(item["get" + attributes.idParam.toUpperCase()], item["get" + attributes.nameParam.toUpperCase()])
+        else
+            block
+
+mixin Option(value, displayName, selected)
+    -attributes.value = value
+    -attributes.selected = selected
+        option(attributes)=displayName
