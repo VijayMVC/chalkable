@@ -58,7 +58,7 @@ NAMESPACE('chlk.activities.announcement', function(){
                 });
 
                 var value = announcements.length ? JSON.stringify(announcements) : '';
-                this.dom.find('.announcements-to-copy').setValue(value);
+                this.dom.find('.selected-announcements').setValue(value);
             },
 
             [[Object, String]],

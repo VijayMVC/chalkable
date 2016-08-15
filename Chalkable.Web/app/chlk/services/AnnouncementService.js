@@ -55,6 +55,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, String, chlk.models.common.ChlkDate]],
+            ria.async.Future, function adjustDates(classId, announcements, startDate_) {
+                return this.post('Announcement/AdjustDates.json', Array, {
+                    classId: classId.valueOf(),
+                    announcements: JSON.parse(announcements),
+                    startDate: startDate_ && startDate_.toStandardFormat()
+                });
+            },
+
             [[Number, chlk.models.id.ClassId, Boolean, Object]],
             ria.async.Future, function getAnnouncementsList_(start_, classId_, importantOnly_, createdAnnouncements_) {
                 return this.post('Feed/List.json', chlk.models.feed.Feed, {

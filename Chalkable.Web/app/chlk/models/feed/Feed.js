@@ -27,9 +27,10 @@ NAMESPACE('chlk.models.feed', function () {
                     raw.annoucementviewdatas = raw.createdannouncements.concat(raw.annoucementviewdatas);
                 }
 
-                this.announcementsToCopy = SJX.fromValue(raw.announcementsToCopy, String);
+                this.selectedAnnouncements = SJX.fromValue(raw.selectedAnnouncements, String);
                 this.toClassId = SJX.fromValue(raw.toClassId, chlk.models.id.ClassId);
                 this.copyStartDate = SJX.fromDeserializable(raw.copyStartDate, chlk.models.common.ChlkDate);
+                this.adjustStartDate = SJX.fromDeserializable(raw.adjustStartDate, chlk.models.common.ChlkDate);
                 this.inProfile = SJX.fromValue(raw.inProfile, Boolean);
                 this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
@@ -70,11 +71,13 @@ NAMESPACE('chlk.models.feed', function () {
 
             Boolean, 'readonly',
 
-            String, 'announcementsToCopy',
+            String, 'selectedAnnouncements',
 
             chlk.models.id.ClassId, 'toClassId',
 
             chlk.models.common.ChlkDate, 'copyStartDate',
+
+            chlk.models.common.ChlkDate, 'adjustStartDate',
 
             Boolean, 'importantOnly',
 

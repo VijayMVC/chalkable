@@ -189,13 +189,23 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
+            var res;
             if(model.getSubmitType() == 'copy'){
-                var res = this.announcementService.copy(model.getClassId(), model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                res = this.announcementService.copy(model.getClassId(), model.getToClassId(), model.getSelectedAnnouncements(), model.getCopyStartDate())
                     .then(function(model){
                         this.userTrackingService.copiedActivities();
                         return model;
                     }, this);
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
+            }
+            if(model.getSubmitType() == 'adjust'){
+                res = this.announcementService.adjustDates(model.getClassId(), model.getSelectedAnnouncements(), model.getAdjustStartDate())
+                    .then(function(model){
+                        this.BackgroundNavigate('feed', 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(),
+                            model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet()]);
+                        return ria.async.BREAK;
+                    }, this);
+                return this.UpdateView(this.getView().getCurrent().getClass(), res);
             }
 
             if(model.getSubmitType() == 'markDone')

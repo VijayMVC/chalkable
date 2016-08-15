@@ -87,13 +87,13 @@ NAMESPACE('chlk.activities.feed', function () {
                     element.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [node.is(':checked')]);
                 });
 
-                this.updateCopySubmitBtn_();
+                this.updateTopSubmitBtn_();
             },
 
             [ria.mvc.DomEventBind('change', '.feed-item-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function feedItemSelect(node, event, selected_){
-                this.updateCopySubmitBtn_();
+                this.updateTopSubmitBtn_();
             },
 
             [ria.mvc.DomEventBind('click', '.gradingPeriodSelect + DIV li:last-child')],
@@ -114,7 +114,7 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('click', '.feed-tools')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function feedToolsClick(node, event){
-                this.dom.find('.copy-activities.active').trigger('click');
+                this.dom.find('.top-block-btn:not(.feed-tools).active').trigger('click');
                 this.dom.find('.tools-buttons-block').toggleClass('hidden');
                 node.toggleClass('active');
             },
@@ -122,8 +122,16 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('click', '.copy-activities')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function copyActivitiesClick(node, event){
-                this.dom.find('.feed-tools.active').trigger('click');
+                this.dom.find('.top-block-btn:not(.copy-activities).active').trigger('click');
                 this.dom.find('.feed-container').toggleClass('copy-mode');
+                node.toggleClass('active');
+            },
+
+            [ria.mvc.DomEventBind('click', '.adjust-activities')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function adjustActivitiesClick(node, event){
+                this.dom.find('.top-block-btn:not(.adjust-activities).active').trigger('click');
+                this.dom.find('.feed-container').toggleClass('adjust-mode');
                 node.toggleClass('active');
             },
 
@@ -133,7 +141,13 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('.copy-activities').trigger('click');
             },
 
-            [ria.mvc.DomEventBind('click', '.copy-submit')],
+            [ria.mvc.DomEventBind('click', '.cancel-adjust')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelAdjustClick(node, event){
+                this.dom.find('.adjust-activities').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('click', '.submit-selected')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function copySubmit(node, event){
                 var announcements = [];
@@ -145,7 +159,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 });
 
                 var value = announcements.length ? JSON.stringify(announcements) : '';
-                this.dom.find('.announcements-to-copy').setValue(value);
+                this.dom.find('.selected-announcements').setValue(value);
             },
 
             [ria.mvc.PartialUpdateRule(null, 'announcements-copy')],
@@ -169,12 +183,13 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('change', '.copy-to-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function classSelect(node, event, selected_){
-                this.updateCopySubmitBtn_();
+                this.updateTopSubmitBtn_();
             },
 
-            function updateCopySubmitBtn_(){
-                var btn = this.dom.find('.copy-submit');
-                if(this.dom.find('.feed-item-check:checked').count() > 0 && this.dom.find('[name="toClassId"]').getValue()){
+            function updateTopSubmitBtn_(){
+                var btn = this.dom.find('.top-submit-btn:visible');
+                if(this.dom.find('.feed-item-check:checked').count() > 0 && (this.dom.find('.feed-container').hasClass('adjust-mode') ||
+                    this.dom.find('.feed-container').hasClass('copy-mode') && this.dom.find('[name="toClassId"]').getValue())){
                     btn.removeAttr('disabled');
                     btn.setProp('disabled', false);
                 }else{

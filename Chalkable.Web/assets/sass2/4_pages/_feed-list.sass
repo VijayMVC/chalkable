@@ -1,4 +1,4 @@
-.copy-buttons-block, .import-buttons-block
+.copy-buttons-block, .import-buttons-block, .adjust-buttons-block
   white-space: nowrap
   height: 33px
 
@@ -37,7 +37,11 @@
     .copy-buttons-block
       display: none
 
-  &.copy-mode
+  &:not(.adjust-mode)
+    .adjust-buttons-block
+      display: none
+
+  &.copy-mode, &.adjust-mode
     .feed-item
       .check-cnt
         display: inline-block
@@ -95,13 +99,13 @@
     right: 0
     top: -88px
 
-    .print-btn, .copy-btn, .tools-btn
+    .print-btn, .copy-btn, .tools-btn, .calendar-btn
       opacity: 0.5
 
       &.active, &:hover
         opacity: 1
 
-    .copy-btn
+    .copy-btn, .calendar-btn
       margin-left: 8px
 
     .tools-btn
