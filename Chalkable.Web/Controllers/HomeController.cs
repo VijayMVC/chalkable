@@ -390,7 +390,8 @@ namespace Chalkable.Web.Controllers
                 Email = context.Login,
                 UUID = context.UserId.ToString()
             };
-            
+            RaygunClient.CustomGroupingKey += (sender, args) => args.CustomGroupingKey = "Login Performance";
+
             RaygunClient.SendInBackground(ex, tags);
         }
 

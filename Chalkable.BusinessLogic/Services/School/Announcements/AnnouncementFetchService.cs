@@ -56,9 +56,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int? classId, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue)
         {
             var feedStartDate = settings.FromDate ??  DateTime.MinValue;
-            var feedEndDate = settings.ToDate ??  DateTime.MaxValue;
-            var sortOption = settings.SortTypeEnum ?? AnnouncementSortOption.DueDateAscending;
-            var ownedOnly = !classId.HasValue ? (bool?)true : null;
+            var feedEndDate   = settings.ToDate   ??  DateTime.MaxValue;
+            var sortOption    = settings.SortTypeEnum ?? AnnouncementSortOption.DueDateAscending;
+            var ownedOnly     = !classId.HasValue ? (bool?)true : null;
 
             if (!settings.AnnouncementTypeEnum.HasValue)
                 return _handlers[sortOption].GetAllItems(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count, ownedOnly);

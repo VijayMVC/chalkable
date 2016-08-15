@@ -45,5 +45,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var ids = entities.Select(x => x.AcadSessionID).ToList();
             ServiceLocatorSchool.SchoolYearService.Delete(ids);
         }
+
+        protected override void PrepareToDeleteInternal(IList<AcadSession> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

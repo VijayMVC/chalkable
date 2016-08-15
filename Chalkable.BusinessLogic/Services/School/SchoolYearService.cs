@@ -31,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentSchoolYear GetPreviousStudentSchoolYearOrNull(int studentId);
         IList<SchoolYear> GetSchoolYearsByStudent(int studentId, StudentEnrollmentStatusEnum? enrollmentStatus, DateTime? date);
         SchoolYear GetCurrentSchoolYearByStudent(int studentId);
+        void PrepareToDeleteStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears);
     }
 
     public class SchoolYearService : SisConnectedService, ISchoolYearService
@@ -178,6 +179,11 @@ namespace Chalkable.BusinessLogic.Services.School
             if (res == null)
                 res = sys.FirstOrDefault();
             return res ?? GetCurrentSchoolYear();
+        }
+
+        public void PrepareToDeleteStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears)
+        {
+            DoUpdate(u => new DataAccessBase<StudentSchoolYear>(u).PrepareToDelete(studentSchoolYears));
         }
     }
 }

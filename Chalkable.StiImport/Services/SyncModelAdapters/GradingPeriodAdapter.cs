@@ -45,5 +45,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var ids = entities.Select(x => x.GradingPeriodID).ToList();
             ServiceLocatorSchool.GradingPeriodService.Delete(ids);
         }
+
+        protected override void PrepareToDeleteInternal(IList<GradingPeriod> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
