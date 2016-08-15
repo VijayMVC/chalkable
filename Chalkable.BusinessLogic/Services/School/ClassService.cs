@@ -72,6 +72,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
         bool IsTeacherClasses(int teacherId, params int[] classIds);
         ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
+
+        IList<DateTime> GetDays(int classId);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -251,6 +253,11 @@ namespace Chalkable.BusinessLogic.Services.School
             var sectionPanorama = ConnectorLocator.PanoramaConnector.GetSectionPanorama(classId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
 
             return ClassPanorama.Create(sectionPanorama);
+        }
+
+        public IList<DateTime> GetDays(int classId)
+        {
+            return DoRead(u => new ClassDataAccess(u).GetDays(classId)).Select(x => x.Day).ToList();
         }
 
         public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)

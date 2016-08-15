@@ -26,8 +26,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
         bool Exists(string title, int? excludeSupplementalAnnouncementId);
         SupplementalAnnouncement GetLastDraft();
-
-        void AdjustDates(IList<int> ids, DateTime startDate, int classId);
     }
 
     public class SupplementalAnnouncementService : BaseAnnouncementService<SupplementalAnnouncement>, ISupplementalAnnouncementService
@@ -460,7 +458,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        public void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        public override void AdjustDates(IList<int> ids, DateTime startDate, int classId)
         {
             BaseSecurity.EnsureTeacher(Context);
             if (startDate < Context.SchoolYearStartDate || startDate > Context.SchoolYearEndDate)

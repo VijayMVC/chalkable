@@ -232,15 +232,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             if (announcements == null || announcements.Count == 0)
                 return Json(true);
+            
+            var adjustClassAnnsTask = Task.Factory.StartNew(() =>
+            {
+                var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Class)
+                    .Select(x => x.AnnouncementId).ToList();
 
-            //waiting for SIS API
-            //Task.Factory.StartNew(() =>
-            //{
-            //    var ids = inputModel.Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Class)
-            //        .Select(x => x.AnnouncementId).ToList();
-
-            //    SchoolLocator.ClassA
-            //});
+                SchoolLocator.ClassAnnouncementService.AdjustDates(ids, startDate, classId);
+            });
 
             var adjustLpsTask = Task.Factory.StartNew(() =>
             {
@@ -260,6 +259,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
             await adjustLpsTask;
             await adjustSuppAnnTask;
+            await adjustClassAnnsTask;
 
             return Json(true);
         }

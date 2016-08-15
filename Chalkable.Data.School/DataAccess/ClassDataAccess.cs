@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -223,6 +224,16 @@ namespace Chalkable.Data.School.DataAccess
             }
 
             return ReadMany<CourseType>(query);
-        } 
+        }
+
+        public IList<Date> GetDays(int classId)
+        {
+            using (
+                var reader = ExecuteStoredProcedureReader("spGetClassDays",
+                    new Dictionary<string, object> {["classId"] = classId}))
+            {
+                return reader.ReadList<Date>();
+            }
+        }
     }
 }

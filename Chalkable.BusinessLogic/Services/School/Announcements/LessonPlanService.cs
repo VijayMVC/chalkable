@@ -41,8 +41,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId);
         void RemoveFromGallery(int lessonPlanId);
         void CopyToGallery(int fromAnnouncementId, int toAnnouncementId);
-
-        void AdjustDates(IList<int> ids, DateTime startDate, int classId);
     }
 
     public class LessonPlanService : BaseAnnouncementService<LessonPlan>, ILessonPlanService
@@ -620,7 +618,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        public void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        public override void AdjustDates(IList<int> ids, DateTime startDate, int classId)
         {
             BaseSecurity.EnsureTeacher(Context);
             if (startDate < Context.SchoolYearStartDate || startDate > Context.SchoolYearEndDate)
