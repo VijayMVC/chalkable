@@ -49,5 +49,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var ids = entities.Select(x => x.UserID).ToList();
             ServiceLocatorMaster.UserService.DeleteUsers(ids, ServiceLocatorSchool.Context.DistrictId.Value);
         }
+
+        protected override void PrepareToDeleteInternal(IList<User> entities)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

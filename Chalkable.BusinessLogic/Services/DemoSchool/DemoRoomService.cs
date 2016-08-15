@@ -79,5 +79,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public void PrepareToDeleteHomerooms(IList<Homeroom> homerooms)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

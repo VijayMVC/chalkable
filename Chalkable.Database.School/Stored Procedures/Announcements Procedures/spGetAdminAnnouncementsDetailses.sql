@@ -51,7 +51,10 @@ Begin
 End
 
 
-Exec spSelectAdminAnnoucnement @adminAnnouncements
+--This procedure was changed to make ordered selects
+--Here we don't need to order, so we create fake table
+Declare @emptyFake TAnnouncementOrder
+Exec spSelectAdminAnnoucnement @adminAnnouncements, @emptyFake, 0, 0, 0
 
 select vwPerson.* from vwPerson
 join @adminAnnouncements ann on ann.AdminRef = vwPerson.Id

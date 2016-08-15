@@ -48,5 +48,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var contactRelationships = entities.Select(x => new Data.School.Model.ContactRelationship { Id = x.ContactRelationshipID }).ToList();
             ServiceLocatorSchool.ContactService.DeleteContactRelationship(contactRelationships);
         }
+
+        protected override void PrepareToDeleteInternal(IList<ContactRelationship> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

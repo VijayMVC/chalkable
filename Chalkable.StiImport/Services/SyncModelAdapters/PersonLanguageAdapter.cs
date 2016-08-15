@@ -34,5 +34,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             ServiceLocatorSchool.LanguageService.DeletePersonLanguages(entities.Select(Selector).ToList());
         }
+
+        protected override void PrepareToDeleteInternal(IList<PersonLanguage> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

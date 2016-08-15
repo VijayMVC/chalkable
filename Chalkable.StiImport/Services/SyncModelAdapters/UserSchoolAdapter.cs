@@ -52,5 +52,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var districtUserSchool = entities.Select(SchoolSelector).ToList();
             ServiceLocatorSchool.UserSchoolService.Delete(districtUserSchool);
         }
+
+        protected override void PrepareToDeleteInternal(IList<UserSchool> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

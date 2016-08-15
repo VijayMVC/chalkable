@@ -39,5 +39,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             ServiceLocatorSchool.RoomService.DeleteHomerooms(entities.Select(Selector).ToList());
         }
+
+        protected override void PrepareToDeleteInternal(IList<Homeroom> entities)
+        {
+            ServiceLocatorSchool.RoomService.PrepareToDeleteHomerooms(entities.Select(Selector).ToList());
+        }
     }
 }

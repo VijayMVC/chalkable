@@ -116,26 +116,28 @@ namespace Chalkable.Tests.Sis
                 uow.Commit();
             }
 
-            var cl = ConnectorLocator.Create("Chalkable", d.SisPassword, d.SisUrl);
+            var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
             var addedUsers = (cl.SyncConnector.GetDiff(typeof(User), versions.First(x => x.TableName == "User").Version) as SyncResult<User>).Inserted;
-            var AllUsers = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
-            var addedUserSchools = (cl.SyncConnector.GetDiff(typeof(UserSchool), versions.First(x => x.TableName == "UserSchool").Version) as SyncResult<UserSchool>).Inserted;
+            var allInowUsers = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
+            var allUsers = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
+            //var addedUserSchools = (cl.SyncConnector.GetDiff(typeof(UserSchool), versions.First(x => x.TableName == "UserSchool").Version) as SyncResult<UserSchool>).Inserted;
 
             IList<Data.Master.Model.User> users = new List<Data.Master.Model.User>();
-            var ids = addedUserSchools.Select(x => x.UserID).Distinct();
+            var ids = allInowUsers.Select(x => x.UserID).Distinct();
+            var existingUserSet = new HashSet<int>(existingUsers.Select(x => x.SisUserId.Value).ToList());
             foreach (var addedUserSchool in ids)
             {
-                if (existingUsers.All(x => x.SisUserId != addedUserSchool))
+                if (!existingUserSet.Contains(addedUserSchool))
                 {
                     if (addedUsers.All(x => x.UserID != addedUserSchool))
                     {
-                        var sisu = AllUsers.First(x => x.UserID == addedUserSchool);
+                        var sisu = allUsers.First(x => x.UserID == addedUserSchool);
                         Data.Master.Model.User u = new Data.Master.Model.User
                         {
                             Id = Guid.NewGuid(),
                             DistrictRef = districtid,
                             FullName = sisu.FullName,
-                            Login = String.Format("user{0}_{1}@chalkable.com", sisu.UserID, districtid),
+                            Login = $"user{sisu.UserID}_{districtid}@chalkable.com",
                             Password = "1Ztq1N1GZ95sasjFa54ikw==",
                             SisUserName = sisu.UserName,
                             SisUserId = sisu.UserID

@@ -1807,7 +1807,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(!isDialog_)
-                        return this.Redirect('feed', 'list', [null, true]);
+                        return this.Redirect('feed', 'doToList');
                 }, this);
 
             if(isDialog_)

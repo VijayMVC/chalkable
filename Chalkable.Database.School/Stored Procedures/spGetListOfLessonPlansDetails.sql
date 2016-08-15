@@ -37,7 +37,10 @@ Declare @count int = (Select count(*) From @lessonPlans)
 Update @lessonPlans
 Set AllCount = @count
 
-Exec spSelectLessonPlans @lessonPlans
+--This procedure was changed to make ordered selects
+--Here we don't need to order, so we create fake table
+Declare @emptyFake TAnnouncementOrder
+Exec spSelectLessonPlans @lessonPlans, @emptyFake, 0, 0, 0
 
 -------------------------------------------------------------------------------------------------
 
@@ -135,3 +138,5 @@ Where AnnouncementAttachment_AnnouncementRef in(Select Id From @lessonPlans)
 		or (@callerRole = @STUDENT_ROLE_ID 
 		and (Attachment_PersonRef = @callerId 
 		or exists(Select * From @teacherIds t Where t.id = Attachment_PersonRef))))
+
+GO

@@ -25,6 +25,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             persistActions.Add(PersistOperationType.Insert, Insert);
             persistActions.Add(PersistOperationType.Update, Update);
             persistActions.Add(PersistOperationType.Delete, Delete);
+            persistActions.Add(PersistOperationType.PrepareToDelete, PrepareToDelete);
         }
 
         
@@ -48,9 +49,15 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             DeleteInternal(entities);
         }
 
+        private void PrepareToDelete(IList<TSyncModel> entities)
+        {
+            PrepareToDeleteInternal(entities);
+        }
+
         protected abstract void InsertInternal(IList<TSyncModel> entities);
         protected abstract void UpdateInternal(IList<TSyncModel> entities);
         protected abstract void DeleteInternal(IList<TSyncModel> entities);
+        protected abstract void PrepareToDeleteInternal(IList<TSyncModel> entities);
     }
 
     public class AdapterLocator
@@ -150,6 +157,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
     {
         Insert = 0,
         Update = 1,
-        Delete = 2
+        Delete = 2,
+        PrepareToDelete = 3
     }
 }

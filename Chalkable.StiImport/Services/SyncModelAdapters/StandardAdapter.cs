@@ -46,5 +46,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.StandardService.DeleteStandards(toDelete);
         }
+
+        protected override void PrepareToDeleteInternal(IList<Standard> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
