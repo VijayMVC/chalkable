@@ -57,7 +57,7 @@
       <Setting name="AesSecretKey"/>
     </ConfigurationSettings>
   </WebRole>
-  <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Standard_D11_v2">
+  <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Medium">
     <Imports>
     </Imports>
     <ConfigurationSettings>
