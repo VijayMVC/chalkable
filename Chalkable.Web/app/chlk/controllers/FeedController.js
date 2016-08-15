@@ -200,7 +200,7 @@ NAMESPACE('chlk.controllers', function (){
             }
             if(model.getSubmitType() == 'adjust'){
                 res = this.announcementService.adjustDates(model.getClassId(), model.getSelectedAnnouncements(), model.getAdjustStartDate())
-                    .then(function(model){
+                    .then(function(data){
                         this.BackgroundNavigate('feed', 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(),
                             model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet()]);
                         return ria.async.BREAK;

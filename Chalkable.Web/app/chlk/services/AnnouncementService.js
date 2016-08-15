@@ -57,7 +57,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, String, chlk.models.common.ChlkDate]],
             ria.async.Future, function adjustDates(classId, announcements, startDate_) {
-                return this.post('Announcement/AdjustDates.json', Array, {
+                return this.post('Announcement/AdjustDates.json', Boolean, {
                     classId: classId.valueOf(),
                     announcements: JSON.parse(announcements),
                     startDate: startDate_ && startDate_.toStandardFormat()
