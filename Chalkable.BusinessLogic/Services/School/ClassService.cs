@@ -74,6 +74,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
 
         IList<DateTime> GetDays(int classId);
+        void PrepareToDelete(IList<Class> classes);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -258,6 +259,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<DateTime> GetDays(int classId)
         {
             return DoRead(u => new ClassDataAccess(u).GetDays(classId)).Select(x => x.Day).ToList();
+        }
+
+        public void PrepareToDelete(IList<Class> classes)
+        {
+            DoUpdate(u => new ClassTeacherDataAccess(u).PrepareToDelete(classes));
         }
 
         public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)

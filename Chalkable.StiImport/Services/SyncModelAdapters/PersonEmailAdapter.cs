@@ -46,5 +46,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.PersonEmailService.DeletePersonsEmails(personEmails);
         }
+
+        protected override void PrepareToDeleteInternal(IList<PersonEmail> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

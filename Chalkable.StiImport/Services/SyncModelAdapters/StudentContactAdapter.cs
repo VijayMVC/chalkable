@@ -50,5 +50,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.ContactService.DeleteStudentContact(contacts);
         }
+
+        protected override void PrepareToDeleteInternal(IList<StudentContact> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count);
 
         CoreRole GetPersonRole(int personId);
+        void PrepareToDelete(IList<Person> persons);
     }
 
     public class PersonService : SisConnectedService, IPersonService
@@ -168,6 +169,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 return CoreRoles.STUDENT_ROLE;
 
             return null;
+        }
+
+        public void PrepareToDelete(IList<Person> persons)
+        {
+            DoUpdate(uow => new PersonDataAccess(uow).PrepareToDelete(persons));
         }
     }
 }

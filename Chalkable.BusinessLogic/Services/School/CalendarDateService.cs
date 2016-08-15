@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<Date> days);
         void Edit(IList<Date> dates);
         void Delete(IList<Date> dates);
+        void PrepareToDelete(IList<Date> dates);
     }
 
     public class CalendarDateService : SchoolServiceBase, ICalendarDateService
@@ -64,6 +65,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public void Delete(IList<Date> dates)
         {
             DoUpdate(uow => new DateDataAccess(uow).Delete(dates));
+        }
+
+        public void PrepareToDelete(IList<Date> dates)
+        {
+            DoUpdate(uow => new DateDataAccess(uow).PrepareToDelete(dates));
         }
     }
 }

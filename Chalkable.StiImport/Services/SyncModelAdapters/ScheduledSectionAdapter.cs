@@ -37,5 +37,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var classPeriods = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassPeriodService.Delete(classPeriods);
         }
+
+        protected override void PrepareToDeleteInternal(IList<ScheduledSection> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

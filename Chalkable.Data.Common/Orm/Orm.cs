@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Web.UI.WebControls;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 
@@ -43,14 +46,24 @@ namespace Chalkable.Data.Common.Orm
             return propertyInfo.GetCustomAttribute<DataEntityAttr>() == null
                 && propertyInfo.GetCustomAttribute<NotDbFieldAttr>() == null;
         }
-        
+
+        private static ConcurrentDictionary<Type, PropertyInfo[]>[] propertyCache =
+        {
+            new ConcurrentDictionary<Type, PropertyInfo[]>(),
+            new ConcurrentDictionary<Type, PropertyInfo[]>()
+        };
+
+        private static PropertyInfo[] Properties(Type t, bool declaredOnly = false)
+        {
+            int index = declaredOnly ? 1 : 0;
+            var props = propertyCache[index].GetOrAdd(t, z => z.GetPropertiesInDeclarationOrder(declaredOnly));
+            return props;
+        }
+
         public static List<string> Fields(Type t, bool identityFields = true, bool pkFields = true, bool declaredOnly = false)
         {
+            var props = Properties(t, declaredOnly);
             var res = new List<string>();
-            var flag = BindingFlags.Instance | BindingFlags.Public;
-            if(declaredOnly)
-                flag = flag | BindingFlags.DeclaredOnly;
-            var props = t.GetProperties(flag);
             foreach (var propertyInfo in props)
                 if (propertyInfo.CanWrite && propertyInfo.CanRead)
                 {
@@ -277,6 +290,32 @@ namespace Chalkable.Data.Common.Orm
                queries.Add(SimpleDelete<T>(BuildCondsByProperties(t, objs[i], primaryKeyFields, i + "_")));
             }
             return new DbQuery(queries);
+        }
+
+        public static DbQuery PrepareToDelete<T>(IList<T> objs)
+        {
+            var t = typeof(T);
+            var keys = GetPrimaryKeyFields(t);
+            var props = Properties(t, false);
+            
+            var fieldsToReset = new List<string>();
+            foreach (var propertyInfo in props)
+                if (propertyInfo.CanWrite && propertyInfo.CanRead)
+                {
+                    if (IsDbField(propertyInfo) && propertyInfo.GetCustomAttribute<PrimaryKeyFieldAttr>() == null &&
+                         Nullable.GetUnderlyingType(propertyInfo.PropertyType) == typeof (int))
+                        {
+                            fieldsToReset.Add(propertyInfo.Name);
+                        }
+                }
+            if (fieldsToReset.Count == 0)
+                return null;
+            DbQuery res = new DbQuery();
+            var vals = fieldsToReset.Select(x => $"[{t.Name}].[{x}] = null").JoinString(",");
+            var joinCond = keys.Select(x => $"[{t.Name}].[{x.Name}] = t.[{x.Name}]").JoinString(" and ");
+            res.Sql.AppendFormat("UPDATE [{0}] set {1} FROM [{0}] join @t t on {2}", t.Name, vals, joinCond);
+            res.Parameters.Add("t", objs);
+            return res;
         }
 
         public static DbQuery SimpleSelect<T>(QueryCondition queryCondition, int? count = null)

@@ -43,5 +43,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.StudentCustomAlertDetailService.Delete(toDelete);
         }
+
+        protected override void PrepareToDeleteInternal(IList<StudentCustomAlertDetail> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

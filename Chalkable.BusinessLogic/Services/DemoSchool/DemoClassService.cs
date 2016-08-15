@@ -413,6 +413,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public void PrepareToDelete(IList<Class> classes)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<ClassDetails> GetClassesSortedByPeriod()
         {
             IList<ClassDetails> classes;

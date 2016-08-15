@@ -160,7 +160,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                     DailyStats = new List<DailyStatsViewData>()
                 };
 
-                var studentStTestsInfos = models
+                var studentStTestsInfos = studentTests
                     .Where(x => x.StandardizedTestId == test.StandardizedTestId
                                 && x.StandardizedTestComponentId == test.StandardizedTestComponentId
                                 && x.StandardizedTestScoreTypeId == test.StandardizedTestScoreTypeId)
