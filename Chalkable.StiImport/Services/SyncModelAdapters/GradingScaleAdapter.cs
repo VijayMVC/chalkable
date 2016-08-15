@@ -39,5 +39,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var gradingScales = entities.Select(x => new Data.School.Model.GradingScale { Id = x.GradingScaleID }).ToList();
             ServiceLocatorSchool.GradingScaleService.DeleteGradingScales(gradingScales);
         }
+
+        protected override void PrepareToDeleteInternal(IList<GradingScale> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

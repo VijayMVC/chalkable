@@ -37,5 +37,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var systemSettings = entities.Select(Selector).ToList();
             ServiceLocatorSchool.SettingsService.Delete(systemSettings);
         }
+
+        protected override void PrepareToDeleteInternal(IList<SystemSetting> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -37,5 +37,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var alphaGrades = entities.Select(x => new Data.School.Model.AlphaGrade { Id = x.AlphaGradeID }).ToList();
             ServiceLocatorSchool.AlphaGradeService.Delete(alphaGrades);
         }
+
+        protected override void PrepareToDeleteInternal(IList<AlphaGrade> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -141,6 +141,16 @@ namespace Chalkable.Data.Common
             }
         }
 
+        public void PrepareToDelete<T>(IList<T> objs)
+        {
+            if (objs.Count > 0)
+            {
+                var q = Orm.Orm.PrepareToDelete(objs);
+                if (q != null)
+                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+            }
+        }
+
         protected const int MAX_PARAMETER_NUMBER = 2000;
         protected void ModifyList<T>(IList<T> objs, Action<IList<T>> modifyAction, Func<IList<T>, DbQuery> buildQueryAction)
         {

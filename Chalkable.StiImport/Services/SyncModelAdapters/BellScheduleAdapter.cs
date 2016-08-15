@@ -46,5 +46,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.BellScheduleService.Delete(bs);
         }
+
+        protected override void PrepareToDeleteInternal(IList<BellSchedule> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

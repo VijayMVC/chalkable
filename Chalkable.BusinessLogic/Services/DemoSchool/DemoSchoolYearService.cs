@@ -205,6 +205,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return sys.Count > 0 ? sys[0] : ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
         }
 
+        public void PrepareToDeleteStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<SchoolYear> GetSortedYears()
         {
             return SchoolYearStorage.GetAll();

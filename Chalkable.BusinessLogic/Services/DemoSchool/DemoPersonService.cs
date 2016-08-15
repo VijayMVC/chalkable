@@ -93,6 +93,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public void PrepareToDelete(IList<Person> persons)
+        {
+            throw new NotImplementedException();
+        }
+
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             query.CallerId = Context.PersonId;

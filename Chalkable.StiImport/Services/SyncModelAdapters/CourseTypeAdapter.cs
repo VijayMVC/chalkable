@@ -43,5 +43,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var courseTypes = entities.Select(x => new Data.School.Model.CourseType { Id = x.CourseTypeID }).ToList();
             ServiceLocatorSchool.CourseTypeService.Delete(courseTypes);
         }
+
+        protected override void PrepareToDeleteInternal(IList<CourseType> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

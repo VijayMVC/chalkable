@@ -58,5 +58,11 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var students = entities.Select(x => new Data.School.Model.Student { Id = x.StudentID }).ToList();
             ServiceLocatorSchool.StudentService.DeleteStudents(students);
         }
+
+        protected override void PrepareToDeleteInternal(IList<Student> entities)
+        {
+            var students = entities.Select(x => new Data.School.Model.Student { Id = x.StudentID }).ToList();
+            ServiceLocatorSchool.StudentService.PrepareToDelete(students);
+        }
     }
 }
