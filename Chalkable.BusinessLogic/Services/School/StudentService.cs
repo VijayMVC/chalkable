@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
         int GetEnrolledStudentsCount();
 
         Task<IList<StudentHealthCondition>> GetStudentHealthConditions(int studentId);
-        Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId);
+        Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId, int schoolYearId);
         byte[] DownloadStudentHealthFormDocument(int studentId, int healthFormId);
         Task VerifyStudentHealthForm(int studentId, int healthFormId);
         Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId);
@@ -168,11 +168,12 @@ namespace Chalkable.BusinessLogic.Services.School
                        || Context.Claims.HasPermission(ClaimInfo.VIEW_MEDICAL));
         }
 
-        public async Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId)
+        public async Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId, int schoolYearId)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             if (!await HasHealthFormAccess())
                 return new List<StudentHealthFormInfo>();
-            var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId);
+            var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId, schoolYearId, Context.PersonId.Value);
             //return StudentHealthFormInfo.Create(healthForms);
             return healthForms == null ? new List<StudentHealthFormInfo>() : StudentHealthFormInfo.Create(healthForms);
         }

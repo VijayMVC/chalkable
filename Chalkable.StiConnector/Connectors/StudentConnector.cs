@@ -89,9 +89,14 @@ namespace Chalkable.StiConnector.Connectors
             return Call<DisciplineDetailDashboard>(url, nvc);
         }
 
-        public async Task<IList<StudentHealthForm>> GetStudentHealthForms(int studentId)
+        public async Task<IList<StudentHealthForm>> GetStudentHealthForms(int studentId, int acadSessionId, int staffId)
         {
-            return await CallAsync<IList<StudentHealthForm>>($"{BaseUrl}health/students/{studentId}/healthForms");
+            var nvc = new NameValueCollection()
+            {
+                ["acadSessionId"] = acadSessionId.ToString(),
+                ["staffId"] = staffId.ToString()
+            };
+            return await CallAsync<IList<StudentHealthForm>>($"{BaseUrl}health/students/{studentId}/healthForms", nvc);
         }
         public async Task SetStudentHealthFormReadReceipts(int studentId, int studentHealthFormId, StudentHealthFormReadReceipt formReadReceipts)
         {

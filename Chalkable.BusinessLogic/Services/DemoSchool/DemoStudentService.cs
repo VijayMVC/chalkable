@@ -184,7 +184,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return StudentHealthConditionStorage.GetStudentHealthConditions(studentId);
         }
 
-        public Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId)
+        public Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId, int schoolYearId)
         {
             throw new NotImplementedException();
         }

@@ -85,7 +85,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
             var studentSummaryInfoTask = SchoolLocator.StudentService.GetStudentSummaryInfo(personId, syId);
             var stHealsConditionsTask = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
-            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(personId);
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(personId, syId);
 
             var studentDetailsInfo = SchoolLocator.StudentService.GetStudentDetailsInfo(personId, syId);
             
@@ -121,8 +121,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public async Task<ActionResult> VerifyStudentHealthForm(int studentId, int healthFormId)
         {
-            await SchoolLocator.StudentService.VerifyStudentHealthForm(studentId, healthFormId);
-            var res = await SchoolLocator.StudentService.GetStudentHealthForms(studentId);
+            var task = SchoolLocator.StudentService.VerifyStudentHealthForm(studentId, healthFormId);
+            var currentSchoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYearByStudent(studentId);
+            await task;
+            var res = await SchoolLocator.StudentService.GetStudentHealthForms(studentId, currentSchoolYear.Id);
             return Json(StudentHealthFormViewData.Create(res));
         }
 
