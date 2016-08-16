@@ -76,7 +76,7 @@ namespace Chalkable.Web.Controllers
         private void SwitchToRole(CoreRole role)
         {
             var context = MasterLocator.UserService.SwitchToRole(role);
-            ChalkableAuthentication.SignIn(context, false);
+            ChalkableAuthentication.SignIn(context, false, context.LoginTimeOut);
         }
 
         public ActionResult LogOut()
@@ -175,7 +175,7 @@ namespace Chalkable.Web.Controllers
             var context = logOnAction(userService);
             if (context != null)
             {
-                ChalkableAuthentication.SignIn(context, false);
+                ChalkableAuthentication.SignIn(context, false, context.LoginTimeOut);
                 if (context.DeveloperId.HasValue && !DemoUserService.IsDemoUser(context))
                     DeveloperAuthentication.SignIn(context, remember);
             }

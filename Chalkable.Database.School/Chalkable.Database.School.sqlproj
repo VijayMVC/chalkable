@@ -369,6 +369,8 @@
     <Build Include="Stored Procedures\spAdjustLessonPlanDates.sql" />
     <Build Include="Stored Procedures\spAdjustSupplementalAnnouncementDates.sql" />
     <Build Include="Stored Procedures\spGetClassDays.sql" />
+    <Build Include="Tables\AppSetting.sql" />
+    <Build Include="User Defined Types\TAppSetting.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />

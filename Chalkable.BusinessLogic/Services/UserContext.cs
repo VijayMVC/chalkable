@@ -64,6 +64,7 @@ namespace Chalkable.BusinessLogic.Services
         public DateTime? SisTokenExpires { get; set; }
         public string SisApiVersion { get; set; }
         public string SisRedirectUrl { get; set; }
+        public int? LoginTimeOut { get; set; }
 
         [Ignore]
         public DateTime NowSchoolTime => DateTime.UtcNow.ConvertFromUtc(DistrictTimeZone ?? "UTC");
@@ -98,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services
             MasterConnectionString = Settings.MasterConnectionString;     
         }
 
-        public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId, int? personId, SchoolYear schoolYear = null, string sisRedirectUrl = null)
+        public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId, int? personId, int? loginTimeOut, SchoolYear schoolYear = null, string sisRedirectUrl = null)
             : this()
         {
             UserId = user.Id;
@@ -110,6 +111,7 @@ namespace Chalkable.BusinessLogic.Services
             RoleId = role.Id;
             DeveloperId = developerId;
             SisRedirectUrl = sisRedirectUrl;
+            LoginTimeOut = loginTimeOut;
             if (district != null)
             {
                 DistrictId = district.Id;
