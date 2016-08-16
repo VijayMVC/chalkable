@@ -54,9 +54,10 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 var image = masterLocator.ApplicationPictureService.GetPicture(app.BigPictureRef.Value, 170, 110);
                 appsImages.Add(app.Id, image);
             }
-
+            var fromDate = settings.StartDate ?? serviceLocator.Context.SchoolYearStartDate;
+            var toDate = settings.EndDate ?? serviceLocator.Context.SchoolYearEndDate;
             return FeedDetailsExportModel.Create(baseData.Person, baseData.SchoolName, baseData.SchoolYearName, serviceLocator.Context.NowSchoolTime, 
-                anns, baseData.Classes, baseData.DayTypes, baseData.Staffs, apps, appsImages);
+                fromDate, toDate,  anns, baseData.Classes, baseData.DayTypes, baseData.Staffs, apps, appsImages);
         }
 
     }

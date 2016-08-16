@@ -164,6 +164,7 @@
     <Compile Include="Model\Announcements\LessonPlan.cs" />
     <Compile Include="Model\Announcements\SisActivityCopyResult.cs" />
     <Compile Include="Model\Announcements\SupplementalAnnouncement.cs" />
+    <Compile Include="Model\AppSetting.cs" />
     <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\AttendanceMonth.cs" />
     <Compile Include="Model\AttendanceReason.cs" />

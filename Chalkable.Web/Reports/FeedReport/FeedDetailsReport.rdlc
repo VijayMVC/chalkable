@@ -38,7 +38,7 @@
                           <rd:DefaultName>Textbox24</rd:DefaultName>
                           <Top>0.95014in</Top>
                           <Left>0.15658in</Left>
-                          <Height>0.125in</Height>
+                          <Height>0.1375in</Height>
                           <Width>7.24768in</Width>
                           <Style>
                             <Border>
@@ -1472,6 +1472,14 @@
           <DataField>ExecutionDateTime</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="StartReportDate">
+          <DataField>StartReportDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="EndReportDate">
+          <DataField>EndReportDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
         <Field Name="IsAdminAnnouncement">
           <DataField>IsAdminAnnouncement</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
@@ -1486,6 +1494,10 @@
         </Field>
         <Field Name="ClassName">
           <DataField>ClassName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ClassNumber">
+          <DataField>ClassNumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Owners">
@@ -1512,6 +1524,10 @@
           <DataField>AnnouncementType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="CategoryName">
+          <DataField>CategoryName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="StartDate">
           <DataField>StartDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
@@ -1528,6 +1544,18 @@
           <DataField>IsHidden</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
+        <Field Name="TotalPoint">
+          <DataField>TotalPoint</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="HasStandards">
+          <DataField>HasStandards</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="HasAttachments">
+          <DataField>HasAttachments</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
         <Field Name="AnnouncementDescription">
           <DataField>AnnouncementDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -1540,10 +1568,6 @@
           <DataField>ShowScoreSettings</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
-        <Field Name="TotalPoint">
-          <DataField>TotalPoint</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
         <Field Name="WeightAddition">
           <DataField>WeightAddition</DataField>
           <rd:TypeName>System.Double</rd:TypeName>
@@ -1551,14 +1575,6 @@
         <Field Name="WeigntMultiplier">
           <DataField>WeigntMultiplier</DataField>
           <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="HasStandards">
-          <DataField>HasStandards</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
-        </Field>
-        <Field Name="HasAttachments">
-          <DataField>HasAttachments</DataField>
-          <rd:TypeName>System.Boolean</rd:TypeName>
         </Field>
         <Field Name="HasAttributes">
           <DataField>HasAttributes</DataField>
@@ -1619,6 +1635,7 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>NewDataSet</rd:DataSetName>
+        <rd:SchemaPath>D:\Work\chalkable-v1\Chalkable.Web\Reports\FeedReport\FeedDetailsDataSet.xsd</rd:SchemaPath>
         <rd:TableName>FeedDetailsExportModel</rd:TableName>
       </rd:DataSetInfo>
     </DataSet>

@@ -215,6 +215,7 @@
     <Compile Include="SyncModel\Address.cs" />
     <Compile Include="SyncModel\AlphaGrade.cs" />
     <Compile Include="SyncModel\AlternateScore.cs" />
+    <Compile Include="SyncModel\AppSetting.cs" />
     <Compile Include="SyncModel\AttendanceCalendar.cs" />
     <Compile Include="SyncModel\AttendanceCalendarDay.cs" />
     <Compile Include="SyncModel\AttendanceMonth.cs" />

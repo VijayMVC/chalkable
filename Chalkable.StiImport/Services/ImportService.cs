@@ -43,7 +43,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             this.districtId = districtId;
             var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
-            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
             
         }
 
@@ -54,7 +54,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             this.districtId = districtId;
             var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo = new UserLoginInfo() };
-            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
 
         }
 

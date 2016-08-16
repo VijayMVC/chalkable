@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services
         public static IServiceLocatorMaster CreateMasterSysAdmin()
         {
             var admin = new User {Id = Guid.Empty, Login = "Virtual system admin", LoginInfo = new UserLoginInfo()};
-            var context = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            var context = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
             var serviceLocator = new ServiceLocatorMaster(context);
             return serviceLocator;
         }
@@ -76,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services
                 if (developer != null)
                     developerId = developer.Id;
             }
-            return new UserContext(user, role, user.District, school, developerId, personId, schoolYear);
+            return new UserContext(user, role, user.District, school, developerId, personId, null, schoolYear);
         }
 
         public static IServiceLocatorSchool CreateSchoolLocator(UserContext context)
