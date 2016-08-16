@@ -42,5 +42,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var ids = entities.Select(x => (int)x.AbsenceReasonID).ToList();
             ServiceLocatorSchool.AttendanceReasonService.Delete(ids);
         }
+
+        protected override void PrepareToDeleteInternal(IList<AbsenceReason> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

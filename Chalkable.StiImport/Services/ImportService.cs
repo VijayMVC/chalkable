@@ -43,7 +43,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             this.districtId = districtId;
             var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
-            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
             
         }
 
@@ -54,7 +54,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             this.districtId = districtId;
             var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo = new UserLoginInfo() };
-            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
 
         }
 
@@ -336,7 +336,12 @@ namespace Chalkable.StiImport.Services
                 if (sr.Updated != null)
                     models.AddRange(sr.Updated.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Update, x)));
                 if (sr.Deleted != null)
-                    models.AddRange(sr.Deleted.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Delete, x)));
+                    foreach (var syncModel in sr.Deleted)
+                    {
+                        models.Add(SyncModelWrapper.Create(syncModel.SYS_CHANGE_VERSION, PersistOperationType.Delete, syncModel));
+                        if (fkProps.Count != 0)
+                            models.Add(SyncModelWrapper.Create(0, PersistOperationType.PrepareToDelete, syncModel));
+                    }
             }
             models.Sort();
             IList<SyncModelWrapper> batch = new List<SyncModelWrapper>();

@@ -318,5 +318,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public void PrepareToDelete(IList<Student> students)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PrepareToDeleteStudentSchools(IList<StudentSchool> studentSchools)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

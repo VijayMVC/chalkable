@@ -51,5 +51,11 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var assignments = entities.Select(Selector).ToList();
             ServiceLocatorSchool.SchoolYearService.UnassignStudents(assignments);
         }
+
+        protected override void PrepareToDeleteInternal(IList<StudentAcadSession> entities)
+        {
+            var assignments = entities.Select(Selector).ToList();
+            ServiceLocatorSchool.SchoolYearService.PrepareToDeleteStudentSchoolYears(assignments);
+        }
     }
 }

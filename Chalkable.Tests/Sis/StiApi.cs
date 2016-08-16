@@ -63,7 +63,7 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void SyncTest()
         {
-            var items = GetTableData<StudentScheduleTerm>(Guid.Parse("44AA3870-5E6C-4FF9-827E-A2AE09B71F0D"), 10522218);
+            var items = GetTableData<UserSchool>(Guid.Parse("10961A71-0C57-4F69-9BC6-7988DABD992E"), 36000413);
             Print(items.Inserted);
             Print(items.Updated);
             Print(items.Deleted);
@@ -102,7 +102,7 @@ namespace Chalkable.Tests.Sis
         {
             var districtIds = new List<Guid>
             {
-                Guid.Parse("7eaf8b84-f4b4-49a1-b39a-14083161347f"),
+                Guid.Parse("6c801aac-4d1c-4a70-8e06-d82ef6846a31"),
                 //Guid.Parse("aa707676-1548-4cdc-af84-2a15257c95bd"),
                 //Guid.Parse("53d7cbd7-cd3e-4a50-9258-8c1f6daedb61"),
                 //Guid.Parse("6c801aac-4d1c-4a70-8e06-d82ef6846a31"),
@@ -154,7 +154,7 @@ namespace Chalkable.Tests.Sis
         {
             var ids = new List<Guid>
             {
-                Guid.Parse("6c801aac-4d1c-4a70-8e06-d82ef6846a31"),
+                Guid.Parse("667416FC-7ECE-40BB-B931-1273C495280D"),
                 //Guid.Parse("1ebcbf07-bcad-4c75-b692-6298a164f9b9"),
                 //Guid.Parse("42bf4a08-5a1a-488a-9a41-812421e21df8"),
                 //Guid.Parse("76ec8972-ca7a-4faf-adb2-f9c48adfeed6"),
@@ -190,12 +190,12 @@ namespace Chalkable.Tests.Sis
         {
             var ids = new List<Guid>
             {
-                Guid.Parse("12628575-A1F2-4DB7-B421-D2DE7DAC343F"),
-                Guid.Parse("E094804D-D775-42C9-949F-4617C9E6299C"),
-                Guid.Parse("428CA1B1-BC79-4096-981A-955EF5B2A74B"),
+                Guid.Parse("8DC08D3A-CC63-4063-9427-132898835057"),
+                //Guid.Parse("E094804D-D775-42C9-949F-4617C9E6299C"),
+                //Guid.Parse("428CA1B1-BC79-4096-981A-955EF5B2A74B"),
 
-                Guid.Parse("0972D700-06C4-49F9-9B69-AD76E07A76F8"),
-                Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
+                //Guid.Parse("0972D700-06C4-49F9-9B69-AD76E07A76F8"),
+                //Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
                 //Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
 
 

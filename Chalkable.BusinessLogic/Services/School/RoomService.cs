@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Room WhereIsPerson(int personId, DateTime dateTime);
         Room GetRoomById(int id);
         Homeroom GetStudentHomeroomOrNull(int studentId, int schoolYearId);
+        void PrepareToDeleteHomerooms(IList<Homeroom> homerooms);
     }
 
     //TODO: needs tests 
@@ -69,6 +70,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 return homeroom;
             }
+        }
+
+        public void PrepareToDeleteHomerooms(IList<Homeroom> homerooms)
+        {
+            DoUpdate(u => new DataAccessBase<Homeroom>(u).PrepareToDelete(homerooms));
         }
 
         public void DeleteRooms(IList<Room> rooms)

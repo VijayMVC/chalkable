@@ -45,5 +45,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.GradingScaleService.DeleteGradingScaleRanges(gsr);
         }
+
+        protected override void PrepareToDeleteInternal(IList<GradingScaleRange> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

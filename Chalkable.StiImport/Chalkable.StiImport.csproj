@@ -161,6 +161,7 @@
     <Compile Include="Services\SyncModelAdapters\AddressAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\AlphaGradeAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\AlternateScoreAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\AppSettingAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\AttendanceMonthAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\BellScheduleAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\CalendarDayAdapter.cs" />
@@ -201,6 +202,8 @@
     <Compile Include="Services\SyncModelAdapters\StaffSchoolAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StandardAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StandardizedTestAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StandardizedTestComponentAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StandardizedTestScoreTypeAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StandardSubjectAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentAcadSessionAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentAdapter.cs" />

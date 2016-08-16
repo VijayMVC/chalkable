@@ -36,5 +36,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var mps = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassService.DeleteMarkingPeriodClasses(mps);
         }
+
+        protected override void PrepareToDeleteInternal(IList<SectionTerm> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -30,5 +30,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             //Not support delete
         }
+
+        protected override void PrepareToDeleteInternal(IList<District> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

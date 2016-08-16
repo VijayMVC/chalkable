@@ -26,6 +26,6 @@ namespace Chalkable.StiConnector.SyncModel
         public Guid DistrictGuid { get; set; }
         public bool IsRetained { get; set; }
 
-        public override int DefaultOrder => 14;
+        public override int DefaultOrder => 22;
     }
 }

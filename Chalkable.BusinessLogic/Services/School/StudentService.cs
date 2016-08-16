@@ -45,6 +45,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId);
         IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null);
+        void PrepareToDelete(IList<Student> students);
+        void PrepareToDeleteStudentSchools(IList<StudentSchool> studentSchools);
     }
 
     public class StudentService : SisConnectedService, IStudentService
@@ -345,6 +347,16 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 return StudentDetailsInfo.Create(studentsDetails, ethnicities, languages, countries, counselors, Context.SchoolLocalId.Value);
             }
+        }
+
+        public void PrepareToDelete(IList<Student> students)
+        {
+            DoUpdate(u => new StudentDataAccess(u).PrepareToDelete(students));
+        }
+
+        public void PrepareToDeleteStudentSchools(IList<StudentSchool> studentSchools)
+        {
+            DoUpdate(u => new DataAccessBase<StudentSchool>(u).PrepareToDelete(studentSchools));
         }
     }
 }
