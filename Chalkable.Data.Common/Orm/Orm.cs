@@ -307,6 +307,13 @@ namespace Chalkable.Data.Common.Orm
                         {
                             fieldsToReset.Add(propertyInfo.Name);
                         }
+                    else if (propertyInfo.PropertyType == typeof (string))
+                    {
+                        foreach (var obj in objs)
+                        {
+                            propertyInfo.SetValue(obj, string.Empty);
+                        }
+                    }
                 }
             if (fieldsToReset.Count == 0)
                 return null;
