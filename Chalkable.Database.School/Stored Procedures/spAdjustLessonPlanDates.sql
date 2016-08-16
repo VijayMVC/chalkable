@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[spAdjustLessonPlanDates]
-	@lpIds	   TInt32 ReadOnly,
+	@ids	   TInt32 ReadOnly,
 	@startDate datetime2,
 	@classId   int
 As
