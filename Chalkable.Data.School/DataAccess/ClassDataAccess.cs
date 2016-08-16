@@ -228,9 +228,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<Date> GetDays(int classId)
         {
-            using (
-                var reader = ExecuteStoredProcedureReader("spGetClassDays",
-                    new Dictionary<string, object> {["classId"] = classId}))
+            using (var reader = ExecuteStoredProcedureReader("spGetClassDays", new Dictionary<string, object> {["classId"] = classId}))
             {
                 return reader.ReadList<Date>();
             }
