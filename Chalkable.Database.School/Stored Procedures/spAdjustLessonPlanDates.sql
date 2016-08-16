@@ -36,7 +36,7 @@ Insert Into @toAdjust
 				and IsSchoolDay = 1
 			    and [Date].SchoolYearRef = @schoolYearId
 		) As [TotalSchoolDays]
-	From LessonPlan Where [Id] in(Select * From @lpIds)
+	From LessonPlan Where [Id] in(Select * From @ids)
 
 Declare @minAnnDate datetime2;
 Set		@minAnnDate = (Select Min([StartDate]) From @toAdjust);
