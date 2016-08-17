@@ -1,0 +1,54 @@
+-var user = self.getUser()
+-var panoramaInfo = user.getPanoramaInfo()
+-var statusData = self.getStatusData()
+
+.profile-page.panorama-page.student-panorama.info-view
+    h2.page-title=Msg.Student_profile
+
+    +ProfileTopBar(self, 'panorama')
+    .summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(user, 140, !self.getUserRole().isStudent())
+            #info-panel.central-block.panel-block
+                displayName =user.getDisplayName() || user.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                .status
+                    div(class=statusData.status, data-tooltip=statusData.statusName)
+                    |#{user.getCurrentClassName()}
+                    if(user.getCurrentClassName() && user.getRoomName() && user.getCurrentClassName().toLowerCase() != 'no class now')
+                        |&nbsp;- #{user.getRoomName()}
+                .sections-info
+                    .section-data
+                        .info-title Phone
+                        .data-info= (user.getPhones() || []).map(function(item){return item.getValue()}).join(',')
+                    .section-data
+                        .info-title Address
+                        .data-info= user.getAddress() && user.getAddress().getValue()
+                    .section-data
+                        .info-title Email
+                        .data-info= user.getEmail()
+                    .section-data
+                        .info-title Grade
+                        .data-info= user.getGradeLevel() && user.getGradeLevel().getName()
+                    .section-data
+                        .info-title Homeroom
+                        .data-info= user.getHomeRoom() && user.getHomeRoom().getName()
+                    .section-data
+                        .info-title Counselor
+                        .data-info= user.getCounselor() && user.getCounselor().getDisplayName()
+            #glance-block-panel.right-block.panel-block
+                .glance-container
+                    if user.getAttendanceBox()
+                        +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, null, true, true)
+                    if user.getDisciplineBox()
+                        +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
+                    if user.getGradesBox()
+                        +GlanceBox(null, null, self.buildGradesGlanceBoxData(), null, null, true, true)
+        +ActionForm('students', 'panoramaSubmit').student-panorama-form.no-working
+            +Hidden('studentId', user.getId())
+            +CloseOpen('Filters', !panoramaInfo.isShowFilters())
+                +PanoramaFilter(panoramaInfo.getSchoolYears(), panoramaInfo.getStandardizedTests(), panoramaInfo.getFilterSettings(), 'students', 'restorePanorama' ,[user.getId()])
+            .panorama-stats
+                +RenderWith(user, chlk.templates.student.StudentProfilePanoramaStatsTpl)
