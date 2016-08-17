@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -38,11 +37,11 @@ namespace Chalkable.Web.Controllers
         }
         
         [AuthorizationFilter("Student")]
-        public ActionResult PracticeGrades(int studentId, int classId, int? standardId)
+        public async Task<ActionResult> PracticeGrades(int studentId, int classId, int? standardId)
         {
-            var stadnards = SchoolLocator.StandardService.GetStandards(classId, null, null);
             var practiceGrades = SchoolLocator.PracticeGradeService.GetPracticeGradesDetails(classId, studentId, standardId);
-            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards));
+            var stadnards = SchoolLocator.StandardService.GetStandards(classId, null, null);
+            return Json(PracticeGradeGridViewData.Create(await practiceGrades, stadnards));
         }
         
         [AuthorizationFilter("Student")]

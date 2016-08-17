@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
@@ -63,9 +64,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public IList<PracticeGradesDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
+        public async Task<IList<PracticeGradesDetailedInfo>> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
         {
-
+            await Task.Delay(0);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
             if (standardId.HasValue)
                 standards = standards.Where(x => x.Id == standardId).ToList();
