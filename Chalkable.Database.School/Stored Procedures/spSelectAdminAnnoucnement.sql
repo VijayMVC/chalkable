@@ -18,7 +18,8 @@ Begin
 		(Select COUNT(*) from AnnouncementAttachment where AnnouncementRef = t.Id) as AttachmentsCount,
 		(select count(*) from vwAnnouncementAttachment where AnnouncementAttachment_AnnouncementRef = t.Id  and Attachment_PersonRef = t.AdminRef) as OwnerAttachmentsCount,
 		0 as StudentsCountWithAttachments, --todo get student from recipients table
-		(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount--,
+		(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount,
+		(Select COUNT(*) From AnnouncementStandard Where AnnouncementRef = t.Id) as StandardsCount--,
 		--(Select ' ' + Attachment_Name From vwAnnouncementAttachment Where vwAnnouncementAttachment.AnnouncementAttachment_AnnouncementRef = t.Id) as AttachmentNames
 	From @adminAnnouncementT t join @annOrderTable sortT
 		On t.Id = sortT.Id
@@ -35,7 +36,8 @@ Begin
 		(Select COUNT(*) from AnnouncementAttachment where AnnouncementRef = t.Id) as AttachmentsCount,
 		(select count(*) from vwAnnouncementAttachment where AnnouncementAttachment_AnnouncementRef = t.Id  and Attachment_PersonRef = t.AdminRef) as OwnerAttachmentsCount,
 		0 as StudentsCountWithAttachments, --todo get student from recipients table
-		(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount--,
+		(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount,
+		(Select COUNT(*) From AnnouncementStandard Where AnnouncementRef = t.Id) as StandardsCount--,
 		--(Select ' ' + Attachment_Name From vwAnnouncementAttachment Where vwAnnouncementAttachment.AnnouncementAttachment_AnnouncementRef = t.Id) as AttachmentNames
 	From @adminAnnouncementT t
 End
