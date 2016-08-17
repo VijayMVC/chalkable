@@ -34,6 +34,8 @@ NAMESPACE('chlk.models.standard', function () {
         'Breadcrumb', [
             String, 'name',
 
+            String, 'description',
+
             chlk.models.standard.ItemType, 'type',
 
             chlk.models.id.StandardSubjectId, 'subjectId',
@@ -56,12 +58,13 @@ NAMESPACE('chlk.models.standard', function () {
 
             chlk.models.id.ABCourseId, 'courseId',
 
-            [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId,
+            [[chlk.models.standard.ItemType, String, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId,
                 chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function $(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
+            function $(type, name, description_, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
                 BASE();
                 this.setType(type);
                 this.setName(name);
+                description_ && this.setDescription(description_);
                 subjectId_ && this.setSubjectId(subjectId_);
                 standardId_ && this.setStandardId(standardId_);
                 authorityId_ && this.setAuthorityId(authorityId_);

@@ -49,21 +49,21 @@ NAMESPACE('chlk.controllers', function () {
                 return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
             },
 
-            [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
+            [[chlk.models.standard.ItemType, String, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
                 chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function showChildItemsAction(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
-                return this.showItemsAction(false, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_);
+            function showChildItemsAction(type, name, description_, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
+                return this.showItemsAction(false, type, name, description_, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_);
             },
 
-            [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
+            [[chlk.models.standard.ItemType, String, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
                 chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function showForBreadcrumbAction(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
-                return this.showItemsAction(true, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_);
+            function showForBreadcrumbAction(type, name, description_, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
+                return this.showItemsAction(true, type, name, description_, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_);
             },
 
-            [[Boolean, chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
+            [[Boolean, chlk.models.standard.ItemType, String, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
                 chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function showItemsAction(isBreadcrumb, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
+            function showItemsAction(isBreadcrumb, type, name, description_, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
                 var res = this.setItemsByArgs.apply(this, arguments), pickerType, BCCount, BCType, AType;
 
                 switch (type){
@@ -109,7 +109,7 @@ NAMESPACE('chlk.controllers', function () {
                 if(isBreadcrumb){
                     breadcrumbs = breadcrumbs.slice(0, BCCount);
                 }else{
-                    var breadcrumb = new chlk.models.standard.Breadcrumb(type, name, subjectId_, standardId_, authorityId_, documentId_,
+                    var breadcrumb = new chlk.models.standard.Breadcrumb(type, name, description_, subjectId_, standardId_, authorityId_, documentId_,
                         subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_);
                     breadcrumbs.push(breadcrumb);
                 }
@@ -127,9 +127,9 @@ NAMESPACE('chlk.controllers', function () {
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'list-update');
             },
 
-            [[Boolean, chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
+            [[Boolean, chlk.models.standard.ItemType, String, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
                 chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function setItemsByArgs(isBreadcrumb, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
+            function setItemsByArgs(isBreadcrumb, type, name, description_, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
                 var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []),
                     options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null), res;
 
@@ -138,7 +138,7 @@ NAMESPACE('chlk.controllers', function () {
                         res = this.getSubjectItems(options);break;
                     case chlk.models.standard.ItemType.SUBJECT:
                     case chlk.models.standard.ItemType.STANDARD:
-                        res = this.getStandards(options, standardIds, subjectId_, standardId_);break;
+                        res = this.getStandards(options, standardIds, subjectId_, standardId_, name, description_);break;
                     case chlk.models.standard.ItemType.AB_MAIN:
                         res = this.getAuthoritiesItems(options);break;
                     case chlk.models.standard.ItemType.AUTHORITY:
@@ -151,14 +151,14 @@ NAMESPACE('chlk.controllers', function () {
                         res = this.getStandardCourseItems(options, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_);break;
                     case chlk.models.standard.ItemType.STANDARD_COURSE:
                     case chlk.models.standard.ItemType.AB_STANDARD:
-                        res = this.getABStandardsItems(options, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_);break;
+                        res = this.getABStandardsItems(options, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, name, description_);break;
                     case chlk.models.standard.ItemType.TOPIC_MAIN:
                         res = this.getSubjectDocumentsItems(options, null, null, true);break;
                     case chlk.models.standard.ItemType.TOPIC_SUBJECT:
                         res = this.getTopicCourses(options, subjectDocumentId_);break;
                     case chlk.models.standard.ItemType.TOPIC_COURSE:
                     case chlk.models.standard.ItemType.TOPIC:
-                        res = this.getTopics(options, subjectDocumentId_, courseId_, topicId_);break;
+                        res = this.getTopics(options, subjectDocumentId_, courseId_, topicId_, name);break;
                 }
 
                 return res;
@@ -173,11 +173,14 @@ NAMESPACE('chlk.controllers', function () {
                     }, this);
             },
 
-            [[chlk.models.common.AttachOptionsViewData, chlk.models.id.ABSubjectDocumentId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function getTopics(options, subjectDocumentId_, courseId_, topicId_){
+            [[chlk.models.common.AttachOptionsViewData, chlk.models.id.ABSubjectDocumentId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId, String]],
+            function getTopics(options, subjectDocumentId_, courseId_, topicId_, name){
                 return this.ABStandardService.getTopics(subjectDocumentId_, courseId_, topicId_)
                     .attach(this.validateResponse_())
                     .then(function(items){
+                        if(topicId_ && topicId_.valueOf())
+                            items.unshift(new chlk.models.academicBenchmark.Topic(topicId_, name, true));
+
                         return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.TOPIC, options);
                     }, this);
             },
@@ -232,11 +235,15 @@ NAMESPACE('chlk.controllers', function () {
                     }, this);
             },
 
-            [[chlk.models.common.AttachOptionsViewData, chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId]],
-            function getABStandardsItems(options, authorityId, documentId, subjectDocumentId, gradeLevelCode_, standardCourseId_, ABStandardId_){
+            [[chlk.models.common.AttachOptionsViewData, chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String,
+                chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, String, String]],
+            function getABStandardsItems(options, authorityId, documentId, subjectDocumentId, gradeLevelCode_, standardCourseId_, ABStandardId_, name, description_){
                 return this.ABStandardService.getStandards(authorityId, documentId, subjectDocumentId, gradeLevelCode_, standardCourseId_, ABStandardId_, true)
                     .attach(this.validateResponse_())
                     .then(function(items){
+                        if(ABStandardId_ && ABStandardId_.valueOf())
+                            items.unshift(new chlk.models.academicBenchmark.Standard(ABStandardId_, name, description_, true));
+
                         return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.AB_STANDARD, options);
                     }, this);
             },
@@ -250,10 +257,13 @@ NAMESPACE('chlk.controllers', function () {
                     }, this);
             },
 
-            function getStandards(options, standardIds, subjectId, standardId_){
+            function getStandards(options, standardIds, subjectId, standardId_, name, description_){
                 return this.standardService.getStandards(options.getClassId(), subjectId, standardId_)
                     .attach(this.validateResponse_())
                     .then(function(standards){
+                        if(standardId_ && standardId_.valueOf())
+                            standards.unshift(new chlk.models.standard.Standard(standardId_, name, null, description_, true));
+
                         return new chlk.models.standard.StandardItemsListViewData(standards, chlk.models.standard.ItemType.STANDARD, options);
                     }, this);
             },

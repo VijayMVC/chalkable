@@ -35,6 +35,19 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
         chlk.models.academicBenchmark.Document, 'document',
         chlk.models.academicBenchmark.SubjectDocument, 'subject',
 
+        [[chlk.models.id.ABStandardId, String, String, Boolean]],
+        function $(standardId_, name_, description_, deepest_){
+            BASE();
+            if(standardId_)
+                this.setStandardId(standardId_);
+            if(name_)
+                this.setName(name_);
+            if(description_)
+                this.setDescription(description_);
+            if(deepest_)
+                this.setDeepest(deepest_);
+        },
+
         function getName(){
             return this.getCode();
         },

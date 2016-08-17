@@ -129,7 +129,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 this.dom.find(node.getData('cnt')).removeClass('x-hidden');
 
                 if(node.hasClass('browse-link'))
-                    this.dom.find('.selected-item:not(.pressed)').removeSelf()
+                    this.dom.find('.selected-item:not(.selected)').removeSelf()
             },
 
             [ria.mvc.DomEventBind('click', '.able-add-item:not(.disabled)')],
@@ -139,7 +139,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     ids = val ? val.split(',') : [],
                     currentId = node.getData('id').toString();
 
-                if(node.hasClass('pressed')){
+                if(node.hasClass('selected')){
                     ids = ids.filter(function(id){return id != currentId});
                     this.dom.find('.selected-item[data-id=' + currentId + ']').removeSelf();
                 }
@@ -172,7 +172,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
                 idsNode.setValue(ids.join(','));
 
-                node.toggleClass('pressed');
+                node.toggleClass('selected');
 
                 this.setSelectedText(ids);
             },
@@ -183,16 +183,16 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 var idsNode = this.dom.find('.standard-ids'), val = idsNode.getValue(),
                     ids = val ? val.split(',') : [],
                     currentId = node.getData('id').toString(),
-                    isRemove = node.hasClass('pressed'),
+                    isRemove = node.hasClass('selected'),
                     itemsWithCurrentId = this.dom.find('.item-block[data-id=' + currentId + ']');
 
                 if(isRemove){
                     ids = ids.filter(function(id){return id != currentId});
-                    itemsWithCurrentId.removeClass('pressed');
+                    itemsWithCurrentId.removeClass('selected');
                 }
                 else{
                     ids.push(currentId);
-                    itemsWithCurrentId.addClass('pressed');
+                    itemsWithCurrentId.addClass('selected');
                 }
 
 
@@ -236,9 +236,9 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     var idsNode = this.dom.find('.standard-ids'), val = idsNode.getValue(),
                         ids = val ? val.split(',') : [], onlyOne = this.isOnlyOne();
 
-                    this.dom.find('.able-add-item').forEach(function(node){
+                    (this.dom.find('.can-be-highlighted') || []).forEach(function(node){
                         if(ids.indexOf(node.getData('id').toString()) > -1){
-                            node.addClass('pressed');
+                            node.addClass('selected');
                             if(onlyOne)
                                 node.addClass('disabled');
                         }
