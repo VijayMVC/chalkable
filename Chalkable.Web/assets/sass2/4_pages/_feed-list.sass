@@ -41,10 +41,19 @@
     .adjust-buttons-block
       display: none
 
-  &.copy-mode, &.adjust-mode
+  &.adjust-mode
     .feed-item
       .check-cnt
         display: inline-block
+
+  &.copy-mode
+    .feed-item
+      .check-cnt:not(.supplemental)
+        display: inline-block
+
+  &.copy-mode, &.adjust-mode
+    .feed-item
+      .check-cnt
         position: absolute
         left: 0
         height: 80px

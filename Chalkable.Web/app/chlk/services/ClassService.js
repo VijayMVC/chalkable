@@ -173,6 +173,13 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId]],
+            ria.async.Future, function getScheduledDays(classId) {
+                return this.get('Class/Days.json', ArrayOf(chlk.models.common.ChlkDate), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
             ria.async.Future, function getSummary(classId) {
                 return this.get('Class/Summary.json', chlk.models.classes.ClassSummary, {
                     classId: classId.valueOf()

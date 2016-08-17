@@ -101,6 +101,8 @@ NAMESPACE('chlk.models.feed', function () {
 
             ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
 
+            ArrayOf(chlk.models.common.ChlkDate), 'classScheduledDays',
+
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
             chlk.models.announcement.FeedSortTypeEnum, 'sortType',
