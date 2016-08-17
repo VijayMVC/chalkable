@@ -174,7 +174,6 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!await HasHealthFormAccess())
                 return new List<StudentHealthFormInfo>();
             var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId, schoolYearId, Context.PersonId.Value);
-            //return StudentHealthFormInfo.Create(healthForms);
             return healthForms == null ? new List<StudentHealthFormInfo>() : StudentHealthFormInfo.Create(healthForms);
         }
 
