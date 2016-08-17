@@ -76,10 +76,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
             CategoryName = GetCategoryName(announcement);
             Complete = announcement.Complete;
 
-            HasStandards = true;
-            HasAttachments = true;
-            //HasStandards = announcement.AnnouncementStandards.Count > 0;
-            //HasAttachments = announcement.AnnouncementAttachments.Count + announcement.AnnouncementApplications.Count > 0;
+            HasStandards = announcement.StandardsCount > 0;
+            HasAttachments = announcement.AttachmentNames.Count + announcement.ApplicationCount > 0;
 
             if (announcement.ClassAnnouncementData != null)
             {
