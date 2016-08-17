@@ -36,6 +36,8 @@ REQUIRE('chlk.models.student.StudentProfileDisciplineViewData');
 REQUIRE('chlk.models.student.StudentProfileSummaryViewData');
 REQUIRE('chlk.models.student.StudentProfileInfoViewData');
 REQUIRE('chlk.models.student.StudentProfileGradingViewData');
+REQUIRE('chlk.models.student.VerifyHealthFormViewData');
+
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
@@ -83,7 +85,7 @@ NAMESPACE('chlk.controllers', function (){
             [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
             function verifyHealthFormDialogWidgetAction(requestId, studentId, healthFormId){
                 var url = this.studentService.getHealthFormDocumentUri(studentId, healthFormId),
-                    model = new chlk.models.common.SimpleObject(url);
+                    model = new chlk.models.student.VerifyHealthFormViewData(requestId, studentId, healthFormId, url);
                 return this.ShadeView(chlk.activities.profile.VerifyHealthFormDialog, ria.async.DeferredData(model, 100));
             },
 

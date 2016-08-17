@@ -60,11 +60,11 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
             String, function getHealthFormDocumentUri(studentId, healthFormId) {
-                return "https://local.chalkable.com/Content/sample-3pp.pdf";
-                /*return this.getUrl('Student/DownloadHealthFormDocument', {
+                //return "https://local.chalkable.com/Content/sample-3pp.pdf";
+                return this.getUrl('Student/DownloadHealthFormDocument', {
                     studentId: studentId.valueOf(),
                     healthFormId: healthFormId.valueOf()
-                });*/
+                });
             },
 
             [[chlk.models.id.SchoolPersonId]],
