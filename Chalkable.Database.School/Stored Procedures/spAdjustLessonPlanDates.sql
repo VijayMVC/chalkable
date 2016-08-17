@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[spAdjustLessonPlanDates]
 	@ids	   TInt32 ReadOnly,
+
 	@startDate datetime2,
 	@classId   int
 As
@@ -55,17 +56,20 @@ From @toAdjust lp
 
 --Getting last school day of School Year
 Declare @schoolYearEndDate datetime2;
+Declare @schoolYearStartDate datetime2;
 Set		@schoolYearEndDate = (Select Max([day]) From @classDays)
+Set		@schoolYearStartDate = (Select Min([day]) From @classDays)
 
---Lps where EndDate is out of School Year date range
-Declare		@LPsOutOfSchoolYear TInt32;
-Insert Into @LPsOutOfSchoolYear
+--Lps where EndDate is out of School Year end date
+Declare		@LPsOutOfSchoolYearEndDate TInt32;
+Insert Into @LPsOutOfSchoolYearEndDate
 	Select Id From @toAdjust Where EndDate > @schoolYearEndDate
 
---Fixing End and Start date for announcement
+--Fixing End and Start date for announcement 
+--if it is out of school year end date
 Update @toAdjust
 Set EndDate = @schoolYearEndDate
-Where Id in (Select * From @LPsOutOfSchoolYear)
+Where Id in (Select * From @LPsOutOfSchoolYearEndDate)
 
 Update @toAdjust
 Set StartDate =  IsNull((Select Min(x.[day]) From (
@@ -75,12 +79,38 @@ Set StartDate =  IsNull((Select Min(x.[day]) From (
 							order by [day] desc
 						 ) x
 						), EndDate)
-Where Id in(Select * From @LPsOutOfSchoolYear)
+Where Id in(Select * From @LPsOutOfSchoolYearEndDate)
+
+--Lps where StartDate is out of School Year start date
+Declare		@LPsOutOfSchoolYearStartDate TInt32;
+Insert Into @LPsOutOfSchoolYearStartDate
+	Select Id From @toAdjust Where StartDate < @schoolYearStartDate
+
+--Fixing End and Start date for announcement 
+--if it is out of school year start date
+Update @toAdjust
+Set StartDate =  @schoolYearStartDate
+Where Id in(Select * From @LPsOutOfSchoolYearStartDate)
+
+Update @toAdjust
+Set EndDate = IsNull((Select Max(x.[day]) From (
+							Select top(IIF(TotalSchoolDays = 0, 1, TotalSchoolDays)) [day] 
+							From @classDays cd 
+							Where cd.[day] >= StartDate
+							order by [day] asc
+						 ) x
+						), EndDate)
+Where Id in (Select * From @LPsOutOfSchoolYearStartDate)
+
+-------------------------
 
 Update LessonPlan
 Set LessonPlan.StartDate = t.StartDate,
 	LessonPlan.EndDate   = t.EndDate
 From  @toAdjust t
-Where LessonPlan.Id in(Select [Id] From @toAdjust)
+Where LessonPlan.Id = t.Id
+
 
 GO
+
+

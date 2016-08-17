@@ -233,24 +233,21 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             if (announcements == null || announcements.Count == 0)
                 return Json(true);
             
-            var adjustClassAnnsTask = Task.Factory.StartNew(() =>
-            {
+            var adjustClassAnnsTask = Task.Factory.StartNew(() => {
                 var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Class)
                     .Select(x => x.AnnouncementId).ToList();
 
                 SchoolLocator.ClassAnnouncementService.AdjustDates(ids, startDate, classId);
             });
 
-            var adjustLpsTask = Task.Factory.StartNew(() =>
-            {
+            var adjustLpsTask = Task.Factory.StartNew(() => {
                 var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.LessonPlan)
                     .Select(x => x.AnnouncementId).ToList();
 
                 SchoolLocator.LessonPlanService.AdjustDates(ids, startDate, classId);
             });
 
-            var adjustSuppAnnTask = Task.Factory.StartNew(() =>
-            {
+            var adjustSuppAnnTask = Task.Factory.StartNew(() => {
                 var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Supplemental)
                     .Select(x => x.AnnouncementId).ToList();
 
