@@ -274,10 +274,10 @@ namespace Chalkable.BusinessLogic.Services.School
             ConnectorLocator.GradebookConnector.PostStandards(classId, gradingPeriodId);
         }
 
+        //TODO make this method async 
         public StudentGrading GetStudentGradingSummary(int schoolYearId, int studentId)
         {
-            var gradingSummaryDashBoard = ConnectorLocator.GradingConnector.GetStudentGradingSummary(schoolYearId,
-                studentId);
+            var gradingSummaryDashBoard = ConnectorLocator.GradingConnector.GetStudentGradingSummary(schoolYearId, studentId);
 
             return new StudentGrading
             {
@@ -288,8 +288,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId)
         {
-            var gradingDetailsDashboard = ConnectorLocator.GradingConnector.GetStudentGradingDetails(schoolYearId,
-                studentId, gradingPeriodId);
+            var gradingDetailsDashboard = ConnectorLocator.GradingConnector.GetStudentGradingDetails(schoolYearId, studentId, gradingPeriodId);
 
             var mapper = MapperFactory.GetMapper<StudentAnnouncement, Score>();
             var studentAnnouncements = new List<StudentAnnouncement>();

@@ -194,6 +194,7 @@
     <Compile Include="Model\StandardizedTest.cs" />
     <Compile Include="Model\StudentAnnouncementApplicationMeta.cs" />
     <Compile Include="Model\StudentCustomAlertDetail.cs" />
+    <Compile Include="Model\StudentHealthCondition.cs" />
     <Compile Include="Model\SupplementalAnnouncementRecipient.cs" />
     <Compile Include="Model\SystemSetting.cs" />
     <Compile Include="Model\GradedItem.cs" />

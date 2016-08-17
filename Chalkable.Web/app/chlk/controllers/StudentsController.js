@@ -25,6 +25,7 @@ REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.activities.discipline.StudentDayDisciplinePopup');
 REQUIRE('chlk.activities.student.StudentProfileGradingPopup');
 REQUIRE('chlk.activities.student.StudentProfilePanoramaPage');
+REQUIRE('chlk.activities.profile.VerifyHealthFormDialog');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -35,6 +36,8 @@ REQUIRE('chlk.models.student.StudentProfileDisciplineViewData');
 REQUIRE('chlk.models.student.StudentProfileSummaryViewData');
 REQUIRE('chlk.models.student.StudentProfileInfoViewData');
 REQUIRE('chlk.models.student.StudentProfileGradingViewData');
+REQUIRE('chlk.models.student.VerifyHealthFormViewData');
+
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
@@ -68,6 +71,39 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.SchoolYearService, 'schoolYearService',
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            function verifyHealthFormDialogAction(studentId, healthFormId){
+                var res = this.WidgetStart('students', 'verifyHealthFormDialog', [studentId, healthFormId])
+                    .then(function(data){
+                        this.BackgroundUpdateView(chlk.activities.profile.StudentInfoPage, data);
+                    }, this)
+                    .attach(this.validateResponse_());
+                return null;
+            },
+
+            [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            function verifyHealthFormDialogWidgetAction(requestId, studentId, healthFormId){
+                var url = this.studentService.getHealthFormDocumentUri(studentId, healthFormId),
+                    model = new chlk.models.student.VerifyHealthFormViewData(requestId, studentId, healthFormId, url);
+                return this.ShadeView(chlk.activities.profile.VerifyHealthFormDialog, ria.async.DeferredData(model, 100));
+            },
+
+            [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            function verifyHealthFormAction(requestId, studentId, healthFormId){
+                var res = this.studentService.verifyStudentHealthForm(studentId, healthFormId)
+                    .then(function(forms){
+                        var model = new chlk.models.student.StudentInfo();
+                        model.setId(studentId);
+                        model.setHealthForms(forms);
+                        this.WidgetComplete(requestId, model);
+                        this.BackgroundCloseView(chlk.activities.profile.VerifyHealthFormDialog);
+                        return ria.async.BREAK;
+                    }, this)
+                    .attach(this.validateResponse_());
+
+                this.UpdateView(chlk.activities.profile.VerifyHealthFormDialog, res);
+            },
 
             [chlk.controllers.SidebarButton('people')],
             function indexStudentAction() {

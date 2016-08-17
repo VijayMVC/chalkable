@@ -29,6 +29,17 @@ NAMESPACE('chlk.templates.classes', function () {
                 return res.join(' | ');
             },
 
+            function getStudentTest(studentTests, test)
+            {
+                return studentTests.filter(function(item){
+                    return item.getStandardizedTest().getId() == test.getStandardizedTest().getId()
+                            && item.getComponent().getId() == test.getComponent().getId()
+                            && item.getScoreType().getId() == test.getScoreType().getId();
+
+                })[0];
+
+            },
+
             function getStudentChartOptions(test){
                 var data = [];
 

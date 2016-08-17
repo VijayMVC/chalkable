@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
-            , bool dropped, bool late, bool exempt, bool incomplete, bool commentWasChanged, GradingStyleEnum? gradingStyle = null);
+            , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
         AutoGrade SetAutoGrade(int announcementApplicationId, int? recepientId, string value);
         IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId);
         IList<AutoGrade> GetAutoGrades(int announcementApplicationId);
@@ -31,15 +31,21 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO : needs testing 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
-                                            bool late, bool exempt, bool incomplete, bool commentWasChanged, GradingStyleEnum? gradingStyle = null)
+                                            bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
             if(!ann.IsSubmitted)
                 throw new ChalkableException("Announcement is not submitted yet");
+
             if (!string.IsNullOrEmpty(value) && value.Trim() != "")
                 exempt = false;
+
             else value = null;
-            
+
+            //need this info, before we post data to iNow, for notification
+            Trace.Assert(ann.SisActivityId.HasValue);
+            var studentScoreBefore = ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, studentId);
+
             var stAnn = new StudentAnnouncement
             {
                 ExtraCredit = extraCredits,
@@ -63,9 +69,14 @@ namespace Chalkable.BusinessLogic.Services.School
 
             if (stAnn.AlternateScoreId.HasValue)
                 stAnn.AlternateScore = ServiceLocator.AlternateScoreService.GetAlternateScore(stAnn.AlternateScoreId.Value);
-            
-            if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value) && !(commentWasChanged && string.IsNullOrWhiteSpace(comment)))
+
+            //
+            var commentWasChanged = (!string.IsNullOrWhiteSpace(comment) && studentScoreBefore.Comment    != comment);
+            var scoreWasChanged =   (!string.IsNullOrWhiteSpace(value)   && studentScoreBefore.ScoreValue != value);
+
+            if (ann.VisibleForStudent && (commentWasChanged || scoreWasChanged))
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToStudent(announcementId, stAnn.StudentId);
+
             return stAnn;
         }
 

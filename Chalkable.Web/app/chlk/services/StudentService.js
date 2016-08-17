@@ -50,6 +50,23 @@ NAMESPACE('chlk.services', function () {
                            .then(function(model){return model.getItems();});
             },
 
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            ria.async.Future, function verifyStudentHealthForm(studentId, healthFormId) {
+                return this.get('Student/VerifyStudentHealthForm.json', ArrayOf(chlk.models.student.StudentHealthFormViewData), {
+                    studentId: studentId.valueOf(),
+                    healthFormId: healthFormId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            String, function getHealthFormDocumentUri(studentId, healthFormId) {
+                //return "https://local.chalkable.com/Content/sample-3pp.pdf";
+                return this.getUrl('Student/DownloadHealthFormDocument', {
+                    studentId: studentId.valueOf(),
+                    healthFormId: healthFormId.valueOf()
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(personId) {
                 return this.get('Student/Info.json', chlk.models.student.StudentInfo, {

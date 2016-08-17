@@ -395,6 +395,7 @@
     <Compile Include="Models\HomeroomViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\StudentPanoramaViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentDetailsViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentHealthFormViewData.cs" />
     <Compile Include="Models\Settings\AdminPanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\ClassProfilePanoramaSettingsViewData.cs" />
@@ -714,6 +715,14 @@
   <ItemGroup>
     <Content Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
     <Content Include="Reports\FeedReport\FeedShortReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Reports\FeedReport\FeedDetailsDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Reports\FeedReport\FeedShortDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

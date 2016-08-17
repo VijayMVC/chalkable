@@ -900,6 +900,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
                 var input = node.find('.grade-input');
+                var commentInput = node.find('.comment-input');
 
                 if(input.hasClass('processing'))
                     return false;
@@ -916,6 +917,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                         oldIncompleteValue = input.getData('incomplete'),
                         exemptValue = node.find('[type=checkbox][name=isexempt]').checked(),
                         oldExemptValue = input.getData('exempt'),
+                        commentValue = (commentInput.getValue() || '').trim(),
+                        oldCommentValue = (commentInput.getData('comment') || '').trim(),
                         changed = false;
 
                     if(value != oldValue && !(!value && !oldValue))
@@ -927,6 +930,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(incompleteValue && !oldIncompleteValue || !incompleteValue && oldIncompleteValue)
                         changed = true;
                     if(exemptValue && !oldExemptValue || !exemptValue && oldExemptValue)
+                        changed = true;
+                    if(commentValue != oldCommentValue && !(!commentValue && !oldCommentValue))
                         changed = true;
 
                     if(!changed)

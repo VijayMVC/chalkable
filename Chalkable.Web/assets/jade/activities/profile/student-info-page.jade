@@ -43,14 +43,21 @@ mixin ParentProfileInfoView(contacts)
                     .data-info-small=contact.isFamilyMember() ? 'Yes' : 'No'
 
             br
-            
-                        
-.profile-page.view-mode
+
+-var person = self.getUser()
+-var forms = person.getHealthForms()
+-var hasForms = forms && forms.length
+
+.profile-page.view-mode(class=person.hasNoVerifiedForm() ? 'not-verified-health-form' : '')
     h2.page-title=Msg.Student_profile
     +ProfileTopBar(self, 'info')
     +ProfileInfoView(self)
-        +ParentProfileInfoView(self.getUser().getStudentContacts())
+        +ParentProfileInfoView(person.getStudentContacts())
         //todo parent section
     +ProfileInfoForm('students', self)
-        +ParentProfileInfoView(self.getUser().getStudentContacts())
+        +ParentProfileInfoView(person.getStudentContacts())
+
+    if hasForms
+        +CloseOpen('Health').health-panel
+            +RenderWith(person, chlk.templates.profile.SchoolPersonInfoHealthFormsTpl)
 
