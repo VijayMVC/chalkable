@@ -227,10 +227,44 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
         }
 
+        [AuthorizationFilter("Teacher")]
+        public async Task<ActionResult> AdjustDates(IList<AnnouncementInputModel> announcements, DateTime startDate, int classId)
+        {
+            if (announcements == null || announcements.Count == 0)
+                return Json(true);
+            
+            var adjustClassAnnsTask = Task.Factory.StartNew(() => {
+                var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Class)
+                    .Select(x => x.AnnouncementId).ToList();
+
+                SchoolLocator.ClassAnnouncementService.AdjustDates(ids, startDate, classId);
+            });
+
+            var adjustLpsTask = Task.Factory.StartNew(() => {
+                var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.LessonPlan)
+                    .Select(x => x.AnnouncementId).ToList();
+
+                SchoolLocator.LessonPlanService.AdjustDates(ids, startDate, classId);
+            });
+
+            var adjustSuppAnnTask = Task.Factory.StartNew(() => {
+                var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Supplemental)
+                    .Select(x => x.AnnouncementId).ToList();
+
+                SchoolLocator.SupplementalAnnouncementService.AdjustDates(ids, startDate, classId);
+            });
+
+            await adjustLpsTask;
+            await adjustSuppAnnTask;
+            await adjustClassAnnsTask;
+
+            return Json(true);
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public async Task<ActionResult> Copy(CopyAnnouncementsInputModel inputModel)
         {
-            inputModel.Announcements = inputModel.Announcements ?? new List<AnnouncementToCopyInputModel>();
+            inputModel.Announcements = inputModel.Announcements ?? new List<AnnouncementInputModel>();
 
             var classAnnouncementCopyTask = Task.Factory.StartNew(() => {
                 var ids = inputModel.Announcements

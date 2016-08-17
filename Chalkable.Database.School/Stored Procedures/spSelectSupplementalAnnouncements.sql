@@ -26,7 +26,8 @@ Begin
 					   ClassRef in (select ClassPerson.ClassRef from ClassPerson 
 												 where ClassPerson.PersonRef = Attachment_PersonRef)) as x
 		) as StudentsCountWithAttachments,
-		(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount
+		(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount,
+		(Select COUNT(*) From AnnouncementStandard Where AnnouncementRef = t.Id) as StandardsCount
 	From @supplementalAnnouncementT t join @orderTable as sortT
 		On t.Id = sortT.Id
 	Order By (Case When @desc is null or @desc = 1 Then sortT.SortedField End) DESC,
@@ -49,7 +50,8 @@ Begin
 					   ClassRef in (select ClassPerson.ClassRef from ClassPerson 
 												 where ClassPerson.PersonRef = Attachment_PersonRef)) as x
 		) as StudentsCountWithAttachments,
-		(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount
+		(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount,
+		(Select COUNT(*) From AnnouncementStandard Where AnnouncementRef = t.Id) as StandardsCount
 	From @supplementalAnnouncementT t
 End
 

@@ -29,6 +29,17 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
         [ria.serialize.SerializeProperty('subjectdocumentid')],
         chlk.models.id.ABSubjectDocumentId, 'subjectDocumentId',
 
+        [[chlk.models.id.ABTopicId, String, Boolean]],
+        function $(id_, name_, deepest_){
+            BASE();
+            if(id_)
+                this.setId(id_);
+            if(name_)
+                this.setName(name_);
+            if(deepest_)
+                this.setDeepest(deepest_);
+        },
+
         function getDescription(){
             return null;
         },

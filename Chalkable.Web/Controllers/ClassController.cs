@@ -198,6 +198,10 @@ namespace Chalkable.Web.Controllers
         }
 
 
-
+        [AuthorizationFilter("Teacher")]
+        public ActionResult Days(int classId)
+        {
+            return Json(SchoolLocator.ClassService.GetDays(classId));
+        }
     }
 }

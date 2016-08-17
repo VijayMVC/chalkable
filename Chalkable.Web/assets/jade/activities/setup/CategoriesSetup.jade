@@ -26,7 +26,7 @@ mixin ReportCell(value)
         .choose-class
     else
         +ActionForm('setup', 'submitAnnouncementTypes')
-            +Hidden('announcementsToCopy').items-to-copy
+            +Hidden('selectedAnnouncements').items-to-copy
             if ableCopy
                 .green-info-msg-cnt
                     .green-info-msg.x-hidden

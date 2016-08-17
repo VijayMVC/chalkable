@@ -44,6 +44,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start = 0, int count = int.MaxValue);
         IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
+
+        void AdjustDates(IList<int> ids, DateTime startDate, int classId);
     }
 
 
@@ -55,6 +57,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public abstract IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         public abstract IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
+        public abstract void AdjustDates(IList<int> ids, DateTime startDate, int classId);
         public abstract IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds);
         
         public abstract void DeleteAnnouncement(int announcementId);

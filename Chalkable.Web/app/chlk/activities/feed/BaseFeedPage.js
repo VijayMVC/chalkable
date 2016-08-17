@@ -2,6 +2,8 @@ REQUIRE('chlk.activities.lib.TemplatePage');
 
 NAMESPACE('chlk.activities.feed', function () {
 
+    var minActivityDate, formatedScheduledDays, scheduledDays;
+
     /** @class chlk.activities.feed.BaseFeedPage*/
     CLASS(
         'BaseFeedPage', EXTENDS(chlk.activities.lib.TemplatePage), [
@@ -87,13 +89,46 @@ NAMESPACE('chlk.activities.feed', function () {
                     element.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [node.is(':checked')]);
                 });
 
-                this.updateCopySubmitBtn_();
+                this.updateTopSubmitBtn_();
             },
 
             [ria.mvc.DomEventBind('change', '.feed-item-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function feedItemSelect(node, event, selected_){
-                this.updateCopySubmitBtn_();
+                this.updateTopSubmitBtn_();
+                if(this.dom.find('.feed-container').hasClass('adjust-mode')){
+                    var curDate = getDate(node.getData('date'));
+                    if(minActivityDate && curDate < minActivityDate || !minActivityDate){
+                        if(formatedScheduledDays.indexOf(curDate.format('m-d-Y')) > -1){
+                            minActivityDate = curDate;
+                        }else{
+                            var lasDay = scheduledDays[scheduledDays.length - 1],
+                                firstDay = scheduledDays[0];
+
+                            if(curDate > lasDay){
+                                minActivityDate = lasDay;
+                            }else{
+                                if(curDate < firstDay){
+                                    minActivityDate = firstDay;
+                                }else{
+                                    var diff = curDate - firstDay, curItem = scheduledDays[0], curDiff;
+                                    scheduledDays.forEach(function(item, i){
+                                        curDiff = Math.abs(curDate - item);
+                                        if(curDiff < diff){
+                                            diff = curDiff;
+                                            curItem = item;
+                                        }
+                                    });
+
+                                    minActivityDate = curItem;
+                                }
+                            }
+                        }
+
+                        this.dom.find('.adjust-start-date').$.datepicker('setDate', minActivityDate);
+                        this.dom.find('.adjust-days-count').setValue('0');
+                    }
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.gradingPeriodSelect + DIV li:last-child')],
@@ -114,7 +149,7 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('click', '.feed-tools')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function feedToolsClick(node, event){
-                this.dom.find('.copy-activities.active').trigger('click');
+                this.dom.find('.top-block-btn:not(.feed-tools).active').trigger('click');
                 this.dom.find('.tools-buttons-block').toggleClass('hidden');
                 node.toggleClass('active');
             },
@@ -122,8 +157,16 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('click', '.copy-activities')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function copyActivitiesClick(node, event){
-                this.dom.find('.feed-tools.active').trigger('click');
+                this.dom.find('.top-block-btn:not(.copy-activities).active').trigger('click');
                 this.dom.find('.feed-container').toggleClass('copy-mode');
+                node.toggleClass('active');
+            },
+
+            [ria.mvc.DomEventBind('click', '.adjust-activities')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function adjustActivitiesClick(node, event){
+                this.dom.find('.top-block-btn:not(.adjust-activities).active').trigger('click');
+                this.dom.find('.feed-container').toggleClass('adjust-mode');
                 node.toggleClass('active');
             },
 
@@ -133,7 +176,13 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('.copy-activities').trigger('click');
             },
 
-            [ria.mvc.DomEventBind('click', '.copy-submit')],
+            [ria.mvc.DomEventBind('click', '.cancel-adjust')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelAdjustClick(node, event){
+                this.dom.find('.adjust-activities').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('click', '.submit-selected')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function copySubmit(node, event){
                 var announcements = [];
@@ -145,7 +194,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 });
 
                 var value = announcements.length ? JSON.stringify(announcements) : '';
-                this.dom.find('.announcements-to-copy').setValue(value);
+                this.dom.find('.selected-announcements').setValue(value);
             },
 
             [ria.mvc.PartialUpdateRule(null, 'announcements-copy')],
@@ -169,12 +218,13 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('change', '.copy-to-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function classSelect(node, event, selected_){
-                this.updateCopySubmitBtn_();
+                this.updateTopSubmitBtn_();
             },
 
-            function updateCopySubmitBtn_(){
-                var btn = this.dom.find('.copy-submit');
-                if(this.dom.find('.feed-item-check:checked').count() > 0 && this.dom.find('[name="toClassId"]').getValue()){
+            function updateTopSubmitBtn_(){
+                var btn = this.dom.find('.top-submit-btn:visible');
+                if(this.dom.find('.feed-item-check:checked').count() > 0 && (this.dom.find('.feed-container').hasClass('adjust-mode') ||
+                    this.dom.find('.feed-container').hasClass('copy-mode') && this.dom.find('[name="toClassId"]').getValue())){
                     btn.removeAttr('disabled');
                     btn.setProp('disabled', false);
                 }else{
@@ -198,29 +248,6 @@ NAMESPACE('chlk.activities.feed', function () {
                 select.removeClass('chosen-with-drop');
             },
 
-            /*[ria.mvc.DomEventBind('mousedown', '#sort-select .chosen-drop')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function chosenDropClick(node, event){
-                this._dropDownClicked = true;
-                var input = this.dom.find('#sort-select-input');
-                setTimeout(function(){
-                    input.trigger('focus');
-                }, 1);
-
-            },
-
-            [ria.mvc.DomEventBind('blur', '#sort-select-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function sortBlur(node, event){
-                if(!this._dropDownClicked){
-                    var select = this.dom.find('#sort-select');
-                    select.removeClass('chosen-container-active');
-                    select.removeClass('chosen-with-drop');
-                }
-
-                this._dropDownClicked = false;
-            },*/
-
             function $() {
                 BASE();
                 //this._dropDownClicked = false;
@@ -241,6 +268,13 @@ NAMESPACE('chlk.activities.feed', function () {
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
                 BASE(model, msg_);
                 this.dom.find('select.prepared').removeClass('prepared');
+
+                if(model instanceof chlk.models.feed.Feed){
+                    minActivityDate = null;
+                    formatedScheduledDays = model.getClassScheduledDays() && model.getClassScheduledDays().map(function(item){return item.format('mm-dd-yy')});
+                    scheduledDays = model.getClassScheduledDays() && model.getClassScheduledDays().map(function(item){return item.getDate()});
+                }
+
                 if(model instanceof chlk.models.feed.FeedItems){
                     this.dom.find('.feed-grid').trigger(chlk.controls.GridEvents.UPDATED.valueOf());
                     if(!model.getItems().length)
@@ -250,13 +284,90 @@ NAMESPACE('chlk.activities.feed', function () {
 
             OVERRIDE, VOID, function onRefresh_(model) {
                 BASE(model);
+                minActivityDate = null;
+                formatedScheduledDays = model.getClassScheduledDays() && model.getClassScheduledDays().map(function(item){return item.format('mm-dd-yy')});
+                scheduledDays = model.getClassScheduledDays() && model.getClassScheduledDays().map(function(item){return item.getDate()});
                 this.dom.find('select.prepared').removeClass('prepared');
             },
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 new ria.dom.Dom().off('click.dates');
-            }
+            },
 
+            // ---------------------- ADJUST DAYS -------------------
+
+            [ria.mvc.DomEventBind('change', '.adjust-days-count')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function adjustDaysCountChange(node, event, selected_){
+                if(minActivityDate && formatedScheduledDays){
+                    var curPosition = formatedScheduledDays.indexOf(minActivityDate.format('m-d-Y')),
+                        value = parseInt(node.getValue(), 10),
+                        selectedPosition = curPosition + value,
+                        date;
+
+                    if(selectedPosition < 0){
+                        selectedPosition = 0;
+                        node.setValue(-curPosition);
+                    }else{
+                        if(selectedPosition >= formatedScheduledDays.length){
+                            selectedPosition = formatedScheduledDays.length - 1;
+                            node.setValue(formatedScheduledDays.length - 1 - curPosition)
+                        }
+                    }
+
+                    date = scheduledDays[selectedPosition];
+                    this.dom.find('.adjust-start-date').$.datepicker('setDate', date);
+                }
+            },
+
+            [ria.mvc.DomEventBind('change', '.adjust-start-date')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function adjustStartDateChange(node, event, selected_){
+                var curMinPos = formatedScheduledDays.indexOf(minActivityDate.format('m-d-Y')),
+                    selectedDate = node.$.datepicker('getDate'),
+                    selectedPos = formatedScheduledDays.indexOf(selectedDate.format('m-d-Y'));
+
+                if(selectedPos == -1){
+                    var lastDay = scheduledDays[scheduledDays.length - 1],
+                        firstDay = scheduledDays[0], curDate;
+
+                    if(selectedDate > lastDay){
+                        curDate = lastDay;
+                        selectedPos = scheduledDays.length - 1;
+                    }else{
+                        if(selectedDate < firstDay){
+                            curDate = firstDay;
+                            selectedPos = 0;
+                        }else{
+                            var diff = selectedDate - firstDay, curItem = scheduledDays[0], curDiff;
+                            scheduledDays.forEach(function(item, i){
+                                curDiff = Math.abs(selectedDate - item);
+                                if(curDiff < diff){
+                                    diff = curDiff;
+                                    curItem = item;
+                                    selectedPos = i;
+                                }
+                            });
+
+                            curDate = curItem;
+                        }
+                    }
+
+                    node.$.datepicker('setDate', curDate);
+                }
+
+                this.dom.find('.adjust-days-count').setValue(selectedPos - curMinPos);
+            },
+
+            [ria.mvc.DomEventBind('keydown', '.adjust-start-date, .adjust-days-count')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function adjustKeyPress(node, event, selected_) {
+                if (event.which == ria.dom.Keys.ENTER.valueOf()) {
+                    event.preventDefault();
+                    node.trigger('change');
+                    return false;
+                }
+            }
         ]);
 });

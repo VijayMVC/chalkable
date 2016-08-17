@@ -24,7 +24,7 @@
                 .standards-list-cnt.selected-cnt.x-hidden
                     .items-cnt.selected-items-cnt
                         each item in selected
-                            .item-block.selected-item.pressed(
+                            .item-block.selected-item.selected(
                                 data-tooltip=item.getTooltip(),
                                 data-id=item.getId().valueOf(),
                                 class = self.isOnlyOne() ? 'disabled' : ''

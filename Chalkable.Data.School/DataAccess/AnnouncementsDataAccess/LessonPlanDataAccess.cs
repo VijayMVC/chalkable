@@ -390,7 +390,20 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return result.ToDictionary(x => x.FromAnnouncementId, y => y.ToAnnouncementId);
         }
 
-        
+        public void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        {
+            if (ids == null || ids.Count == 0)
+                return;
+
+            var @params = new Dictionary<string, object>
+            {
+                ["ids"] = ids,
+                ["startDate"] = startDate,
+                ["classId"] = classId
+            };
+
+            ExecuteStoredProcedure("spAdjustLessonPlanDates", @params);
+        }
     }
 
 
