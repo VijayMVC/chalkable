@@ -2767,9 +2767,15 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         function addStandardsAction(data){
-            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
-            this.getContext().getSession().remove(ChlkSessionConstants.STANDARD_BREADCRUMBS);
-            this.getContext().getSession().remove(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS);
+            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null),
+                argsObj = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS, null),
+                breadcrumbsObj = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_BREADCRUMBS, null),
+                classId = options.getClassId().valueOf();
+
+            delete argsObj[classId];
+            delete breadcrumbsObj[classId];
+            this.getContext().getSession().set(ChlkSessionConstants.STANDARD_BREADCRUMBS, breadcrumbsObj || {});
+            this.getContext().getSession().set(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS, argsObj || {});
 
             var res = this.announcementService.addStandards(options.getAnnouncementId(), data.standardIds ? data.standardIds.split(',').filter(function(item){return item}) : [])
                 .then(function(announcement){

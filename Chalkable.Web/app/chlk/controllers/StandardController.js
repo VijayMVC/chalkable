@@ -25,14 +25,27 @@ NAMESPACE('chlk.controllers', function () {
             [ria.mvc.Inject],
             chlk.services.ABStandardService, 'ABStandardService',
 
+            [[chlk.models.id.ClassId]],
             function showStandardsAction(){
                 var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []),
-                    args = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS, [false, chlk.models.standard.ItemType.MAIN, 'Subjects']),
-                    breadcrumbs = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_BREADCRUMBS, null);
+                    argsObj = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS, {}),
+                    breadcrumbsObj = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_BREADCRUMBS, {}),
+                    args, breadcrumbs, options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
 
-                if(!breadcrumbs){
+                var classId = options.getClassId();
+
+                if(argsObj[classId.valueOf()]){
+                    args = argsObj[classId.valueOf()];
+                }else{
+                    args = [false, chlk.models.standard.ItemType.MAIN, 'Subjects'];
+                }
+
+                if(breadcrumbsObj[classId.valueOf()]){
+                    breadcrumbs = breadcrumbsObj[classId.valueOf()];
+                }else{
                     breadcrumbs = [new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.MAIN, 'Subjects')];
-                    this.getContext().getSession().set(ChlkSessionConstants.STANDARD_BREADCRUMBS, breadcrumbs);
+                    breadcrumbsObj[classId.valueOf()] = breadcrumbs;
+                    this.getContext().getSession().set(ChlkSessionConstants.STANDARD_BREADCRUMBS, breadcrumbsObj);
                 }
 
                 var res = ria.async.wait([
@@ -103,8 +116,22 @@ NAMESPACE('chlk.controllers', function () {
                     case 3: BCType = ChlkSessionConstants.TOPIC_BREADCRUMBS; AType = ChlkSessionConstants.TOPIC_LAST_ARGUMENTS; break;
                 }
 
-                this.getContext().getSession().set(AType, arguments);
-                var breadcrumbs = this.getContext().getSession().get(BCType, []);
+                var breadcrumbs, breadcrumbsObj;
+
+                if(pickerType == 1){
+                    var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+                    var classId = options.getClassId();
+
+                    var argsObj = this.getContext().getSession().get(AType, {});
+                    argsObj[classId.valueOf()] = arguments;
+                    this.getContext().getSession().set(AType, argsObj);
+                    breadcrumbsObj = this.getContext().getSession().get(BCType, {});
+
+                    breadcrumbs = breadcrumbsObj[classId.valueOf()] || [];
+                }else{
+                    this.getContext().getSession().set(AType, arguments);
+                    breadcrumbs = this.getContext().getSession().get(BCType, []);
+                }
 
                 if(isBreadcrumb){
                     breadcrumbs = breadcrumbs.slice(0, BCCount);
@@ -114,7 +141,12 @@ NAMESPACE('chlk.controllers', function () {
                     breadcrumbs.push(breadcrumb);
                 }
 
-                this.getContext().getSession().set(BCType, breadcrumbs);
+                if(pickerType == 1){
+                    breadcrumbsObj[classId.valueOf()] = breadcrumbs;
+                    this.getContext().getSession().set(BCType, breadcrumbsObj);
+                }else{
+                    this.getContext().getSession().set(BCType, breadcrumbs);
+                }
 
                 res = res.then(function(model){
                     if(!isBreadcrumb){
