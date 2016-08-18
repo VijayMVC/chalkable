@@ -2,4 +2,4 @@ if self.getType() == chlk.models.standard.ItemType.SEARCH
     .breadcrumb-item.search-breadcrumb-item=self.getName()
 else
     +ActionLink('standard', 'showForBreadcrumb', self.getType(), self.getName(), self.getDescription(), self.getSubjectId(), self.getStandardId(), self.getAuthorityId(), self.getDocumentId(),
-        self.getSubjectDocumentId(), self.getGradeLevelCode(), self.getStandardCourseId(), self.getABStandardId(), self.getCourseId(), self.getTopicId()).breadcrumb-item=self.getName()
+        self.getSubjectDocumentId(), self.getGradeLevelCode(), self.getStandardCourseId(), self.getABStandardId(), self.getCourseId(), self.getTopicId()).breadcrumb-item=self.getName() || self.getDescription()
