@@ -236,7 +236,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     EnsureTeacherChalkableAccess(claimInfos);
                 }
+#if DEBUG
+                var loginTimeOut = (int?) null;
+#else
                 var loginTimeOut = schoolL.AppSettingService.GetLoginTimeOut();
+#endif
 
                 var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, loginTimeOut, schoolYear, sisRedirectUrl)
                 {
