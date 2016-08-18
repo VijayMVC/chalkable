@@ -102,6 +102,10 @@ NAMESPACE('chlk.activities.feed', function () {
                     this.updateMinActivityDate_();
 
                 this.updateTopSubmitBtn_();
+
+                var allCheck = this.dom.find('.all-tasks-check:visible');
+                if(!node.is(':checked') && allCheck.is(':checked'))
+                    allCheck.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
             },
 
             [ria.mvc.DomEventBind('click', '.gradingPeriodSelect + DIV li:last-child')],
@@ -180,7 +184,7 @@ NAMESPACE('chlk.activities.feed', function () {
                     .setValue('')
                     .setData('value', null)
                     .trigger('change');
-                this.dom.find('.all-tasks-check')
+                this.dom.find('.all-tasks-check:visible')
                     .trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
 
                 this.dom.find('.feed-item-check ').trigger('change');
