@@ -41,7 +41,7 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
             if(standardId_)
                 this.setStandardId(standardId_);
             if(name_)
-                this.setName(name_);
+                this.setCode(name_);
             if(description_)
                 this.setDescription(description_);
             if(deepest_)
