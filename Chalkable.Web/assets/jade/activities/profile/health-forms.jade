@@ -7,6 +7,6 @@
                 .cell.name Form
                 .cell.verified Verified
             each form in forms
-                +ActionLink('students', 'verifyHealthFormDialog', self.getId(), form.getId()).grid-row.health-form-row
+                +ActionLink('students', 'verifyHealthFormDialog', self.getId(), form.getId(), !!form.getVerifiedDate()).grid-row.health-form-row
                     .cell.name=form.getName()
                     .cell.verified=form.getVerifiedDate() ? form.getVerifiedDate().getDate().format('m/d/Y h:i A') : '--'

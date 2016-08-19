@@ -21,5 +21,8 @@ NAMESPACE('chlk.templates.profile', function () {
 
             [ria.templates.ModelPropertyBind],
             String, 'documentUrl',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'readonly'
         ]);
 });
