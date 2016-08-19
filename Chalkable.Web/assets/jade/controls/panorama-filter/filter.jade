@@ -1,0 +1,24 @@
+mixin PanoramaFilter(years, standardizedTests, values, restoreController, restoreAction, restoreParams)
+    -attributes = self.prepare(attributes, standardizedTests)
+    -years = years || []
+    .panorama-filter-ctn(attributes)
+        +Hidden('filterValues', '').filters-value
+        .with-line
+            -var yearsIds = values ? values.getSchoolYearIds() : []
+            +Select('SchoolYearIds')(multiple="true", data-placeholder="Select School Year").school-years-select.submit-after-change.external-items
+                each year in years
+                    +Option(year.getId().valueOf(), year.getName(), yearsIds.filter(function(item){return item == year.getId()}).length > 0)
+
+            +ActionLink(restoreController, restoreAction, restoreParams)(data-tooltip="Restore filters").right.restore-btn
+            BUTTON(type="submit", name="submitType", value="save", data-tooltip="Save filters").right.save-btn
+        .filters-block
+            .filters-container
+                if values
+                    -var filters = values.getStandardizedTestFilters() || []
+                    each item in filters
+                        -var model = new chlk.models.controls.PanoramaFilterBlockViewData(standardizedTests, item.getId(), item.getScoreTypeId(), item.getComponentId())
+                        +RenderWith(model, chlk.templates.controls.PanoramaFilterBlockTpl)
+            .add-filter-container
+                .add-circle-btn.add-filter-btn +
+                span.light-grey Add filter
+
