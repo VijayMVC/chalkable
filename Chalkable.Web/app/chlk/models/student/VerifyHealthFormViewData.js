@@ -12,12 +12,15 @@ NAMESPACE('chlk.models.student', function () {
             chlk.models.id.HealthFormId, 'healthFormId',
             chlk.models.id.SchoolPersonId, 'studentId',
             String, 'documentUrl',
+            Boolean, 'readonly',
 
-            [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId, String]],
-            function $(requestId_,  studentId_, healthFormId_, documentUrl_){
+            [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId, String, Boolean]],
+            function $(requestId_,  studentId_, healthFormId_, documentUrl_, readonly_){
                 BASE();
                 if(requestId_)
                     this.setRequestId(requestId_);
+                if(readonly_)
+                    this.setReadonly(readonly_);
                 if(healthFormId_)
                     this.setHealthFormId(healthFormId_);
                 if(studentId_)
