@@ -1,0 +1,22 @@
+.departments
+    style(type="text/css", scoped) .pre { white-space: pre-wrap; word-break: break-all; }
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('departments', 'add').chlk-add.opacity-button Add Department
+    +Grid('departments', 'page', self).not-transparent
+        +GridHead()
+            .th
+            .th Name
+            .th keywords
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td
+                        img.avatar.avatar47(src=self.getPictureURL(item.getId(), 26, 46))
+                    .td= item.getName()
+                    .td.pre= item.getKeywords()
+                    .td.action-links
+                        +ActionLink('departments', 'update', item.getId()).profile
+                        +ActionLink('departments', 'delete', item.getId()).remove
+
