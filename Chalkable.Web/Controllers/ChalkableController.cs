@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.WebPages;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -120,7 +121,7 @@ namespace Chalkable.Web.Controllers
             base.Initialize(requestContext);
             var chalkablePrincipal = User as ChalkablePrincipal;
             UserContext context = null;
-
+            
             AuthorizationUserInfo authAppInfo;
             Application app;
             if (ApplicationAuthentification.AuthenticateByToken(requestContext, ServiceLocatorFactory.CreateMasterSysAdmin().ApplicationService,
@@ -147,6 +148,9 @@ namespace Chalkable.Web.Controllers
                 }
                 context = chalkablePrincipal.Context;
             }
+
+            ChalkableAuthentication.UpdateLoginTimeOut(context);
+            
             InitServiceLocators(context);
         }
         

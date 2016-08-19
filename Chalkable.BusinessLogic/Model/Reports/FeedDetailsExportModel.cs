@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -24,6 +25,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public int? StandardId { get; set; }
         public string StandardName { get; set; }
         public string StandardDescription { get; set; }
+        public int StudentOrder { get; set; }
 
         public int? AnnouncementAttachmentId { get; set; }
         public string AnnouncementAttachmentName { get; set; }
@@ -46,10 +48,11 @@ namespace Chalkable.BusinessLogic.Model.Reports
             public bool Document { get; set; }
         }
         
+
         public FeedDetailsExportModel() { }
 
         protected FeedDetailsExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, DateTime? startRange, DateTime? endRange, AnnouncementDetails ann
-            , ClassDetails classDetails, IList<DayType> dayTypes, IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, Person recipient)
+            , ClassDetails classDetails, IList<DayType> dayTypes, IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, Person student, int studentOrder)
             : base(person, schoolName, sy, nowSchoolTime, startRange, endRange, classDetails, dayTypes, staffs, ann)
         {
             AnnouncementDescription = ann.Content;
@@ -64,10 +67,11 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 WeigntMultiplier = (double?) ann.ClassAnnouncementData.WeightMultiplier ?? ClassAnnouncement.DEFAULT_WEGIHT_MULTIPLIER;
                 ShowScoreSettings = CanShowScoreSettings(ann.ClassAnnouncementData);
             }
-            if (IsSupplemental && recipient != null)
+            if (IsSupplemental && student != null)
             {
-                StudentId = recipient.Id;
-                StudentDisplayName = recipient.DisplayName();
+                StudentId = student.Id;
+                StudentDisplayName = student.FirstName + " " + student.LastName;
+                StudentOrder = studentOrder;
             }
             if (standard != null)
             {
@@ -126,20 +130,21 @@ namespace Chalkable.BusinessLogic.Model.Reports
             , DateTime? startRange, DateTime? endRange, IList<AnnouncementDetails> anns, ClassDetails classDetails, IList<DayType> dayTypes
             , IList<Staff> staffs, IList<Application> apps, IDictionary<Guid, byte[]> appsImages)
         {
+
             var items = (from a in anns
                          from sa in a.AnnouncementStandards.DefaultIfEmpty()
                          from aa in a.AnnouncementAttributes.DefaultIfEmpty()
                          from attItem in PrepareAttachmentItems(a.AnnouncementAttachments, a.AnnouncementApplications, apps, appsImages).DefaultIfEmpty()
-                         from recipient in (a.SupplementalAnnouncementData?.Recipients ?? new List<Person>()).DefaultIfEmpty()
-                         select Create(person, schoolName, sy, nowSchoolTime, startRange, endRange, a, classDetails, dayTypes, staffs, sa?.Standard, aa, attItem, recipient)).ToList();
+                         from recipient in (PrepareOrderedStudents(a)).DefaultIfEmpty()
+                         select Create(person, schoolName, sy, nowSchoolTime, startRange, endRange, a, classDetails, dayTypes, staffs, sa?.Standard, aa, attItem, recipient?.First, recipient?.Second ?? 0)).ToList();
             return items;
         }
 
         private static FeedDetailsExportModel Create(Person person, string schoolName, string sy, DateTime nowSchoolTime, DateTime? startRange, DateTime? endRange
             , AnnouncementDetails ann, ClassDetails classDetails, IList<DayType> dayTypes 
-            , IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, AttachmentItem attachmentItem, Person recipient)
+            , IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, AttachmentItem attachmentItem,  Person student, int studentOrder)
         {
-            var res = new FeedDetailsExportModel(person, schoolName, sy, nowSchoolTime, startRange, endRange, ann, classDetails, dayTypes, staffs, standard, attribute, recipient);
+            var res = new FeedDetailsExportModel(person, schoolName, sy, nowSchoolTime, startRange, endRange, ann, classDetails, dayTypes, staffs, standard, attribute, student, studentOrder);
             if (attachmentItem != null)
             {
                 res.AnnouncementAttachmentId = attachmentItem.Id;
@@ -150,6 +155,15 @@ namespace Chalkable.BusinessLogic.Model.Reports
             }
             return res;
         }
+
+        private static IList<Pair<Person, int>> PrepareOrderedStudents(AnnouncementComplex announcement)
+        {
+            var resipients = announcement.SupplementalAnnouncementData?.Recipients;
+            if (resipients == null)
+                return new List<Pair<Person, int>>();
+            int order = 0;
+            return resipients.Select(recipient => new Pair<Person, int>(recipient, order++)).ToList();
+        } 
 
         private static IList<AttachmentItem> PrepareAttachmentItems(IList<AnnouncementAttachment> annAtts, IList<AnnouncementApplication> annApps
             , IList<Application> apps, IDictionary<Guid, byte[]> appsImages)

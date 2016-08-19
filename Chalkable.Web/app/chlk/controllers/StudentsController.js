@@ -72,9 +72,9 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.SchoolYearService, 'schoolYearService',
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
-            function verifyHealthFormDialogAction(studentId, healthFormId){
-                var res = this.WidgetStart('students', 'verifyHealthFormDialog', [studentId, healthFormId])
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId, Boolean]],
+            function verifyHealthFormDialogAction(studentId, healthFormId, readonly_){
+                var res = this.WidgetStart('students', 'verifyHealthFormDialog', [studentId, healthFormId, readonly_])
                     .then(function(data){
                         this.BackgroundUpdateView(chlk.activities.profile.StudentInfoPage, data);
                     }, this)
@@ -82,10 +82,10 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
-            [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
-            function verifyHealthFormDialogWidgetAction(requestId, studentId, healthFormId){
+            [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId, Boolean]],
+            function verifyHealthFormDialogWidgetAction(requestId, studentId, healthFormId, readonly_){
                 var url = this.studentService.getHealthFormDocumentUri(studentId, healthFormId),
-                    model = new chlk.models.student.VerifyHealthFormViewData(requestId, studentId, healthFormId, url);
+                    model = new chlk.models.student.VerifyHealthFormViewData(requestId, studentId, healthFormId, url, readonly_);
                 return this.ShadeView(chlk.activities.profile.VerifyHealthFormDialog, ria.async.DeferredData(model, 100));
             },
 

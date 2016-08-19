@@ -54,7 +54,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                     .right-block.i-b.right
                         .i-b
                             LABEL.text Adjust Days
-                            INPUT(type="number", name="adjustCount", value="0").adjust-days-count
+                            INPUT(type="number", name="adjustCount", value="0", disabled = true).adjust-days-count
                         .i-b
                             LABEL.text OR Start Date
                         +DatePicker('adjustStartDate')(
@@ -62,7 +62,8 @@ div(class = noComplete ? "no-complete" : "").feed-container
                                 showOtherMonths: true,
                                 selectOtherMonths: true,
                                 enabledDays: self.getClassScheduledDays() || []
-                            }
+                            },
+                            disabled = true
                         ).adjust-start-date
                         BUTTON(type="button").negative-button.cancel-adjust Cancel
                         BUTTON(type="submit", name="submitType", value="adjust", disabled="disabled").blue-button.adjust-submit.submit-selected.top-submit-btn Update

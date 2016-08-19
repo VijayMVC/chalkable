@@ -98,11 +98,11 @@ NAMESPACE('chlk.templates.classes', function () {
 
                             res.push(test.getStandardizedTest().getDisplayName(), new Date(this.x).format('m.d.Y'), test.getComponent().getName(), test.getScoreType().getName(), this.y);
 
-                            return res.join(' | ');
+                            return res.join(' |<br/>');
                         },
 
                         positioner: function (labelWidth, labelHeight, point) {
-                            return { x: point.plotX - labelWidth/2 + 10, y: point.plotY - labelHeight/2 - 25 };
+                            return { x: point.plotX - labelWidth/2 + 10, y: point.plotY - labelHeight };
                         }
                     },
 

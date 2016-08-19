@@ -11,9 +11,13 @@
           <xs:element minOccurs="1" maxOccurs="1" name="WeightAddition" nillable="true" type="xs:double" />
           <xs:element minOccurs="1" maxOccurs="1" name="WeigntMultiplier" nillable="true" type="xs:double" />
           <xs:element minOccurs="1" maxOccurs="1" name="HasAttributes" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IsSupplemental" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StudentId" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StudentDisplayName" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="StandardId" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" maxOccurs="1" name="StandardName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="StandardDescription" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StudentOrder" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="AnnouncementAttachmentId" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementAttachmentName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementAttachmentImage" type="xs:base64Binary" />

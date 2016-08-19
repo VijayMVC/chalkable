@@ -196,7 +196,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 AcadSessionId = Context.SchoolYearId.Value,
                 StaffId = Context.PersonId.Value,
                 StudentHealthFormId = healthFormId,
-                VerifiedDate = Context.NowSchoolTime,
+                VerifiedDate = Context.NowSchoolTime.Date,
                 StudentId = studentId
             };
             await ConnectorLocator.StudentConnector.SetStudentHealthFormReadReceipts(studentId, healthFormId, formReadReceipts);
