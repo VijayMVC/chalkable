@@ -186,6 +186,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             , UnitOfWork uow, ClassAnnouncementDataAccess annDa)
         {
             ann.Content = inputAnnData.Content;
+
+            if(inputAnnData.Title == null || Exists(inputAnnData.Title, inputAnnData.ClassId, inputAnnData.ExpiresDate.Value, null))
+                throw new ChalkableException("Invalid Class Announcement Title");
+            ann.Title = inputAnnData.Title;
+            
             if (inputAnnData.ExpiresDate.HasValue)
                 ann.Expires = inputAnnData.ExpiresDate.Value.Date;
             if (inputAnnData.ClassAnnouncementTypeId.HasValue)
