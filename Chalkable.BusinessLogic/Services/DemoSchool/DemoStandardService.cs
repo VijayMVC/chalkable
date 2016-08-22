@@ -421,5 +421,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public void PrepareToDelete(List<Standard> toDelete)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
