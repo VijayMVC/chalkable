@@ -87,7 +87,7 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void SyncTest()
         {
-            var items = GetTableData<Person>(Guid.Parse("5f0873ba-f152-483c-9ee5-0dafcce92131"));
+            var items = GetTableData<Student>(Guid.Parse("07abdc8f-2dfc-4bbe-960b-395f6feae8c7"));
             Print(items.Inserted);
             Print(items.Updated);
             Print(items.Deleted);
