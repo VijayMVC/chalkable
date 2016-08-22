@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Task VerifyStudentHealthForm(int studentId, int healthFormId);
         Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId);
         Task<StudentExplorerInfo> GetStudentExplorerInfo(int studentId, int schoolYearId);
-        Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
+        Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> acadYears, IList<StandardizedTestFilter> standardizedTestFilters);
 
         StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId);
         IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null);
@@ -260,25 +260,25 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new StudentDataAccess(u).GetEnrolledStudentsCount());
         }
 
-        public async Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        public async Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> acadYears, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
 
             if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to view class panorama");
 
-            if (schoolYearIds == null || schoolYearIds.Count == 0)
-                throw new ChalkableException("School years is required parameter");
+            if (acadYears == null || acadYears.Count == 0)
+                throw new ChalkableException("Academic Years is required parameter");
 
             standardizedTestFilters = standardizedTestFilters ?? new List<StandardizedTestFilter>();
             var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
             var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);
 
-            var tasks = new List<Task<IList<Date>>>();
-            foreach (var syId in schoolYearIds)
-            {
-                tasks.Add(Task.Run(() => ServiceLocator.CalendarDateService.GetLastDays(syId, true, null, Context.NowSchoolYearTime)));
-            }
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYears(acadYears);
+            var studentSchoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByStudent(studentId, StudentEnrollmentStatusEnum.CurrentlyEnrolled, null);
+            var schoolYearIds = schoolYears.Where(x => studentSchoolYears.Any(y => y.Id == x.Id)).Select(x=>x.Id).ToList();
+            
+            var tasks = schoolYearIds.Select(syId => Task.Run(() => ServiceLocator.CalendarDateService.GetLastDays(syId, true, null, Context.NowSchoolYearTime))).ToList();
             var studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
 
             var days = (await Task.WhenAll(tasks)).SelectMany(x => x).OrderBy(x=>x.Day).ToList();

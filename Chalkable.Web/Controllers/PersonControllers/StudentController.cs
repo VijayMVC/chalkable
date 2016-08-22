@@ -294,13 +294,13 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to view class panorama");
 
-            if (settings.SchoolYearIds == null)
+            if (settings.AcadYears == null)
                 settings = SchoolLocator.PanoramaSettingsService.Get<StudentProfilePanoramaSetting>(null);
 
-            if (settings.SchoolYearIds.Count == 0)
-                throw new ChalkableException("School years is required parameter");
+            if (settings.AcadYears.Count == 0)
+                throw new ChalkableException("Academic years is required parameter");
 
-            var studentPanorama = await SchoolLocator.StudentService.Panorama(studentId, settings.SchoolYearIds, settings.StandardizedTestFilters);
+            var studentPanorama = await SchoolLocator.StudentService.Panorama(studentId, settings.AcadYears, settings.StandardizedTestFilters);
             var standardizedTests = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             
             return Json(StudentPanoramaViewData.Create(studentId, studentPanorama, settings, standardizedTests));
@@ -312,8 +312,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to change panorama settings");
 
-            if (setting.SchoolYearIds == null || setting.SchoolYearIds.Count == 0)
-                throw new ChalkableException("School years is required parameter");
+            if (setting.AcadYears == null || setting.AcadYears.Count == 0)
+                throw new ChalkableException("Academic years is required parameter");
 
             SchoolLocator.PanoramaSettingsService.Save(setting, null);
             return Json(true);
