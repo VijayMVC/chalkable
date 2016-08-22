@@ -352,6 +352,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this._needPopUp = true;
                 new ria.dom.Dom('.student-block').forEach(function(node){
                     var container = node.find('.not-empty');
+
+                    if(container.find('.attendance-data').getData("is-read-only")) return;
+
                     if(container.exists()){
                         container
                             .removeClass('absent')
