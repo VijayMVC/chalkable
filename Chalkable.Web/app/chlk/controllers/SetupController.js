@@ -260,7 +260,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.UpdateView(chlk.activities.setup.CategoriesSetupPage, res, 'copy');
                 }
 
-                this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), "whoa.", null, 'negative-button')
+                var res = this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), "whoa.", null, 'negative-button')
                     .thenCall(this.announcementTypeService.deleteTypes, [model.getIds().split(',')])
                     .attach(this.validateResponse_())
                     .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
@@ -268,7 +268,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(data){
                         return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId(), true]);
                     }, this);
-                return null;
+                return this.UpdateView(chlk.activities.setup.CategoriesSetupPage, res);
             },
 
             [chlk.controllers.Permissions([
