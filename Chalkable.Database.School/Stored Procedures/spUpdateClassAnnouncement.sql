@@ -24,7 +24,6 @@ set
 	[ClassAnnouncementTypeRef] = [CAs].[ClassAnnouncementTypeRef],
 	[ClassRef] = [CAs].[ClassRef],
 	[SchoolYearRef] = [CAs].[SchoolYearRef],
-	[Order] = [CAs].[Order],
 	[Dropped] = [CAs].[Dropped],
 	[SisActivityId] = [CAs].[SisActivityId],
 	[MaxScore] = [CAs].[MaxScore],

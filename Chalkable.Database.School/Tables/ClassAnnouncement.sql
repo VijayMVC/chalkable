@@ -5,7 +5,7 @@
     [ClassAnnouncementTypeRef] INT            NULL,
     [MayBeDropped]             BIT            NOT NULL,
     [VisibleForStudent]        BIT            NOT NULL,
-    [Order]                    INT            NOT NULL,
+    [Order]                    INT            NULL,
     [Dropped]                  BIT            NOT NULL,
     [MaxScore]                 DECIMAL (20, 2)   NULL,
     [WeightAddition]           DECIMAL (9, 6) NULL,
