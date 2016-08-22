@@ -85,7 +85,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Student/Panorama.json', chlk.models.panorama.StudentPanoramaViewData, {
                     studentId: studentId.valueOf(),
                     standardizedTestFilters: data_ && data_.standardizedTestFilters,
-                    schoolYearIds: data_ && data_.schoolYearIds
+                    acadYears: data_ && data_.acadYears
                 });
             },
 
@@ -93,7 +93,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Student/SavePanoramaSettings.json', Boolean, {
                     studentId : studentId.valueOf(),
                     standardizedTestFilters: data.standardizedTestFilters,
-                    schoolYearIds: data.schoolYearIds
+                    acadYears: data.acadYears
                 });
             },
 

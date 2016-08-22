@@ -79,10 +79,10 @@ namespace Chalkable.Data.School.DataAccess
 
             var conds = new AndQueryCondition();
             if (onlyActive)
-                conds.Add(nameof(SchoolYear.ARCHIVE_DATE), null);
+                conds.Add(nameof(SchoolYear.ArchiveDate), null);
             var q = Orm.SimpleSelect<SchoolYear>(conds);
             q.Sql.Append($" And {nameof(SchoolYear.AcadYear)} in (Select * From @years)");
-            q.Parameters.Add("year", years);
+            q.Parameters.Add("years", years);
 
             return ReadMany<SchoolYear>(q);
         } 
