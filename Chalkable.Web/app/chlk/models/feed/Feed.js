@@ -24,6 +24,8 @@ NAMESPACE('chlk.models.feed', function () {
                         item.imported = true;
                     });
 
+                    this.adjustedItemsCount = raw.createdannouncements.length;
+
                     raw.annoucementviewdatas = raw.createdannouncements.concat(raw.annoucementviewdatas);
                 }
 
@@ -31,6 +33,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.toClassId = SJX.fromValue(raw.toClassId, chlk.models.id.ClassId);
                 this.copyStartDate = SJX.fromDeserializable(raw.copyStartDate, chlk.models.common.ChlkDate);
                 this.adjustStartDate = SJX.fromDeserializable(raw.adjustStartDate, chlk.models.common.ChlkDate);
+                this.adjustCount = SJX.fromValue(raw.adjustCount, Number);
                 this.inProfile = SJX.fromValue(raw.inProfile, Boolean);
                 this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
@@ -68,6 +71,10 @@ NAMESPACE('chlk.models.feed', function () {
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
 
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'createdAnnouncements',
+
+            Number, 'adjustCount',
+
+            Number, 'adjustedItemsCount',
 
             Boolean, 'readonly',
 
