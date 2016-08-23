@@ -127,7 +127,7 @@ NAMESPACE('chlk.activities.feed', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function feedToolsClick(node, event){
                 this.dom.find('.top-block-btn:not(.feed-tools).active').trigger('click');
-                this.dom.find('.tools-buttons-block').toggleClass('hidden');
+                this.dom.find('.feed-container').toggleClass('settings-mode');
                 node.toggleClass('active');
             },
 
