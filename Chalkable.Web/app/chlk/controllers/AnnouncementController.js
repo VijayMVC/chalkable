@@ -1792,7 +1792,7 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    return this.Redirect('feed', 'list', [null, true]);
+                    return this.Redirect('feed', 'doToList');
                 }, this);
         },
 
@@ -2020,7 +2020,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(model.getSubmitType() == 'submitOnEdit')
                         return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.ADMIN]);
                     else{
-                        return this.BackgroundNavigate('feed', 'list', [null, true]);
+                        return this.BackgroundNavigate('feed', 'doToList');
                     }
                 }
             }, this);
@@ -2102,7 +2102,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(submitType == 'submitOnEdit')
                             this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN]);
                         else{
-                            this.BackgroundNavigate('feed', 'list', [null, true]);
+                            this.BackgroundNavigate('feed', 'doToList');
                         }
                         return ria.async.BREAK;
                     }
@@ -2251,7 +2251,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(isEdit)
                         return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.SUPPLEMENTAL_ANNOUNCEMENT]);
                     else{
-                        return this.BackgroundNavigate('feed', 'list', [null, true]);
+                        return this.BackgroundNavigate('feed', 'doToList');
                     }
                 }
             }, this);
@@ -2655,7 +2655,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(isEdit)
                         return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT]);
                     else{
-                        return this.BackgroundNavigate('feed', 'list', [null, true]);
+                        return this.BackgroundNavigate('feed', 'doToList');
                     }
                 }
             }, this);
