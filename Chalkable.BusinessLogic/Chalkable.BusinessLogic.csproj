@@ -199,6 +199,7 @@
     <Compile Include="Model\Reports\LessonPlanReportInputModel.cs" />
     <Compile Include="Model\Reports\MissingAssignmentsInputModel.cs" />
     <Compile Include="Model\Reports\ProgressReportInputModel.cs" />
+    <Compile Include="Model\Reports\ReportCardsInputModel.cs" />
     <Compile Include="Model\Reports\SeatingChartReportInputModel.cs" />
     <Compile Include="Model\Reports\ShortFeedExportModel.cs" />
     <Compile Include="Model\Reports\WorksheetReportInputModel.cs" />

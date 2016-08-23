@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -34,6 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
+        byte[] GetReportCards(ReportCardsInputModel inputModel);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
     }
@@ -417,6 +419,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableException(string.Format(ChlkResources.ERR_REPORT_DEFINITION_FILE_NOT_FOUND, definition));
 
             return new DefaultRenderer().Render(dataSet, definition, format, null);
+        }
+
+        public byte[] GetReportCards(ReportCardsInputModel inputModel)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+
+            throw new NotImplementedException();
         }
 
         public FeedReportSettingsInfo GetFeedReportSettings()
