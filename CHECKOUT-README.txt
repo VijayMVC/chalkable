@@ -13,4 +13,4 @@ Post checkout steps:
 Post update steps:
 * npm install
 * npm run-script bower
-* grunt post-checkout
+* grunt post-checkout 
