@@ -187,7 +187,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             ann.Content = inputAnnData.Content;
 
-            if(inputAnnData.Title == null || Exists(inputAnnData.Title, inputAnnData.ClassId, inputAnnData.ExpiresDate.Value, null))
+            if(inputAnnData.Title == null || (inputAnnData.ExpiresDate.HasValue && Exists(inputAnnData.Title, inputAnnData.ClassId, inputAnnData.ExpiresDate.Value, inputAnnData.AnnouncementId)))
                 throw new ChalkableException("Invalid Class Announcement Title");
             ann.Title = inputAnnData.Title;
             
