@@ -147,6 +147,16 @@ NAMESPACE('chlk.activities.feed', function () {
                 node.toggleClass('active');
             },
 
+            [ria.mvc.DomEventBind('click', '.cancel-copy, .cancel-adjust')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function topCancelClick(node, event){
+                this.dom.find('.feed-item-check').forEach(function(element){
+                    element.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
+                });
+
+                this.updateTopSubmitBtn_();
+            },
+
             [ria.mvc.DomEventBind('click', '.cancel-copy')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function cancelCopyClick(node, event){
@@ -157,6 +167,9 @@ NAMESPACE('chlk.activities.feed', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function cancelAdjustClick(node, event){
                 this.dom.find('.adjust-activities').trigger('click');
+                setTimeout(function(){
+                    this.updateMinActivityDate_();
+                }.bind(this), 1);
             },
 
             [ria.mvc.DomEventBind('click', '.submit-selected')],
