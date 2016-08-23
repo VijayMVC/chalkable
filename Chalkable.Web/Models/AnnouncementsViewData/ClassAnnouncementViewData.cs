@@ -9,7 +9,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
     public class ClassAnnouncementViewData : ShortAnnouncementViewData
     {
         public DateTime? ExpiresDate { get; set; }
-        public string DefaultTitle { get; set; }
         public int? AnnouncementTypeId { get; set; }
         public int? ChalkableAnnouncementTypeId { get; set; }
         public int? ClassId { get; set; }
@@ -17,7 +16,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string FullClassName { get; set; }
         public Guid? DepartmentId { get; set; }
         public bool Dropped { get; set; }
-        public int Order { get; set; }
         public decimal? MaxScore { get; set; }
         public bool CanDropStudentScore { get; set; }
         public bool MayBeExempt { get; set; }
@@ -31,7 +29,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         protected ClassAnnouncementViewData(ClassAnnouncement announcement, IList<ClaimInfo> claims)
             : base(announcement)
         {
-            DefaultTitle = announcement.DefaultTitle;
             AnnouncementTypeId = announcement.ClassAnnouncementTypeRef;
             ChalkableAnnouncementTypeId = announcement.ChalkableAnnouncementType;
             PersonId = announcement.PrimaryTeacherRef;
@@ -42,7 +39,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             FullClassName = announcement.FullClassName;
             Dropped = announcement.Dropped;
             ExpiresDate = announcement.Expires == DateTime.MinValue ? (DateTime?)null : announcement.Expires;
-            Order = announcement.Order;
             IsOwner = announcement.IsOwner;
             MaxScore = announcement.MaxScore;
             CanDropStudentScore = announcement.MayBeDropped;

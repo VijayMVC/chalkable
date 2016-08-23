@@ -5,15 +5,12 @@ REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.announcement.LessonPlanSearchTpl');
 REQUIRE('chlk.templates.announcement.LessonPlanCategoriesListTpl');
-REQUIRE('chlk.templates.announcement.LessonPlanAutoCompleteTpl');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
 REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
-
-    var titleTimeout;
 
     /** @class chlk.activities.announcement.LessonPlanFormPage*/
     CLASS(
@@ -28,11 +25,6 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanSearchTpl, 'categories', '#galleryCategoryForSearchContainer', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'LessonPlanFormPage', EXTENDS(chlk.activities.announcement.AnnouncementFormPage), [
-
-            OVERRIDE, VOID, function onRender_(model){
-                BASE(model);
-                titleTimeout = undefined;
-            },
 
             [ria.mvc.DomEventBind('click', '.import-btn, .lesson-plan-import-popup')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -52,39 +44,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],
-            VOID, function addToGalleryRule(tpl, model, msg_) {
-
-            },
-
-            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            OVERRIDE, VOID, function titleKeyUp(node, event){
-                var dom = this.dom, node = node, value = node.getValue();
-                if(dom.find('.title-block-container').hasClass('with-gallery-id')){
-                    if(!value || !value.trim()){
-                        dom.find('.save-title-btn').setAttr('disabled', true);
-                    }else{
-                        /*if(value == node.getData('title')){
-                            this.updateFormByNotExistingTitle();
-                            dom.find('.save-title-btn').setAttr('disabled', true);
-                        }else{*/
-                            titleTimeout && clearTimeout(titleTimeout);
-                            titleTimeout = setTimeout(function(){
-                                if(value == node.getValue())
-                                    dom.find('#check-title-button').trigger('click');
-                            }, 100);
-                        //}
-                    }
-                }
-            },
-
             OVERRIDE, VOID, function onStart_() {
                 BASE();
                 var that = this;
-                new ria.dom.Dom().on('click', '.create-from-template', function($target, event){
-                    that.setNotSave(true);
-                });
+
                 new ria.dom.Dom().on('click.import', function($target, event){
                     var node = ria.dom.Dom(event.target);
                     if(!node.isOrInside('.import-btn'))

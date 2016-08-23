@@ -6,12 +6,12 @@
       <!-- DB Settings -->
       <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
       <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
-      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMasterForPanorama;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
-      <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="7FE08FBF-1977-4FF1-ADB6-7F9B4F0AE997" />
 
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- Redis Cache -->
@@ -52,12 +52,12 @@
       <!-- DB Settings -->
       <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
       <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
-      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMasterForPanorama;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
-      <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="7FE08FBF-1977-4FF1-ADB6-7F9B4F0AE997D" />
       <Setting name="DbUpdateTimeout" value="3600" />
 
       <Setting name="Domain" value="local.chalkable.com" />
@@ -82,12 +82,12 @@
       <!-- DB Settings -->
       <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
       <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
-      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMasterForPanorama;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
-      <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="7FE08FBF-1977-4FF1-ADB6-7F9B4F0AE997" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <Setting name="Domain" value="local.chalkable.com" />
       <!-- Task settings -->

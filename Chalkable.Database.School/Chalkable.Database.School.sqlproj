@@ -77,6 +77,7 @@
     <Folder Include="Stored Procedures\Announcements Procedures" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\PostDeploy" />
+    <Folder Include="Scripts\PreDeploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Address.sql" />
@@ -188,7 +189,6 @@
     <Build Include="Stored Procedures\spGetStudentsByClass.sql" />
     <Build Include="Stored Procedures\spGetStudentsByTeacher.sql" />
     <Build Include="Stored Procedures\spGetTeacherClasses.sql" />
-    <Build Include="Stored Procedures\spReorderAnnouncements.sql" />
     <Build Include="Stored Procedures\spSearchClasses.sql" />
     <Build Include="Stored Procedures\spSearchPersons.sql" />
     <Build Include="Stored Procedures\spSearchStaff.sql" />
@@ -382,5 +382,8 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Chalkable.Database.School.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\PreDeploy\001_Set_Nullable_And_Null_Order_In_ClassAnnouncement.sql" />
   </ItemGroup>
 </Project>
