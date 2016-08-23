@@ -89,5 +89,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
         public IDbMaintenanceService DbMaintenanceService { get{throw new NotImplementedException();} }
         public IAcademicBenchmarkService AcademicBenchmarkService { get{throw new NotImplementedException();} }
+        public ICustomReportTemplateService CustomReportTemplateService { get {throw new NotImplementedException();} }
     }
 }

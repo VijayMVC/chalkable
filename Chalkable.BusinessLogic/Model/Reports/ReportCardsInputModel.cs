@@ -5,7 +5,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
 {
     public class ReportCardsInputModel
     {
-        public int CustomReportTemplateId { get; set; }
+        public Guid CustomReportTemplateId { get; set; }
         public IntList GroupIds { get; set; }
         public IntList StudentIds { get; set; }
         public string Tile { get; set; }
