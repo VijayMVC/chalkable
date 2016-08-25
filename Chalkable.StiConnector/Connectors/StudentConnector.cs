@@ -91,6 +91,9 @@ namespace Chalkable.StiConnector.Connectors
 
         public async Task<IList<StudentHealthForm>> GetStudentHealthForms(int studentId, int acadSessionId, int staffId)
         {
+            if (!IsSupportedApiVersion("7.3.11.21155"))
+                return new List<StudentHealthForm>();
+
             var nvc = new NameValueCollection()
             {
                 ["acadSessionId"] = acadSessionId.ToString(),
@@ -100,7 +103,10 @@ namespace Chalkable.StiConnector.Connectors
         }
         public async Task SetStudentHealthFormReadReceipts(int studentId, int studentHealthFormId, StudentHealthFormReadReceipt formReadReceipts)
         {
-           await PostAsync<Object>($"{BaseUrl}health/students/{studentId}/healthForms/{studentHealthFormId}/readReceipts", formReadReceipts);
+            if (!IsSupportedApiVersion("7.3.11.21155"))
+                return;
+
+            await PostAsync<object>($"{BaseUrl}health/students/{studentId}/healthForms/{studentHealthFormId}/readReceipts", formReadReceipts);
         }
 
         public async Task<bool> HasHealthLicenses()
