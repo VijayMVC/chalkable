@@ -8,7 +8,6 @@
 	[PreviewCommentsEnabled]	BIT	 NOT NULL,
 	[RequireCommentsEnabled]	BIT	 NOT NULL,
 	[Expires] [datetime2](7) NOT NULL,
-	[Order] [int] NOT NULL,
 	[Dropped] [bit] NOT NULL,
 	[ClassAnnouncementTypeRef] [int] NULL,
 	[SchoolYearRef] [int] NULL,

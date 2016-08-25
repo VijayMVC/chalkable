@@ -22,7 +22,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         private const string CREATE_PORCEDURE = "spCreateClasssAnnouncement";
-        private const string REORDER_PROCEDURE = "spReorderAnnouncements";
 
         private const string CLASS_ANNOUNCEMENT_TYPE_ID_PARAM = "classAnnouncementTypeId";
         private const string CREATED_PARAM = "created";
@@ -202,21 +201,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         private const string CLASS_ANN_TYPE_PARAM = "classAnnType";
-
-        public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int classId)
-        {
-            var parameters = new Dictionary<string, object>
-                {
-                    {SCHOOL_YEAR_ID_PARAM, schoolYearId},
-                    {CLASS_ANN_TYPE_PARAM, classAnnouncementTypeId},
-                    {CLASS_ID_PARAM, classId}
-                };
-            using (ExecuteStoredProcedureReader(REORDER_PROCEDURE, parameters))
-            {
-            }
-        }
-        
-        
+       
         public IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds, int personId)
         {
             if (activitiesIds == null || activitiesIds.Count == 0) return new List<AnnouncementComplex>();

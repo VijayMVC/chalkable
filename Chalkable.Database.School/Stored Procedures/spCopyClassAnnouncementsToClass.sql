@@ -69,10 +69,10 @@ Output ToCopy.[Id], ToCopy.[FromActivityId], Inserted.[Id], ToCopy.[ToActivityId
 
 Insert Into ClassAnnouncement
 (Id, Expires, ClassRef, MayBeDropped, VisibleForStudent, 
-	[Order], Dropped, SisActivityId, SchoolYearRef, IsScored)
+	Dropped, SisActivityId, SchoolYearRef, IsScored)
 	Select 
 		[ToAnnouncementId], getDate(), ToClassId,
-		0, 0, 0, 0, 
+		0, 0, 0,
 		[ToActivityId], --SisActivityId
 		ToSchoolYearId,  --SchoolYearRef
 		0

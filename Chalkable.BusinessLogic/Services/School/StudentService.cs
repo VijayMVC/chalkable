@@ -158,7 +158,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     IsAlert = x.IsAlert,
                     MedicationType = x.MedicationType,
                     Treatment = x.Treatment
-                }).ToList(); 
+                }).OrderBy(x => x.Name).ToList(); 
         }
 
         private bool CanGetHealthConditions()
@@ -174,7 +174,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!await HasHealthFormAccess())
                 return new List<StudentHealthFormInfo>();
             var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId, schoolYearId, Context.PersonId.Value);
-            return healthForms == null ? new List<StudentHealthFormInfo>() : StudentHealthFormInfo.Create(healthForms);
+            return healthForms == null ? new List<StudentHealthFormInfo>() : StudentHealthFormInfo.Create(healthForms).OrderBy(x => x.Name).ToList();
         }
 
         private async Task<bool> HasHealthFormAccess()

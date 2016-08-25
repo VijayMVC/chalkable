@@ -266,8 +266,13 @@ NAMESPACE('chlk.controllers', function (){
                     .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId(), true]);
+                        setTimeout(function(){
+                            this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId(), true]);
+                        }.bind(this), 10);
+
+                        return ria.async.BREAK;
                     }, this);
+
                 return this.UpdateView(chlk.activities.setup.CategoriesSetupPage, res);
             },
 

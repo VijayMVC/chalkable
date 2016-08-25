@@ -37,27 +37,22 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
     .table.top-table
         .left-block
             .left-block-container
-                div(class=announcementItem.getExpiresDate() || isAdmin ? 'with-date' : '').title-block-container
+                .title-block-container
                     +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
-                    +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
                 if types
                     -var typeId = self.getSelectedTypeId()
                     .left-top-container
                         .recipients-container
                             label(for="type-select").main-label Category:
                             .types-select-cnt
-                                +Select('typeid')#type-select
+                                +Select('typeid')(class="validate[required]")#type-select
+                                    +Option('', 'Select category', !typeId)
                                     each item in types
                                         if item.getId().valueOf()
                                             +Option(item.getId(), item.getName(), typeId== item.getId())(
-                                            data-typeid=item.getId(),
-                                            data-typename=item.getName()
+                                                data-typeid=item.getId(),
+                                                data-typename=item.getName()
                                             )
-                            BUTTON(
-                                type = editable ? "submit" : "button",
-                                name="submitType",
-                                value="save"
-                            )#announcement-type-btn.validate-skip.x-hidden
         .right-block
             .h-1
     .table
