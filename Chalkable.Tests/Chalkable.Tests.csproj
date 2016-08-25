@@ -102,6 +102,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AB_Api\AbApiTests.cs" />
     <Compile Include="Common\SettingsTest.cs" />
     <Compile Include="DacPacDeployTest.cs" />
     <Compile Include="DataAccess\Master\DataAccessTestBase.cs" />
@@ -124,6 +125,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkConnector\Chalkable.AcademicBenchmarkConnector.csproj">
+      <Project>{a8f83b5e-129f-465e-b8ae-b37231c28df1}</Project>
+      <Name>Chalkable.AcademicBenchmarkConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.BackgroundTaskProcessor\Chalkable.BackgroundTaskProcessor.csproj">
       <Project>{57307F26-31D4-4759-B22D-C60C7F02DEDB}</Project>
       <Name>Chalkable.BackgroundTaskProcessor</Name>
