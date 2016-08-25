@@ -45,7 +45,8 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                         .recipients-container
                             label(for="type-select").main-label Category:
                             .types-select-cnt
-                                +Select('typeid')#type-select
+                                +Select('typeid')(class="validate[required]")#type-select
+                                    +Option('', 'Select category', !typeId)
                                     each item in types
                                         if item.getId().valueOf()
                                             +Option(item.getId(), item.getName(), typeId== item.getId())(
