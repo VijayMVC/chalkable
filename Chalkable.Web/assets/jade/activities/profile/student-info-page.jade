@@ -39,25 +39,29 @@ mixin ParentProfileInfoView(contacts)
     +CloseOpen('Contacts').today-work-panel
         -var index = 0;
         table
-            each contact in contacts
+            while (index < contacts.length)
 
-                -var person = contact.getPersonInfo()
+                -var person = contacts[index].getPersonInfo()
                 -var primaryPhone = person.getPrimaryPhone() ? person.getPrimaryPhone().getValue() : '';
                 -var address = person.getAddress() ? person.getAddress().getValue() : ''
-
-                if(index % 2 == 0)
-                    tr
+                tr
+                    td(valign='top')
+                        +SingleContact_(contacts[index], person, primaryPhone, address)
+                    if contacts[index+1]
+                        -var person2 = contacts[index+1].getPersonInfo()
+                        -var primaryPhone2 = person2.getPrimaryPhone() ? person2.getPrimaryPhone().getValue() : '';
+                        -var address2 = person2.getAddress() ? person2.getAddress().getValue() : ''
                         td(valign='top')
-                            +SingleContact_(contact, person, primaryPhone, address)
-                        if contacts[index+1]
-                            -var person2 = contacts[index+1].getPersonInfo()
-                            -var primaryPhone2 = person2.getPrimaryPhone() ? person2.getPrimaryPhone().getValue() : '';
-                            -var address2 = person2.getAddress() ? person2.getAddress().getValue() : ''
+                            +SingleContact_(contacts[index+1], person2, primaryPhone2, address2)
+                        if contacts[index+2]
+                            -var person3 = contacts[index+2].getPersonInfo()
+                            -var primaryPhone3 = person3.getPrimaryPhone() ? person3.getPrimaryPhone().getValue() : '';
+                            -var address3 = person3.getAddress() ? person3.getAddress().getValue() : ''
                             td(valign='top')
-                                +SingleContact_(contacts[index+1], person2, primaryPhone2, address2)
+                                +SingleContact_(contacts[index + 2], person3, primaryPhone3, address3)
                                 br
-                -index = index + 1
-
+                                br
+                -index += 3
 
 -var person = self.getUser()
 -var forms = person.getHealthForms()
