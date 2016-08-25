@@ -1,0 +1,13 @@
+.dialog.edit-groups
+    .x-window-header
+        h1 Verify Health Form
+        .close.close-btn
+
+    .document-container
+        +PdfDocument(self.getDocumentUrl())
+        if !self.isReadonly()
+            .no-items-text.small I have read and fully understand the selected student health form.
+    .buttons-container
+        BUTTON(type="submit").negative-button.close=Msg.Cancel
+        if !self.isReadonly()
+            +ActionButton('students', 'verifyHealthForm', self.getRequestId(), self.getStudentId(), self.getHealthFormId()).blue-button Verify

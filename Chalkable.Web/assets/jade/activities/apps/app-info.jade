@@ -1,0 +1,261 @@
+mixin Textbox(tName, val, isReadonly, validationRule, placeholder)
+    rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
+    if isReadonly
+        -attributes.readonly = isReadonly
+    placeholderText = placeholder ? placeholder : ""
+    input(type="text", name=tName, value=val, class=rule, placeholder=placeholderText)(attributes).text
+
+
+
+mixin TextArea(tName, val, isReadonly, validationRule)
+    //todo: fix duplicate attrs
+    rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
+    if isReadonly
+        -attributes.readonly = isReadonly
+    textarea(name=tName, class=rule)(attributes)=val
+
+mixin MyAppsPermission(prefix, appName, suffix, shortText)
+    permissionCls = shortText ? "app-name " + shortText : "app-name"
+    .myapps-permission
+        label=prefix
+        if appName.length > 0
+            span(data-tooltip=prefix +  " " + appName + " " + suffix, data-tooltip-type="overflow", class=permissionCls)=appName
+        span.my-apps=suffix
+
+mixin MyAppsPermissions(myAppsAccess, appName, readOnly)
+    .my-apps
+        .permission
+            +MyAppsPermission("Can Teachers Launch", appName, "in My Apps?")
+            +SlideCheckbox("teacherMyAppsEnabled", myAppsAccess.isTeacherMyAppsEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Students Launch", appName, "in My Apps?")
+            +SlideCheckbox("studentMyAppsEnabled", myAppsAccess.isStudentMyAppsEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Admins Launch", appName, "in My Apps?")
+            +SlideCheckbox("adminMyAppsEnabled", myAppsAccess.isAdminMyAppsEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Parents Launch", appName, "in My Apps?", "short")
+            +SlideCheckbox("parentMyAppsEnabled", myAppsAccess.isParentMyAppsEnabled(), readOnly)
+
+mixin ExternalAttachPermissions(appsAccess, appName, readOnly)
+    .external-attach-apps.my-apps
+        .permission
+            +MyAppsPermission("Can Teachers Launch", appName, "in External Attach Mode?")
+            +SlideCheckbox("teacherExternalAttachEnabled", myAppsAccess.isTeacherExternalAttachEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Students Launch", appName, "in External Attach Mode?")
+            +SlideCheckbox("studentExternalAttachEnabled", myAppsAccess.isStudentExternalAttachEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Admins Launch", appName, "in External Attach Mode?")
+            +SlideCheckbox("adminExternalAttachEnabled", myAppsAccess.isAdminExternalAttachEnabled(), readOnly)
+
+
+app = self.app
+myAppsAccess = app.getAppAccess()
+
+selectedAppCategories = {}
+selectedAppGradeLevels = {}
+selectedAppPermissions = {}
+selectedAppPlatforms = {}
+appGradeLvls = []
+appCategories = []
+appPermissions = []
+appPlatforms = [];
+
+
+
+
+
+actAppCategories = app.getCategories() || []
+actAppGradeLevels = app.getGradeLevels() || []
+actAppPermissions = app.getPermissions() || []
+actAppPlatforms = app.getPlatforms() || []
+
+
+
+
+
+each item in actAppGradeLevels
+    -selectedAppGradeLevels[item.valueOf()] = true
+    -appGradeLvls.push(item.valueOf())
+each item in actAppCategories
+    -selectedAppCategories[item.getId()] = true
+    -appCategories.push(item.getId().valueOf())
+
+each item in actAppPermissions
+    -selectedAppPermissions[item.getId()] = true
+    -appPermissions.push(item.getId().valueOf())
+
+each item in actAppPlatforms
+    -selectedAppPlatforms[item.getId()] = true
+    -appPlatforms.push(item.getId().valueOf())
+
+appGradeLvls = appGradeLvls.join(',')
+appCategories = appCategories.join(',')
+appPermissions = appPermissions.join(',')
+appPlatforms = appPlatforms.join(',')
+
+
+simpleApp = !app.isAdvancedApp()
+
+.app-info
+    h2.page-title APP info
+
+    .api-key
+        = 'API key: '
+        +Textbox("apikey", app.getSecretKey(), true)
+
+
+    if !self.isReadOnly()
+        .action-bar.not-transparent.dev-app-info
+            .container.panel-bg
+                label= "Status: " + app.getState().toString()
+    +ActionForm('apps', 'update').app-info
+        if !self.isReadOnly()
+            disableSubmitBtn = self.isDraft() || app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
+            +Button()(disabled = disableSubmitBtn, name="submit-btn", class = disableSubmitBtn ? "x-item-disabled" : "").blue-button.submit-btn  Submit App
+        +Hidden('draft', self.isDraft())
+        +Hidden('id', app.getId())
+        +Hidden('developerName', app.getDeveloperInfo().getName())
+        +Hidden('developerWebSite', app.getDeveloperInfo().getWebSite())
+        .section.first
+            .elem
+                label.hint App Name:
+                +Textbox("name", app.getName(), self.isReadOnly(), "required")
+            .elem
+                label.hint App URL:
+                +Textbox("url", app.getUrl(), self.isReadOnly(), _DEBUG ? "required" : "required, custom[url]")
+
+            .elem
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Advanced App", "", "", "short")
+                        +SlideCheckbox("advancedApp", app.isAdvancedApp(), self.isReadOnly()).advancedApp
+        .section.advanced(class = simpleApp ?  "x-hidden" : undefined)
+            .elem
+                label.top.hint My Apps:
+                +MyAppsPermissions(myAppsAccess, app.getName(), self.isReadOnly())
+            .elem
+                lebel.top.hint External Attach Apps:
+                +ExternalAttachPermissions(myAppsAccess, app.getName(), self.isReadOnly())
+        .section.small.advanced(class = simpleApp ?  "x-hidden" : undefined)
+            .elem.first
+                label.hint New Item:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Teachers or Admins Attach", app.getName(), "in New Items?", "short")
+                        +SlideCheckbox("attachEnabled", myAppsAccess.isAttachEnabled(), self.isReadOnly())
+            .elem
+                label.hint Grading View:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Will Teachers be", ' ', 'viewing student output?', "short-gd")
+                        +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
+            .elem
+                label.hint Settings:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can SysAdmin Launch ", app.getName(), "in Settings?", "short")
+                        +SlideCheckbox("sysAdminSettingsEnabled", myAppsAccess.isSysAdminSettingsEnabled(), self.isReadOnly())
+                    .permission
+                        +MyAppsPermission("Can District Admin Launch ", app.getName(), "in Settings?", "short")
+                        +SlideCheckbox("districtAdminSettingsEnabled", myAppsAccess.isDistrictAdminSettingsEnabled(), self.isReadOnly())
+            .elem
+                label.hint Profile:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Student Launch ", app.getName(), "in Profile?", "short")
+                        +SlideCheckbox("studentProfileEnabled", myAppsAccess.isStudentProfileEnabled(), self.isReadOnly())
+
+        .section.small.advanced(class = simpleApp ?  "x-hidden" : undefined)
+            .elem
+                label.hint Provides Recommended Content
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Does ", app.getName(), ' Provide Recommended Content?', "short")
+                        +SlideCheckbox("providesRecommendedContent", myAppsAccess.isProvidesRecommendedContent(), self.isReadOnly())
+        .section.small
+            .elem.standarts
+                isAdjustToStandards = app.getStandards() && app.getStandards().length > 0
+                label.hint Standards:
+                .info
+                    label.description Is your app aligned with common core standards?
+                    +SlideCheckbox("adjustedToStandarts", isAdjustToStandards, self.isReadOnly()).toggle-standarts
+                .add-standards-container(class = isAdjustToStandards ? undefined :  "x-hidden")
+                    .add-standards
+                        +RenderWith(self.prepareStandardListData(), chlk.templates.standard.ApplicationStandardsTpl)
+        .section.advanced(class = simpleApp ?  "x-hidden" : undefined)
+            .elem
+                label.hint API Access:
+                .permissions
+                    +CheckboxList('permissions', 'app-permission', appPermissions)
+                        each item in self.getPermissions()
+                            -isChecked = !!selectedAppPermissions[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-permission'+ item.getId(), isChecked, self.isReadOnly())
+        .section
+            .elem
+                label.hint Subjects:
+                .categories
+                    +CheckboxList('categories', 'app-category', appCategories)
+                        each item in self.getCategories()
+                            -isChecked = !!selectedAppCategories[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-category' + item.getId(), isChecked, self.isReadOnly())
+        .section
+            .elem
+                label.hint Grades:
+                .grade-levels
+                    +CheckboxList('gradeLevels', 'app-grade-level', appGradeLvls)
+                        each item in self.getGradeLevels()
+                            -isChecked = !!selectedAppGradeLevels[item.getId().valueOf()]
+                            +LabeledCheckbox(item.getName(), 'app-grade-level' + item.getId(), isChecked, self.isReadOnly())
+
+        .section
+            .elem
+                label.wide.hint Short Description:
+                +Textbox("shortDescription", app.getShortDescription(), self.isReadOnly(), "required, maxSize[150]")
+            .elem
+                label.wide.hint.top-align Long Description:
+                +TextArea("longDescription", app.getDescription(), self.isReadOnly(), "required, maxSize[1000]")
+            .elem
+                label.wide.hint Video Demo:
+                +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly(), "custom[url]")
+        .section.short
+            .elem
+                label.hint Works on:
+                .app-platforms
+                   +CheckboxList('platforms', 'app-platform', appPlatforms)
+                        each item in self.getSupportedPlatforms()
+                            -isChecked = !!selectedAppPlatforms[item.getId()]
+                            +LabeledCheckbox(item.getName(), 'app-platform' + item.getId(), isChecked, self.isReadOnly())
+
+        .section.last
+            .pictures
+                .elem.icons
+                    label.hint Icons:
+                    .icons
+                        .icon
+                           +RenderWith(app.getIconPicture(), chlk.templates.apps.AppPicture)
+                        .banner
+                           +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
+                        .external-attach-picture
+                            +RenderWith(app.getExternalAttachPicture(), chlk.templates.apps.AppPicture)
+        .section.last
+            .pictures
+                .elem.screenshots
+                        +RenderWith(app.getScreenshotPictures(), chlk.templates.apps.AppScreenshots)
+
+        if !self.isReadOnly()
+            +Button()(disabled = !self.isDraft(),name="submit-draft-btn", class = !self.isDraft() ? "x-item-disabled" : "").submit-draft-btn.special-button.blue-button Update Draft
+
+    if app.isLive() && self.getUserRole().isSysAdmin()
+        +ActionForm('apps','setInternalData')
+            +Hidden('id', app.getId())
+            .section
+                .elem
+                    label.wide.hint Internal Score:
+                    +Textbox("internalscore", app.getInternalScore(), false, "required, maxSize[100]")
+                .elem
+                    label.wide.hint Internal Description:
+                    +Textbox("internaldescription", app.getInternalDescription(), false, "required, maxSize[150]")
+            +Button(name="submit-internal-data-btn").submit-draft-btn.special-button.blue-button Set Internal Data
+
