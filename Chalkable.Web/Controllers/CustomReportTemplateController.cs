@@ -18,7 +18,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Create(string name, string layout, string style)
         {
-
             byte[] icon;
             string filename;
             GetFileFromRequest(out icon, out filename);
@@ -43,6 +42,13 @@ namespace Chalkable.Web.Controllers
         {
             MasterLocator.CustomReportTemplateService.Delete(templateId);
             return Json(true);
+        }
+
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult Info(Guid templateId)
+        {
+            var res = MasterLocator.CustomReportTemplateService.GetById(templateId);
+            return Json(CustomReportTemplateViewData.Create(res));
         }
     }
 }

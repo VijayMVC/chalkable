@@ -19,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IPersonPictureService PersonPictureService { get; }
         IPictureService DepartmentIconService { get; }
         IPictureService ApplicationPictureService { get; }
+        IPictureService CustomReportTemplateIconService { get; }
         IApplicationService ApplicationService { get; }
         ICategoryService CategoryService { get; }
         IApplicationUploadService ApplicationUploadService { get; }
@@ -42,6 +43,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IPersonPictureService personPictureService;
         private IPictureService departmentIconService;
         private IPictureService applicationPictureService;
+        private IPictureService customReportTemplateIconService;
         private IApplicationService applicationService;
         private ICategoryService categoryService;
         private IApplicationUploadService applicationUploadService;
@@ -60,6 +62,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             chalkableDepartmentService = new ChalkableDepartmentService(this);
             personPictureService = new PersonPictureService(this);
             departmentIconService = new DepartmentIconService(this);
+            customReportTemplateIconService = new CustomReportTemplateIconService(this);
             districtService = new DistrictService(this);
             applicationService = new ApplicationService(this);
             categoryService = new CategoryService(this);
@@ -82,6 +85,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IChalkableDepartmentService ChalkableDepartmentService => chalkableDepartmentService;
         public IPersonPictureService PersonPictureService => personPictureService;
         public IPictureService DepartmentIconService => departmentIconService;
+        public IPictureService CustomReportTemplateIconService => customReportTemplateIconService;
         public IApplicationService ApplicationService => applicationService;
         public ICategoryService CategoryService => categoryService;
         public IApplicationUploadService ApplicationUploadService => applicationUploadService;

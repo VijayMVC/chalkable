@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             DoUpdate(u =>
             {
                 new DataAccessBase<CustomReportTemplate, Guid>(u).Insert(template);
-                UploadIcon(template.Id, icon);
+                ServiceLocator.CustomReportTemplateIconService.UploadPicture(template.Id, icon);
             });
             return template;
         }
@@ -52,24 +52,16 @@ namespace Chalkable.BusinessLogic.Services.Master
                 template.Style = style;
                 template.Name = name;
                 da.Update(template);
-                UploadIcon(template.Id, icon);
+                ServiceLocator.CustomReportTemplateIconService.UploadPicture(templateId, icon);
             });
             return template;
         }
 
         public byte[] GetIcon(Guid templateId)
         {
-            return ServiceLocator.StorageBlobService.GetBlobContent(REPORT_TEMPLATE_ICON_CONTAINER, templateId.ToString());
-        }
-        private void UploadIcon(Guid templateId, byte[] icon)
-        {
-            ServiceLocator.StorageBlobService.AddBlob(REPORT_TEMPLATE_ICON_CONTAINER, templateId.ToString(), icon);
+            return ServiceLocator.CustomReportTemplateIconService.GetPicture(templateId, null, null);
         }
 
-        private void DeleteIcon(Guid templateId)
-        {
-            ServiceLocator.StorageBlobService.DeleteBlob(REPORT_TEMPLATE_ICON_CONTAINER, templateId.ToString());
-        }
         
 
         public void Delete(Guid templateId)
@@ -78,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             DoUpdate(u =>
             {
                 new DataAccessBase<CustomReportTemplate, Guid>(u).Delete(templateId);
-                DeleteIcon(templateId);
+                ServiceLocator.CustomReportTemplateIconService.DeletePicture(templateId);
             });
         }
 
