@@ -28,6 +28,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IUserTrackingService UserTrackingService { get; }
         IDbMaintenanceService DbMaintenanceService { get; }
         IAcademicBenchmarkService AcademicBenchmarkService { get; }
+        ICustomReportTemplateService CustomReportTemplateService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -48,6 +49,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IUserTrackingService userTrackingService;
         private IDbMaintenanceService dbMaintenanceService;
         private IAcademicBenchmarkService academicBenchmarkService;
+        private ICustomReportTemplateService customReportTemplateService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -69,18 +71,19 @@ namespace Chalkable.BusinessLogic.Services.Master
             userTrackingService = new MixPanelService(Settings.MixPanelToken);
             dbMaintenanceService = new DbMaintenanceService(this);
             academicBenchmarkService = new AcademicBenchmarkService(this);
+            customReportTemplateService = new CustomReportTemplateService(this);
         }
 
-        public IUserService UserService { get { return userService; } }
-        public ISchoolService SchoolService { get { return schoolService; } }
-        public IDistrictService DistrictService { get { return districtService; } }
-        public IBackgroundTaskService BackgroundTaskService { get { return backgroundTaskService; } }
-        public IPreferenceService PreferenceService { get { return preferenceService; } }
-        public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
-        public IPersonPictureService PersonPictureService { get { return personPictureService; } }
-        public IPictureService DepartmentIconService { get { return departmentIconService; } }
-        public IApplicationService ApplicationService { get { return applicationService; } }
-        public ICategoryService CategoryService { get { return categoryService; } }
+        public IUserService UserService => userService;
+        public ISchoolService SchoolService => schoolService;
+        public IDistrictService DistrictService => districtService;
+        public IBackgroundTaskService BackgroundTaskService => backgroundTaskService;
+        public IPreferenceService PreferenceService => preferenceService;
+        public IChalkableDepartmentService ChalkableDepartmentService => chalkableDepartmentService;
+        public IPersonPictureService PersonPictureService => personPictureService;
+        public IPictureService DepartmentIconService => departmentIconService;
+        public IApplicationService ApplicationService => applicationService;
+        public ICategoryService CategoryService => categoryService;
         public IApplicationUploadService ApplicationUploadService => applicationUploadService;
         public IEmailService EmailService { get; protected set; }
         public IDeveloperService DeveloperService => developerService;
@@ -89,6 +92,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IUserTrackingService UserTrackingService => userTrackingService;
         public IDbMaintenanceService DbMaintenanceService => dbMaintenanceService;
         public IAcademicBenchmarkService AcademicBenchmarkService => academicBenchmarkService;
+        public ICustomReportTemplateService CustomReportTemplateService => customReportTemplateService;
 
 
         public virtual IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)
