@@ -33,8 +33,15 @@
 
 .feed-container
 
+  .top-green-info
+    top: -43px
+
   .double-select
     width: 150px
+
+  &:not(.settings-mode)
+    .tools-buttons-block
+      display: none
 
   &:not(.copy-mode)
     .copy-buttons-block
@@ -53,6 +60,11 @@
     .feed-item
       .check-cnt:not(.supplemental)
         display: inline-block
+
+  &.copy-mode, &.adjust-mode, &.settings-mode
+    .top-green-info
+      position: relative
+      top: 0
 
   &.copy-mode, &.adjust-mode
     .feed-item

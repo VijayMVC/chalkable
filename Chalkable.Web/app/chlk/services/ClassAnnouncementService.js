@@ -77,6 +77,7 @@ NAMESPACE('chlk.services', function () {
                 , discussionEnabled, previewCommentsEnabled, requireCommentsEnabled) {
                 return this.post('ClassAnnouncement/SubmitAnnouncement.json', Boolean, {
                     announcementid:id.valueOf(),
+                    title: title_,
                     classannouncementtypeid:announcementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
                     content: content_,

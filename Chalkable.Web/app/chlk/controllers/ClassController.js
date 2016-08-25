@@ -327,13 +327,13 @@ NAMESPACE('chlk.controllers', function (){
 
             function getPanorama_(classId, restore_){
                 return ria.async.wait([
-                        this.classService.getPanorama(classId),
-                        this.schoolYearService.list()
+                        this.classService.getPanorama(classId)
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var model = result[0];
-                        model.setSchoolYears(result[1]);
+                        var years = this.getContext().getSession().get(ChlkSessionConstants.YEARS, []);
+                        model.setYears(years);
                         model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
                         restore_ && model.setShowFilters(true);
                         return new chlk.models.classes.ClassProfileSummaryViewData(

@@ -1,3 +1,21 @@
+.top-green-info
+  position: absolute
+  background: #e9f6ed
+  color: #41b768
+  font-weight: bold
+  box-shadow: none
+  width: 260px
+  left: 50%
+  margin-left: -130px
+  top: 0
+  line-height: 35px
+  border: 1px solid #41b768
+  text-align: center
+  border-radius: 3px
+
+  &:hover
+    opacity: 1
+
 .lesson-plan-form-dialog
   .dialog
     width: 880px
@@ -122,22 +140,6 @@
   .title-block-container
     position: relative
 
-  #view-imported-button
-    position: absolute
-    background: #e9f6ed
-    color: #41b768
-    font-weight: bold
-    border-color: #41b768
-    box-shadow: none
-    width: 260px
-    left: 50%
-    margin-left: -130px
-    top: 0
-    line-height: 35px
-
-    &:hover
-      opacity: 1
-
   .action-bar
     .items
       width: 95%
@@ -181,23 +183,8 @@
   .ann-form-container > *
     margin-bottom: 24px
 
-  .title-block-container:not(.with-date):not(.with-gallery-id)
-    .save-title-btn
-      display: none
-
   .title-block
     margin-top: 16px
-
-    &.class-announcement:not(.active)
-      .input-container
-        display: none
-
-      .save-title-btn
-        display: none
-
-    &.active
-      .title-text, .edit-icon
-        display: none
 
     .titleformError
       margin-left: 106px !important
@@ -210,17 +197,6 @@
       INPUT
         width: 100%
         box-sizing: border-box
-
-    .save-title-btn
-      position: absolute
-
-    .title-text
-      font-size: 16px
-      font-weight: 600
-
-    .title-text
-      line-height: 31px
-      display: inline-block
 
     BUTTON
       vertical-align: top

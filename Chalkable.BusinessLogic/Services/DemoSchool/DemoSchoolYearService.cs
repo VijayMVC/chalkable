@@ -140,6 +140,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<SchoolYear> GetSchoolYearsByAcadYears(IList<int> years, bool activeOnly = true)
+        {
+            throw new NotImplementedException();
+        }
+
         public static SchoolYear GetDemoSchoolYear()
         {
             var currentDate = DateTime.Today;

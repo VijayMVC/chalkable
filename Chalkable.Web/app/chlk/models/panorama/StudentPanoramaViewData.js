@@ -154,7 +154,7 @@ NAMESPACE('chlk.models.panorama', function () {
             ArrayOf(chlk.models.common.ChartDateItem), 'attendancesStats',
             ArrayOf(chlk.models.panorama.StudentDisciplineStatViewData), 'studentDisciplineStats',
             ArrayOf(chlk.models.panorama.StudentAbsenceStatViewData), 'studentAbsenceStats',
-            ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
+            ArrayOf(Number), 'years',
             Boolean, 'showFilters',
 
             chlk.models.panorama.StudentAttendancesSortType, 'attendancesOrderBy',

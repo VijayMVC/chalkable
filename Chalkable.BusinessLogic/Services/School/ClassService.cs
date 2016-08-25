@@ -71,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
         IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
         bool IsTeacherClasses(int teacherId, params int[] classIds);
-        ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
+        ClassPanorama Panorama(int classId, IList<int> academicYears, IList<StandardizedTestFilter> standardizedTestFilters);
 
         IList<DateTime> GetDays(int classId);
         void PrepareToDelete(IList<Class> classes);
@@ -238,20 +238,25 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ClassPanorama Panorama(int classId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        public ClassPanorama Panorama(int classId, IList<int> academicYears, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
 
             if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to view class panorama");
 
-            if (schoolYearIds == null || schoolYearIds.Count == 0)
+            if (academicYears == null || academicYears.Count == 0)
                 throw new ChalkableException("School years is required parameter");
 
             standardizedTestFilters = standardizedTestFilters ?? new List<StandardizedTestFilter>();
             var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
             var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);
-            var sectionPanorama = ConnectorLocator.PanoramaConnector.GetSectionPanorama(classId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
+
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYears(academicYears);
+            var c = ServiceLocator.ClassService.GetClassDetailsById(classId);
+            if (c.SchoolYear != null)
+                schoolYears = schoolYears.Where(x => x.SchoolRef == c.SchoolYear.SchoolRef).ToList();
+            var sectionPanorama = ConnectorLocator.PanoramaConnector.GetSectionPanorama(classId, schoolYears.Select(x=>x.Id).ToList(), componentIds.ToList(), scoreTypeIds.ToList());
 
             return ClassPanorama.Create(sectionPanorama);
         }

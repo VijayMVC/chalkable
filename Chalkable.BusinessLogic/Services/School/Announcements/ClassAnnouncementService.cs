@@ -88,7 +88,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var res = annDa.Create(classAnnType.Id, classId, Context.NowSchoolTime, expiresDate, Context.PersonId.Value);
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime, Context.SchoolLocalId.Value);
-                annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassAnnouncementData.ClassRef);
                 res = InternalGetDetails(annDa, res.Id);
                 var classAnnData = res.ClassAnnouncementData;
                 if (classAnnData.ClassAnnouncementTypeRef.HasValue)
@@ -153,9 +152,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     ServiceLocator.AnnouncementAssignedAttributeService.ValidateAttributes(res.AnnouncementAttributes);
                     res.ClassAnnouncementData.State = AnnouncementState.Created;
                     res.ClassAnnouncementData.Created = Context.NowSchoolTime.Date;
-                    if (string.IsNullOrEmpty(res.ClassAnnouncementData.Title)
-                        || res.ClassAnnouncementData.DefaultTitle == res.ClassAnnouncementData.Title)
-                        res.ClassAnnouncementData.Title = res.ClassAnnouncementData.DefaultTitle;
 
                     var activity = new Activity();
                     MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
@@ -181,10 +177,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     annAttDa.Insert(res.AnnouncementAttributes);
                 }
                 da.Update(res.ClassAnnouncementData);
-
-                var sy = new SchoolYearDataAccess(uow).GetByDate(res.ClassAnnouncementData.Expires, Context.SchoolLocalId.Value);
-                if (res.ClassAnnouncementData.ClassAnnouncementTypeRef.HasValue)
-                    da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementData.ClassAnnouncementTypeRef.Value, res.ClassAnnouncementData.ClassRef);
                 uow.Commit();
             }
         }
@@ -194,6 +186,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             , UnitOfWork uow, ClassAnnouncementDataAccess annDa)
         {
             ann.Content = inputAnnData.Content;
+
+            if(inputAnnData.Title == null || (inputAnnData.ExpiresDate.HasValue && Exists(inputAnnData.Title, inputAnnData.ClassId, inputAnnData.ExpiresDate.Value, inputAnnData.AnnouncementId)))
+                throw new ChalkableException("Invalid Class Announcement Title");
+            ann.Title = inputAnnData.Title;
+            
             if (inputAnnData.ExpiresDate.HasValue)
                 ann.Expires = inputAnnData.ExpiresDate.Value.Date;
             if (inputAnnData.ClassAnnouncementTypeId.HasValue)
@@ -240,8 +237,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 }
             }
             annDa.Update(ann);
-            if (ann.ClassAnnouncementTypeRef.HasValue && Context.SchoolYearId.HasValue)
-                annDa.ReorderAnnouncements(Context.SchoolYearId.Value, ann.ClassAnnouncementTypeRef.Value, ann.ClassRef);
             return ann;
         }
 

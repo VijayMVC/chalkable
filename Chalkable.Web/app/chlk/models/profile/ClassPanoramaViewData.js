@@ -32,7 +32,7 @@ NAMESPACE('chlk.models.profile', function () {
             chlk.models.profile.ClassDistributionSectionViewData, 'classDistributionSection',
             ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'standardizedTestsStatsByClass',
             ArrayOf(chlk.models.profile.StandardizedTestStatsViewData), 'selectStandardizedTestsStats',
-            ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
+            ArrayOf(Number), 'years',
             ArrayOf(chlk.models.panorama.StudentStandardizedTestStats), 'students',
             Boolean, 'showFilters',
 

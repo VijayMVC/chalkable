@@ -30,24 +30,28 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             if (!classId.HasValue)
             {
                 Trace.Assert(serviceLocator.Context.SchoolYearId.HasValue);
-                return new ClassProfilePanoramaSetting { SchoolYearIds = new List<int> { serviceLocator.Context.SchoolYearId.Value } };
+                var sy = serviceLocator.SchoolYearService.GetSchoolYearById(serviceLocator.Context.SchoolYearId.Value);
+                return new ClassProfilePanoramaSetting { AcadYears = new List<int> { sy.AcadYear } };
             }
+
             var @class = serviceLocator.ClassService.GetById(classId.Value);
 
-            var currentSchoolYearId = @class.SchoolYearRef ?? serviceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var currentSchoolYear = @class.SchoolYearRef.HasValue 
+                ? serviceLocator.SchoolYearService.GetSchoolYearById(@class.SchoolYearRef.Value) 
+                : serviceLocator.SchoolYearService.GetCurrentSchoolYear();
             
             var adminPanoramaSettings = serviceLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
-            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(currentSchoolYearId, adminPanoramaSettings.PreviousYearsCount);
+            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(currentSchoolYear.Id, adminPanoramaSettings.PreviousYearsCount);
 
             var res = new ClassProfilePanoramaSetting
             {
-                SchoolYearIds = previousSchoolYear.Select(x => x.Id).ToList(),
+                AcadYears = previousSchoolYear.Select(x => x.AcadYear).ToList(),
                 StandardizedTestFilters = adminPanoramaSettings.CourseTypeDefaultSettings
                     ?.FirstOrDefault(x => x.CourseTypeId == @class.CourseTypeRef)
                     ?.StandardizedTestFilters ?? new List<StandardizedTestFilter>()
             };
 
-            res.SchoolYearIds.Add(currentSchoolYearId);
+            res.AcadYears.Add(currentSchoolYear.AcadYear);
 
             return res;
         }
@@ -60,12 +64,12 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
 
             var res = new StudentProfilePanoramaSetting
             {
-                SchoolYearIds = previousSchoolYear.Select(x => x.Id).ToList(),
+                AcadYears = previousSchoolYear.Select(x => x.AcadYear).ToList(),
                 StandardizedTestFilters = adminPanoramaSettings.StudentDefaultSettings
                     ?? new List<StandardizedTestFilter>()
             };
 
-            res.SchoolYearIds.Add(currentSchoolYear.Id);
+            res.AcadYears.Add(currentSchoolYear.AcadYear);
 
             return res;
         }

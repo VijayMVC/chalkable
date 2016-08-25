@@ -29,6 +29,12 @@ NAMESPACE('chlk.templates.feed', function () {
             Number, 'count',
 
             [ria.templates.ModelPropertyBind],
+            Number, 'adjustedItemsCount',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'adjustCount',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'startDate',
 
             [ria.templates.ModelPropertyBind],

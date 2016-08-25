@@ -1,13 +1,6 @@
--var isClass = self.getType() == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT
-.title-block(class = (isClass ? 'class-announcement' : ''))
-    if isClass
-        .title-text=self.getTitle()
-    .edit-icon
+.title-block
     .input-container
         INPUT(data-title=self.getTitle(), type="text", name="title", class="validate[required]", value=self.getTitle(), autocomplete="off", maxlength="30",
             placeholder="Item Name...", readonly = self.isReadonly())#title
-        div(data-tooltip=Msg.Name_already_taken).exists-icon
-    BUTTON(disabled, name="submitType", value="saveTitle", type="submit").validate-skip.blue-button.save-title-btn=Msg.Save
-    BUTTON(name="submitType", value="checkTitle", type="submit")#check-title-button.validate-skip.x-hidden
-    BUTTON(name="submitType", value="viewImported", type="submit")#view-imported-button.validate-skip.x-hidden View imported items in your feed
+    BUTTON(name="submitType", value="viewImported", type="submit")#view-imported-button.top-green-info.validate-skip.x-hidden View imported items in your feed
     +Hidden('createdAnnouncements').created-announcements

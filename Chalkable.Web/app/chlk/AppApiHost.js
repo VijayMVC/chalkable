@@ -14,6 +14,8 @@ NAMESPACE('chlk', function(){
         return parseFloat(ria.dom.Dom('html').$.css('zoom') || '1');
     }
 
+    var cbs = {};
+
     /** @class chlk.AppApiHost*/
     CLASS('AppApiHost', [
         // $$ - singleton instance factory
@@ -47,7 +49,7 @@ NAMESPACE('chlk', function(){
 
 
         [[Object, String, Object]],
-        function addApp(rWindow, rURL, data){
+        function addApp(rWindow, rURL, data) {
             if (data.simpleApp && data.simpleApp == true){
                 if (data.attach == false)
                     this.closeApp(data);
@@ -73,6 +75,16 @@ NAMESPACE('chlk', function(){
             }
             else
                 this.doCallApiReactor_('closeMe', data);
+        },
+
+        [[Object, String, Object]],
+        function isAppReadyForClosing(rWindow, rURL, cb) {
+            var res = {};
+            res.action = 'isReadyForClosing';
+            res.reqId = (new Date()).getTime().toString(36) + Math.random().toString(36) + '-irfc';
+            cbs[res.reqId] = cb;
+
+            rWindow.postMessage(res, rURL);
         },
 
         function messengerCallback_(e){
@@ -111,6 +123,15 @@ NAMESPACE('chlk', function(){
                 case 'popMe':
                     if ($iframe.$.parents('.app-wrapper-page').Dom().exists()) {
                         this.doCallApiReactor_(data.action, data);
+                    }
+
+                    break;
+
+                case 'handleResponse':
+                    var reqId = data.reqId;
+                    if (cbs.hasOwnProperty(reqId)) {
+                        cbs[reqId](data.value);
+                        delete cbs[reqId];
                     }
 
                     break;
