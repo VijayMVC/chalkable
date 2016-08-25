@@ -32,14 +32,24 @@ namespace Chalkable.BusinessLogic.Model.Reports
             get { return (ReportCardsOrderBy)OrderBy; }
             set { OrderBy = (int)value; }
         }
-
-        public int IncludeOptions { get; set; }
-        public ReportCardsAddionalOptions IncludeOptionsType
-        {
-            get { return (ReportCardsAddionalOptions)IncludeOptions; }
-            set { IncludeOptions = (int)value; }
-        }
         public int IdToPrint { get; set; }
+
+        public IntList IncludeOptions { get; set; }
+        private bool HasOption(ReportCardsAddionalOptions option)
+        {
+            return IncludeOptions.Contains((int) option);
+        }
+        public bool IncludeAnnouncements => HasOption(ReportCardsAddionalOptions.Announcement);
+        public bool IncludeAttendance => HasOption(ReportCardsAddionalOptions.Attendance);
+        public bool IncludeGradginPeriodNotes => HasOption(ReportCardsAddionalOptions.GradginPeriodNotes);
+        public bool IncludeGradingScaleTraditional => HasOption(ReportCardsAddionalOptions.GradingScaleTraditional);
+        public bool IncludeGraginScaleStandards => HasOption(ReportCardsAddionalOptions.GraginScaleStandards);
+        public bool IncludeMeritDemerit => HasOption(ReportCardsAddionalOptions.MeritDemerit);
+        public bool IncludePerentSignature => HasOption(ReportCardsAddionalOptions.PerentSignature);
+        public bool IncludePromotionStatus => HasOption(ReportCardsAddionalOptions.PromotionStatus);
+        public bool IncludeWithdrawnStudents => HasOption(ReportCardsAddionalOptions.WithdrawnStudents);
+        public bool IncludeYearToDateInformation => HasOption(ReportCardsAddionalOptions.YearToDateInformation);
+
     }
 
     public enum ReportCardsRecipientType
@@ -65,18 +75,17 @@ namespace Chalkable.BusinessLogic.Model.Reports
         StudentId = 4
     }
 
-    [Flags]
     public enum ReportCardsAddionalOptions
     {
         Announcement = 0,
         Attendance = 1,
         GradginPeriodNotes = 2,
-        GradingScaleTraditional = 4,
-        GraginScaleStandards = 8,
-        MeritDemerit = 16,
-        PerentSignature = 32,
-        PromotionStatus = 64,
-        WithdrawnStudents = 128,
-        YearToDateInformation = 256    
+        GradingScaleTraditional = 3,
+        GraginScaleStandards = 4,
+        MeritDemerit = 5,
+        PerentSignature = 6,
+        PromotionStatus = 7,
+        WithdrawnStudents = 8,
+        YearToDateInformation = 9    
     }
 }
