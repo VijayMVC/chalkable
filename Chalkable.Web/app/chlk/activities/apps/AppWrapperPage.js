@@ -1,3 +1,7 @@
+REQUIRE('ria.async.Completer');
+
+REQUIRE('chlk.AppApiHost');
+
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.apps.AppWrapperPageTpl');
 
@@ -18,6 +22,27 @@ NAMESPACE('chlk.activities.apps', function () {
                         this.dom.find('iframe').parent()
                             .removeClass('partial-update');
                     }.bind(this))
+            },
+
+            function getInnerDocument() {
+                var iframe = this.dom.find('iframe');
+                return jQuery(iframe.valueOf()).get(0).contentWindow;
+            },
+
+            function getFrameUrl(splitBy) {
+                var iframe = this.dom.find('iframe');
+                return (iframe.getAttr('src') || "").split(splitBy)[0];
+            },
+
+            OVERRIDE, Object, function isReadyForClosing() {
+                var completer = new ria.async.Completer;
+
+                chlk.AppApiHost().isAppReadyForClosing(
+                    this.getInnerDocument(),
+                    this.getFrameUrl('myview'),
+                    completer.complete);
+
+                return completer.getFuture();
             }
         ]);
 });
