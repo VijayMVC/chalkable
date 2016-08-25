@@ -65,7 +65,6 @@
   <ItemGroup>
     <Build Include="dbo\Tables\SubjectDoc.sql" />
     <Build Include="dbo\Tables\Subject.sql" />
-    <Build Include="dbo\Tables\StandardRelation.sql" />
     <Build Include="dbo\Tables\Standard.sql" />
     <Build Include="dbo\Tables\GradeLevel.sql" />
     <Build Include="dbo\Tables\Document.sql" />
@@ -81,5 +80,7 @@
     <Build Include="dbo\User Defined Types\TDocument.sql" />
     <Build Include="dbo\User Defined Types\TCourse.sql" />
     <Build Include="dbo\User Defined Types\TAuthority.sql" />
+    <Build Include="dbo\Tables\StandardDerivative.sql" />
+    <Build Include="dbo\Stored Procedures\spSearchStandards.sql" />
   </ItemGroup>
 </Project>
