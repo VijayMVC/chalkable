@@ -72,7 +72,7 @@ NAMESPACE('chlk.activities.lib', function () {
 
             [[String]],
             OVERRIDE, VOID, function onModelComplete_(msg_) {
-                this.dom.removeClass(this._partialUpdateCls);
+                this.dom && this.dom.removeClass(this._partialUpdateCls);
                 BASE(msg_);
             },
 
