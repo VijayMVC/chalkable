@@ -1,0 +1,22 @@
+﻿CREATE TYPE [dbo].[TStandard] AS TABLE (
+    [Id]              UNIQUEIDENTIFIER NULL,
+    [Description]     NVARCHAR (256)   NULL,
+    [Number]          NVARCHAR (100)   NULL,
+    [Label]           NVARCHAR (50)    NULL,
+    [IsDeepest]       BIT              NULL,
+    [Level]           INT              NULL,
+    [Seq]             NVARCHAR (30)    NULL,
+    [IsActive]        BIT              NULL,
+    [Version]         NVARCHAR (50)    NULL,
+    [DateModified]    DATETIME2 (7)    NULL,
+    [ExtDescription]  NVARCHAR (256)   NULL,
+    [AdoptYear]       INT              NULL,
+    [AuthorityRef]    UNIQUEIDENTIFIER NULL,
+    [DocumentRef]     UNIQUEIDENTIFIER NULL,
+    [SubjectRef]      NVARCHAR (10)    NULL,
+    [SubjectDocRef]   UNIQUEIDENTIFIER NULL,
+    [CourseRef]       UNIQUEIDENTIFIER NULL,
+    [ParentRef]       UNIQUEIDENTIFIER NULL,
+    [GradeLevelLoRef] NVARCHAR (5)     NULL,
+    [GradeLevelHiRef] NVARCHAR (5)     NULL);
+

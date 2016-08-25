@@ -1,0 +1,43 @@
+{    "hasnextpage": true,
+    "haspreviouspage": false,
+    "pageindex": 0,
+    "pagesize": 10,
+    "totalcount": 52,
+    "totalpages": 6,
+    "data": [
+        {
+            "id": 1,
+            "name": "Art",
+            "keywords": ["art", "dance", "drama", "music", "studio art"]
+        },
+        {
+            "id": 2,
+            "name": "Science",
+            "keywords": ["science", "biology", "chemistry", "physics", "earth science", "space science", "lab", "environmental", "anatomy", "physical", "botany", "plant", "soil", "astronomy", "oceanography"]
+        },
+        {
+            "id": 3,
+            "name": "English",
+            "keywords": ["literature", "humanities", "composition", "oral languages", "grammar", "language arts writing", "reading", "reading comprehension", "vocabulary", "literary", "journalism"]
+        },
+        {
+            "id": 4,
+            "name": "Math",
+            "keywords": ["algebra", "algebra I", "algebra II", "geometry", "pre-calculus", "statistics", "trigonometry", "calculus algebraic", "mathematics", "equation"]
+        },
+        {
+            "id": 5,
+            "name": "Social Studies",
+            "keywords": ["History", "Government", "Economics", "Social sciences", "Geography", "Psychology"]
+        },
+        {
+            "id": 6,
+            "name": "Phys Education",
+            "keywords": ["Gym", "Athletics", "Teams", "Track", "Sports", "Health"]
+        },
+        {
+            "id": 7,
+            "name": "Language",
+            "keywords": ["Arabic", "French", "German", "Greek", "Hebrew", "Italian", "Japanese", "Korean", "Latin", "Mandarin", "Russian", "Spanish", "Foreign Language"]
+        }
+    ], "success": true}
