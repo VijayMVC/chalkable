@@ -120,8 +120,6 @@ namespace Chalkable.BusinessLogic.Services.School
                             orderByFirstName, start, count, markingPeriodId, enrolledOnly));
         }
 
-
-       
         public async Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);

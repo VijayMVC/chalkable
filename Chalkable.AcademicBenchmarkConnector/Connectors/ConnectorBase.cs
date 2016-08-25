@@ -103,10 +103,6 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             {
                 return HandleWebException<TResponse>(ex);
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
             finally
             {
                 stream?.Dispose();
