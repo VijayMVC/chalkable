@@ -2,7 +2,7 @@
 
 namespace Chalkable.Data.AcademicBenchmark.Model
 {
-    class Subject
+    public class Subject
     {
         [PrimaryKeyFieldAttr]
         public string Code { get; set; }

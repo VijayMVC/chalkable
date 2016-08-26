@@ -3,7 +3,7 @@ using Chalkable.Data.Common;
 
 namespace Chalkable.Data.AcademicBenchmark.Model
 {
-    class SubjectDoc
+    public class SubjectDoc
     {
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
