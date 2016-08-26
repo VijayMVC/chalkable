@@ -726,7 +726,7 @@
                                                     <Style>
                                                       <FontSize>14pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
-                                                      <Color>#2c75ba</Color>
+                                                      <Color>#56554f</Color>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -792,7 +792,7 @@
                                                     <Style>
                                                       <FontSize>14pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
-                                                      <Color>#2c75ba</Color>
+                                                      <Color>#56554f</Color>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -1318,7 +1318,7 @@
                                                   <Style>
                                                     <FontSize>12pt</FontSize>
                                                     <FontWeight>Bold</FontWeight>
-                                                    <Color>#2c75ba</Color>
+                                                    <Color>#56554f</Color>
                                                   </Style>
                                                 </TextRun>
                                               </TextRuns>

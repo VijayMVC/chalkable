@@ -11,9 +11,9 @@ NAMESPACE('chlk.lib.mvc', function () {
     CLASS(
         'ChlkView', EXTENDS(ria.mvc.View), [
 
-            [[ImplementerOf(ria.mvc.IActivity)]],
-            OVERRIDE, ria.mvc.IActivity, function get_(activityClass) {
-                return this.prepareActivity_(BASE(activityClass));
+            [[ImplementerOf(ria.mvc.IActivity), ria.mvc.ActivityViewMode]],
+            OVERRIDE, ria.mvc.IActivity, function get_(activityClass, viewMode) {
+                return this.prepareActivity_(BASE(activityClass, viewMode));
             },
 
             chlk.models.common.Role, function getCurrentRole_(){
@@ -87,6 +87,15 @@ NAMESPACE('chlk.lib.mvc', function () {
             [[String]],
             VOID, function updateUserName(userName) {
                 ria.dom.Dom('header .logout-area').setText(userName);
+            },
+
+            /**
+             * Pop all from stack with stop and reset engine
+             * @deprecated
+             */
+            VOID, function reset() {
+                while (this.getCurrent() !== null)
+                    this.stopActivity_(this.pop_());
             }
         ]);
 });

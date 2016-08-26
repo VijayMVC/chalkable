@@ -319,7 +319,7 @@
                                                     <Value>=Fields!AnnouncementName.Value</Value>
                                                     <Style>
                                                       <FontWeight>SemiBold</FontWeight>
-                                                      <Color>#2c75ba</Color>
+                                                      <Color>#56554f</Color>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -594,7 +594,7 @@
                                                     <Value>=Fields!AnnouncementType.Value</Value>
                                                     <Style>
                                                       <FontWeight>SemiBold</FontWeight>
-                                                      <Color>#2c75ba</Color>
+                                                      <Color>#56554f</Color>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -886,7 +886,7 @@
                                                   <Style>
                                                     <FontSize>12pt</FontSize>
                                                     <FontWeight>Bold</FontWeight>
-                                                    <Color>#2c75ba</Color>
+                                                    <Color>#56554f</Color>
                                                   </Style>
                                                 </TextRun>
                                               </TextRuns>
