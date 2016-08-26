@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Chalkable.Common;
 using Chalkable.Data.AcademicBenchmark.Model;
 
@@ -29,11 +30,14 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
         public IAcademicBenchmarkServiceBase<Subject, string> SubjectService { get; }
         public IDbService DbService { get; protected set; }
 
-        private AcademicBenchmarkServiceLocator(UserContext context)
+        public AcademicBenchmarkServiceLocator(UserContext context, string connectionString = null)
         {
             Context = context;
-            
-            DbService = new DbService(Settings.AcademicBenchmarkDbConnectionString);
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+                connectionString = Settings.AcademicBenchmarkDbConnectionString;
+
+            DbService = new DbService(connectionString);
             StandardService = new StandardService(this);
 
             DocumentService = new AcademicBenchmarkServiceBase<Document, Guid>(this);

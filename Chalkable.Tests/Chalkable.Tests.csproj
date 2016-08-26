@@ -102,7 +102,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AB_Api\AbApiTests.cs" />
+    <Compile Include="AcademicBenchmarkTests\AbApiTests.cs" />
+    <Compile Include="AcademicBenchmarkTests\ABServicesTests.cs" />
     <Compile Include="Common\SettingsTest.cs" />
     <Compile Include="DacPacDeployTest.cs" />
     <Compile Include="DataAccess\Master\DataAccessTestBase.cs" />
@@ -140,6 +141,10 @@
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.AcademicBenchmark\Chalkable.Data.AcademicBenchmark.csproj">
+      <Project>{61935eee-bf16-477d-aa84-30555fc0f71c}</Project>
+      <Name>Chalkable.Data.AcademicBenchmark</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
       <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>
