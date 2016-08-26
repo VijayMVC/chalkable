@@ -5,15 +5,12 @@ REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.announcement.LessonPlanSearchTpl');
 REQUIRE('chlk.templates.announcement.LessonPlanCategoriesListTpl');
-REQUIRE('chlk.templates.announcement.LessonPlanAutoCompleteTpl');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
 REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
-
-    var listLastTimeout;
 
     /** @class chlk.activities.announcement.LessonPlanFormDialog*/
     CLASS(
@@ -23,22 +20,41 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributesTpl, 'update-attributes', '.attributes-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanFormTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.SuggestedAppsListTpl, '', '.suggested-apps-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanSearchTpl, 'categories', '#galleryCategoryForSearchContainer', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'LessonPlanFormDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
-            [ria.mvc.DomEventBind('change', '.advanced-options .discussion-option.checkbox')],
+            [ria.mvc.DomEventBind('keypress', 'input')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function discussionOptionChange(node, event){
-                var discussionEnabled = node.checked();
-                var options = node.parent('.advanced-options').find('.preview-comments-option.checkbox,.require-comments-option.checkbox');
-                if(!discussionEnabled){
-                    options.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), false)
+            function inputKeyPress(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER){
+                    event.preventDefault();
                 }
-                options.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), !discussionEnabled);
             },
+
+            OVERRIDE, VOID, function onStop_() {
+                var button = new ria.dom.Dom('#save-form-button');
+                if(button.exists())
+                    button.trigger('click');
+
+                BASE();
+
+            },
+
+            [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function categoryChange(node, event, selected_){
+                if(node.getValue() == -1){
+                    node.setValue(node.getData('value'));
+                    node.trigger('chosen:updated');
+                    node.parent('.left-top-container').find('.add-category-btn').trigger('click');
+                }else{
+                    node.setData('value', node.getValue());
+                }
+            },
+
+            //--------------------  ANNOUNCEMENT VIEW  ----------------------------------
 
             [ria.mvc.DomEventBind('click', '.attribute-title')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -69,37 +85,75 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }, 500);
             },
 
-            [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            function categoryChange(node, event, selected_){
-                if(node.getValue() == -1){
-                    node.setValue(node.getData('value'));
-                    node.trigger('chosen:updated');
-                    node.parent('.left-top-container').find('.add-category-btn').trigger('click');
-                }else{
-                    node.setData('value', node.getValue());
+            //--------------------  STANDARDS AND SUGGESTED APPS  -----------------------
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
+            [[Object, Object, String]],
+            VOID, function updateStandardsAndSuggestedApps(tpl, model, msg_) {
+                var standardsData = new chlk.models.standard.StandardsListViewData(
+                    null, model.getClassId(),
+                    null, model.getStandards(),
+                    model.getId()
+                );
+                var standardsTpl = new chlk.templates.standard.AnnouncementStandardsTpl();
+                this.onPrepareTemplate_(standardsTpl, standardsData, msg_);
+                standardsTpl.options({
+                    ableToRemoveStandard: model.isAbleToRemoveStandard()
+                });
+                standardsTpl.assign(standardsData);
+                standardsTpl.renderTo(this.dom.find('.standards-list').empty());
+
+                model.setNeedButtons(true);
+                model.setNeedDeleteButton(true);
+                var attachmentsTpl = new chlk.templates.announcement.AnnouncementAppAttachments();
+                this.onPrepareTemplate_(attachmentsTpl, model, msg_);
+                attachmentsTpl.assign(model);
+                attachmentsTpl.renderTo(this.dom.find('.apps-attachments-bock').empty());
+
+                var suggestedAppsNode = this.dom.find('.suggested-apps').empty();
+                if(model.getStandards() && model.getStandards().length > 0 && this.isStudyCenterEnabled()){
+                    this.suggestedAppsPartialUpdate_(model, suggestedAppsNode, msg_);
+                    this.dom.find('.add-standards').find('.title').setText(Msg.Click_to_add_more);
+                }
+                else {
+                    this.dom.find('.apps-with-recommended-contents').empty();
                 }
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],
-            VOID, function addToGalleryRule(tpl, model, msg_) {
-
+            [[chlk.models.announcement.FeedAnnouncementViewData, ria.dom.Dom, String]],
+            VOID, function suggestedAppsPartialUpdate_(model, suggestedAppsNode, msg_){
+                var suggestedApps = model.getSuggestedApps();
+                var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
+                    model.getClassId(),
+                    model.getId(),
+                    suggestedApps,
+                    model.getStandards(),
+                    null,
+                    model.getType()
+                );
+                var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
+                this.onPrepareTemplate_(suggestedAppsTpl, model, msg_);
+                suggestedAppsTpl.assign(suggestedAppsListData);
+                suggestedAppsTpl.renderTo(suggestedAppsNode);
             },
 
-            [[Object, String]],
-            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
-                BASE(model, msg_);
-                if(model instanceof chlk.models.announcement.LastMessages){
-                    this.dom.find('#content').trigger('focus');
-                    var node = this.dom.find('.no-assignments-text');
-                    listLastTimeout = setTimeout(function(){
-                        node.fadeOut();
-                    }, 2000)
-                }
-
-            },
+            //--------------------  APP CONTENT  --------------------------
 
             ArrayOf(Object), 'waitingForAppContentListRender',
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+
+                if(this.waitingForAppContentListRender){
+                    this.waitingForAppContentListRender.forEach(function(_){
+                        this.renderAppContentList_(_.tpl, _.appId);
+                    }, this);
+
+                    this.waitingForAppContentListRender = [];
+                }
+
+            },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppContentListTpl, 'before-app-contents-loaded', '')],
             [[Object, Object, String]],
@@ -156,112 +210,18 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
-            [[Object, Object, String]],
-            VOID, function updateStandardsAndSuggestedApps(tpl, model, msg_) {
-                var standardsData = new chlk.models.standard.StandardsListViewData(
-                    null, model.getClassId(),
-                    null, model.getStandards(),
-                    model.getId()
-                );
-                var standardsTpl = new chlk.templates.standard.AnnouncementStandardsTpl();
-                this.onPrepareTemplate_(standardsTpl, standardsData, msg_);
-                standardsTpl.options({
-                    ableToRemoveStandard: model.isAbleToRemoveStandard()
-                });
-                standardsTpl.assign(standardsData);
-                standardsTpl.renderTo(this.dom.find('.standards-list').empty());
+            //--------------------  BASE ANNOUNCEMENT  --------------------
 
-                model.setNeedButtons(true);
-                model.setNeedDeleteButton(true);
-                var attachmentsTpl = new chlk.templates.announcement.AnnouncementAppAttachments();
-                this.onPrepareTemplate_(attachmentsTpl, model, msg_);
-                attachmentsTpl.assign(model);
-                attachmentsTpl.renderTo(this.dom.find('.apps-attachments-bock').empty());
-
-                var suggestedAppsNode = this.dom.find('.suggested-apps').empty();
-                if(model.getStandards() && model.getStandards().length > 0 && this.isStudyCenterEnabled()){
-                    this.suggestedAppsPartialUpdate_(model, suggestedAppsNode, msg_);
-                    this.dom.find('.add-standards').find('.title').setText(Msg.Click_to_add_more);
-                }
-                else {
-                    this.dom.find('.apps-with-recommended-contents').empty();
-                }
-            },
-
-            [[chlk.models.announcement.FeedAnnouncementViewData, ria.dom.Dom, String]],
-            VOID, function suggestedAppsPartialUpdate_(model, suggestedAppsNode, msg_){
-                var suggestedApps = model.getSuggestedApps();
-                var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
-                    model.getClassId(),
-                    model.getId(),
-                    suggestedApps,
-                    model.getStandards(),
-                    null,
-                    model.getType()
-                );
-                var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
-                this.onPrepareTemplate_(suggestedAppsTpl, model, msg_);
-                suggestedAppsTpl.assign(suggestedAppsListData);
-                suggestedAppsTpl.renderTo(suggestedAppsNode);
-            },
-
-            [ria.mvc.DomEventBind('keypress', 'input')],
+            [ria.mvc.DomEventBind('change', '.advanced-options .discussion-option.checkbox')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function inputKeyPress(node, event){
-                if(event.keyCode == ria.dom.Keys.ENTER){
-                    event.preventDefault();
+            VOID, function discussionOptionChange(node, event){
+                var discussionEnabled = node.checked();
+                var options = node.parent('.advanced-options').find('.preview-comments-option.checkbox,.require-comments-option.checkbox');
+                if(!discussionEnabled){
+                    options.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), false)
                 }
+                options.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), !discussionEnabled);
             },
-
-            OVERRIDE, VOID, function onRender_(model){
-                BASE(model);
-                var that = this;
-
-                new ria.dom.Dom().on('click.save', '.class-button[type=submit]', function($target, event){
-                    if(!that.dom.find('.is-edit').getData('isedit')){
-                        var classId = $target.getAttr('classId');
-                        that.dom.find('input[name=classId]').setValue(classId);
-                        var defaultType = $target.getData('default-announcement-type-id');
-                        that.dom.find('input[name=announcementTypeId]').setValue(defaultType);
-                    }
-
-                    if($target.getAttr('type') == 'submit'){
-                        var $form = that.dom.find('form');
-                        $form.setData('submit-name', $target.getAttr('name'));
-                        $form.setData('submit-value', $target.getValue() || $target.getAttr('value'));
-                        $form.setData('submit-skip', $target.hasClass('validate-skip'));
-                        $form.trigger('submit');
-                    }
-                });
-            },
-
-            [[Object]],
-            OVERRIDE, VOID, function onRefresh_(model){
-                BASE(model);
-
-                if(this.waitingForAppContentListRender){
-                    this.waitingForAppContentListRender.forEach(function(_){
-                        this.renderAppContentList_(_.tpl, _.appId);
-                    }, this);
-
-                    this.waitingForAppContentListRender = [];
-                }
-
-            },
-
-            OVERRIDE, VOID, function onStop_() {
-                var button = new ria.dom.Dom('#save-form-button');
-                if(button.exists())
-                    button.trigger('click');
-
-                new ria.dom.Dom().off('click.title');
-                new ria.dom.Dom().off('click.save', '.class-button[type=submit]');
-
-                BASE();
-
-            },
-
 
             [ria.mvc.DomEventBind('click', '.calendar-mark')],
             [[ria.dom.Dom, ria.dom.Event]],

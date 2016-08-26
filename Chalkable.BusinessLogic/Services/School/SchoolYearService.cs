@@ -22,7 +22,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetPreviousSchoolYears(int fromSchoolYearid, int count = 1);
-        IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true); 
+        IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true);
+        IList<SchoolYear> GetSchoolYearsByAcadYears(IList<int> years, bool activeOnly = true); 
         IList<StudentSchoolYear> GetStudentAssignments();
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
@@ -92,10 +93,12 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true)
         {
-            var conds = new AndQueryCondition {{SchoolYear.ACAD_YEAR_FIELD, year}};
-            if(activeOnly)
-                conds.Add(SchoolYear.ARCHIVE_DATE, null);
-            return DoRead(u=> new SchoolYearDataAccess(u).GetAll(conds));
+            return GetSchoolYearsByAcadYears(new List<int> {year}, activeOnly);
+        }
+
+        public IList<SchoolYear> GetSchoolYearsByAcadYears(IList<int> years, bool activeOnly = true)
+        {
+            return DoRead(u => new SchoolYearDataAccess(u).GetByAcadYears(years, activeOnly));
         }
 
         public IList<SchoolYear> Add(IList<SchoolYear> schoolYears)

@@ -11,7 +11,6 @@
 	[ClassAnnouncementTypeRef] [int] NULL,
 	[ClassRef] [int] NOT NULL,
 	[SchoolYearRef] [int] NULL,
-	[Order] [int] NOT NULL,
 	[Dropped] [bit] NOT NULL,
 	[SisActivityId] [int] NULL,
 	[MaxScore] [decimal](18, 2) NULL,

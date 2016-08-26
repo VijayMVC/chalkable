@@ -260,15 +260,20 @@ NAMESPACE('chlk.controllers', function (){
                     return this.UpdateView(chlk.activities.setup.CategoriesSetupPage, res, 'copy');
                 }
 
-                this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), "whoa.", null, 'negative-button')
+                var res = this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), "whoa.", null, 'negative-button')
                     .thenCall(this.announcementTypeService.deleteTypes, [model.getIds().split(',')])
                     .attach(this.validateResponse_())
                     .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId(), true]);
+                        setTimeout(function(){
+                            this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId(), true]);
+                        }.bind(this), 10);
+
+                        return ria.async.BREAK;
                     }, this);
-                return null;
+
+                return this.UpdateView(chlk.activities.setup.CategoriesSetupPage, res);
             },
 
             [chlk.controllers.Permissions([

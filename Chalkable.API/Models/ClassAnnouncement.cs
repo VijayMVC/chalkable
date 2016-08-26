@@ -14,7 +14,6 @@ namespace Chalkable.API.Models
         public string FullClassName { get; set; }
         public Guid? DepartmentId { get; set; }
         public bool Dropped { get; set; }
-        public int Order { get; set; }
         public decimal? MaxScore { get; set; }
         public bool CanDropStudentScore { get; set; }
         public bool MayBeExempt { get; set; }

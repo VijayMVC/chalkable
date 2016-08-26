@@ -90,7 +90,7 @@ NAMESPACE('chlk.controls', function () {
 
                 var res = {
                     standardizedTestFilters: filters,
-                    schoolYearIds: form.find('.school-years-select').getValue()
+                    acadYears: form.find('.school-years-select').getValue()
                 };
 
                 return res;

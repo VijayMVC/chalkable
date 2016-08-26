@@ -62,18 +62,11 @@ namespace Chalkable.Web.Models
         public bool IsAdminAnnouncement { get; set; }
         public static SearchViewData Create(Announcement announcement)
         {
-            var annData = announcement;
-            var description = announcement.Title;
-            var classAnnData = announcement as ClassAnnouncement;
-            if (classAnnData != null)
-                description = string.Format("{0} {1} {2}", announcement.Title
-                            , announcement.AnnouncementTypeName, (classAnnData).Order);
-            
             return new AnnouncementSearchViewData
             {
                 Id = announcement.Id.ToString(),
-                Description = description,
-                AnnouncementType = (int?)annData.Type,
+                Description = announcement.Title,
+                AnnouncementType = (int?)announcement.Type,
                 SearchType = (int)SearchTypeEnum.Announcements
             };
         }

@@ -10,11 +10,11 @@ NAMESPACE('chlk.models.profile', function () {
     /** @class chlk.models.profile.PanoramaSettingsViewData*/
     CLASS(
         UNSAFE, 'PanoramaSettingsViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
-            ArrayOf(chlk.models.id.SchoolYearId), 'schoolYearIds',
+            ArrayOf(chlk.models.id.SchoolYearId), 'acadYears',
             ArrayOf(chlk.models.profile.StandardizedTestFilterViewData), 'standardizedTestFilters',
 
             VOID, function deserialize(raw) {
-                this.schoolYearIds = SJX.fromArrayOfValues(raw.schoolyearids, chlk.models.id.SchoolYearId);
+                this.acadYears = SJX.fromArrayOfValues(raw.acadyears, chlk.models.id.SchoolYearId);
                 this.standardizedTestFilters = SJX.fromArrayOfDeserializables(raw.standardizedtestfilters, chlk.models.profile.StandardizedTestFilterViewData);
             }
         ]);

@@ -6,7 +6,7 @@ namespace Chalkable.Web.Models.Settings
     public class PersonProfilePanoramaSettingViewData : BasePanoramaSettingsViewData
     {
         public int? CourseType { get; set; }
-        protected PersonProfilePanoramaSettingViewData(StudentProfilePanoramaSetting settings) : base(settings.SchoolYearIds, settings.StandardizedTestFilters)
+        protected PersonProfilePanoramaSettingViewData(StudentProfilePanoramaSetting settings) : base(settings.AcadYears, settings.StandardizedTestFilters)
         {
         }
         public static PersonProfilePanoramaSettingViewData Create(StudentProfilePanoramaSetting settings)

@@ -54,12 +54,13 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                                     label(for="type-select").main-label Category:
                                     .types-select-cnt
                                         -var typeId = self.getSelectedTypeId()
-                                        +Select('typeid')#type-select
+                                        +Select('typeid')(class="validate[required]")#type-select
+                                            +Option('', 'Select category', !typeId)
                                             each item in types
                                                 if item.getId().valueOf()
                                                     +Option(item.getId(), item.getName(), typeId== item.getId())(
-                                                    data-typeid=item.getId(),
-                                                    data-typename=item.getName()
+                                                        data-typeid=item.getId(),
+                                                        data-typename=item.getName()
                                                     )
                     .right-block
                         .h-1
