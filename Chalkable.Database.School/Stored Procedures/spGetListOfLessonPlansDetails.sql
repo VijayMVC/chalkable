@@ -16,12 +16,12 @@ Insert Into @lessonPlans
 Select distinct
 	vwLP.*,
 	cast((Case When GalleryOwnerRef = @callerId or exists(Select * From ClassTeacher CT where CT.PersonRef = @callerId and CT.ClassRef = vwLP.ClassRef) then 1 else 0 End) as Bit),
-	cast((Case When ard.Complete is null Then 0 Else 1 End) as Bit) as Complete, 
+	cast((Case When ard.Complete is null Then 0 Else ard.Complete End) as Bit) as Complete, 
 	0 as AllCount 
 From 
 	vwLessonPlan vwLP
 	left join AnnouncementRecipientData ard
-		on ard.AnnouncementRef = vwLP.Id
+		on ard.AnnouncementRef = vwLP.Id and ard.PersonRef = @callerId
 Where
 	Id in(Select * From @lessonPlanIds)
 	and (@callerRole = @ADMIN_ROLE_ID or  SchoolYearRef = @schoolYearId)

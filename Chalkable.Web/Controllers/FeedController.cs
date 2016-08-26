@@ -59,11 +59,15 @@ namespace Chalkable.Web.Controllers
                     .Select(x => x.AnnouncementId).ToList();
                 var clAnnIds = createdAnnouncements.Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Class)
                     .Select(x => x.AnnouncementId).ToList();
+                var suppAnnIds = createdAnnouncements.Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Supplemental)
+                        .Select(x => x.AnnouncementId).ToList();
 
                 if(clAnnIds.Count > 0)
                     createdAnns.AddRange(schoolL.ClassAnnouncementService.GetAnnouncementsByIds(clAnnIds));
                 if(lpIds.Count > 0)
                     createdAnns.AddRange(schoolL.LessonPlanService.GetAnnouncementsByIds(lpIds));
+                if (suppAnnIds.Count > 0)
+                    createdAnns.AddRange(schoolL.SupplementalAnnouncementService.GetAnnouncementsByIds(suppAnnIds));
             }
             return PrepareFeedComplexViewData(schoolL, list, settings, createdAnns);
         }

@@ -80,17 +80,21 @@ NAMESPACE('chlk.activities.classes', function () {
                         dom.find('.highlighted-students').setValue(highlightedValue);
                     }
 
-                    var selectedStudents = [];
-                    dom.find('.student-check:checked').forEach(function(node){
-                        selectedStudents.push(node.getData('id'));
-                    });
-
-                    var selectedValue = selectedStudents.length ? JSON.stringify(selectedStudents) : '';
-                    dom.find('.selected-students').setValue(selectedValue);
-
                     form.find('.submit-by-check').trigger('click');
                     dom.find('.standardized-tests-tab').addClass('partial-update');
                 }, 1000)
+            },
+
+            [ria.mvc.DomEventBind('submit', '.class-panorama-form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function formSubmit(node, event){
+                var selectedStudents = [];
+                this.dom.find('.student-check:checked').forEach(function(node){
+                    selectedStudents.push(node.getData('id'));
+                });
+
+                var selectedValue = selectedStudents.length ? JSON.stringify(selectedStudents) : '';
+                this.dom.find('.selected-students').setValue(selectedValue);
             },
 
             [ria.mvc.DomEventBind('change', '.student-grid-check')],

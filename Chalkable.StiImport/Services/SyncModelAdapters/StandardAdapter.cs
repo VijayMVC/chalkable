@@ -49,7 +49,11 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void PrepareToDeleteInternal(IList<Standard> entities)
         {
-            throw new System.NotImplementedException();
+            var toDelete = entities.Select(x => new Data.School.Model.Standard
+            {
+                Id = x.StandardID
+            }).ToList();
+            ServiceLocatorSchool.StandardService.PrepareToDelete(toDelete);
         }
     }
 }

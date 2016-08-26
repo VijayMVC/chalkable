@@ -16,7 +16,7 @@
     "PDFObject": "git://github.com/pipwerks/PDFObject.git",
     "autosize": "~3.0.9",
     "chosen": "~1.4.2",
-    "emp.ria-framework": "~0.2.3",
+    "emp.ria-framework": "~0.2.5",
     "highcharts": "~4.1.8",
     "jQuery-Validation-Engine": "git://github.com/posabsolute/jQuery-Validation-Engine.git#~2.6.4",
     "jQuery-menu-aim": "git://github.com/kamens/jQuery-menu-aim.git",

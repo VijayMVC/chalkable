@@ -250,14 +250,14 @@ NAMESPACE('chlk.controllers', function (){
             function getPanorama_(personId, restore_){
                 return ria.async.wait([
                         this.studentService.getInfoForPanorama(personId),
-                        this.studentService.getPanorama(personId),
-                        this.schoolYearService.list()
+                        this.studentService.getPanorama(personId)
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var userData = result[0];
                         var panorama = result[1];
-                        panorama.setSchoolYears(result[2]);
+                        var years = this.getContext().getSession().get(ChlkSessionConstants.YEARS, []);
+                        panorama.setYears(years);
                         panorama.setShowFilters(restore_ || false);
                         userData.setPanoramaInfo(panorama);
                         var res = new chlk.models.student.StudentProfilePanoramaViewData(this.getCurrentRole(), userData, this.getUserClaims_());
@@ -299,8 +299,8 @@ NAMESPACE('chlk.controllers', function (){
                 res = this.studentService.getPanorama(data.studentId, filterValues)
                     .then(function(panorama){
                         var userData = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PANORAMA, null);
-                        var schoolYears = userData.getPanoramaInfo().getSchoolYears();
-                        panorama.setSchoolYears(schoolYears);
+                        var years = userData.getPanoramaInfo().getYears();
+                        panorama.setYears(years);
                         userData.setPanoramaInfo(panorama);
                         return userData;
                     }, this)

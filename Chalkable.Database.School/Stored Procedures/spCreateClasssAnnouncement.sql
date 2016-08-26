@@ -66,8 +66,8 @@ begin transaction
 
 		set @announcementId = SCOPE_IDENTITY()
 
-		insert into ClassAnnouncement(Id, ClassRef, ClassAnnouncementTypeRef, Expires, SchoolYearRef, Dropped,MayBeDropped, MaxScore, [Order],VisibleForStudent, WeightAddition, WeightMultiplier, IsScored)
-		values(@announcementId, @classId, @classAnnouncementTypeId, @expires, @schoolYearId, 0, 0, 0, 0, 1, 0, 1, 1)
+		insert into ClassAnnouncement(Id, ClassRef, ClassAnnouncementTypeRef, Expires, SchoolYearRef, Dropped, MayBeDropped, MaxScore, VisibleForStudent, WeightAddition, WeightMultiplier, IsScored)
+		values(@announcementId, @classId, @classAnnouncementTypeId, @expires, @schoolYearId, 0, 0, 0, 1, 0, 1, 1)
 
 
 		/*GET CONTENT FROM PREV ANNOUNCEMENT*/
@@ -83,12 +83,6 @@ begin transaction
 		--update Announcement set Content = @prevContent where Id = @announcementId
 	end
 
-	if(@classAnnouncementTypeId is not null and @classId is not null)
-	begin
-	declare @reorderRes TInt32
-	insert into @reorderRes
-	exec [spReorderAnnouncements] @schoolYearId, @classAnnouncementTypeId,  @classId
-	end
 	exec spGetClassAnnouncementDetails @announcementId, @personId, @callerRole, @schoolYearId
 
 commit

@@ -1,7 +1,7 @@
 -var noComplete = self.completeOnly && !self.items.length
 -var typesEnum = chlk.models.announcement.AnnouncementTypeEnum
 
-div(class = noComplete ? "no-complete" : "").feed-container
+div(class = (noComplete ? "no-complete " : "") + (self.hasFilters() ? 'settings-mode' : '')).feed-container
     -var topData = self.getTopData()
     -var isAdmin = self.getUserRole().isAdmin()
     -var listAction = self.isInProfile() ? 'listForProfile' : 'list'
@@ -85,7 +85,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         ).copy-start-date
                         BUTTON(type="button").negative-button.cancel-copy Cancel
                         BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-submit.submit-selected.top-submit-btn Copy
-            .left-buttons-block.tools-buttons-block(class=self.hasFilters() ? '' : 'hidden')
+            .left-buttons-block.tools-buttons-block
                 if !self.isInProfile() && self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
                     +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
@@ -149,6 +149,10 @@ div(class = noComplete ? "no-complete" : "").feed-container
                 needGoToButton = true,
                 pageSize = 10
             ).feed-grid
+                -var aICount = self.getAdjustedItemsCount()
+                -var aCount = self.getAdjustCount()
+                if(aICount && (aCount || aCount === 0))
+                    .top-green-info=aICount + ' item' + (aICount > 1 ? 's were' : ' was') + ' adjusted ' + (aCount > 0 ? '+' : '') + aCount + ' day' + (aCount == 1 ? '' : 's')
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
                     +FeedItem(item, self.isReadonly(), false, self.isStaringDisabled())

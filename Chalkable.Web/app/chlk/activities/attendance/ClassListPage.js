@@ -357,6 +357,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this._needPopUp = true;
                 var that = this;
                 this._classAttendances.forEach(function(att){
+                    if(att.isStudentAttendanceReadOnly())
+                        return;
+
                     att.setType(chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf());
                     att.setLevel(null);
                     att.setAttendanceReasonId(null);
