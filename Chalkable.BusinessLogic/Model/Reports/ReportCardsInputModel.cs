@@ -41,11 +41,11 @@ namespace Chalkable.BusinessLogic.Model.Reports
         }
         public bool IncludeAnnouncements => HasOption(ReportCardsAddionalOptions.Announcement);
         public bool IncludeAttendance => HasOption(ReportCardsAddionalOptions.Attendance);
-        public bool IncludeGradginPeriodNotes => HasOption(ReportCardsAddionalOptions.GradginPeriodNotes);
+        public bool IncludeGradingPeriodNotes => HasOption(ReportCardsAddionalOptions.GradingPeriodNotes);
         public bool IncludeGradingScaleTraditional => HasOption(ReportCardsAddionalOptions.GradingScaleTraditional);
-        public bool IncludeGraginScaleStandards => HasOption(ReportCardsAddionalOptions.GraginScaleStandards);
+        public bool IncludeGradingScaleStandards => HasOption(ReportCardsAddionalOptions.GragingScaleStandards);
         public bool IncludeMeritDemerit => HasOption(ReportCardsAddionalOptions.MeritDemerit);
-        public bool IncludePerentSignature => HasOption(ReportCardsAddionalOptions.PerentSignature);
+        public bool IncludeParentSignature => HasOption(ReportCardsAddionalOptions.ParentSignature);
         public bool IncludePromotionStatus => HasOption(ReportCardsAddionalOptions.PromotionStatus);
         public bool IncludeWithdrawnStudents => HasOption(ReportCardsAddionalOptions.WithdrawnStudents);
         public bool IncludeYearToDateInformation => HasOption(ReportCardsAddionalOptions.YearToDateInformation);
@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
     public enum ReportCardsLogoType
     {
         None = 0,
-        Distric = 1,
+        District = 1,
         School = 2
     }
 
@@ -79,11 +79,11 @@ namespace Chalkable.BusinessLogic.Model.Reports
     {
         Announcement = 0,
         Attendance = 1,
-        GradginPeriodNotes = 2,
+        GradingPeriodNotes = 2,
         GradingScaleTraditional = 3,
-        GraginScaleStandards = 4,
+        GragingScaleStandards = 4,
         MeritDemerit = 5,
-        PerentSignature = 6,
+        ParentSignature = 6,
         PromotionStatus = 7,
         WithdrawnStudents = 8,
         YearToDateInformation = 9    
