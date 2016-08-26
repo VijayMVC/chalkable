@@ -28,6 +28,8 @@
       <Setting name="ChalkableSchoolDbServers" />
       <Setting name="ChalkableSchoolTemplateDbName" />
       <Setting name="DbUpdateTimeout" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark"/>
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" />
       <Setting name="RedisCache.ConcurentConnections" />
@@ -71,6 +73,8 @@
       <Setting name="ChalkableSchoolTemplateDbName" />
       <Setting name="DbUpdateTimeout" />
       <Setting name="Domain" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark"/>
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" />
       <Setting name="DbBackupServiceUrl" />
@@ -99,6 +103,8 @@
       <Setting name="ChalkableSchoolTemplateDbName" />
       <Setting name="DbUpdateTimeout" />
       <Setting name="Domain" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark"/>
       <!-- Task settings -->
       <Setting name="TaskProducer.SisImportProducer.Interval" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" />

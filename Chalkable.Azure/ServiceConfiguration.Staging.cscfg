@@ -13,6 +13,8 @@
       <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" value="chlk-qa.redis.cache.windows.net,abortConnect=false,ssl=true,syncTimeout=500,password=mOiq0phviZ0/SiUAuwCj/9hsWReh4YFzCYQWYln7uZw=" />
       <Setting name="RedisCache.ConcurentConnections" value="25" />
@@ -60,6 +62,8 @@
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <Setting name="Domain" value="dev.chalkable.com" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" value="10000" />
       <Setting name="DbBackupServiceUrl" value="https://bl2prod-dacsvc.azure.com/DACWebService.svc" />
@@ -88,6 +92,8 @@
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <Setting name="Domain" value="dev.chalkable.com" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!-- Task settings -->
       <Setting name="TaskProducer.SisImportProducer.Interval" value="600" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />

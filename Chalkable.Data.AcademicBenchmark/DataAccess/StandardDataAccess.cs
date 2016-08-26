@@ -25,7 +25,11 @@ namespace Chalkable.Data.AcademicBenchmark.DataAccess
 
         public override void Delete(Guid key)
         {
-            this.Delete(new List<Standard> {new Standard() {Id = key} });
+            var @params = new Dictionary<string, object>
+            {
+                ["standardIds"] = new List<Guid> { key }
+            };
+            ExecuteStoredProcedure("spDeleteStandards", @params);
         }
 
         public StandardRelations GetStandardRelations(Guid id)
