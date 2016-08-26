@@ -348,7 +348,7 @@ NAMESPACE('chlk.services', function () {
             ArrayOf(chlk.models.id.GroupId),
             ArrayOf(chlk.models.id.GradingPeriodId),
             ArrayOf(chlk.models.id.AttendanceReasonId),
-            ArrayOf(chlk.models.reports.ReportCardsAddionalOptions)]],
+            ArrayOf(chlk.models.reports.ReportCardsAdditionalOptions)]],
         ria.async.Future, function submitReportCards(templateId, title, logo, recipient, orderBy, idToPrint, includeGradedStandardsOnly
                 , groupIds, gradingPeriodIds, attendanceReasonIds, inculdeOptions){
              url = this.getUrl('Reporting/ReportCards.json',{

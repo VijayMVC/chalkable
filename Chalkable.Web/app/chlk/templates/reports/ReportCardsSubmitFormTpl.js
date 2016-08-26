@@ -22,6 +22,11 @@ NAMESPACE('chlk.templates.reports', function () {
             Boolean, 'ableDownload',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'ableToReadSSNumber'
+            Boolean, 'ableToReadSSNumber',
+
+            Boolean, function hideSSNumber(){
+                return !this.isAbleToReadSSNumber();
+            },
+
     ]);
 });

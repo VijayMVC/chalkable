@@ -13,7 +13,7 @@ NAMESPACE('chlk.models.reports', function () {
         HOME_ROOM: 1,
         POST_CODE: 2,
         STUDENT_DISPLAY_NAME: 3,
-        STUDNET_IDENTIFIER: 4
+        STUDENT_IDENTIFIER: 4
     });
 
     /** @class chlk.models.reports.ReportCardsLogoType*/
@@ -30,8 +30,8 @@ NAMESPACE('chlk.models.reports', function () {
         MAILING_CONTACTS: 2
     });
 
-    /** @class chlk.models.reports.ReportCardsAddionalOptions*/
-    ENUM('ReportCardsAddionalOptions',{
+    /** @class chlk.models.reports.ReportCardsAdditionalOptions*/
+    ENUM('ReportCardsAdditionalOptions',{
         ANNOUNCEMENT: 0,
         ATTENDANCE:1,
         GRADING_PERIOD_NOTES:2,
@@ -54,9 +54,11 @@ NAMESPACE('chlk.models.reports', function () {
 
         String, 'gradingPeriodIds',
 
-        String, 'absenceReasonIds',
+        String, 'attendanceReasonIds',
 
         String, 'groupIds',
+
+        String, 'includeOptions',
 
         chlk.models.reports.ReportCardsLogoType, 'logo',
 
