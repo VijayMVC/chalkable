@@ -14,8 +14,8 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
             return new DocumentViewData
             {
                 Id = document.Id,
-                Code = document.Code,
-                Description = document.Description
+                Description = document.Description,
+                Code = document.Code
             };
         }
     }

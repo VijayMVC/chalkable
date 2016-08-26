@@ -14,6 +14,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         [JsonProperty("guid")]
         public Guid Id { get; set; }
 
+        [JsonProperty("number")]
+        public string Number { get; set; }
+
         [JsonProperty("descr")]
         public string Description { get; set; }
     }

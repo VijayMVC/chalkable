@@ -13,8 +13,8 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmark
             return new Document
             {
                 Id = doc.Id,
-                Code = doc.Code,
-                Description = doc.Title
+                Description = doc.Title,
+                Code = doc.Code
             };
         }
     }

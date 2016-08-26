@@ -15,11 +15,18 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
 
         [JsonProperty("descr")]
         public string Description { get; set; }
-
-        //TODO: think do we need these fields 
+        
         [JsonProperty("lo")]
         public string Low { get; set; }
         [JsonProperty("hi")]
-        public string Height { get; set; }
+        public string High { get; set; }
+    }
+
+    public class GradeLevelRange
+    {
+        [JsonProperty("low")]
+        public string Low { get; set; }
+        [JsonProperty("high")]
+        public string High { get; set; }
     }
 }

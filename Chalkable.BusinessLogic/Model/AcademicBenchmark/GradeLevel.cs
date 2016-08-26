@@ -12,7 +12,7 @@
             {
                 Description = grLevel.Description,
                 Code = grLevel.Code,
-                Height = grLevel.Height,
+                Height = grLevel.High,
                 Low = grLevel.Low
             };
         }
