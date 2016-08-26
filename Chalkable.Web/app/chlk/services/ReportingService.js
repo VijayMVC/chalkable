@@ -7,6 +7,7 @@ REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
 REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceRegisterReportViewData');
+REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
 
 REQUIRE('chlk.lib.ajax.IframeGetTask');
 
@@ -339,6 +340,31 @@ NAMESPACE('chlk.services', function () {
                 start: 0,
                 count: 9999
             });
+        },
+
+        [[chlk.models.id.CustomReportTemplateId, String, chlk.models.reports.ReportCardsLogoType,
+            chlk.models.reports.ReportCardsRecipientType, chlk.models.reports.ReportCardsOrderBy,
+            chlk.models.reports.StudentIdentifierEnum, Boolean,
+            ArrayOf(chlk.models.id.GroupId),
+            ArrayOf(chlk.models.id.GradingPeriodId),
+            ArrayOf(chlk.models.id.AttendanceReasonId),
+            ArrayOf(chlk.models.reports.ReportCardsAddionalOptions)]],
+        ria.async.Future, function submitReportCards(templateId, title, logo, recipient, orderBy, idToPrint, includeGradedStandardsOnly
+                , groupIds, gradingPeriodIds, attendanceReasonIds, inculdeOptions){
+             url = this.getUrl('Reporting/ReportCards.json',{
+                 customReportTemplateId: templateId.valueOf(),
+                 title: title,
+                 logo: logo.valueOf(),
+                 recipient: recipient.valueOf(),
+                 orderBy: orderBy.valueOf(),
+                 idToPrint: idToPrint.valueOf(),
+                 includeGradedStandardsOnly: includeGradedStandardsOnly,
+                 groupIds: this.arrayToCsv(groupIds),
+                 gradingPeriodIds: this.arrayToCsv(gradingPeriodIds),
+                 attendanceReasonIds: this.arrayToCsv(attendanceReasonIds),
+                 includeOptions: this.arrayToCsv(inculdeOptions)
+            });
+            return this.getWithIframe(url);
         },
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, String]],
