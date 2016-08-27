@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,22 @@ namespace Chalkable.Tests.AcademicBenchmarkTests
                 Description = "Test Description"
             };
             locator.AuthorityService.Add(new List<Authority> {authority});
+        }
+
+        [Test]
+        public void ImportTest()
+        {
+            var importService = new AcademicBenchmarkImport.ImportService(null);
+            try
+            {
+                importService.Import();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Debug.WriteLine(e.StackTrace);
+            }
+
         }
     }
 }

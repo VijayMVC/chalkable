@@ -395,7 +395,7 @@ namespace Chalkable.StiImport.Services
                         break;
                 }
                 if (cnt < entities.Count)
-                    Log.LogError($"only first {MAX_LOOGED_ENTITIES}  if {entities.Count} entities were logged");
+                    Log.LogError($"only first {MAX_LOOGED_ENTITIES}  of {entities.Count} entities were logged");
                 throw;
             }
             

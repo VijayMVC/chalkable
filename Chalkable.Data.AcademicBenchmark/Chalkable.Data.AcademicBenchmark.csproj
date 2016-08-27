@@ -51,6 +51,7 @@
     <Compile Include="Model\StandardRelations.cs" />
     <Compile Include="Model\Subject.cs" />
     <Compile Include="Model\SubjectDoc.cs" />
+    <Compile Include="Model\SyncLastDate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

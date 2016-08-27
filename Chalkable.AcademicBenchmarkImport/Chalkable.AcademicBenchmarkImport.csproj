@@ -42,7 +42,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImportService.cs" />
+    <Compile Include="Mappers\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkConnector\Chalkable.AcademicBenchmarkConnector.csproj">
+      <Project>{a8f83b5e-129f-465e-b8ae-b37231c28df1}</Project>
+      <Name>Chalkable.AcademicBenchmarkConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
+      <Project>{b008fbc2-8afb-48ff-ba85-97845ddf02d2}</Project>
+      <Name>Chalkable.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615f16a-b37f-40b4-b58d-cc39fa8f6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.AcademicBenchmark\Chalkable.Data.AcademicBenchmark.csproj">
+      <Project>{61935eee-bf16-477d-aa84-30555fc0f71c}</Project>
+      <Name>Chalkable.Data.AcademicBenchmark</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
+      <Project>{c9acb7a6-1755-424a-b0bb-3b0c5b13ec15}</Project>
+      <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
+      <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
+      <Name>Chalkable.Data.School</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
