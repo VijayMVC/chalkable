@@ -101,7 +101,7 @@ namespace Chalkable.Tests.Sis
                 Guid.Parse("5f0873ba-f152-483c-9ee5-0dafcce92131"),
                 //Guid.Parse("B2139E91-8A07-43D1-A609-6D7EA711A391"),
             };
-            FixMissingSchoolUsersSync(districtIds);
+            //FixMissingSchoolUsersSync(districtIds);
         }
 
         [Test]
@@ -239,7 +239,7 @@ namespace Chalkable.Tests.Sis
             {
                 try
                 {
-                    FixMissingUsersSync(guid);
+                    //FixMissingUsersSync(guid);
                 }
                 catch (Exception e)
                 {
