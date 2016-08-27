@@ -347,7 +347,7 @@ namespace Chalkable.StiImport.Services
             IList<SyncModelWrapper> batch = new List<SyncModelWrapper>();
             for (int i = 0; i < models.Count; i++)
             {
-                if (i > 0 && (models[i].Model.GetType().Name != models[i - 1].GetType().Name || models[i].OperationType != models[i - 1].OperationType))
+                if (i > 0 && (models[i].Model.GetType().Name != models[i - 1].Model.GetType().Name || models[i].OperationType != models[i - 1].OperationType))
                 {
                     Persist(adapterLocator.GetAdapter(batch[0].Model.GetType()), batch[0].OperationType,
                         batch.Select(x => x.Model).ToList());
