@@ -10,6 +10,9 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
+using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
@@ -38,6 +41,10 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetReportCards(ReportCardsInputModel inputModel);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
+
+        IList<ReportCardsLogo> GetReportCardsLogos();
+        void UpdateReportCardsLogo(int? schoolId, byte[] logoIcon);
+        void DeletReportCardsLogo(int id);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -453,6 +460,50 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolYearId.HasValue);
             ValidateDateRange(settings.StartDate, settings.EndDate);
             ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, settings.ToDictionary());
+        }
+
+        public IList<ReportCardsLogo> GetReportCardsLogos()
+        {
+            var res = DoRead(u => new DataAccessBase<ReportCardsLogo>(u).GetAll());
+            return res;
+        }
+
+        public void UpdateReportCardsLogo(int? schoolId, byte[] logoIcon)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u =>
+            {
+                var da = new DataAccessBase<ReportCardsLogo, int>(u);
+                var res = da.GetAll(new AndQueryCondition {{nameof(ReportCardsLogo.SchoolRef), schoolId}})
+                            .FirstOrDefault();
+                var logoAddress = UploadLogo(schoolId, logoIcon);
+                if (res == null)
+                {
+                    res = new ReportCardsLogo { SchoolRef = schoolId , LogoAddress = logoAddress};
+                    da.Insert(res);
+                }
+                else
+                {
+                    res.SchoolRef = schoolId;
+                    res.LogoAddress = logoAddress;
+                    da.Update(res);
+                }
+            });
+        }
+
+        private string UploadLogo(int? schoolId, byte[] logo)
+        {
+            Trace.Assert(Context.DistrictId.HasValue);
+            var key = $"{Context.DistrictId.Value}";
+            if (schoolId.HasValue) key += $"_{schoolId.Value}";
+            ServiceLocator.StorageBlobService.AddBlob("reportscardslogo", key, logo);
+            return (new BlobHelper()).GetBlobsRelativeAddress("reportscardslogo", key);
+        }
+
+        public void DeletReportCardsLogo(int id)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u => new DataAccessBase<ReportCardsLogo, int>(u).Delete(id));
         }
 
         private static void ValidateDateRange(DateTime? startDate, DateTime? endDate)

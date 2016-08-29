@@ -398,6 +398,7 @@
     <Compile Include="Models\PanoramaViewDatas\StudentPanoramaViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentDetailsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentHealthFormViewData.cs" />
+    <Compile Include="Models\ReportCardsLogoViewData.cs" />
     <Compile Include="Models\Settings\AdminPanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\ClassProfilePanoramaSettingsViewData.cs" />

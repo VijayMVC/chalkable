@@ -208,5 +208,36 @@ namespace Chalkable.Web.Controllers
             var feedReportSettings = SchoolLocator.ReportService.GetFeedReportSettings();
             return Json(FeedReportSettingsViewData.Create(feedReportSettings, feedSettings));
         }
+
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult ListReportCardsLogo()
+        {
+            return Json(GetListOfReportCardsLogo());
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult UpdateReportCardsLogo(int? schoolId)
+        {
+            byte[] icon;
+            string filename;
+            GetFileFromRequest(out icon, out filename);
+            SchoolLocator.ReportService.UpdateReportCardsLogo(schoolId, icon);
+            return Json(GetListOfReportCardsLogo());
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult DeletReportCardsLogo(int id)
+        {
+            SchoolLocator.ReportService.DeletReportCardsLogo(id);
+            return Json(GetListOfReportCardsLogo());
+        }
+
+        private IList<ReportCardsLogoViewData> GetListOfReportCardsLogo()
+        {
+            return ReportCardsLogoViewData.Create(SchoolLocator.ReportService.GetReportCardsLogos());
+        }
+
+        
     }
 }
