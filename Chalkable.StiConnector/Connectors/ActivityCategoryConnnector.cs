@@ -32,6 +32,8 @@ namespace Chalkable.StiConnector.Connectors
         }
         public IList<ActivityCategory> GetBySectionIds(IList<int> sectionIds)
         {
+            if(sectionIds.Count == 0)
+                return new List<ActivityCategory>();
             if(sectionIds.Count == 1)
                 return Call<IList<ActivityCategory>>($"{BaseUrl}sections/{sectionIds.First()}/activities/categories");
    
