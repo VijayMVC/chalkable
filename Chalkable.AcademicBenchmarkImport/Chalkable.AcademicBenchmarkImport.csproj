@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportAcademicBenchmarkServiceLocator.cs" />
+    <Compile Include="ImportDbService.cs" />
     <Compile Include="ImportService.cs" />
     <Compile Include="Mappers\MapperHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +63,10 @@
     <ProjectReference Include="..\Chalkable.Data.AcademicBenchmark\Chalkable.Data.AcademicBenchmark.csproj">
       <Project>{61935eee-bf16-477d-aa84-30555fc0f71c}</Project>
       <Name>Chalkable.Data.AcademicBenchmark</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
+      <Project>{ceb50b03-b84b-4194-9bee-f1a2ebd17686}</Project>
+      <Name>Chalkable.Data.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
       <Project>{c9acb7a6-1755-424a-b0bb-3b0c5b13ec15}</Project>

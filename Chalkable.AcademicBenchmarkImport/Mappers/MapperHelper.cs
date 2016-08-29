@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Configuration;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 using Chalkable.Data.AcademicBenchmark.Model;
 
 namespace Chalkable.AcademicBenchmarkImport.Mappers
@@ -67,6 +68,34 @@ namespace Chalkable.AcademicBenchmarkImport.Mappers
             {
                 Description = model.Description,
                 Id = model.Id
+            };
+        }
+
+        public static Standard Map(AcademicBenchmarkConnector.Models.Standard model)
+        {
+            return new Standard
+            {
+                Id = model.Id,
+                Description = model.Description,
+                IsActive = model.IsActive,
+                DocumentRef = model.Document.Id,
+                CourseRef = model.Course.Id,
+                IsDeepest = model.IsDeepest,
+                AuthorityRef = model.Authority.Id,
+                ParentRef = null,
+                AdoptYear = int.Parse(model.AdoptYear),
+                DateModified = model.DateModified,
+                GradeLevelHiRef = model.GradeLevel.High,
+                GradeLevelLoRef = model.GradeLevel.Low,
+                Label = model.Label,
+                Level = model.Level,
+                Number = model.Number,
+                Seq = model.Seq,
+                SubjectDocRef = model.SubjectDocument.Id,
+                // We need broad, because subjects have sub tree, and we don't 
+                // know about child subjects anything. So we take parent subject
+                SubjectRef = model.Subject.Broad, //!!!
+                Version = model.Version
             };
         }
     }

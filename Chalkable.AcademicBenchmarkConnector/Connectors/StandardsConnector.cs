@@ -11,12 +11,6 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     public interface IStandardsConnector
     {
         Task<Standard> GetStandardById(Guid standardId);
-        Task<Course> GetCourseById(Guid courseId);
-        Task<Authority> GetAuthorityById(Guid authorityId);
-        Task<Subject> GetSubjectById(string code);
-        Task<Document> GetDocumentById(Guid documentId);
-        Task<SubjectDocument> GetSubjectDocumentById(Guid subjectDocId);
-        Task<GradeLevel> GetGradeLevelByCode(string code);
 
         Task<StandardRelations> GetStandardRelationsById(Guid standardId);
         Task<IList<Authority>> GetAuthorities();
@@ -27,7 +21,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         Task<IList<Course>> GetCourses(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode);
         Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start, int count);
         Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, Guid? courceId, bool? isDeepest);
-
+        Task<IList<Standard>> GetAllStandards(int start, int count);
+        Task<int> GetAllStandardCount();
     }
 
     public class StandardsConnector : ConnectorBase, IStandardsConnector
@@ -41,42 +36,6 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             var url = $"standards/{standardId}";
             var res = await GetOne<BaseResource<Standard>>(url, null);
             return res?.Data;
-        }
-
-        public async Task<Course> GetCourseById(Guid courseId)
-        {
-            var data = await GetPage<CourseWrapper>(null, null, null, courseId: courseId);
-            return data.First().Course;
-        }
-
-        public async Task<Authority> GetAuthorityById(Guid authorityId)
-        {
-            var data = await GetPage<AuthorityWrapper>(authorityId, null, null);
-            return data.First().Authority;
-        }
-
-        public async Task<Subject> GetSubjectById(string code)
-        {
-            var data = await GetPage<SubjectWrapper>(null, null, null, subjectCode: code);
-            return data.First().Subject;
-        }
-
-        public async Task<Document> GetDocumentById(Guid documentId)
-        {
-            var data = await GetPage<DocumentWrapper>(null, documentId, null);
-            return data.First().Document;
-        }
-
-        public async Task<SubjectDocument> GetSubjectDocumentById(Guid subjectDocId)
-        {
-            var data = await GetPage<SubjectDocumentWrapper>(null, null, subjectDocId);
-            return data.First().SubjectDocument;
-        }
-
-        public async Task<GradeLevel> GetGradeLevelByCode(string code)
-        {
-            var data = await GetPage<GradeLevelWrapper>(null, null, null, gradeLevelCode:code);
-            return data.First().GradeLevel;
         }
 
         public async Task<StandardRelations> GetStandardRelationsById(Guid standardId)
@@ -98,6 +57,17 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, Guid? courceId, bool? isDeepest)
         {
             return await GetPage<Standard>(authorityId, documentId, subjectDocId, parentId: parentId, gradeLevelCode: gradeLevelCode, courseId: courceId, deepest: isDeepest);
+        }
+
+        public async Task<IList<Standard>> GetAllStandards(int start, int count)
+        {
+            return await GetPage<Standard>(null, null, null, start: start, limit: count);
+        }
+
+        public async Task<int> GetAllStandardCount()
+        {
+            var standard = await GetPage<Standard>(null, null, null, start: 0, limit: 0);
+            return standard.TotalCount;
         }
 
         public async Task<IList<Authority>> GetAuthorities()

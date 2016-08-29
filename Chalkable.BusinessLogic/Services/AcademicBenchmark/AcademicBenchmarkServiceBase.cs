@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Chalkable.Data.AcademicBenchmark.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 
@@ -45,6 +46,7 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new DataAccessBase<TModel>(u).Insert(models));
+            
         }
 
         public virtual void Delete(IList<TModel> models)

@@ -24,5 +24,14 @@ namespace Chalkable.Tests.AB_Api
             }
         }
 
+        [Test]
+        public void TestStandardAllCount()
+        {
+            var abConnector = new AcademicBenchmarkConnector.Connectors.ConnectorLocator();
+
+            var allCount = Task.Run(() => abConnector.StandardsConnector.GetAllStandardCount()).Result;
+            
+            Debug.WriteLine($"{allCount}");
+        }
     }
 }

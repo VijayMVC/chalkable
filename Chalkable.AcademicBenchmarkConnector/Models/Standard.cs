@@ -9,7 +9,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         [JsonProperty("number")]
         public string Number { get; set; }
         [JsonProperty("seq")]
-        public short Seq { get; set; }
+        public string Seq { get; set; }
         [JsonProperty("descr")]
         public string Description { get; set; }
         [JsonProperty("deepest")]
@@ -17,7 +17,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         [JsonProperty("level")]
         public short Level { get; set; }
         [JsonProperty("label")]
-        public short Label { get; set; }
+        public string Label { get; set; }
         [JsonProperty("status")]
         public string Status { get; set; }
         [JsonProperty("placeholder")]
@@ -28,6 +28,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         public GuidIdDto Parent { get; set; }
         [JsonProperty("version")]
         public string Version { get; set; }
+
+        [JsonProperty("date_modified")]
+        public DateTime DateModified { get; set; }
 
         public bool IsDeepest => Deepest == "Y";
         public bool IsActive => Status == "Active";

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Data.AcademicBenchmark.DataAccess;
 using Chalkable.Data.AcademicBenchmark.Model;
 using Chalkable.Data.Common;
 
@@ -12,6 +13,8 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
     {
         void UpdateLastSyncDate(DateTime date);
         DateTime? GetLastSyncDateOrNull();
+        void BeforeSync();
+        void AfterSync();
     }
 
     public class SyncService : AcademicBenchmarkServiceBase<SyncLastDate, DateTime>, ISyncService
@@ -22,16 +25,26 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
 
         public DateTime? GetLastSyncDateOrNull()
         {
-            return DoRead(u => new DataAccessBase<SyncLastDate>(u).GetAll().FirstOrDefault())?.Date;
+            return DoRead(u => new SyncDataAccess(u).GetAll().FirstOrDefault())?.Date;
         }
 
         public void UpdateLastSyncDate(DateTime date)
         {
             DoUpdate(u =>
             {
-                new DataAccessBase<SyncLastDate, int>(u).Delete(1);
-                new DataAccessBase<SyncLastDate>(u).Insert(SyncLastDate.Create(1, date));
+                new SyncDataAccess(u).Delete(1);
+                new SyncDataAccess(u).Insert(SyncLastDate.Create(1, date));
             });
+        }
+
+        public void BeforeSync()
+        {
+            DoUpdate(u => new SyncDataAccess(u).BeforeSync());
+        }
+
+        public void AfterSync()
+        {
+            DoUpdate(u => new SyncDataAccess(u).AfterSync());
         }
     }
 }
