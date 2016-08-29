@@ -1,0 +1,30 @@
+mixin ActionLinkOrNull_(isActionLink, date, classId, periodOrder)
+    if isActionLink
+        +ActionLink('calendar', 'showDayPopUp', date, classId, periodOrder)(attributes)
+            block
+    else
+        A(href="javascript:;")(attributes)
+            block
+
+
+.day-calendar-body
+    .day-names.day
+        each item,i in self.getItems()
+            div(class=item.getTodayClassName()).day
+                p=item.getDate().format('DD, M d')
+    .items-table
+        -var lastPeriodOrder = null
+        each item in self.groupItemsAsTable()
+            .item
+                each calendarDayItem, order in item
+                    .cell(class = calendarDayItem.day ? calendarDayItem.day.getTodayClassName() : null)
+                        if order == 0
+                            A: .period-info= item.period.getName()
+
+                        each ann in calendarDayItem
+                            -var period = ann.getPeriod()
+                            if period && period.getClassName()
+                                +ActionLinkOrNull_(self.isMainCalendar(), calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId(), period.getOrder())(
+                                        class = period.isCurrentSection() ? 'current-section' : null).period-item.day
+                                    .course-icon: +ClassImg(period, 45, 80)
+                                    .p-container(data-tooltip=period.getFullClassName())= period.getClassName()
