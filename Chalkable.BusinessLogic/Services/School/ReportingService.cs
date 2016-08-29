@@ -482,6 +482,10 @@ namespace Chalkable.BusinessLogic.Services.School
                     res = new ReportCardsLogo { SchoolRef = schoolId , LogoAddress = logoAddress};
                     da.Insert(res);
                 }
+                else if (logoIcon == null)
+                {
+                    da.Delete(res.Id);
+                }
                 else
                 {
                     res.SchoolRef = schoolId;
