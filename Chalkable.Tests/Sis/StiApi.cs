@@ -77,7 +77,7 @@ namespace Chalkable.Tests.Sis
                 version = (new SyncVersionDataAccess(uow)).GetAll().First(x => x.TableName == name).Version;
             }
             
-
+            Debug.WriteLine($"version {version}");
             var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
             var items = (cl.SyncConnector.GetDiff(typeof(T), version) as SyncResult<T>);
             return items;
@@ -87,7 +87,7 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void SyncTest()
         {
-            var items = GetTableData<Student>(Guid.Parse("07abdc8f-2dfc-4bbe-960b-395f6feae8c7"));
+            var items = GetTableData<Person>(Guid.Parse("c548d2a9-e4f6-4476-9834-33f105cc10a6"));
             Print(items.Inserted);
             Print(items.Updated);
             Print(items.Deleted);
