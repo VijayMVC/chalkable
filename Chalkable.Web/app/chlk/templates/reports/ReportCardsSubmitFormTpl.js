@@ -24,6 +24,9 @@ NAMESPACE('chlk.templates.reports', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'ableToReadSSNumber',
 
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.group.Group), 'groups',
+
             Boolean, function hideSSNumber(){
                 return !this.isAbleToReadSSNumber();
             },

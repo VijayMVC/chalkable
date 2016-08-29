@@ -3,6 +3,8 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.reports.CustomReportTemplate');
 REQUIRE('chlk.models.attendance.AttendanceReason');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');
+REQUIRE('chlk.models.group.Group');
+
 
 NAMESPACE('chlk.models.reports', function () {
     "use strict";
@@ -75,6 +77,8 @@ NAMESPACE('chlk.models.reports', function () {
         ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
         ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
+
+        ArrayOf(chlk.models.group.Group), 'groups',
 
         Boolean, 'ableDownload',
 

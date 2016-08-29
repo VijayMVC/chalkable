@@ -27,6 +27,16 @@ mixin Radio(name, value, title, selected)
                 TABLE.report-table
                     TR
                         TD(colspan="3").item-3
+                            .add-recipients-container
+                                .add-recipients
+                                    .recipients-list
+                                        -var groups = self.getGroups() || []
+                                        +ActionButton('announcement', 'showGroups', null).add-recipients-btn.grey-button.same-on-hovere +
+                                        each group in groups
+                                            .grey-button.same-on-hover.button-like=recipient.getGroupName()
+                                            .remove-recipient
+                    TR
+                        TD(colspan="3").item-3
                             input(type="text", name="title", placeholder='Report Tile')
                     TR
                         TD.item-3
