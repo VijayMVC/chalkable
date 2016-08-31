@@ -89,6 +89,8 @@ namespace Chalkable.BusinessLogic.Services
         [Ignore]
         public bool IsInternalApp{ get; set; }
         [Ignore]
+        public bool IsTrustedApp { get; set; }
+        [Ignore]
         public string OAuthApplication{ get; set; }
         [Ignore]
         public IList<ClaimInfo> Claims { get; set; } 

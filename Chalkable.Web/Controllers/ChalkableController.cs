@@ -64,7 +64,7 @@ namespace Chalkable.Web.Controllers
 
         private bool HideSensitiveData()
         {
-            return Context!= null && Context.IsOAuthUser && (!Context.IsInternalApp 
+            return Context!= null && Context.IsOAuthUser && (!Context.IsInternalApp || !Context.IsTrustedApp
                 || (Context.OAuthApplication == Settings.ApiExplorerClientId));
         }
 
@@ -132,6 +132,7 @@ namespace Chalkable.Web.Controllers
 
                 SchoolLocator.Context.IsOAuthUser = true;
                 SchoolLocator.Context.IsInternalApp = app.IsInternal;
+                SchoolLocator.Context.IsTrustedApp = app.IsTrustedApp;
                 SchoolLocator.Context.OAuthApplication = app.Url;
                 SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(app.Url);
 
