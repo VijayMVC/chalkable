@@ -1,0 +1,110 @@
+mixin Radio(name, value, title, selected)
+    -attributes.type = "radio"
+    -attributes.name = name
+    -attributes.value = value
+    -attributes.checked = selected ? "checked" : null
+    -attributes.id = attributes.id || ria.dom.Dom.GID()
+    input(attributes).chlk-radio-input
+    label(for=attributes.id)=title
+    br
+
+
+
+.dialog.report-window
+    +ActionForm('reporting', 'submitReportCards').comprehensive-progress-report-form.no-working.report-form
+        .x-window-header
+            .close.close-btn.dark
+            h1 Report Cards
+
+        .x-window-body
+            +Hidden('attendanceReasonIds', '')#absence-reasons
+            +Hidden('studentIds', '')#student-ids-value
+            +Hidden('groupIds', '')#group-ids-value
+            +Hidden('gradingPeriodIds', '')#grading-periods
+            .report-content
+                if !self.isAbleDownload()
+                    .error=Msg.Report_No_Access_Msg
+                TABLE.report-table
+                    TR
+                        TD(colspan="3").item-3
+                            .add-recipients-container
+                                .add-recipients
+                                    .recipients-list
+                                        -var groups = self.getGroups() || []
+                                        +ActionButton('announcement', 'showGroups', null).add-recipients-btn.grey-button.same-on-hovere +
+                                        each group in groups
+                                            .grey-button.same-on-hover.button-like=recipient.getGroupName()
+                                            .remove-recipient
+                    TR
+                        TD(colspan="3").item-3
+                            input(type="text", name="title", placeholder='Report Tile')
+                    TR
+                        TD.item-3
+                            h3 Recipient
+                            .recipient-type
+                                +Radio('recipient', chlk.models.reports.ReportCardsRecipientType.STUDENTS.valueOf(), 'Students', true)
+                                +Radio('recipient', chlk.models.reports.ReportCardsRecipientType.CUSTODIANS.valueOf(), 'Custodians', false)
+                                +Radio('recipient', chlk.models.reports.ReportCardsRecipientType.MAILING_CONTACTS.valueOf(), 'Mailing Contacts', false)
+                        TD.item-3
+                            h3 Logo
+                            .logo
+                                +Radio('logo', chlk.models.reports.ReportCardsLogoType.DISTRICT.valueOf(), 'District', true)
+                                +Radio('logo', chlk.models.reports.ReportCardsLogoType.SCHOOL.valueOf(), 'School', false)
+                                +Radio('logo', chlk.models.reports.ReportCardsLogoType.NONE.valueOf(), 'None', false)
+                        TD.item-3
+                            h3 Layout
+                            +Select('customReportTemplateId')
+                                each template in self.getTemplates()
+                                    +Option(template.getId().valueOf(), template.getName(), true)
+                            h3 Grading Periods
+                            +Select('gradingPeriod1')(multiple)#grading-period-select
+                                each gp in self.getGradingPeriods()
+                                    +Option(gp.getId().valueOf(), gp.getName(), false)
+                    TR
+                        TD.item-3
+                            h3=Msg.Order_by
+                            .order-by
+                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.GRADE_LEVEL.valueOf(), Msg.Grade_Level, true)
+                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.HOME_ROOM.valueOf(), 'Homeroom', false)
+                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.POST_CODE.valueOf(), Msg.Grade_Level, false)
+                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.STUDENT_DISPLAY_NAME.valueOf(), Msg.Student_display_name, false)
+                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.STUDENT_IDENTIFIER.valueOf(), Msg.Student_ID, false)
+
+                        TD.item-3
+                            h3=Msg.ID_to_print
+                            .id-to-print
+                                +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.ALT_STUDENT_NUMBER.valueOf(), Msg.Student_Number, true)
+                                +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.STATE_ID_NUMBER.valueOf(), Msg.State_ID_number, false)
+                                +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.STUDENT_NUMBER.valueOf(), Msg.Alt_student_number, false)
+                                if(!self.hideSSNumber())
+                                    +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.SOCIAL_SECURITY_NUMBER.valueOf(), Msg.SS_number, false)
+                                +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, false)
+                        TD.item-3
+                            h3=Msg.Absence_reasons
+                            +Select('absenceReason')(multiple).reasons-select
+                                each reason in self.getReasons()
+                                    +Option(reason.getId().valueOf(), reason.getName(), true)
+                    TR
+                        TD.item-3
+                            h3 Standards
+                            .standards-type
+                                +Radio('includeGradedStandardsOnly', false, Msg.All, true)
+                                +Radio('includeGradedStandardsOnly', true, Msg.Graded, false)
+                        TD.item-3
+                        TD.item-3
+                            h3 Include
+                            +Select('absenceReason')(multiple).reasons-select
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.ANNOUNCEMENT.valueOf(), 'Announcement', true)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.ATTENDANCE.valueOf(), 'Attendance', true)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_PERIOD_NOTES.valueOf(), 'Grading Period Note', true)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_SCALE_TRADITIONAL.valueOf(), 'Grading Scale - Traditional', true)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_SCALE_STANDARDS.valueOf(), 'Grading Scale - Standards', true)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.MERIT_DEMERIT.valueOf(), 'Merit/Demerit', true)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.PARENT_SIGNATURE.valueOf(), 'Parent Signature', false)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.PROMOTION_STATUS.valueOf(), 'Promotion Status', false)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.WITHDRAWN_STUDENTS.valueOf(), 'Withdrawn Students', false)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.YEAR_TO_DATE_INFORMATION.valueOf(), 'Year to Date Iinformation', false)
+
+        .x-window-footer.report-bottom
+            BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

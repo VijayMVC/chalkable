@@ -1,0 +1,17 @@
+.settings
+   .action-bar.not-transparent.buttons
+      .container.panel-bg
+         .items
+            +ActionLink('settings', 'dashboardAdmin') Messaging
+            each app in self.getApplications()
+               +ActionLink('settings', 'appSettings', app.getId())=app.getName()
+            if self.isAdminPanoramaEnabled()
+               +ActionLink('settings', 'panoramaAdmin') Panorama
+            a.action-link.pressed  Report Cards
+
+
+      -var canUpdate = self.isAbleToUpdate();
+
+      if !canUpdate
+         .check-box-container.sub
+            .title You don't have right permission to make changes. Only user with Maintain Chalkable District Settings permission can update settings

@@ -10,7 +10,7 @@ namespace Chalkable.Web.Controllers
     public class SchoolController : ChalkableController
     {
         
-        [AuthorizationFilter("SysAdmin")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
         public ActionResult List(Guid districtId, int? start, int? count)
         {
             count = count ?? 10;
