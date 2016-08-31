@@ -75,6 +75,10 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.reports.SubmitReportCardsViewData]],
         function submitReportCardsAction(model){
+            if(model.getSubmitType() == "addRecipients"){
+                return this.Redirect('group', 'showGroupsFromReport', [model.getGroupIds()])
+            }
+
             var result = this.reportingService.submitReportCards(
                 model.getCustomReportTemplateId(),
                 model.getTitle(),

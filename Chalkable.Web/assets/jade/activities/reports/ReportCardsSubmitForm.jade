@@ -19,7 +19,6 @@ mixin Radio(name, value, title, selected)
         .x-window-body
             +Hidden('attendanceReasonIds', '')#absence-reasons
             +Hidden('studentIds', '')#student-ids-value
-            +Hidden('groupIds', '')#group-ids-value
             +Hidden('gradingPeriodIds', '')#grading-periods
             .report-content
                 if !self.isAbleDownload()
@@ -30,14 +29,11 @@ mixin Radio(name, value, title, selected)
                             .add-recipients-container
                                 .add-recipients
                                     .recipients-list
-                                        -var groups = self.getGroups() || []
-                                        +ActionButton('announcement', 'showGroups', null).add-recipients-btn.grey-button.same-on-hovere +
-                                        each group in groups
-                                            .grey-button.same-on-hover.button-like=recipient.getGroupName()
-                                            .remove-recipient
+                                        -var groupsModel = new chlk.models.reports.ReportCardRecipientsViewData(self.getGroups())
+                                        +RenderWith(groupsModel, chlk.templates.reports.ReportCardRecipientsTpl)
                     TR
                         TD(colspan="3").item-3
-                            input(type="text", name="title", placeholder='Report Tile')
+                            input(type="text", name="title", placeholder='Title', value="Report Card").report-title
                     TR
                         TD.item-3
                             h3 Recipient

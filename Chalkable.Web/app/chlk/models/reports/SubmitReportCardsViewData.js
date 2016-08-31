@@ -60,6 +60,8 @@ NAMESPACE('chlk.models.reports', function () {
 
         String, 'groupIds',
 
+        String, 'submitType',
+
         String, 'includeOptions',
 
         chlk.models.reports.ReportCardsLogoType, 'logo',
