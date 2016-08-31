@@ -296,10 +296,11 @@ NAMESPACE('chlk.controllers', function () {
             },
 
             [chlk.controllers.NotChangedSidebarButton()],
-            [[chlk.models.id.AnnouncementId]],
-            function addGroupAction(announcementId_) {
+            [[String, chlk.models.id.AnnouncementId]],
+            function addGroupAction(listRequestId_, announcementId_) {
                 var group = new chlk.models.group.Group();
                 announcementId_ && group.setAnnouncementId(announcementId_);
+                listRequestId_ && group.setListRequestId(listRequestId_);
                 return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, new ria.async.DeferredData(group));
             }
         ]);

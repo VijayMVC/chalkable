@@ -5,11 +5,11 @@
 
     .groups-container
         each group in self.getGroups()
+            -group.setListRequestId(self.getListRequestId())
             +RenderWith(group, chlk.templates.group.AnnouncementGroupTpl)(
-                announcementId = self.getAnnouncementId(),
-                listRequestId = self.getListRequestId()
+                announcementId = self.getAnnouncementId()
             )
         .new-group
     .buttons-container
-        +ActionButton('group', 'addGroup', self.getAnnouncementId()).special-button2.add.add-group + New Group
+        +ActionButton('group', 'addGroup', self.getListRequestId(), self.getAnnouncementId()).special-button2.add.add-group + New Group
 
