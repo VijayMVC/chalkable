@@ -34,6 +34,7 @@
 	[HasStudentProfile]				BIT					NOT NULL DEFAULT (0),
 	[ProvidesRecommendedContent]	BIT					NOT NULL DEFAULT (0),
     [ExternalAttachPictureRef]		UNIQUEIDENTIFIER	NULL,
+	[IsTrustedApp]					BIT					NOT NULL DEFAULT (0),
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Application_Developer] FOREIGN KEY ([DeveloperRef]) REFERENCES [dbo].[Developer] ([Id]),
     CONSTRAINT [FK_Application_Original] FOREIGN KEY ([OriginalRef]) REFERENCES [dbo].[Application] ([Id])

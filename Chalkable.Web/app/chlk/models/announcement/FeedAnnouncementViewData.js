@@ -82,6 +82,8 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
                 this.imported = SJX.fromValue(raw.imported, Boolean);
 
+                this.requestId = SJX.fromValue(raw.requestId, String);
+
                 if(raw.createdAnnouncements)
                     this.createdAnnouncements = JSON.parse(raw.createdAnnouncements);
 
@@ -162,6 +164,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             chlk.models.classes.Class, 'clazz',
 
+            String, 'requestId',
 
             [[Object]],
             Boolean, function isFeedItemHidden_(raw){
