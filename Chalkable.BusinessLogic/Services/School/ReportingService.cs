@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<ReportCardsLogo> GetReportCardsLogos();
         void UpdateReportCardsLogo(int? schoolId, byte[] logoIcon);
-        void DeletReportCardsLogo(int id);
+        void DeleteReportCardsLogo(int id);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -504,7 +504,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return (new BlobHelper()).GetBlobsRelativeAddress("reportscardslogo", key);
         }
 
-        public void DeletReportCardsLogo(int id)
+        public void DeleteReportCardsLogo(int id)
         {
             BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new DataAccessBase<ReportCardsLogo, int>(u).Delete(id));

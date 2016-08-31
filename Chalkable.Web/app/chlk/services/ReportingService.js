@@ -8,6 +8,7 @@ REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceRegisterReportViewData');
 REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
+REQUIRE('chlk.models.settings.ReportCardsLogo');
 
 REQUIRE('chlk.lib.ajax.IframeGetTask');
 
@@ -365,6 +366,24 @@ NAMESPACE('chlk.services', function () {
                  includeOptions: this.arrayToCsv(inculdeOptions)
             });
             return this.getWithIframe(url);
+        },
+
+        ria.async.Future, function listReportCardsLogo(){
+            return this.get('Reporting/ListReportCardsLogo.json', ArrayOf(chlk.models.settings.ReportCardsLogo),{});
+        },
+
+        [[Object, Number]],
+        ria.async.Future, function updateReportCardsLogo(files, schoolId_){
+            return this.uploadFiles('Reporting/UpdateReportCardsLogo.json', [files[0]], ArrayOf(chlk.models.settings.ReportCardsLogo),{
+                schoolId: schoolId_ && schoolId_.valueOf(),
+            });
+        },
+
+        [[chlk.models.id.ReportCardsLogoId]],
+        ria.async.Future, function deleteReportCardsLogo(reportCardsLogoId){
+            return this.post('Reporting/DeleteReportCardsLogo.json', ArrayOf(chlk.models.settings.ReportCardsLogo), {
+                id: reportCardsLogoId.valueOf()
+            });
         },
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, String]],

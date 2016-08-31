@@ -8,18 +8,27 @@ namespace Chalkable.Web.Models
     {
         public int Id { get; set; }
         public int? SchoolId { get; set; }
+        public string SchoolName { get; set; }
         public string LogoAddress { get; set; }
         public bool IsDistrictLogo { get; set; }
 
-        public static IList<ReportCardsLogoViewData> Create(IList<ReportCardsLogo> reportsLogos)
+        public static IList<ReportCardsLogoViewData> Create(IList<ReportCardsLogo> reportsLogos, IList<School> schools)
         {
-            return reportsLogos.Select(x => new ReportCardsLogoViewData
+            var res = new List<ReportCardsLogoViewData>();
+            foreach (var logo in reportsLogos)
             {
-                Id = x.Id,
-                SchoolId = x.SchoolRef,
-                LogoAddress = x.LogoAddress,
-                IsDistrictLogo = !x.SchoolRef.HasValue
-            }).ToList();
+                var school = schools.FirstOrDefault(x => x.Id == logo.SchoolRef);
+                if(logo.SchoolRef.HasValue && school == null) continue;
+                res.Add(new ReportCardsLogoViewData
+                {
+                    Id = logo.Id,
+                    SchoolId = logo.SchoolRef,
+                    SchoolName = school?.Name,
+                    LogoAddress = logo.LogoAddress,
+                    IsDistrictLogo = logo.SchoolRef.HasValue
+                });
+            }
+            return res;
         } 
     }
 }

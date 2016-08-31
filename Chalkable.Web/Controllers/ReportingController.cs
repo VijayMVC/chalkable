@@ -227,15 +227,16 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult DeletReportCardsLogo(int id)
+        public ActionResult DeleteReportCardsLogo(int id)
         {
-            SchoolLocator.ReportService.DeletReportCardsLogo(id);
+            SchoolLocator.ReportService.DeleteReportCardsLogo(id);
             return Json(GetListOfReportCardsLogo());
         }
 
         private IList<ReportCardsLogoViewData> GetListOfReportCardsLogo()
         {
-            return ReportCardsLogoViewData.Create(SchoolLocator.ReportService.GetReportCardsLogos());
+            var schools = SchoolLocator.SchoolService.GetSchools();
+            return ReportCardsLogoViewData.Create(SchoolLocator.ReportService.GetReportCardsLogos(), schools);
         }
 
         

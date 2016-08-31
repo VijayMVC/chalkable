@@ -8,6 +8,8 @@ REQUIRE('chlk.activities.reports.StudentReportDialog');
 REQUIRE('chlk.activities.reports.ReportCardsDialog');
 REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
 
+
+
 NAMESPACE('chlk.controllers', function (){
 
     /** @class chlk.controllers.ReportingController*/
@@ -92,7 +94,8 @@ NAMESPACE('chlk.controllers', function (){
             }, this)
             .thenBreak();
             return this.UpdateView(chlk.activities.reports.ReportCardsDialog, result);
-        }
+        },
+
 
     ])
 });
