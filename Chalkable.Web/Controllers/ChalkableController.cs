@@ -64,7 +64,7 @@ namespace Chalkable.Web.Controllers
 
         private bool HideSensitiveData()
         {
-            return Context!= null && Context.IsOAuthUser && (!Context.IsInternalApp || !Context.IsTrustedApp
+            return Context!= null && Context.IsOAuthUser && (!Context.IsInternalApp && !Context.IsTrustedApp
                 || (Context.OAuthApplication == Settings.ApiExplorerClientId));
         }
 

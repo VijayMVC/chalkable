@@ -48,6 +48,9 @@ namespace Chalkable.API.Models
         [JsonProperty("statecode")]
         public string StateCode { get; set; }
 
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
         [JsonProperty("birthdate")]
         public DateTime? BirthDate { get; set; }
 

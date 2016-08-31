@@ -51,7 +51,7 @@ namespace Chalkable.Api.SampleApp.Controllers
             studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, new DateTime(2015, 12, 23, 12, 0, 0));
             studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, new DateTime(2015, 12, 24, 12, 0, 0));
             studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, null);
-
+            
             return View("Attach", DefaultJsonViewData.Create(new
             {
                 // AnnouncementApplicationIds = await announcementAppIdsTask,
@@ -61,7 +61,8 @@ namespace Chalkable.Api.SampleApp.Controllers
                 //Standards = await standardsTask,
                 //Relations = await relationsTask,
                 IsSchoolDay = isSchoolDay,
-            }));
+                Me = await Connector.Person.GetMe()
+        }));
         }
 
         public async Task<ActionResult> ContentAttach(int announcementApplicationId, string contentId)
