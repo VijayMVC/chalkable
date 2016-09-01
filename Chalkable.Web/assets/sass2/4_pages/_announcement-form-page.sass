@@ -1,0 +1,471 @@
+.top-green-info
+  position: absolute
+  background: #e9f6ed
+  color: #41b768
+  font-weight: bold
+  box-shadow: none
+  width: 260px
+  left: 50%
+  margin-left: -130px
+  top: 0
+  line-height: 35px
+  border: 1px solid #41b768
+  text-align: center
+  border-radius: 3px
+
+  &:hover
+    opacity: 1
+
+.lesson-plan-form-dialog
+  .dialog
+    width: 880px
+
+.double-select.chosen-container.chosen-with-drop
+  LI.active-result
+    overflow: hidden
+    text-overflow: ellipsis
+
+    &:hover, &.active-item
+      color: #56554f
+      background: #f1f1f1
+
+    &.selected-item
+      background: #e1e1e1
+
+  .chosen-drop.second-drop
+    left: 100%
+    border: 1px solid #aaa
+
+.add-new-category-dialog
+  input[name=value]
+    margin: 10px 20px
+
+  BUTTON.add
+    margin-bottom: 15px
+
+.announcement-import-dialog
+  .dialog
+    width: 750px
+
+  .row-block
+    .name-td:not(.check)
+      border-right: 1px solid #ebebeb
+
+.announcement-import-dialog, .categories-import-dialog
+  .double-select
+    width: 150px
+    margin-left: 4px
+
+  .top-container
+    background: #f7f7f5
+    line-height: 62px
+    padding: 0 49px 0 32px
+
+    .copy-start-date
+      width: 192px
+
+  .row-block
+    line-height: 48px
+
+    .box-checkbox
+      vertical-align: middle
+
+    &.header-row
+      line-height: 40px
+      font-size: 14px
+      border-bottom: 1px solid #ebebeb
+
+  LABEL.text
+    font-weight: bold
+
+  .table-block
+    width: 100%
+
+    .items-container
+      overflow-x: auto
+      height: 300px
+
+    .header-row
+      font-weight: bold
+
+    .name-td
+      display: inline-block
+      text-overflow: ellipsis
+      overflow: hidden
+      white-space: nowrap
+      text-align: left
+      vertical-align: top
+      padding: 0 20px
+
+      &.check
+        padding: 0
+        width: 62px
+        text-align: right
+
+      &.date
+        width: 149px
+
+      &.category
+        width: 209px
+
+      &.name
+        width: 190px
+
+  .dialog
+    .buttons-container
+      margin: 0
+
+.announcement-form
+  .lesson-plan-import-popup
+    padding: 0
+    right: -49px
+    top: 84px
+    width: 165px
+
+    a
+      display: block
+      padding: 8px 12px
+      text-decoration: none
+      text-align: left
+      font-weight: bold
+      margin: 0
+
+      &:hover
+        background: #f1f1f1
+
+  .h-1
+    min-height: 1px
+    min-width: 225px
+
+  .title-block-container
+    position: relative
+
+  .action-bar
+    .items
+      width: 95%
+
+  .import-btn
+    float: right
+    margin-top: 50px
+    position: absolute
+    white-space: nowrap
+    right: 0px
+
+  .attach-btn-area
+    margin-bottom: 20px
+    border-bottom: 1px solid #e7e6e2
+    height: 53px
+
+    button
+      width: 132px
+
+    .attach-attribute-btn
+      float: right
+      margin-right: 20px
+      text-decoration: none
+      font-size: 14px
+
+    .plus
+      display: inline-block
+      padding: 0 4px
+      border-radius: 15px
+      background: #41b768
+      margin-left: 9px
+      color: white
+      height: 16px
+      line-height: 16px
+      font-size: 15px
+      margin-top: 19px
+
+  .bottom-block
+    margin-top: 78px
+
+  .ann-form-container > *
+    margin-bottom: 24px
+
+  .title-block
+    margin-top: 16px
+
+    .titleformError
+      margin-left: 106px !important
+
+    .input-container
+      position: relative
+      display: inline-block
+      width: 100%
+
+      INPUT
+        width: 100%
+        box-sizing: border-box
+
+    BUTTON
+      vertical-align: top
+      margin-left: 3px
+
+  .top-table
+    table-layout: fixed
+
+  .table, .left-block
+    width: 100%
+
+  .left-block textarea
+    display: block
+    padding: 15px
+    min-height: 157px
+    width: 100%
+    box-sizing: border-box
+
+    &.item-content
+      padding: 15px 45px 80px 15px
+
+  .left-block-container
+    position: relative
+
+  .add-standards-container
+    position: absolute
+    bottom: 15px
+    left: 15px
+    right: 15px
+
+  .standards-list
+    padding-top: 8px
+    max-height: 68px
+    overflow: auto
+    padding-left: 0px
+    position: relative
+
+    .add-standards .title
+      color: #e0e0e0
+      font-weight: 600
+      font-size: 12px
+      padding-top: 6px
+      padding-bottom: 0
+      cursor: pointer
+      text-align: center
+
+  .recipients-list
+    padding-left: 40px
+    position: relative
+
+    &::before
+      content: 'To :'
+      position: absolute
+      left: 0
+      font: bold 16px Arial
+      top: 7px
+
+  .standards-list, .recipients-list
+
+    BUTTON
+      min-width: 35px
+
+    .button-like
+      min-width: 20px
+
+    .button-like
+      padding-right: 30px
+
+    BUTTON, .button-like
+      position: relative
+      display: inline-block
+
+      &:not(:last-child)
+        margin-right: 10px
+
+    .remove-standard, .remove-recipient
+      border: none
+      width: 32px
+      height: 32px
+      box-shadow: none
+      +icons-32-sprite(close)
+      position: absolute
+      top: -2px
+      right: -2px
+
+  .drawer-icon
+    width: 32px
+    height: 32px
+    position: absolute
+    +icons-32-sprite(inbox)
+    right: 15px
+    bottom: 80px
+    opacity: .5
+    +transition(opacity .3s ease-in-out)
+    cursor: pointer
+
+    &:hover
+      opacity: 1
+
+  .left-block
+    position: relative
+
+  .drop-down-container
+    position: absolute
+    top: 100%
+    left: 0
+    right: 0
+    background: #fff
+    display: none
+    //border: 1px solid #000
+    margin-top: -80px
+
+    .new-item-dropdown
+      white-space: normal
+      text-align: left
+
+      >DIV
+        overflow: hidden
+        text-overflow: ellipsis
+
+    h1
+      padding: 0
+      margin: 0
+
+    +box-shadow(transparentize(#000, .8) 0 2px 16px)
+    z-index: 11
+
+    &.top::before
+      +rotate(-45deg)
+      top: -7px
+      left: auto
+      right: 24px
+
+  .left-top-container
+    margin-bottom: 17px
+
+    >DIV.i-b
+      margin-right: 15px
+
+  .right-block, .left-top-container
+    INPUT[type=text]
+      box-sizing: border-box
+      width: 225px
+      margin-bottom: 16px
+
+    SELECT
+      width: 225px
+
+    .recipients-select+DIV.chosen-container
+      width: 100% !important
+
+    .i-b
+      .chosen-container
+        width: 217px !important
+
+    LABEL[for]
+      font-size: 13px
+      line-height: 18px
+      font-weight: 600
+      color: #56554f
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      margin-bottom: 6px
+      display: inline-block
+      text-align: left
+
+      &.main-label
+        margin-top: 10px
+
+  .right-block
+    width: 243px
+
+    > *
+      margin-left: 18px
+      position: relative
+
+
+
+    .question-mark, .calendar-mark
+      position: absolute
+      right: 5px
+      width: 24px
+      height: 24px
+      bottom: 18px
+      font-size: 0
+      opacity: .5
+
+    .question-mark
+      +icons-24-sprite(question)
+
+    .calendar-mark
+      +icons-24-sprite(calendar)
+
+  .advanced-options-btn
+    position: absolute
+    right: 0
+    +icons-32-sprite(settings)
+    width: 32px
+    height: 32px
+    margin-top: -9px
+    z-index: 1
+
+  .advanced-options
+    .check-box-container
+      margin: 10px 0
+
+      &>*
+        vertical-align: middle
+
+      &:not(.gallery)>LABEL[FOR]
+        min-width: 165px
+
+      &.gallery
+        >LABEL[FOR]
+          &:not(:last-child)
+            margin-right: 10px
+
+          &:not(:first-child)
+            margin-left: 5px
+            font-weight: normal
+
+
+  .advanced-options-container
+    position: absolute
+    padding: 15px
+    +box-shadow(transparentize(#000, .8) 0 2px 16px)
+    margin-left: -16px
+    margin-top: -4px
+    z-index: 11
+    width: 227px
+    text-align: left
+
+    .new-input-container
+      width: 107px
+      text-align: center
+
+      &:first-child
+        margin-right: 11px
+
+      INPUT[type=text]
+        width: 100%
+        margin-bottom: 0
+
+    > *
+      position: relative
+      white-space: normal
+
+    &.top::before
+      +rotate(-45deg)
+      top: -7px
+      left: 30%
+      margin-left: -7px
+  .apps-with-recommended-contents
+    &.before-loading
+      position: relative
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+      background: image-url("images2/loaders/circular-grey.gif") center center no-repeat transparentize(#fff, .5)
+      z-index: 999
+      content: ' '
+      display: block
+      height: 100px
+
+    .load-content-btn
+      float: right
+      position: relative
+      right: 16px
+
+.gallery-view
+  #lpGalleryCategoryType, #lp-gallery-sort-type
+    width: 200px
