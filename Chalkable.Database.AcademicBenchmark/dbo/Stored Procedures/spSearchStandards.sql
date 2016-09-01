@@ -11,8 +11,7 @@ Where
 	(@searchQuery is null 
 	 Or [Description] like(@searchQuery)
 	 Or [Number]      like(@searchQuery)
-	 Or [Label]	      like(@searchQuery)
-	 Or [ExtDescription] like(@searchQuery))
+	 Or [Label]	      like(@searchQuery))
   AND
 	(@deepest is null or IsDeepest = @deepest)
 
@@ -21,8 +20,7 @@ Where
 	(@searchQuery is null 
 	 Or [Description] like(@searchQuery)
 	 Or [Number]      like(@searchQuery)
-	 Or [Label]	      like(@searchQuery)
-	 Or [ExtDescription] like(@searchQuery))
+	 Or [Label]	      like(@searchQuery))
   AND
 	(@deepest is null or IsDeepest = @deepest)
 Order By Number

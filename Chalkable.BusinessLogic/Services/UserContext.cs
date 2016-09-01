@@ -96,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services
 
         public UserContext()
         {
-            //MasterConnectionString = Settings.MasterConnectionString;     
+            MasterConnectionString = Settings.MasterConnectionString;     
         }
 
         public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId, int? personId, int? loginTimeOut, SchoolYear schoolYear = null, string sisRedirectUrl = null)

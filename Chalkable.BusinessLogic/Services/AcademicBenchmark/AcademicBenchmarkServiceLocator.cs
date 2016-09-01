@@ -15,7 +15,8 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
         IAcademicBenchmarkServiceBase<GradeLevel, string> GradeLevelService { get; }
         IAcademicBenchmarkServiceBase<StandardDerivative, Guid> StandardDerivativeService { get; }
         IAcademicBenchmarkServiceBase<Subject, string> SubjectService { get; }
-        IAcademicBenchmarkServiceBase<SubjectDoc, Guid> SubjectDocService { get; } 
+        IAcademicBenchmarkServiceBase<SubjectDoc, Guid> SubjectDocService { get; }
+        IAcademicBenchmarkServiceBase<Topic, Guid> TopicService { get; }
         ISyncService SyncService { get; }
         IDbService DbService { get; }
     }
@@ -31,6 +32,7 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
         public IAcademicBenchmarkServiceBase<StandardDerivative, Guid> StandardDerivativeService { get; }
         public IAcademicBenchmarkServiceBase<Subject, string> SubjectService { get; }
         public IAcademicBenchmarkServiceBase<SubjectDoc, Guid> SubjectDocService { get; }
+        public IAcademicBenchmarkServiceBase<Topic, Guid> TopicService { get; } 
         public ISyncService SyncService { get; } 
         public IDbService DbService { get; protected set; }
 
@@ -51,6 +53,7 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
             StandardDerivativeService = new AcademicBenchmarkServiceBase<StandardDerivative, Guid>(this);
             SubjectService = new AcademicBenchmarkServiceBase<Subject, string>(this);
             SubjectDocService = new AcademicBenchmarkServiceBase<SubjectDoc, Guid>(this);
+            TopicService = new AcademicBenchmarkServiceBase<Topic, Guid>(this);
             SyncService = new SyncService(this);
         }
     }

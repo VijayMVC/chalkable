@@ -82,7 +82,7 @@ namespace Chalkable.AcademicBenchmarkImport.Mappers
                 CourseRef = model.Course.Id,
                 IsDeepest = model.IsDeepest,
                 AuthorityRef = model.Authority.Id,
-                ParentRef = null,
+                ParentRef = model.Parent?.Id,
                 AdoptYear = int.Parse(model.AdoptYear),
                 DateModified = model.DateModified,
                 GradeLevelHiRef = model.GradeLevel.High,
@@ -96,6 +96,36 @@ namespace Chalkable.AcademicBenchmarkImport.Mappers
                 // know about child subjects anything. So we take parent subject
                 SubjectRef = model.Subject.Broad, //!!!
                 Version = model.Version
+            };
+        }
+
+        public static IList<StandardDerivative> Map(AcademicBenchmarkConnector.Models.StandardRelations model)
+        {
+            return model?.Relations?.Derivatives?.Select(x => new StandardDerivative
+            {
+                StandardRef = model.Data.Id,
+                DerivativeRef = x.Standard.Id
+            }).ToList();
+        }
+
+        public static Topic Map(AcademicBenchmarkConnector.Models.Topic model)
+        {
+            return new Topic
+            {
+                Id = model.Id,
+                Description = model.Description,
+                IsActive = model.IsActive,
+                CourseRef = model.Course.Id,
+                IsDeepest = model.IsDeepest,
+                ParentRef = model.Parent?.Id,
+                AdoptYear = int.Parse(model.AdoptYear),
+                // We need broad, because subjects have sub tree, and we don't 
+                // know about child subjects anything. So we take parent subject
+                SubjectRef = model.Subject.Broad, //!!!
+                GradeLevelHiRef = model.GradeLevel.High,
+                GradeLevelLoRef = model.GradeLevel.Low,
+                Level = model.Level,
+                SubjectDocRef = model.SubjectDocument.Id
             };
         }
     }

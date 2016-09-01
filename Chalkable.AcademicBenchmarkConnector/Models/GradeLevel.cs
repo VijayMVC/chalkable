@@ -20,6 +20,17 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         public string Low { get; set; }
         [JsonProperty("hi")]
         public string High { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var o = (GradeLevel) obj;
+            return o.Code == Code;
+        }
+
+        public override int GetHashCode()
+        {
+            return Code.GetHashCode();
+        }
     }
 
     public class GradeLevelRange

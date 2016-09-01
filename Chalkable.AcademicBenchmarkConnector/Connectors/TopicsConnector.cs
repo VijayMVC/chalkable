@@ -10,10 +10,12 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 {
     public interface ITopicsConnector
     {
-        Task<PaginatedList<Topic>> GetTopics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool? deepest, string searchQuery, int start, int count);
+        Task<PaginatedList<Topic>> GetTopics(Guid? subjectDocId = null, Guid? courseId = null, Guid? parentId = null, bool? deepest = null, string searchQuery = null, int start = 0, int count = int.MaxValue);
         Task<Topic> GetTopic(Guid id);
         Task<IList<SubjectDocument>> GetSubjectDocuments();
         Task<IList<Course>> GetCourses(Guid? subjectDocumentId);
+        Task<IList<Subject>> GetSubjects();
+        Task<IList<GradeLevel>> GetGradeLevels();
     }
 
     public class TopicsConnector : ConnectorBase, ITopicsConnector
@@ -38,6 +40,17 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return (await GetPage<CourseWrapper>(subjectDocumentId)).Select(x => x.Course).ToList();
         }
 
+        public async Task<IList<Subject>> GetSubjects()
+        {
+            return (await GetPage<SubjectWrapper>()).Select(x => x.Subject).ToList();
+        }
+
+        public async Task<IList<GradeLevel>> GetGradeLevels()
+        {
+            return (await GetPage<GradeLevelWrapper>()).Select(x => x.GradeLevel).ToList();
+            
+        }
+
         public async Task<PaginatedList<Topic>> GetTopics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool? deepest, string searchQuery, int start, int count)
         {
             return await GetPage<Topic>(subjectDocId, courseId, parentId, deepest, searchQuery, start, count);
@@ -47,7 +60,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         {
             [typeof(Topic)] = null,
             [typeof(SubjectDocumentWrapper)] = "subject_doc",
-            [typeof(CourseWrapper)] = "course"
+            [typeof(CourseWrapper)] = "course",
+            [typeof(SubjectWrapper)] = "subject",
+            [typeof(GradeLevelWrapper)] = "grade"
         };
         protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? subjectDocId = null, Guid? courseId = null,
             Guid? parentId = null, bool? deepest = null, string searchQuery = null, int offset = 0, int limit = int.MaxValue)

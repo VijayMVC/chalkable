@@ -56,6 +56,16 @@ namespace Chalkable.Tests.AcademicBenchmarkTests
             {
                 Debug.WriteLine(e.Message);
                 Debug.WriteLine(e.StackTrace);
+                if (e.InnerException != null)
+                {
+                    Debug.WriteLine(e.InnerException.Message);
+                    Debug.WriteLine(e.InnerException.StackTrace);
+                    if (e.InnerException.InnerException != null)
+                    {
+                        Debug.WriteLine(e.InnerException.InnerException.Message);
+                        Debug.WriteLine(e.InnerException.InnerException.StackTrace);
+                    }
+                }
             }
 
         }

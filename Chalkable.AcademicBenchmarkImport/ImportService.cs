@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,32 +8,95 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Chalkable.AcademicBenchmarkConnector.Connectors;
-using Chalkable.AcademicBenchmarkConnector.Models;
+//using Chalkable.AcademicBenchmarkConnector.Models;
 using Chalkable.AcademicBenchmarkImport.Mappers;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.AcademicBenchmark;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
+using Chalkable.Data.AcademicBenchmark.Model;
 using Chalkable.Data.Master.Model;
+//using StandardRelations = Chalkable.AcademicBenchmarkConnector.Models.StandardRelations;
+
+//using Authority = Chalkable.AcademicBenchmarkConnector.Models.Authority;
+//using Course = Chalkable.AcademicBenchmarkConnector.Models.Course;
+//using Document = Chalkable.AcademicBenchmarkConnector.Models.Document;
+//using GradeLevel = Chalkable.AcademicBenchmarkConnector.Models.GradeLevel;
+//using Standard = Chalkable.AcademicBenchmarkConnector.Models.Standard;
+//using StandardRelations = Chalkable.AcademicBenchmarkConnector.Models.StandardRelations;
+//using Subject = Chalkable.AcademicBenchmarkConnector.Models.Subject;
 
 namespace Chalkable.AcademicBenchmarkImport
 {
+    public class StandardRelationsLoader
+    {
+        public StandardRelationsLoader(IConnectorLocator abConnectorLocator, IEnumerable<Guid> standardIds)
+        {
+            ConnectorLocator = abConnectorLocator;
+            StandardIdsToProcess = new ConcurrentQueue<Guid>(standardIds);
+            Result = new ConcurrentBag<AcademicBenchmarkConnector.Models.StandardRelations>();
+            _pool = new List<Thread>();
+        }
+
+        protected IConnectorLocator ConnectorLocator { get; }
+        protected ConcurrentQueue<Guid> StandardIdsToProcess { get; }
+        protected ConcurrentBag<AcademicBenchmarkConnector.Models.StandardRelations> Result { get; set; }
+
+        protected void Worker(object o)
+        {
+            while (!StandardIdsToProcess.IsEmpty)
+            {
+                Guid standardId;
+                while (StandardIdsToProcess.TryDequeue(out standardId))
+                {
+                    var id = standardId;
+                    var standardRel = Task.Run(() => ConnectorLocator.StandardsConnector.GetStandardRelationsById(id)).Result;
+
+                    if (standardRel != null)
+                        Result.Add(standardRel);
+                }
+            }
+        }
+
+        public IList<AcademicBenchmarkConnector.Models.StandardRelations> Load()
+        {
+            for (var i = 0; i < 10; ++i)
+            {
+                var currentTh = new Thread(Worker);
+                currentTh.Start();
+
+                _pool.Add(currentTh);
+            }
+
+            WaitAllThreads(_pool);
+
+            return Result.ToList();
+        }
+
+        protected static void WaitAllThreads(IList<Thread> threads)
+        {
+            foreach (var thread in threads)
+                thread.Join();
+        }
+
+        private readonly IList<Thread> _pool;
+    }
+    
     public class ImportResult
     {
-        public IList<Authority> Authorities { get; set; } 
-        public IList<Course> Courses { get; set; }
-        public IList<Document> Documents { get; set; }
-        public IList<GradeLevel> GradeLevels { get; set; }
-        public IList<Standard> Standards { get; set; }
-        public IList<StandardRelations> StandardRelations { get; set; }
-        public IList<Subject> Subjects { get; set; }
-        public IList<SubjectDocument> SubjectDocuments { get; set; } 
+        public IList<AcademicBenchmarkConnector.Models.Authority> Authorities { get; set; } 
+        public IList<AcademicBenchmarkConnector.Models.Course> Courses { get; set; }
+        public IList<AcademicBenchmarkConnector.Models.Document> Documents { get; set; }
+        public IList<AcademicBenchmarkConnector.Models.GradeLevel> GradeLevels { get; set; }
+        public IList<AcademicBenchmarkConnector.Models.Standard> Standards { get; set; }
+        public IList<AcademicBenchmarkConnector.Models.StandardRelations> StandardRelations { get; set; }
+        public IList<AcademicBenchmarkConnector.Models.Subject> Subjects { get; set; }
+        public IList<AcademicBenchmarkConnector.Models.SubjectDocument> SubjectDocuments { get; set; } 
+        public IList<AcademicBenchmarkConnector.Models.Topic> Topics { get; set; } 
     }
 
     public class ImportService
     {
-        
-
         protected IConnectorLocator ConnectorLocator { get; set; }
         protected IAcademicBenchmarkServiceLocator ServiceLocator { get; set; }
         protected BackgroundTaskService.BackgroundTaskLog Log { get; }
@@ -55,10 +119,12 @@ namespace Chalkable.AcademicBenchmarkImport
                 {
                     using (var uow = dbService.GetUowForRead())
                     {
+                        Debug.WriteLine("Ping");
                         var c = uow.GetTextCommand("select 1");
                         c.ExecuteNonQuery();
+                        Debug.WriteLine("Pong");
                     }
-                    Thread.Sleep(60 * 1000);
+                    Thread.Sleep(5 * 1000);
                 }
                 catch (Exception ex)
                 {
@@ -87,8 +153,6 @@ namespace Chalkable.AcademicBenchmarkImport
 
             var dbService = (ImportDbService)ServiceLocator.DbService;
 
-            //Log.LogInfo("No last sync date. Started full import.");
-
             dbService.BeginTransaction();
 
             var pingThread = new Thread(PingConnection);
@@ -116,9 +180,49 @@ namespace Chalkable.AcademicBenchmarkImport
                 }
             }
 
-            ServiceLocator.SyncService.UpdateLastSyncDate(DateTime.UtcNow.Date);
             ServiceLocator.SyncService.AfterSync();
+
             dbService.CommitAll();
+//StandardRelations
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //var standardRelLoader = new StandardRelationsLoader(ConnectorLocator, importResult.Standards.Select(x => x.Id));
+            //var standardRels = standardRelLoader.Load();
+            
+            //dbService.BeginTransaction();
+
+            //pingThread = new Thread(PingConnection);
+            //pingThread.Start(dbService);
+            
+            //try
+            //{
+            //    var standardDerivatives = new List<StandardDerivative>();
+            //    foreach (var standardRel in standardRels)
+            //        standardDerivatives.AddRange(MapperHelper.Map(standardRel) ?? new List<StandardDerivative>());
+
+            //    ServiceLocator.StandardDerivativeService.Add(standardDerivatives);
+            //}
+            //catch (Exception e)
+            //{
+            //    dbService.Rollback();
+            //    throw;
+            //}
+            //finally
+            //{
+            //    try
+            //    {
+            //        pingThread.Abort();
+            //    }
+            //    catch (Exception)
+            //    {
+            //        // ignored
+            //    }
+            //}
+
+            //ServiceLocator.SyncService.UpdateLastSyncDate(DateTime.UtcNow.Date);
+            //ServiceLocator.SyncService.AfterSync();
+            
+            //dbService.CommitAll();
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
         protected void SyncData(DateTime lastSyncDate)
@@ -129,21 +233,34 @@ namespace Chalkable.AcademicBenchmarkImport
         protected ImportResult DownloadAllDataForImport()
         {
             var importRes = new ImportResult();
-            var authorities = Task.Run(() => ConnectorLocator.StandardsConnector.GetAuthorities());
-            var courses = Task.Run(() => ConnectorLocator.StandardsConnector.GetCourses(null, null, null, null));
+            var authorities = Task.Run(() => ConnectorLocator.StandardsConnector.GetAuthorities());        
             var documents = Task.Run(() => ConnectorLocator.StandardsConnector.GetDocuments(null));
-            var gradeLevels = Task.Run(() => ConnectorLocator.StandardsConnector.GetGradeLevels(null, null, null));
-            var subjects = Task.Run(() => ConnectorLocator.StandardsConnector.GetSubjects(null, null));
-            var subjectsDocs = Task.Run(() => ConnectorLocator.StandardsConnector.GetSubjectDocuments(null, null));
-            var standards = Task.Run(() => ConnectorLocator.StandardsConnector.GetAllStandards(0, 1000));
+
+            var standardGradeLevels = Task.Run(() => ConnectorLocator.StandardsConnector.GetGradeLevels(null, null, null));
+            var standardSubjects = Task.Run(() => ConnectorLocator.StandardsConnector.GetSubjects(null, null));
+            var standardSubjectsDocs = Task.Run(() => ConnectorLocator.StandardsConnector.GetSubjectDocuments(null, null));
+            var standardCourses = Task.Run(() => ConnectorLocator.StandardsConnector.GetCourses(null, null, null, null));
+
+            var topicGradeLevels = Task.Run(() => ConnectorLocator.TopicsConnector.GetGradeLevels());
+            var topicSubjects = Task.Run(() => ConnectorLocator.TopicsConnector.GetSubjects());
+            var topicSubjectsDocs = Task.Run(() => ConnectorLocator.TopicsConnector.GetSubjectDocuments());
+            var topicCourses = Task.Run(() => ConnectorLocator.TopicsConnector.GetCourses(null));
+
+            var standards = Task.Run(() => ConnectorLocator.StandardsConnector.GetAllStandards(0, int.MaxValue));
+            var topics = Task.Run(() => ConnectorLocator.TopicsConnector.GetTopics());
 
             importRes.Authorities = authorities.Result;
-            importRes.Courses = courses.Result;
             importRes.Documents = documents.Result;
-            importRes.GradeLevels = gradeLevels.Result;
-            importRes.Subjects = subjects.Result;
-            importRes.SubjectDocuments = subjectsDocs.Result;
+
+            importRes.Courses = standardCourses.Result.Union(topicCourses.Result).ToList();
+            importRes.GradeLevels = standardGradeLevels.Result.Union(topicGradeLevels.Result).ToList();
+            importRes.Subjects = standardSubjects.Result.Union(topicSubjects.Result).ToList();
+            importRes.SubjectDocuments = standardSubjectsDocs.Result.Union(topicSubjectsDocs.Result).ToList();
+
             importRes.Standards = standards.Result;
+            importRes.Topics = topics.Result;
+            
+            //importRes.StandardRelations = new List<AcademicBenchmarkConnector.Models.StandardRelations>(); ;
 
             return importRes;
         }
@@ -151,12 +268,15 @@ namespace Chalkable.AcademicBenchmarkImport
         protected void InsertAllDataToDb(ImportResult importResult)
         {
             ServiceLocator.AuthorityService.Add(importResult.Authorities?.Select(MapperHelper.Map).ToList());
-            ServiceLocator.CourseService.Add(importResult.Courses?.Select(MapperHelper.Map).ToList());
             ServiceLocator.DocumentService.Add(importResult.Documents?.Select(MapperHelper.Map).ToList());
+
+            ServiceLocator.CourseService.Add(importResult.Courses?.Select(MapperHelper.Map).ToList());
             ServiceLocator.GradeLevelService.Add(importResult.GradeLevels?.Select(MapperHelper.Map).ToList());
             ServiceLocator.SubjectService.Add(importResult.Subjects?.Select(MapperHelper.Map).ToList());
             ServiceLocator.SubjectDocService.Add(importResult.SubjectDocuments?.Select(MapperHelper.Map).ToList());
+
             ServiceLocator.StandardService.Add(importResult.Standards?.Select(MapperHelper.Map).ToList());
+            ServiceLocator.TopicService.Add(importResult.Topics?.Select(MapperHelper.Map).ToList());
         }
     }
 }
