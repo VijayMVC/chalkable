@@ -43,12 +43,19 @@ NAMESPACE('chlk.controls', function () {
 
 
             //TODO: make base jquery control method
-            [[Object]],
-            Object, function processAttrs(attributes) {
+            [[Object, String]],
+            Object, function processAttrs(attributes, hiddenName_) {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        this.updateSelect(jQuery('#'+attributes.id), attributes);
+                        var select = jQuery('#'+attributes.id);
+                        this.updateSelect(select, attributes);
+                        if(hiddenName_)
+                            select.parents('form').on('submit', function(){
+                                var selVal = select.val(),
+                                    value = Array.isArray(selVal) ? selVal.join(',') : selVal;
+                                jQuery(this).find('[name=' + hiddenName_ + ']').val(value);
+                            })
                     }.bind(this));
                 return attributes;
             }

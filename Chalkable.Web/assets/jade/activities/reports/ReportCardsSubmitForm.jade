@@ -49,11 +49,11 @@ mixin Radio(name, value, title, selected)
                                 +Radio('logo', chlk.models.reports.ReportCardsLogoType.NONE.valueOf(), 'None', false)
                         TD.item-3
                             h3 Layout
-                            +Select('customReportTemplateId')
+                            +Select('customReportTemplate', 'customReportTemplateId')
                                 each template in self.getTemplates()
                                     +Option(template.getId().valueOf(), template.getName(), true)
                             h3 Grading Periods
-                            +Select('gradingPeriod1')(multiple)#grading-period-select
+                            +Select('gradingPeriodItems', 'gradingPeriodIds')(multiple)#grading-period-select
                                 each gp in self.getGradingPeriods()
                                     +Option(gp.getId().valueOf(), gp.getName(), false)
                     TR
@@ -77,7 +77,7 @@ mixin Radio(name, value, title, selected)
                                 +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, false)
                         TD.item-3
                             h3=Msg.Absence_reasons
-                            +Select('absenceReason')(multiple).reasons-select
+                            +Select('attendanceReasons', 'attendanceReasonIds')(multiple).reasons-select
                                 each reason in self.getReasons()
                                     +Option(reason.getId().valueOf(), reason.getName(), true)
                     TR
@@ -89,7 +89,7 @@ mixin Radio(name, value, title, selected)
                         TD.item-3
                         TD.item-3
                             h3 Include
-                            +Select('absenceReason')(multiple).reasons-select
+                            +Select('includeOptionValues', 'includeOptions')(multiple).reasons-select
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ANNOUNCEMENT.valueOf(), 'Announcement', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ATTENDANCE.valueOf(), 'Attendance', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_PERIOD_NOTES.valueOf(), 'Grading Period Note', true)
