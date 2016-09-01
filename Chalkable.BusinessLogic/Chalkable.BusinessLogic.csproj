@@ -140,6 +140,7 @@
     <Compile Include="Model\AcademicBenchmark\GradeLevel.cs" />
     <Compile Include="Model\AcademicBenchmark\ShortStandard.cs" />
     <Compile Include="Model\AcademicBenchmark\Standard.cs" />
+    <Compile Include="Model\AcademicBenchmark\StandardInfo.cs" />
     <Compile Include="Model\AcademicBenchmark\StandardRelations.cs" />
     <Compile Include="Model\AcademicBenchmark\Subject.cs" />
     <Compile Include="Model\AcademicBenchmark\SubjectDocument.cs" />
@@ -227,8 +228,13 @@
     <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\AcademicBenchmark\AcademicBenchmarkServiceLocator.cs" />
     <Compile Include="Services\AcademicBenchmark\AcademicBenchmarkServiceBase.cs" />
+    <Compile Include="Services\AcademicBenchmark\CourseService.cs" />
+    <Compile Include="Services\AcademicBenchmark\DocumentService.cs" />
+    <Compile Include="Services\AcademicBenchmark\GradeLevelService.cs" />
     <Compile Include="Services\AcademicBenchmark\StandardService.cs" />
+    <Compile Include="Services\AcademicBenchmark\SubjectDocService.cs" />
     <Compile Include="Services\AcademicBenchmark\SyncService.cs" />
+    <Compile Include="Services\AcademicBenchmark\TopicService.cs" />
     <Compile Include="Services\CrocodocService.cs" />
     <Compile Include="Services\DbService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementAssignedAttributeService.cs" />

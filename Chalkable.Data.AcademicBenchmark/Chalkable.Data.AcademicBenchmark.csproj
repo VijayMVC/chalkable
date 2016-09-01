@@ -41,8 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\CourseDataAccess.cs" />
+    <Compile Include="DataAccess\DocumentDataAccess.cs" />
+    <Compile Include="DataAccess\GradeLevelDataAccess.cs" />
     <Compile Include="DataAccess\StandardDataAccess.cs" />
+    <Compile Include="DataAccess\SubjectDocDataAccess.cs" />
     <Compile Include="DataAccess\SyncDataAccess.cs" />
+    <Compile Include="DataAccess\TopicDataAccess.cs" />
     <Compile Include="Model\Authority.cs" />
     <Compile Include="Model\Course.cs" />
     <Compile Include="Model\Document.cs" />

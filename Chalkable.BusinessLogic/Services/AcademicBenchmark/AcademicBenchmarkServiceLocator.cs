@@ -9,14 +9,14 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
     {
         UserContext Context { get; }
         IStandardService StandardService { get; }
-        IAcademicBenchmarkServiceBase<Document, Guid> DocumentService { get; }
+        IDocumentService DocumentService { get; }
         IAcademicBenchmarkServiceBase<Authority, Guid> AuthorityService { get; }
-        IAcademicBenchmarkServiceBase<Course, Guid> CourseService { get; }
-        IAcademicBenchmarkServiceBase<GradeLevel, string> GradeLevelService { get; }
+        ICourseService CourseService { get; }
+        IGradeLevelService GradeLevelService { get; }
         IAcademicBenchmarkServiceBase<StandardDerivative, Guid> StandardDerivativeService { get; }
         IAcademicBenchmarkServiceBase<Subject, string> SubjectService { get; }
-        IAcademicBenchmarkServiceBase<SubjectDoc, Guid> SubjectDocService { get; }
-        IAcademicBenchmarkServiceBase<Topic, Guid> TopicService { get; }
+        ISubjectDocService SubjectDocService { get; }
+        ITopicService TopicService { get; }
         ISyncService SyncService { get; }
         IDbService DbService { get; }
     }
@@ -25,14 +25,14 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
     {
         public UserContext Context { get; protected set; }
         public IStandardService StandardService { get; }
-        public IAcademicBenchmarkServiceBase<Document, Guid> DocumentService { get; }
+        public IDocumentService DocumentService { get; }
         public IAcademicBenchmarkServiceBase<Authority, Guid> AuthorityService { get; }
-        public IAcademicBenchmarkServiceBase<Course, Guid> CourseService { get; }
-        public IAcademicBenchmarkServiceBase<GradeLevel, string> GradeLevelService { get; }
+        public ICourseService CourseService { get; }
+        public IGradeLevelService GradeLevelService { get; }
         public IAcademicBenchmarkServiceBase<StandardDerivative, Guid> StandardDerivativeService { get; }
         public IAcademicBenchmarkServiceBase<Subject, string> SubjectService { get; }
-        public IAcademicBenchmarkServiceBase<SubjectDoc, Guid> SubjectDocService { get; }
-        public IAcademicBenchmarkServiceBase<Topic, Guid> TopicService { get; } 
+        public ISubjectDocService SubjectDocService { get; }
+        public ITopicService TopicService { get; } 
         public ISyncService SyncService { get; } 
         public IDbService DbService { get; protected set; }
 
@@ -46,14 +46,14 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
             DbService = new DbService(connectionString);
             StandardService = new StandardService(this);
 
-            DocumentService = new AcademicBenchmarkServiceBase<Document, Guid>(this);
+            DocumentService = new DocumentService(this);
             AuthorityService = new AcademicBenchmarkServiceBase<Authority, Guid>(this);
-            CourseService = new AcademicBenchmarkServiceBase<Course, Guid>(this);
-            GradeLevelService = new AcademicBenchmarkServiceBase<GradeLevel, string>(this);
+            CourseService = new CourseService(this);
+            GradeLevelService = new GradeLevelService(this);
             StandardDerivativeService = new AcademicBenchmarkServiceBase<StandardDerivative, Guid>(this);
             SubjectService = new AcademicBenchmarkServiceBase<Subject, string>(this);
-            SubjectDocService = new AcademicBenchmarkServiceBase<SubjectDoc, Guid>(this);
-            TopicService = new AcademicBenchmarkServiceBase<Topic, Guid>(this);
+            SubjectDocService = new SubjectDocService(this);
+            TopicService = new TopicService(this);
             SyncService = new SyncService(this);
         }
     }

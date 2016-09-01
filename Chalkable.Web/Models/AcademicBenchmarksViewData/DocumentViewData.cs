@@ -18,5 +18,15 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
                 Code = document.Code
             };
         }
+
+        public static DocumentViewData Create(Data.AcademicBenchmark.Model.Document model)
+        {
+            return new DocumentViewData
+            {
+                Id = model.Id,
+                Code = model.Code,
+                Description = model.Title
+            };
+        }
     }
 }

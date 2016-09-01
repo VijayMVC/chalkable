@@ -33,5 +33,14 @@ namespace Chalkable.Tests.AB_Api
             
             Debug.WriteLine($"{allCount}");
         }
+
+        [Test]
+        public void TestCourses()
+        {
+            var abConnector = new AcademicBenchmarkConnector.Connectors.ConnectorLocator();
+            var courses = Task.Run(() => abConnector.StandardsConnector.GetCourses(null, null, null, "5"));
+
+            Debug.WriteLine(courses.Result.Count);
+        }
     }
 }

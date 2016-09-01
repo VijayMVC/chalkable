@@ -65,7 +65,7 @@ namespace Chalkable.Data.AcademicBenchmark.DataAccess
         }
 
         public IList<Standard> Get(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode,
-            Guid? parentId, Guid? courseId, bool? deepest)
+            Guid? parentId, Guid? courseId, bool firstLevelOnly = false)
         {
             AndQueryCondition conditions = new AndQueryCondition();
             if(authorityId.HasValue)
@@ -83,8 +83,8 @@ namespace Chalkable.Data.AcademicBenchmark.DataAccess
             if(courseId.HasValue)
                 conditions.Add(nameof(Standard.CourseRef), courseId, ConditionRelation.Equal);
 
-            if(deepest.HasValue)
-                conditions.Add(nameof(Standard.IsDeepest), deepest, ConditionRelation.Equal);
+            if(firstLevelOnly)
+                conditions.Add(nameof(Standard.Level), 1, ConditionRelation.Equal);
 
             //add grade level code condition!!!
             var query = Orm.SimpleSelect(nameof(Standard), conditions);
