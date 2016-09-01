@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
+using Chalkable.Common.Web;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using School = Chalkable.Data.Master.Model.School;
@@ -20,10 +21,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string DistrictTimeZone { get; set; }
         public string DistrictName { get; set; }
         public string StateCode { get; set; }
+        public string Email { get; set; }
 
         public IList<PersonClaimViewData> Claims { get; set; } 
 
-        protected CurrentPersonViewData(Person person, District district, School school, SchoolYear schoolYear, IList<ClaimInfo> claimInfos)
+        protected CurrentPersonViewData(PersonDetails person, District district, School school, SchoolYear schoolYear, IList<ClaimInfo> claimInfos)
             : base(person)
         {
             CurrentSchoolYearId = schoolYear.Id;
@@ -35,11 +37,12 @@ namespace Chalkable.Web.Models.PersonViewDatas
             DistrictTimeZone = DateTimeTools.WindowsToIana(district.TimeZone);
             DistrictName = district.Name;
             StateCode = district.StateCode;
+            Email = person.Email;
             Claims = PersonClaimViewData.Create(claimInfos);
         }
 
 
-        public static CurrentPersonViewData Create(Person person, District district, School school, SchoolYear schoolYear, IList<ClaimInfo> claims)
+        public static CurrentPersonViewData Create(PersonDetails person, District district, School school, SchoolYear schoolYear, IList<ClaimInfo> claims)
         {
             return new CurrentPersonViewData(person, district, school, schoolYear, claims);
         }
