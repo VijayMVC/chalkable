@@ -1,0 +1,16 @@
+if chlk.templates.search && chlk.templates.search.SiteSearch
+    .wrapper
+        +SearchBox(chlk.services.SearchService, "search", chlk.templates.search.SiteSearch)#siteSearch(
+            name="siteSearch"
+            clearAfterSelect = false
+            withButton = true,
+            listCls = "site-search"
+        )
+        label(for="siteSearch")#search-glass
+
+if chlk.controllers.ReportingController
+    +ActionButton('reporting', 'reportCards').blue.report-cards-link &nbsp;
+if chlk.controllers.NotificationController
+    +ActionButton('notification', 'list-new').blue.notifications-link &nbsp;
+
++Logout('account', 'logout', self.getCurrentPerson())

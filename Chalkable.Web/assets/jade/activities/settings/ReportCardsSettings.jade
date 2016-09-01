@@ -1,0 +1,48 @@
+mixin ImagesSliader(images)
+   ul.slider
+      each image,i in images
+         input(type="radio", name="radio-btn", id="img-"+i)
+         li.slide-container
+            .slide
+               img(src=image.address)
+               .title=image.name
+            .nav
+               -var prev = i == 0 ? images.length - 1 : i - 1
+               -var next = i >= images.length - 1 ? 0 : i + 1
+               label(for="img-" + prev).prev='&#x2039;'
+               label(for="img-" + next).next='&#x2039;'
+
+
+
+.settings
+   .action-bar.not-transparent.buttons
+      .container.panel-bg
+         .items
+            +ActionLink('settings', 'dashboardAdmin') Messaging
+            each app in self.getApplications()
+               +ActionLink('settings', 'appSettings', app.getId())=app.getName()
+            if self.isAdminPanoramaEnabled()
+               +ActionLink('settings', 'panoramaAdmin') Panorama
+            a.action-link.pressed  Report Cards
+
+
+      -var canUpdate = self.isAbleToUpdate();
+      .logo-section
+         h3.title Logo
+         .with-line
+
+         .schools
+            .filters-block
+               .filters-container
+                    each item in self.schoolsLogo()
+                        .school
+                           +ActionButton()=item.getSchoolName()
+
+               .add-filter-container
+                  .add-circle-btn.add-filter-btn +
+                  span.light-grey Add filter
+         .logo
+            +ImagesSliader(self.prepareImages())
+      if !canUpdate
+         .check-box-container.sub
+            .title You don't have right permission to make changes. Only user with Maintain Chalkable District Settings permission can update settings
