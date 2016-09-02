@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Services.Master;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.AB_Api
@@ -42,5 +43,20 @@ namespace Chalkable.Tests.AB_Api
 
             Debug.WriteLine(courses.Result.Count);
         }
+
+        [Test]
+        public void TestRelations()
+        {
+            var abConnector = new AcademicBenchmarkConnector.Connectors.ConnectorLocator();
+            //var masterService = new ServiceLocatorMaster();
+
+            var startTime = DateTime.Now;
+            var relations = Task.Run(() => abConnector.StandardsConnector.GetStandardRelationsById(new Guid("6A59A66C-6EC0-11DF-AB2D-366B9DFF4B22"))).Result;
+            var delta = DateTime.Now - startTime;
+            //Debug.WriteLine($"{relations.Relations?.Origins?.Count} --- {relations.Relations?.Derivatives?.Count} --- {relations.Relations?.RelatedDerivatives?.Count}");
+            Debug.WriteLine(delta);
+
+        }
+        
     }
 }

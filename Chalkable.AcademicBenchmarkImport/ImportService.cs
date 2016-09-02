@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Chalkable.AcademicBenchmarkConnector.Connectors;
-//using Chalkable.AcademicBenchmarkConnector.Models;
 using Chalkable.AcademicBenchmarkImport.Mappers;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.AcademicBenchmark;
@@ -16,15 +13,6 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.AcademicBenchmark.Model;
 using Chalkable.Data.Master.Model;
-//using StandardRelations = Chalkable.AcademicBenchmarkConnector.Models.StandardRelations;
-
-//using Authority = Chalkable.AcademicBenchmarkConnector.Models.Authority;
-//using Course = Chalkable.AcademicBenchmarkConnector.Models.Course;
-//using Document = Chalkable.AcademicBenchmarkConnector.Models.Document;
-//using GradeLevel = Chalkable.AcademicBenchmarkConnector.Models.GradeLevel;
-//using Standard = Chalkable.AcademicBenchmarkConnector.Models.Standard;
-//using StandardRelations = Chalkable.AcademicBenchmarkConnector.Models.StandardRelations;
-//using Subject = Chalkable.AcademicBenchmarkConnector.Models.Subject;
 
 namespace Chalkable.AcademicBenchmarkImport
 {
@@ -46,6 +34,9 @@ namespace Chalkable.AcademicBenchmarkImport
         {
             while (!StandardIdsToProcess.IsEmpty)
             {
+                if (StandardIdsToProcess.Count % 10000 == 0)
+                    Debug.WriteLine("10000 elements proccessed");
+
                 Guid standardId;
                 while (StandardIdsToProcess.TryDequeue(out standardId))
                 {
@@ -89,7 +80,6 @@ namespace Chalkable.AcademicBenchmarkImport
         public IList<AcademicBenchmarkConnector.Models.Document> Documents { get; set; }
         public IList<AcademicBenchmarkConnector.Models.GradeLevel> GradeLevels { get; set; }
         public IList<AcademicBenchmarkConnector.Models.Standard> Standards { get; set; }
-        public IList<AcademicBenchmarkConnector.Models.StandardRelations> StandardRelations { get; set; }
         public IList<AcademicBenchmarkConnector.Models.Subject> Subjects { get; set; }
         public IList<AcademicBenchmarkConnector.Models.SubjectDocument> SubjectDocuments { get; set; } 
         public IList<AcademicBenchmarkConnector.Models.Topic> Topics { get; set; } 
@@ -119,12 +109,10 @@ namespace Chalkable.AcademicBenchmarkImport
                 {
                     using (var uow = dbService.GetUowForRead())
                     {
-                        Debug.WriteLine("Ping");
                         var c = uow.GetTextCommand("select 1");
                         c.ExecuteNonQuery();
-                        Debug.WriteLine("Pong");
                     }
-                    Thread.Sleep(5 * 1000);
+                    Thread.Sleep(60 * 1000);
                 }
                 catch (Exception ex)
                 {
@@ -183,45 +171,44 @@ namespace Chalkable.AcademicBenchmarkImport
             ServiceLocator.SyncService.AfterSync();
 
             dbService.CommitAll();
-//StandardRelations
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //var standardRelLoader = new StandardRelationsLoader(ConnectorLocator, importResult.Standards.Select(x => x.Id));
-            //var standardRels = standardRelLoader.Load();
-            
-            //dbService.BeginTransaction();
+            var standardIds = importResult.Standards.Select(x => x.Id).ToList();
+            var standardRelLoader = new StandardRelationsLoader(ConnectorLocator, standardIds);
+            var standardRels = standardRelLoader.Load();
 
-            //pingThread = new Thread(PingConnection);
-            //pingThread.Start(dbService);
-            
-            //try
-            //{
-            //    var standardDerivatives = new List<StandardDerivative>();
-            //    foreach (var standardRel in standardRels)
-            //        standardDerivatives.AddRange(MapperHelper.Map(standardRel) ?? new List<StandardDerivative>());
+            dbService.BeginTransaction();
 
-            //    ServiceLocator.StandardDerivativeService.Add(standardDerivatives);
-            //}
-            //catch (Exception e)
-            //{
-            //    dbService.Rollback();
-            //    throw;
-            //}
-            //finally
-            //{
-            //    try
-            //    {
-            //        pingThread.Abort();
-            //    }
-            //    catch (Exception)
-            //    {
-            //        // ignored
-            //    }
-            //}
+            pingThread = new Thread(PingConnection);
+            pingThread.Start(dbService);
 
-            //ServiceLocator.SyncService.UpdateLastSyncDate(DateTime.UtcNow.Date);
-            //ServiceLocator.SyncService.AfterSync();
+            try
+            {
+                var standardDerivatives = new List<StandardDerivative>();
+                foreach (var standardRel in standardRels)
+                    standardDerivatives.AddRange(MapperHelper.Map(standardRel) ?? new List<StandardDerivative>());
+
+                ServiceLocator.StandardDerivativeService.Add(standardDerivatives);
+            }
+            catch (Exception e)
+            {
+                dbService.Rollback();
+                throw;
+            }
+            finally
+            {
+                try
+                {
+                    pingThread.Abort();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+
+            ServiceLocator.SyncService.UpdateLastSyncDate(DateTime.UtcNow.Date);
             
-            //dbService.CommitAll();
+            dbService.CommitAll();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
@@ -259,8 +246,6 @@ namespace Chalkable.AcademicBenchmarkImport
 
             importRes.Standards = standards.Result;
             importRes.Topics = topics.Result;
-            
-            //importRes.StandardRelations = new List<AcademicBenchmarkConnector.Models.StandardRelations>(); ;
 
             return importRes;
         }

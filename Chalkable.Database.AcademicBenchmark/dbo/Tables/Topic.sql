@@ -24,3 +24,19 @@
 GO
 ALTER TABLE [dbo].[Topic] NOCHECK CONSTRAINT [FK_Topic_Topic];
 
+
+
+
+GO
+ALTER TABLE [dbo].[Topic] NOCHECK CONSTRAINT [FK_Topic_Topic];
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Topic_SubjectDocRef]
+    ON [dbo].[Topic]([SubjectDocRef] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Topic_CourseRef]
+    ON [dbo].[Topic]([CourseRef] ASC);
+

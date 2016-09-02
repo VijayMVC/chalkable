@@ -20,5 +20,16 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
                 RelatedDerivatives = standardRelations.RelatedDerivatives?.Select(StandardViewData.Create).ToList()
             };
         }
+
+        public static StandardRelationsViewData Create(StandardRelationsInfo model)
+        {
+            return new StandardRelationsViewData
+            {
+                CurrentStandard = StandardViewData.Create(model.Standard),
+                Derivatives = model.Derivatives?.Select(StandardViewData.Create).ToList(),
+                RelatedDerivatives = model.RelatedDerivatives?.Select(StandardViewData.Create).ToList(),
+                Origins = model.Derivatives?.Select(StandardViewData.Create).ToList()
+            };
+        }
     }
 }

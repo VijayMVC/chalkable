@@ -142,6 +142,7 @@
     <Compile Include="Model\AcademicBenchmark\Standard.cs" />
     <Compile Include="Model\AcademicBenchmark\StandardInfo.cs" />
     <Compile Include="Model\AcademicBenchmark\StandardRelations.cs" />
+    <Compile Include="Model\AcademicBenchmark\StandardRelationsInfo.cs" />
     <Compile Include="Model\AcademicBenchmark\Subject.cs" />
     <Compile Include="Model\AcademicBenchmark\SubjectDocument.cs" />
     <Compile Include="Model\AcademicBenchmark\Topic.cs" />

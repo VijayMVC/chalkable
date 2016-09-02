@@ -6,14 +6,17 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.AcademicBenchmark.DataAccess;
 using Chalkable.Data.Common;
+using Chalkable.Data.School.DataAccess;
 using Standard = Chalkable.Data.AcademicBenchmark.Model.Standard;
+using StandardDataAccess = Chalkable.Data.AcademicBenchmark.DataAccess.StandardDataAccess;
 using StandardRelations = Chalkable.Data.AcademicBenchmark.Model.StandardRelations;
 
 namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
 {
     public interface IStandardService : IAcademicBenchmarkServiceBase<Chalkable.Data.AcademicBenchmark.Model.Standard, Guid>
     {
-        StandardRelations GetStandardRelations(Guid id);
+        StandardRelationsInfo GetStandardRelations(Guid id);
+        IList<StandardRelationsInfo> GetStandardsRelations(IList<Guid> ids);
         PaginatedList<StandardInfo> Search(string searchQuery, bool? deepest = null, int start = 0, int count = int.MaxValue);
         IList<StandardInfo> Get(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, Guid? courseId, bool firstLevelOnly = false);
 
@@ -32,9 +35,37 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
             DoUpdate(u => new StandardDataAccess(u).Delete(models));
         }
 
-        public StandardRelations GetStandardRelations(Guid id)
+        public StandardRelationsInfo GetStandardRelations(Guid id)
         {
-            return DoRead(u => new StandardDataAccess(u).GetStandardRelations(id));
+            using (var uow = Read())
+            {
+                var dataAccess = new StandardDataAccess(uow);
+                var relations = dataAccess.GetStandardRelations(id);
+                var authorities = new DataAccessBase<Data.AcademicBenchmark.Model.Authority>(uow).GetAll();
+                var document = new DocumentDataAccess(uow).GetAll();
+
+                return StandardRelationsInfo.Create(relations, authorities, document);
+            }
+
+                
+        }
+
+        public IList<StandardRelationsInfo> GetStandardsRelations(IList<Guid> ids)
+        {
+            using (var uow = Read())
+            {
+                var result = new List<StandardRelationsInfo>();
+                var standardDA = new StandardDataAccess(uow);
+                var authorities = new DataAccessBase<Data.AcademicBenchmark.Model.Authority>(uow).GetAll();
+                var docs = new DocumentDataAccess(uow).GetAll();
+                foreach (var id in ids)
+                {
+                    var relation = standardDA.GetStandardRelations(id);
+                    result.Add(StandardRelationsInfo.Create(relation, authorities, docs));
+                }
+
+                return result;
+            }
         }
 
         public PaginatedList<StandardInfo> Search(string searchQuery, bool? deepest = null, int start = 0, int count = int.MaxValue)

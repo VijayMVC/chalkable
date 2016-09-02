@@ -1,4 +1,4 @@
-﻿Create Procedure spGetStandardRelations
+﻿CREATE Procedure [dbo].[spGetStandardRelations]
 	@standardId UNIQUEIDENTIFIER
 As
 
@@ -18,6 +18,8 @@ Insert Into @relatedDerivatives
 	Select DerivativeRef From StandardDerivative 
 		join @relatedDerivatives as rd
 			on StandardDerivative.StandardRef = rd.Value
+
+Select * From [Standard] Where Id = @standardId
 
 Select * From [Standard] join @origins orig on [Standard].Id = orig.Value
 

@@ -12,7 +12,7 @@
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
       <!--AcademicBenchmarkDB-->
-      <Setting name="ChalkableAcademicBenchmark" value=""/>
+      <Setting name="ChalkableAcademicBenchmark" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark;UID=chalkableadmin;Pwd=Hellowebapps1!"/>
       
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
@@ -63,7 +63,7 @@
       <Setting name="DbUpdateTimeout" value="3600" />
       <Setting name="Domain" value="local.chalkable.com" />
       <!--AcademicBenchmarkDB-->
-      <Setting name="ChalkableAcademicBenchmark" value=""/>
+      <Setting name="ChalkableAcademicBenchmark" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark;UID=chalkableadmin;Pwd=Hellowebapps1!"/>
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" value="-1" />
       <Setting name="DbBackupServiceUrl" value="" />
@@ -93,7 +93,7 @@
       <Setting name="DbUpdateTimeout" value="3600" />
       <Setting name="Domain" value="local.chalkable.com" />
       <!--AcademicBenchmarkDB-->
-      <Setting name="ChalkableAcademicBenchmark" value=""/>
+      <Setting name="ChalkableAcademicBenchmark" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark;UID=chalkableadmin;Pwd=Hellowebapps1!"/>
       <!-- Task settings -->
       <Setting name="TaskProducer.SisImportProducer.Interval" value="600" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />

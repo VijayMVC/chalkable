@@ -31,3 +31,40 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Standard_SubjectRef]
+    ON [dbo].[Standard]([SubjectRef] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Standard_ParentRef]
+    ON [dbo].[Standard]([ParentRef] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Standard_GradeLevelLoRef]
+    ON [dbo].[Standard]([GradeLevelLoRef] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Standard_GradeLevelHiRef]
+    ON [dbo].[Standard]([GradeLevelHiRef] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Standard_DocumentRef]
+    ON [dbo].[Standard]([DocumentRef] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Standard_CourseRef]
+    ON [dbo].[Standard]([CourseRef] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Standard_AuthorityRef]
+    ON [dbo].[Standard]([AuthorityRef] ASC);
+
