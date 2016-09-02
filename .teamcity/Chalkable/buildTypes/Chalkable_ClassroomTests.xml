@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="7276b8ce-2b31-4343-905f-185a505f95de" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
+  <name>Classroom Tests</name>
+  <description />
+  <settings>
+    <options>
+      <option name="allowPersonalBuildTriggering" value="false" />
+      <option name="checkoutMode" value="ON_AGENT" />
+      <option name="executionTimeoutMin" value="240" />
+    </options>
+    <disabled-settings>
+      <setting-ref ref="BUILD_EXT_20" />
+      <setting-ref ref="vcsTrigger" />
+    </disabled-settings>
+    <parameters>
+      <param name="env.AZURE_STORAGE_ACCESS_KEY" value="zxxda1db24a9e0854386ffb9225581b53b11e8068db01aac7fa326fea8c13c7d40c0c8a7535bb0801a9a16d0aa1c6d74044c021f9e34eb150819c6e8c3320f88eff36cd35d4c321162ec3192c5ba9431098e9520b6646dbdf75775d03cbe80d301b" spec="password display='hidden'" />
+      <param name="env.BUILD_BRANCH" value="%vcsroot.branchName%" />
+      <param name="env.BUILD_COUNTER" value="%build.counter%" />
+      <param name="env.NUGET_API_KEY" value="zxx75fb5e2c5084ec89c3dd56e5159453ee1f10eaf56173e59497fb821c45f636c5c2ec30e8af0dff7c" spec="password display='hidden'" />
+      <param name="env.PEM_ENCRYPTION_SECRET" value="zxxb518bd5a770ce9ee28a6b89b530d041bef9450c060986f1ca2df77aca73da318" spec="password display='hidden'" />
+      <param name="env.RAYGUN_AUTHTOKEN" value="zxxdcfd4d7a5253c38f710f6e0d35995be18543f795223130a90ac54ee3bda21c69775d03cbe80d301b" spec="password display='hidden'" />
+      <param name="env.SYSADMIN_PRIVATE_TOKEN" value="zxx092e87f55b9b108c61ed21f6490fbf0751ed70b6094f94f1c67d8f99648321d07ab0cd994fac2107" spec="password display='normal'" />
+    </parameters>
+    <build-runners>
+      <runner id="RUNNER_67" name="pip install" type="simpleRunner">
+        <parameters>
+          <param name="command.executable" value="python" />
+          <param name="command.parameters" value="-m pip install requests" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+      <runner id="RUNNER_66" name="run-all.cmd" type="simpleRunner">
+        <parameters>
+          <param name="command.executable" value="Chalkable.AutomatedTests\run-all.cmd" />
+          <param name="teamcity.build.workingDir" value="Chalkable.AutomatedTests" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings>
+      <vcs-entry-ref root-id="Chalkable_ChalkableTestSourcesCi" />
+    </vcs-settings>
+    <requirements>
+      <exists name="env.PYTHONHOME" />
+    </requirements>
+    <build-triggers>
+      <build-trigger id="TRIGGER_7" type="schedulingTrigger">
+        <parameters>
+          <param name="cronExpression_dm" value="*" />
+          <param name="cronExpression_dw" value="1-5" />
+          <param name="cronExpression_hour" value="0-8,20-23" />
+          <param name="cronExpression_min" value="00" />
+          <param name="cronExpression_month" value="*" />
+          <param name="cronExpression_sec" value="00" />
+          <param name="dayOfWeek" value="Sunday" />
+          <param name="hour" value="4" />
+          <param name="minute" value="0" />
+          <param name="promoteWatchedBuild" value="true" />
+          <param name="revisionRule" value="lastSuccessful" />
+          <param name="revisionRuleBuildBranch" value="staging" />
+          <param name="revisionRuleDependsOn" value="bt5" />
+          <param name="schedulingPolicy" value="cron" />
+          <param name="timezone" value="SERVER" />
+          <param name="triggerBuildIfWatchedBuildChanges" value="true" />
+        </parameters>
+      </build-trigger>
+      <build-trigger id="vcsTrigger" type="vcsTrigger">
+        <parameters>
+          <param name="quietPeriodMode" value="DO_NOT_USE" />
+          <param name="triggerRules"><![CDATA[+:Chalkable.AutomatedTests\*
+-:*]]></param>
+        </parameters>
+      </build-trigger>
+    </build-triggers>
+    <build-extensions>
+      <extension id="BUILD_EXT_18" type="BuildFailureOnMessage">
+        <parameters>
+          <param name="buildFailureOnMessage.conditionType" value="contains" />
+          <param name="buildFailureOnMessage.messagePattern" value="failed" />
+          <param name="buildFailureOnMessage.outputText" value="FAILED" />
+          <param name="buildFailureOnMessage.reverse" value="false" />
+        </parameters>
+      </extension>
+      <extension id="BUILD_EXT_19" type="BuildFailureOnMessage">
+        <parameters>
+          <param name="buildFailureOnMessage.conditionType" value="matchesRegex" />
+          <param name="buildFailureOnMessage.messagePattern" value="exceptions?\s+" />
+          <param name="buildFailureOnMessage.reverse" value="false" />
+        </parameters>
+      </extension>
+      <extension id="BUILD_EXT_20" type="BuildFailureOnMessage">
+        <parameters>
+          <param name="buildFailureOnMessage.conditionType" value="contains" />
+          <param name="buildFailureOnMessage.messagePattern" value="error" />
+          <param name="buildFailureOnMessage.reverse" value="false" />
+        </parameters>
+      </extension>
+    </build-extensions>
+    <cleanup />
+  </settings>
+</build-type>
+

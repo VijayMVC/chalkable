@@ -1,0 +1,22 @@
+﻿@using Newtonsoft.Json
+@model Chalkable.Api.SampleApp.Models.DefaultJsonViewData
+@{
+    ViewBag.Title = "Student  View Mode";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section headscripts
+{
+    <script type="text/javascript">
+        CHLK_API.setReady(true);
+    </script>
+}
+
+<h2>Your current score </h2><br/>
+
+<pre>@Model.JsonData</pre>
+
+<div>  
+    <h3>Student Info</h3><br />
+    <pre> @ViewBag.CurrentUser.JsonData</pre>
+</div> 
