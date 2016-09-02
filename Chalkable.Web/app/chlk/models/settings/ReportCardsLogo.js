@@ -19,7 +19,7 @@ NAMESPACE('chlk.models.settings', function (){
         [ria.serialize.SerializeProperty('logoaddress')],
         String, 'logoAddress',
 
-        [ria.serialize.SerializeProperty('districtlogo')],
+        [ria.serialize.SerializeProperty('isdistrictlogo')],
         Boolean, 'districtLogo'
     ]);
 });

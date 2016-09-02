@@ -146,9 +146,43 @@ NAMESPACE('chlk.controllers', function (){
                         this.adminDistrictService.getSettings()])
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return new chlk.models.settings.ReportCardsSettingsViewData(data[0], data[1].getItems(), data[2].getApplications(), hasPermission)
+                        var res = new chlk.models.settings.ReportCardsSettingsViewData(data[0], data[1].getItems(), data[2].getApplications(), hasPermission);
+                        this.getContext().getSession().set('reportCardsSettings', res);
+                        return res;
                     }, this);
                 return this.PushView(chlk.activities.settings.ReportCardsSettingsPage, res);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [[Object, Number]],
+            function updateReportCardsLogoAction(files, schoolId_){
+                var res = this.reportingService.updateReportCardsLogo(files, schoolId_)
+                    .attach(this.validateResponse_())
+                    .then(function(listOfLogo){
+                        var res = this.getContext().getSession().get('reportCardsSettings', null);
+                        res.setListOfLogo(listOfLogo);
+                        this.getContext().getSession().set('reportCardsSettings', res);
+                        return res;
+                    }, this);
+                return this.UpdateView(chlk.activities.settings.ReportCardsSettingsPage, res);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [[chlk.models.id.ReportCardsLogoId]],
+            function deleteReportCardsLogo(reportCardsLogoId){
+                var res = this.reportingService.deleteReportCardsLogo(reportCardsLogoId)
+                    .attach(this.validateResponse_())
+                    .then(function(listOfLogo){
+                        var res = this.getContext().getSession().get('reportCardsSettings', null);
+                        res.setListOfLogo(listOfLogo);
+                        this.getContext().getSession().set('reportCardsSettings', res);
+                        return res;
+                    }, this);
+                return this.UpdateView(chlk.activities.settings.ReportCardsSettingsPage, res);
             },
 
             [chlk.controllers.AccessForRoles([

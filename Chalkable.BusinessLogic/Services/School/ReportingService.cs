@@ -498,10 +498,10 @@ namespace Chalkable.BusinessLogic.Services.School
         private string UploadLogo(int? schoolId, byte[] logo)
         {
             Trace.Assert(Context.DistrictId.HasValue);
-            var key = $"{Context.DistrictId.Value}";
+            var key = $"reportcardslogo_{Context.DistrictId.Value}";
             if (schoolId.HasValue) key += $"_{schoolId.Value}";
-            ServiceLocator.StorageBlobService.AddBlob("reportscardslogo", key, logo);
-            return (new BlobHelper()).GetBlobsRelativeAddress("reportscardslogo", key);
+            ServiceLocator.StorageBlobService.AddBlob("pictureconteiner", key, logo);
+            return (new BlobHelper()).GetBlobsRelativeAddress("pictureconteiner", key);
         }
 
         public void DeleteReportCardsLogo(int id)

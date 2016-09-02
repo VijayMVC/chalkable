@@ -25,7 +25,7 @@ namespace Chalkable.Web.Models
                     SchoolId = logo.SchoolRef,
                     SchoolName = school?.Name,
                     LogoAddress = logo.LogoAddress,
-                    IsDistrictLogo = logo.SchoolRef.HasValue
+                    IsDistrictLogo = !logo.SchoolRef.HasValue
                 });
             }
             return res;

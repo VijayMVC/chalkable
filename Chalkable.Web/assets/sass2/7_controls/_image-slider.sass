@@ -1,0 +1,74 @@
+.slides
+  padding: 0
+  width: 220px
+  height: 150px
+  display: block
+  margin: 0 auto
+  position: relative
+
+
+.slides *
+  user-select: none
+  -ms-user-select: none
+  -moz-user-select: none
+  -khtml-user-select: none
+  -webkit-user-select: none
+  -webkit-touch-callout: none
+
+
+.slides input
+  display: none
+
+.slide-container
+  display: block
+
+.slide
+  top: 0
+  opacity: 0
+  width: 220px
+  height: 150px
+  display: block
+  position: absolute
+  transform: scale(0)
+  transition: all .7s ease-in-out
+
+
+.slide img
+  width: 100%
+  height: 100%
+
+
+.nav label
+  width: 25px
+  height: 100%
+  display: none
+  position: absolute
+  opacity: 0
+  z-index: 9
+  cursor: pointer
+  transition: opacity .2s
+  color: #FFF
+  font-size: 15pt
+  text-align: center
+  line-height: 160px
+  font-family: "Varela Round", sans-serif
+  background-color: rgba(255, 255, 255, .3)
+  text-shadow: 0px 0px 15px rgb(119, 119, 119)
+
+.slide:hover + .nav label
+  opacity: 0.5
+
+.nav label:hover
+  opacity: 1
+
+.nav .next
+  right: 0
+
+input:checked + .slide-container  .slide
+  opacity: 1
+  transform: scale(1)
+  transition: opacity 1s ease-in-out
+
+input:checked + .slide-container .nav label
+  display: block
+
