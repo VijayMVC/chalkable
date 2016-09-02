@@ -70,50 +70,37 @@ namespace Chalkable.AcademicBenchmarkImport.Model
         }
     }
 
-    internal class SyncData<T>
+    internal class SyncData<T, TId>
     {
         public IList<T> Update { get; set; }
-        public IList<T> Delete { get; set; }
+        public IList<TId> Delete { get; set; }
         public IList<T> Insert { get; set; }
 
-        public IList<T> Get(OperationType operation)
-        {
-            switch (operation)
-            {
-                case OperationType.Delete:
-                    return Delete;
-                case OperationType.Insert:
-                    return Insert;
-            }
-
-            return Update;
-        } 
-
-        public static SyncData<Standard> Create(IList<SyncItem> syncItems, IList<Standard> models)
+        public static SyncData<Standard, Guid> Create(IList<SyncItem> syncItems, IList<Standard> models)
         {
             var forUpdate = syncItems.Where(x => MapperHelper.Map(x.ChangeType) == OperationType.Update);
             var forInsert = syncItems.Where(x => MapperHelper.Map(x.ChangeType) == OperationType.Insert);
             var forDelete = syncItems.Where(x => MapperHelper.Map(x.ChangeType) == OperationType.Delete);
 
-            return new SyncData<Standard>
+            return new SyncData<Standard, Guid>
             {
                 Insert = models?.Where(x => forInsert.Any(y => y.Id == x.Id)).ToList(),
                 Update = models?.Where(x => forUpdate.Any(y => y.Id == x.Id)).ToList(),
-                Delete = models?.Where(x => forDelete.Any(y => y.Id == x.Id)).ToList()
+                Delete = forDelete.Select(x => x.Id).ToList()
             };
         }
 
-        public static SyncData<Topic> Create(IList<SyncItem> syncItems, IList<Topic> topics)
+        public static SyncData<Topic, Guid> Create(IList<SyncItem> syncItems, IList<Topic> topics)
         {
             var forUpdate = syncItems.Where(x => MapperHelper.Map(x.ChangeType) == OperationType.Update);
             var forInsert = syncItems.Where(x => MapperHelper.Map(x.ChangeType) == OperationType.Insert);
             var forDelete = syncItems.Where(x => MapperHelper.Map(x.ChangeType) == OperationType.Delete);
 
-            return new SyncData<Topic>
+            return new SyncData<Topic, Guid>
             {
                 Insert = topics?.Where(x => forInsert.Any(y => y.Id == x.Id)).ToList(),
                 Update = topics?.Where(x => forUpdate.Any(y => y.Id == x.Id)).ToList(),
-                Delete = topics?.Where(x => forDelete.Any(y => y.Id == x.Id)).ToList()
+                Delete = forDelete.Select(x => x.Id).ToList()
             };
         }
     }

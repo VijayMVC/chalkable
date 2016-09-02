@@ -421,6 +421,25 @@ namespace Chalkable.Data.Common
             SimpleDelete(BuildCondsByKey(key));
         }
 
+        public virtual void Delete(IList<TParam> keys)
+        {
+            if (keys == null || keys.Count == 0)
+                return;
+
+            var sql = new StringBuilder();
+            sql.AppendFormat(Orm.Orm.DELETE_FORMAT, typeof(TEntity).Name);
+
+            var primaryKeyFields = Orm.Orm.GetPrimaryKeyFields(typeof(TEntity));
+            sql.Append($" Where {primaryKeyFields.First().Name} in( Select * From @keys ) ");
+
+            var @params = new Dictionary<string, object>
+            {
+                ["keys"] = keys
+            };
+
+            ExecuteNonQueryParametrized(sql.ToString(), @params);
+        }
+
         public virtual TEntity GetById(TParam key)
         {
             return SelectOne<TEntity>(BuildCondsByKey(key));

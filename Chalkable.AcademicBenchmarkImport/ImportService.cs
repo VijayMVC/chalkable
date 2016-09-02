@@ -23,7 +23,6 @@ namespace Chalkable.AcademicBenchmarkImport
         Delete,
         Update
     }
-    
 
     public class ImportService
     {
@@ -58,8 +57,8 @@ namespace Chalkable.AcademicBenchmarkImport
         public void Import()
         {
             ConnectorLocator = ConnectorLocator ?? new ConnectorLocator();
-            var connectionStr = @"Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark;UID=chalkableadmin;Pwd=Hellowebapps1!";
-            ServiceLocator = ServiceLocator ?? new ImportAcademicBenchmarkServiceLocator(_sysAdminContext, connectionStr);
+            //var connectionStr = @"Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark_Testing;UID=chalkableadmin;Pwd=Hellowebapps1!";
+            ServiceLocator = ServiceLocator ?? new ImportAcademicBenchmarkServiceLocator(_sysAdminContext, Settings.AcademicBenchmarkDbConnectionString);
 
             var lastSyncDate = ServiceLocator.SyncService.GetLastSyncDateOrNull();
 
@@ -71,12 +70,13 @@ namespace Chalkable.AcademicBenchmarkImport
 
         protected void FullImport()
         {
+            Log.LogInfo("Last sync date is empty. Started full import.");
             var importResult = DownloadAllDataForImport();
 
             var dbService = (ImportDbService)ServiceLocator.DbService;
 
             dbService.BeginTransaction();
-
+            Log.LogInfo("Started database transaction");
             var pingThread = new Thread(PingConnection);
             pingThread.Start(dbService);
 
@@ -87,6 +87,8 @@ namespace Chalkable.AcademicBenchmarkImport
             }
             catch (Exception e)
             {
+                Log.LogInfo($"Error: {e.Message}");
+                Log.LogInfo("Transaction is going to rollback");
                 dbService.Rollback();
                 throw;
             }
@@ -105,12 +107,15 @@ namespace Chalkable.AcademicBenchmarkImport
             ServiceLocator.SyncService.AfterSync();
 
             dbService.CommitAll();
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            Log.LogInfo("Transaction was commited");
+/////////////////////////////////////Proccessing Standardar Relations in another transaction////////////////////////////////////////////////////
             var standardIds = importResult.Standards.Select(x => x.Id).ToList();
+            Log.LogInfo("Loading Standard Relations . . .");
             var standardRelLoader = new StandardRelationsLoader(ConnectorLocator, standardIds);
             var standardRels = standardRelLoader.Load();
 
             dbService.BeginTransaction();
+            Log.LogInfo("Started database transaction");
 
             pingThread = new Thread(PingConnection);
             pingThread.Start(dbService);
@@ -125,6 +130,8 @@ namespace Chalkable.AcademicBenchmarkImport
             }
             catch (Exception e)
             {
+                Log.LogInfo($"Error: {e.Message}");
+                Log.LogInfo("Transaction is going to rollback");
                 dbService.Rollback();
                 throw;
             }
@@ -143,6 +150,7 @@ namespace Chalkable.AcademicBenchmarkImport
             ServiceLocator.SyncService.UpdateLastSyncDate(DateTime.UtcNow.Date);
             
             dbService.CommitAll();
+            Log.LogInfo("Transaction was commited.");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
@@ -164,6 +172,8 @@ namespace Chalkable.AcademicBenchmarkImport
             }
             catch (Exception e)
             {
+                Log.LogInfo($"Error: {e.Message}");
+                Log.LogInfo("Transaction is going to rollback");
                 dbService.Rollback();
                 throw;
             }
@@ -183,6 +193,7 @@ namespace Chalkable.AcademicBenchmarkImport
             ServiceLocator.SyncService.UpdateLastSyncDate(DateTime.UtcNow.Date);
 
             dbService.CommitAll();
+            Log.LogInfo("Transaction was commited.");
         }
 
         protected void ProcessImportResult(ImportResult importResult)
@@ -190,22 +201,25 @@ namespace Chalkable.AcademicBenchmarkImport
             ProcessBaseResult(importResult);
 
             ServiceLocator.StandardService.Add(importResult.Standards?.Select(MapperHelper.Map).ToList());
+            Log.LogInfo("Processed Standard table");
             ServiceLocator.TopicService.Add(importResult.Topics?.Select(MapperHelper.Map).ToList());
+            Log.LogInfo("Processed Topic table");
         }
 
         protected void ProcessSyncResult(SyncResult syncResult)
         {
             ProcessBaseResult(syncResult);
-
-            var standardSyncData = SyncData<Standard>.Create(syncResult.StandardSyncItems, syncResult.Standards);
+            var standardSyncData = SyncData<Standard, Guid>.Create(syncResult.StandardSyncItems, syncResult.Standards);
             ServiceLocator.StandardService.Add(standardSyncData.Insert?.Select(MapperHelper.Map).ToList());
             ServiceLocator.StandardService.Edit(standardSyncData.Update?.Select(MapperHelper.Map).ToList());
-            ServiceLocator.StandardService.Delete(standardSyncData.Delete?.Select(MapperHelper.Map).ToList());
+            ServiceLocator.StandardService.Delete(standardSyncData.Delete);
+            Log.LogInfo("Processed Standard table");
 
-            var topicSyncData = SyncData<Topic>.Create(syncResult.TopicSyncItems, syncResult.Topics);
+            var topicSyncData = SyncData<Topic, Guid>.Create(syncResult.TopicSyncItems, syncResult.Topics);
             ServiceLocator.TopicService.Add(topicSyncData.Insert?.Select(MapperHelper.Map).ToList());
             ServiceLocator.TopicService.Edit(topicSyncData.Update?.Select(MapperHelper.Map).ToList());
-            ServiceLocator.TopicService.Delete(topicSyncData.Delete?.Select(MapperHelper.Map).ToList());
+            ServiceLocator.TopicService.Delete(topicSyncData.Delete);
+            Log.LogInfo("Processed Topic table");
         }
 
         protected void ProcessBaseResult(ResultBase resultBase)
@@ -217,6 +231,8 @@ namespace Chalkable.AcademicBenchmarkImport
             ServiceLocator.GradeLevelService.Add(resultBase.GradeLevels?.Select(MapperHelper.Map).ToList());
             ServiceLocator.SubjectService.Add(resultBase.Subjects?.Select(MapperHelper.Map).ToList());
             ServiceLocator.SubjectDocService.Add(resultBase.SubjectDocuments?.Select(MapperHelper.Map).ToList());
+
+            Log.LogInfo("Processed Authority, Document, Course, GradeLevel, Subject, SubjectDoc tables");
         }
 
         protected ImportResult DownloadAllDataForImport()
@@ -225,8 +241,10 @@ namespace Chalkable.AcademicBenchmarkImport
             var importRes = new ImportResult(baseResult);
 
             var standards = Task.Run(() => ConnectorLocator.StandardsConnector.GetAllStandards(0, int.MaxValue));
+            Log.LogInfo("Downloaded Standard table");
             var topics = Task.Run(() => ConnectorLocator.TopicsConnector.GetTopics());
-
+            Log.LogInfo("Downloaded Topic table");
+            
             importRes.Standards = standards.Result;
             importRes.Topics = topics.Result;
 
@@ -236,6 +254,7 @@ namespace Chalkable.AcademicBenchmarkImport
         protected SyncResult DownloadAllDataForSync(DateTime lastSyncDate)
         {
             var resultBase = DownloadBaseData();
+            
             var standardSyncItems = Task.Run(() => ConnectorLocator.SyncConnector.GetStandardsSyncData(lastSyncDate, 0, int.MaxValue));
             var topicSyncItems = Task.Run(() => ConnectorLocator.SyncConnector.GetTopicsSyncData(lastSyncDate, 0, int.MaxValue));
             var syncRes = new SyncResult(resultBase)
@@ -251,7 +270,8 @@ namespace Chalkable.AcademicBenchmarkImport
             var topicIds = syncRes.TopicSyncItems.Select(x => x.Id);
             var topicLoader = new LoaderBase<Guid, AcademicBenchmarkConnector.Models.Topic>(topicIds);
             syncRes.Topics = topicLoader.Load(id => Task.Run(() => ConnectorLocator.TopicsConnector.GetTopic(id)).Result);
-
+            
+            Log.LogInfo("Downloaded Standard, Topic sync data");
             return syncRes;
         }
 
@@ -278,6 +298,8 @@ namespace Chalkable.AcademicBenchmarkImport
             result.GradeLevels = standardGradeLevels.Result.Union(topicGradeLevels.Result).ToList();
             result.Subjects = standardSubjects.Result.Union(topicSubjects.Result).ToList();
             result.SubjectDocuments = standardSubjectsDocs.Result.Union(topicSubjectsDocs.Result).ToList();
+
+            Log.LogInfo("Downloaded Authority, Document, Course, GradeLevel, Subject, SubjectDoc tables");
 
             return result;
         }
