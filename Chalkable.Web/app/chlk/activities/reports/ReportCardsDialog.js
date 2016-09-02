@@ -21,6 +21,19 @@ NAMESPACE('chlk.activities.reports', function(){
                 ids.splice(ids.indexOf(id), 1);
                 idsNode.setValue(ids.join(','));
                 node.parent('.grey-button').removeSelf();
+            },
+
+            [ria.mvc.DomEventBind('chosen:showing_dropdown', '.custom-template-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function customTemplateSelect(node, event_, b_){
+                console.info(node);
+                var chosenC = node.$.find('+DIV.chosen-container');
+                node.$.find('option').each(function(index){
+                    var icon = $(this).data('icon'),
+                        img = '<img src="' + icon + '"/>';
+
+                    chosenC.find('.active-result:eq(' + index + ')').prepend(img);
+                });
             }
         ]);
 });
