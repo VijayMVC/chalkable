@@ -30,5 +30,21 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
                 Document = DocumentViewData.Create(standard.Document)
             };
         }
+
+        public static StandardViewData Create(StandardInfo model)
+        {
+            return new StandardViewData
+            {
+                Id = model.Id,
+                Description = model.Description,
+                Code = model.Code,
+                IsActive = model.IsActive,
+                IsDeepest = model.IsDeepest,
+                Level = model.Level,
+                ParentId = model.ParentId,
+                Authority = AuthorityViewData.Create(model.Authority),
+                Document = DocumentViewData.Create(model.Document)
+            };
+        }
     }
 }

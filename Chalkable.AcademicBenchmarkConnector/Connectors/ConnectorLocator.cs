@@ -9,6 +9,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     {
         IStandardsConnector StandardsConnector { get; }
         ITopicsConnector TopicsConnector { get; }
+        ISyncConnector SyncConnector { get; }
         string ApiRoot { get; }
         AuthContext AuthContext { get; }
     }
@@ -17,6 +18,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     {
         public IStandardsConnector StandardsConnector { get; private set; }
         public ITopicsConnector TopicsConnector { get; private set; }
+        public ISyncConnector SyncConnector { get; private set; }
         public string ApiRoot => Settings.AcademicBenchmarkApiUrl;
 
         private AuthContext _authContext;
@@ -37,6 +39,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         {
             StandardsConnector = new StandardsConnector(this);
             TopicsConnector = new TopicsConnector(this);
+            SyncConnector = new SyncConnector(this);
         }
     }
 

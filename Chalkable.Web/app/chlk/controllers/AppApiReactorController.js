@@ -163,7 +163,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (data) {
                         return data.map(function (_) { return _.serialize(); });
                     }, this)
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },
@@ -174,7 +174,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (data) {
                         return data.map(function (_) { return _.serialize(); });
                     }, this)
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },
@@ -188,7 +188,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (models) {
                         return models.getItems().map(function (x) { return x.serialize() });
                     })
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },

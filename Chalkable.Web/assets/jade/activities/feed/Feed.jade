@@ -61,7 +61,7 @@ div(class = (noComplete ? "no-complete " : "") + (self.hasFilters() ? 'settings-
                             data-options={
                                 showOtherMonths: true,
                                 selectOtherMonths: true,
-                                enabledDays: self.getClassScheduledDays() || []
+                                enabledDays: self.getClassScheduledDays && self.getClassScheduledDays() || []
                             },
                             disabled = true
                         ).adjust-start-date
@@ -149,8 +149,8 @@ div(class = (noComplete ? "no-complete " : "") + (self.hasFilters() ? 'settings-
                 needGoToButton = true,
                 pageSize = 10
             ).feed-grid
-                -var aICount = self.getAdjustedItemsCount()
-                -var aCount = self.getAdjustCount()
+                -var aICount = self.getAdjustedItemsCount && self.getAdjustedItemsCount()
+                -var aCount = self.getAdjustCount && self.getAdjustCount()
                 if(aICount && (aCount || aCount === 0))
                     .top-green-info=aICount + ' item' + (aICount > 1 ? 's were' : ' was') + ' adjusted ' + (aCount > 0 ? '+' : '') + aCount + ' day' + (aCount == 1 ? '' : 's')
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")

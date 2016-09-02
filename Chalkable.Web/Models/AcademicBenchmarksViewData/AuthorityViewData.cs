@@ -18,5 +18,15 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
                 Description = authority.Description
             };
         }
+
+        public static AuthorityViewData Create(Data.AcademicBenchmark.Model.Authority model)
+        {
+            return new AuthorityViewData
+            {
+                Id = model.Id,
+                Description = model.Description,
+                Code = model.Code
+            };
+        }
     }
 }

@@ -46,6 +46,7 @@ namespace Chalkable.Data.Master.Model
         public bool HasDistrictAdminSettings { get; set; }
         public bool HasStudentProfile { get; set; }
         public bool ProvidesRecommendedContent { get; set; }
+        public bool IsTrustedApp { get; set; }
 
         [NotDbFieldAttr]
         public bool? Ban { get; set; }

@@ -18,8 +18,8 @@
                 Document = new Document
                 {
                     Id = standard.Document.Id,
-                    Code = standard.Document.Code,
                     Description = standard.Document.Title,
+                    Code = standard.Document.Code
                 };
         }
         public static Standard Create(AcademicBenchmarkConnector.Models.Standard standard)

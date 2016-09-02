@@ -231,15 +231,12 @@
       cursor: pointer
 
     &:not(.gradable)
-      .edit-cell
-        display: none
+      .grade-info
+        background: transparent
 
     &.active-cell
       .value-input
         display: block
-
-      .edit-cell
-        display: none
 
     &.top-popup
       .grading-input-popup
@@ -262,27 +259,26 @@
     +icons-24-sprite(comment-icon2)
     z-index: 2
 
-  .edit-cell
-    position: absolute
-    left: 0
-    right: 1px
-    top: 0
-    bottom: 1px
-    background-color: #eeeeee
-    z-index: 1
-    opacity: 0
+  .grade-value.gradable
+    .grade-info
+      height: 40px
 
-    &::after
-      content: ' '
-      position: absolute
-      top: 4px
-      left: 4px
-      +icons-24-sprite(edit-cell)
-      width: 12px
-      height: 12px
+      &:hover
+        background-color: #eeeeee
+        position: relative
+        z-index: 1
 
-    &:hover
-      opacity: 1
+        .with-comment
+          display: none
+
+        &::after
+          content: ' '
+          position: absolute
+          top: 4px
+          left: 4px
+          +icons-24-sprite(edit-cell)
+          width: 12px
+          height: 12px
 
   .value-input
     position: absolute

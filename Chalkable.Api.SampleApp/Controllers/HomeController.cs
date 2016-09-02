@@ -106,6 +106,8 @@ namespace Chalkable.Api.SampleApp.Controllers
             count = count ?? int.MaxValue;
 
             var standards = Task.Run(() => PrepareCommonCores(standardInfos)).Result;
+
+            var userEmail = Task.Run(() => GetCurrentUser(null)).Result.Email;
             
             var res = ContentStorage.GetStorage().GetContents().OrderBy(x=>x.ContentId).ToList();
             return new PaginatedList<ApplicationContent>(res, start.Value, count.Value);

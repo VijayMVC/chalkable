@@ -6,6 +6,7 @@ using Chalkable.API.Helpers;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.Master.Model;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Logic
@@ -44,7 +45,10 @@ namespace Chalkable.Web.Logic
 
             var res = BaseApplicationViewData.Create(applications);
             foreach (var app in res)
+            {
                 app.EncodedSecretKey = HashHelper.HexOfCumputedHash(applications.First(x => x.Id == app.Id).SecretKey);
+                app.AccessToken = masterLocator.ApplicationService.GetAccessToken(app.Id, ChalkableAuthentication.GetSessionKey());
+            }
 
             return res;
         }

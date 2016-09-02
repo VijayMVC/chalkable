@@ -30,7 +30,7 @@
                             row-index=i,
                             data-student-id=info.studentid,
                             data-standard-id=info.standardid,
-                            data-grading-period-id=self.getGradingPeriod().getId().valueOf()
+                            data-grading-period-id=self.getGradingPeriod().getId().valueOf(),
                             class=(self.isGradable() ? 'gradable' : '')
                         ).dotted-h.grade-value.letter
                             -var value = self.displayGrade(info.gradevalue)
@@ -46,5 +46,3 @@
                                 span(data-grade-value=info.gradevalue).grade-text=value
                                 if info.comment
                                     .with-comment
-                                if self.isGradable()
-                                    .edit-cell
