@@ -90,7 +90,7 @@ NAMESPACE('chlk.controllers', function (){
                 this.getIdsList(model.getGroupIds(), chlk.models.id.GroupId),
                 this.getIdsList(model.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
                 this.getIdsList(model.getAttendanceReasonIds(), chlk.models.id.AttendanceReasonId),
-                this.getIdsList(model.getIncludeOptions(), chlk.models.reports.ReportCardsAddionalOptions)
+                model.getIncludeOptions()
             )
             .attach(this.validateResponse_())
             .then(function () {

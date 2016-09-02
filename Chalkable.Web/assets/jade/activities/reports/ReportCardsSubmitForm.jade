@@ -14,7 +14,7 @@ mixin Radio(name, value, title, selected)
     +ActionForm('reporting', 'submitReportCards').comprehensive-progress-report-form.no-working.report-form
         .x-window-header
             .close.close-btn.dark
-            h1 Report Cards
+            h1 Report
 
         .x-window-body
             +Hidden('attendanceReasonIds', '')#absence-reasons
@@ -33,7 +33,9 @@ mixin Radio(name, value, title, selected)
                                         +RenderWith(groupsModel, chlk.templates.reports.ReportCardRecipientsTpl)
                     TR
                         TD(colspan="3").item-3
-                            input(type="text", name="title", placeholder='Title', value="Report Card").report-title
+                            .text-block
+                                label Title
+                                input(type="text", name="title", placeholder='Title', value="Report Card").report-title
                     TR
                         TD.item-3
                             h3 Recipient
@@ -49,11 +51,13 @@ mixin Radio(name, value, title, selected)
                                 +Radio('logo', chlk.models.reports.ReportCardsLogoType.NONE.valueOf(), 'None', false)
                         TD.item-3
                             h3 Layout
-                            +Select('customReportTemplateId')
+                            +Select('customReportTemplate', 'customReportTemplateId').custom-template-select
                                 each template in self.getTemplates()
-                                    +Option(template.getId().valueOf(), template.getName(), true)
+                                    +Option(template.getId().valueOf(), template.getName(), true)(
+                                        data-icon=self.getPictureURL(template.getId().valueOf(), 64, 64)
+                                    )
                             h3 Grading Periods
-                            +Select('gradingPeriod1')(multiple)#grading-period-select
+                            +Select('gradingPeriodItems', 'gradingPeriodIds')(multiple)#grading-period-select
                                 each gp in self.getGradingPeriods()
                                     +Option(gp.getId().valueOf(), gp.getName(), false)
                     TR
@@ -77,7 +81,7 @@ mixin Radio(name, value, title, selected)
                                 +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, false)
                         TD.item-3
                             h3=Msg.Absence_reasons
-                            +Select('absenceReason')(multiple).reasons-select
+                            +Select('attendanceReasons', 'attendanceReasonIds')(multiple).reasons-select
                                 each reason in self.getReasons()
                                     +Option(reason.getId().valueOf(), reason.getName(), true)
                     TR
@@ -89,7 +93,7 @@ mixin Radio(name, value, title, selected)
                         TD.item-3
                         TD.item-3
                             h3 Include
-                            +Select('absenceReason')(multiple).reasons-select
+                            +Select('includeOptionValues', 'includeOptions')(multiple).reasons-select
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ANNOUNCEMENT.valueOf(), 'Announcement', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ATTENDANCE.valueOf(), 'Attendance', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_PERIOD_NOTES.valueOf(), 'Grading Period Note', true)
@@ -101,6 +105,10 @@ mixin Radio(name, value, title, selected)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.WITHDRAWN_STUDENTS.valueOf(), 'Withdrawn Students', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.YEAR_TO_DATE_INFORMATION.valueOf(), 'Year to Date Iinformation', false)
 
+        .images-for-load-cnt
+            each template in self.getTemplates()
+                img(src = self.getPictureURL(template.getId().valueOf(), 64, 64))
+
         .x-window-footer.report-bottom
-            BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
             BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
+            BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
