@@ -7,10 +7,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     public class MasterServiceBase
     {
         protected IServiceLocatorMaster ServiceLocator { get; private set; }
-        protected UserContext Context
-        {
-            get { return ServiceLocator.Context; }
-        }
+        protected UserContext Context => ServiceLocator.Context;
 
         public MasterServiceBase(IServiceLocatorMaster serviceLocator)
         {

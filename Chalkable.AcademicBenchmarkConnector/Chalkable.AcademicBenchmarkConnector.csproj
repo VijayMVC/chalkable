@@ -49,6 +49,7 @@
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\StandardsConnector.cs" />
+    <Compile Include="Connectors\SyncConnector.cs" />
     <Compile Include="Connectors\TopicsConnector.cs" />
     <Compile Include="Exceptions\ChalkableABUnauthorizedException.cs" />
     <Compile Include="Models\Authority.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Models\Standard.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Subject.cs" />
+    <Compile Include="Models\SyncData.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

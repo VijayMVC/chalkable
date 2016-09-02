@@ -694,7 +694,8 @@ NAMESPACE('chlk.controllers', function (){
                         ann.getId(),
                         ann.getType(),
                         ann.getStandards(),
-                        app.getEncodedSecretKey())
+                        app.getEncodedSecretKey(),
+                        app.getAccessToken())
                     //.attach(this.validateResponse_())
                     .catchError(function(e){
                         this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), null, 'app-contents-fail');
@@ -2746,15 +2747,17 @@ NAMESPACE('chlk.controllers', function (){
         function showGroupsAction(announcementId){
             this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_ID, announcementId);
             var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []).map(function (_) { return _.valueOf() });
-            return this.Redirect('group', 'show', [{
-                selected: groupsIds,
-                controller: 'announcement',
-                action: 'saveGroupsToAnnouncement',
-                resultHidden: 'groupIds',
-                hiddenParams: {
-                    id: announcementId
-                }
-            }]);
+            this.WidgetStart('group', 'show', [{
+                    selected: groupsIds,
+                    hiddenParams: {
+                        id: announcementId
+                    }
+                }])
+                .then(function(data){
+                    this.BackgroundNavigate('announcement', 'saveGroupsToAnnouncement', [data]);
+                }, this)
+                .attach(this.validateResponse_());
+            return null;
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

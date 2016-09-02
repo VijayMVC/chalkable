@@ -261,9 +261,10 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('select.prepared').removeClass('prepared');
 
                 if(model instanceof chlk.models.feed.Feed){
+                    var scheduledDays = model.getClassScheduledDays && model.getClassScheduledDays() || [];
                     minActivityDate = null;
-                    formatedScheduledDays = model.getClassScheduledDays() && model.getClassScheduledDays().map(function(item){return item.format('mm-dd-yy')});
-                    scheduledDays = model.getClassScheduledDays() && model.getClassScheduledDays().map(function(item){return item.getDate()});
+                    formatedScheduledDays = scheduledDays && scheduledDays.map(function(item){return item.format('mm-dd-yy')});
+                    scheduledDays = scheduledDays && scheduledDays.map(function(item){return item.getDate()});
                 }
 
                 if(model instanceof chlk.models.feed.FeedItems){
@@ -276,8 +277,9 @@ NAMESPACE('chlk.activities.feed', function () {
             OVERRIDE, VOID, function onRefresh_(model) {
                 BASE(model);
                 minActivityDate = null;
-                formatedScheduledDays = model.getClassScheduledDays() && model.getClassScheduledDays().map(function(item){return item.format('mm-dd-yy')});
-                scheduledDays = model.getClassScheduledDays() && model.getClassScheduledDays().map(function(item){return item.getDate()});
+                var classScheduledDays = model.getClassScheduledDays && model.getClassScheduledDays() || [];
+                formatedScheduledDays = classScheduledDays && classScheduledDays.map(function(item){return item.format('mm-dd-yy')});
+                scheduledDays = classScheduledDays && classScheduledDays.map(function(item){return item.getDate()});
                 this.dom.find('select.prepared').removeClass('prepared');
             },
 

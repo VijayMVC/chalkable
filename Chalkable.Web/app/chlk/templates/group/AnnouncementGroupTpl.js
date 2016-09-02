@@ -15,6 +15,9 @@ NAMESPACE('chlk.templates.group', function () {
             [ria.templates.ModelPropertyBind],
             String, 'name',
 
-            chlk.models.id.AnnouncementId, 'announcementId'
+            chlk.models.id.AnnouncementId, 'announcementId',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'listRequestId'
         ])
 });

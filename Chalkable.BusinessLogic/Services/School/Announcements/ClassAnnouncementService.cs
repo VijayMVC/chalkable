@@ -143,6 +143,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             var res = GetAnnouncementDetails(announcementId);
+
+            if (res.ClassAnnouncementData.Title == null || Exists(res.ClassAnnouncementData.Title, res.ClassAnnouncementData.ClassRef, res.ClassAnnouncementData.Expires, res.ClassAnnouncementData.Id))
+                throw new ChalkableException("Invalid Class Announcement Title");
+
             using (var uow = Update())
             {
                 var da = CreateClassAnnouncementDataAccess(uow);
@@ -186,9 +190,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             , UnitOfWork uow, ClassAnnouncementDataAccess annDa)
         {
             ann.Content = inputAnnData.Content;
-
-            if(inputAnnData.Title == null || (inputAnnData.ExpiresDate.HasValue && Exists(inputAnnData.Title, inputAnnData.ClassId, inputAnnData.ExpiresDate.Value, inputAnnData.AnnouncementId)))
-                throw new ChalkableException("Invalid Class Announcement Title");
             ann.Title = inputAnnData.Title;
             
             if (inputAnnData.ExpiresDate.HasValue)

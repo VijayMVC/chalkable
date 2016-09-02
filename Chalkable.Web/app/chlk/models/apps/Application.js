@@ -71,6 +71,8 @@ NAMESPACE('chlk.models.apps', function () {
                 this.bannedForCurrentSchool = SJX.fromValue(raw.isbannedforcurrentschool, Boolean);
                 this.bannedForDistrict = SJX.fromValue(raw.isbannedfordistrict, Boolean);
                 this.partiallyBanned = SJX.fromValue(raw.ispartiallybanned, Boolean);
+
+                this.accessToken = SJX.fromValue(raw.accesstoken, String);
             },
 
             chlk.models.id.AppId, 'id',
@@ -115,6 +117,7 @@ NAMESPACE('chlk.models.apps', function () {
 
             Number, 'internalScore',
             String, 'internalDescription',
+            String, 'accessToken',
 
 
             SELF, 'liveApplication',

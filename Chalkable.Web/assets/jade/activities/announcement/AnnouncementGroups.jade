@@ -4,8 +4,9 @@
             .right.saved-block saved
         .close.close-btn
 
-    +ActionForm(self.getController(), self.getAction())
-        +Hidden(self.getResultHidden(), self.getSelected().map(function(item){return item.valueOf()}).join(',')).group-ids
+    +ActionForm('group', 'submitGroups')
+        +Hidden('groupIds', self.getSelected().map(function(item){return item.valueOf()}).join(',')).group-ids
+        +Hidden('requestId', self.getRequestId())
         -var hiddenParams = self.getHiddenParams()
         if hiddenParams
             each key in Object.getOwnPropertyNames(hiddenParams)
@@ -17,7 +18,7 @@
                     td.name-td
                         .column.groups
                             h1.column-cell=Msg.My_Groups
-                                +ActionButton('group', 'editGroups', hiddenParams.id)(type="button").special-button2.edit-button=Msg.Edit
+                                +ActionButton('group', 'editGroups', self.getRequestId(), hiddenParams && hiddenParams.id)(type="button").special-button2.edit-button=Msg.Edit
                             each group in self.getGroups()
                                 .column-cell
                                     +ActionLink('group', 'showGroupMembers', group.getId())(data-tooltip=group.getName(), data-tooltip-type="overflow").group-name.name

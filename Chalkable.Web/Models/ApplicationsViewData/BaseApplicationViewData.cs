@@ -41,6 +41,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public bool? IsBannedForDistrict { get; set; }
         public bool? IsPartiallyBanned { get; set; }
         public bool? IsBannedForCurrentSchool { get; set; }
+        public string AccessToken { get; set; }
         
         protected BaseApplicationViewData(Application application)
         {
@@ -70,6 +71,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             IsBannedForCurrentSchool = null;
             IsBannedForDistrict = null;
             IsPartiallyBanned = null;
+            AccessToken = null;
         }
 
         public static BaseApplicationViewData Create(Application application)

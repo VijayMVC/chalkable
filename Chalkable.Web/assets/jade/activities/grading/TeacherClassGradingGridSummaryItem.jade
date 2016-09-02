@@ -22,8 +22,6 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable, canPutOnlyZer
         div(class=cls, data-tooltip=info.getTooltipText(maxScore, true)).alert-flag
         if info.getComment()
             .with-comment
-        if gradable
-            .edit-cell
 
 mixin StudentAverages(tpl)
     if tpl.getStudentAverages()

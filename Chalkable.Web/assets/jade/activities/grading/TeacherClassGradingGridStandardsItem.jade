@@ -1,18 +1,16 @@
-mixin TeacherClassStandardsGridSummaryCell(info, ableEdit)
+mixin TeacherClassStandardsGridSummaryCell(info)
     -var value = self.displayGrade(info.getGradeValue())
     div(
-    class= (value ? "" : "empty-grade"),
-    data-standardid= info.getStandardId(),
-    data-studentid= info.getStudentId(),
-    data-classid= info.getClassId(),
-    data-gradeid= info.getGradeId(),
-    data-gradingperiodid= info.getGradingPeriodId(),
-    data-comment= info.getComment()
+        class= (value ? "" : "empty-grade"),
+        data-standardid= info.getStandardId(),
+        data-studentid= info.getStudentId(),
+        data-classid= info.getClassId(),
+        data-gradeid= info.getGradeId(),
+        data-gradingperiodid= info.getGradingPeriodId(),
+        data-comment= info.getComment()
     ).grade-info
         span(data-grade-value=info.getGradeValue()).grade-text=value
         if info.getComment()
             .with-comment
-        if ableEdit
-            .edit-cell
 
-+TeacherClassStandardsGridSummaryCell(self.getModel(), true)
++TeacherClassStandardsGridSummaryCell(self.getModel())

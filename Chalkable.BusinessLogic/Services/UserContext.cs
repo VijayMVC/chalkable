@@ -89,6 +89,8 @@ namespace Chalkable.BusinessLogic.Services
         [Ignore]
         public bool IsInternalApp{ get; set; }
         [Ignore]
+        public bool IsTrustedApp { get; set; }
+        [Ignore]
         public string OAuthApplication{ get; set; }
         [Ignore]
         public IList<ClaimInfo> Claims { get; set; } 
@@ -96,7 +98,7 @@ namespace Chalkable.BusinessLogic.Services
 
         public UserContext()
         {
-            MasterConnectionString = Settings.MasterConnectionString;     
+            MasterConnectionString = Settings.MasterConnectionString;
         }
 
         public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId, int? personId, int? loginTimeOut, SchoolYear schoolYear = null, string sisRedirectUrl = null)
