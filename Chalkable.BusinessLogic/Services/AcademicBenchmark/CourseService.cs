@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.AcademicBenchmark.DataAccess;
 using Chalkable.Data.AcademicBenchmark.Model;
 
@@ -22,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
 
         public IList<Course> GetForStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode)
         {
-            if (!authorityId.HasValue && !documentId.HasValue && !subjectDocId.HasValue && !string.IsNullOrWhiteSpace(gradeLevelCode))
+            if (!authorityId.HasValue && !documentId.HasValue && !subjectDocId.HasValue && string.IsNullOrWhiteSpace(gradeLevelCode))
                 return GetAll();
 
             return DoRead(u => new CourseDataAccess(u).Get(authorityId, documentId, subjectDocId, gradeLevelCode));

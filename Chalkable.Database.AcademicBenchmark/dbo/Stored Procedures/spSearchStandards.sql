@@ -1,4 +1,4 @@
-﻿CREATE Procedure spSearchStandards
+﻿CREATE Procedure [dbo].[spSearchStandards]
 	@searchQuery nvarchar(500),
 	@deepest bit,
 	@start int,
@@ -23,7 +23,7 @@ Where
 	 Or [Label]	      like(@searchQuery))
   AND
 	(@deepest is null or IsDeepest = @deepest)
-Order By Number
+Order By Id
 OFFSET  @start ROWS FETCH NEXT @count ROWS ONLY
 
 Go

@@ -1,5 +1,4 @@
-﻿
-CREATE Procedure [dbo].[spGetCourses]
+﻿CREATE Procedure [dbo].[spGetCourses]
 	@authorityId UNIQUEIDENTIFIER,
 	@documentId  UNIQUEIDENTIFIER, 
 	@subjectDocId UNIQUEIDENTIFIER,
@@ -14,9 +13,8 @@ Declare @gradeId int = Cast(
 	When @gradeLevelCode = 'PK' Then -1
 	Else @gradeLevelCode End as int)
 
-select @gradeId
-
 if @forTopics = 0
+Begin
 	Insert Into @courseIds
 		Select Distinct CourseRef
 		From [Standard]	
@@ -31,12 +29,14 @@ if @forTopics = 0
 		And (@authorityId is null or AuthorityRef = @authorityId)
 		And (@documentId is null or DocumentRef = @documentId)
 		And (@subjectDocId is null or SubjectDocRef = @subjectDocId)
+End
 Else
+Begin
 	Insert Into @courseIds
 		Select Distinct CourseRef
 		From [Topic]	
 		Where (@subjectDocId is null or SubjectDocRef = @subjectDocId)
-	
+End
 
 Select Distinct * From Course
 Where Course.Id in(select * From @courseIds)
