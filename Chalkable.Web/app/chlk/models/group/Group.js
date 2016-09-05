@@ -12,11 +12,13 @@ NAMESPACE('chlk.models.group', function(){
         chlk.models.id.GroupId, 'id',
         chlk.models.id.AnnouncementId, 'announcementId',
         String, 'name',
+        String, 'listRequestId',
         Boolean, 'withStudents',
 
         VOID, function deserialize(raw){
             this.id = SJX.fromValue(raw.id, chlk.models.id.GroupId);
             this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
+            this.listRequestId = SJX.fromValue(raw.listRequestId, String);
             this.name = SJX.fromValue(raw.name, String);
             this.withStudents = SJX.fromValue(raw.hasstudents, Boolean);
         }

@@ -13,6 +13,9 @@ NAMESPACE('chlk.templates.standard', function(){
             String, 'name',
 
             [ria.templates.ModelPropertyBind],
+            String, 'description',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.standard.ItemType, 'type',
 
             [ria.templates.ModelPropertyBind],

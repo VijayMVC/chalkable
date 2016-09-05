@@ -43,5 +43,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var annAttributes = entities.Select(x => new Data.School.Model.AnnouncementAttribute { Id = x.ActivityAttributeID }).ToList();
             ServiceLocatorSchool.AnnouncementAttributeService.Delete(annAttributes);
         }
+
+        protected override void PrepareToDeleteInternal(IList<ActivityAttribute> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

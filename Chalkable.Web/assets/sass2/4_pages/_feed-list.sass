@@ -1,6 +1,9 @@
-.copy-buttons-block, .import-buttons-block
+.copy-buttons-block, .import-buttons-block, .adjust-buttons-block
   white-space: nowrap
   height: 33px
+
+  INPUT[type=number]
+    width: 50px
 
   .copy-start-date
     width: 192px
@@ -30,17 +33,42 @@
 
 .feed-container
 
+  .top-green-info
+    top: -43px
+
   .double-select
     width: 150px
+
+  &:not(.settings-mode)
+    .tools-buttons-block
+      display: none
 
   &:not(.copy-mode)
     .copy-buttons-block
       display: none
 
-  &.copy-mode
+  &:not(.adjust-mode)
+    .adjust-buttons-block
+      display: none
+
+  &.adjust-mode
     .feed-item
       .check-cnt
         display: inline-block
+
+  &.copy-mode
+    .feed-item
+      .check-cnt:not(.supplemental)
+        display: inline-block
+
+  &.copy-mode, &.adjust-mode, &.settings-mode
+    .top-green-info
+      position: relative
+      top: 0
+
+  &.copy-mode, &.adjust-mode
+    .feed-item
+      .check-cnt
         position: absolute
         left: 0
         height: 80px
@@ -95,13 +123,13 @@
     right: 0
     top: -88px
 
-    .print-btn, .copy-btn, .tools-btn
+    .print-btn, .copy-btn, .tools-btn, .calendar-btn
       opacity: 0.5
 
       &.active, &:hover
         opacity: 1
 
-    .copy-btn
+    .copy-btn, .calendar-btn
       margin-left: 8px
 
     .tools-btn

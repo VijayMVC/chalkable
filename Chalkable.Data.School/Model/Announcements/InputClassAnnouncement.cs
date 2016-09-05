@@ -18,7 +18,6 @@ namespace Chalkable.Data.School.Model.Announcements
         public int? ClassAnnouncementTypeRef { get; set; }
         public int ClassRef { get; set; }
         public int SchoolYearRef { get; set; }
-        public int Order { get; set; }
         public bool Dropped { get; set; }
         public int? SisActivityId { get; set; }
         public decimal? MaxScore { get; set; }
@@ -45,7 +44,6 @@ namespace Chalkable.Data.School.Model.Announcements
                 ClassAnnouncementTypeRef = classAnnouncement.ClassAnnouncementTypeRef,
                 ClassRef = classAnnouncement.ClassRef,
                 SchoolYearRef = classAnnouncement.SchoolYearRef,
-                Order = classAnnouncement.Order,
                 Dropped = classAnnouncement.Dropped,
                 SisActivityId = classAnnouncement.SisActivityId,
                 MaxScore = classAnnouncement.MaxScore,

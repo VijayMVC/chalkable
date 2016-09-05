@@ -104,7 +104,7 @@ NAMESPACE('chlk.templates.profile', function(){
                     res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId], true));
 
                 if(isStudentController){
-                    res.push(this.createActionLinkModel_(this._studentControllerName, 'assessmentProfile', 'Assessments', pressedLinkName, [userId], !this.isAssessmentEnabled()));
+                    res.push(this.createActionLinkModel_(this._studentControllerName, 'assessmentProfile', 'Assessment', pressedLinkName, [userId], !this.isAssessmentEnabled()));
                     res.push(this.createActionLinkModel_(controller, 'panorama', 'Panorama'
                         , pressedLinkName, [userId], !this.isStudyCenterEnabled() || !this.hasUserPermission_(permissionEnum.VIEW_PANORAMA)));
                 }

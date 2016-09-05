@@ -67,5 +67,10 @@ namespace Chalkable.Common
         {
             Cache.StringSet(sessionKey, JsonConvert.SerializeObject(userInfo), expiry);
         }
+
+        public static void UpdateExpiryUserInfo(string sessionKey, TimeSpan expiry)
+        {
+            Cache.KeyExpire(sessionKey, DateTime.Now.Add(expiry));
+        }
     }
 }

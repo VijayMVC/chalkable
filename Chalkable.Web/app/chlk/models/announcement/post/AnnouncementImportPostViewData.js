@@ -12,9 +12,9 @@ NAMESPACE('chlk.models.announcement.post', function () {
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
-                this.announcementsToCopy = SJX.fromValue(raw.announcementsToCopy, String);
+                this.selectedAnnouncements = SJX.fromValue(raw.selectedAnnouncements, String);
             },
 
-            String, 'announcementsToCopy'
+            String, 'selectedAnnouncements'
         ]);
 });

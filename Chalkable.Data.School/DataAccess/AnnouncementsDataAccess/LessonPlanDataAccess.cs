@@ -262,7 +262,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             additionalParams.Add("schoolYearId", query.ClassId.HasValue ? (int?)null : schoolYearId);
             additionalParams.Add("classId", query.ClassId);
 
-            return InternalGetAnnouncements<LessonPlansQuery>(procedureName, query, additionalParams);
+            var res = InternalGetAnnouncements<LessonPlansQuery>(procedureName, query, additionalParams);
+
+            return res;
         }
         public AnnouncementQueryResult GetLessonPlansOrderedByDate(LessonPlansQuery query)
         {
@@ -388,7 +390,20 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return result.ToDictionary(x => x.FromAnnouncementId, y => y.ToAnnouncementId);
         }
 
-        
+        public void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        {
+            if (ids == null || ids.Count == 0)
+                return;
+
+            var @params = new Dictionary<string, object>
+            {
+                ["ids"] = ids,
+                ["startDate"] = startDate,
+                ["classId"] = classId
+            };
+
+            ExecuteStoredProcedure("spAdjustLessonPlanDates", @params);
+        }
     }
 
 

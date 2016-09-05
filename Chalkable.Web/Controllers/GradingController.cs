@@ -165,8 +165,8 @@ namespace Chalkable.Web.Controllers
             StandardGradingGridViewData currentStandardGrid = null;
             if (currentGradingPeriod != null)
             {
-                var students = GetStudentsForGrid(classId, currentGradingPeriod.MarkingPeriodRef);
                 var gradingStandardsTask = SchoolLocator.GradingStandardService.GetGradingStandards(classId, currentGradingPeriod.Id);
+                var students = GetStudentsForGrid(classId, currentGradingPeriod.MarkingPeriodRef);
                 currentStandardGrid = StandardGradingGridViewData.Create(currentGradingPeriod, await gradingStandardsTask, students);
             }
             return Json(StandardGradingGridsViewData.Create(gradingPeriods, currentStandardGrid));
@@ -269,15 +269,13 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }*/
 
-        //TODO: do we need this in API still?
-        //[AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult UpdateItem(int announcementId, int studentId, string gradeValue, string extraCredits
-            , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? callFromGradeBook, bool? commentWasChanged)
+            , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? callFromGradeBook)
         {
-            var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(announcementId, studentId, gradeValue, extraCredits
-                , comment, dropped, late ?? false, exempt ?? false, incomplete ?? false, commentWasChanged ?? false
-                , (int)GradingStyleEnum.Numeric100);
+            var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(announcementId, studentId, gradeValue, extraCredits, 
+                comment, dropped, late ?? false, exempt ?? false, incomplete ?? false, (int)GradingStyleEnum.Numeric100);
+
             return Json(ShortStudentAnnouncementViewData.Create(studentAnn));
         }
 

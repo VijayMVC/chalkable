@@ -327,13 +327,13 @@ NAMESPACE('chlk.controllers', function (){
 
             function getPanorama_(classId, restore_){
                 return ria.async.wait([
-                        this.classService.getPanorama(classId),
-                        this.schoolYearService.list()
+                        this.classService.getPanorama(classId)
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var model = result[0];
-                        model.setSchoolYears(result[1]);
+                        var years = this.getContext().getSession().get(ChlkSessionConstants.YEARS, []);
+                        model.setYears(years);
                         model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
                         restore_ && model.setShowFilters(true);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
@@ -371,11 +371,21 @@ NAMESPACE('chlk.controllers', function (){
 
             function panoramaSubmitAction(data){
                 var filterValues = data.filterValues ? JSON.parse(data.filterValues) : '',
-                    selectedStudents = data.selectedStudents || data.highlightedStudents,
+                    selectedStudents = data.selectedStudents,
+                    highlightedStudents = data.highlightedStudents,
+                    selectedAndHighlighted,
                     res, isSave = data.submitType == 'save', byCheck = data.submitType == 'check',
                     byColumn = data.submitType == 'column', isSupplemental = data.submitType == 'supplemental';
 
                 selectedStudents = selectedStudents ? JSON.parse(selectedStudents) : '';
+                highlightedStudents = highlightedStudents ? JSON.parse(highlightedStudents) : '';
+                selectedAndHighlighted = selectedStudents || [];
+
+                highlightedStudents && highlightedStudents.forEach(function(item){
+                    if(selectedStudents.indexOf(item) == -1) {
+                        selectedAndHighlighted.push(item);
+                    }
+                });
 
                 if(isSupplemental){
                     return this.Redirect('announcement', 'supplementalAnnouncement', [data.classId, null, selectedStudents]);
@@ -387,7 +397,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, 'save-filters');
                 }
 
-                res = this.classService.getPanorama(data.classId, filterValues, selectedStudents)
+                res = this.classService.getPanorama(data.classId, filterValues, selectedAndHighlighted)
                     .attach(this.validateResponse_());
 
                 return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, byCheck ? chlk.activities.lib.DontShowLoader() : '');

@@ -1,6 +1,7 @@
 ﻿@using Chalkable.Common
 @using Chalkable.Web.Common
 @using Chalkable.Web.Models.PersonViewDatas
+@using Chalkable.Web.Tools
 
 @{
     var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
@@ -16,7 +17,6 @@
     <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
     <link rel="icon" href="@Url.Content("~/favicon.ico")" />
     <!--Fonts-->
-    <link href="//fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet" type="text/css" />
     <link href="//fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
     <link href="//fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css"/>
@@ -63,6 +63,7 @@
     <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
     <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
     <script build:src="/app/bower/cryptojslib/rollups/hmac-sha256.js" src="@Url.StaticContent("/app/bower/cryptojslib/rollups/hmac-sha256.js")"></script>
+    <script build:src="/app/bower/PDFObject/pdfobject.js" src="@Url.StaticContent("/app/bower/PDFObject/pdfobject.js")"></script>
     <!-- endbuild -->
 
 @if (!Chalkable.Web.Tools.CompilerHelper.IsProduction)
@@ -367,6 +368,16 @@
     @ChlkHelpers.RaygunInit()
     
     @ChlkHelpers.GoogleAnalytics()
-    @ChlkHelpers.MixPanel() 
-</body> 
+    @ChlkHelpers.MixPanel()
+    <!--Register user to mixpanel-->
+    <script type="text/javascript">
+        if(window.mixpanel) {
+            window.mixpanel.register({
+                "login": @ViewData.GetJsConstantValueOrNull(ViewConstants.USER_LOGIN),
+                "distinct_id": "mixpanel-user-" +  @ViewData.GetJsConstantValueOrNull(ViewConstants.USER_LOGIN),
+                "role": currentChlkPerson.role.name
+            });
+        }
+    </script>
+</body>
 </html>

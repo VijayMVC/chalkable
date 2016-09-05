@@ -43,7 +43,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             this.districtId = districtId;
             var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
-            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
             
         }
 
@@ -54,7 +54,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             this.districtId = districtId;
             var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo = new UserLoginInfo() };
-            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
 
         }
 
@@ -336,13 +336,18 @@ namespace Chalkable.StiImport.Services
                 if (sr.Updated != null)
                     models.AddRange(sr.Updated.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Update, x)));
                 if (sr.Deleted != null)
-                    models.AddRange(sr.Deleted.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Delete, x)));
+                    foreach (var syncModel in sr.Deleted)
+                    {
+                        models.Add(SyncModelWrapper.Create(syncModel.SYS_CHANGE_VERSION, PersistOperationType.Delete, syncModel));
+                        if (fkProps.Count != 0)
+                            models.Add(SyncModelWrapper.Create(0, PersistOperationType.PrepareToDelete, syncModel));
+                    }
             }
             models.Sort();
             IList<SyncModelWrapper> batch = new List<SyncModelWrapper>();
             for (int i = 0; i < models.Count; i++)
             {
-                if (i > 0 && models[i].CompareTo(models[i - 1]) != 0)
+                if (i > 0 && (models[i].Model.GetType().Name != models[i - 1].Model.GetType().Name || models[i].OperationType != models[i - 1].OperationType))
                 {
                     Persist(adapterLocator.GetAdapter(batch[0].Model.GetType()), batch[0].OperationType,
                         batch.Select(x => x.Model).ToList());
@@ -390,7 +395,7 @@ namespace Chalkable.StiImport.Services
                         break;
                 }
                 if (cnt < entities.Count)
-                    Log.LogError($"only first {MAX_LOOGED_ENTITIES}  if {entities.Count} entities were logged");
+                    Log.LogError($"only first {MAX_LOOGED_ENTITIES}  of {entities.Count} entities were logged");
                 throw;
             }
             

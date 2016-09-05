@@ -29,6 +29,12 @@ NAMESPACE('chlk.templates.feed', function () {
             Number, 'count',
 
             [ria.templates.ModelPropertyBind],
+            Number, 'adjustedItemsCount',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'adjustCount',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'startDate',
 
             [ria.templates.ModelPropertyBind],
@@ -42,6 +48,9 @@ NAMESPACE('chlk.templates.feed', function () {
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.common.ChlkDate), 'classScheduledDays',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',

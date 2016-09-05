@@ -50,6 +50,23 @@ NAMESPACE('chlk.services', function () {
                            .then(function(model){return model.getItems();});
             },
 
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            ria.async.Future, function verifyStudentHealthForm(studentId, healthFormId) {
+                return this.get('Student/VerifyStudentHealthForm.json', ArrayOf(chlk.models.student.StudentHealthFormViewData), {
+                    studentId: studentId.valueOf(),
+                    healthFormId: healthFormId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            String, function getHealthFormDocumentUri(studentId, healthFormId) {
+                //return "https://local.chalkable.com/Content/sample-3pp.pdf";
+                return this.getUrl('Student/DownloadHealthFormDocument', {
+                    studentId: studentId.valueOf(),
+                    healthFormId: healthFormId.valueOf()
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(personId) {
                 return this.get('Student/Info.json', chlk.models.student.StudentInfo, {
@@ -68,7 +85,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Student/Panorama.json', chlk.models.panorama.StudentPanoramaViewData, {
                     studentId: studentId.valueOf(),
                     standardizedTestFilters: data_ && data_.standardizedTestFilters,
-                    schoolYearIds: data_ && data_.schoolYearIds
+                    acadYears: data_ && data_.acadYears
                 });
             },
 
@@ -76,7 +93,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Student/SavePanoramaSettings.json', Boolean, {
                     studentId : studentId.valueOf(),
                     standardizedTestFilters: data.standardizedTestFilters,
-                    schoolYearIds: data.schoolYearIds
+                    acadYears: data.acadYears
                 });
             },
 

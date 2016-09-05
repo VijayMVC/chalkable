@@ -76,6 +76,7 @@ Set lp.EndDate = IsNull((Select Max(x.[day])
 								Select top(IIF(lp.TotalSchoolDays = 0, 1, lp.TotalSchoolDays)) cd.[day] as [day] 
 								From @classDays cd 
 								Where cd.[day] >= lp.StartDate
+								Order by [Day] Asc
 						     ) x
 					 ), lp.StartDate)
 From @toCopy lp

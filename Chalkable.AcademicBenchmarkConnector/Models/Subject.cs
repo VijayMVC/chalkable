@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 
 namespace Chalkable.AcademicBenchmarkConnector.Models
@@ -18,6 +21,16 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         [JsonProperty("descr")]
         public string Description { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            var o = (Subject)obj;
+            return o.Code == this.Code;
+        }
+
+        public override int GetHashCode()
+        {
+            return Code.GetHashCode();
+        }
     }
 
     public class SubjectDocumentWrapper
@@ -32,5 +45,16 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         public Guid Id { get; set; }
         [JsonProperty("descr")]
         public string Description { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var o = (SubjectDocument) obj;
+            return o.Id == this.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

@@ -29,6 +29,17 @@ NAMESPACE('chlk.templates.classes', function () {
                 return res.join(' | ');
             },
 
+            function getStudentTest(studentTests, test)
+            {
+                return studentTests.filter(function(item){
+                    return item.getStandardizedTest().getId() == test.getStandardizedTest().getId()
+                            && item.getComponent().getId() == test.getComponent().getId()
+                            && item.getScoreType().getId() == test.getScoreType().getId();
+
+                })[0];
+
+            },
+
             function getStudentChartOptions(test){
                 var data = [];
 
@@ -87,11 +98,11 @@ NAMESPACE('chlk.templates.classes', function () {
 
                             res.push(test.getStandardizedTest().getDisplayName(), new Date(this.x).format('m.d.Y'), test.getComponent().getName(), test.getScoreType().getName(), this.y);
 
-                            return res.join(' | ');
+                            return res.join(' |<br/>');
                         },
 
                         positioner: function (labelWidth, labelHeight, point) {
-                            return { x: point.plotX - labelWidth/2 + 10, y: point.plotY - labelHeight/2 - 25 };
+                            return { x: point.plotX - labelWidth/2 + 10, y: point.plotY - labelHeight };
                         }
                     },
 

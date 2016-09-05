@@ -5,6 +5,8 @@ REQUIRE('chlk.models.common.Button');
 REQUIRE('chlk.activities.apps.AttachAppsDialog');
 REQUIRE('chlk.activities.apps.AppShadeDialog');
 
+REQUIRE('ria.async.Future');
+
 NAMESPACE('chlk.controllers', function (){
 
     var waitingForAppResponse = false,
@@ -161,7 +163,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (data) {
                         return data.map(function (_) { return _.serialize(); });
                     }, this)
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },
@@ -172,7 +174,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (data) {
                         return data.map(function (_) { return _.serialize(); });
                     }, this)
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },
@@ -186,15 +188,23 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (models) {
                         return models.getItems().map(function (x) { return x.serialize() });
                     })
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },
 
             function _replayTo(data) {
-                return function (value) {
-                    data.__source.postMessage({action: 'handleResponse', value: value, reqId: data.reqId}, data.__origin);
-                }
+                var head, value = null;
+                (head = new ria.async.Future)
+                    .then(function (v) {
+                        value = v;
+                        return v;
+                    })
+                    .complete(function () {
+                        data.__source.postMessage({action: 'handleResponse', value: value, reqId: data.reqId}, data.__origin);
+                    });
+
+                return head;
             },
 
             [[Object]],
@@ -210,7 +220,7 @@ NAMESPACE('chlk.controllers', function (){
                 }
 
                 this.ShowAlertBox(filtered_text, data.header || null, isHtml)
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },
@@ -222,7 +232,7 @@ NAMESPACE('chlk.controllers', function (){
                     , data.inputValue || null
                     , data.inputAttrs || null
                     , data.inputType || null)
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },
@@ -233,7 +243,7 @@ NAMESPACE('chlk.controllers', function (){
                     , data.header || null
                     , data.buttonText || null
                     , data.buttonClass || null)
-                    .then(this._replayTo(data));
+                    .attach(this._replayTo(data));
 
                 return null;
             },

@@ -125,8 +125,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.id.ClassId, Boolean, Boolean, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            chlk.models.id.GradingPeriodId, Object, Object, Boolean, Boolean, Object]],
-        function listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_) {
+            chlk.models.id.GradingPeriodId, Object, Object, Boolean, Boolean, Object, Number]],
+        function listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_, adjustCount_) {
 
             //todo : think about go to inow part
             if(!this.canViewFeed()){
@@ -145,7 +145,7 @@ NAMESPACE('chlk.controllers', function (){
             annType_ = this.parseEnumValue_(chlk.models.announcement.AnnouncementTypeEnum, annType_);
 
             var result = this
-                .getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_)
+                .getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_, adjustCount_)
                 .attach(this.validateResponse_());
 
             if(isProfile_)
@@ -189,13 +189,23 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
+            var res;
             if(model.getSubmitType() == 'copy'){
-                var res = this.announcementService.copy(model.getClassId(), model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                res = this.announcementService.copy(model.getClassId(), model.getToClassId(), model.getSelectedAnnouncements(), model.getCopyStartDate())
                     .then(function(model){
                         this.userTrackingService.copiedActivities();
                         return model;
                     }, this);
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
+            }
+            if(model.getSubmitType() == 'adjust'){
+                res = this.announcementService.adjustDates(model.getClassId(), model.getSelectedAnnouncements(), model.getAdjustStartDate())
+                    .then(function(data){
+                        return this.getFeedItems(false, model.isImportantOnly(), model.getClassId(), 0, model.getStartDate(), model.getEndDate(),
+                            model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet(), false, JSON.parse(model.getSelectedAnnouncements()), model.getAdjustCount());
+                    }, this)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(this.getView().getCurrent().getClass(), res);
             }
 
             if(model.getSubmitType() == 'markDone')
@@ -256,25 +266,38 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            chlk.models.id.GradingPeriodId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean, Boolean, Object]],
-        function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_){
+            chlk.models.id.GradingPeriodId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean, Boolean, Object, Number]],
+        function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_, adjustCount_){
 
             var annsList = isProfile_ && classId_
                 ? this.announcementService.getAnnouncementsForClassProfile(classId_, start_ | 0, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_)
-                : this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, createdAnnouncements_)
+                : this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, createdAnnouncements_);
 
             var gps = isProfile_ && classId_
                 ? this.gradingPeriodService.getListByClassId(classId_)
-                : this.gradingPeriodService.getList()
+                : this.gradingPeriodService.getList();
 
-            return ria.async.wait([
-                annsList,
-                gps,
-                this.schoolYearService.listOfSchoolYearClasses()
-            ])
+            var res;
+
+            if(classId_ && classId_.valueOf() && this.userIsTeacher())
+                res = ria.async.wait([
+                    annsList,
+                    gps,
+                    this.schoolYearService.listOfSchoolYearClasses(),
+                    this.classService.getScheduledDays(classId_)
+                ]);
+            else
+                res = ria.async.wait([
+                    annsList,
+                    gps,
+                    this.schoolYearService.listOfSchoolYearClasses()
+                ]);
+
+
+            return res
                 .attach(this.validateResponse_())
                 .then(function(result){
-                    var model = result[0], gradingPeriods = result[1], classesByYears = result[2];
+                    var model = result[0], gradingPeriods = result[1], classesByYears = result[2], classScheduledDays = result[3];
 
                     if(isProfile_){
                         model.setInProfile(true);
@@ -295,6 +318,9 @@ NAMESPACE('chlk.controllers', function (){
 
                     model.setGradingPeriods(gradingPeriods);
                     model.setClassesByYears(classesByYears);
+                    if(adjustCount_ || adjustCount_ === 0)
+                        model.setAdjustCount(adjustCount_);
+                    classScheduledDays && model.setClassScheduledDays(classScheduledDays);
                     importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);
 
                     return model;

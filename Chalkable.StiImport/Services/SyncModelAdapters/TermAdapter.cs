@@ -42,5 +42,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var ids = entities.Select(x => new MarkingPeriod { Id = x.TermID }).ToList();
             ServiceLocatorSchool.MarkingPeriodService.DeleteMarkingPeriods(ids);
         }
+
+        protected override void PrepareToDeleteInternal(IList<Term> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

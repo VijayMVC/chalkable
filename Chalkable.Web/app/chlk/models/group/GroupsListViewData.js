@@ -12,15 +12,19 @@ NAMESPACE('chlk.models.group', function(){
 
         chlk.models.id.AnnouncementId, 'announcementId',
 
+        String, 'listRequestId',
+
         VOID, function deserialize(raw){
             this.groups = SJX.fromArrayOfDeserializables(raw.groups, chlk.models.group.Group);
         },
 
-        [[ArrayOf(chlk.models.group.Group), chlk.models.id.AnnouncementId]],
-        function $(groups_, announcementId_){
+        [[String, ArrayOf(chlk.models.group.Group), chlk.models.id.AnnouncementId]],
+        function $(listRequestId_, groups_, announcementId_){
             BASE();
             if(groups_)
                 this.setGroups(groups_);
+            if(listRequestId_)
+                this.setListRequestId(listRequestId_);
             if(announcementId_)
                 this.setAnnouncementId(announcementId_);
         }

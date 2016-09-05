@@ -653,7 +653,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             /* Other events */
 
-            [ria.mvc.DomEventBind('contextmenu', '.edit-cell, .avg-text')],
+            [ria.mvc.DomEventBind('contextmenu', '.grade-info, .avg-text')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function cellContextMenu(node, event){
                 var cell = node.parent('.grade-value');

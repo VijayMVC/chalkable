@@ -11,6 +11,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.DataAccess
@@ -74,6 +75,25 @@ namespace Chalkable.Tests.DataAccess
         {
             var cc = new CustomCollection(){{5, 6}, {new object()}};
         }
+
+        [Test]
+        public void TestPrepareToDelete()
+        {
+            var classes = new List<Class>
+            {
+                new Class()
+                {
+                    Id = 1,
+                    MaxGradeLevelRef = 20,
+                    MinGradeLevelRef = 30,
+                    
+                }
+            };
+
+            var q = Orm.PrepareToDelete(classes);
+            Debug.WriteLine(q.Sql);
+        }
+
     }
 
     public class CustomCollection : ICollection<object>

@@ -35,13 +35,18 @@ namespace Chalkable.BusinessLogic.Services.School
         Student GetById(int id, int schoolYearId);
         int GetEnrolledStudentsCount();
 
-        IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
-        StudentSummaryInfo GetStudentSummaryInfo(int studentId, int schoolYearId);
-        StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
-        Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters);
+        Task<IList<StudentHealthCondition>> GetStudentHealthConditions(int studentId);
+        Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId, int schoolYearId);
+        byte[] DownloadStudentHealthFormDocument(int studentId, int healthFormId);
+        Task VerifyStudentHealthForm(int studentId, int healthFormId);
+        Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId);
+        Task<StudentExplorerInfo> GetStudentExplorerInfo(int studentId, int schoolYearId);
+        Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> acadYears, IList<StandardizedTestFilter> standardizedTestFilters);
 
         StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId);
         IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null);
+        void PrepareToDelete(IList<Student> students);
+        void PrepareToDeleteStudentSchools(IList<StudentSchool> studentSchools);
     }
 
     public class StudentService : SisConnectedService, IStudentService
@@ -115,14 +120,16 @@ namespace Chalkable.BusinessLogic.Services.School
                             orderByFirstName, start, count, markingPeriodId, enrolledOnly));
         }
 
-        public StudentSummaryInfo GetStudentSummaryInfo(int studentId, int schoolYearId)
+        public async Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
             
-            var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(schoolYearId, studentId, Context.NowSchoolTime);
+            var nowDashboardTask = ConnectorLocator.StudentConnector.GetStudentNowDashboard(schoolYearId, studentId, Context.NowSchoolTime);
             var student = ServiceLocator.StudentService.GetById(studentId, schoolYearId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
+            var nowDashboard = await nowDashboardTask;
+
             var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
             var anns = DoRead(uow => new ClassAnnouncementForTeacherDataAccess(uow, schoolYearId).GetByActivitiesIds(activitiesIds, Context.PersonId.Value));
             anns = anns.Where(x => x.ClassAnnouncementData.VisibleForStudent).ToList();
@@ -130,28 +137,26 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
+        public async Task<IList<StudentHealthCondition>> GetStudentHealthConditions(int studentId)
         {
             if (!CanGetHealthConditions())
                 return new List<StudentHealthCondition>();
 
-            var healthConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
+            var healthConditions = await ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
 
             if (healthConditions == null)
                 return new List<StudentHealthCondition>();
 
-            var result = (from studentCondition in healthConditions
-                where studentCondition != null
-                select new StudentHealthCondition
+            return healthConditions.Where(x => x != null)
+                .Select(x => new StudentHealthCondition
                 {
-                    Id = studentCondition.Id,
-                    Name = studentCondition.Name,
-                    Description = studentCondition.Description,
-                    IsAlert = studentCondition.IsAlert,
-                    MedicationType = studentCondition.MedicationType,
-                    Treatment = studentCondition.Treatment
-                }).ToList();
-            return result;
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    IsAlert = x.IsAlert,
+                    MedicationType = x.MedicationType,
+                    Treatment = x.Treatment
+                }).OrderBy(x => x.Name).ToList(); 
         }
 
         private bool CanGetHealthConditions()
@@ -161,13 +166,55 @@ namespace Chalkable.BusinessLogic.Services.School
                        || Context.Claims.HasPermission(ClaimInfo.VIEW_MEDICAL));
         }
 
+        public async Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId, int schoolYearId)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            if (!await HasHealthFormAccess())
+                return new List<StudentHealthFormInfo>();
+            var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId, schoolYearId, Context.PersonId.Value);
+            return healthForms == null ? new List<StudentHealthFormInfo>() : StudentHealthFormInfo.Create(healthForms).OrderBy(x => x.Name).ToList();
+        }
 
-        public StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId)
+        private async Task<bool> HasHealthFormAccess()
+        {
+            return CanGetHealthConditions() && await ConnectorLocator.StudentConnector.HasHealthLicenses();
+        } 
+        
+        public async Task VerifyStudentHealthForm(int studentId, int healthFormId)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+
+            BaseSecurity.EnsureAdminOrTeacher(Context);
+            if (!CanGetHealthConditions())
+                throw new ChalkableSecurityException();
+
+            var formReadReceipts = new StudentHealthFormReadReceipt
+            {
+                AcadSessionId = Context.SchoolYearId.Value,
+                StaffId = Context.PersonId.Value,
+                StudentHealthFormId = healthFormId,
+                VerifiedDate = Context.NowSchoolTime.Date,
+                StudentId = studentId
+            };
+            await ConnectorLocator.StudentConnector.SetStudentHealthFormReadReceipts(studentId, healthFormId, formReadReceipts);
+        }
+
+        public byte[] DownloadStudentHealthFormDocument(int studentId, int healthFormId)
+        {
+            return ConnectorLocator.StudentConnector.GetStudentHealthFormDocument(studentId, healthFormId);
+        }
+
+
+        public async Task<StudentExplorerInfo> GetStudentExplorerInfo(int studentId, int schoolYearId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
+
             var date = Context.NowSchoolYearTime;
+            var inowStiExpolorerTask = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(schoolYearId, studentId, date);
+
             var student = GetById(studentId, schoolYearId);
             var classes = ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId).ToList();
             var classPersons = ServiceLocator.ClassService.GetClassPersons(studentId, true);
@@ -177,12 +224,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 var classTeachers = ServiceLocator.ClassService.GetClassTeachers(null, Context.PersonId.Value);
                 classes = classes.Where(c => classTeachers.Any(ct => ct.ClassRef == c.Id)).ToList();
             }
-            var inowStExpolorer = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(schoolYearId, student.Id, date);
             var standards = ServiceLocator.StandardService.GetStandards(null, null, null);
+
             IList<int> importanActivitiesIds = new List<int>();
             IList<AnnouncementComplex> announcements = new List<AnnouncementComplex>();
             IList<StandardScore> standardScores = new List<StandardScore>();
             IList<StudentAverage> mostRecentAverages = new List<StudentAverage>();
+            var inowStExpolorer = await inowStiExpolorerTask;
             if (inowStExpolorer != null)
             {
                 mostRecentAverages = inowStExpolorer.Averages.Where(x => x.IsGradingPeriodAverage && (x.HasGrade)).OrderBy(x => x.GradingPeriodId).ToList();
@@ -210,25 +258,25 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new StudentDataAccess(u).GetEnrolledStudentsCount());
         }
 
-        public async Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> schoolYearIds, IList<StandardizedTestFilter> standardizedTestFilters)
+        public async Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> acadYears, IList<StandardizedTestFilter> standardizedTestFilters)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
 
             if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to view class panorama");
 
-            if (schoolYearIds == null || schoolYearIds.Count == 0)
-                throw new ChalkableException("School years is required parameter");
+            if (acadYears == null || acadYears.Count == 0)
+                throw new ChalkableException("Academic Years is required parameter");
 
             standardizedTestFilters = standardizedTestFilters ?? new List<StandardizedTestFilter>();
             var componentIds = standardizedTestFilters.Select(x => x.ComponentId);
             var scoreTypeIds = standardizedTestFilters.Select(x => x.ScoreTypeId);
 
-            var tasks = new List<Task<IList<Date>>>();
-            foreach (var syId in schoolYearIds)
-            {
-                tasks.Add(Task.Run(() => ServiceLocator.CalendarDateService.GetLastDays(syId, true, null, Context.NowSchoolYearTime)));
-            }
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYears(acadYears);
+            var studentSchoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByStudent(studentId, StudentEnrollmentStatusEnum.CurrentlyEnrolled, null);
+            var schoolYearIds = schoolYears.Where(x => studentSchoolYears.Any(y => y.Id == x.Id)).Select(x=>x.Id).ToList();
+            
+            var tasks = schoolYearIds.Select(syId => Task.Run(() => ServiceLocator.CalendarDateService.GetLastDays(syId, true, null, Context.NowSchoolYearTime))).ToList();
             var studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
 
             var days = (await Task.WhenAll(tasks)).SelectMany(x => x).OrderBy(x=>x.Day).ToList();
@@ -297,6 +345,16 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 return StudentDetailsInfo.Create(studentsDetails, ethnicities, languages, countries, counselors, Context.SchoolLocalId.Value);
             }
+        }
+
+        public void PrepareToDelete(IList<Student> students)
+        {
+            DoUpdate(u => new StudentDataAccess(u).PrepareToDelete(students));
+        }
+
+        public void PrepareToDeleteStudentSchools(IList<StudentSchool> studentSchools)
+        {
+            DoUpdate(u => new DataAccessBase<StudentSchool>(u).PrepareToDelete(studentSchools));
         }
     }
 }

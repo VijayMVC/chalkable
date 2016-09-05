@@ -617,5 +617,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 u.Commit();
             }
         }
+
+        public override void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        {
+            BaseSecurity.EnsureTeacher(Context);
+            if (startDate < Context.SchoolYearStartDate || startDate > Context.SchoolYearEndDate)
+                throw new ChalkableException("Start date should be between school year start and end date");
+
+            DoUpdate(u => CreateLessonPlanDataAccess(u).AdjustDates(ids, startDate, classId));
+        }
     }
 }

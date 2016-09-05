@@ -169,7 +169,7 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.announcement.AnnouncementImportViewData(model.getClassId(), null, announcements);
                     });
             else
-                res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                res = this.announcementService.copy(this.getCurrentClassId(),model.getToClassId(), model.getSelectedAnnouncements(), model.getCopyStartDate())
                     .then(function(createdList){
                         this.userTrackingService.importActivities();
                         this.WidgetComplete(model.getRequestId(), createdList);
@@ -694,7 +694,8 @@ NAMESPACE('chlk.controllers', function (){
                         ann.getId(),
                         ann.getType(),
                         ann.getStandards(),
-                        app.getEncodedSecretKey())
+                        app.getEncodedSecretKey(),
+                        app.getAccessToken())
                     //.attach(this.validateResponse_())
                     .catchError(function(e){
                         this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), null, 'app-contents-fail');
@@ -1792,7 +1793,7 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    return this.Redirect('feed', 'list', [null, true]);
+                    return this.Redirect('feed', 'doToList');
                 }, this);
         },
 
@@ -1807,7 +1808,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(!isDialog_)
-                        return this.Redirect('feed', 'list', [null, true]);
+                        return this.Redirect('feed', 'doToList');
                 }, this);
 
             if(isDialog_)
@@ -1923,41 +1924,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
         },
 
-        [[chlk.models.id.AnnouncementId, String]],
-        function saveTitleAction(announcementId, announcementTitle){
-            var result = this.classAnnouncementService
-                .editTitle(announcementId, announcementTitle)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    return new chlk.models.announcement.FeedAnnouncementViewData();
-                });
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
-        },
-
-        [[String, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.id.AnnouncementId]],
-        function checkTitleAction(title, classId, expiresdate, annoId){
-            var res = this.classAnnouncementService
-                .existsTitle(title, classId, expiresdate, annoId)
-                .attach(this.validateResponse_())
-                .then(function(success){
-                    return new chlk.models.Success(success);
-                });
-            return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
-        },
-
-        function showTitlePopUpAction(){
-            return this.ShowMsgBox(Msg.Same_Title_Text, '', [{
-                text: Msg.OK.toUpperCase(),
-                controller: 'announcement',
-                action: 'closeTitlePopUp',
-                color: chlk.models.common.ButtonColor.GREEN.valueOf()
-            }]), null;
-        },
-
-        function closeTitlePopUpAction(){
-            return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(new chlk.models.Success(true)), 'title-popup');
-        },
-
         [[chlk.models.announcement.FeedAnnouncementViewData]],
         function prepareAnnouncementForm_(announcement){
             announcement.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
@@ -1994,14 +1960,6 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
-            if (submitType == 'saveTitle'){
-                return this.saveAdminTitleAction(model.getId(), model.getTitle())
-            }
-
-            if (submitType == 'checkTitle'){
-                return this.checkAdminTitleAction(model.getTitle(), model.getId());
-            }
-
             var res = this.adminAnnouncementService
                 .submitAdminAnnouncement(
                     model.getId(),
@@ -2020,25 +1978,14 @@ NAMESPACE('chlk.controllers', function (){
                     if(model.getSubmitType() == 'submitOnEdit')
                         return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.ADMIN]);
                     else{
-                        return this.BackgroundNavigate('feed', 'list', [null, true]);
+                        return this.BackgroundNavigate('feed', 'doToList');
                     }
                 }
             }, this);
             return null;
         },
 
-        [[chlk.models.id.AnnouncementId, String]],
-        function saveAdminTitleAction(announcementId, announcementTitle){
-            var result = this.adminAnnouncementService
-                .editTitle(announcementId, announcementTitle)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    return new chlk.models.announcement.AnnouncementAttributeListViewData();
-                });
-            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, result, chlk.activities.lib.DontShowLoader());
-        },
-
-        [[String, chlk.models.id.AnnouncementId]],
+        /*[[String, chlk.models.id.AnnouncementId]],
         function checkAdminTitleAction(title, annoId){
             var res = this.adminAnnouncementService
                 .existsTitle(title, annoId)
@@ -2047,7 +1994,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.Success(success);
                 });
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, chlk.activities.lib.DontShowLoader());
-        },
+        },*/
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.FeedAnnouncementViewData]],
@@ -2102,7 +2049,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(submitType == 'submitOnEdit')
                             this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN]);
                         else{
-                            this.BackgroundNavigate('feed', 'list', [null, true]);
+                            this.BackgroundNavigate('feed', 'doToList');
                         }
                         return ria.async.BREAK;
                     }
@@ -2131,27 +2078,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.LessonPlanFormDialog, res);
         },
 
-        [[chlk.models.id.AnnouncementId, String]],
-        function saveSupplementalTitleAction(announcementId, announcementTitle){
-            var result = this.supplementalAnnouncementService
-                .editTitle(announcementId, announcementTitle)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    return new chlk.models.announcement.FeedAnnouncementViewData();
-                });
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
-        },
-
-        [[String, chlk.models.id.AnnouncementId]],
-        function checkSupplementalTitleAction(title, annoId){
-            var res = this.supplementalAnnouncementService
+        /*[[String, chlk.models.id.AnnouncementId]],
+        function checkSupplementalTitle_(title, annoId){
+            return this.supplementalAnnouncementService
                 .existsTitle(title, annoId)
                 .attach(this.validateResponse_())
                 .then(function(success){
                     return new chlk.models.Success(success);
                 });
-            return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
-        },
+        },*/
 
         function saveSupplementalAnnouncement_(model){
             return this.supplementalAnnouncementService
@@ -2251,7 +2186,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(isEdit)
                         return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.SUPPLEMENTAL_ANNOUNCEMENT]);
                     else{
-                        return this.BackgroundNavigate('feed', 'list', [null, true]);
+                        return this.BackgroundNavigate('feed', 'doToList');
                     }
                 }
             }, this);
@@ -2269,14 +2204,6 @@ NAMESPACE('chlk.controllers', function (){
 
             if (submitType == 'listLast'){
                 return null;
-            }
-
-            if (submitType == 'saveTitle'){
-                return this.saveSupplementalTitleAction(model.getId(), model.getTitle())
-            }
-
-            if (submitType == 'checkTitle'){
-                return this.checkSupplementalTitleAction(model.getTitle(), model.getId());
             }
 
             if (submitType == 'viewImported'){
@@ -2516,14 +2443,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.listLastAction(announcementTypeName, classId, announcementTypeId, schoolPersonId);
             }
 
-            if (submitType == 'saveTitle'){
-                return this.saveTitleAction(model.getId(), model.getTitle())
-            }
-
-            if (submitType == 'checkTitle'){
-                return this.checkTitleAction(model.getTitle(), classId, model.getExpiresDate(), model.getId());
-            }
-
             if (submitType == 'viewImported'){
                 this.getContext().getSession().set(ChlkSessionConstants.CREATED_ANNOUNCEMENTS, model.getCreatedAnnouncements());
                 return this.Redirect('feed', 'viewImported', [model.getClassId()]);
@@ -2616,25 +2535,40 @@ NAMESPACE('chlk.controllers', function (){
             var res;
             if(this.userInRole(chlk.models.common.RoleEnum.TEACHER))
                 res = this.classAnnouncementService
-                    .submitClassAnnouncement(
-                        model.getId(),
-                        model.getClassId(),
-                        model.getAnnouncementTypeId(),
-                        model.getTitle(),
-                        model.getContent(),
-                        model.getExpiresDate(),
-                        model.getMaxScore(),
-                        model.getWeightAddition(),
-                        model.getWeightMultiplier(),
-                        model.isHiddenFromStudents(),
-                        model.isAbleDropStudentScore(),
-                        model.isGradable(),
-                        model.getAssignedAttributesPostData(),
-                        model.isDiscussionEnabled(),
-                        model.isPreviewCommentsEnabled(),
-                        model.isRequireCommentsEnabled()
-                    )
-                    .attach(this.validateResponse_());
+                    .existsTitle(model.getTitle(), model.getClassId(), model.getExpiresDate(), model.getId())
+                    .attach(this.validateResponse_())
+                    .then(function(exists){
+                        if(!exists)
+                            return this.classAnnouncementService
+                                .submitClassAnnouncement(
+                                    model.getId(),
+                                    model.getClassId(),
+                                    model.getAnnouncementTypeId(),
+                                    model.getTitle(),
+                                    model.getContent(),
+                                    model.getExpiresDate(),
+                                    model.getMaxScore(),
+                                    model.getWeightAddition(),
+                                    model.getWeightMultiplier(),
+                                    model.isHiddenFromStudents(),
+                                    model.isAbleDropStudentScore(),
+                                    model.isGradable(),
+                                    model.getAssignedAttributesPostData(),
+                                    model.isDiscussionEnabled(),
+                                    model.isPreviewCommentsEnabled(),
+                                    model.isRequireCommentsEnabled()
+                                )
+                                .attach(this.validateResponse_());
+
+                        this.ShowMsgBox(Msg.Same_Title_Text, '', [{
+                            text: Msg.OK.toUpperCase(),
+                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                        }]);
+
+                        this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+
+                        return ria.async.BREAK;
+                    }, this);
             else
                 res = this.adminAnnouncementService
                     .submitAdminAnnouncement(
@@ -2655,7 +2589,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(isEdit)
                         return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT]);
                     else{
-                        return this.BackgroundNavigate('feed', 'list', [null, true]);
+                        return this.BackgroundNavigate('feed', 'doToList');
                     }
                 }
             }, this);
@@ -2767,9 +2701,15 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         function addStandardsAction(data){
-            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
-            this.getContext().getSession().remove(ChlkSessionConstants.STANDARD_BREADCRUMBS);
-            this.getContext().getSession().remove(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS);
+            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null),
+                argsObj = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS, null),
+                breadcrumbsObj = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_BREADCRUMBS, null),
+                classId = options.getClassId().valueOf();
+
+            delete argsObj[classId];
+            delete breadcrumbsObj[classId];
+            this.getContext().getSession().set(ChlkSessionConstants.STANDARD_BREADCRUMBS, breadcrumbsObj || {});
+            this.getContext().getSession().set(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS, argsObj || {});
 
             var res = this.announcementService.addStandards(options.getAnnouncementId(), data.standardIds ? data.standardIds.split(',').filter(function(item){return item}) : [])
                 .then(function(announcement){
@@ -2807,15 +2747,17 @@ NAMESPACE('chlk.controllers', function (){
         function showGroupsAction(announcementId){
             this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_ID, announcementId);
             var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []).map(function (_) { return _.valueOf() });
-            return this.Redirect('group', 'show', [{
-                selected: groupsIds,
-                controller: 'announcement',
-                action: 'saveGroupsToAnnouncement',
-                resultHidden: 'groupIds',
-                hiddenParams: {
-                    id: announcementId
-                }
-            }]);
+            this.WidgetStart('group', 'show', [{
+                    selected: groupsIds,
+                    hiddenParams: {
+                        id: announcementId
+                    }
+                }])
+                .then(function(data){
+                    this.BackgroundNavigate('announcement', 'saveGroupsToAnnouncement', [data]);
+                }, this)
+                .attach(this.validateResponse_());
+            return null;
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

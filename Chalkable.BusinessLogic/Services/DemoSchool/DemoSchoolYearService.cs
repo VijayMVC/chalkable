@@ -140,6 +140,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<SchoolYear> GetSchoolYearsByAcadYears(IList<int> years, bool activeOnly = true)
+        {
+            throw new NotImplementedException();
+        }
+
         public static SchoolYear GetDemoSchoolYear()
         {
             var currentDate = DateTime.Today;
@@ -203,6 +208,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var sys = ServiceLocator.SchoolYearService.GetSchoolYearsByStudent(studentId, StudentEnrollmentStatusEnum.CurrentlyEnrolled, Context.NowSchoolTime);
             return sys.Count > 0 ? sys[0] : ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+        }
+
+        public void PrepareToDeleteStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears)
+        {
+            throw new NotImplementedException();
         }
 
         public IList<SchoolYear> GetSortedYears()

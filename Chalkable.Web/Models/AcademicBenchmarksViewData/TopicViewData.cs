@@ -28,5 +28,21 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
                 CourseId = topic.Course.Id
             };
         }
+
+        public static TopicViewData Create(Data.AcademicBenchmark.Model.Topic model)
+        {
+            return new TopicViewData
+            {
+                Id = model.Id,
+                Description = model.Description,
+                IsActive = model.IsActive,
+                Level = (short)model.Level,
+                IsDeepest = model.IsDeepest,
+                CourseId = model.CourseRef,
+                ParentId = model.ParentRef,
+                SubjectDocumentId = model.SubjectDocRef
+                
+            };
+        }
     }
 }

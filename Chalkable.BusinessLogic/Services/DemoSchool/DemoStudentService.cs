@@ -178,13 +178,30 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return PrepareStudentListDetailsData(students, stWithDrawDic);
         }
 
-        public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
+        public async Task<IList<StudentHealthCondition>> GetStudentHealthConditions(int studentId)
         {
+            await Task.Delay(0);
             return StudentHealthConditionStorage.GetStudentHealthConditions(studentId);
         }
 
-        public StudentSummaryInfo GetStudentSummaryInfo(int studentId, int schoolYearId)
+        public Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId, int schoolYearId)
         {
+            throw new NotImplementedException();
+        }
+
+        public byte[] DownloadStudentHealthFormDocument(int studentId, int healthFormId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task VerifyStudentHealthForm(int studentId, int healthFormId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId)
+        {
+            await Task.Delay(0);
             throw new NotImplementedException();
         }
 
@@ -247,8 +264,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        public StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId)
+        public async Task<StudentExplorerInfo> GetStudentExplorerInfo(int studentId, int schoolYearId)
         {
+            await Task.Delay(0);
             Trace.Assert(Context.SchoolLocalId.HasValue);
             var student = GetById(studentId, schoolYearId);
             var classes = ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId).ToList();
@@ -297,6 +315,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public IList<StudentDetailsInfo> GetClassStudentsDetails(int classId, bool? isEnrolled = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PrepareToDelete(IList<Student> students)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PrepareToDeleteStudentSchools(IList<StudentSchool> studentSchools)
         {
             throw new NotImplementedException();
         }

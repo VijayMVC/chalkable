@@ -49,6 +49,6 @@
         +ActionForm('students', 'panoramaSubmit').student-panorama-form.no-working
             +Hidden('studentId', user.getId())
             +CloseOpen('Filters', !panoramaInfo.isShowFilters())
-                +PanoramaFilter(panoramaInfo.getSchoolYears(), panoramaInfo.getStandardizedTests(), panoramaInfo.getFilterSettings(), 'students', 'restorePanorama' ,[user.getId()])
+                +PanoramaFilter(panoramaInfo.getYears(), panoramaInfo.getStandardizedTests(), panoramaInfo.getFilterSettings(), 'students', 'restorePanorama' ,[user.getId()])
             .panorama-stats
                 +RenderWith(user, chlk.templates.student.StudentProfilePanoramaStatsTpl)

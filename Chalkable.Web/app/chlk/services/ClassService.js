@@ -96,7 +96,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Class/Panorama.json', chlk.models.profile.ClassPanoramaViewData, {
                     classId: classId.valueOf(),
                     standardizedTestFilters: data_ && data_.standardizedTestFilters,
-                    schoolYearIds: data_ && data_.schoolYearIds,
+                    acadYears: data_ && data_.acadYears,
                     selectedStudents: selectedStudents_
                 }).then(function(model){
                     this.getContext().getSession().set(ChlkSessionConstants.CURRENT_PANORAMA, model);
@@ -115,7 +115,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Class/SavePanoramaSettings.json', Boolean, {
                     classId : classId,
                     standardizedTestFilters: data.standardizedTestFilters,
-                    schoolYearIds: data.schoolYearIds
+                    acadYears: data.acadYears
                 });
             },
 
@@ -170,6 +170,13 @@ NAMESPACE('chlk.services', function () {
                 panorama.setDescending(descending_);
 
                 return ria.async.DeferredData(panorama);
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getScheduledDays(classId) {
+                return this.get('Class/Days.json', ArrayOf(chlk.models.common.ChlkDate), {
+                    classId: classId.valueOf()
+                });
             },
 
             [[chlk.models.id.ClassId]],

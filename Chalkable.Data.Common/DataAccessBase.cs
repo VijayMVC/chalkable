@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common.Orm;
@@ -138,6 +136,16 @@ namespace Chalkable.Data.Common
                 var sql = string.Format("UPDATE [{0}] set {1} FROM [{0}] join @t t on {2}", t.Name, vals, joinCond);
                 IDictionary<string, object> ps = new Dictionary<string, object> { { "t", objs } };
                 ExecuteNonQueryParametrized(sql, ps, 10 + objs.Count);
+            }
+        }
+
+        public void PrepareToDelete<T>(IList<T> objs)
+        {
+            if (objs.Count > 0)
+            {
+                var q = Orm.Orm.PrepareToDelete(objs);
+                if (q != null)
+                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
             }
         }
 

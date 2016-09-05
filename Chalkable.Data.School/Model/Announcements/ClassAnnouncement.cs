@@ -30,7 +30,6 @@ namespace Chalkable.Data.School.Model.Announcements
         public int? ClassAnnouncementTypeRef { get; set; }
         public int ClassRef { get; set; }
         public int SchoolYearRef { get; set; }
-        public int Order { get; set; }
         public bool Dropped { get; set; }
         
         public int? SisActivityId { get; set; }
@@ -72,16 +71,5 @@ namespace Chalkable.Data.School.Model.Announcements
         public string FullClassName { get; set; }
         [NotDbFieldAttr]
         public Guid? DepartmentId { get; set; }
-        [NotDbFieldAttr]
-        public override string Title
-        {
-            get { return !string.IsNullOrEmpty(base.Title) ? base.Title : DefaultTitle; }
-            set { base.Title = value; }
-        }
-
-        [NotDbFieldAttr]
-        public string DefaultTitle => !string.IsNullOrEmpty(ClassAnnouncementTypeName)
-            ? $"{ClassAnnouncementTypeName} {Order}"
-            : null;
     }
 }

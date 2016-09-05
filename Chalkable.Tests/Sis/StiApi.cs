@@ -49,17 +49,87 @@ namespace Chalkable.Tests.Sis
             var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
 
             District d;
-            IList<Data.Master.Model.User> existingUsers;
             using (var uow = new UnitOfWork(mcs, false))
             {
                 var da = new DistrictDataAccess(uow);
                 d = da.GetById(districtId);
-                var conds = new SimpleQueryCondition("DistrictRef", districtId, ConditionRelation.Equal);
-                existingUsers = (new UserDataAccess(uow)).GetAll(conds);
             }
             var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
-            var items = (cl.SyncConnector.GetDiff(typeof(T), null) as SyncResult<T>);
+            var items = (cl.SyncConnector.GetDiff(typeof(T), version) as SyncResult<T>);
             return items;
+        }
+
+        private SyncResult<T> GetTableData<T>(Guid districtId) where T : SyncModel
+        {
+            var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
+
+            District d;
+            using (var uow = new UnitOfWork(mcs, false))
+            {
+                var da = new DistrictDataAccess(uow);
+                d = da.GetById(districtId);
+            }
+            var cs = $"Data Source={d.ServerUrl};Initial Catalog={d.Id};UID=chalkableadmin;Pwd=Hellowebapps1!";
+            long? version;
+            using (var uow = new UnitOfWork(cs, true))
+            {
+                var name = typeof (T).Name;
+                version = (new SyncVersionDataAccess(uow)).GetAll().First(x => x.TableName == name).Version;
+            }
+            
+            Debug.WriteLine($"version {version}");
+            var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
+            var items = (cl.SyncConnector.GetDiff(typeof(T), version) as SyncResult<T>);
+            return items;
+        }
+
+
+        [Test]
+        public void SyncTest()
+        {
+            var items = GetTableData<Person>(Guid.Parse("c548d2a9-e4f6-4476-9834-33f105cc10a6"));
+            Print(items.Inserted);
+            Print(items.Updated);
+            Print(items.Deleted);
+        }
+
+        [Test]
+        public void FixMissingSchoolUsersSync()
+        {
+            var districtIds = new List<Guid>
+            {
+                Guid.Parse("5f0873ba-f152-483c-9ee5-0dafcce92131"),
+                //Guid.Parse("B2139E91-8A07-43D1-A609-6D7EA711A391"),
+            };
+            FixMissingSchoolUsersSync(districtIds);
+        }
+
+        [Test]
+        public void FixClassPersonInsert()
+        {
+            var districtIds = new List<Guid>
+            {
+                Guid.Parse("69b1f18e-333e-4aa8-83d5-2647edea4a48"),
+            };
+            ForEachDistrict(districtIds, delegate (District d, ConnectorLocator cl, UnitOfWork u)
+            {
+                var da = new ClassPersonDataAccess(u);
+                var inDb = da.GetAll();
+
+                var new_ = (cl.SyncConnector.GetDiff(typeof(StudentScheduleTerm), 25063934) as SyncResult<StudentScheduleTerm>).Inserted;
+
+                var toDELETE =
+                    inDb.Where(
+                        x =>
+                            new_.Any(
+                                y =>
+                                    x.PersonRef == y.StudentID && x.ClassRef == y.SectionID &&
+                                    x.MarkingPeriodRef == y.TermID)).ToList();
+
+
+                toDELETE.ForEach(x=>Debug.WriteLine($"{x.PersonRef} {x.ClassRef} {x.MarkingPeriodRef}"));
+                da.Delete(toDELETE);
+            });
         }
 
         [Test]
@@ -67,8 +137,8 @@ namespace Chalkable.Tests.Sis
         {
             var districtIds = new List<Guid>
             {
-                Guid.Parse("341D63DB-49AE-4057-A06D-714E9A3D31EB"),
-                Guid.Parse("aa707676-1548-4cdc-af84-2a15257c95bd"),
+                Guid.Parse("6c801aac-4d1c-4a70-8e06-d82ef6846a31"),
+                //Guid.Parse("aa707676-1548-4cdc-af84-2a15257c95bd"),
                 //Guid.Parse("53d7cbd7-cd3e-4a50-9258-8c1f6daedb61"),
                 //Guid.Parse("6c801aac-4d1c-4a70-8e06-d82ef6846a31"),
                 //Guid.Parse("c9c9ad32-1576-45e6-8f92-39de929f4554"),
@@ -80,7 +150,7 @@ namespace Chalkable.Tests.Sis
                 //Guid.Parse("ef4f14b7-13d0-4710-95c3-124537284880"),
                 //Guid.Parse("0972d700-06c4-49f9-9b69-ad76e07a76f8"),
             };
-            ForEachDistrict(districtIds, delegate(District d, UnitOfWork u)
+            ForEachDistrict(districtIds, delegate (District d, UnitOfWork u)
             {
                 var c = u.GetTextCommand("ALTER TABLE StudentSchoolYear NOCHECK CONSTRAINT FK_StudentSchoolYear_Homeroom");
                 //ALTER TABLE StudentSchoolYear WITH CHECK CHECK CONSTRAINT FK_StudentSchoolYear_Homeroom
@@ -94,11 +164,11 @@ namespace Chalkable.Tests.Sis
         {
             var districtIds = new List<Guid>
             {
-                Guid.Parse("18c60c7d-c931-4e6f-90ac-2dc85e958efd"),
+                Guid.Parse("d5b5202e-7ae7-4a7a-9a37-61944fe8c1bb"),
 
-                Guid.Parse("6afa2170-6a18-43d2-b4a0-81a42c6a75dd"),
+                //Guid.Parse("6afa2170-6a18-43d2-b4a0-81a42c6a75dd"),
 
-                Guid.Parse("1ebcbf07-bcad-4c75-b692-6298a164f9b9"),
+                //Guid.Parse("1ebcbf07-bcad-4c75-b692-6298a164f9b9"),
 
                 //Guid.Parse("667416fc-7ece-40bb-b931-1273c495280d"),
 
@@ -115,20 +185,11 @@ namespace Chalkable.Tests.Sis
         }
 
         [Test]
-        public void SyncTest()
-        {
-            var items = GetTableData<PersonLanguage>(Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"), null);
-            Print(items.All);
-            //Print(items.Updated);
-            //Print(items.Deleted);
-        }
-        
-        [Test]
         public void FixBellScheduleDelete()
         {
             var ids = new List<Guid>
             {
-                Guid.Parse("27e81a8d-772c-430f-8886-24b3b3d21df8"),
+                Guid.Parse("667416FC-7ECE-40BB-B931-1273C495280D"),
                 //Guid.Parse("1ebcbf07-bcad-4c75-b692-6298a164f9b9"),
                 //Guid.Parse("42bf4a08-5a1a-488a-9a41-812421e21df8"),
                 //Guid.Parse("76ec8972-ca7a-4faf-adb2-f9c48adfeed6"),
@@ -164,12 +225,12 @@ namespace Chalkable.Tests.Sis
         {
             var ids = new List<Guid>
             {
-                Guid.Parse("66B7AA33-2F40-4568-A222-4A99AB62955B"),
-                Guid.Parse("FC507B44-64C3-40B6-8082-9FDC4B0EA33A"),
-                Guid.Parse("6C801AAC-4D1C-4A70-8E06-D82EF6846A31"),
+                Guid.Parse("8DC08D3A-CC63-4063-9427-132898835057"),
+                //Guid.Parse("E094804D-D775-42C9-949F-4617C9E6299C"),
+                //Guid.Parse("428CA1B1-BC79-4096-981A-955EF5B2A74B"),
 
-                //Guid.Parse("12628575-A1F2-4DB7-B421-D2DE7DAC343F"),
-                //Guid.Parse("0B55D8F2-6FD7-45FE-8944-EE4EDC86DA79"),
+                //Guid.Parse("0972D700-06C4-49F9-9B69-AD76E07A76F8"),
+                //Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
                 //Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
 
 
@@ -178,7 +239,7 @@ namespace Chalkable.Tests.Sis
             {
                 try
                 {
-                    FixUserSchoolSync(guid);
+                    FixMissingUsersSync(guid);
                 }
                 catch (Exception e)
                 {
@@ -186,85 +247,7 @@ namespace Chalkable.Tests.Sis
                 }
             }
         }
-
         
-
-        [Test]
-        public void FixUserSyncDistricts()
-        {
-            FixUserSyncAllDistricts();
-        }
-
-        public void FixUserSyncAllDistricts()
-        {
-            var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
-
-            IList<District> districts;
-            using (var uow = new UnitOfWork(mcs, true))
-            {
-                var da = new DistrictDataAccess(uow);
-                districts = da.GetAll();
-            }
-            int cnt = 30;
-            List<District>[] lists = new List<District>[cnt];
-            for (int i = 0; i < cnt; i++)
-                lists[i] = new List<District>();
-            for (int i = 0; i < districts.Count; i++)
-            {
-                lists[i%30].Add(districts[i]);
-            }
-            Thread[] threads = new Thread[cnt];
-            for (int i = 0; i < cnt; i++)
-            {
-                int ii = i;
-                var t = new Thread(() =>
-                {
-                    int k = ii;
-                    for (int j = 0; j < lists[k].Count; j++)
-                    {
-                        FixUserSync(lists[k][j].Id);
-                        Debug.WriteLine($"{k} {j} completed");
-                    }
-                });
-                threads[i] = t;
-                t.Start();
-            }
-            for (int i = 0; i < cnt; i++)
-                threads[i].Join();
-        }
-
-
-        [Test]
-        public void Test4()
-        {
-            var cl = ConnectorLocator.Create("Chalkable", "8nA4qU4yG", "http://sandbox.sti-k12.com/chalkable/api/");
-            var items = (cl.SyncConnector.GetDiff(typeof(AcadSession), null) as SyncResult<AcadSession>).All.ToList();
-            items = items.ToList();
-
-            var sql = new StringBuilder();
-            sql.Append(@"declare @sy table (id int, ArchiveDate datetime2 null) 
-                         insert into @sy
-                         values");
-
-            foreach ( var item in items)
-            {
-                var s = string.Format("({0},{1}),", item.AcadSessionID, item.ArchiveDate.HasValue ? "cast('" + item.ArchiveDate.Value + "' as datetime2)" : "null");
-                sql.Append(s);
-            }
-            sql.Append(" ").Append(@"update SchoolYear
-                                    set ArchiveDate = sy.ArchiveDate
-                                    from SchoolYear 
-                                    join @sy sy on SchoolYear.Id = sy.Id");
-
-        
-            Debug.WriteLine(sql.ToString());
-        }
-
-        [Test]
-        public void Test3()
-        {
-            Debug.WriteLine(DateTime.Now.Month);
-        }
 
         [Test]
         public void SectionPanoramaApiTest()

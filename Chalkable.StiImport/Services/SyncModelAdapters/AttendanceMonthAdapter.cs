@@ -41,5 +41,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var attendanceMonthes = entities.Select(x => new Data.School.Model.AttendanceMonth { Id = x.AttendanceMonthID }).ToList();
             ServiceLocatorSchool.AttendanceMonthService.Delete(attendanceMonthes);
         }
+
+        protected override void PrepareToDeleteInternal(IList<AttendanceMonth> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

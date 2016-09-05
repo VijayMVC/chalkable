@@ -25,6 +25,7 @@ REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.activities.discipline.StudentDayDisciplinePopup');
 REQUIRE('chlk.activities.student.StudentProfileGradingPopup');
 REQUIRE('chlk.activities.student.StudentProfilePanoramaPage');
+REQUIRE('chlk.activities.profile.VerifyHealthFormDialog');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -35,6 +36,8 @@ REQUIRE('chlk.models.student.StudentProfileDisciplineViewData');
 REQUIRE('chlk.models.student.StudentProfileSummaryViewData');
 REQUIRE('chlk.models.student.StudentProfileInfoViewData');
 REQUIRE('chlk.models.student.StudentProfileGradingViewData');
+REQUIRE('chlk.models.student.VerifyHealthFormViewData');
+
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
@@ -68,6 +71,39 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.SchoolYearService, 'schoolYearService',
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId, Boolean]],
+            function verifyHealthFormDialogAction(studentId, healthFormId, readonly_){
+                var res = this.WidgetStart('students', 'verifyHealthFormDialog', [studentId, healthFormId, readonly_])
+                    .then(function(data){
+                        this.BackgroundUpdateView(chlk.activities.profile.StudentInfoPage, data);
+                    }, this)
+                    .attach(this.validateResponse_());
+                return null;
+            },
+
+            [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId, Boolean]],
+            function verifyHealthFormDialogWidgetAction(requestId, studentId, healthFormId, readonly_){
+                var url = this.studentService.getHealthFormDocumentUri(studentId, healthFormId),
+                    model = new chlk.models.student.VerifyHealthFormViewData(requestId, studentId, healthFormId, url, readonly_);
+                return this.ShadeView(chlk.activities.profile.VerifyHealthFormDialog, ria.async.DeferredData(model, 100));
+            },
+
+            [[String, chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            function verifyHealthFormAction(requestId, studentId, healthFormId){
+                var res = this.studentService.verifyStudentHealthForm(studentId, healthFormId)
+                    .then(function(forms){
+                        var model = new chlk.models.student.StudentInfo();
+                        model.setId(studentId);
+                        model.setHealthForms(forms);
+                        this.WidgetComplete(requestId, model);
+                        this.BackgroundCloseView(chlk.activities.profile.VerifyHealthFormDialog);
+                        return ria.async.BREAK;
+                    }, this)
+                    .attach(this.validateResponse_());
+
+                this.UpdateView(chlk.activities.profile.VerifyHealthFormDialog, res);
+            },
 
             [chlk.controllers.SidebarButton('people')],
             function indexStudentAction() {
@@ -214,14 +250,14 @@ NAMESPACE('chlk.controllers', function (){
             function getPanorama_(personId, restore_){
                 return ria.async.wait([
                         this.studentService.getInfoForPanorama(personId),
-                        this.studentService.getPanorama(personId),
-                        this.schoolYearService.list()
+                        this.studentService.getPanorama(personId)
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var userData = result[0];
                         var panorama = result[1];
-                        panorama.setSchoolYears(result[2]);
+                        var years = this.getContext().getSession().get(ChlkSessionConstants.YEARS, []);
+                        panorama.setYears(years);
                         panorama.setShowFilters(restore_ || false);
                         userData.setPanoramaInfo(panorama);
                         var res = new chlk.models.student.StudentProfilePanoramaViewData(this.getCurrentRole(), userData, this.getUserClaims_());
@@ -263,8 +299,8 @@ NAMESPACE('chlk.controllers', function (){
                 res = this.studentService.getPanorama(data.studentId, filterValues)
                     .then(function(panorama){
                         var userData = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PANORAMA, null);
-                        var schoolYears = userData.getPanoramaInfo().getSchoolYears();
-                        panorama.setSchoolYears(schoolYears);
+                        var years = userData.getPanoramaInfo().getYears();
+                        panorama.setYears(years);
                         userData.setPanoramaInfo(panorama);
                         return userData;
                     }, this)

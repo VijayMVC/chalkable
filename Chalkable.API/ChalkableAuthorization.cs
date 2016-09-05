@@ -80,15 +80,15 @@ namespace Chalkable.API
             request.Headers.Add(AuthenticationHeaderName, $"{AuthenticationSignature}:{signature}");
         }
 
-        public void AuthorizeQueryRequest(string token, IList<string> identityParams)
+        public async Task AuthorizeQueryRequest(string authenticationSignature, IList<string> identityParams, string accessToken)
         {
             var signatureMsg = identityParams.JoinString("|");
             var appSecret = Configuration.AppSecret;
             signatureMsg += "|" + HashHelper.HexOfCumputedHash(appSecret);
             var hash = HashHelper.HexOfCumputedHash(signatureMsg);
-            if (token != hash)
+            if (authenticationSignature != hash)
                 throw new ChalkableApiException($"Security error. Invalid token in query request to {Configuration.ApplicationRoot}");
-
+            await AuthorizeAsync(accessToken);
         }
 
 

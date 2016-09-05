@@ -38,5 +38,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var gradingComments = entities.Select(x => new Data.School.Model.GradingComment { Id = x.GradingCommentID }).ToList();
             ServiceLocatorSchool.GradingCommentService.Delete(gradingComments);
         }
+
+        protected override void PrepareToDeleteInternal(IList<GradingComment> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

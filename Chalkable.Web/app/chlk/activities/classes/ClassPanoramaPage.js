@@ -25,29 +25,6 @@ NAMESPACE('chlk.activities.classes', function () {
 
             },
 
-            function clearCheckedStudents_(){
-                this.dom.find('.student-grid-check:checked').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
-                this.dom.find('.selected-students').setValue('');
-                this.dom.find('.add-supplemental-btn').addClass('v-hidden');
-            },
-
-            function clearHighlightedStudents_(){
-                this.dom.find('.highlighted-students').setValue('');
-                this.dom.find('.students-grid').find('.highlighted').removeClass('highlighted');
-                disableUpdateByColumn = true;
-
-                jQuery('.distribution-chart').each(function(){
-                    var chart = jQuery(this).highcharts();
-                    chart.series[0].data.forEach(function(item){
-                        item.select(false);
-                    });
-                });
-
-                setTimeout(function(){
-                    disableUpdateByColumn = false;
-                }, 1);
-            },
-
             [ria.mvc.DomEventBind('columnselect', '.distribution-chart')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function columnSelect(node, event, selected_){
@@ -55,22 +32,18 @@ NAMESPACE('chlk.activities.classes', function () {
                     clearTimeout(studentsTimeout);
                     var grid = this.dom.find('.students-grid'), dom = this.dom, currentChart = node.valueOf()[0];
 
-                    this.clearCheckedStudents_();
-
                     grid.find('.highlighted').removeClass('highlighted');
 
                     selected_ && selected_.forEach(function(id){
                         grid.find('.grid-row[data-id=' + id + ']').addClass('highlighted');
+                        grid.find('.student-check[data-id=' + id + ']').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [true]);
                     });
 
-                    studentsTimeout = setTimeout(function(){
-                        var value = selected_ && selected_.length ? JSON.stringify(selected_) : '';
-                        dom.find('.highlighted-students').setValue(value);
+                    if(selected_)
 
-                        node.parent('form').find('.submit-by-check').trigger('click');
-                        dom.find('.standardized-tests-tab').addClass('partial-update');
-                    }, 1000);
+                    this.dom.find('.add-supplemental-btn').removeClass('v-hidden');
 
+                    this.submitSelectedStudents_(node.parent('form'), true, selected_);
 
                     disableUpdateByColumn = true;
 
@@ -98,15 +71,38 @@ NAMESPACE('chlk.activities.classes', function () {
                 });
             },
 
+            VOID, function submitSelectedStudents_(form, fromColumn_, highlighted_){
+                var dom = this.dom;
+
+                studentsTimeout = setTimeout(function(){
+                    if(fromColumn_){
+                        var highlightedValue = highlighted_ && highlighted_.length ? JSON.stringify(highlighted_) : '';
+                        dom.find('.highlighted-students').setValue(highlightedValue);
+                    }
+
+                    form.find('.submit-by-check').trigger('click');
+                    dom.find('.standardized-tests-tab').addClass('partial-update');
+                }, 1000)
+            },
+
+            [ria.mvc.DomEventBind('submit', '.class-panorama-form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function formSubmit(node, event){
+                var selectedStudents = [];
+                this.dom.find('.student-check:checked').forEach(function(node){
+                    selectedStudents.push(node.getData('id'));
+                });
+
+                var selectedValue = selectedStudents.length ? JSON.stringify(selectedStudents) : '';
+                this.dom.find('.selected-students').setValue(selectedValue);
+            },
+
             [ria.mvc.DomEventBind('change', '.student-grid-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function studentsChange(node, event, selected_){
                 clearTimeout(studentsTimeout);
 
-                this.clearHighlightedStudents_();
-
-                var btn = this.dom.find('.add-supplemental-btn'),
-                    dom = this.dom;
+                var btn = this.dom.find('.add-supplemental-btn'), dom = this.dom;
 
                 setTimeout(function(){
                     if(dom.find('.student-check:checked').count())
@@ -115,19 +111,7 @@ NAMESPACE('chlk.activities.classes', function () {
                         btn.addClass('v-hidden');
                 }, 1);
 
-                studentsTimeout = setTimeout(function(){
-                    var selectedStudents = [];
-                    dom.find('.student-check:checked').forEach(function(node){
-                        selectedStudents.push(node.getData('id'));
-                    });
-
-                    var value = selectedStudents.length ? JSON.stringify(selectedStudents) : '';
-                    dom.find('.selected-students').setValue(value);
-
-                    node.parent('form').find('.submit-by-check').trigger('click');
-                    dom.find('.standardized-tests-tab').addClass('partial-update');
-                }, 1000)
-
+                this.submitSelectedStudents_(node.parent('form'));
             },
 
             [ria.mvc.DomEventBind(chlk.controls.TabEvents.TAB_CHANGED.valueOf(), '.tabs-block')],
@@ -158,17 +142,25 @@ NAMESPACE('chlk.activities.classes', function () {
                         selectedStudents.forEach(function(id){
                             dom.find('.student-check[data-id=' + id + ']').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [true]);
                         });
-                    }else{
-                        var highlightedStudents = this.dom.find('.highlighted-students').getValue();
-
-                        if(highlightedStudents){
-                            highlightedStudents = JSON.parse(highlightedStudents);
-
-                            highlightedStudents.forEach(function(id){
-                                dom.find('.grid-row[data-id=' + id + ']').addClass('highlighted');
-                            });
-                        }
                     }
+
+                    var highlightedStudents = this.dom.find('.highlighted-students').getValue();
+
+                    if(highlightedStudents){
+                        highlightedStudents = JSON.parse(highlightedStudents);
+
+                        highlightedStudents.forEach(function(id){
+                            dom.find('.grid-row[data-id=' + id + ']').addClass('highlighted');
+                        });
+                    }
+
+                    var btn = this.dom.find('.add-supplemental-btn');
+
+                    if(selectedStudents)
+                        btn.removeClass('v-hidden');
+                    else
+                        btn.addClass('v-hidden');
+
                 }
             },
 

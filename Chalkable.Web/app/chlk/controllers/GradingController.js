@@ -1164,9 +1164,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function updateStudentAvgFromModel(model){
-                if(this.getView().getCurrent().getClass() == chlk.activities.grading.StudentAvgPopupDialog)
-                    this.getView().pop();
-                var activityClass = this.getView().getCurrent().getClass();
+                this.BackgroundCloseView(chlk.activities.grading.StudentAvgPopupDialog);
+                var activityClass = chlk.activities.grading.GradingClassSummaryGridPage;
                 if(!model.getGradingPeriodId())
                     return this.UpdateView(activityClass, new ria.async.DeferredData(model), chlk.activities.lib.DontShowLoader());
 

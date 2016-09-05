@@ -61,11 +61,11 @@ if self.getUserRole().isTeacher()
                         each test in tests
                             .cell.test
                                 if studentTests
-                                    -var studentTest = studentTests.filter(function(item){return item.getStandardizedTest().getId() == test.getStandardizedTest().getId()})[0]
+                                    -var studentTest = self.getStudentTest(studentTests, test)
                                     if studentTest
-                                        if test.getDailyStats().length == 1
-                                            SPAN(data-tooltip=self.getTestTooltip(test))=test.getDailyStats()[0].getNumber()
+                                        if studentTest.getDailyStats().length == 1
+                                            SPAN(data-tooltip=self.getTestTooltip(test))=studentTest.getDailyStats()[0].getNumber()
                                         else
                                             +Chart()(
-                                                data-options = self.getStudentChartOptions(test)
+                                                data-options = self.getStudentChartOptions(studentTest)
                                             ).small-chart

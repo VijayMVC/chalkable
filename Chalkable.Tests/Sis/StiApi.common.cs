@@ -27,7 +27,6 @@ namespace Chalkable.Tests.Sis
             {
                 var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
                 District d;
-                IList<Data.Master.Model.User> existingUsers;
                 using (var uow = new UnitOfWork(mcs, false))
                 {
                     var da = new DistrictDataAccess(uow);
@@ -44,13 +43,36 @@ namespace Chalkable.Tests.Sis
             }
         }
 
+        void ForEachDistrict(IEnumerable<Guid> districtIds, Action<District, ConnectorLocator, UnitOfWork, UnitOfWork> action)
+        {
+            foreach (var districtId in districtIds)
+            {
+                var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
+                District d;
+                using (var muow = new UnitOfWork(mcs, true))
+                {
+                    var da = new DistrictDataAccess(muow);
+                    d = da.GetById(districtId);
+
+                    var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
+                    var cs = $"Data Source={d.ServerUrl};Initial Catalog={d.Id};UID=chalkableadmin;Pwd=Hellowebapps1!";
+                    using (var uow = new UnitOfWork(cs, true))
+                    {
+                        action(d, cl, muow, uow);
+                        uow.Commit();
+                    }
+                    muow.Commit();
+                }
+                Debug.WriteLine($"district {d.Id} processing is done");
+            }
+        }
+
         void ForEachDistrict(IEnumerable<Guid> districtIds, Action<District, UnitOfWork> action)
         {
             foreach (var districtId in districtIds)
             {
                 var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
                 District d;
-                IList<Data.Master.Model.User> existingUsers;
                 using (var uow = new UnitOfWork(mcs, false))
                 {
                     var da = new DistrictDataAccess(uow);
@@ -72,7 +94,6 @@ namespace Chalkable.Tests.Sis
             {
                 var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
                 District d;
-                IList<Data.Master.Model.User> existingUsers;
                 using (var uow = new UnitOfWork(mcs, false))
                 {
                     var da = new DistrictDataAccess(uow);

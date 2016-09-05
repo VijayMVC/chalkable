@@ -190,13 +190,13 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (user == null) 
                 return null;
             if (user.IsSysAdmin)
-                return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null, null);
+                return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null, null, null);
             if (user.IsDistrictRegistrator)
-                return new UserContext(user, CoreRoles.DISTRICT_REGISTRATOR_ROLE, user.District, null, null, null);
+                return new UserContext(user, CoreRoles.DISTRICT_REGISTRATOR_ROLE, user.District, null, null, null, null);
             if (user.IsDeveloper)
                 return DeveloperLogin(user);
             if (user.IsAppTester)
-                return new UserContext(user, CoreRoles.APP_TESTER_ROLE, user.District, null, null, null);
+                return new UserContext(user, CoreRoles.APP_TESTER_ROLE, user.District, null, null, null, null);
             throw new UnknownRoleException();           
         }
 
@@ -236,8 +236,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     EnsureTeacherChalkableAccess(claimInfos);
                 }
+#if DEBUG
+                var loginTimeOut = (int?) null;
+#else
+                var loginTimeOut = schoolL.AppSettingService.GetLoginTimeOut();
+#endif
 
-                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear, sisRedirectUrl)
+                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, loginTimeOut, schoolYear, sisRedirectUrl)
                 {
                     Claims = ClaimInfo.Create(iNowUser.Claims),
                     SisApiVersion = iNowConnector.ApiVersion
@@ -312,7 +317,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var schoolYear = DemoSchoolYearService.GetDemoSchoolYear();
             int roleId;
             var personId = DemoPersonService.GetPersonDataForLogin(schoolUser.User, out roleId);
-            var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, developerId, personId, schoolYear)
+            var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, developerId, personId, null, schoolYear)
             {
                 Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())
             };
@@ -337,7 +342,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             user.DistrictRef = developer.DistrictRef;
             user.LoginInfo = new UserLoginInfo {Id = user.Id};
             user.District = DemoDistrictService.CreateDemoDistrict(developer.DistrictRef.Value);
-            return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id, null);
+            return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id, null, null);
         }
 
         private void PrepareSchoolData(IServiceLocatorSchool schoolL, User user, int? schoolYearId, int[] acdaIds

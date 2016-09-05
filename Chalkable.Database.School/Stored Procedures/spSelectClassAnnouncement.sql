@@ -14,9 +14,8 @@ Select
 				   ClassRef in (select ClassPerson.ClassRef from ClassPerson 
 											 where ClassPerson.PersonRef = Attachment_PersonRef)) as x
 	) as StudentsCountWithAttachments,
-	(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount--,
-	--(Select ' ' + Attachment_Name From vwAnnouncementAttachment Where vwAnnouncementAttachment.AnnouncementAttachment_AnnouncementRef = t.Id) as AttachmentNames
-
+	(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = t.Id and Active = 1) as ApplicationCount,
+	(Select COUNT(*) From AnnouncementStandard Where AnnouncementRef = t.Id) as StandardsCount
 From @classAnnT t
 
 

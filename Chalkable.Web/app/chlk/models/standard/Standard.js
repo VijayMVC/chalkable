@@ -44,8 +44,8 @@ NAMESPACE('chlk.models.standard', function () {
                 return this.getDescription();
             },
 
-            [[chlk.models.id.StandardId, String, String]],
-            function $(standardId_, name_, grade_){
+            [[chlk.models.id.StandardId, String, String, String, Boolean]],
+            function $(standardId_, name_, grade_, description_, deepest_){
                 BASE();
                 if(standardId_)
                     this.setStandardId(standardId_);
@@ -53,6 +53,10 @@ NAMESPACE('chlk.models.standard', function () {
                     this.setName(name_);
                 if(grade_)
                     this.setGrade(grade_);
+                if(description_)
+                    this.setDescription(description_);
+                if(deepest_)
+                    this.setDeepest(deepest_);
             },
 
             String, function getUrlComponents(index_) {
