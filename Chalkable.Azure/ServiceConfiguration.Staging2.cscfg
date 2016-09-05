@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="Chalkable.Web">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <!-- DB Settings -->
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
+      <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
+      <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
+      <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
+      <Setting name="ChalkableSchoolDbServers" value="zbqa56h95p.database.windows.net" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
+      <Setting name="DbUpdateTimeout" value="3600" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark;UID=chalkableadmin;Pwd=Hellowebapps1!"/>
+      <!-- Redis Cache -->
+      <Setting name="RedisCache.ConnectionString" value="chlk-qa.redis.cache.windows.net,abortConnect=false,ssl=true,password=mOiq0phviZ0/SiUAuwCj/9hsWReh4YFzCYQWYln7uZw=" />
+      <Setting name="RedisCache.ConcurentConnections" value="1" />
+      <!-- More DB servers should be joined by comma-->
+      <!-- CDN and content settings-->
+      <Setting name="Domain" value="dev2.chalkable.com" />
+      <Setting name="ScriptsRoot" value="https://az374501.vo.msecnd.net/static-{0}" />
+      <!-- API Explorer -->
+      <Setting name="api.explorer.client-id" value="" />
+      <Setting name="api.explorer.secret" value="" />
+      <Setting name="api.explorer.redirecturi" value="" />
+      <Setting name="api.explorer.client-name" value="api explorer" />
+      <Setting name="api.explorer.scope" value="" />
+      <!--tracking-->
+      <Setting name="mixpanel-token" value="" />
+      <!-- other settings -->
+      <Setting name="home-redirect-url" value="/Home/Index" />
+      <!--application insight-->
+      <Setting name="verbosity" value="Verbose" />
+      <Setting name="instrumentationKey" value="dedde1a0-79f6-4531-98fa-13a09428297a" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
+      <!--WebClient Timeout Settings-->
+      <Setting name ="WebClientTimeout" value="300000"/>
+      <!--SetMinThreads params-->
+      <Setting name="Threads.DefaultMinWorkerThreads" value="4"/>
+      <Setting name="Threads.DefaultMinIoThreads" value="4"/>
+      <!--AES Settings-->
+      <Setting name="AesSecretKey" value="5E9F42ED7A2E51D39CD63EA9BDE5AAD9DA2B86532CC57DABC2636F8B3A95D48E"/>
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+  <Role name="Chalkable.BackgroundTaskProcessor">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <!-- DB Settings -->
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
+      <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
+      <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
+      <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
+      <Setting name="ChalkableSchoolDbServers" value="zbqa56h95p.database.windows.net" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
+      <Setting name="DbUpdateTimeout" value="3600" />
+      <Setting name="Domain" value="dev2.chalkable.com" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark;UID=chalkableadmin;Pwd=Hellowebapps1!"/>
+      <!-- other settings -->
+      <Setting name="TaskProcessorDelay" value="10000" />
+      <Setting name="DbBackupServiceUrl" value="https://sn1prod-dacsvc.azure.com/DACWebService.svc" />
+      <Setting name="PictureProcessorCount" value="1" />
+      <Setting name="AllSchoolRunner.DistrictsPerThread" value="4" />
+      <!--tracking-->
+      <Setting name="mixpanel-token" value="" />
+      <!--application insight-->
+      <Setting name="verbosity" value="verbose" />
+      <Setting name="instrumentationKey" value="e0965ec7-647b-4e03-ae8d-63f48e27edac" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
+      <Setting name ="WebClientTimeout" value="300000"/>
+    </ConfigurationSettings>
+  </Role>
+  <Role name="Chalkable.BackgroundTaskProducer">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <!-- DB Settings -->
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
+      <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
+      <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
+      <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
+      <Setting name="ChalkableSchoolDbServers" value="zbqa56h95p.database.windows.net" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
+      <Setting name="DbUpdateTimeout" value="3600" />
+      <Setting name="Domain" value="dev2.chalkable.com" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark;UID=chalkableadmin;Pwd=Hellowebapps1!"/>
+      <!-- Task settings -->
+      <Setting name="TaskProducer.SisImportProducer.Interval" value="300" />
+      <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />
+      <Setting name="TaskProducer.SisImportProducer.IntervalEnd" value="86400" />
+      <Setting name="TaskProducer.CleanupManager.Interval" value="600" />
+      <Setting name="TaskProducer.CleanupManager.IntervalStart" value="0" />
+      <Setting name="TaskProducer.CleanupManager.IntervalEnd" value="86400" />
+      <Setting name="TaskProducer.DbBackupProducer.Interval" value="86400" />
+      <Setting name="TaskProducer.DbBackupProducer.IntervalStart" value="0" />
+      <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
+      <!--tracking-->
+      <Setting name="mixpanel-token" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
+      <Setting name ="WebClientTimeout" value="300000"/>
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>
