@@ -9,12 +9,16 @@ import time
 import json
 import random
 import ast
+import string
+from time import sleep
+
 
 
 
 
 class BaseAuthedTestCase(unittest.TestCase):
     def setUp(self):
+
         # info for the teacher
         s = requests.Session()
         payload = {'UserName': user_email, 'Password': user_pwd, 'remember': 'false'}
@@ -109,10 +113,31 @@ class BaseAuthedTestCase(unittest.TestCase):
 
         # getting grading periods
         var_grading_periods_list = re.findall('var gradingPeriods = .+', page_as_one_string)
+
         var_grading_periods_string = ''.join(var_grading_periods_list)
         var_grading_periods_cut_off_list = re.findall('"id":[0-9]+', var_grading_periods_string)
         var_grading_periods_cut_off_string = ''.join(var_grading_periods_cut_off_list)
         self.var_grading_periods_final_list = re.findall('[0-9]+', var_grading_periods_cut_off_string)
+
+
+        # getting grading periods and dates
+        self.list_for_grading_periods_and_classes = []
+        var_grading_periods_list_for_dict = re.findall('var gradingPeriods = .+', page_as_one_string)
+        var_grading_periods_string_for_dict = ''.join(var_grading_periods_list_for_dict)
+        var_grading_periods_cut_off_string_for_dict = var_grading_periods_string_for_dict[30:-3]
+        dictionary_var_grading_periods_cut_off_string_for_dict = json.loads(var_grading_periods_cut_off_string_for_dict)
+        #print dictionary_var_grading_periods_cut_off_string_for_dict, type(dictionary_var_grading_periods_cut_off_string_for_dict)
+        dictionary_var_grading_periods_cut_off_string_for_dict_data = dictionary_var_grading_periods_cut_off_string_for_dict['data']
+        for j in dictionary_var_grading_periods_cut_off_string_for_dict_data:
+            #print j['startdate'], j['enddate']
+            self.list_for_grading_periods_and_classes.append({'startdate': j['startdate'], 'enddate': j['enddate']})
+
+
+
+
+
+
+
 
 
         #gradingComments
@@ -150,6 +175,7 @@ class BaseAuthedTestCase(unittest.TestCase):
 
 
 
+
         dictionary_var_classes_advanced_data_cut_off_string_data = dictionary_var_classes_advanced_data_cut_off_string['data']
 
 
@@ -163,6 +189,8 @@ class BaseAuthedTestCase(unittest.TestCase):
         var_markingPeriods_string = ''.join(var_marking_periods_list)
         var_markingPeriods_cut_off_string = var_markingPeriods_string[31:-3]
         dictionary_var_markingPeriods_cut_off_string = json.loads(var_markingPeriods_cut_off_string)
+
+
         self.dict_for_marking_period_date_startdate_endate = {}
         dictionary_var_markingPeriods_cut_off_string_data = dictionary_var_markingPeriods_cut_off_string['data']
        # print 'dictionary_var_markingPeriods_cut_off_string_data', dictionary_var_markingPeriods_cut_off_string_data
@@ -189,9 +217,12 @@ class BaseAuthedTestCase(unittest.TestCase):
            # print 'info_for_one_class',info_for_one_class
             self.dict_for_clas_marking_period[info_for_one_class['id']] = info_for_one_class['markingperiodsid']
 
+
+
         # getting list of classes
         for k in dictionary_var_markingPeriods_cut_off_string_data:
             self.list_of_classes.append(k['id'])
+
 
         self.session = s
 
@@ -247,10 +278,10 @@ class BaseAuthedTestCase(unittest.TestCase):
         r = s.get(chlk_server_url + url, headers=headers)
         return self.verify_response(r, status, success)
 
-    def postJSON(self, url, obj, status=200, success=True):
+    def postJSON(self, url, obj, status=200, success=True, files=None):
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
-        r = s.post(chlk_server_url + url, json=obj, headers=headers)
+        r = s.post(chlk_server_url + url, json=obj, headers=headers, files=files)
         return self.verify_response(r, status, success)
 
     def postJSON_Assessment(self, url, obj, status=200, success=True, files=None):
@@ -259,13 +290,11 @@ class BaseAuthedTestCase(unittest.TestCase):
         r = s.post(chlk_server_url_assessment + url, json=obj, headers=headers, files=files)
         return self.verify_response(r, status, success, 'Success')   
 
-    def post(self, url, params, status=200, success=True):
-
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
 
         try:
-            r = s.post(chlk_server_url + url, data=params, headers=headers)
+            r = s.post(chlk_server_url + url, data=params, headers=headers, files=files)
         except ValueError:
             self.assertTrue(False, 'Request failed, ' + url)
             return None
