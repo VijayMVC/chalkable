@@ -1,0 +1,35 @@
+mixin ReportCell(value)
+    .cell
+        div(data-tooltip=value, data-tooltip-type="overflow").text=value
+
+.setup-page
+    h2.page-title=Msg.Setup
+
+    .action-bar
+        .items
+            +ActionLink('setup', 'categoriesSetup')=Msg.Category(true)
+            +ActionLink('setup', 'commentsSetup').pressed=Msg.Comment(true)
+            +ActionLink('setup', 'classroomOptionSetup')=Msg.Options
+
+    +ActionForm('setup', 'deleteComments').no-working
+        .chlk-grid-container
+            .grid
+                .row.header
+                    .cell
+                        +Checkbox('allchecks', false).all-checkboxes
+                    .cell= Msg.Comment
+                    .cell= ''
+                each comment in self.getComments()
+                    -var disabledClick = !comment.isEditable() || !self.isAbleEdit()
+                    .row
+                        div(data-id=comment.getCommentId()).cell.check-container
+                            +Checkbox('commentyId', false, disabledClick).item-check
+                        .cell
+                            +ActionLink('setup', 'addEditComment', comment.getCommentId())(disabled=disabledClick ? "disabled" : null, data-tooltip=comment.getComment(), data-tooltip-type="overflow").text=comment.getComment()
+                        .cell.lock
+                            if comment.isSystem()
+                                .lock-icon(data-tooltip="Locked")
+        +Hidden('ids', '').ids-to-delete
+        .buttons-block
+            +ActionButton('setup', 'addEditComment')(type="button", disabled = !self.isAbleEdit()).chlk-button.blue-button=Msg.Add
+            BUTTON(type="submit", disabled='disabled').chlk-button.negative-button.delete-button=Msg.Delete

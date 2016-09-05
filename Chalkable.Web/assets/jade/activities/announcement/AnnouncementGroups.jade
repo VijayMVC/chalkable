@@ -1,0 +1,38 @@
+.dialog
+    .x-window-header
+        h1 Announcement Groups
+            .right.saved-block saved
+        .close.close-btn
+
+    +ActionForm('group', 'submitGroups')
+        +Hidden('groupIds', self.getSelected().map(function(item){return item.valueOf()}).join(',')).group-ids
+        +Hidden('requestId', self.getRequestId())
+        -var hiddenParams = self.getHiddenParams()
+        if hiddenParams
+            each key in Object.getOwnPropertyNames(hiddenParams)
+                +Hidden(key, hiddenParams[key])
+
+        .groups-container
+            table
+                tr
+                    td.name-td
+                        .column.groups
+                            h1.column-cell=Msg.My_Groups
+                                +ActionButton('group', 'editGroups', self.getRequestId(), hiddenParams && hiddenParams.id)(type="button").special-button2.edit-button=Msg.Edit
+                            each group in self.getGroups()
+                                .column-cell
+                                    +ActionLink('group', 'showGroupMembers', group.getId())(data-tooltip=group.getName(), data-tooltip-type="overflow").group-name.name
+                                        .text-container(data-tooltip = group.getName())=group.getName()
+                                    .box-checkbox.right(class = group.isWithStudents() ? '' : 'disabled' )
+                                        +Checkbox('group', self.isGroupChecked(group), !group.isWithStudents(), true)(data-id=group.getId().valueOf()).right.group-check
+                    td.name-td
+                        .column.schools
+                            h1.column-cell=Msg.Schools
+                    td.name-td
+                        .column.students
+                            h1.column-cell=Msg.Students
+
+        .buttons-container
+            +Button.special-button2.cancel.close.negative-button Cancel
+            +Button()(type="submit", disabled=(self.getSelected().length == 0)).special-button2.blue-button.add.add-groups Submit
+
