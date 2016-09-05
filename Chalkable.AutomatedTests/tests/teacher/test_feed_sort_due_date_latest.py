@@ -80,10 +80,10 @@ class TestFeed(BaseAuthedTestCase):
 
     def do_feed_list_and_verify(self, start, count=500):
         dictionary_get_items = self.get('/Feed/List.json?start='+str(start)+'&classId=&complete=false&count='+str(count))
-        #dictionary_verify_settingsforfeed = dictionary_get_items['data']['settingsforfeed']
-        #self.assertTrue('announcementtype' in dictionary_verify_settingsforfeed, 'announcementtype exists')
-        #self.assertTrue('sorttype' in dictionary_verify_settingsforfeed, 'sorttype exists')
-        #self.assertTrue('gradingperiodid' in dictionary_verify_settingsforfeed, 'announcementtype exists')
+        dictionary_verify_settingsforfeed = dictionary_get_items['data']['settingsforfeed']
+        self.assertTrue('announcementtype' in dictionary_verify_settingsforfeed, 'announcementtype exists')
+        self.assertTrue('sorttype' in dictionary_verify_settingsforfeed, 'sorttype exists')
+        self.assertTrue('gradingperiodid' in dictionary_verify_settingsforfeed, 'announcementtype exists')
         
         #announcementtype = str(dictionary_verify_settingsforfeed['announcementtype'])
         #sorttype = str(dictionary_verify_settingsforfeed['sorttype'])
@@ -113,7 +113,7 @@ class TestFeed(BaseAuthedTestCase):
                         return one_item['type']
 
                     self.assertTrue(get_item_date(last_item) >= get_item_date(item),
-                                    "Items are sorted not in earliest order" + ": " +
+                                    "Items are sorted not in latest order" + ": " +
                                     str(get_item_date(last_item)) + " " +
                                     str(get_item_date(item)) + " " + "item_type: " + str(get_item_type(last_item)) +
                                     " " + "item_id: " + str(get_item_id(last_item)))
@@ -124,7 +124,7 @@ class TestFeed(BaseAuthedTestCase):
             #sorted_list_dates = sorted(decoded_list, reverse=True)
             #reverse_list_to_str = ', '.join(sorted_list_dates)
             
-            #self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted not in latest order' + ": " + decoded_list_to_str + ' == ' + reverse_list_to_str)
+
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
     

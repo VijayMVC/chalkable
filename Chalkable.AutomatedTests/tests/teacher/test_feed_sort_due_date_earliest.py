@@ -72,8 +72,8 @@ class TestFeed(BaseAuthedTestCase):
 
         ##########################################################################################
 
-        self.settings_data = {'sortType':'0'}
-        
+        self.settings_data = {'sortType': '0'}
+
         self.post('/Feed/SetSettings.json?', self.settings_data)
     
         self.do_feed_list_and_verify(0)    
@@ -97,7 +97,7 @@ class TestFeed(BaseAuthedTestCase):
         if len(dictionary_verify_annoucementviewdatas_all) > 0:
             for item in dictionary_verify_annoucementviewdatas_all:
                 if last_item != None:
-                    def get_item_date(one_item): #creating new function
+                    def get_item_date(one_item):
                         if one_item['type'] == 3:
                             return one_item['lessonplandata']['startdate']
                         if one_item['type'] == 1:
@@ -116,114 +116,16 @@ class TestFeed(BaseAuthedTestCase):
                                     str(get_item_date(last_item)) + " " +
                                     str(get_item_date(item)) + " " + "item_type: " + str(get_item_type(last_item)) +
                                     " " + "item_id: " + str(get_item_id(last_item)))
-                    '''
-                    type = str(item['type'])
-                    if type == '3':
-                        lessonplandata = item['lessonplandata']
-                        for key, value in lessonplandata.iteritems():
-                            startdate = lessonplandata['startdate']
-                            one_type = lessonplandata['type']
-                            #list_for_types.append(one_type)
-                            #list_for_date.append(startdate)
-                            one_id = lessonplandata['id']
-                            #list_for_id.append(one_id)
-                            if last_item['type'] == 3:
-                                self.assertTrue(get_item_date(last_item) <= get_item_date(item),
-                                                "Items are sorted not in earliest order" + ": " +
-                                                str(last_item['lessonplandata']['startdate']) + " " +
-                                                str(startdate) + " " + str(one_type) + " " + str(one_id))
-                            if last_item['type'] == 1:
-                                self.assertTrue(last_item['classannouncementdata']['expiresdate'] <= startdate,
-                                                "Items are sorted not in earliest order" +
-                                                ": " + str(
-                                                    last_item['classannouncementdata']['expiresdate']) + " " + str(
-                                                    startdate) + " " + str(one_type) + " " + str(one_id))
-                            if last_item['type'] == 4:
-                                self.assertTrue(last_item['supplementalannouncementdata']['expiresdate'] <= startdate,
-                                                "Items are sorted not in earliest order" +
-                                                ": " + str(
-                                                    last_item['supplementalannouncementdata']['expiresdate']) + " " +
-                                                str(startdate) + " " + str(one_type) + " " + str(one_id))
-                            break
 
-                    if type == '1':
-                        classannouncementdata = item ['classannouncementdata']
-                        for key2, value2 in classannouncementdata.iteritems():
-                            expiresdate = classannouncementdata['expiresdate']
-                            one_type = classannouncementdata['type']
-                            #list_for_types.append(one_type)
-                            one_id = classannouncementdata['id']
-                            #list_for_date.append(expiresdate)
-                            #list_for_id.append(one_id)
-                            if last_item['type'] == 3:
-                                self.assertTrue(last_item['lessonplandata']['startdate'] <= startdate,
-                                                "Items are sorted not in earliest order" + ": " +
-                                                str(last_item['lessonplandata']['startdate']) + " " +
-                                                str(startdate) + " " + str(one_type) + " " + str(one_id))
-                            if last_item['type'] == 1:
-                                self.assertTrue(last_item['classannouncementdata']['expiresdate'] <= startdate,
-                                                "Items are sorted not in earliest order" +
-                                                ": " + str(
-                                                    last_item['classannouncementdata']['expiresdate']) + " " + str(
-                                                    startdate) + " " + str(one_type) + " " + str(one_id))
-                            if last_item['type'] == 4:
-                                self.assertTrue(last_item['supplementalannouncementdata']['expiresdate'] <= startdate,
-                                                "Items are sorted not in earliest order" +
-                                                ": " + str(
-                                                    last_item['supplementalannouncementdata']['expiresdate']) + " " +
-                                                str(startdate) + " " + str(one_type) + " " + str(one_id))
-                            break
 
-                    if type == '4':
-                        supplementalannouncementdata = item['supplementalannouncementdata']
-                        complete = item['complete']
-                        self.assertTrue(complete == False, "Verify item's state on false")
-                        for key2, value2 in supplementalannouncementdata.iteritems():
-                            expiresdate = classannouncementdata['expiresdate']
-                            one_type = classannouncementdata['type']
-                            #list_for_types.append(one_type)
-                            one_id = classannouncementdata['id']
-                            #list_for_date.append(expiresdate)
-                            #list_for_id.append(one_id)
-                            if last_item['type'] == 3:
-                                self.assertTrue(last_item['lessonplandata']['startdate'] <= startdate,
-                                                "Items are sorted not in earliest order" + ": " +
-                                                str(last_item['lessonplandata']['startdate']) + " " +
-                                                str(startdate) + " " + str(one_type) + " " + str(one_id))
-                            if last_item['type'] == 1:
-                                self.assertTrue(last_item['classannouncementdata']['expiresdate'] <= startdate,
-                                                "Items are sorted not in earliest order" +
-                                                ": " + str(
-                                                    last_item['classannouncementdata']['expiresdate']) + " " + str(
-                                                    startdate) + " " + str(one_type) + " " + str(one_id))
-                            if last_item['type'] == 4:
-                                self.assertTrue(last_item['supplementalannouncementdata']['expiresdate'] <= startdate,
-                                                "Items are sorted not in earliest order" +
-                                                ": " + str(
-                                                    last_item['supplementalannouncementdata']['expiresdate']) + " " +
-                                                str(startdate) + " " + str(one_type) + " " + str(one_id))
-                            break
-                    '''
                 last_item = item
-            decoded_list = [x.encode('utf-8') for x in list_for_date]
+            #@decoded_list = [x.encode('utf-8') for x in list_for_date]
             #@decoded_list_to_str = ', '.join(decoded_list)
 
             
 
             #sorted_list_dates = sorted(decoded_list, key = lambda d: map(int, d.split('-')))
             #reverse_list_to_str = ', '.join(sorted_list_dates)
-
-            #print len(decoded_list)
-
-            #for i in decoded_list:
-               # print i
-
-
-          #  for j in list_for_id:
-            #    print j
-
-           # for k in list_for_types:
-           #    print k
 
             #size1 = len(decoded_list)
            # i = 0
@@ -233,8 +135,6 @@ class TestFeed(BaseAuthedTestCase):
               #  i += 1
 
                 #self.assertTrue(decoded_list[i] >= decoded_list[i+1]-1, 'Items are sorted not in earliest order')
-
-            #self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted not in earliest order' + ": " + decoded_list_to_str + ' == ' + reverse_list_to_str)
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
     
