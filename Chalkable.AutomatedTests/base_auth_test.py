@@ -234,7 +234,7 @@ class BaseAuthedTestCase(unittest.TestCase):
 
         self.session_classmate = s_classmate
 
-    def post_instead_of_get(self, url, params, status=200, success=True):
+    def post(self, url, params, status=200, success=True):
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         try:
