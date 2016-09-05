@@ -61,7 +61,7 @@ namespace Chalkable.AcademicBenchmarkImport.Helper
         private Func<TQueueItem, TResultItem> _getFunc;      
     }
 
-    //Will be tested later if we need this
+    //TODO: Will be tested later if we need this.
     public class StandardRelationsLoader
     {
         public StandardRelationsLoader(IConnectorLocator abConnectorLocator, IEnumerable<Guid> standardIds)
@@ -80,9 +80,6 @@ namespace Chalkable.AcademicBenchmarkImport.Helper
         {
             while (!StandardIdsToProcess.IsEmpty)
             {
-                //if (StandardIdsToProcess.Count % 10000 == 0)
-                    //Debug.WriteLine("10000 elements proccessed");
-
                 Guid standardId;
                 while (StandardIdsToProcess.TryDequeue(out standardId))
                 {

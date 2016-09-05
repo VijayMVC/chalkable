@@ -130,7 +130,7 @@ namespace Chalkable.AcademicBenchmarkImport
             }
             catch (Exception e)
             {
-                Log.LogInfo($"Error: {e.Message}");
+                Log.LogError($"Error: {e.Message}");
                 Log.LogInfo("Transaction is going to rollback");
                 dbService.Rollback();
                 throw;
