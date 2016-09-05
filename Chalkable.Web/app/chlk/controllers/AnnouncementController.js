@@ -694,7 +694,8 @@ NAMESPACE('chlk.controllers', function (){
                         ann.getId(),
                         ann.getType(),
                         ann.getStandards(),
-                        app.getEncodedSecretKey())
+                        app.getEncodedSecretKey(),
+                        app.getAccessToken())
                     //.attach(this.validateResponse_())
                     .catchError(function(e){
                         this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), null, 'app-contents-fail');

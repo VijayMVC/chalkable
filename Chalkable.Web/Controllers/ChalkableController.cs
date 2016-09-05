@@ -8,6 +8,7 @@ using System.Web.Routing;
 using System.Web.WebPages;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.AcademicBenchmark;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
@@ -64,7 +65,7 @@ namespace Chalkable.Web.Controllers
 
         private bool HideSensitiveData()
         {
-            return Context!= null && Context.IsOAuthUser && (!Context.IsInternalApp || !Context.IsTrustedApp
+            return Context!= null && Context.IsOAuthUser && (!Context.IsInternalApp && !Context.IsTrustedApp
                 || (Context.OAuthApplication == Settings.ApiExplorerClientId));
         }
 
@@ -114,6 +115,7 @@ namespace Chalkable.Web.Controllers
         
         public IServiceLocatorMaster MasterLocator { get; protected set; }
         public IServiceLocatorSchool SchoolLocator { get; protected set; }
+        public IAcademicBenchmarkServiceLocator AcademicBenchmarkLocator { get; protected set; }
         protected UserContext Context => SchoolLocator != null ? SchoolLocator.Context : MasterLocator.Context;
 
         protected override void Initialize(RequestContext requestContext)
@@ -159,6 +161,7 @@ namespace Chalkable.Web.Controllers
         {
             SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(context);
             MasterLocator = SchoolLocator.ServiceLocatorMaster;
+            AcademicBenchmarkLocator = new AcademicBenchmarkServiceLocator(context);
         }
         
         public RedirectToRouteResult Redirect<T>(Expression<Action<T>> action) where T : Controller

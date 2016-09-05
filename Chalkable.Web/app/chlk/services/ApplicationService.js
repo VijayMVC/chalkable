@@ -321,9 +321,9 @@ NAMESPACE('chlk.services', function () {
                 chlk.models.id.AnnouncementId,
                 chlk.models.announcement.AnnouncementTypeEnum,
                 ArrayOf(chlk.models.standard.Standard),
-                String, Number, Number
+                String, String, Number, Number
             ]],
-            ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey, start_, count_){
+            ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey, accessToken, start_, count_){
                 var params = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARDS(standards);
                 params.apiRoot = _GLOBAL.location.origin;
                 params.mode = 'content-query'; // added this mode to settings
@@ -331,11 +331,12 @@ NAMESPACE('chlk.services', function () {
                 params.announcementType = announcementType.valueOf();
                 params.start = start_;
                 params.count = count_ || 5;
+                params.token = accessToken;
                 //disable Cache
                 params._= Math.random().toString(36).substr(2) + (new Date).getTime().toString(36);
 
-                var token = this.generateTokenForApiCall_(params, encodedKey);
-                return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, token, params);
+                var signature = this.generateTokenForApiCall_(params, encodedKey);
+                return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, signature, params);
             },
 
             [[Object, String]],

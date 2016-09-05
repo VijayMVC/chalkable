@@ -18,5 +18,16 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
                 Low = grLevel.Low
             };
         }
+
+        public static GradeLevelViewData Create(Data.AcademicBenchmark.Model.GradeLevel model)
+        {
+            return new GradeLevelViewData
+            {
+                Code = model.Code,
+                Description = model.Description,
+                Low = model.Low,
+                Height = model.High
+            };
+        }
     }
 }

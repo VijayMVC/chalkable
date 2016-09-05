@@ -14,7 +14,21 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         [JsonProperty("guid")]
         public Guid Id { get; set; }
 
+        [JsonProperty("number")]
+        public string Number { get; set; }
+
         [JsonProperty("descr")]
         public string Description { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var o = (Course)obj;
+            return Id == o.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

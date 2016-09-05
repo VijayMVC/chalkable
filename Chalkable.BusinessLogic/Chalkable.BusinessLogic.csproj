@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,6 +14,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <SkipPostSharp>True</SkipPostSharp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -139,7 +140,9 @@
     <Compile Include="Model\AcademicBenchmark\GradeLevel.cs" />
     <Compile Include="Model\AcademicBenchmark\ShortStandard.cs" />
     <Compile Include="Model\AcademicBenchmark\Standard.cs" />
+    <Compile Include="Model\AcademicBenchmark\StandardInfo.cs" />
     <Compile Include="Model\AcademicBenchmark\StandardRelations.cs" />
+    <Compile Include="Model\AcademicBenchmark\StandardRelationsInfo.cs" />
     <Compile Include="Model\AcademicBenchmark\Subject.cs" />
     <Compile Include="Model\AcademicBenchmark\SubjectDocument.cs" />
     <Compile Include="Model\AcademicBenchmark\Topic.cs" />
@@ -225,6 +228,15 @@
     <Compile Include="Security\NotificationSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
     <Compile Include="Security\UserSecurity.cs" />
+    <Compile Include="Services\AcademicBenchmark\AcademicBenchmarkServiceLocator.cs" />
+    <Compile Include="Services\AcademicBenchmark\AcademicBenchmarkServiceBase.cs" />
+    <Compile Include="Services\AcademicBenchmark\CourseService.cs" />
+    <Compile Include="Services\AcademicBenchmark\DocumentService.cs" />
+    <Compile Include="Services\AcademicBenchmark\GradeLevelService.cs" />
+    <Compile Include="Services\AcademicBenchmark\StandardService.cs" />
+    <Compile Include="Services\AcademicBenchmark\SubjectDocService.cs" />
+    <Compile Include="Services\AcademicBenchmark\SyncService.cs" />
+    <Compile Include="Services\AcademicBenchmark\TopicService.cs" />
     <Compile Include="Services\CrocodocService.cs" />
     <Compile Include="Services\DbService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementAssignedAttributeService.cs" />
@@ -416,6 +428,10 @@
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.AcademicBenchmark\Chalkable.Data.AcademicBenchmark.csproj">
+      <Project>{61935eee-bf16-477d-aa84-30555fc0f71c}</Project>
+      <Name>Chalkable.Data.AcademicBenchmark</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
       <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>

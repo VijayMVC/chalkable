@@ -13,6 +13,7 @@
       <Setting name="ChalkableSchoolDbServers" value="" />
       <Setting name="ChalkableSchoolTemplateDbName" value="" />
       <Setting name="DbUpdateTimeout" value="" />
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" value="" />
       <Setting name="RedisCache.ConcurentConnections" value="1" />
@@ -53,6 +54,8 @@
       <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
       <Setting name="ChalkableMaster" value="" />
       <Setting name="ChalkableSchool" value="" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!--<Setting name="ChalkableSchoolTemplate" value="" />-->
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
@@ -82,6 +85,8 @@
       <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
       <Setting name="ChalkableMaster" value="" />
       <Setting name="ChalkableSchool" value="" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!--<Setting name="ChalkableSchoolTemplate" value="" />-->
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />

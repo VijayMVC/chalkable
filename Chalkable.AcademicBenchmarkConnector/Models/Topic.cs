@@ -22,15 +22,15 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         public Course Course { get; set; }
         [JsonProperty("subject_doc")]
         public SubjectDocument SubjectDocument { get; set; }
+        [JsonProperty("subject")]
+        public Subject Subject { get; set; }
+        [JsonProperty("grade")]
+        public GradeLevelRange GradeLevel { get; set; }
+        [JsonProperty("adopt_year")]
+        public string AdoptYear { get; set; }
+
+
         public bool IsDeepest => Deepest == "Y";
         public bool IsActive => Status == "Active";
-    }
-
-    public class TopicStandards
-    {
-        [JsonProperty("topic")]
-        public Topic Topic { get; set; }
-        [JsonProperty("standards")]
-        public IEnumerable<Standard> Standards { get; set; }
     }
 }

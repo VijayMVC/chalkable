@@ -30,7 +30,7 @@ namespace Chalkable.API.Controllers
             {
                 try
                 {
-                    AuthorizeQueryRequest();
+                    await AuthorizeQueryRequest(token);
                     var res = GetApplicationContents(standards, start, count);
                     return ChlkJsonResult(res, true);
                 }
@@ -61,15 +61,15 @@ namespace Chalkable.API.Controllers
                 : await new ChalkableConnector(ChalkableAuthorization).Person.GetMe();
         }
 
-        private void AuthorizeQueryRequest()
+        private async Task AuthorizeQueryRequest(string accessToken)
         {
-            var token = Request.Headers[ChalkableAuthorization.AuthenticationHeaderName];
-            if (string.IsNullOrWhiteSpace(token))
+            var authenticationSignature = Request.Headers[ChalkableAuthorization.AuthenticationHeaderName];
+            if (string.IsNullOrWhiteSpace(authenticationSignature))
                 throw new ChalkableApiException("Security error. Missing token");
-            token = token.Replace($"{ChalkableAuthorization.AuthenticationSignature}:", "").Trim();
+            authenticationSignature = authenticationSignature.Replace($"{ChalkableAuthorization.AuthenticationSignature}:", "").Trim();
 
             var identityParams = GetQueryIdentityParams();
-            ChalkableAuthorization.AuthorizeQueryRequest(token, identityParams);
+            await ChalkableAuthorization.AuthorizeQueryRequest(authenticationSignature, identityParams, accessToken);
         }
 
         private IList<string> GetQueryIdentityParams()
