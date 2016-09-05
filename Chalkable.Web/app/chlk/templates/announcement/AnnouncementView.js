@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AnnouncementComment), 'announcementComments',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 
             [ria.templates.ModelPropertyBind],
@@ -65,6 +68,19 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'students',
+
+            function getChatCount(){
+                var res = 0;
+
+                this.getAnnouncementQnAs().forEach(function(item){
+                    if(item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+                        res+=1;
+
+                    res+=1;
+                });
+
+                return res || '';
+            },
 
             /*[ria.templates.ModelPropertyBind],
             Number, 'ownerAttachmentsCount',

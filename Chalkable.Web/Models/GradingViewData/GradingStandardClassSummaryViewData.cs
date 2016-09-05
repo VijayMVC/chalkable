@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models.GradingViewData
  
         public static GradingStandardClassSummaryViewData Create(GradingPeriod gradingPeriod
             , IList<GradingStandardInfo> gradingStandards, IList<ClassAnnouncement> announcements
-            , IList<AnnouncementStandard> announcementStandards)
+            , IList<AnnouncementStandard> announcementStandards, IList<ClaimInfo> claims)
         {
             var res = new GradingStandardClassSummaryViewData
                 {
@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models.GradingViewData
                 var annIds = announcementStandards.Where(x => x.StandardRef == kv.Key).Select(x => x.AnnouncementRef).ToList();
                 var anns = announcements.Where(x => annIds.Contains(x.Id)).ToList();
                 res.Items.Add(GradingStandardClassItemViewData.Create(anns, kv.Value.Average(x => x.NumericGrade)
-                    , kv.Value.First().Standard));
+                    , kv.Value.First().Standard, claims));
             }
             if(res.Items.Count > 0)
                 res.Avg = res.Items.Average(x => x.Avg);
@@ -43,13 +43,13 @@ namespace Chalkable.Web.Models.GradingViewData
         public IList<ClassAnnouncementViewData> Announcements { get; set; }
  
         public static GradingStandardClassItemViewData Create(IList<ClassAnnouncement> announcements,
-                                                              decimal? avg, Standard standard)
+                                                              decimal? avg, Standard standard, IList<ClaimInfo> claims)
         {
             return new GradingStandardClassItemViewData
                 {
                     ItemDescription = StandardViewData.Create(standard),
                     Avg = avg,
-                    Announcements = ClassAnnouncementViewData.Create(announcements)
+                    Announcements = ClassAnnouncementViewData.Create(announcements, claims)
                 };
         }
     }

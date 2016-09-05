@@ -1,8 +1,4 @@
-﻿
-
-
-
-CREATE Procedure spBeforeRestore
+﻿Create Procedure spBeforeRestore
 as
 begin transaction
 declare @chalkableTables table
@@ -15,9 +11,12 @@ values
 ('Notification'),
 ('AutoGrade'),
 ('PracticeGrade'),
+('AnnouncementCommentAttachment'),
+('AnnouncementComment'),
+('StudentAnnouncementApplicationMeta'),
 ('AnnouncementApplication'),
-('Attachment'),
 ('AnnouncementAttachment'),
+('Attachment'),
 ('AnnouncementQnA'),
 ('PrivateMessageRecipient'),
 ('PrivateMessage'),
@@ -29,7 +28,8 @@ values
 ('AnnouncementStandard'),
 ('StudentGroup'),
 ('Group'),
-
+('SupplementalAnnouncementRecipient'),
+('SupplementalAnnouncement'),
 ('AdminAnnouncement'),
 ('ClassAnnouncement'),
 ('LessonPlan'),

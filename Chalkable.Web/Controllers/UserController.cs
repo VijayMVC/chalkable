@@ -76,7 +76,7 @@ namespace Chalkable.Web.Controllers
         private void SwitchToRole(CoreRole role)
         {
             var context = MasterLocator.UserService.SwitchToRole(role);
-            ChalkableAuthentication.SignIn(context, false);
+            ChalkableAuthentication.SignIn(context, false, context.LoginTimeOut);
         }
 
         public ActionResult LogOut()
@@ -175,7 +175,7 @@ namespace Chalkable.Web.Controllers
             var context = logOnAction(userService);
             if (context != null)
             {
-                ChalkableAuthentication.SignIn(context, false);
+                ChalkableAuthentication.SignIn(context, false, context.LoginTimeOut);
                 if (context.DeveloperId.HasValue && !DemoUserService.IsDemoUser(context))
                     DeveloperAuthentication.SignIn(context, remember);
             }
@@ -184,25 +184,7 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult GetAccessToken(string login, string password, string clientId, string clientSecret, string redirectUri)
         {
-            try
-            {
-                var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-                var context = serviceLocator.UserService.Login(login, password);
-                if (context != null)
-                {
-                    var accessTokenUri = $"https://{Settings.WindowsAzureOAuthServiceNamespace}.accesscontrol.windows.net/v2/OAuth2-13/";
-                    var scope = Settings.WindowsAzureOAuthRelyingPartyRealm;
-                    var userInfo = OAuthUserIdentityInfo.Create(login, context.Role, context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
-                    return Json(new
-                    {
-                        token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userInfo, scope)
-                    }, 5);
-                }
-            }
-            catch (Exception)
-            {
-                return Json(false);
-            }
+            // THIS WAS REMOVED WITH ACS SUPPORT
             return Json(false);
         }
     }

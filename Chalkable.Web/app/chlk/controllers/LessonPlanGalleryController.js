@@ -38,23 +38,27 @@ NAMESPACE('chlk.controllers', function () {
                 var state = chlk.models.announcement.StateEnum.SUBMITTED,
                     categoryType = categoryType_ || this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, null);
                 var result = ria.async.wait([
-                    this.lessonPlanService.getLessonPlanTemplatesList(categoryType, filter_, sortType_, state, start_, count_),
+                    this.lessonPlanService.getLessonPlanTemplatesList(
+                        categoryType, filter_,
+                        sortType_ || chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
+                        state, start_, count_),
                     this.lpGalleryCategoryService.list()
                 ])
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var lessonPlans = result[0], lessonPlanCategories = result[1];
-                        this.lpGalleryCategoryService.cacheLessonPlanCategories(lessonPlanCategories);
                         return new chlk.models.announcement.LessonPlanGalleryViewData(
                             lessonPlans,
                             lessonPlanCategories,
                             sortType_ || chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
                             null,
                             categoryType,
-                            filter_,
-                            this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)
+                            filter_
                         );
                     }, this);
+
+                this.userTrackingService.viewGallery();
+
                 return this.PushOrUpdateView(chlk.activities.announcement.LessonPlanGalleryPage, result);
             },
 
@@ -109,8 +113,7 @@ NAMESPACE('chlk.controllers', function () {
                             sortType_ || chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
                             classId_,
                             categoryType_,
-                            filter_,
-                            this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)
+                            filter_
                         );
                     }, this);
 

@@ -29,16 +29,9 @@ where
 	or (@roleId = 3 and  exists(select * from ClassPerson where ClassRef = Class_Id and PersonRef = @personId and IsEnrolled = 1))
 	)
 
-select * from @class
+exec spSelectClassDetails @class
 
-select mpc.*
-from
-	MarkingPeriodClass mpc
-	join @class c on c.Class_Id = mpc.ClassRef
-
-select ct.*
-from ClassTeacher ct
-	join @class c on c.Class_Id = ct.ClassRef
+select * from Room
 
 if (@roleId = 3) begin
 exec spGetSchedule @schoolYearId, null, @personId, null, @roleId, @now, @now

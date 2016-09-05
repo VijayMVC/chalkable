@@ -18,7 +18,19 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'annOwner',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs'
+            String, 'title',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'type',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.people.User, 'owner',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.classes.Class, 'clazz'
 
         ])
 });

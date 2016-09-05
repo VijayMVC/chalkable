@@ -44,5 +44,15 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.CalendarDateService.Delete(dates);
         }
+
+        protected override void PrepareToDeleteInternal(IList<CalendarDay> entities)
+        {
+            var dates = entities.Select(x => new Date
+            {
+                Day = x.Date,
+                SchoolYearRef = x.AcadSessionID
+            }).ToList();
+            ServiceLocatorSchool.CalendarDateService.PrepareToDelete(dates);
+        }
     }
 }

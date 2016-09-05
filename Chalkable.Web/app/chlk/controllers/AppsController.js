@@ -262,8 +262,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[Number, Number, String, Object]],
-        function uploadPictureDeveloperAction(width, height, msg, file) {
-            if (!this.isValidFileExtension(file[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
+        function uploadPictureDeveloperAction(width, height, msg, fileList) {
+            if (!this.isValidFileExtension(fileList[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
                 return this.ShowMsgBox("Sorry, this picture format is invalid", 'Error', [{
                     text: 'Ok',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf(),
@@ -273,7 +273,7 @@ NAMESPACE('chlk.controllers', function (){
                 }]), null;
 
             var result = this.appsService
-                .uploadPicture(file, width, height)
+                .uploadPicture(fileList[0], width, height)
                 .attach(this.validateResponse_())
                 .then(function(id){
                     var pictureUrl = this.pictureService.getPictureUrl(id, width, height);
@@ -301,14 +301,14 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[String, Object]],
-        function uploadScreenshotDeveloperAction(screenshots_, file) {
+        function uploadScreenshotDeveloperAction(screenshots_, fileList) {
 
             var screenshotDims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS();
             var width = screenshotDims.width;
             var height = screenshotDims.height;
             var msg = "Screenshots";
 
-            if (!this.isValidFileExtension(file[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
+            if (!this.isValidFileExtension(fileList[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
                 return this.ShowMsgBox("Sorry, this picture format is invalid", 'Error', [{
                     text: 'Ok',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf(),
@@ -318,7 +318,7 @@ NAMESPACE('chlk.controllers', function (){
                 }]), null;
 
             var result = this.appsService
-                .uploadPicture(file, width, height)
+                .uploadPicture(fileList[0], width, height)
                 .attach(this.validateResponse_())
                 .then(function(id){
                     var screenshots = (screenshots_ || "").split(",");
@@ -444,7 +444,7 @@ NAMESPACE('chlk.controllers', function (){
                 appUrlAppend_ += 'contentId=' + contentId;
             if(standardsUrlComponents_)
                 appUrlAppend_ += '&' + standardsUrlComponents_;
-            return this.tryToAttachAction('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
+            return this.tryToAttachAction(annId, appId, announcementType, appUrlAppend_);
         },
 
         [chlk.controllers.StudyCenterEnabled()],
@@ -454,13 +454,13 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function openSuggestedAppTeacherAction(appId, annId, announcementType, appUrlAppend_){
-            return this.tryToAttachAction('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
+            return this.tryToAttachAction(annId, appId, announcementType, appUrlAppend_);
         },
 
 
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean, String]],
-        function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned, appUrlSuffix_){
+        [[chlk.models.id.AppId, String, String, Boolean, String]],
+        function openSuggestedAppFromExplorerAction(appId, appUrl, viewUrl, isBanned, appUrlSuffix_){
             if(viewUrl){
                 this.userTrackingService.openedAppFrom(appUrl, "explorer");
                 return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, null, appUrlSuffix_);
@@ -497,7 +497,7 @@ NAMESPACE('chlk.controllers', function (){
             var mode = chlk.models.apps.AppModes.ATTACH;
 
             var result = this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .getAccessToken(this.getCurrentPerson().getId(), null, appId)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 })
@@ -507,7 +507,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
+                        + '&token=' + encodeURIComponent(data.getToken())
                         + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
                         + '&announcementType=' + encodeURIComponent(announcementType.valueOf())
                         + (attributeId_ ? '&attributeId=' + encodeURIComponent(attributeId_.valueOf()) : '')
@@ -539,7 +539,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(app){
                     var viewUrl = app.getEditUrl()
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + app.getOauthCode()
+                        + '&token=' + encodeURIComponent(app.getToken())
                         + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
@@ -573,7 +573,7 @@ NAMESPACE('chlk.controllers', function (){
 
 
             var result = this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), url)
+                .getAccessToken(this.getCurrentPerson().getId(), url)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 }, this)
@@ -605,7 +605,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var app = new chlk.models.apps.AppAttachment.$create(
                         viewUrl,
-                        data.getAuthorizationCode(),
+                        data.getToken(),
                         announcementAppId_,
                         appData
                     );
@@ -745,14 +745,6 @@ NAMESPACE('chlk.controllers', function (){
 
              var isSchoolFlatRateEnabled = model.isSchoolFlatRateEnabled();
              var isClassFlatRateEnabled = model.isClassFlatRateEnabled();
-
-             var appPriceInfo = isFreeApp ? new chlk.models.apps.AppPrice()
-                                          :
-                                            new chlk.models.apps.AppPrice(
-                                                model.getCostPerUser(),
-                                                isClassFlatRateEnabled ? model.getCostPerClass() : null,
-                                                isSchoolFlatRateEnabled ? model.getCostPerSchool(): null
-                                            );
             var cats = this.getIdsList(model.getCategories(), chlk.models.id.AppCategoryId);
             var gradeLevels = this.getIdsList(model.getGradeLevels(), chlk.models.id.GradeLevelId);
             var appPermissions = this.getIdsList(model.getPermissions(), chlk.models.apps.AppPermissionTypeEnum);
@@ -801,7 +793,6 @@ NAMESPACE('chlk.controllers', function (){
                      model.getId(),
                      shortAppData,
                      appPermissions,
-                     appPriceInfo,
                      this.getCurrentPerson().getId(),
                      appAccess,
                      cats,
@@ -866,14 +857,12 @@ NAMESPACE('chlk.controllers', function (){
                     var pictureUrl = data.getBannerPictureUrl();
                     return ria.async.wait(
                             this.appsService.getAppAnalytics(data.getId()),
-                            this.appsService.getAppReviews(data.getId()),
                             this.appsService.getDevApps()
                         )
                         .attach(this.validateResponse_())
                         .then(function(res){
-                           var appReviews = res[1];
                            var analytics = res[0];
-                           var devApps = res[2];
+                           var devApps = res[1];
 
                            return new chlk.models.apps.AppGeneralInfoViewData(
                                 data.getName(),
@@ -922,7 +911,7 @@ NAMESPACE('chlk.controllers', function (){
             var appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
 
             return this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .getAccessToken(this.getCurrentPerson().getId(), null, appId)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 })
@@ -932,7 +921,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var viewUrl = appData.getUrl() + '?mode=' + mode
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
+                        + '&token=' + encodeURIComponent(data.getToken())
                         + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');

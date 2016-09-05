@@ -75,5 +75,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.PhoneService.Delete(phones);
         }
+
+        protected override void PrepareToDeleteInternal(IList<PersonTelephone> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

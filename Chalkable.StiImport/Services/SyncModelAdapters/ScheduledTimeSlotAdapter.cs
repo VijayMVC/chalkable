@@ -44,5 +44,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.Delete(sts);
         }
+
+        protected override void PrepareToDeleteInternal(IList<ScheduledTimeSlot> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

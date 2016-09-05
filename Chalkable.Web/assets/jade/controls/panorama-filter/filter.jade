@@ -4,13 +4,13 @@ mixin PanoramaFilter(years, standardizedTests, values, restoreController, restor
     .panorama-filter-ctn(attributes)
         +Hidden('filterValues', '').filters-value
         .with-line
-            -var yearsIds = values ? values.getSchoolYearIds() : []
-            +Select('SchoolYearIds')(multiple="true", data-placeholder="Select School Year").school-years-select.submit-after-change.external-items
+            -var selectedYears = values ? values.getAcadYears() : []
+            +Select('AcadYears')(multiple="true", data-placeholder="Select School Year").school-years-select.submit-after-change.external-items
                 each year in years
-                    +Option(year.getId().valueOf(), year.getName(), yearsIds.filter(function(item){return item == year.getId()}).length > 0)
+                    +Option(year, year, selectedYears.filter(function(item){return item == year}).length > 0)
 
-            +ActionButtonWithPrepend(restoreController, restoreAction, restoreParams).right.restore-btn Restore
-            BUTTON(type="submit", name="submitType", value="save").right Save
+            +ActionLink(restoreController, restoreAction, restoreParams)(data-tooltip="Restore filters").right.restore-btn
+            BUTTON(type="submit", name="submitType", value="save", data-tooltip="Save filters").right.save-btn
         .filters-block
             .filters-container
                 if values

@@ -41,5 +41,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             }).ToList();
             ServiceLocatorSchool.DayTypeService.Delete(dayTypes);
         }
+
+        protected override void PrepareToDeleteInternal(IList<DayType> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

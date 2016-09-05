@@ -10,9 +10,11 @@
             +Hidden('highlightedStudents').highlighted-students
             BUTTON(type='submit', name="submitType", value="check").x-hidden.submit-by-check
             +CloseOpen('Filter', !clazz.isShowFilters())
-                +PanoramaFilter(clazz.getSchoolYears(), clazz.getStandardizedTests(), clazz.getFilterSettings(), 'class', 'restorePanorama', [clazz.getId()])
+                +PanoramaFilter(clazz.getYears(), clazz.getStandardizedTests(), clazz.getFilterSettings(), 'class', 'restorePanorama', [clazz.getId()])
             .charts-part
-                +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)
+                +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)(
+                    userRole=self.getUserRole()
+                )
 
 
 

@@ -4,13 +4,14 @@
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 -var userRole = self.getUserRole()
 -var isAdmin = userRole.isAdmin()
+-var schoolYearRange = [{start: self.getSchoolYear() && self.getSchoolYear().getStartDate().getDate(), end: self.getSchoolYear() && self.getSchoolYear().getEndDate().getDate()}]
 
 .announcement-form.dialog.attach-dialog
     .x-window-header
         h1 LESSON PLAN
         a.close.close-btn
     .x-window-body
-        +ActionForm('announcement', 'onLessonPlanTemplateSave')(onlySubmitValidate=true).no-working
+        +ActionForm('announcement', 'onLessonPlanTemplateSave')(onlySubmitValidate=true).no-working.main-form
             .ann-form-container
                 +Hidden('id', announcement.getId().valueOf())
                 +Hidden('isedit', !!state)(data-isedit = !!state).is-edit
@@ -27,7 +28,7 @@
                                 )
                             .left-top-container
                                 .categories-container.i-b
-                                    label(for="galleryCategoryId").main-lable Category:
+                                    label(for="galleryCategoryId").main-label Category:
                                     #galleryCategoryForSearchContainer
                                         +Select('galleryCategoryId')(disabled = !!state)#galleryCategoryId
                                             +Option('', 'Select category', true)
@@ -60,7 +61,7 @@
                                 data-options={
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
-                                    dateRanges: self.getClassScheduleDateRanges()
+                                    dateRanges: isAdmin ? schoolYearRange : self.getClassScheduleDateRanges()
                                 },
                                 data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
                                 placeholder=Msg.Start_date,
@@ -74,7 +75,7 @@
                                 data-options={
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
-                                    dateRanges: self.getClassScheduleDateRanges()
+                                    dateRanges: isAdmin ? schoolYearRange : self.getClassScheduleDateRanges()
                                 },
                                 data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
                                 placeholder=Msg.End_date,
@@ -87,9 +88,24 @@
                                 label(for="ann-hidefromstudents")=Msg.Hide_from_Students
                                 +SlideCheckbox('hidefromstudents', isAdmin ? true: lessonPlan.isHiddenFromStudents(), false, true, isAdmin)(
                                     data-tooltip-timeout=500,
-                                    data-tooltip=Msg.Hide_From_Student_Tooltip_Message,
-                                    readonly = !!state
+                                    data-tooltip=Msg.Hide_From_Student_Tooltip_Message
                                 )
+                            .check-box-container
+                                label(for="ann-discussionenabled")=Msg.Class_Discussion
+                                +SlideCheckbox('discussionenabled', lessonPlan.isDiscussionEnabled(), false, !!state)(
+                                    data-isdiscussionenabled=lessonPlan.isDiscussionEnabled(),
+                                    data-tooltip-timeout=500
+                                ).discussion-option
+                            .check-box-container
+                                label(for="ann-previewcommentsenabled")=Msg.Preview_Comments
+                                +SlideCheckbox('previewcommentsenabled', lessonPlan.isPreviewCommentsEnabled(), false, !!state || !lessonPlan.isDiscussionEnabled())(
+                                    data-tooltip-timeout=500
+                                ).preview-comments-option
+                            .check-box-container
+                                label(for="ann-requirecommentsenabled")=Msg.Require_Comments
+                                +SlideCheckbox('requirecommentsenabled', lessonPlan.isRequireCommentsEnabled(), false, !!state || !lessonPlan.isDiscussionEnabled())(
+                                    data-tooltip-timeout=500
+                                ).require-comments-option
                             if self.isStudyCenterEnabled()
                                 .check-box-container.gallery
                                     label(for="in-gallery-personal-public") Gallery

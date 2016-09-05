@@ -157,8 +157,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
             else
-                conds.Add(LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId);
-            
+                conds.Add(LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId);           
 
             if (lpGalleryCategoryId.HasValue)
                 conds.Add(LessonPlan.LP_GALERRY_CATEGORY_REF_FIELD, lpGalleryCategoryId);
@@ -234,11 +233,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected DbQuery SelectLessonPlan(QueryCondition condition, int? callerId = null)
         {
             var dbQuery = new DbQuery();
-            var classTeacherSql = !callerId.HasValue ? "cast(0 as bit)" :
-                            string.Format(@"(select cast(case when count(*) > 0 then 1 else 0 end as bit)
-                                                     from [{0}] where [{0}].[{1}] = {2}  and [{0}].[{3}] = [{4}].[{5}])",
+            var classTeacherSql = "cast(0 as bit)";
+            if (callerId.HasValue)
+            {
+                classTeacherSql = string.Format(@"(select count(*) from [{0}] where [{0}].[{1}] = {2}  and [{0}].[{3}] = [{4}].[{5}])",
                               "ClassTeacher", ClassTeacher.PERSON_REF_FIELD, callerId, ClassTeacher.CLASS_REF_FIELD,
                               LessonPlan.VW_LESSON_PLAN_NAME, LessonPlan.CLASS_REF_FIELD);
+
+                classTeacherSql = $"cast(case when {nameof(LessonPlan.GalleryOwnerRef)} = {callerId} or {classTeacherSql} > 0 then 1 else 0 end as bit)";
+            }
 
             var selectSet = $"{LessonPlan.VW_LESSON_PLAN_NAME}.*, {classTeacherSql} as IsOwner";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, LessonPlan.VW_LESSON_PLAN_NAME);
@@ -256,10 +259,12 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if(additionalParams == null)
                 additionalParams = new Dictionary<string, object>();
             
-            additionalParams.Add("schoolYearId", schoolYearId);
+            additionalParams.Add("schoolYearId", query.ClassId.HasValue ? (int?)null : schoolYearId);
             additionalParams.Add("classId", query.ClassId);
 
-            return InternalGetAnnouncements<LessonPlansQuery>(procedureName, query, additionalParams);
+            var res = InternalGetAnnouncements<LessonPlansQuery>(procedureName, query, additionalParams);
+
+            return res;
         }
         public AnnouncementQueryResult GetLessonPlansOrderedByDate(LessonPlansQuery query)
         {
@@ -350,7 +355,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition
                 {
                     {Announcement.TITLE_FIELD, title},
-                    {LessonPlan.LP_GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual}
+                    {nameof(LessonPlan.InGallery), true }
                 };
             if (excludedLessonPlanId.HasValue)
                 conds.Add(Announcement.ID_FIELD, excludedLessonPlanId, ConditionRelation.NotEqual);
@@ -385,7 +390,20 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return result.ToDictionary(x => x.FromAnnouncementId, y => y.ToAnnouncementId);
         }
 
-        
+        public void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        {
+            if (ids == null || ids.Count == 0)
+                return;
+
+            var @params = new Dictionary<string, object>
+            {
+                ["ids"] = ids,
+                ["startDate"] = startDate,
+                ["classId"] = classId
+            };
+
+            ExecuteStoredProcedure("spAdjustLessonPlanDates", @params);
+        }
     }
 
 

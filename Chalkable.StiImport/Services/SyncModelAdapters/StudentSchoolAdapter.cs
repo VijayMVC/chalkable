@@ -29,13 +29,20 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void UpdateInternal(IList<StudentSchool> entities)
         {
-            //No update here
+            //needed for resync
+            ServiceLocatorSchool.StudentService.EditStudentSchools(entities.Select(Selector).ToList());
         }
 
         protected override void DeleteInternal(IList<StudentSchool> entities)
         {
             var ss = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StudentService.DeleteStudentSchools(ss);
+        }
+
+        protected override void PrepareToDeleteInternal(IList<StudentSchool> entities)
+        {
+            var ss = entities.Select(Selector).ToList();
+            ServiceLocatorSchool.StudentService.PrepareToDeleteStudentSchools(ss);
         }
     }
 }

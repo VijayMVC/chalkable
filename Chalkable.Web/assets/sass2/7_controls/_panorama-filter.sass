@@ -3,6 +3,28 @@
 
   .restore-btn
     margin-left: 10px
+    width: 24px
+    height: 24px
+    display: inline-block
+    +icons-24-sprite(restore)
+
+  .save-btn
+    width: 24px
+    height: 24px
+    display: inline-block
+    +icons-24-sprite(save-filters)
+    border: none
+    +box-shadow(none)
+    padding: 0
+
+    &:hover
+      +icons-24-sprite(save-filters)
+
+  .restore-btn, .save-btn
+    opacity: 0.6
+
+    &:hover
+      opacity: 1
 
   SELECT.external-items+DIV.chosen-container-multi
     left: 230px
@@ -46,6 +68,11 @@
   .filter-block
     position: relative
     margin-bottom: 30px
+
+    .delete-btn
+      right: auto
+      top: 3px
+      display: inline-block
 
     .v-line
       position: absolute

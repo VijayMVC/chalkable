@@ -99,7 +99,6 @@ NAMESPACE('chlk.controllers', function () {
                 var model = new chlk.models.announcement.FeedAnnouncementViewData();
                 model.setCategories(list);
                 var activity = this.userIsAdmin() ? chlk.activities.announcement.LessonPlanFormDialog : chlk.activities.announcement.LessonPlanFormPage;
-                this.BackgroundUpdateView(activity, model, 'right-categories');
                 this.BackgroundUpdateView(activity, model, 'categories');
             }
         ]);

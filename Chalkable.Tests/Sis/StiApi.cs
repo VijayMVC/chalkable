@@ -35,371 +35,219 @@ using StudentContact = Chalkable.StiConnector.SyncModel.StudentContact;
 using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
 using User = Chalkable.StiConnector.SyncModel.User;
 using UserSchool = Chalkable.StiConnector.SyncModel.UserSchool;
+using BellSchedule = Chalkable.StiConnector.SyncModel.BellSchedule;
+using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
+using PersonLanguage = Chalkable.StiConnector.SyncModel.PersonLanguage;
 
 
 namespace Chalkable.Tests.Sis
 {
-    public class StiApi : TestBase
+    public partial class StiApi : TestBase
     {
+        private SyncResult<T> GetTableData<T>(Guid districtId, long? version) where T : SyncModel
+        {
+            var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
+
+            District d;
+            using (var uow = new UnitOfWork(mcs, false))
+            {
+                var da = new DistrictDataAccess(uow);
+                d = da.GetById(districtId);
+            }
+            var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
+            var items = (cl.SyncConnector.GetDiff(typeof(T), version) as SyncResult<T>);
+            return items;
+        }
+
+        private SyncResult<T> GetTableData<T>(Guid districtId) where T : SyncModel
+        {
+            var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
+
+            District d;
+            using (var uow = new UnitOfWork(mcs, false))
+            {
+                var da = new DistrictDataAccess(uow);
+                d = da.GetById(districtId);
+            }
+            var cs = $"Data Source={d.ServerUrl};Initial Catalog={d.Id};UID=chalkableadmin;Pwd=Hellowebapps1!";
+            long? version;
+            using (var uow = new UnitOfWork(cs, true))
+            {
+                var name = typeof (T).Name;
+                version = (new SyncVersionDataAccess(uow)).GetAll().First(x => x.TableName == name).Version;
+            }
+            
+            Debug.WriteLine($"version {version}");
+            var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
+            var items = (cl.SyncConnector.GetDiff(typeof(T), version) as SyncResult<T>);
+            return items;
+        }
+
+
         [Test]
         public void SyncTest()
         {
-            var cl = ConnectorLocator.Create("Chalkable", "Gq1Yo2Rp6", "https://519217.stiinformationnow.com/API/");
-            var items = (cl.SyncConnector.GetDiff(typeof(CourseType), 1706917) as SyncResult<CourseType>);
+            var items = GetTableData<Person>(Guid.Parse("c548d2a9-e4f6-4476-9834-33f105cc10a6"));
             Print(items.Inserted);
             Print(items.Updated);
             Print(items.Deleted);
         }
 
         [Test]
+        public void FixMissingSchoolUsersSync()
+        {
+            var districtIds = new List<Guid>
+            {
+                Guid.Parse("5f0873ba-f152-483c-9ee5-0dafcce92131"),
+                //Guid.Parse("B2139E91-8A07-43D1-A609-6D7EA711A391"),
+            };
+            FixMissingSchoolUsersSync(districtIds);
+        }
+
+        [Test]
+        public void FixClassPersonInsert()
+        {
+            var districtIds = new List<Guid>
+            {
+                Guid.Parse("69b1f18e-333e-4aa8-83d5-2647edea4a48"),
+            };
+            ForEachDistrict(districtIds, delegate (District d, ConnectorLocator cl, UnitOfWork u)
+            {
+                var da = new ClassPersonDataAccess(u);
+                var inDb = da.GetAll();
+
+                var new_ = (cl.SyncConnector.GetDiff(typeof(StudentScheduleTerm), 25063934) as SyncResult<StudentScheduleTerm>).Inserted;
+
+                var toDELETE =
+                    inDb.Where(
+                        x =>
+                            new_.Any(
+                                y =>
+                                    x.PersonRef == y.StudentID && x.ClassRef == y.SectionID &&
+                                    x.MarkingPeriodRef == y.TermID)).ToList();
+
+
+                toDELETE.ForEach(x=>Debug.WriteLine($"{x.PersonRef} {x.ClassRef} {x.MarkingPeriodRef}"));
+                da.Delete(toDELETE);
+            });
+        }
+
+        [Test]
+        public void DisableStudentSchoolYearHomeroomConstraint()
+        {
+            var districtIds = new List<Guid>
+            {
+                Guid.Parse("6c801aac-4d1c-4a70-8e06-d82ef6846a31"),
+                //Guid.Parse("aa707676-1548-4cdc-af84-2a15257c95bd"),
+                //Guid.Parse("53d7cbd7-cd3e-4a50-9258-8c1f6daedb61"),
+                //Guid.Parse("6c801aac-4d1c-4a70-8e06-d82ef6846a31"),
+                //Guid.Parse("c9c9ad32-1576-45e6-8f92-39de929f4554"),
+                //Guid.Parse("26a3a198-e329-4a34-a6e0-814c76ad45cb"),
+                //Guid.Parse("747BC5D3-C453-42F3-AF54-868351ACFEE4"),
+                //Guid.Parse("27e81a8d-772c-430f-8886-24b3b3d21df8"),
+                //Guid.Parse("509138b6-db56-45ee-8c26-592abe4e1c5a"),
+                //Guid.Parse("77a5f7c0-a97e-448f-b619-72799719dc78"),
+                //Guid.Parse("ef4f14b7-13d0-4710-95c3-124537284880"),
+                //Guid.Parse("0972d700-06c4-49f9-9b69-ad76e07a76f8"),
+            };
+            ForEachDistrict(districtIds, delegate (District d, UnitOfWork u)
+            {
+                var c = u.GetTextCommand("ALTER TABLE StudentSchoolYear NOCHECK CONSTRAINT FK_StudentSchoolYear_Homeroom");
+                //ALTER TABLE StudentSchoolYear WITH CHECK CHECK CONSTRAINT FK_StudentSchoolYear_Homeroom
+                c.ExecuteNonQuery();
+            });
+            //
+        }
+
+        [Test]
+        public void FixGradeLevelNumber()
+        {
+            var districtIds = new List<Guid>
+            {
+                Guid.Parse("d5b5202e-7ae7-4a7a-9a37-61944fe8c1bb"),
+
+                //Guid.Parse("6afa2170-6a18-43d2-b4a0-81a42c6a75dd"),
+
+                //Guid.Parse("1ebcbf07-bcad-4c75-b692-6298a164f9b9"),
+
+                //Guid.Parse("667416fc-7ece-40bb-b931-1273c495280d"),
+
+                //Guid.Parse("9067d336-bfbd-410d-856c-ba5ea5ae91fa"),
+
+                
+            };
+            ForEachDistrict(districtIds, delegate (District d, UnitOfWork u)
+            {
+                var c = u.GetTextCommand("Update GradeLevel set Number = Number + 100");
+                c.ExecuteNonQuery();
+            });
+            //
+        }
+
+        [Test]
+        public void FixBellScheduleDelete()
+        {
+            var ids = new List<Guid>
+            {
+                Guid.Parse("667416FC-7ECE-40BB-B931-1273C495280D"),
+                //Guid.Parse("1ebcbf07-bcad-4c75-b692-6298a164f9b9"),
+                //Guid.Parse("42bf4a08-5a1a-488a-9a41-812421e21df8"),
+                //Guid.Parse("76ec8972-ca7a-4faf-adb2-f9c48adfeed6"),
+                
+
+            };
+            foreach (var guid in ids)
+            {
+                FixBellScheduleDelete(guid);
+            }
+        }
+
+        [Test]
+        public void FixRoomDelete()
+        {
+            var ids = new List<Guid>
+            {
+                Guid.Parse("e02c0198-b69b-47f6-871e-c4de3ecbbe1e"),
+                Guid.Parse("f754b2e4-d360-4922-8c9a-d5e21fc3007c"),
+                Guid.Parse("cdb64b27-54e4-40b4-8807-c4037867e751"),
+                //Guid.Parse("f754b2e4-d360-4922-8c9a-d5e21fc3007c"),
+            };
+            foreach (var guid in ids)
+            {
+                FixRoomDelete(guid);
+            }
+        }
+
+
+
+        [Test]
         public void FixUserSchoolSync()
         {
             var ids = new List<Guid>
             {
-                Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
+                Guid.Parse("8DC08D3A-CC63-4063-9427-132898835057"),
+                //Guid.Parse("E094804D-D775-42C9-949F-4617C9E6299C"),
+                //Guid.Parse("428CA1B1-BC79-4096-981A-955EF5B2A74B"),
 
-                Guid.Parse("F76407F1-5AD1-4B92-BE5F-659DC3E15BF1"),
+                //Guid.Parse("0972D700-06C4-49F9-9B69-AD76E07A76F8"),
+                //Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
+                //Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
 
-                Guid.Parse("FC507B44-64C3-40B6-8082-9FDC4B0EA33A"),
 
-                Guid.Parse("E02C0198-B69B-47F6-871E-C4DE3ECBBE1E"),
-
-                Guid.Parse("1C46F721-D79F-40C4-A0B6-68D3D0A73D82"),
             };
             foreach (var guid in ids)
             {
-                FixUserSchoolSync(guid);
-            }
-        }
-
-        public void FixUserSchoolSync(Guid districtid)
-        {
-            var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
-            
-            District d;
-            IList<Data.Master.Model.User> existingUsers;
-            using (var uow = new UnitOfWork(mcs, true))
-            {
-                var da = new DistrictDataAccess(uow);
-                d = da.GetById(districtid);
-                var conds = new SimpleQueryCondition("DistrictRef", districtid, ConditionRelation.Equal);
-                existingUsers = (new UserDataAccess(uow)).GetAll(conds);
-
-                uow.Commit();
-            }
-            var cs = String.Format("Data Source={0};Initial Catalog={1};UID=chalkableadmin;Pwd=Hellowebapps1!", d.ServerUrl, d.Id);
-            IList<SyncVersion> versions;
-            using (var uow = new UnitOfWork(cs, true))
-            {
-                versions = (new SyncVersionDataAccess(uow)).GetAll();
-                uow.Commit();
-            }
-
-            var cl = ConnectorLocator.Create("Chalkable", d.SisPassword, d.SisUrl);
-            var addedUsers = (cl.SyncConnector.GetDiff(typeof(User), versions.First(x=>x.TableName=="User").Version) as SyncResult<User>).Inserted;
-            var AllUsers = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
-            var addedUserSchools = (cl.SyncConnector.GetDiff(typeof(UserSchool), versions.First(x => x.TableName == "UserSchool").Version) as SyncResult<UserSchool>).Inserted;
-
-            IList<Data.Master.Model.User> users = new List<Data.Master.Model.User>();
-            var ids = addedUserSchools.Select(x => x.UserID).Distinct();
-            foreach (var addedUserSchool in ids)
-            {
-                if (existingUsers.All(x => x.SisUserId != addedUserSchool))
+                try
                 {
-                    if (addedUsers.All(x => x.UserID != addedUserSchool))
-                    {
-                        var sisu = AllUsers.First(x => x.UserID == addedUserSchool);
-                        Data.Master.Model.User u = new Data.Master.Model.User
-                        {
-                            Id = Guid.NewGuid(),
-                            DistrictRef = districtid,
-                            FullName = sisu.FullName,
-                            Login = String.Format("user{0}_{1}@chalkable.com", sisu.UserID, districtid),
-                            Password = "1Ztq1N1GZ95sasjFa54ikw==",
-                            SisUserName = sisu.UserName,
-                            SisUserId = sisu.UserID
-                        };
-                        users.Add(u);
-                    }
+                    FixMissingUsersSync(guid);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
                 }
             }
-
-            
-            using (var uow = new UnitOfWork(mcs, true))
-            {
-                
-                (new UserDataAccess(uow)).Insert(users);
-                uow.Commit();
-            }
-        }
-
-        [Test]
-        public void FixUserSyncDistricts()
-        {
-            FixUserSyncAllDistricts();
-        }
-
-        public void FixUserSyncAllDistricts()
-        {
-            var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
-
-            IList<District> districts;
-            using (var uow = new UnitOfWork(mcs, true))
-            {
-                var da = new DistrictDataAccess(uow);
-                districts = da.GetAll();
-            }
-            int cnt = 30;
-            List<District>[] lists = new List<District>[cnt];
-            for (int i = 0; i < cnt; i++)
-                lists[i] = new List<District>();
-            for (int i = 0; i < districts.Count; i++)
-            {
-                lists[i%30].Add(districts[i]);
-            }
-            Thread[] threads = new Thread[cnt];
-            for (int i = 0; i < cnt; i++)
-            {
-                int ii = i;
-                var t = new Thread(() =>
-                {
-                    int k = ii;
-                    for (int j = 0; j < lists[k].Count; j++)
-                    {
-                        FixUserSync(lists[k][j].Id);
-                        Debug.WriteLine($"{k} {j} completed");
-                    }
-                });
-                threads[i] = t;
-                t.Start();
-            }
-            for (int i = 0; i < cnt; i++)
-                threads[i].Join();
-        }
-
-        public void FixUserSync(Guid districtid)
-        {
-            StringBuilder log = new StringBuilder();
-            try
-            {
-                var mcs = "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
-
-                District d;
-                IList<Data.Master.Model.User> chalkableUsers;
-                using (var uow = new UnitOfWork(mcs, true))
-                {
-                    var da = new DistrictDataAccess(uow);
-                    d = da.GetById(districtid);
-                    var conds = new SimpleQueryCondition("DistrictRef", districtid, ConditionRelation.Equal);
-                    chalkableUsers = (new UserDataAccess(uow)).GetAll(conds);
-                }
-                //var cs = String.Format("Data Source={0};Initial Catalog={1};UID=chalkableadmin;Pwd=Hellowebapps1!", d.ServerUrl, d.Id);
-
-                var cl = ConnectorLocator.Create("Chalkable", d.SisPassword, d.SisUrl);
-                var inowUsers = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
-                var st = new HashSet<int>(chalkableUsers.Select(x => x.SisUserId.Value).ToList());
-
-                IList<Data.Master.Model.User> users = new List<Data.Master.Model.User>();
-                foreach (var sisu in inowUsers)
-                    if (!st.Contains(sisu.UserID))
-                    {
-                        Data.Master.Model.User u = new Data.Master.Model.User
-                        {
-                            Id = Guid.NewGuid(),
-                            DistrictRef = districtid,
-                            FullName = sisu.FullName,
-                            Login = String.Format("user{0}_{1}@chalkable.com", sisu.UserID, districtid),
-                            Password = "1Ztq1N1GZ95sasjFa54ikw==",
-                            SisUserName = sisu.UserName,
-                            SisUserId = sisu.UserID
-                        };
-                        users.Add(u);
-                        log.AppendLine(sisu.UserID.ToString());
-                    }
-
-                using (var uow = new UnitOfWork(mcs, true))
-                {
-
-                    (new UserDataAccess(uow)).Insert(users);
-                    uow.Commit();
-                }
-                log.AppendLine($"{users.Count} users were added");
-            }
-            catch (Exception ex)
-            {
-                log.AppendLine(ex.Message);
-                log.AppendLine(ex.StackTrace);
-            }
-            
-            File.WriteAllText($"c:\\tmp\\logs\\{districtid}.txt", log.ToString());
-        }
-
-        private void Print(IEnumerable<Standard> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.StandardID} {item.ParentStandardID} {item.StandardSubjectID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<Person> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.PersonID}, {item.FirstName}, {item.LastName}, {item.DateOfBirth}, {item.GenderDescriptor}, {item.PhysicalAddressID}, {item.UserID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<StudentScheduleTerm> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.StudentID} {item.SectionID} {item.TermID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<PersonTelephone> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.PersonID} {item.TelephoneNumber} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
         }
         
-        private void Print(IEnumerable<Course> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.CourseID} {item.CourseTypeID} {item.GradingScaleID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<User> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.UserID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-        
-        private void Print(IEnumerable<UserSchool> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.UserID} {item.SchoolID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<Room> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.RoomID} {item.RoomNumber} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<GradeLevel> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.GradeLevelID} {item.Name} {item.Sequence} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<StudentContact> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.StudentID} {item.RelationshipID}  {item.ContactID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<ContactRelationship> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.ContactRelationshipID} {item.Name} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<GradingScale> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.GradingScaleID} {item.Name} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<Student> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.StudentID} {item.UserID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<Address> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.AddressID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        private void Print(IEnumerable<CourseType> items)
-        {
-            foreach (var item in items)
-            {
-                Debug.WriteLine($"{item.CourseTypeID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
-            }
-            Debug.WriteLine("---------------------------------");
-        }
-
-        [Test]
-        public void Test4()
-        {
-            var cl = ConnectorLocator.Create("Chalkable", "8nA4qU4yG", "http://sandbox.sti-k12.com/chalkable/api/");
-            var items = (cl.SyncConnector.GetDiff(typeof(AcadSession), null) as SyncResult<AcadSession>).All.ToList();
-            items = items.ToList();
-
-            var sql = new StringBuilder();
-            sql.Append(@"declare @sy table (id int, ArchiveDate datetime2 null) 
-                         insert into @sy
-                         values");
-
-            foreach ( var item in items)
-            {
-                var s = string.Format("({0},{1}),", item.AcadSessionID, item.ArchiveDate.HasValue ? "cast('" + item.ArchiveDate.Value + "' as datetime2)" : "null");
-                sql.Append(s);
-            }
-            sql.Append(" ").Append(@"update SchoolYear
-                                    set ArchiveDate = sy.ArchiveDate
-                                    from SchoolYear 
-                                    join @sy sy on SchoolYear.Id = sy.Id");
-
-        
-            Debug.WriteLine(sql.ToString());
-        }
-
-        [Test]
-        public void Test3()
-        {
-            Debug.WriteLine(DateTime.Now.Month);
-        }
 
         [Test]
         public void SectionPanoramaApiTest()

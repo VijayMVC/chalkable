@@ -1,3 +1,21 @@
+.top-green-info
+  position: absolute
+  background: #e9f6ed
+  color: #41b768
+  font-weight: bold
+  box-shadow: none
+  width: 260px
+  left: 50%
+  margin-left: -130px
+  top: 0
+  line-height: 35px
+  border: 1px solid #41b768
+  text-align: center
+  border-radius: 3px
+
+  &:hover
+    opacity: 1
+
 .lesson-plan-form-dialog
   .dialog
     width: 880px
@@ -26,6 +44,14 @@
     margin-bottom: 15px
 
 .announcement-import-dialog
+  .dialog
+    width: 750px
+
+  .row-block
+    .name-td:not(.check)
+      border-right: 1px solid #ebebeb
+
+.announcement-import-dialog, .categories-import-dialog
   .double-select
     width: 150px
     margin-left: 4px
@@ -48,9 +74,6 @@
       line-height: 40px
       font-size: 14px
       border-bottom: 1px solid #ebebeb
-
-    .name-td:nth-child(2), .name-td:nth-child(3)
-      border-right: 1px solid #ebebeb
 
   LABEL.text
     font-weight: bold
@@ -89,8 +112,6 @@
         width: 190px
 
   .dialog
-    width: 750px
-
     .buttons-container
       margin: 0
 
@@ -118,22 +139,6 @@
 
   .title-block-container
     position: relative
-
-  #view-imported-button
-    position: absolute
-    background: #e9f6ed
-    color: #41b768
-    font-weight: bold
-    border-color: #41b768
-    box-shadow: none
-    width: 260px
-    left: 50%
-    margin-left: -130px
-    top: 0
-    line-height: 35px
-
-    &:hover
-      opacity: 1
 
   .action-bar
     .items
@@ -178,23 +183,11 @@
   .ann-form-container > *
     margin-bottom: 24px
 
-  .title-block-container:not(.with-date):not(.with-gallery-id)
-    .save-title-btn
-      display: none
-
   .title-block
     margin-top: 16px
 
-    &.class-announcement:not(.active)
-      .input-container
-        display: none
-
-      .save-title-btn
-        display: none
-
-    &.active
-      .title-text, .edit-icon
-        display: none
+    .titleformError
+      margin-left: 106px !important
 
     .input-container
       position: relative
@@ -204,17 +197,6 @@
       INPUT
         width: 100%
         box-sizing: border-box
-
-    .save-title-btn
-      position: absolute
-
-    .title-text
-      font-size: 16px
-      font-weight: 600
-
-    .title-text
-      line-height: 31px
-      display: inline-block
 
     BUTTON
       vertical-align: top
@@ -246,10 +228,11 @@
     right: 15px
 
   .standards-list
-    border-top: dashed 3px #e0e0e0
     padding-top: 8px
     max-height: 68px
     overflow: auto
+    padding-left: 0px
+    position: relative
 
     .add-standards .title
       color: #e0e0e0
@@ -261,6 +244,9 @@
       text-align: center
 
   .recipients-list
+    padding-left: 40px
+    position: relative
+
     &::before
       content: 'To :'
       position: absolute
@@ -269,8 +255,6 @@
       top: 7px
 
   .standards-list, .recipients-list
-    padding-left: 50px
-    position: relative
 
     BUTTON
       min-width: 35px
@@ -378,7 +362,7 @@
       display: inline-block
       text-align: left
 
-      &.main-lable
+      &.main-label
         margin-top: 10px
 
   .right-block
@@ -443,6 +427,17 @@
     z-index: 11
     width: 227px
     text-align: left
+
+    .new-input-container
+      width: 107px
+      text-align: center
+
+      &:first-child
+        margin-right: 11px
+
+      INPUT[type=text]
+        width: 100%
+        margin-bottom: 0
 
     > *
       position: relative

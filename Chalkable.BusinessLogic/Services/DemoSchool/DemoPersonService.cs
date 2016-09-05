@@ -93,6 +93,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public void PrepareToDelete(IList<Person> persons)
+        {
+            throw new NotImplementedException();
+        }
+
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             query.CallerId = Context.PersonId;
@@ -235,7 +240,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return PersonStorage.GetById(id);
         }
 
-        public PersonDetails GetPersonDetails(int personId)
+        public PersonDetails GetPersonDetails(int personId, int? schoolId)
         {
             var person = GetPersons(new PersonQuery()
             {

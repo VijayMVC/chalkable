@@ -12,7 +12,14 @@ mixin UserProfileTopBar(tplObj, user, pressedActionName)
             .right
                 +ActionLink('settings', 'dashboard').settings Settings
 
-mixin StudentProfileSummaryInfo(tpl, pressedLinkName)
+
+mixin StudentClassesInfo(user)
+    if user.getClassesSection()
+        +CloseOpen(Msg.Classes).today-work-panel
+            .classes-tb-container
+                +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class).classes-bar
+
+mixin StudentProfileSummaryInfo(tpl, pressedLinkName, renderClassesInfo)
     -user = tpl.getUser() 
     -statusData = tpl.getStatusData()
     .profile-page
@@ -40,7 +47,5 @@ mixin StudentProfileSummaryInfo(tpl, pressedLinkName)
                             +GlanceBox(null, null, tpl.buildDisciplineGlanceBoxData(), null, null)
                         if user.getGradesBox()
                             +GlanceBox(null, null, tpl.buildGradesGlanceBoxData(), null, null, true, true)
-        if user.getClassesSection()
-            +CloseOpen(Msg.Classes).today-work-panel
-                .classes-tb-container
-                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class).classes-bar
+        if renderClassesInfo
+            +StudentClassesInfo(user)

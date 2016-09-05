@@ -35,5 +35,12 @@ namespace Chalkable.Web.Controllers
             var classroomOption = SchoolLocator.ClassroomOptionService.GetClassOption(classId, true);
             return Json(ClassroomOptionViewData.Create(classroomOption));
         }
+
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher")]
+        public ActionResult Copy(int fromClassId, int toClassId)
+        {
+            SchoolLocator.ClassroomOptionService.CopyClassroomOption(fromClassId, toClassId);
+            return Json(true);    
+        }
     }
 }

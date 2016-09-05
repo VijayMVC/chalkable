@@ -15,7 +15,6 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
-using Chalkable.Web.Models;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PanoramaViewDatas;
 using Chalkable.Web.Models.Settings;
@@ -88,7 +87,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassSchedule(int classId, DateTime? date)
         {
             var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var schedule = AnnouncementCalendarController.BuildDayAnnCalendar(SchoolLocator, date, classId, null, GetCurrentSchoolYearId());
+            var schedule = AnnouncementCalendarController.BuildDayAnnCalendar(SchoolLocator, date, classId, null, GetCurrentSchoolYearId(), Context.Claims);
             return Json(ClassScheduleViewData.Create(clazz, schedule), 13);
         }
         
@@ -153,15 +152,15 @@ namespace Chalkable.Web.Controllers
             if(!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to view class panorama");
 
-            if(settings.SchoolYearIds == null)
+            if(settings.AcadYears == null)
                 settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSetting>(classId);
 
-            if (settings.SchoolYearIds.Count == 0)
+            if (settings.AcadYears.Count == 0)
                 throw new ChalkableException("School years is required parameter");
 
             var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
-            var panorama = SchoolLocator.ClassService.Panorama(classId, settings.SchoolYearIds, settings.StandardizedTestFilters);
+            var panorama = SchoolLocator.ClassService.Panorama(classId, settings.AcadYears, settings.StandardizedTestFilters);
             var gradingScale = SchoolLocator.GradingScaleService.GetClassGradingScaleRanges(classId);
             
             var classStudents = SchoolLocator.StudentService.GetClassStudentsDetails(classId, true);
@@ -180,8 +179,8 @@ namespace Chalkable.Web.Controllers
             if (!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to change panorama settings");
 
-            if (setting.SchoolYearIds == null || setting.SchoolYearIds.Count == 0)
-                throw new ChalkableException("School years is required parameter");
+            if (setting.AcadYears == null || setting.AcadYears.Count == 0)
+                throw new ChalkableException("Academic years is required parameter");
 
             SchoolLocator.PanoramaSettingsService.Save(setting, classId);
             return Json(true);
@@ -198,6 +197,10 @@ namespace Chalkable.Web.Controllers
         }
 
 
-
+        [AuthorizationFilter("Teacher")]
+        public ActionResult Days(int classId)
+        {
+            return Json(SchoolLocator.ClassService.GetDays(classId));
+        }
     }
 }

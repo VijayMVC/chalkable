@@ -55,6 +55,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, String, chlk.models.common.ChlkDate]],
+            ria.async.Future, function adjustDates(classId, announcements, startDate_) {
+                return this.post('Announcement/AdjustDates.json', Boolean, {
+                    classId: classId.valueOf(),
+                    announcements: JSON.parse(announcements),
+                    startDate: startDate_ && startDate_.toStandardFormat()
+                });
+            },
+
             [[Number, chlk.models.id.ClassId, Boolean, Object]],
             ria.async.Future, function getAnnouncementsList_(start_, classId_, importantOnly_, createdAnnouncements_) {
                 return this.post('Feed/List.json', chlk.models.feed.Feed, {
@@ -92,6 +101,24 @@ NAMESPACE('chlk.services', function () {
                 }else{
                     return this.getAnnouncementsList_(start_, classId_, importantOnly_, createdAnnouncements_);
                 }
+            },
+
+
+            [[chlk.models.id.ClassId, Number, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
+                chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum]],
+            ria.async.Future, function getAnnouncementsForClassProfile(classId, start_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_){
+                return this.get('Feed/ClassFeed.json', chlk.models.feed.Feed,{
+                    classId: classId.valueOf(),
+                    start: start_ || 0,
+                    count: 10,
+                    complete: importantOnly_ ? false : null,
+                    //settings data
+                    announcementType: annType_ && annType_.valueOf(),
+                    sortType: sortType_ && sortType_.valueOf(),
+                    fromDate: startDate_ && startDate_.toStandardFormat(),
+                    toDate: endDate_ && endDate_.toStandardFormat(),
+                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
+                });
             },
 
             [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,

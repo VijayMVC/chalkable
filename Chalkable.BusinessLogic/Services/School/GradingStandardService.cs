@@ -22,10 +22,14 @@ namespace Chalkable.BusinessLogic.Services.School
         public async Task<IList<GradingStandardInfo>> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
         {
             var isTeacherClass = DoRead(u => new ClassTeacherDataAccess(u).Exists(classId, Context.PersonId));
-            if (reCalculateStandards && GradebookSecurity.CanReCalculateGradebook(Context, isTeacherClass)) 
-                await ConnectorLocator.GradebookConnector.Calculate(classId);
-            var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
+            Task<Gradebook> calculateTask = null;
+            if (reCalculateStandards && GradebookSecurity.CanReCalculateGradebook(Context, isTeacherClass))
+                calculateTask = ConnectorLocator.GradebookConnector.Calculate(classId);
+            
             var standards = ServiceLocator.StandardService.GetGridStandardsByPacing(classId, null, null, gradingPeriodId);
+            if (calculateTask != null)
+                await calculateTask;
+            var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
             standards = standards.Where(s => s.IsActive || standardScores.Any(ss => ss.StandardId == s.Id && ss.HasScore)).ToList();
             var res = GradingStandardInfo.Create(standardScores, standards);
             return res;

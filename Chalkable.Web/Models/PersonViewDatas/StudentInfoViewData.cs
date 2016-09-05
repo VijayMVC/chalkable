@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -11,6 +12,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public IdNameViewData<int> GradeLevel { get; set; }
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
+        public IList<StudentHealthFormViewData> HealthForms { get; set; } 
         public bool HasMedicalAlert { get; set; }
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
@@ -65,6 +67,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             var res = Create(student);
 
+            res.DisplayName = studentDetails.DisplayName(includeMiddleName: true);
+
             var gradeLevels = student.StudentSchoolYears
                 .OrderBy(x => x.SchoolYearRef)
                 .Select( x => IdNameViewData<int>.Create(x.GradeLevelRef, x.GradeLevel.Name))
@@ -81,7 +85,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.SpEdStatus = studentDetails.SpEdStatus;
             res.IsIEPActive = studentDetails.IsIEPActive(today);
             res.IsTitle1Eligible = studentDetails.StudentSchool.IsTitle1Eligible;
-            res.Section504 = !string.IsNullOrWhiteSpace(studentDetails.Section504Qualification) && studentDetails.Section504Qualification != "NA";
+            res.Section504 = !string.IsNullOrWhiteSpace(studentDetails.Section504Qualification) 
+                             && studentDetails.Section504Qualification.Trim() != "NA";
             res.IsHomeless = studentDetails.IsHomeless;
             res.IsImmigrant = studentDetails.IsImmigrant;
             res.Language = studentDetails.Language != null
@@ -116,8 +121,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
             if (currentClass != null)
                 res.CurrentClassName = currentClass.Name;
-
-
 
             return res;
         }

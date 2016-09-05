@@ -33,9 +33,11 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             //hide hidden activities
             if (!inputModel.Settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();
-            
-            return ShortFeedExportModel.Create(baseData.Person, baseData.SchoolName, baseData.SchoolYearName, serviceLocator.Context.NowSchoolTime
-                , baseData.Classes, baseData.Staffs, baseData.DayTypes, anns);
+
+            var fromDate = inputModel.Settings.StartDate ?? serviceLocator.Context.SchoolYearStartDate;
+            var toDate = inputModel.Settings.EndDate ?? serviceLocator.Context.SchoolYearEndDate;
+            return ShortFeedExportModel.Create(baseData.Person, baseData.SchoolName, baseData.SchoolYearName, serviceLocator.Context.NowSchoolTime,
+                fromDate, toDate, baseData.Classes, baseData.Staffs, baseData.DayTypes, anns);
         }
         
     }

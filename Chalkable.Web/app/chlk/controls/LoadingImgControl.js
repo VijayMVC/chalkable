@@ -10,34 +10,35 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/loading-img.jade')(this);
             },
 
-            [[Number, Object]],
-            VOID, function checkImage(timeOut, img, attrs){
-                var parent = img.parent();
-                var timer = setTimeout(function(){
-                    img.css('visibility', 'hidden');
-                    parent.addClass('loading');
-                    var src = img.attr('src');
-                    img.attr('src', src);
-                    this.checkImage(timeOut > 10 ? 10 : timeOut * 2, img, attrs);
-                }.bind(this), timeOut * 100);
-                img.data('timer', timer);
-            },
 
             [[Object]],
             Object, function processAttrs(attrs){
                 attrs.id = attrs.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        var that = this, img = jQuery('#' + attrs.id);
-                        img.on('error', function(){
-                            that.checkImage(1, img, attrs);
-                        });
+                        var img = jQuery('#' + attrs.id),
+                            src = img.attr('src');
 
-                        img.on('load', function(){
-                            img.css('visibility', 'visible');
-                            img.parent().removeClass('loading');
-                            clearTimeout(img.data('timer'));
-                        });
+                        img
+                            .on('error', function(){
+                                img.css('visibility', 'hidden');
+                                var timeout = img.data('img-loader.timeout') || 50,
+                                    retries = img.data('img-loader.retries') || 0;
+
+                                img.parent().addClass('loading');
+
+                                (retries < 25) && setTimeout(function () {
+                                    img.attr('src', src)
+                                        .data('img-loader.timeout', Math.min(timeout * 2 + Math.random() * 100, 10000) - Math.random() * 50)
+                                        .data('img-loader.retries', retries+1);
+                                }, timeout);
+                            })
+
+                            .on('load', function(){
+                                img.css('visibility', 'visible');
+                                img.parent().removeClass('loading');
+                                clearTimeout(img.data('timer'));
+                            });
 
                     }.bind(this));
                 return attrs;

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using WindowsAzure.Acs.Oauth2.Client;
-using WindowsAzure.Acs.Oauth2.Client.Protocol;
+using System.Web;
 using Chalkable.API.Configuration;
 using Chalkable.API.Exceptions;
 using Chalkable.API.Helpers;
@@ -10,31 +11,24 @@ using Newtonsoft.Json;
 
 namespace Chalkable.API
 {
-    internal class SimpleOAuth2ClientInternal : SimpleOAuth2Client
+    public class TokenAuthenticationInfo
     {
-        public AccessTokenResponse CurrentAccessTokenPublic
-        {
-            get { return CurrentAccessToken; }
-            set { CurrentAccessToken = value; }
-        }
-
-        public DateTime LastAccessTokenRefreshPublic
-        {
-            get { return LastAccessTokenRefresh; }
-            set { LastAccessTokenRefresh = value; }
-        }
-
-        public SimpleOAuth2ClientInternal(Uri authorizeUri, Uri accessTokenUri, string clientId, string clientSecret, string scope, Uri redirectUri, ClientMode mode = ClientMode.ThreeLegged) : base(authorizeUri, accessTokenUri, clientId, clientSecret, scope, redirectUri, mode)
-        {            
-        }
+        [JsonProperty("token")]
+        public string AppToken { get; set; }
+        [JsonProperty("ts")]
+        public long Timestamp { get; set; }
+        [JsonProperty("sig")]
+        public string Signature { get; set; }
     }
 
     public class ChalkableAuthorization
     {
+        public const string AuthenticationHeaderName = "Authorization";
+        public const string AuthenticationSignature = "Signature";
+
         public string ApiRoot { get; }
+        private string Token { get; set; }
         public ApplicationEnvironment Configuration { get; }
-        public SimpleOAuth2Client OauthClient { get; private set; }
-        private string RefreshToken { get; set; }
 
         public ChalkableAuthorization(string apiRoot, ApplicationEnvironment configuration = null)
         {
@@ -43,93 +37,80 @@ namespace Chalkable.API
         }
 
 
-        public async Task AuthorizeAsync(string refreshToken)
+        public async Task AuthorizeAsync(string token)
         {
-            if (RefreshToken == refreshToken)
-                return;
-
-            OauthClient = new SimpleOAuth2ClientInternal(
-                authorizeUri: new Uri(ApiRoot + "/authorize/index"),
-                accessTokenUri: new Uri(Configuration.AcsUri),
-                clientId: Configuration.ClientId,
-                clientSecret: Configuration.AppSecret,
-                scope: Configuration.Scope,
-                redirectUri: new Uri(Configuration.RedirectUri));
-
-            await Task.Run(() => OauthClient.Authorize(refreshToken));
-
-            RefreshToken = refreshToken;
+            Token = token;
+            await Task.FromResult(true);
         }
 
-        public void AuthorizeQueryRequest(string token, IList<string> identityParams)
+        public static string ComputeSignature(string method, Uri requestUri, long contentLength, long ts, string token, string appSecret)
+        {
+            var query = HttpUtility.ParseQueryString(requestUri.Query);
+            var keys = query.AllKeys
+                .OrderBy(x => x)
+                .Select(key => $"_{key}={query[key]}")
+                .JoinString("_");
+
+            var signatureBase = $"{method.ToLowerInvariant()}_{requestUri.AbsolutePath}_{token}_{ts}_{Math.Max(0, contentLength)}_{keys}_{appSecret}";
+
+            return HashHelper.HexOfCumputedHash(signatureBase);
+        }
+        
+        public static double DateTimeToUnixTimestamp(DateTime dateTime)
+        {
+            return (TimeZoneInfo.ConvertTimeToUtc(dateTime) - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+        }
+
+        public void SignRequest(HttpWebRequest request)
+        {
+            if(string.IsNullOrWhiteSpace(Token)) return;
+            var ts = (long)DateTimeToUnixTimestamp(DateTime.UtcNow);
+            var appSecret = Configuration.AppSecret;
+
+            var signatureJson = JsonConvert.SerializeObject(new TokenAuthenticationInfo
+            {
+                AppToken = Token,
+                Timestamp = ts,
+                Signature = ComputeSignature(request.Method, request.RequestUri, request.ContentLength, ts, Token, appSecret)
+            });
+
+            var signatureBytes = System.Text.Encoding.UTF8.GetBytes(signatureJson);
+            var signature = Convert.ToBase64String(signatureBytes);
+
+            request.Headers.Add(AuthenticationHeaderName, $"{AuthenticationSignature}:{signature}");
+        }
+
+        public async Task AuthorizeQueryRequest(string authenticationSignature, IList<string> identityParams, string accessToken)
         {
             var signatureMsg = identityParams.JoinString("|");
             var appSecret = Configuration.AppSecret;
             signatureMsg += "|" + HashHelper.HexOfCumputedHash(appSecret);
             var hash = HashHelper.HexOfCumputedHash(signatureMsg);
-            if (token != hash)
+            if (authenticationSignature != hash)
                 throw new ChalkableApiException($"Security error. Invalid token in query request to {Configuration.ApplicationRoot}");
-
+            await AuthorizeAsync(accessToken);
         }
 
 
         public class ChalkableAuthorizationSerialized
         {
             public string ApiRoot { get; set; }
-            public IDictionary<string, string> AccessTokenParams { get; set; }
-            public Uri AccessTokenBase { get; set; }
-            public DateTime AccessTokenRefreshed { get; set; }
-            public string RefreshToken { get; set; }
+            public string Token { get; set; }
         }
 
         private ChalkableAuthorization(ChalkableAuthorizationSerialized data, ApplicationEnvironment configuration = null)
         {
             ApiRoot = data.ApiRoot;
             Configuration = configuration ?? Settings.GetConfiguration(ApiRoot);
-
-            var client = new SimpleOAuth2ClientInternal(
-                authorizeUri: new Uri(ApiRoot + "/authorize/index"),
-                accessTokenUri: new Uri(Configuration.AcsUri),
-                clientId: Configuration.ClientId,
-                clientSecret: Configuration.AppSecret,
-                scope: Configuration.Scope,
-                redirectUri: new Uri(Configuration.RedirectUri))
-            {
-                LastAccessTokenRefreshPublic = data.AccessTokenRefreshed,
-                CurrentAccessTokenPublic = new AccessTokenResponse(data.AccessTokenBase)
-            };
-
-            foreach (var pair in data.AccessTokenParams)
-            {
-                client.CurrentAccessTokenPublic.Parameters.Add(pair.Key, pair.Value);
-            }
-
-            OauthClient = client;
-
-            RefreshToken = data.RefreshToken;
+            Token = data.Token;
         }
 
         public string Serialize()
         {
-            var client = OauthClient as SimpleOAuth2ClientInternal;
-
-            if (client == null)
-                throw new Exception("Serialization failed");
-
-            var s = client.CurrentAccessTokenPublic.Parameters;
-            var p = new Dictionary<string, string>();
-            foreach (var key in s.AllKeys)
-            {
-                p[key] = s[key];
-            }
-            
             return JsonConvert.SerializeObject(new ChalkableAuthorizationSerialized
             {
                 ApiRoot = ApiRoot,
-                AccessTokenParams = p,
-                AccessTokenBase = client.CurrentAccessTokenPublic.BaseUri,
-                AccessTokenRefreshed = client.LastAccessTokenRefreshPublic,
-                RefreshToken = RefreshToken
+                Token = Token
             });
         }
 

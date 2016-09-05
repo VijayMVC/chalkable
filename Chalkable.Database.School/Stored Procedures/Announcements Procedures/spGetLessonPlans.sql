@@ -18,7 +18,7 @@ declare @TEACHER_ROLE int = 2,
 
 Select
 	vwLessonPlan.*,
-	cast((case when (select count(*) from ClassTeacher where PersonRef = @personId and ClassTeacher.ClassRef = vwLessonPlan.ClassRef) >= 1 then 1 else 0 end) as bit)  as IsOwner,
+	cast((Case When GalleryOwnerRef = @personId or exists(Select * From ClassTeacher CT where CT.PersonRef = @personId and CT.ClassRef = vwLessonPlan.ClassRef) then 1 else 0 End) as bit)  as IsOwner,
 	cast((case when annRecipientData.Complete is null then 0 else annRecipientData.Complete end) as bit) as Complete,
 	count(vwLessonPlan.Id) over() as AllCount
 From
@@ -42,4 +42,4 @@ Where
 	and (@toDate is null or StartDate <= @toDate)
 	and (@complete is null or annRecipientData.Complete = @complete or (@complete = 0 and annRecipientData.Complete is null))
 	and (InGallery = 0)
-	and SchoolYearRef = @schoolYearId
+	and (@schoolYearId is null or SchoolYearRef = @schoolYearId)

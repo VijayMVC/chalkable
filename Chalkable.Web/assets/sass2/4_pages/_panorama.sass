@@ -18,14 +18,16 @@
     .data-info
       width: 58%
 
-  .sections-info
-    margin-top: 7px
-
   .chlk-grid
     .cell
+      word-break: break-all
+
       &:not(.center)
         text-align: left
         padding: 0 10px
+
+        &.active-sort
+          padding-right: 15px
 
       &.code
         width: 5%
@@ -44,11 +46,25 @@
 
 .panorama-page
 
+  .students-grid
+    .cell:not(.name)
+      padding: 0 5px
+
+  .stats-container
+    .top-bar
+      text-align: center
+
+  .chart-label-y
+    text-align: left
+    overflow: visible
+
   .highcharts-container
     &::before
       content: none
 
   .cell
+    word-break: break-all
+
     &.checks
       width: 5%
 
@@ -93,6 +109,7 @@
 
   .course-type-header
     margin-bottom: 10px
+    position: relative
 
   .main-text
     font-size: 18px

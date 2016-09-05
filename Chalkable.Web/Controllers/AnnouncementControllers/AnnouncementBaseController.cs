@@ -31,7 +31,9 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             Trace.Assert(Context.PersonId.HasValue);
             var annDetails = SchoolLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
-            if (forRead) return PrepareFullAnnouncementViewDataForRead(annDetails);
+            if (forRead)
+                return PrepareFullAnnouncementViewDataForRead(annDetails);
+
             return PrepareAnnouncmentViewDataForEdit(annDetails);
         }
 
@@ -59,6 +61,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 }
                 var studentAnnouncementApplicationMeta = SchoolLocator.ApplicationSchoolService.GetStudentAnnouncementApplicationMetaByAnnouncementId(ann.Id);
                 annView.StudentsAnnouncementApplicationMeta = StudentAnnouncementApplicationMetaViewData.Create(studentAnnouncementApplicationMeta);
+                var comments = SchoolLocator.AnnouncementCommentService.GetList(ann.Id);
+                annView.AnnouncementComments = AnnouncementCommentController.PrepareListOfCommentViewData(comments, SchoolLocator);
             }
             return annView;
         }
@@ -86,9 +90,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
             if (annView.ClassAnnouncementData != null && annView.ClassId.HasValue)
             {
-                var options = SchoolLocator.ClassroomOptionService.GetClassOption(annView.ClassId.Value);
+                var options = SchoolLocator.ClassroomOptionService.GetClassOption(annView.ClassId.Value, true);
                 annView.IsAbleUseExtraCredit = options != null && options.IsAveragingMethodPoints;
-
             }
             return annView;
         }
@@ -110,7 +113,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 ann.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id);
                 ann.GradingStudentsCount = ann.StudentAnnouncements.Count(x => x.IsGraded);
             }
-            var annViewData = AnnouncementDetailedViewData.Create(ann, Context.PersonId.Value, attachments, attrAttachmentInfo);
+            var annViewData = AnnouncementDetailedViewData.Create(ann, Context.PersonId.Value, attachments, attrAttachmentInfo, Context.Claims);
+
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
             annViewData.ApplicationsCount = annViewData.Applications.Count;
             annViewData.AssessmentApplicationId = MasterLocator.ApplicationService.GetAssessmentId();

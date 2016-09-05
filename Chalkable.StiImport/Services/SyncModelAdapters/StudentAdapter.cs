@@ -18,7 +18,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Id = x.StudentID,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
+                Gender = x.GenderID.HasValue ? Locator.GenderMapping[x.GenderID.Value] : "U",
                 UserId = x.UserID,
                 HasMedicalAlert = x.HasMedicalAlert,
                 IsAllowedInetAccess = x.IsAllowedInetAccess,
@@ -36,7 +36,8 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 OriginalEnrollmentDate = x.OriginalEnrollmentDate,
                 Section504Qualification = x.Section504Qualification,
                 StateIdNumber = x.StateIDNumber,
-                StudentNumber = x.StudentNumber
+                StudentNumber = x.StudentNumber,
+                MiddleName = x.MiddleName ?? ""
             };
         }
 
@@ -56,6 +57,12 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             var students = entities.Select(x => new Data.School.Model.Student { Id = x.StudentID }).ToList();
             ServiceLocatorSchool.StudentService.DeleteStudents(students);
+        }
+
+        protected override void PrepareToDeleteInternal(IList<Student> entities)
+        {
+            var students = entities.Select(x => new Data.School.Model.Student { Id = x.StudentID }).ToList();
+            ServiceLocatorSchool.StudentService.PrepareToDelete(students);
         }
     }
 }

@@ -17,9 +17,10 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         public virtual TSettings GetSettings(IServiceLocatorSchool serviceLocator, int? personId, int? classId)
         {
             var settings = serviceLocator.PersonSettingService.GetSettingsForPerson(new List<string> { SettingKey }, personId, null, classId);
-            return settings.ContainsKey(SettingKey)
-                ? JsonConvert.DeserializeObject<TSettings>(settings[SettingKey])
-                : GetDefault(serviceLocator, classId);
+            TSettings res = null;
+            if (settings.ContainsKey(SettingKey))
+                res = JsonConvert.DeserializeObject<TSettings>(settings[SettingKey]);
+            return res ?? GetDefault(serviceLocator, classId);
         }
         public virtual void SetSettings(IServiceLocatorSchool serviceLocator, int? personId, int? classId, BaseSettingModel settings)
         {
@@ -51,11 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
 
     public class AdminPanoramaSettingsHandler : BasePanoramaSettingsHandler<AdminPanoramaSettings>
     {
-        public AdminPanoramaSettingsHandler(string settingKey)
-        {
-            SettingKey = settingKey;
-        }
-        protected override string SettingKey { get; }
+        protected override string SettingKey => PersonSetting.ADMIN_PANORAMA_SETTINGS;
         public override AdminPanoramaSettings GetDefault(IServiceLocatorSchool serviceLocator, int? classId)
         {
             return new AdminPanoramaSettings

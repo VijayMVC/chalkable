@@ -17,6 +17,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, chlk.models.id.ClassId, String]],
+            ria.async.Future, function copy(fromClassId, toClassId, classAnnouncementTypeIds){
+                return this.post('AnnouncementType/Copy.json', Object,{
+                    fromClassId: fromClassId.valueOf(),
+                    toClassId: toClassId.valueOf(),
+                    classAnnouncementTypeIds: classAnnouncementTypeIds
+                });
+            },
+
             [[chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number]],
             ria.async.Future, function create(classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_){
                 return this.post('AnnouncementType/Create.json', chlk.models.announcement.ClassAnnouncementType,{

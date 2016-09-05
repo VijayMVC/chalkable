@@ -37,7 +37,11 @@ Select @primaryTeacherId = t.PrimaryTeacherRef, @classId = t.ClassRef, @lessonPl
 
 
 Declare @schoolId int  = (Select SchoolRef from SchoolYear Where Id = @schoolYearId)
-exec spSelectLessonPlans @lessonPlan
+
+--Select lesson plans was changed for ordering properly LPs.
+--Here we don't need ordering, so we pass fake table.
+Declare @emptyFake TAnnouncementOrder
+exec spSelectLessonPlans @lessonPlan, @emptyFake, 0, 0, 0
 exec spSelectAnnouncementAddionalData @lessonPlanId, @primaryTeacherId, @callerId, @schoolId
 
 Declare @teacherIds TInt32

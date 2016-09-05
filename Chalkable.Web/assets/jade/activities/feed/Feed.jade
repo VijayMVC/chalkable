@@ -1,7 +1,7 @@
 -var noComplete = self.completeOnly && !self.items.length
 -var typesEnum = chlk.models.announcement.AnnouncementTypeEnum
 
-div(class = noComplete ? "no-complete" : "").feed-container
+div(class = (noComplete ? "no-complete " : "") + (self.hasFilters() ? 'settings-mode' : '')).feed-container
     -var topData = self.getTopData()
     -var isAdmin = self.getUserRole().isAdmin()
     -var listAction = self.isInProfile() ? 'listForProfile' : 'list'
@@ -18,6 +18,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
         -selected = self.getClassId()
 
     -var ableCopy = self.getUserRole().isTeacher() && selected && selected.valueOf()
+    -var ableAdjust = ableCopy
 
     h2.page-title Feed
     .action-bar
@@ -41,9 +42,31 @@ div(class = noComplete ? "no-complete" : "").feed-container
             //input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
             +Hidden('toSet', '').to-set
-            +Hidden('announcementsToCopy').announcements-to-copy
+            +Hidden('selectedAnnouncements').selected-announcements
             input(type="hidden", name=isAdmin && !self.isInProfile() ? "gradeLevels" : "classId", value=selected)
 
+            if ableAdjust
+                .left-buttons-block.adjust-buttons-block
+                    .left-block.i-b
+                        .box-checkbox.circle
+                            +Checkbox('allTasks', false, false, true).all-tasks-check
+                        LABEL.text All
+                    .right-block.i-b.right
+                        .i-b
+                            LABEL.text Adjust Days
+                            INPUT(type="number", name="adjustCount", value="0", disabled = true).adjust-days-count
+                        .i-b
+                            LABEL.text OR Start Date
+                        +DatePicker('adjustStartDate')(
+                            data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true,
+                                enabledDays: self.getClassScheduledDays && self.getClassScheduledDays() || []
+                            },
+                            disabled = true
+                        ).adjust-start-date
+                        BUTTON(type="button").negative-button.cancel-adjust Cancel
+                        BUTTON(type="submit", name="submitType", value="adjust", disabled="disabled").blue-button.adjust-submit.submit-selected.top-submit-btn Update
             if ableCopy
                 .left-buttons-block.copy-buttons-block
                     .left-block.i-b
@@ -53,7 +76,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                     .right-block.i-b.right
                         .i-b.copy-to-block
                             LABEL.text Copy to:
-                            +DoubleSelect('toClassId', self.getClassesForSelect()).copy-to-select
+                            +DoubleSelect('toClassId', self.getClassesByYears()).copy-to-select
                         +DatePicker('copyStartDate')(
                             data-options={
                                 showOtherMonths: true,
@@ -61,8 +84,8 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             }
                         ).copy-start-date
                         BUTTON(type="button").negative-button.cancel-copy Cancel
-                        BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-submit Copy
-            .left-buttons-block.tools-buttons-block(class=self.hasFilters() ? '' : 'hidden')
+                        BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-submit.submit-selected.top-submit-btn Copy
+            .left-buttons-block.tools-buttons-block
                 if !self.isInProfile() && self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
                     +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
@@ -115,15 +138,21 @@ div(class = noComplete ? "no-complete" : "").feed-container
                 if self.hasFilters()
                     .clear-filters Clear Filters
             .right-buttons-block
+                if ableAdjust
+                    a(href="javascript:", data-tooltip="Adjust Item Dates").top-block-btn.calendar-btn.adjust-activities
                 +ActionLink('feed', 'feedPrinting', selected, self.importantOnly)(data-tooltip="Print").print-btn
                 if ableCopy
-                    a(href="javascript:", data-tooltip="Copy").copy-btn.copy-activities
-                a(href="javascript:", class=self.hasFilters() ? 'active' : '', data-tooltip="Feed Tools").tools-btn.feed-tools
+                    a(href="javascript:", data-tooltip="Copy").top-block-btn.copy-btn.copy-activities
+                a(href="javascript:", class=self.hasFilters() ? 'active' : '', data-tooltip="Feed Tools").top-block-btn.tools-btn.feed-tools
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,
                 pageSize = 10
             ).feed-grid
+                -var aICount = self.getAdjustedItemsCount && self.getAdjustedItemsCount()
+                -var aCount = self.getAdjustCount && self.getAdjustCount()
+                if(aICount && (aCount || aCount === 0))
+                    .top-green-info=aICount + ' item' + (aICount > 1 ? 's were' : ' was') + ' adjusted ' + (aCount > 0 ? '+' : '') + aCount + ' day' + (aCount == 1 ? '' : 's')
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
                     +FeedItem(item, self.isReadonly(), false, self.isStaringDisabled())

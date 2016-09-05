@@ -43,7 +43,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             this.districtId = districtId;
             var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
-            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
             
         }
 
@@ -54,7 +54,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             this.districtId = districtId;
             var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo = new UserLoginInfo() };
-            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
 
         }
 
@@ -136,8 +136,15 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("download data to restore");
             DownloadSyncData();
             Log.LogInfo("remove user records");
-            context.GetSyncResult<StiConnector.SyncModel.User>().Inserted = new StiConnector.SyncModel.User[0];
-            context.GetSyncResult<StiConnector.SyncModel.User>().Rows = new StiConnector.SyncModel.User[0];
+            var all = ServiceLocatorMaster.UserService.GetAll(districtId);
+            var allIds = new HashSet<int>(all.Select(x => x.SisUserId.Value));
+            var newUsers = new List<StiConnector.SyncModel.User>();
+            var rows = context.GetSyncResult<StiConnector.SyncModel.User>().Rows;
+            foreach (var r in rows)
+                if (!allIds.Contains(r.UserID))
+                    newUsers.Add(r);
+            context.GetSyncResult<StiConnector.SyncModel.User>().Inserted = null;
+            context.GetSyncResult<StiConnector.SyncModel.User>().Rows = newUsers.ToArray();
             context.GetSyncResult<StiConnector.SyncModel.User>().Updated = null;
             context.GetSyncResult<StiConnector.SyncModel.User>().Deleted = null;
             Log.LogInfo("do initial sync");
@@ -173,28 +180,40 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
             Log.LogInfo("download data to resync");
             context = new SyncContext();
+
+            var tablesToResync = new List<string>
+            {
+                tableName,
+                nameof(Gender),    // We need this tables for mappers
+                nameof(SpEdStatus) // inside StudentAdapter/Selector
+            };
+
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase<SyncModel>>();
             foreach (var table in toSync)
             {
                 var type = context.Types[table.Key];
                 SyncResultBase<SyncModel> res;
-                var resType = (typeof(SyncResult<>)).MakeGenericType(new[] { type });
-                if (table.Key == tableName)
+                var resType = (typeof(SyncResult<>)).MakeGenericType(type);
+                if (tablesToResync.Contains(table.Key))
                 {
                     Log.LogInfo("Start downloading " + table.Key);
                     res = (SyncResultBase<SyncModel>) connectorLocator.SyncConnector.GetDiff(type, null);
                     Log.LogInfo("Table downloaded: " + table.Key + " " + res.RowCount);
+                }
+                else
+                    res = (SyncResultBase<SyncModel>)Activator.CreateInstance(resType, new object[0]);
+                
+
+                if (table.Key == tableName) //resync table
+                {
                     object o = resType.GetProperty("Rows").GetValue(res);
                     resType.GetProperty("Updated").SetValue(res, o);
                     resType.GetProperty("Inserted").SetValue(res, null);
                     resType.GetProperty("Deleted").SetValue(res, null);
                     resType.GetProperty("Rows").SetValue(res, null);
                 }
-                else
-                {
-                    res = (SyncResultBase<SyncModel>)Activator.CreateInstance(resType, new object[0]);
-                }
+
                 results.Add(res);
             }
             foreach (var syncResultBase in results)
@@ -251,13 +270,13 @@ namespace Chalkable.StiImport.Services
                 Log.LogException(ex, districtId.ToString(), taskId.ToString());
                 if (!schoolCommited)
                 {
-                    Log.LogInfo("rollback school db");
+                    Log.LogError("rollback school db");
                     schoolDb.Rollback();
                 }
                 else
-                    Log.LogInfo("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");
+                    Log.LogError("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");
                 //TODO.....
-                Log.LogInfo("rollback master db");
+                Log.LogError("rollback master db");
                 masterDb.Rollback();
                 throw;
             }
@@ -317,13 +336,18 @@ namespace Chalkable.StiImport.Services
                 if (sr.Updated != null)
                     models.AddRange(sr.Updated.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Update, x)));
                 if (sr.Deleted != null)
-                    models.AddRange(sr.Deleted.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Delete, x)));
+                    foreach (var syncModel in sr.Deleted)
+                    {
+                        models.Add(SyncModelWrapper.Create(syncModel.SYS_CHANGE_VERSION, PersistOperationType.Delete, syncModel));
+                        if (fkProps.Count != 0)
+                            models.Add(SyncModelWrapper.Create(0, PersistOperationType.PrepareToDelete, syncModel));
+                    }
             }
             models.Sort();
             IList<SyncModelWrapper> batch = new List<SyncModelWrapper>();
             for (int i = 0; i < models.Count; i++)
             {
-                if (i > 0 && models[i].CompareTo(models[i - 1]) != 0)
+                if (i > 0 && (models[i].Model.GetType().Name != models[i - 1].Model.GetType().Name || models[i].OperationType != models[i - 1].OperationType))
                 {
                     Persist(adapterLocator.GetAdapter(batch[0].Model.GetType()), batch[0].OperationType,
                         batch.Select(x => x.Model).ToList());
@@ -371,7 +395,7 @@ namespace Chalkable.StiImport.Services
                         break;
                 }
                 if (cnt < entities.Count)
-                    Log.LogError($"only first {MAX_LOOGED_ENTITIES}  if {entities.Count} entities were logged");
+                    Log.LogError($"only first {MAX_LOOGED_ENTITIES}  of {entities.Count} entities were logged");
                 throw;
             }
             

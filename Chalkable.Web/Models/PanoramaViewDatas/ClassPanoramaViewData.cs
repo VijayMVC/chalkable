@@ -82,7 +82,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             foreach (var standardizedTestInfo in models)
             {
                 var test = res.FirstOrDefault(x => x.StandardizedTest.Id == standardizedTestInfo.StandardizedTestId
-                                                   && x.Component.Id == standardizedTestInfo.StandardizedTestComponentId);
+                                                   && x.Component.Id == standardizedTestInfo.StandardizedTestComponentId
+                                                   && x.ScoreType.Id == standardizedTestInfo.StandardizedTestScoreTypeId);
 
                 if (test != null)
                     continue;
@@ -101,7 +102,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
 
                 var studentStTestsInfos = models
                     .Where(x => x.StandardizedTestId == standardizedTestInfo.StandardizedTestId
-                                && x.StandardizedTestComponentId == standardizedTestInfo.StandardizedTestComponentId)
+                                && x.StandardizedTestComponentId == standardizedTestInfo.StandardizedTestComponentId
+                                && x.StandardizedTestScoreTypeId == standardizedTestInfo.StandardizedTestScoreTypeId)
                     .GroupBy(y => y.Date, x => decimal.Parse(x.Score));
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)
@@ -140,7 +142,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             foreach (var test in studentTests)
             {
                 var currentTest = res.FirstOrDefault(x => x.StandardizedTest.Id == test.StandardizedTestId
-                                                       && x.Component.Id == test.StandardizedTestComponentId);
+                                                       && x.Component.Id == test.StandardizedTestComponentId 
+                                                       && x.ScoreType.Id == test.StandardizedTestScoreTypeId);
 
                 if (currentTest != null)
                     continue;
@@ -157,9 +160,10 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                     DailyStats = new List<DailyStatsViewData>()
                 };
 
-                var studentStTestsInfos = models
+                var studentStTestsInfos = studentTests
                     .Where(x => x.StandardizedTestId == test.StandardizedTestId
-                                && x.StandardizedTestComponentId == test.StandardizedTestComponentId)
+                                && x.StandardizedTestComponentId == test.StandardizedTestComponentId
+                                && x.StandardizedTestScoreTypeId == test.StandardizedTestScoreTypeId)
                     .GroupBy(y => y.Date, x => decimal.Parse(x.Score));
 
                 foreach (var studentStTestsInfo in studentStTestsInfos)
@@ -212,11 +216,18 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         }
         private static ClassDistributionStatsViewData CreateAbsencesViewData(IList<ShortStudentAbsenceInfo> models)
         {
-            var res = new ClassDistributionStatsViewData();
+            var res = new ClassDistributionStatsViewData
+            {
+                ClassAvg = 0,
+                DistributionStats = new List<DistributionItemViewData>()
+            };
             var absencePersents = models.Where(x => x.NumberOfDaysEnrolled != 0)
                 .Select(x => new { Persent = (int) decimal.Round(x.NumberOfAbsences/x.NumberOfDaysEnrolled*100), x.StudentId})
                 .OrderBy(x => x.Persent).ToList();
-            
+
+            if (absencePersents.Count == 0)
+                return res;
+
             var maxPersent = absencePersents.Max(x => x.Persent);
 
             res.DistributionStats = new List<DistributionItemViewData>();
@@ -245,6 +256,9 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                 DistributionStats = new List<DistributionItemViewData>()
             };
             models = models.OrderBy(x => x.NumberOfInfractions).ToList();
+
+            if (models.Count == 0)
+                return res;
 
             var maxInfractionCount = models.Max(x => x.NumberOfInfractions);
             if(maxInfractionCount % 3 != 0)

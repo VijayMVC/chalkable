@@ -1,3 +1,5 @@
+@import "compass/css3/user-interface"
+
 .grading-comments-list
   position: absolute
   background: white
@@ -167,6 +169,159 @@
 .announcement-view-page
   position: relative
 
+  .discussion-block
+    .comments-block
+      margin-left: -40px
+
+      h3
+        margin-left: 40px
+
+    INPUT, TEXTAREA
+      @include input-placeholder
+        font-style: italic
+
+    .chat-bubble
+      padding: 14px 8px 17px 21px
+      min-height: 50px
+
+      .img-wrapper
+        margin-top: 13px
+
+      .top-block>SPAN
+        font-weight: bold
+        color: #aba9a5
+        font-size: 14px
+
+      .right>*
+        margin-left: 4px
+
+    .qna>FORM.reply-form
+      margin-top: 20px
+
+    .qna:not(.for-reply)
+      >FORM.reply-form
+        display: none
+
+    .qna:not(.for-edit)
+      >FORM.edit-form
+        display: none
+
+    .qna.for-edit
+      >DIV.chat-bubble
+        display: none
+
+    .reply-icon, .edit-grey-icon, .invisible-grey-icon, .visible-icon, .x-remove-icon
+      cursor: pointer
+
+    .for-delete
+      .delete-block
+        display: block
+
+    .delete-block
+      display: none
+      background: rgba(210, 210, 210, 0.9)
+
+      &::before
+        content: ' '
+        position: absolute
+        +rotate(-135deg)
+        top: 17px
+        left: -7px
+        width: 12px
+        height: 12px
+        pointer-events: none
+        border-width: 1px 1px 0 0
+        background: rgba(210, 210, 210, 0.9)
+
+      .delete-content
+        position: absolute
+        top: 50%
+        left: 50%
+        margin-left: -151px
+        margin-top: -34px
+        text-align: center
+
+      .text
+        font-weight: bold
+        font-size: 16px
+        margin-bottom: 16px
+
+
+      .negative-button
+        margin-right: 16px
+
+    .comments-block
+      .comments-block
+        margin-top: 28px
+
+      .row:last-child
+        margin-bottom: 0
+
+    .hidden-comment
+      >DIV.qna>DIV.chat-bubble, >DIV.avatar-block-left
+        opacity: 0.5
+
+    .download-link
+      display: inline-block
+      font-weight: bold
+
+    .comments-count
+      margin: 31px 0 17px
+      font-size: 18px
+
+    .row
+      width: 100%
+      margin-bottom: 28px
+
+    .img-cnt
+      display: inline-block
+      background: #eee
+      margin-right: 10px
+      position: relative
+
+      .delete-attachment
+        top: -8px
+        right: -8px
+        display: none
+
+    .post-comment-form
+      border: none !important
+
+      .post-comment-text-block
+        width: 100%
+        box-sizing: border-box
+        margin-bottom: 14px
+        padding: 8px 10px
+        border-radius: 4px
+        border: 1px solid #c8c7c3
+        +box-shadow(rgba(0, 0, 0, 0.1) 0 1px 3px inset, rgba(255, 255, 255, 0.5) 0 1px 1px)
+        position: relative
+
+      .img-cnt:hover
+        .delete-attachment
+          display: block
+          opacity: 1
+
+      TEXTAREA
+        +box-shadow(none)
+        width: 100%
+        border: none
+        resize: none !important
+
+      .green-button
+        width: 85px
+        margin-right: 15px
+
+
+
+    .avatar-block-left
+      padding-right: 0
+      text-align: center
+      width: 131px
+
+      .avatar-wrapper
+        display: inline-block
+
   .close-open-control
     margin-top: 24px
 
@@ -220,50 +375,6 @@
       border-radius: 4px
       width: 325px
       margin-left: 85px
-
-  .qna
-    width: 350px
-    position: relative
-
-    font-size: 14px
-    line-height: 22px
-    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
-    color: #2b2a28
-    font-family: 'Open Sans', sanf-serif
-
-    .edit-question-input
-      display: none
-
-    h3
-      margin: 0 0 8px
-      padding: 0
-      font-size: inherit
-
-    p
-      margin: 0
-
-    .chat-bubble + span
-      font-size: 10px
-      line-height: 40px
-      color: #9c9c9c
-      font-style: italic
-
-    .submit-btn
-      display: none
-      position: absolute
-      bottom: 0
-      right: 0
-
-    input[type=text]
-      //display: block
-      border: none
-      +box-shadow(none)
-      background: transparent
-      font-size: inherit
-      line-height: inherit
-      padding: 0
-      color: inherit
-      width: 100%
 
   .student-announcements-top-panel
     border: 1px solid #c8c7c3
@@ -342,7 +453,6 @@
       background: #2f7790
       line-height: 60px
       padding: 0 20px
-      font-family: 'Reenie Beanie', serif
       font-size: 34pt
       color: #fff
       margin: -16px -16px -16px 0

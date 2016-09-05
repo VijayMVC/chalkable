@@ -12,7 +12,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public const string VISIBLE_FOR_STUDENT_FIELD = nameof(VisibleForStudent);
         public const string VW_SUPPLEMENTAL_ANNOUNCEMENT = "vwSupplementalAnnouncement";
 
-        public DateTime Expires { get; set; }
+        public DateTime? Expires { get; set; }
         public bool VisibleForStudent { get; set; }
         public int ClassRef { get; set; }
         public int? ClassAnnouncementTypeRef { get; set; }

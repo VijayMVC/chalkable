@@ -15,19 +15,19 @@ Declare @lessonPlans TLessonPlan
 Insert Into @lessonPlans
 Select distinct
 	vwLP.*,
-	cast((Case When exists(Select * From ClassTeacher CT where CT.PersonRef = @callerId and CT.ClassRef = vwLP.ClassRef) then 1 else 0 End) as Bit),
-	cast((Case When ard.Complete is null Then 0 Else 1 End) as Bit) as Complete, 
+	cast((Case When GalleryOwnerRef = @callerId or exists(Select * From ClassTeacher CT where CT.PersonRef = @callerId and CT.ClassRef = vwLP.ClassRef) then 1 else 0 End) as Bit),
+	cast((Case When ard.Complete is null Then 0 Else ard.Complete End) as Bit) as Complete, 
 	0 as AllCount 
 From 
 	vwLessonPlan vwLP
 	left join AnnouncementRecipientData ard
-		on ard.AnnouncementRef = vwLP.Id
+		on ard.AnnouncementRef = vwLP.Id and ard.PersonRef = @callerId
 Where
 	Id in(Select * From @lessonPlanIds)
 	and (@callerRole = @ADMIN_ROLE_ID or  SchoolYearRef = @schoolYearId)
 	and (
 		 @onlyOwner = 0
-		 or (@callerRole = @ADMIN_ROLE_ID or @callerRole = @TEACHER_ROLE_ID)  AND exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwLP.ClassRef)
+		 or (@callerRole = @ADMIN_ROLE_ID or @callerRole = @TEACHER_ROLE_ID)  AND (exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwLP.ClassRef) or InGallery = 1)
 		 or @callerRole = @STUDENT_ROLE_ID And exists(Select * From ClassPerson Where ClassPerson.PersonRef = @callerId and ClassPerson.ClassRef = vwLP.ClassRef)
 			And vwLP.VisibleForStudent = 1
 		)
@@ -37,7 +37,10 @@ Declare @count int = (Select count(*) From @lessonPlans)
 Update @lessonPlans
 Set AllCount = @count
 
-Exec spSelectLessonPlans @lessonPlans
+--This procedure was changed to make ordered selects
+--Here we don't need to order, so we create fake table
+Declare @emptyFake TAnnouncementOrder
+Exec spSelectLessonPlans @lessonPlans, @emptyFake, 0, 0, 0
 
 -------------------------------------------------------------------------------------------------
 
@@ -136,3 +139,4 @@ Where AnnouncementAttachment_AnnouncementRef in(Select Id From @lessonPlans)
 		and (Attachment_PersonRef = @callerId 
 		or exists(Select * From @teacherIds t Where t.id = Attachment_PersonRef))))
 
+GO

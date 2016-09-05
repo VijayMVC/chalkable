@@ -10,7 +10,11 @@ NAMESPACE('chlk.services', function () {
         'LpGalleryCategoryService', EXTENDS(chlk.services.BaseService), [
 
             ria.async.Future, function list() {
-                return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.announcement.CategoryViewData));
+                return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.announcement.CategoryViewData))
+                    .then(function(categories){
+                        this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, categories);
+                        return categories;
+                    }, this);
             },
 
             [[String]],

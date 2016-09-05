@@ -151,6 +151,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public string GetAccessToken(Guid applicationId, string session)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public IList<Application> GetApplicationsByIds(IList<Guid> ids)
         {

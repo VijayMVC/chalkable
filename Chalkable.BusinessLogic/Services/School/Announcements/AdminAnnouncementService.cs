@@ -164,6 +164,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             throw new NotImplementedException();
         }
+
+        public override void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
         {
             throw new NotImplementedException();
@@ -333,18 +339,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate, bool complete)
         {
             DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.Admin, 
-                schoolYearId, personId, roleId, true, classId, startDate, endDate, filterByExpiryDate));
+                schoolYearId, personId, roleId, complete, classId, startDate, endDate, filterByExpiryDate));
         }
-
-        protected override void SetUnComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate)
-        {
-            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.Admin,
-                schoolYearId, personId, roleId, false, classId, startDate, endDate, filterByExpiryDate));
-        }
-
+        
         public IList<Student> GetAdminAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue)
         {
             return DoRead(u => new AdminAnnouncementForAdminDataAccess(u).GetAdminAnnouncementRecipients(announcementId, start, count));

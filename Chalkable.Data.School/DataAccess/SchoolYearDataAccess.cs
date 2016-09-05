@@ -72,6 +72,21 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<SchoolYear>(new DbQuery(sqlQuery, @params));
         }
 
+        public IList<SchoolYear> GetByAcadYears(IList<int> years, bool onlyActive = true)
+        {
+            if (years == null || years.Count == 0)
+                return new List<SchoolYear>();
+
+            var conds = new AndQueryCondition();
+            if (onlyActive)
+                conds.Add(nameof(SchoolYear.ArchiveDate), null);
+            var q = Orm.SimpleSelect<SchoolYear>(conds);
+            q.Sql.Append($" And {nameof(SchoolYear.AcadYear)} in (Select * From @years)");
+            q.Parameters.Add("years", years);
+
+            return ReadMany<SchoolYear>(q);
+        } 
+
         public PaginatedList<SchoolYear> GetBySchool(int schoolId)
         {
             return PaginatedSelect< SchoolYear>(new SimpleQueryCondition("SchoolRef", schoolId, ConditionRelation.Equal), "Id", 0, int.MaxValue);
@@ -101,6 +116,21 @@ namespace Chalkable.Data.School.DataAccess
             var dbQuery = Orm.SimpleSelect<StudentSchoolYear>(queryConditions);
 
             return ReadOneOrNull<StudentSchoolYear>(dbQuery);
+        }
+
+        public IList<SchoolYear> GetSchoolYearsByStudent(int studentId, StudentEnrollmentStatusEnum? enrollmentStatus)
+        {
+            var conds = new AndQueryCondition
+            {
+                {StudentSchoolYear.STUDENT_FIELD_REF_FIELD, studentId},
+            };
+            if (enrollmentStatus.HasValue)
+                conds.Add(StudentSchoolYear.ENROLLMENT_STATUS_FIELD, (int) enrollmentStatus.Value);
+            var query = Orm.SimpleSelect<StudentSchoolYear>(conds);
+            var studentSys = ReadMany<StudentSchoolYear>(query);
+            return studentSys.Count > 0 
+                ? GetByIds(studentSys.Select(x => x.SchoolYearRef).ToList()) 
+                : new List<SchoolYear>();
         }
     }
 }

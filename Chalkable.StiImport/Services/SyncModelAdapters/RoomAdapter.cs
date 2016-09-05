@@ -41,5 +41,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var ids = entities.Select(x => new Data.School.Model.Room { Id = x.RoomID }).ToList();
             ServiceLocatorSchool.RoomService.DeleteRooms(ids);
         }
+
+        protected override void PrepareToDeleteInternal(IList<Room> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

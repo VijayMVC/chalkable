@@ -18,7 +18,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 AddressRef = x.PhysicalAddressID,
                 BirthDate = x.DateOfBirth,
                 FirstName = x.FirstName,
-                Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
+                Gender = x.GenderID.HasValue ? Locator.GenderMapping[x.GenderID.Value] : "U",
                 Id = x.PersonID,
                 LastName = x.LastName,
                 PhotoModifiedDate = x.PhotoModifiedDate
@@ -41,6 +41,12 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             var persons = entities.Select(x => new Data.School.Model.Person { Id = x.PersonID }).ToList();
             ServiceLocatorSchool.PersonService.Delete(persons);
+        }
+
+        protected override void PrepareToDeleteInternal(IList<Person> entities)
+        {
+            var persons = entities.Select(x => new Data.School.Model.Person { Id = x.PersonID }).ToList();
+            ServiceLocatorSchool.PersonService.PrepareToDelete(persons);
         }
     }
 }

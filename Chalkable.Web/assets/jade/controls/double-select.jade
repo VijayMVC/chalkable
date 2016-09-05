@@ -1,7 +1,10 @@
-mixin DoubleSelect(name, items)
+mixin DoubleSelect(name, items, copyToYearName, toClassName)
     -attributes = self.processAttrs(attributes);
+    -items = self.prepareItems(items)
     .double-select.chosen-container.chosen-container-single(attributes)
         +Hidden(name).selected-value
+        +Hidden(copyToYearName || 'copyToYearName').selected-year-name
+        +Hidden(toClassName || 'toClassName').selected-class-name
         a.chosen-single
             SPAN.value-text
             DIV

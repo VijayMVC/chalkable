@@ -120,6 +120,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public void PrepareToDelete(IList<Date> dates)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Date> GetDates(DateQuery dateQuery)
         {
             return GetDatesFiltered(dateQuery);

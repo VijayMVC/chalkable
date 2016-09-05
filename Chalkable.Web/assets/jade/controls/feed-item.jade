@@ -18,16 +18,19 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
     - itemClasses.push(item.isComplete() ? 'complete' : '')
 
     div(class = itemClasses).feed-item
-        if !supplementalAnnouncement
-            .check-cnt
-                .box-checkbox.circle
-                    +Checkbox('items', false, false, true)(data-id = item.getId().valueOf(), data-type = item.getType().valueOf()).feed-item-check
+        .check-cnt(class = supplementalAnnouncement ? "supplemental" : "")
+            .box-checkbox.circle
+                +Checkbox('items', false, false, true)(
+                    data-id = item.getId().valueOf(),
+                    data-type = item.getType().valueOf(),
+                    data-date = lessonPlan ? lessonPlan.getStartDate() && lessonPlan.getStartDate().getDate() : announcementItem.getExpiresDate() && announcementItem.getExpiresDate().getDate()
+                ).feed-item-check
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), false, item.getType())(class = isStaringDisabled ? 'disabled' : '', data-tooltip=Msg.Done).star.complete
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), true, item.getType())(class = isStaringDisabled ? 'disabled' : '', data-tooltip= Msg.ToDo).star
         +ActionLink('announcement', 'view', item.getId(), item.getType())(class = disabled ? 'disabled' : '').announcement-link
             .title: +Glue_(item.getTitle(), "")
             if lessonPlan
-                .date= (lessonPlan.getStartDate() && lessonPlan.getStartDate().format(timeFormat)) + " - " + (lessonPlan.getEndDate() && lessonPlan.getEndDate().format(timeFormat)) + '  Lesson Plan  ' + lessonPlan.getCategoryName()
+                .date= (lessonPlan.getStartDate() && lessonPlan.getStartDate().format(timeFormat)) + " - " + (lessonPlan.getEndDate() && lessonPlan.getEndDate().format(timeFormat)) + '  Lesson Plan  ' + (lessonPlan.getCategoryName() || '')
             else
                 .date= (announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().toString(timeFormat) : '') + '  ' + announcementItem.getAnnouncementTypeName()
             .attachment
@@ -44,6 +47,8 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
                         .small-icon.attachment-icon(data-tooltip=item.getAttachmentNames())
                     if supplementalAnnouncement
                         .small-icon.supplemental-icon(data-tooltip=supplementalAnnouncement.getRecipientsTooltip())
+                    if item.isShowDiscussionIcon()
+                        .small-icon.discussion-icon(data-tooltip="Class Discussion")
 
                     if lessonPlan
                         .line(data-tooltip = lessonPlan.getPercents() + '% complete')

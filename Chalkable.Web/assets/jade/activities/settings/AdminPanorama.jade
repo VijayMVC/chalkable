@@ -8,7 +8,8 @@
                 +ActionLink('settings', 'dashboardAdmin') Messaging
                 each app in self.getApplications()
                     +ActionLink('settings', 'appSettings', app.getId())=app.getName()
-                +ActionLink('settings', 'panoramaAdmin').pressed Panorama
+                if self.isAdminPanoramaEnabled()
+                    +ActionLink('settings', 'panoramaAdmin').pressed Panorama
     .summary-view
         +ActionForm('settings', 'panoramaSubmit').panorama-form.no-working
             +Hidden('filters').filters-value

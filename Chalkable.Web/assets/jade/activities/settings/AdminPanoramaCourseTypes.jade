@@ -4,6 +4,7 @@
 each item in panoramaSettings.getCourseTypeDefaultSettings() || []
     .course-type-block(data-id = item.getCourseType().getCourseTypeId().valueOf())
         h3.course-type-header= item.getCourseType().getCourseTypeName()
+            .delete-btn
         .filters-block
             .filters-container
                 each filter in item.getStandardizedTestFilters() || []

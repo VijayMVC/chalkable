@@ -42,5 +42,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             { Id = x.TimeSlotVariationId }).ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.DeleteScheduledTimeSlotVariations(sectionTimeSlotVariations);
         }
+
+        protected override void PrepareToDeleteInternal(IList<ScheduledTimeSlotVariation> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

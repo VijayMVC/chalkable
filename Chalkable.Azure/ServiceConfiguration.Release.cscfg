@@ -13,19 +13,14 @@
       <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net,qap56j04br.database.windows.net,xk45tx8se0.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" value="chlk-prod.redis.cache.windows.net,abortConnect=false,ssl=true,password=Szt054ruVN1Bo97xpGeeLlaB9imaSipgMEbOHHnOspk=" />
       <Setting name="RedisCache.ConcurentConnections" value="25" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="classroom.chalkable.com" />
       <Setting name="ScriptsRoot" value="https://az374501.vo.msecnd.net/static-{0}" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="6ielVZXrxXB3ZrU/4om5/HM5a7GGniMmMriAevxxyQw=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="chalkable.com" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://chalkable.com/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="j3OCyBJiVl0AXklP/jAAaHQsDHaL7ARTeBROVWe6nL4=" />
       <!-- API Explorer -->
       <Setting name="api.explorer.client-id" value="https://chalkable.com" />
       <Setting name="api.explorer.secret" value="Qwerty1@" />
@@ -45,6 +40,8 @@
       <!--SetMinThreads params-->
       <Setting name="Threads.DefaultMinWorkerThreads" value="25"/>
       <Setting name="Threads.DefaultMinIoThreads" value="25"/>
+      <!--AES Settings-->
+      <Setting name="AesSecretKey" value="5E9F42ED7A2E51D39CD63EA9BDE5AAD9DA2B86532CC57DABC2636F8B3A95D48E"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
@@ -64,13 +61,9 @@
       <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net,qap56j04br.database.windows.net,xk45tx8se0.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="6ielVZXrxXB3ZrU/4om5/HM5a7GGniMmMriAevxxyQw=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="chalkable.com" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://chalkable.com/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="j3OCyBJiVl0AXklP/jAAaHQsDHaL7ARTeBROVWe6nL4=" />
+      <Setting name="Domain" value="classroom.chalkable.com" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" value="1" />
       <Setting name="DbBackupServiceUrl" value="https://sn1prod-dacsvc.azure.com/DACWebService.svc" />
@@ -99,13 +92,9 @@
       <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net,qap56j04br.database.windows.net,xk45tx8se0.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
-      <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="6ielVZXrxXB3ZrU/4om5/HM5a7GGniMmMriAevxxyQw=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="chalkable.com" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://chalkable.com/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="j3OCyBJiVl0AXklP/jAAaHQsDHaL7ARTeBROVWe6nL4=" />
+      <Setting name="Domain" value="classroom.chalkable.com" />
+      <!--AcademicBenchmarkDB-->
+      <Setting name="ChalkableAcademicBenchmark" value=""/>
       <!-- Task settings -->
       <Setting name="TaskProducer.SisImportProducer.Interval" value="180" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />

@@ -253,6 +253,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.MESSAGING_DISABLED] = Context.MessagingDisabled;
             ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
             ViewData[ViewConstants.SIS_API_VERSION] = Context.SisApiVersion;
+            ViewData[ViewConstants.USER_LOGIN] = Context.Login;
 
             var leParams = SchoolLocator.LeService.GetLEParams();
 
@@ -299,8 +300,9 @@ namespace Chalkable.Web.Controllers
             ProcessFirstLogin(person);
             ProcessActive(person, personView);
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
-            var classes = startupData.Classes;
-            PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
+            var dayTypes = SchoolLocator.DayTypeService.GetDayTypes(startupData.Classes.SelectMany(x => x.ClassPeriods, (a, b) => b.DayTypeRef).ToList());
+            var classesVD = ClassComplexViewData.Create(startupData.Classes, startupData.Rooms, dayTypes).ToList();
+            PrepareJsonData(classesVD, ViewConstants.CLASSES);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyStudent(Context.Login, person.FirstName, person.LastName, 
                 district.Name, "", person.FirstLoginDate, Context.DistrictTimeZone, ip, Context.SCEnabled);
@@ -332,7 +334,9 @@ namespace Chalkable.Web.Controllers
 
             var schoolOption = startupData.SchoolOption;
             PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
-            var classesList = classes.Select(ClassViewData.Create).ToList();
+
+            var dayTypes = SchoolLocator.DayTypeService.GetDayTypes(classes.SelectMany(x => x.ClassPeriods, (a, b) => b.DayTypeRef).ToList());
+            var classesList = ClassComplexViewData.Create(classes, startupData.Rooms, dayTypes).ToList();
             PrepareJsonData(classesList, ViewConstants.CLASSES);
 
             ProcessMethodAndCallTime(() => PrepareClassesAdvancedData(startupData), timeCallBuilder, "Retrieving Activity Category from Inow");
@@ -386,7 +390,8 @@ namespace Chalkable.Web.Controllers
                 Email = context.Login,
                 UUID = context.UserId.ToString()
             };
-            
+            RaygunClient.CustomGroupingKey += (sender, args) => args.CustomGroupingKey = "Login Performance";
+
             RaygunClient.SendInBackground(ex, tags);
         }
 

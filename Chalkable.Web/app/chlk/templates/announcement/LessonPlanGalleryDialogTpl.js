@@ -28,10 +28,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'empty',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.LpGalleryCategoryId, 'categoryType',
-
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'ableToRemove'
+            chlk.models.id.LpGalleryCategoryId, 'categoryType'
 
         ]);
 });

@@ -46,7 +46,7 @@ namespace Chalkable.BackgroundTaskProcessor
 #if !DEBUG
                     try
                     {
-                        raygunClient.SendInBackground(ex, new []{ Settings.WindowsAzureOAuthRelyingPartyName, "task-processor" });
+                        raygunClient.SendInBackground(ex, new []{ Settings.Domain, "task-processor" });
                         Telemetry.TrackException(ex);                        
                     }
                     catch (Exception){}

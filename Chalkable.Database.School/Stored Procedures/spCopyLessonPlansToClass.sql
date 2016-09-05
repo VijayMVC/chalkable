@@ -36,12 +36,16 @@ Declare @toCopy table
 	SchoolYearRef int,
 	InGallery bit,
 	GalleryOwnerRef int,
+	DiscussionEnabled bit,
+	PreviewCommentsEnabled bit,
+	RequireCommentsEnabled bit,
 	TotalSchoolDays int
 )
 
 Insert Into @toCopy
 	Select 
 		Id, Content, StartDate, EndDate, VisibleForStudent, Title, SchoolYearRef, InGallery, GalleryOwnerRef,
+		DiscussionEnabled, PreviewCommentsEnabled, RequireCommentsEnabled,
 		(
 		  Select Count(*) 
 		  From [Date]					   
@@ -72,6 +76,7 @@ Set lp.EndDate = IsNull((Select Max(x.[day])
 								Select top(IIF(lp.TotalSchoolDays = 0, 1, lp.TotalSchoolDays)) cd.[day] as [day] 
 								From @classDays cd 
 								Where cd.[day] >= lp.StartDate
+								Order by [Day] Asc
 						     ) x
 					 ), lp.StartDate)
 From @toCopy lp
@@ -114,8 +119,8 @@ Merge Into Announcement
 Using @toCopy as ToCopy
 	On 1 = 0
 When Not Matched Then
-	Insert (Content, Created, [State], Title)
-	Values (ToCopy.Content, @created, 1, ToCopy.Title)
+	Insert (Content, Created, [State], Title, DiscussionEnabled, PreviewCommentsEnabled, RequireCommentsEnabled)
+	Values (ToCopy.Content, @created, 1, ToCopy.Title, ToCopy.DiscussionEnabled, ToCopy.PreviewCommentsEnabled, ToCopy.RequireCommentsEnabled)
 Output Inserted.Id, ToCopy.Id
 	Into @newAnnIds;
 
@@ -128,9 +133,9 @@ Insert Into LessonPlan
 		null,
 		null,
 		ToCopy.VisibleForStudent,
+		@toSchoolYearId,
 		ToCopy.InGallery,
-		ToCopy.GalleryOwnerRef,
-		@toSchoolYearId
+		ToCopy.GalleryOwnerRef
 	From 
 		@toCopy as ToCopy join @newAnnIds as NewLp
 			on ToCopy.Id = NewLp.[FromAnnouncementId]

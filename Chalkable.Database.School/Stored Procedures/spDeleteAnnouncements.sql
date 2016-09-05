@@ -2,6 +2,15 @@
 as
 Begin Transaction
 
+/*DELETE AnnouncementCommentAttachments*/
+Delete From AnnouncementCommentAttachment 
+Where AnnouncementCommentRef in (Select Id From AnnouncementComment 
+								Join @announcementIdList as anIds 
+									on anIds.Value = AnnouncementComment.AnnouncementRef)
+
+/*DELETE AnnouncementComments*/
+Delete From AnnouncementComment Where AnnouncementRef in (Select Value From @announcementIdList)
+
 /*DELETE AnnouncementGroups*/
 Delete From AnnouncementGroup Where AnnouncementRef in (Select Value From @announcementIdList)
 

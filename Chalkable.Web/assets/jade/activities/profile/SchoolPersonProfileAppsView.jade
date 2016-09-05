@@ -9,7 +9,7 @@
             .img-container
                 +PersonImg(user, 140, !self.getUserRole().isStudent())
                 .grades-container
-        #student-info-panel.right-block.panel-block
+        #student-info-panel.right-block.panel-block.central-block
             displayName =user.getDisplayName() || user.getFullName()
             h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
     .sections

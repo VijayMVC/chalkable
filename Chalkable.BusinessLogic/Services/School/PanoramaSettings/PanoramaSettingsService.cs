@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
@@ -26,23 +27,31 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         
         private static ClassProfilePanoramaSetting GetDefaultClassPanoramaSettings(IServiceLocatorSchool serviceLocator, int? classId)
         {
-            var currentSchoolYear = serviceLocator.SchoolYearService.GetCurrentSchoolYear();
             if (!classId.HasValue)
-                return new ClassProfilePanoramaSetting {SchoolYearIds = new List<int> {currentSchoolYear.Id}};
+            {
+                Trace.Assert(serviceLocator.Context.SchoolYearId.HasValue);
+                var sy = serviceLocator.SchoolYearService.GetSchoolYearById(serviceLocator.Context.SchoolYearId.Value);
+                return new ClassProfilePanoramaSetting { AcadYears = new List<int> { sy.AcadYear } };
+            }
 
-            var adminPanoramaSettings = serviceLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
             var @class = serviceLocator.ClassService.GetById(classId.Value);
+
+            var currentSchoolYear = @class.SchoolYearRef.HasValue 
+                ? serviceLocator.SchoolYearService.GetSchoolYearById(@class.SchoolYearRef.Value) 
+                : serviceLocator.SchoolYearService.GetCurrentSchoolYear();
             
-            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(adminPanoramaSettings.PreviousYearsCount);
+            var adminPanoramaSettings = serviceLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
+            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(currentSchoolYear.Id, adminPanoramaSettings.PreviousYearsCount);
 
             var res = new ClassProfilePanoramaSetting
             {
-                SchoolYearIds = previousSchoolYear.Select(x => x.Id).ToList(),
-                StandardizedTestFilters = adminPanoramaSettings.CourseTypeDefaultSettings.FirstOrDefault(x => x.CourseTypeId == @class.Id)?.StandardizedTestFilters
-                    ?? new List<StandardizedTestFilter>()
+                AcadYears = previousSchoolYear.Select(x => x.AcadYear).ToList(),
+                StandardizedTestFilters = adminPanoramaSettings.CourseTypeDefaultSettings
+                    ?.FirstOrDefault(x => x.CourseTypeId == @class.CourseTypeRef)
+                    ?.StandardizedTestFilters ?? new List<StandardizedTestFilter>()
             };
 
-            res.SchoolYearIds.Add(currentSchoolYear.Id);
+            res.AcadYears.Add(currentSchoolYear.AcadYear);
 
             return res;
         }
@@ -51,16 +60,16 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
         {
             var currentSchoolYear = serviceLocator.SchoolYearService.GetCurrentSchoolYear();
             var adminPanoramaSettings = serviceLocator.PanoramaSettingsService.Get<AdminPanoramaSettings>(null);
-            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(adminPanoramaSettings.PreviousYearsCount);
+            var previousSchoolYear = serviceLocator.SchoolYearService.GetPreviousSchoolYears(currentSchoolYear.Id, adminPanoramaSettings.PreviousYearsCount);
 
             var res = new StudentProfilePanoramaSetting
             {
-                SchoolYearIds = previousSchoolYear.Select(x => x.Id).ToList(),
+                AcadYears = previousSchoolYear.Select(x => x.AcadYear).ToList(),
                 StandardizedTestFilters = adminPanoramaSettings.StudentDefaultSettings
                     ?? new List<StandardizedTestFilter>()
             };
 
-            res.SchoolYearIds.Add(currentSchoolYear.Id);
+            res.AcadYears.Add(currentSchoolYear.AcadYear);
 
             return res;
         }
@@ -78,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.School.PanoramaSettings
             },
             {
                 typeof(AdminPanoramaSettings),
-                new AdminPanoramaSettingsHandler(PersonSetting.ADMIN_PANORAMA_SETTINGS)
+                new AdminPanoramaSettingsHandler()
             }
         };
 

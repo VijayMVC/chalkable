@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Chalkable.BusinessLogic.Model
 {
-    public class AnnouncementToCopyInputModel
+    public class AnnouncementInputModel
     {
         public int AnnouncementId { get; set; }
         public int AnnouncementType { get; set; }
@@ -13,6 +13,6 @@ namespace Chalkable.BusinessLogic.Model
         public int FromClassId { get; set; }
         public int ToClassId { get; set; }
         public DateTime? StartDate { get; set; }
-        public IList<AnnouncementToCopyInputModel> Announcements { get; set; }
+        public IList<AnnouncementInputModel> Announcements { get; set; }
     }
 }

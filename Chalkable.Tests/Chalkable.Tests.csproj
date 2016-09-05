@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -78,8 +78,8 @@
       <HintPath>..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -95,6 +95,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -102,6 +103,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcademicBenchmarkTests\AbApiTests.cs" />
+    <Compile Include="AcademicBenchmarkTests\ABServicesTests.cs" />
     <Compile Include="Common\SettingsTest.cs" />
     <Compile Include="DacPacDeployTest.cs" />
     <Compile Include="DataAccess\Master\DataAccessTestBase.cs" />
@@ -109,7 +112,10 @@
     <Compile Include="DataAccess\OrmTest.cs" />
     <Compile Include="OnDataBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sis\StiApi.common.cs" />
     <Compile Include="Sis\StiApi.cs" />
+    <Compile Include="Sis\StiApi.fixes.cs" />
+    <Compile Include="Sis\StiApi.prints.cs" />
     <Compile Include="Storage\LogDownloadTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestBase.Pathes.cs" />
@@ -121,6 +127,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkConnector\Chalkable.AcademicBenchmarkConnector.csproj">
+      <Project>{a8f83b5e-129f-465e-b8ae-b37231c28df1}</Project>
+      <Name>Chalkable.AcademicBenchmarkConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkImport\Chalkable.AcademicBenchmarkImport.csproj">
+      <Project>{40af3637-d687-428d-9c49-bbb2795ce7f3}</Project>
+      <Name>Chalkable.AcademicBenchmarkImport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.BackgroundTaskProcessor\Chalkable.BackgroundTaskProcessor.csproj">
       <Project>{57307F26-31D4-4759-B22D-C60C7F02DEDB}</Project>
       <Name>Chalkable.BackgroundTaskProcessor</Name>
@@ -132,6 +146,10 @@
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.AcademicBenchmark\Chalkable.Data.AcademicBenchmark.csproj">
+      <Project>{61935eee-bf16-477d-aa84-30555fc0f71c}</Project>
+      <Name>Chalkable.Data.AcademicBenchmark</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
       <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>
@@ -149,15 +167,15 @@
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
-      <Project>{3051f268-b03f-42ae-a06c-1d8dd751bdbf}</Project>
-      <Name>WindowsAzure.Acs.Oauth2</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataAccess\School\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

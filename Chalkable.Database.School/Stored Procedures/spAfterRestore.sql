@@ -1,7 +1,4 @@
-﻿
-
-
-CREATE Procedure spAfterRestore
+﻿Create Procedure spAfterRestore
 as
 declare @chalkableTables table
 (name nvarchar(2048),
@@ -10,25 +7,29 @@ ord int)
 insert into @chalkableTables
 (name, ord)
 values
-('PersonSetting', 22),
-('Notification', 21),
-('AutoGrade', 20),
-('PracticeGrade', 19),
-('AnnouncementApplication', 18),
-('AnnouncementAttachment', 17),
-('Attachment', 16),
-('AnnouncementQnA', 15),
-('PrivateMessageRecipient', 14),
-('PrivateMessage', 13),
-('LPGalleryCategory', 12),
+('PersonSetting', 27),
+('Notification', 26),
+('AutoGrade', 25),
+('PracticeGrade', 24),
+('AnnouncementCommentAttachment', 23),
+('AnnouncementComment', 22),
+('StudentAnnouncementApplicationMeta', 21),
+('AnnouncementApplication', 20),
+('AnnouncementAttachment', 19),
+('Attachment', 18),
+('AnnouncementQnA', 17),
+('PrivateMessageRecipient', 16),
+('PrivateMessage', 15),
+('LPGalleryCategory', 14),
 
-('AnnouncementAssignedAttribute', 11),
-('AnnouncementGroup', 10),
-('AnnouncementRecipientData', 9),
-('AnnouncementStandard', 8),
-('StudentGroup', 7),
-('Group', 6),
-
+('AnnouncementAssignedAttribute', 13),
+('AnnouncementGroup', 12),
+('AnnouncementRecipientData', 11),
+('AnnouncementStandard', 10),
+('StudentGroup', 9),
+('Group', 8),
+('SupplementalAnnouncementRecipient', 7),
+('SupplementalAnnouncement', 6),
 ('AdminAnnouncement', 5),
 ('ClassAnnouncement', 4),
 ('LessonPlan', 3),

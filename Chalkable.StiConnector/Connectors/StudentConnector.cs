@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Runtime.Remoting.Contexts;
+using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
@@ -21,29 +24,29 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
         
-        public IList<StudentCondition> GetStudentConditions(int studentId)
+        public async Task<IList<StudentCondition>> GetStudentConditions(int studentId)
         {
             var url = $"{BaseUrl}chalkable/students/{studentId}/conditions";
-            return Call<IList<StudentCondition>>(url);
+            return await CallAsync<IList<StudentCondition>>(url);
         }
         
-        public NowDashboard GetStudentNowDashboard(int acadSessionId, int studentId, DateTime nowSchoolTime)
+        public async Task<NowDashboard> GetStudentNowDashboard(int acadSessionId, int studentId, DateTime nowSchoolTime)
         {
             var nvc = new NameValueCollection
             {
                 [DATE_PARAM] = nowSchoolTime.ToString(DATE_TIME_FORMAT, CultureInfo.InvariantCulture)
             };
             var url = $"{BaseUrl}chalkable/{acadSessionId}/students/{studentId}/dashboard/now";
-            return Call<NowDashboard>(url, nvc);
+            return await CallAsync<NowDashboard>(url, nvc);
         }
         
-        public StudentExplorerDashboard GetStudentExplorerDashboard(int acadSessionId, int studentId, DateTime? date = null)
+        public async Task<StudentExplorerDashboard> GetStudentExplorerDashboard(int acadSessionId, int studentId, DateTime? date = null)
         {
             var nvc = new NameValueCollection();
             if(date.HasValue)
                 nvc.Add(DATE_PARAM, date.Value.ToString(Constants.DATE_FORMAT));
             var url = $"{BaseUrl}chalkable/{acadSessionId}/students/{studentId}/dashboard/explorer";
-            return Call<StudentExplorerDashboard>(url, nvc);
+            return await CallAsync<StudentExplorerDashboard>(url, nvc);
         }
         
         public StudentAttendanceSummaryDashboard GetStudentAttendanceSummary(int studentId, int acadSessionId, int? termId)
@@ -84,6 +87,52 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
             var url = $"{BaseUrl}chalkable/{acadSessionId}/students/{studentId}/dashboard/discipline/detail";
             return Call<DisciplineDetailDashboard>(url, nvc);
+        }
+
+        public async Task<IList<StudentHealthForm>> GetStudentHealthForms(int studentId, int acadSessionId, int staffId)
+        {
+            if (!IsSupportedApiVersion("7.3.11.21155"))
+                return new List<StudentHealthForm>();
+
+            var nvc = new NameValueCollection()
+            {
+                ["acadSessionId"] = acadSessionId.ToString(),
+                ["staffId"] = staffId.ToString()
+            };
+            return await CallAsync<IList<StudentHealthForm>>($"{BaseUrl}health/students/{studentId}/healthForms", nvc);
+        }
+        public async Task SetStudentHealthFormReadReceipts(int studentId, int studentHealthFormId, StudentHealthFormReadReceipt formReadReceipts)
+        {
+            if (!IsSupportedApiVersion("7.3.11.21155"))
+                return;
+
+            await PostAsync<object>($"{BaseUrl}health/students/{studentId}/healthForms/{studentHealthFormId}/readReceipts", formReadReceipts);
+        }
+
+        public async Task<bool> HasHealthLicenses()
+        {
+            try
+            {
+                await InitWebClient().DownloadDataTaskAsync($"{BaseUrl}moduleLicenses/Health");
+                return true;
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response is HttpWebResponse)
+                {
+                    HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
+                    if (status == HttpStatusCode.NotFound)
+                        return false;
+                }
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
+            }
+        }
+
+        public byte[] GetStudentHealthFormDocument(int studentId, int healthFormId)
+        {
+            return Download($"{BaseUrl}health/students/{studentId}/healthForms/{healthFormId}");
         }
     }
 }

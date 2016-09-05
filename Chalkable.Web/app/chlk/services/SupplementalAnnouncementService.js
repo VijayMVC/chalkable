@@ -63,9 +63,11 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String
-                , chlk.models.common.ChlkDate, Boolean, Array, String, Number]],
+                , chlk.models.common.ChlkDate, Boolean, Array, String
+                , Boolean, Boolean, Boolean, Number]],
             ria.async.Future, function saveSupplementalAnnouncement(id, classId_, title_, content_
-                , expiresDate_, hideFromStudent_, attributesListData, recipientsIds, classAnnouncementTypeId_) {
+                , expiresDate_, hideFromStudent_, attributesListData, recipientsIds
+                , discussionEnabled, previewCommentsEnabled, requireCommentsEnabled,  classAnnouncementTypeId_) {
                 return this.post('SupplementalAnnouncement/Save.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     supplementalAnnouncementPlanId:id.valueOf(),
                     title: title_,
@@ -75,14 +77,19 @@ NAMESPACE('chlk.services', function () {
                     hidefromstudents: hideFromStudent_ || false,
                     attributes: attributesListData,
                     recipientsIds: recipientsIds ? recipientsIds.split(',') : [],
-                    classAnnouncementTypeId: classAnnouncementTypeId_
+                    classAnnouncementTypeId: classAnnouncementTypeId_,
+                    discussionEnabled: discussionEnabled,
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String
-                , chlk.models.common.ChlkDate, Boolean, Array, String, Number]],
+                , chlk.models.common.ChlkDate, Boolean, Array, String
+                , Boolean, Boolean, Boolean, Number]],
             ria.async.Future, function submitSupplementalAnnouncement(id, classId_, title_, content_
-                , expiresDate_, hideFromStudent_, attributesListData, recipientsIds, classAnnouncementTypeId_) {
+                , expiresDate_, hideFromStudent_, attributesListData, recipientsIds
+                , discussionEnabled, previewCommentsEnabled, requireCommentsEnabled,  classAnnouncementTypeId_) {
                 return this.post('SupplementalAnnouncement/Submit.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     supplementalAnnouncementPlanId:id.valueOf(),
                     title: title_ || ('test ' + id.valueOf()),
@@ -92,7 +99,10 @@ NAMESPACE('chlk.services', function () {
                     hidefromstudents: hideFromStudent_ || false,
                     attributes: attributesListData,
                     recipientsIds: recipientsIds ? recipientsIds.split(',') : [],
-                    classAnnouncementTypeId: classAnnouncementTypeId_
+                    classAnnouncementTypeId: classAnnouncementTypeId_,
+                    discussionEnabled: discussionEnabled,
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             }
         ])

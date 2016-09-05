@@ -94,7 +94,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 
                 var time = DateTime.Now - startTime;
                 var timeString = $"{time.Minutes}:{time.Seconds}.{time.Milliseconds}";
-                Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
+                //Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
 
                 ProcessResponseStatus(response.Status, url);
                 return response;
@@ -102,10 +102,6 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             catch (WebException ex)
             {
                 return HandleWebException<TResponse>(ex);
-            }
-            catch (Exception e)
-            {
-                throw e;
             }
             finally
             {
@@ -118,7 +114,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         { 
             if (status.Code != (int) HttpStatusCode.OK)
             {
-                Trace.TraceError(string.Format(ERROR_FORMAT, url, $"{status.Category}. {status.InformationMessage}"));
+                //Trace.TraceError(string.Format(ERROR_FORMAT, url, $"{status.Category}. {status.InformationMessage}"));
                 if (status.Code == (int)HttpStatusCode.Unauthorized)
                     throw new ChalkableABUnauthorizedException(status.ErrorMessage, status.InformationMessage);
             }

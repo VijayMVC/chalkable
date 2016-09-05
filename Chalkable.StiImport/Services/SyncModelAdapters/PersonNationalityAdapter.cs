@@ -35,5 +35,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             ServiceLocatorSchool.CountryService.DeletePersonNationality(entities.Select(Selector).ToList());
         }
+
+        protected override void PrepareToDeleteInternal(IList<PersonNationality> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

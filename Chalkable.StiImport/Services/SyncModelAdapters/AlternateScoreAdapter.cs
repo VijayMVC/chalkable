@@ -38,5 +38,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var alternateScores = entities.Select(x => new Data.School.Model.AlternateScore { Id = x.AlternateScoreID }).ToList();
             ServiceLocatorSchool.AlternateScoreService.Delete(alternateScores);
         }
+
+        protected override void PrepareToDeleteInternal(IList<AlternateScore> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -17,7 +17,6 @@
     <dependencies>
       <dependency id="Microsoft.AspNet.Mvc" version="5.2.3"/>
       <dependency id="Newtonsoft.Json" version="7.0.1" />
-      <dependency id="WindowsAzure.Acs.Oauth2.Client" version="1.1.88" />
     </dependencies>
   </metadata>
 </package>

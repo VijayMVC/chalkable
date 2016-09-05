@@ -8,6 +8,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Web.Controllers;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -55,25 +56,41 @@ namespace Chalkable.Web.Models
                 ShortPersonInfo = ShortPersonViewData.Create(person)
             };
         }
+
+        public static SearchViewData Create(Staff staff)
+        {
+            return new PersonSearchViewData
+            {
+                Description = staff.FullName(),
+                Id = staff.Id.ToString(),
+                SearchType = (int)SearchTypeEnum.Persons,
+                ShortPersonInfo = StaffViewData.Create(staff)
+            };
+        }
+
+        public static SearchViewData Create(Student student)
+        {
+            return new PersonSearchViewData
+            {
+                Description = student.FullName(),
+                Id = student.Id.ToString(),
+                SearchType = (int)SearchTypeEnum.Persons,
+                ShortPersonInfo = StudentViewData.Create(student)
+            };
+        }
     }
+
     public class AnnouncementSearchViewData : SearchViewData
     {
         public int? AnnouncementType { get; set; }
         public bool IsAdminAnnouncement { get; set; }
         public static SearchViewData Create(Announcement announcement)
         {
-            var annData = announcement;
-            var description = announcement.Title;
-            var classAnnData = announcement as ClassAnnouncement;
-            if (classAnnData != null)
-                description = string.Format("{0} {1} {2}", announcement.Title
-                            , announcement.AnnouncementTypeName, (classAnnData).Order);
-            
             return new AnnouncementSearchViewData
             {
                 Id = announcement.Id.ToString(),
-                Description = description,
-                AnnouncementType = (int?)annData.Type,
+                Description = announcement.Title,
+                AnnouncementType = (int?)announcement.Type,
                 SearchType = (int)SearchTypeEnum.Announcements
             };
         }
@@ -129,15 +146,22 @@ namespace Chalkable.Web.Models
         {
         }
 
+        
         public override IList<SearchViewData> Build(Object searchRes)
         {
-            var schoolPersons = searchRes as IList<Person>;
-            if (schoolPersons == null || (SearchTypeEnum)searchType != SearchTypeEnum.Persons)
+            var personList = searchRes as SearchController.PersonList;
+            if (personList == null || (SearchTypeEnum)searchType != SearchTypeEnum.Persons)
                 throw new ChalkableException("Invalid search View Builder for such search type");
 
-            return schoolPersons.Select(PersonSearchViewData.Create).ToList();
+            var res = new List<SearchViewData>();
+            if(personList.Students.Count > 0)
+                res.AddRange(personList.Students.Select(PersonSearchViewData.Create));
+            if (personList.Staffs.Count > 0)
+                res.AddRange(personList.Staffs.Select(PersonSearchViewData.Create));
+            return res;
         }
     }
+
     public class SearchAnnouncementBuilder : BaseSearchResultBuilder
     {
         public SearchAnnouncementBuilder(SearchTypeEnum searchTypeEnum)
@@ -193,6 +217,6 @@ namespace Chalkable.Web.Models
         Applications = 1,
         Announcements = 2,
         Attachments = 3,
-        Classes = 4
+        Classes = 4,
     }
 }

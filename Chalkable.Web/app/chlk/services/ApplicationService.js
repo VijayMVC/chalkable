@@ -104,7 +104,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function uploadPicture(file, width_, height_) {
 
                 //switched width and height intentionally
-                return this.uploadFiles('Application/UploadPicture', file, chlk.models.id.PictureId, {
+                return this.uploadFiles('Application/UploadPicture', [file], chlk.models.id.PictureId, {
                     width: height_,
                     height: width_
                 });
@@ -154,9 +154,9 @@ NAMESPACE('chlk.services', function () {
                         announcementType: announcementType.valueOf()
                     })
                     .then(function(attachment){
-                        return this.getOauthCode(personId, attachment.getUrl())
+                        return this.getAccessToken(personId, attachment.getUrl())
                             .then(function(data){
-                                attachment.setOauthCode(data.getAuthorizationCode());
+                                attachment.setToken(data.getToken());
                                 return attachment;
                             });
                     }, this);
@@ -172,9 +172,9 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.SchoolPersonId, String, chlk.models.id.AppId]],
-            ria.async.Future, function getOauthCode(personId, appUrl_, appId_){
+            ria.async.Future, function getAccessToken(personId, appUrl_, appId_){
                 var forEdit = false;
-                return this.get('Application/GetOauthCode.json', chlk.models.apps.ApplicationAuthorization, {
+                return this.get('Application/GetAccessToken.json', chlk.models.apps.ApplicationAuthorization, {
                     applicationUrl: appUrl_,
                     applicationId: appId_ ? appId_.valueOf() : undefined
                 }).transform(function (applicationAuthorization) {
@@ -221,7 +221,6 @@ NAMESPACE('chlk.services', function () {
                 chlk.models.id.AppId,
                 chlk.models.apps.ShortAppInfo,
                 ArrayOf(chlk.models.apps.AppPermissionTypeEnum),
-                chlk.models.apps.AppPrice,
                 chlk.models.id.SchoolPersonId,
                 chlk.models.apps.AppAccess,
                 ArrayOf(chlk.models.id.AppCategoryId),
@@ -232,13 +231,12 @@ NAMESPACE('chlk.services', function () {
                 ArrayOf(chlk.models.id.ABStandardId)
             ]],
             ria.async.Future, function updateApp(
-                appId, shortAppInfo, permissionIds, appPricesInfo, devId, appAccess, categories, pictures_,
+                appId, shortAppInfo, permissionIds, devId, appAccess, categories, pictures_,
                 gradeLevels, platforms, forSubmit, standards){
                 return this.post('Application/Update.json', chlk.models.apps.Application,  {
                     applicationId: appId.valueOf(),
                     shortApplicationInfo: shortAppInfo.getPostData(),
                     permissions: this.arrayToIds(permissionIds),
-                    applicationPrices: appPricesInfo.getPostData(),
                     developerId: devId.valueOf(),
                     applicationAccessInfo: appAccess.getPostData(),
                     categories: this.arrayToIds(categories),
@@ -293,15 +291,6 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[chlk.models.id.AppId, Number]],
-            ria.async.Future, function getAppReviews(appId, start_){
-                return this
-                    .get('Application/GetAppReviews.json', chlk.models.apps.AppRating, {
-                        applicationId: appId.valueOf(),
-                        start: start_ || 0
-                    });
-            },
-
             ria.async.Future, function getAppAnalytics(appId){
                 return this
                     .post('Application/GetAppAnalytics.json', chlk.models.developer.HomeAnalytics, {
@@ -332,9 +321,9 @@ NAMESPACE('chlk.services', function () {
                 chlk.models.id.AnnouncementId,
                 chlk.models.announcement.AnnouncementTypeEnum,
                 ArrayOf(chlk.models.standard.Standard),
-                String, Number, Number
+                String, String, Number, Number
             ]],
-            ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey, start_, count_){
+            ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey, accessToken, start_, count_){
                 var params = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARDS(standards);
                 params.apiRoot = _GLOBAL.location.origin;
                 params.mode = 'content-query'; // added this mode to settings
@@ -342,11 +331,12 @@ NAMESPACE('chlk.services', function () {
                 params.announcementType = announcementType.valueOf();
                 params.start = start_;
                 params.count = count_ || 5;
+                params.token = accessToken;
                 //disable Cache
                 params._= Math.random().toString(36).substr(2) + (new Date).getTime().toString(36);
 
-                var token = this.generateTokenForApiCall_(params, encodedKey);
-                return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, token, params);
+                var signature = this.generateTokenForApiCall_(params, encodedKey);
+                return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, signature, params);
             },
 
             [[Object, String]],

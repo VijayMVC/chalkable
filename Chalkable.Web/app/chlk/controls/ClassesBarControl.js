@@ -7,6 +7,8 @@ REQUIRE('chlk.services.ClassService');
 
 REQUIRE('chlk.controls.LeftRightToolbarControl');
 REQUIRE('chlk.controls.ActionLinkControl');
+REQUIRE('chlk.templates.classes.ClassPopupTpl');
+
 
 NAMESPACE('chlk.controls', function () {
 
@@ -110,6 +112,31 @@ NAMESPACE('chlk.controls', function () {
                             })
                         });
 
+                        classesBar.on('mouseover', '.group .class-button', function(node, event){
+
+                            var itemId = Number.parseInt(node.getData('item-id'));
+                            if(itemId){
+                                var classId = new chlk.models.id.ClassId(itemId);
+                                var c = this.context.getService(chlk.services.ClassService).getClassById(classId);
+                                var popUpTpl = new chlk.templates.classes.ClassPopupTpl();
+                                popUpTpl.assign(c);
+
+                                var popupHolder = new ria.dom.Dom('#chlk-class-bar-popup-container');
+                                var main = popupHolder.parent();
+                                //var top =  node.offset().top + node.height() - main.offset().top + 90;
+                                var left = node.offset().left - main.offset().left + 120;
+                                popupHolder.setCss('left', left);
+                                popupHolder.setCss('top', top);
+                                popUpTpl.renderTo(popupHolder.setHTML(''));
+                            }
+
+                        }.bind(this));
+
+                        classesBar.on('mouseleave  click', '.group .class-button', function(node,event){
+                            var popupHolder = new ria.dom.Dom('#chlk-class-bar-popup-container');
+                            popupHolder.setHTML('');
+                        }.bind(this));
+
                         /*mainClassesBar.on('click', '.class-button', function(node, event){
                             var classId = JSON.parse(node.getData('item-id'));
                             this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CLASSES_BAR_ITEM_ID, classId ? new chlk.models.id.ClassId(classId.valueOf()) : null);
@@ -151,5 +178,19 @@ NAMESPACE('chlk.controls', function () {
                 }
 
             }
+            //,
+
+            //[ria.mvc.DomEventBind('mouseover', '.classes-bar .group .class-button')],
+            //[[ria.dom.Dom, ria.dom.Event]],
+            //function mouseOverClass(node, event){
+            //
+            //},
+            //
+            //[ria.mvc.DomEventBind('mouseleave', '.classes-bar .group .class-button')],
+            //[[ria.dom.Dom, ria.dom.Event]],
+            //function mouseLeaveClass(node, event){
+            //    var popupHolder = new ria.dom.Dom('#chlk-class-bar-popup-container');
+            //    popupHolder.setHTML('');
+            //},
         ]);
 });

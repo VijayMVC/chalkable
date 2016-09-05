@@ -371,6 +371,7 @@ var Msg = {
     Class_average: 'Class average',
     Class_Average_Only: 'Class Average Only',
     Class_cost: 'Class cost',
+    Class_Discussion: 'Class Discussion',
     Class_name: 'Class name',
     Class_size: 'Class size',
     Class_flat_rate: 'Class flat rate',
@@ -568,6 +569,7 @@ var Msg = {
     Number_of_rows: 'Number of rows :',
     Password_reset: 'Password reset',
     Parent_info: 'Parent Info',
+    Preview_Comments: 'Preview Comments',
     Public_and_private: 'Public and private',
     Old_Password: 'Old Password',
     One_Per_Page: 'One Per Page',
@@ -588,6 +590,7 @@ var Msg = {
     Reporting_period: 'Reporting period',
     Responsible_for_bill: 'Responsible for Bill',
     Return_to_Homepage: 'Return to Homepage',
+    Require_Comments: 'Require Comments',
     Right_now: 'Right now',
     Room_number: 'Room number',
     Room_shortcut: 'RM',
@@ -705,8 +708,8 @@ var Msg = {
     Weeks_ago: function(n){
         String.format('{0} week{1} ago', n, (n==1 ? '' : 's'));
     },
-    Weight_Addition: 'Weight Addition',
-    Weight_Multiplier:'Weight Multiplier',
+    Weight_Addition: 'Wt. Addition',
+    Weight_Multiplier:'Wt. Multiplier',
     Working_filter: 'Working filter',
     Worksheet_Report: 'Worksheet Report',
     Whole_day: 'Whole day',
@@ -723,9 +726,12 @@ var Msg = {
     Max_Score_Tooltip_Message: 'Enter a maximum score for this assignment. Enter 0 if you will not be grading the item.',
     Weight_Multiplier_Tooltip_Message: 'For this item to be part of the marking period average, a number greater than 0 must be entered.',
     Weight_Addition_Tooltip_Message: 'Enter a number here if points are to be added to each student’s grade for this item.',
-    Hide_From_Student_Tooltip_Message: 'This is will hide the item from students',
+    Hide_From_Student_Tooltip_Message: 'This will hide the item from students',
     Can_Drop_Student_Score_Tooltip_Message: 'Check this box if a score may be dropped for this item',
-    Extra_Credit_Tooltip_Message: '',
+    Extra_Credit_Tooltip_Message: 'Check to make this a zero point graded assignment. Leave unchecked to make this a zero point non-graded assignment.',
+    Class_Discussion_Tooltip_Message: 'Check to include a class discussion with the assignment',
+    Class_Discussion_Preview_Comments_Tooltip_Message: 'All student comments must be approved by the teacher before other students can view them',
+    Class_Discussion_Require_Comments_Tooltip_Message: 'A student must leave a comment before they can see comments from other students',
 
     Add_Credit_Transaction_Success: function(balance){
         return String.format("Success! Your new balance is ${0}", balance)

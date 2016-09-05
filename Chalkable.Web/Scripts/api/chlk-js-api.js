@@ -42,6 +42,7 @@ var CHLK_API = function (window, document, $) {
         SHOW_PLUS: 'showPlus',
         APP_ERROR: 'appError',
         ON_BEFORE_CLOSE: 'addYourself',
+        IS_READY_FOR_CLOSING: 'isReadyForClosing',
         UPDATE_ORIGIN: 'updateOrigin',
         REQUEST_ORIGIN: 'requestOrigin',
         ON_CALLBACK: 'handleResponse',
@@ -83,6 +84,14 @@ var CHLK_API = function (window, document, $) {
         postMessage(res, null, rURL);
     }
 
+    function postResponse(data, value, rURL){
+        var res = data || {};
+        res.action = ChlkActionTypes.ON_CALLBACK;
+        res.value = value;
+
+        postMessage(res, null, rURL);
+    }
+
     var parentURL = chlkRequestSiteRoot();
 
     function updateOrigin(origin){
@@ -113,6 +122,9 @@ var CHLK_API = function (window, document, $) {
                         break;
                     case ChlkActionTypes.ON_BEFORE_CLOSE:
                         handleOnBeforeClose(e.data);
+                        break;
+                    case ChlkActionTypes.IS_READY_FOR_CLOSING:
+                        handleIsReadyForClosing(e.data);
                         break;
                     case ChlkActionTypes.ON_CALLBACK:
                         handleCallback(e.data);
@@ -152,6 +164,20 @@ var CHLK_API = function (window, document, $) {
         } else if (typeof onBeforeAttachHandler === 'boolean') {
             data.appReady = onBeforeAttachHandler;
             postAction(data, isAttach ? ChlkActionTypes.ADD_ME : ChlkActionTypes.SAVE_ME, parentURL);
+        }
+    }
+
+    function handleIsReadyForClosing(data) {
+        if (onBeforeAttachHandler === null) {
+            throw Error('onBeforeAttachHandler should be registered with CHLK_API.onBeforeAttachHandler() call');
+        }
+
+        if (typeof onBeforeAttachHandler === 'function') {
+            onBeforeAttachHandler(data, function (isReady) {
+                postResponse(data, isReady, parentURL);
+            });
+        } else if (typeof onBeforeAttachHandler === 'boolean') {
+            postResponse(data, onBeforeAttachHandler, parentURL);
         }
     }
 

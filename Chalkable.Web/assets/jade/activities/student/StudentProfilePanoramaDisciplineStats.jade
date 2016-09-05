@@ -1,6 +1,8 @@
 mixin HeaderLink_(name, type)
     +ActionLink('students', 'sortPanoramaDisciplines', type, self.getDisciplinesOrderBy() == type && !self.isDisciplinesDescending())(
-        class = (self.getDisciplinesOrderBy() == type ? "active-sort " : "") + (self.isDisciplinesDescending() ? "descending" : "")
+        class = (self.getDisciplinesOrderBy() == type ? "active-sort " : "") + (self.isDisciplinesDescending() ? "descending" : ""),
+        data-tooltip=name,
+        data-tooltip-type="overflow"
     )(attributes).cell=name
 
 -var disciplinesOrderByEnum = chlk.models.panorama.StudentDisciplinesSortType
@@ -16,13 +18,13 @@ mixin HeaderLink_(name, type)
             +HeaderLink_('Disposition Date', disciplinesOrderByEnum.DISPOSITION_DATE).disposition-date
             +HeaderLink_('Disposition', disciplinesOrderByEnum.DISPOSITION).disposition
             +HeaderLink_('Note', disciplinesOrderByEnum.NOTE).note
-        each item in self.getStudentDisciplineStats()
+        each item in self.getStudentDisciplineStats() || []
             .grid-row
-                .cell.date=item.getOccurrenceDate() && item.getOccurrenceDate().format('D dd/mm/yy')
+                .cell.date=item.getOccurrenceDate() && item.getOccurrenceDate().format('D mm/dd/yy')
                 .cell.infraction=item.getInfractionName()
                 .cell.center.code=item.getInfractionStateCode()
                 .cell.center.demerits=item.getDemeritsEarned()
-                .cell.center.primary=item.isPrimary()
-                .cell.disposition-date=item.getDispositionStartDate() && item.getDispositionStartDate().format('D dd/mm/yy')
+                .cell.center.primary=item.isPrimary() ? "Y" : "N"
+                .cell.disposition-date=item.getDispositionStartDate() && item.getDispositionStartDate().format('mm/dd/yy')
                 .cell.disposition=item.getDispositionName()
                 .cell.note=item.getDispositionNote()

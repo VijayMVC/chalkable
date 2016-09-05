@@ -1,4 +1,6 @@
-﻿using Chalkable.StiConnector.Connectors.Model;
+﻿using System;
+using System.Collections.Generic;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -19,5 +21,11 @@ namespace Chalkable.StiConnector.Connectors
         {
             return Call<ClassroomOption>($"{BaseUrl}chalkable/sections/{sectionId}/options");
         }
+
+        public void CopyClassroomOption(int fromSectionId, int[] copyToSectionIds)
+        {
+            Post<Object, int[]>($"{BaseUrl}chalkable/sections/{fromSectionId}/options/copy", copyToSectionIds);
+        }
+        
     }
 }

@@ -11,6 +11,7 @@ namespace Chalkable.StiConnector.SyncModel
         public int HomeroomID { get; set; }
         public int AcadSessionID { get; set; }
         public string Name { get; set; }
+        [NullableForeignKey]
         public int? TeacherID { get; set; }
         [NullableForeignKey]
         public int? RoomID { get; set; }

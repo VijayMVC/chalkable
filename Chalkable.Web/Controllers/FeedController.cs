@@ -17,10 +17,17 @@ namespace Chalkable.Web.Controllers
     public class FeedController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult List(int? start, int? count, bool? complete, int? classId, IList<AnnouncementToCopyInputModel> createdAnnouncements)
+        public ActionResult List(int? start, int? count, bool? complete, int? classId, IList<AnnouncementInputModel> createdAnnouncements)
         {
             var settings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();
             return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, settings, createdAnnouncements));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult ClassFeed(int classId, int? start, int? count, bool? complete, FeedSettingsInfo settings)
+        {
+            //settings = SchoolLocator.AnnouncementFetchService.GetSettingsForClassFeed(classId);
+            return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, settings, new List<AnnouncementInputModel>()));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
@@ -31,7 +38,7 @@ namespace Chalkable.Web.Controllers
             
             return Json(PrepareFeedComplexViewData(SchoolLocator, announcements, settings, null));
         }
-
+        
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SetSettings(FeedSettingsInfo settings)
         {
@@ -39,7 +46,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
         public static FeedComplexViewData GetAnnouncementForFeedList(IServiceLocatorSchool schoolL, int? start, int? count
-            , bool? complete, int? classId, FeedSettingsInfo settings, IList<AnnouncementToCopyInputModel> createdAnnouncements)
+            , bool? complete, int? classId, FeedSettingsInfo settings, IList<AnnouncementInputModel> createdAnnouncements)
         {
             start = start ?? 0;
             count = count ?? (DemoUserService.IsDemoUser(schoolL.Context) ? int.MaxValue : 10);
@@ -52,11 +59,15 @@ namespace Chalkable.Web.Controllers
                     .Select(x => x.AnnouncementId).ToList();
                 var clAnnIds = createdAnnouncements.Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Class)
                     .Select(x => x.AnnouncementId).ToList();
+                var suppAnnIds = createdAnnouncements.Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Supplemental)
+                        .Select(x => x.AnnouncementId).ToList();
 
                 if(clAnnIds.Count > 0)
                     createdAnns.AddRange(schoolL.ClassAnnouncementService.GetAnnouncementsByIds(clAnnIds));
                 if(lpIds.Count > 0)
                     createdAnns.AddRange(schoolL.LessonPlanService.GetAnnouncementsByIds(lpIds));
+                if (suppAnnIds.Count > 0)
+                    createdAnns.AddRange(schoolL.SupplementalAnnouncementService.GetAnnouncementsByIds(suppAnnIds));
             }
             return PrepareFeedComplexViewData(schoolL, list, settings, createdAnns);
         }
@@ -80,7 +91,7 @@ namespace Chalkable.Web.Controllers
             var annApps = schoolL.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(annsIdsWithApp, true);
             var apps = schoolL.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(annApps.Select(x => x.ApplicationRef).ToList());
             annApps = annApps.Where(x => apps.Any(a => a.Id == x.ApplicationRef)).ToList();
-            return AnnouncementViewData.Create(announcements, annApps, apps);
+            return AnnouncementViewData.Create(announcements, annApps, apps, schoolL.Context.Claims);
         }
     }
 }

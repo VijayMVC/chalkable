@@ -14,6 +14,7 @@ using Chalkable.UserTracking;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -39,7 +40,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                         return Redirect<ClassAnnouncementController>(c => c.CreateClassAnnouncement(classAnnType, classId.Value, null));
                 }
                 if (draft is LessonPlan)
+                {
                     classId = classId ?? (draft as LessonPlan).ClassRef;
+                    return Redirect<LessonPlanController>(x => x.CreateLessonPlan(classId));
+                }
+                
                 if (draft is SupplementalAnnouncement)
                 {
                     var supplementedAnn = draft as SupplementalAnnouncement;
@@ -52,7 +57,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 }
             }
             if(classId.HasValue)
-                return Redirect<LessonPlanController>(c => c.CreateLessonPlan(classId.Value));
+                return Redirect<ClassAnnouncementController>(c => c.CreateClassAnnouncement(null, classId.Value, null));
             return Json(null, 7);
         }
 
@@ -82,7 +87,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult Read(int announcementId, int? announcementType)
         {
             var res = PrepareFullAnnouncementViewData(announcementId, announcementType, true);
-
+            
             //TODO: implement this later
             /*
             Currently admin has no rigths to edit lessonplans and activities even
@@ -91,9 +96,10 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             if((res.LessonPlanData != null || res.ClassAnnouncementData != null || res.SupplementalAnnouncementData != null) && BaseSecurity.IsDistrictAdmin(Context))
                 res.IsOwner = false;
             //------------------------------------------------------------------------
+            
 
             MasterLocator.UserTrackingService.OpenedAnnouncement(Context.Login, res.AnnouncementTypeName, res.Title, res.PersonName);
-            return Json(res, 7);
+            return Json(res, 20);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
@@ -127,44 +133,30 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Done(int? classId, int option, int? annType)
         {
-            MarkDoneOptions mdo = (MarkDoneOptions) option;
-            if (!annType.HasValue)
-            {
-                SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo);
-                SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
-                SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
-            }
-            else
-            {
-                if((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.Class)
-                    SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
-                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.LessonPlan)
-                    SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
-            }
-
-
+            SetCompleteByOptions(classId, option, annType, true);
             return Json(true);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult UnDone(int? classId, int option, int? annType)
         {
+            SetCompleteByOptions(classId, option, annType, false);
+            return Json(true);
+        }
+
+        private void SetCompleteByOptions(int? classId, int option, int? annType, bool complete)
+        {
             MarkDoneOptions mdo = (MarkDoneOptions)option;
             if (!annType.HasValue)
             {
-                SchoolLocator.AdminAnnouncementService.SetUnComplete(classId, mdo);
-                SchoolLocator.LessonPlanService.SetUnComplete(classId, mdo);
-                SchoolLocator.ClassAnnouncementService.SetUnComplete(classId, mdo);
+                SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo, complete);
+                SchoolLocator.LessonPlanService.SetComplete(classId, mdo, complete);
+                SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo, complete);
+                SchoolLocator.SupplementalAnnouncementService.SetComplete(classId, mdo, complete);
             }
-            else
-            {
-                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.Class)
-                    SchoolLocator.ClassAnnouncementService.SetUnComplete(classId, mdo);
-                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.LessonPlan)
-                    SchoolLocator.LessonPlanService.SetUnComplete(classId, mdo);
-            }
-            return Json(true);
+            else SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum)annType).SetComplete(classId, mdo, complete);
         }
+
 
         [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult SubmitStandardsToAnnouncement(int announcementId, int? announcementType, IntList standardIds)
@@ -235,10 +227,44 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
         }
 
+        [AuthorizationFilter("Teacher")]
+        public async Task<ActionResult> AdjustDates(IList<AnnouncementInputModel> announcements, DateTime startDate, int classId)
+        {
+            if (announcements == null || announcements.Count == 0)
+                return Json(true);
+            
+            var adjustClassAnnsTask = Task.Factory.StartNew(() => {
+                var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Class)
+                    .Select(x => x.AnnouncementId).ToList();
+
+                SchoolLocator.ClassAnnouncementService.AdjustDates(ids, startDate, classId);
+            });
+
+            var adjustLpsTask = Task.Factory.StartNew(() => {
+                var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.LessonPlan)
+                    .Select(x => x.AnnouncementId).ToList();
+
+                SchoolLocator.LessonPlanService.AdjustDates(ids, startDate, classId);
+            });
+
+            var adjustSuppAnnTask = Task.Factory.StartNew(() => {
+                var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Supplemental)
+                    .Select(x => x.AnnouncementId).ToList();
+
+                SchoolLocator.SupplementalAnnouncementService.AdjustDates(ids, startDate, classId);
+            });
+
+            await adjustLpsTask;
+            await adjustSuppAnnTask;
+            await adjustClassAnnsTask;
+
+            return Json(true);
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public async Task<ActionResult> Copy(CopyAnnouncementsInputModel inputModel)
         {
-            inputModel.Announcements = inputModel.Announcements ?? new List<AnnouncementToCopyInputModel>();
+            inputModel.Announcements = inputModel.Announcements ?? new List<AnnouncementInputModel>();
 
             var classAnnouncementCopyTask = Task.Factory.StartNew(() => {
                 var ids = inputModel.Announcements
@@ -270,6 +296,13 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 AnnouncementId = x
             }));
             return Json(res);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult GetAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue)
+        {
+            var res = SchoolLocator.LessonPlanService.GetAnnouncementRecipientPersons(announcementId, start, count);
+            return Json(res.Select(ShortPersonViewData.Create));
         }
     }
 

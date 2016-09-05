@@ -12,13 +12,7 @@ NAMESPACE('chlk.templates.group', function () {
             ArrayOf(chlk.models.id.GroupId), 'selected',
 
             [ria.templates.ModelPropertyBind],
-            String, 'controller',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'action',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'resultHidden',
+            String, 'requestId',
 
             [ria.templates.ModelPropertyBind],
             Object, 'hiddenParams',

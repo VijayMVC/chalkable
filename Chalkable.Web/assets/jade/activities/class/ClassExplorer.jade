@@ -1,4 +1,4 @@
--var canPressStandards = !self.getUserRole().isAdmin()
+-var canPressStandards = true//!self.getUserRole().isAdmin()
 
 mixin ExplorerStandardLink(standard, abId, i)
     if !canPressStandards
@@ -13,7 +13,7 @@ mixin ExplorerStandardLink(standard, abId, i)
             block
 
 .profile-page
-    h2.page-title=Msg.Class_profile
+    h2.page-title=self.getClazz().getName()
 
     +ProfileTopBar(self, 'explorer')
     .explorer-view(class=canPressStandards ? 'can-press-standards' : '')

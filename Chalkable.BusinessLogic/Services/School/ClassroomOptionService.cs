@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
@@ -12,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(IList<ClassroomOption> classroomOptions);
         ClassroomOption GetClassOption(int classId, bool useInowApi = false);
         ClassroomOption SetUpClassroomOption(ClassroomOption classroomOption);
+        void CopyClassroomOption(int fromClassId, int toClassId);
     }
 
     public class ClassroomOptionService : SisConnectedService, IClassroomOptionService
@@ -48,12 +50,39 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new DataAccessBase<ClassroomOption, int>(u).GetByIdOrNull(classId));
         }
 
+        private void EnsureInModifyAccess(ClassroomOption inputOptions, StiConnector.Connectors.Model.ClassroomOption currentOptions)
+        {
+            if (inputOptions.AveragingMethod != currentOptions.AveragingMethod)
+                BaseSecurity.EnsureHavingClaim(ClaimInfo.MAINTAIN_GRADE_BOOK_AVG_METHOD, Context);
+
+            if(inputOptions.StandardsCalculationWeightMaximumValues != currentOptions.StandardsCalculationWeightMaximumValues)
+                BaseSecurity.EnsureHavingClaim(ClaimInfo.MAINTAIN_STANDARDS_OPTIONS, Context);
+
+            if(inputOptions.StandardsCalculationRule != currentOptions.StandardsCalculationRule)
+                BaseSecurity.EnsureHavingClaim(ClaimInfo.MAINTAIN_STANDARDS_OPTIONS, Context);
+
+            if (inputOptions.StandardsGradingScaleRef != currentOptions.StandardsGradingScaleId)
+                BaseSecurity.EnsureHavingClaim(ClaimInfo.MAINTAIN_STANDARDS_OPTIONS, Context);
+
+            if (inputOptions.StandardsCalculationMethod != currentOptions.StandardsCalculationMethod)
+                BaseSecurity.EnsureHavingClaim(ClaimInfo.MAINTAIN_STANDARDS_OPTIONS, Context);
+        }
+
         public ClassroomOption SetUpClassroomOption(ClassroomOption classroomOption)
         {
+            var currentClassroomOption = ConnectorLocator.ClassroomOptionConnector.GetClassroomOption(classroomOption.Id);
+
+            EnsureInModifyAccess(classroomOption, currentClassroomOption);
+
             var inowClassroomOption = CreateInowClassroomOption(classroomOption);
             ConnectorLocator.ClassroomOptionConnector.UpdateClassroomOption(inowClassroomOption.SectionId, inowClassroomOption);
-            inowClassroomOption = ConnectorLocator.ClassroomOptionConnector.GetClassroomOption(inowClassroomOption.SectionId);
+            
             return classroomOption;
+        }
+
+        public void CopyClassroomOption(int fromClassId, int toClassId)
+        {
+            ConnectorLocator.ClassroomOptionConnector.CopyClassroomOption(fromClassId, new[] {toClassId});
         }
 
         private ClassroomOption CreateClassroomOption(StiConnector.Connectors.Model.ClassroomOption stiClassoption)

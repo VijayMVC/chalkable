@@ -34,6 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void CopyStandardsToAnnouncement(int fromAnnouncementId, int toAnnouncementId, int announcementType);
         IList<Standard> GetGridStandardsByPacing(int? classId, int? gradeLevelId, int? subjectId, int? gradingPeriodId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false);
 
+        void PrepareToDelete(List<Standard> toDelete);
     }
     public class StandardService : SchoolServiceBase, IStandardService
     {
@@ -90,6 +91,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<Standard> GetGridStandardsByPacing(int? classId, int? gradeLevelId, int? subjectId, int? gradingPeriodId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false)
         {
             return DoRead(u => new StandardDataAccess(u).GetGridStandardsByPacing(classId, gradeLevelId, subjectId, gradingPeriodId, parentStandardId, allStandards, activeOnly));
+        }
+
+        public void PrepareToDelete(List<Standard> toDelete)
+        {
+            DoUpdate(u => new StandardDataAccess(u).PrepareToDelete(toDelete));
         }
 
         public void AddStandardSubjects(IList<StandardSubject> standardSubjects)
@@ -169,7 +175,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 standards = da.SearchStandards(filter, activeOnly);
                 if (classId.HasValue)
                 {
-                    var standardsByClass = da.GetStandards(new StandardQuery {ClassId = classId, ActiveOnly = activeOnly});
+                    var standardsByClass = da.GetStandards(new StandardQuery {ClassId = classId, ActiveOnly = activeOnly, AllStandards = true});
                     standards = standards.Where(s => standardsByClass.Any(s2 => s2.Id == s.Id)).ToList();
                 }
                 if (deepest.HasValue)

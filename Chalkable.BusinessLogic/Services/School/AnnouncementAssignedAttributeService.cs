@@ -325,17 +325,19 @@ namespace Chalkable.BusinessLogic.Services.School
                         Name = attributeForCopying.Name,
                         Text = attributeForCopying.Text,
                         VisibleForStudents = attributeForCopying.VisibleForStudents,
+                        AttachmentRef = attributeForCopying.AttachmentRef,
+                        Attachment = attributeForCopying.Attachment
                     };
-                    if (attributeForCopying.Attachment != null)
-                    {
-                        var attContent = serviceLocator.AttachementService.GetAttachmentContent(attributeForCopying.Attachment);
-                        if (attContent.Content != null)
-                        {
-                            var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
-                            attribute.AttachmentRef = att.Id;
-                            attribute.Attachment = att;
-                        }
-                    }
+                    //if (attributeForCopying.Attachment != null)
+                    //{
+                    //    var attContent = serviceLocator.AttachementService.GetAttachmentContent(attributeForCopying.Attachment);
+                    //    if (attContent.Content != null)
+                    //    {
+                    //        var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
+                    //        attribute.AttachmentRef = att.Id;
+                    //        attribute.Attachment = att;
+                    //    }
+                    //}
                     attributes.Add(attribute);
                 }
             }
@@ -346,7 +348,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public static IList<Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>> CopyNonStiAttributes(IDictionary<int, int> fromToAnnouncementIds, 
             UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
         {
-            var attachmentDA = new AttachmentDataAccess(unitOfWork);
+            //var attachmentDA = new AttachmentDataAccess(unitOfWork);
 
             var annAssignedAttributeDA = new AnnouncementAssignedAttributeDataAccess(unitOfWork);
             var attributesForCopying = annAssignedAttributeDA.GetLastListByAnnIds(fromToAnnouncementIds.Select(x => x.Key).ToList(), int.MaxValue)
@@ -365,25 +367,27 @@ namespace Chalkable.BusinessLogic.Services.School
                         AttributeTypeId = attributeToCopy.AttributeTypeId,
                         Name = attributeToCopy.Name,
                         Text = attributeToCopy.Text,
-                        VisibleForStudents = attributeToCopy.VisibleForStudents
+                        VisibleForStudents = attributeToCopy.VisibleForStudents,
+                        AttachmentRef = attributeToCopy.AttachmentRef,
+                        Attachment = attributeToCopy.Attachment
                     };
 
-                    if (attributeToCopy.Attachment != null)
-                    {
-                        var attachment = new Attachment
-                        {
-                            Name = attributeToCopy.Attachment.Name,
-                            PersonRef = serviceLocator.Context.PersonId.Value,
-                            Uuid = null,
-                            UploadedDate = serviceLocator.Context.NowSchoolTime,
-                            LastAttachedDate = serviceLocator.Context.NowSchoolTime,
-                        };
+                    //if (attributeToCopy.Attachment != null)
+                    //{
+                    //    var attachment = new Attachment
+                    //    {
+                    //        Name = attributeToCopy.Attachment.Name,
+                    //        PersonRef = serviceLocator.Context.PersonId.Value,
+                    //        Uuid = null,
+                    //        UploadedDate = serviceLocator.Context.NowSchoolTime,
+                    //        LastAttachedDate = serviceLocator.Context.NowSchoolTime,
+                    //    };
 
-                        attachment.Id = attachmentDA.InsertWithEntityId(attachment);
+                    //    attachment.Id = attachmentDA.InsertWithEntityId(attachment);
 
-                        newAttribute.AttachmentRef = attachment.Id;
-                        newAttribute.Attachment = attachment;
-                    }
+                    //    newAttribute.AttachmentRef = attachment.Id;
+                    //    newAttribute.Attachment = attachment;
+                    //}
                     fromToAttributes.Add(new Pair<AnnouncementAssignedAttribute, AnnouncementAssignedAttribute>(attributeToCopy, newAttribute));
                 }
             }

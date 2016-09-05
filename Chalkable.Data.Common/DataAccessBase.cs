@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Data;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Reflection;
 using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common.Orm;
@@ -128,7 +126,27 @@ namespace Chalkable.Data.Common
         }
         protected void SimpleUpdate<T>(IList<T> objs)
         {
-            ModifyList(objs, SimpleUpdate, Orm.Orm.SimpleUpdate);
+            if (objs.Count > 0)
+            {
+                var t = typeof(T);
+                var fields = Orm.Orm.Fields(t, false, false);
+                var keys = Orm.Orm.GetPrimaryKeyFields(t);
+                var vals = fields.Select(x => $"[{t.Name}].[{x}] = t.[{x}]").JoinString(",");
+                var joinCond = keys.Select(x => $"[{t.Name}].[{x.Name}] = t.[{x.Name}]").JoinString(" and ");
+                var sql = string.Format("UPDATE [{0}] set {1} FROM [{0}] join @t t on {2}", t.Name, vals, joinCond);
+                IDictionary<string, object> ps = new Dictionary<string, object> { { "t", objs } };
+                ExecuteNonQueryParametrized(sql, ps, 10 + objs.Count);
+            }
+        }
+
+        public void PrepareToDelete<T>(IList<T> objs)
+        {
+            if (objs.Count > 0)
+            {
+                var q = Orm.Orm.PrepareToDelete(objs);
+                if (q != null)
+                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+            }
         }
 
         protected const int MAX_PARAMETER_NUMBER = 2000;
@@ -137,7 +155,7 @@ namespace Chalkable.Data.Common
             if (objs.Count > 0)
             {
                 var fields = Orm.Orm.Fields<T>();
-                var keyCount = Orm.Orm.GetPrimaryKeyFields(typeof (T)).Count;
+                var keyCount = Orm.Orm.GetPrimaryKeyFields(typeof(T)).Count;
                 if ((fields.Count + keyCount) * objs.Count > MAX_PARAMETER_NUMBER)
                 {
                     var list1 = objs.Take(objs.Count / 2).ToList();

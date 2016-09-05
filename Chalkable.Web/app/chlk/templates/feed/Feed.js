@@ -29,6 +29,12 @@ NAMESPACE('chlk.templates.feed', function () {
             Number, 'count',
 
             [ria.templates.ModelPropertyBind],
+            Number, 'adjustedItemsCount',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'adjustCount',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'startDate',
 
             [ria.templates.ModelPropertyBind],
@@ -42,6 +48,9 @@ NAMESPACE('chlk.templates.feed', function () {
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.common.ChlkDate), 'classScheduledDays',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
@@ -66,25 +75,6 @@ NAMESPACE('chlk.templates.feed', function () {
 
             function hasFilters(){
                 return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate() || this.getSortType() && this.getSortType().valueOf()
-            },
-
-            function getClassesForSelect(){
-                var items = this.getClassesByYears() || [], res = [];
-                items.forEach(function(item){
-                    var classes = item.getClasses();
-                    if(classes.length){
-                        res.push({
-                            name: item.getSchoolYear().getName(),
-                            values: classes.map(function(clazz){
-                                return {
-                                    name: clazz.getFullClassName(),
-                                    id: clazz.getId().valueOf()
-                                }
-                            })
-                        })
-                    }
-                });
-                return res;
             }
 
         ])

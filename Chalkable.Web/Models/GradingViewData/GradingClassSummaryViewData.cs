@@ -16,12 +16,12 @@ namespace Chalkable.Web.Models.GradingViewData
         public GradingClassSummaryViewData CurrentGradingBox { get; set; }
 
         public static ClassGradingBoxesViewData Create(IList<GradingPeriod> gradingPeriods,
-                                                TeacherClassGrading gradingSummary)
+                                                TeacherClassGrading gradingSummary, IList<ClaimInfo> claims)
         {
             return new ClassGradingBoxesViewData
                 {
                     GradingPeriods = gradingPeriods.Select(GradingPeriodViewData.Create).ToList(),
-                    CurrentGradingBox = GradingClassSummaryViewData.Create(gradingSummary)
+                    CurrentGradingBox = GradingClassSummaryViewData.Create(gradingSummary, claims)
                 };
         }
     }
@@ -51,17 +51,17 @@ namespace Chalkable.Web.Models.GradingViewData
             //return res;
         }
 
-        public static GradingClassSummaryViewData Create(TeacherClassGrading gradingSummary)
+        public static GradingClassSummaryViewData Create(TeacherClassGrading gradingSummary, IList<ClaimInfo> claims)
         {
             if(gradingSummary == null)
                 return null;
 
             return Create(gradingSummary.Announcements, gradingSummary.GradingPeriod,
-                gradingSummary.AnnouncementTypes, gradingSummary.Avg);
+                gradingSummary.AnnouncementTypes, gradingSummary.Avg, claims);
         }
 
         public static GradingClassSummaryViewData Create(IList<AnnouncementDetails> announcements,
-               GradingPeriod gradingPeriod, IList<GradedClassAnnouncementType> announcementTypes, double? avg)
+               GradingPeriod gradingPeriod, IList<GradedClassAnnouncementType> announcementTypes, double? avg, IList<ClaimInfo> claims)
         {
             var res = new GradingClassSummaryViewData
                 {
@@ -74,7 +74,7 @@ namespace Chalkable.Web.Models.GradingViewData
                 foreach (var gradedClassAnnouncementType in announcementTypes)
                 {
                     var anns = announcements.Where(x => x.ClassAnnouncementData.ClassAnnouncementTypeRef == gradedClassAnnouncementType.Id).ToList();
-                    res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(anns, gradedClassAnnouncementType));
+                    res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(anns, gradedClassAnnouncementType, claims));
                 }
             }
             return res;
@@ -89,14 +89,14 @@ namespace Chalkable.Web.Models.GradingViewData
         public decimal? Avg { get; set; }
         
         public static GradingClassSummaryItemViewData Create(IList<AnnouncementDetails> announcements,
-                       GradedClassAnnouncementType announcementType)
+                       GradedClassAnnouncementType announcementType, IList<ClaimInfo> claims)
         {
             var res = new GradingClassSummaryItemViewData
                 {
                     Percent = announcementType.Percentage,
                     Type = ClassAnnouncementTypeViewData.Create(announcementType),
                     Avg = (decimal?) announcementType.Avg,
-                    Announcements = announcements.Select(x=>ClassAnnouncementViewData.Create(x.ClassAnnouncementData)).ToList()
+                    Announcements = announcements.Select(x=>ClassAnnouncementViewData.Create(x.ClassAnnouncementData, claims)).ToList()
                 };
             return res;
         }

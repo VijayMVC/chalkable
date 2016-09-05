@@ -52,7 +52,10 @@ NAMESPACE('chlk.templates.student', function () {
                         lineWidth: 1,
                         lineColor: '#ebebeb',
                         gridLineColor: '#ebebeb',
-                        gridLineDashStyle: 'solid'
+                        gridLineDashStyle: 'solid',
+                        startOnTick: true,
+                        showFirstLabel: true//,
+                        //min: 0
                     },
 
                     series: series
@@ -60,15 +63,20 @@ NAMESPACE('chlk.templates.student', function () {
             },
 
             function getAbsencesChartOptions_(){
-                var stats = this.getModel().getPanoramaInfo().getStudentAbsenceStats() || [],
-                    columnData = [], absenceLevels = ['Absent', 'Half Day', 'All Day'],
-                    categoriesNames = ['A', 'H', 'D'];
+                var stats = this.getModel().getPanoramaInfo().getAttendancesStats() || [],
+                    columnData = [],
+                    absenceLevels = {
+                        0: "All Day",
+                        0.5: "Half Day",
+                        1.0: "Present"
+                    };
+
 
                 if(!stats.length)
                     return null;
 
                 stats.forEach(function(item, index){
-                    columnData.push([item.getDate().getDate().getTime(), absenceLevels.indexOf(item.getAbsenceLevel())]);
+                    columnData.push([item.getDate().getDate().getTime(), item.getNumber()]);
                 });
 
                 return {
@@ -95,9 +103,13 @@ NAMESPACE('chlk.templates.student', function () {
                         gridLineDashStyle: 'solid',
                         labels: {
                             formatter: function () {
-                                return categoriesNames[this.value];
+                                return this.value.toFixed(1);
                             }
-                        }
+                        },
+                        startOnTick: true,
+                        showFirstLabel: true,
+                        min: 0,
+                        max: 1
                     },
 
                     tooltip: {
@@ -107,7 +119,6 @@ NAMESPACE('chlk.templates.student', function () {
                     },
 
                     series: [{
-                        type: 'area',
                         data: columnData,
                         color: '#41b768'
                     }]
@@ -130,14 +141,6 @@ NAMESPACE('chlk.templates.student', function () {
                         height: 200
                     },
 
-                    plotOptions:{
-                        line: {
-                            marker: {
-                                symbol: 'triangle-down'
-                            }
-                        }
-                    },
-
                     xAxis: {
                         type: 'datetime',
                         labels: {
@@ -154,11 +157,14 @@ NAMESPACE('chlk.templates.student', function () {
                         lineWidth: 1,
                         lineColor: '#ebebeb',
                         gridLineColor: '#ebebeb',
-                        gridLineDashStyle: 'solid'
+                        gridLineDashStyle: 'solid',
+                        startOnTick: true,
+                        showFirstLabel: true,
+                        min: 0,
+                        tickInterval: 1
                     },
 
                     series: [{
-                        type: 'area',
                         data: columnData,
                         color: '#f8e6a5'
                     }]

@@ -77,8 +77,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult DownloadAttachment(int attachmentId, bool? needsDownload, int? width, int? height)
         {
-            var att = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(attachmentId).Attachment;
-            var attContentInfo = SchoolLocator.AttachementService.GetAttachmentContent(att);
+            var att = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(attachmentId)?.Attachment;
+            var attContentInfo = att != null ? SchoolLocator.AttachementService.GetAttachmentContent(att) : null;
             if (attContentInfo == null)
             {
                 Response.StatusCode = 404;
@@ -151,7 +151,7 @@ namespace Chalkable.Web.Controllers
                 string name = attContentInfo.Attachment.Name;
                 SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementTypeEnum)announcementType, bin, name);
             }
-            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType);
+            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType, true);
             return Json(res, 6);
         }
 

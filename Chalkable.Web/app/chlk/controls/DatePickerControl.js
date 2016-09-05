@@ -72,6 +72,14 @@ NAMESPACE('chlk.controls', function () {
                     options.maxDate = ranges[ranges.length - 1].end;
                 }
 
+                if(options.enabledDays) {
+                    var enabledDays = options.enabledDays.map(function(day){return day.format('mm-dd-yy')});
+                    delete options.enabledDays;
+                    options.beforeShowDay = function(date) {
+                        return [enabledDays.indexOf(date.format('m-d-Y')) > -1, ''];
+                    };
+                }
+
                 if(options.dateRanges) {
                     var ranges = options.dateRanges.sort(function (_1, _2) { return _1.start - _2.start; });
                     delete options.dateRanges;
@@ -225,6 +233,9 @@ NAMESPACE('chlk.controls', function () {
                                 }
 
                                 that.updateValue(node);
+
+                                //if(date)
+                                    node.trigger('change');
                             }
                         });
 

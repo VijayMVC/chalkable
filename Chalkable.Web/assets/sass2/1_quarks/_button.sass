@@ -130,7 +130,7 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
   z-index: 3
   border-radius: 8px
 
-.print-btn, .copy-btn, .tools-btn
+.print-btn, .copy-btn, .tools-btn, .calendar-btn
   width: 32px
   height: 32px
   display: inline-block
@@ -144,6 +144,9 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
 .tools-btn
   +icons-32-sprite(tools)
 
+.calendar-btn
+  +icons-32-sprite(calendar-with-dots)
+
 .import-icon
   width: 24px
   height: 24px
@@ -155,6 +158,14 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
   height: 24px
   display: inline-block
   +icons-24-sprite(import-small)
+
+@each $icon in reply, edit-grey, invisible-grey, visible, x-remove
+  .#{$icon}-icon
+    width: 24px
+    height: 24px
+    display: inline-block
+    +icons-24-sprite($icon)
+
 
 BUTTON .import-small-icon
   position: relative

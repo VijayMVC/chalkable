@@ -39,7 +39,6 @@ NAMESPACE('chlk.services', function () {
             },
 
 
-            [[chlk.models.id.AnnouncementAttachmentId, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function startViewSession(announcementAttachmentId, announcementType_) {
                 var annType = announcementType_ || this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
                 return this.get('AnnouncementAttachment/StartViewSession', String, {

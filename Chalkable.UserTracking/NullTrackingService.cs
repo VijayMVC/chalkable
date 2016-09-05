@@ -69,13 +69,11 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects, decimal price,
-            decimal? pricePerSchool, decimal? pricePerClass)
+        public void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects)
         {
         }
 
-        public void UpdatedDraft(string email, string appName, string shortDescription, string subjects, decimal price,
-            decimal? pricePerSchool, decimal? pricePerClass)
+        public void UpdatedDraft(string email, string appName, string shortDescription, string subjects)
         {
         }
 
@@ -112,8 +110,13 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached)
+        public void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached, bool includeDiscussion)
         {
+        }
+
+        public void ImportItems(string email, string fromClass, int itemsCount)
+        {
+            throw new NotImplementedException();
         }
 
         public void CreatedReport(string email, string reportType)
@@ -170,11 +173,19 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
+        public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached, bool includeDiscussion)
+        {
+        }
+
+        public void CreateNewSupplemental(string email, string sClass, int studentCount, int appsAttached, int doscAttached, bool includeDiscussion)
         {
         }
 
         public void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached)
+        {
+        }
+
+        public void CopyItems(string email, string toClass, int itemsCount)
         {
         }
     }

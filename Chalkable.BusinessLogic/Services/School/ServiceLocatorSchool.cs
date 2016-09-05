@@ -85,6 +85,9 @@ namespace Chalkable.BusinessLogic.Services.School
         IEthnicityService EthnicityService { get; }
         ILanguageService LanguageService { get; }
         ICountryService CountryService { get; }
+
+        IAnnouncementCommentService AnnouncementCommentService { get; }
+        IAppSettingService AppSettingService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -164,6 +167,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private ILanguageService languageService;
         private ICountryService countryService;
+        private IAnnouncementCommentService announcementCommentService;
+        
+        private IAppSettingService appSettingService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -239,6 +245,8 @@ namespace Chalkable.BusinessLogic.Services.School
             ethnicityService = new EthnicityService(this);
             languageService = new LanguageService(this);
             countryService = new CountryService(this);
+            announcementCommentService = new AnnouncementCommentService(this);
+            appSettingService = new AppSettingService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -334,5 +342,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IEthnicityService EthnicityService => ethnicityService;
         public ILanguageService LanguageService => languageService;
         public ICountryService CountryService => countryService;
+        public IAnnouncementCommentService AnnouncementCommentService => announcementCommentService;
+        public IAppSettingService AppSettingService => appSettingService;
     }
 }

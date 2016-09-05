@@ -1,3 +1,7 @@
+.student-report-dialog
+  .report-content
+    height: 330px
+
 .feed-printing-dialog
   .dialog
     .report-bottom
@@ -383,6 +387,13 @@
 
         &:last-child
           border-right: none
+
+        &.lock
+          width: 24px
+        .lock-icon
+          +icons-24-sprite(lock)
+          width: 16px
+          height: 16px
 
       &:first-child
         .cell

@@ -79,6 +79,7 @@ NAMESPACE('chlk.models.attachment', function () {
             String, 'thumbnailUrl',
             String, 'url',
             String, 'publicUrl',
+            String, 'pictureId',
             chlk.models.attachment.AttachmentTypeEnum, 'type',
             Boolean, 'teachersAttachment',
             Boolean, 'owner',

@@ -142,10 +142,12 @@ NAMESPACE('chlk.activities.attendance', function () {
                         var input = row.find('input.combo-input');
                         if(row.find('.combo-list').exists())
                             this.scrollToOption(null, row.find('.combo-list-container'));
+                        var x = window.scrollX, y = window.scrollY;
                         if(input.exists())
                             input.trigger('focus');
                         else
                             gridFocus.trigger('focus');
+                        window.scrollTo(x, y);                        
                     }.bind(this), 1);
 
                 }
@@ -347,6 +349,23 @@ NAMESPACE('chlk.activities.attendance', function () {
                 attendancesNode.setValue(JSON.stringify(this.getAttendances_()));
                 this._needPopUp = false;
                 node.parent('form').trigger('submit');
+            },
+
+            [ria.mvc.DomEventBind('click', '#all-present-link:not(.disabled)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function allPresentClick(node, event){
+                this._needPopUp = true;
+                var that = this;
+                this._classAttendances.forEach(function(att){
+                    if(att.isStudentAttendanceReadOnly())
+                        return;
+
+                    att.setType(chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf());
+                    att.setLevel(null);
+                    att.setAttendanceReasonId(null);
+                    att.setAttendanceReason(null);
+                    that.renderStudentAttendance_(att);
+                })
             }
         ]);
 });

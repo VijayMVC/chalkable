@@ -15,6 +15,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 return 1;
             if (ChangeVersion < other.ChangeVersion)
                 return -1;
+            if (!ChangeVersion.HasValue && other.ChangeVersion.HasValue)
+                return 1;
+            if (ChangeVersion.HasValue && !other.ChangeVersion.HasValue)
+                return -1;
             if (OperationType > other.OperationType)
                 return 1;
             if (OperationType < other.OperationType)

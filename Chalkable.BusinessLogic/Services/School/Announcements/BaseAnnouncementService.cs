@@ -32,8 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
         void SetComplete(int id, bool complete);
-        void SetComplete(int? classId, MarkDoneOptions option);
-        void SetUnComplete(int? classId, MarkDoneOptions option);
+        void SetComplete(int? classId, MarkDoneOptions option, bool complete);
         void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         bool CanAddStandard(int announcementId);
 
@@ -42,9 +41,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         Standard RemoveStandard(int announcementId, int standardId);
         void RemoveAllAnnouncementStandards(int standardId);
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
-        IList<Person> GetAnnouncementRecipientPersons(int announcementId);
+        IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start = 0, int count = int.MaxValue);
         IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
+
+        void AdjustDates(IList<int> ids, DateTime startDate, int classId);
     }
 
 
@@ -56,6 +57,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public abstract IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         public abstract IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
+        public abstract void AdjustDates(IList<int> ids, DateTime startDate, int classId);
         public abstract IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds);
         
         public abstract void DeleteAnnouncement(int announcementId);
@@ -79,10 +81,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             });
         }
 
-        public IList<Person> GetAnnouncementRecipientPersons(int announcementId)
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start, int count)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateDataAccess(u).GetAnnouncementRecipientPersons(announcementId, Context.PersonId.Value));
+            return DoRead(u => CreateDataAccess(u).GetAnnouncementRecipientPersons(announcementId, start, count));
         }
 
         
@@ -196,7 +198,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => new AnnouncementStandardDataAccess(u).GetAnnouncementStandardsByClassId(classId));
         }
 
-        public void SetComplete(int? classId, MarkDoneOptions option)
+        public void SetComplete(int? classId, MarkDoneOptions option, bool complete)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
@@ -218,34 +220,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     break;
             }
             if(fromDate <= toDate)
-                SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId, filterByExpiryDate);
+                SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId, filterByExpiryDate, complete);
         }
-
-        public void SetUnComplete(int? classId, MarkDoneOptions option)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            Trace.Assert(Context.SchoolYearId.HasValue);
-
-            DateTime toDate;
-            DateTime fromDate;
-            var filterByExpiryDate = false;
-            GetDateRangeForMarking(out fromDate, out toDate);
-            switch (option)
-            {
-                case MarkDoneOptions.Till30Days:
-                    if (toDate > Context.NowSchoolTime.AddDays(-30))
-                        toDate = Context.NowSchoolTime.AddDays(-30);
-                    break;
-                case MarkDoneOptions.TillToday:
-                    if (toDate > Context.NowSchoolTime.AddDays(-1))
-                        toDate = Context.NowSchoolTime.AddDays(-1);
-                    filterByExpiryDate = true;
-                    break;
-            }
-            if (fromDate <= toDate)
-                SetUnComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId, filterByExpiryDate);
-        }
-
+        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate, bool complete);
+        
         private void GetDateRangeForMarking(out DateTime startDate, out DateTime endDate)
         {
             var feedSettings = ServiceLocator.AnnouncementFetchService.GetSettingsForFeed();
@@ -260,10 +238,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             else
                 endDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
         }
-
-        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate);
-
-        protected abstract void SetUnComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate);
 
         public Announcement GetAnnouncementById(int id)
         {

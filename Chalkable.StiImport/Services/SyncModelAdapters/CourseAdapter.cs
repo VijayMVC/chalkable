@@ -89,5 +89,14 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 }).ToList();
             ServiceLocatorSchool.ClassService.Delete(courses);
         }
+
+        protected override void PrepareToDeleteInternal(IList<Course> entities)
+        {
+            var courses = entities.Select(x => new Class
+            {
+                Id = x.CourseID
+            }).ToList();
+            ServiceLocatorSchool.ClassService.PrepareToDelete(courses);
+        }
     }
 }

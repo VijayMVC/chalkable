@@ -22,7 +22,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         private const string CREATE_PORCEDURE = "spCreateClasssAnnouncement";
-        private const string REORDER_PROCEDURE = "spReorderAnnouncements";
 
         private const string CLASS_ANNOUNCEMENT_TYPE_ID_PARAM = "classAnnouncementTypeId";
         private const string CREATED_PARAM = "created";
@@ -202,21 +201,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         private const string CLASS_ANN_TYPE_PARAM = "classAnnType";
-
-        public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int classId)
-        {
-            var parameters = new Dictionary<string, object>
-                {
-                    {SCHOOL_YEAR_ID_PARAM, schoolYearId},
-                    {CLASS_ANN_TYPE_PARAM, classAnnouncementTypeId},
-                    {CLASS_ID_PARAM, classId}
-                };
-            using (ExecuteStoredProcedureReader(REORDER_PROCEDURE, parameters))
-            {
-            }
-        }
-        
-        
+       
         public IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds, int personId)
         {
             if (activitiesIds == null || activitiesIds.Count == 0) return new List<AnnouncementComplex>();
@@ -302,16 +287,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         /// </summary>
         /// <param name="sisCopyResult">Key is SOURCE sis activity id. Value is NEW sis activity id</param>
         /// <returns>Key is SOURCE announcement id. Value is NEW announcement id</returns>
-        public IDictionary<int, int> CopyClassAnnouncementsToClass(IDictionary<int, int> sisCopyResult, int toClassId, DateTime created)
+        public IDictionary<int, int> CopyClassAnnouncementsToClass(IList<SisActivityCopyResult> sisCopyResult, DateTime created)
         {
-            var sisCopyRes = SisActivityCopyResult.Create(sisCopyResult);
             var @params = new Dictionary<string, object>
             {
-                ["sisCopyResult"] = sisCopyRes,
-                ["toClassId"] = toClassId,
+                ["sisCopyResult"] = sisCopyResult,
                 ["created"] = created
             };
-
             using (var reader = ExecuteStoredProcedureReader("spCopyClassAnnouncementsToClass", @params))
             {
                 return reader.ReadList<AnnouncementCopyResult>()
@@ -319,6 +301,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
     }
+
 
     public class ClassAnnouncementsQuery : AnnouncementsQuery
     {

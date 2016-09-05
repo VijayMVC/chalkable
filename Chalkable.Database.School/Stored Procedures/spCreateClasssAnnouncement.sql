@@ -39,12 +39,16 @@ begin transaction
 	insert into @annIdT
 	select Id from vwClassAnnouncement
 	Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId)
-	AND ClassAnnouncementTypeRef = @classAnnouncementTypeId AND [State] = 0
-	and SchoolYearRef  = @schoolYearId
+		 AND [State] = 0
+		 and SchoolYearRef  = @schoolYearId
 	Union
 	Select Id From vwLessonPlan
 	Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) And [State] = 0
-	and SchoolYearRef  = @schoolYearId
+		and SchoolYearRef  = @schoolYearId
+	Union 
+	Select Id from vwSupplementalAnnouncement
+	Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 
+		  and SchoolYearRef = @schoolYearId
 
 	exec spDeleteAnnouncements @annIdT
 
@@ -57,13 +61,13 @@ begin transaction
 		end
 		else begin
 		/*INSERT TO ANNOUNCEMENT*/
-		insert into Announcement (Created, Title, Content, [State])
-		values(@created, null, null, @state);
+		insert into Announcement (Created, Title, Content, [State], DiscussionEnabled, PreviewCommentsEnabled, RequireCommentsEnabled)
+		values(@created, null, null, @state, 0 ,0 ,0);
 
 		set @announcementId = SCOPE_IDENTITY()
 
-		insert into ClassAnnouncement(Id, ClassRef, ClassAnnouncementTypeRef, Expires, SchoolYearRef, Dropped,MayBeDropped, MaxScore, [Order],VisibleForStudent, WeightAddition, WeightMultiplier, IsScored)
-		values(@announcementId, @classId, @classAnnouncementTypeId, @expires, @schoolYearId, 0, 0, 0, 0, 1, 0, 1, 1)
+		insert into ClassAnnouncement(Id, ClassRef, ClassAnnouncementTypeRef, Expires, SchoolYearRef, Dropped, MayBeDropped, MaxScore, VisibleForStudent, WeightAddition, WeightMultiplier, IsScored)
+		values(@announcementId, @classId, @classAnnouncementTypeId, @expires, @schoolYearId, 0, 0, 0, 1, 0, 1, 1)
 
 
 		/*GET CONTENT FROM PREV ANNOUNCEMENT*/
@@ -79,12 +83,6 @@ begin transaction
 		--update Announcement set Content = @prevContent where Id = @announcementId
 	end
 
-	if(@classAnnouncementTypeId is not null and @classId is not null)
-	begin
-	declare @reorderRes TInt32
-	insert into @reorderRes
-	exec [spReorderAnnouncements] @schoolYearId, @classAnnouncementTypeId,  @classId
-	end
 	exec spGetClassAnnouncementDetails @announcementId, @personId, @callerRole, @schoolYearId
 
 commit

@@ -39,5 +39,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var ids = entities.Select(x => x.StandardSubjectID).ToList();
             ServiceLocatorSchool.StandardService.DeleteStandardSubjects(ids);
         }
+
+        protected override void PrepareToDeleteInternal(IList<StandardSubject> entities)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

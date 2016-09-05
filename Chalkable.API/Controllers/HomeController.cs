@@ -13,7 +13,7 @@ namespace Chalkable.API.Controllers
     public abstract class HomeController: BaseController
     {
         [AllowCorsPolicy]
-        public virtual async Task<ActionResult> Index(string mode, string code, string apiRoot, int? announcementApplicationId,
+        public virtual async Task<ActionResult> Index(string mode, string token, string apiRoot, int? announcementApplicationId,
             int? studentId, int? announcementId, int? announcementType, int? attributeId, int? start, int? count, string contentId)
         {
 
@@ -30,7 +30,7 @@ namespace Chalkable.API.Controllers
             {
                 try
                 {
-                    AuthorizeQueryRequest();
+                    await AuthorizeQueryRequest(token);
                     var res = GetApplicationContents(standards, start, count);
                     return ChlkJsonResult(res, true);
                 }
@@ -40,10 +40,10 @@ namespace Chalkable.API.Controllers
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(code))
+            if (string.IsNullOrWhiteSpace(token))
                 return new EmptyResult();
 
-            await ChalkableAuthorization.AuthorizeAsync(code);
+            await ChalkableAuthorization.AuthorizeAsync(token);
 
             if (string.IsNullOrWhiteSpace(mode))
                 mode = Settings.MY_VIEW_MODE;
@@ -61,15 +61,15 @@ namespace Chalkable.API.Controllers
                 : await new ChalkableConnector(ChalkableAuthorization).Person.GetMe();
         }
 
-        private void AuthorizeQueryRequest()
+        private async Task AuthorizeQueryRequest(string accessToken)
         {
-            var token = Request.Headers["Authorization"];
-            if (string.IsNullOrWhiteSpace(token))
+            var authenticationSignature = Request.Headers[ChalkableAuthorization.AuthenticationHeaderName];
+            if (string.IsNullOrWhiteSpace(authenticationSignature))
                 throw new ChalkableApiException("Security error. Missing token");
-            token = token.Replace("Bearer:", "").Trim();
+            authenticationSignature = authenticationSignature.Replace($"{ChalkableAuthorization.AuthenticationSignature}:", "").Trim();
 
             var identityParams = GetQueryIdentityParams();
-            ChalkableAuthorization.AuthorizeQueryRequest(token, identityParams);
+            await ChalkableAuthorization.AuthorizeQueryRequest(authenticationSignature, identityParams, accessToken);
         }
 
         private IList<string> GetQueryIdentityParams()

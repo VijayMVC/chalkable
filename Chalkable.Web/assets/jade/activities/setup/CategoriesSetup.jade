@@ -3,8 +3,10 @@ mixin ReportCell(value)
         div(data-tooltip=value, data-tooltip-type="overflow").text=value
 
 .setup-page
+    -var ableCopy = self.isAbleEdit()
     -var topData = self.getTopData();
     -var selectedId = topData.getSelectedItemId();
+    -var noClassId = !selectedId || !selectedId.valueOf()
 
     h2.page-title=Msg.Setup
 
@@ -15,11 +17,27 @@ mixin ReportCell(value)
             +ActionLink('setup', 'categoriesSetup').pressed=Msg.Category(true)
             +ActionLink('setup', 'commentsSetup')=Msg.Comment(true)
             +ActionLink('setup', 'classroomOptionSetup')=Msg.Options
+        .right
+            if ableCopy && !noClassId
+                +ActionLink('setup', 'showImportDialog', selectedId)(data-tooltip="Import").import-icon.setup-import
+                a(href="javascript:", data-tooltip="Copy").copy-btn.setup-copy
 
-    if !selectedId || !selectedId.valueOf()
+    if noClassId
         .choose-class
     else
-        +ActionForm('setup', 'deleteAnnouncementTypes')
+        +ActionForm('setup', 'submitAnnouncementTypes')
+            +Hidden('selectedAnnouncements').items-to-copy
+            if ableCopy
+                .green-info-msg-cnt
+                    .green-info-msg.x-hidden
+
+                .copy-buttons-block.left-buttons-block
+                    .right-block.i-b.right
+                        .i-b.copy-to-block
+                            LABEL.text Copy categories to:
+                            +DoubleSelect('toClassId', self.getClassesByYears()).copy-to-select
+                        BUTTON(type="button").negative-button.cancel-copy Cancel
+                        BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-submit Copy
             .chlk-grid-container
                 .grid
                     .row.header
@@ -30,7 +48,7 @@ mixin ReportCell(value)
                         .cell= Msg.HS_to_drop
                         .cell= Msg.LS_to_drop
                         .cell= Msg.Percent
-                        .cell= Msg.Is_system
+                        .cell
                     each category in self.getCategories()
                         .row
                             div(data-id=category.getId()).cell.check-container
@@ -41,8 +59,9 @@ mixin ReportCell(value)
                             +ReportCell(category.getHighScoresToDrop())
                             +ReportCell(category.getLowScoresToDrop())
                             +ReportCell(category.getPercentage().toFixed(3))
-                            .cell
-                                .text #{category.isSystem() ? '+' : ''}
+                            .cell.lock
+                                if category.isSystem()
+                                    .lock-icon(data-tooltip="Locked")
             +Hidden('categoryIds', '').categoty-ids
             +Hidden('classid', selectedId)
             +Hidden('ids', '').ids-to-delete

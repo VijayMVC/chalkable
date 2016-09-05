@@ -153,7 +153,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits,
-            string comment, bool dropped, bool late, bool exempt, bool incomplete, bool commentWasChanged, GradingStyleEnum? gradingStyle = null)
+            string comment, bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
 
@@ -231,7 +231,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (studentAnnouncement.AlternateScoreId.HasValue)
                 studentAnnouncement.AlternateScore = ServiceLocator.AlternateScoreService.GetAlternateScore(studentAnnouncement.AlternateScoreId.Value);
-            if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value) && !(commentWasChanged &&  string.IsNullOrWhiteSpace(comment)))
+            if (ann.VisibleForStudent)
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToStudent(announcementId, studentAnnouncement.StudentId);
             return studentAnnouncement;
         }

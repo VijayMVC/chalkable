@@ -89,6 +89,8 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(PersonNationality));
 
             RegisterType(typeof(Homeroom));
+            
+            RegisterType(typeof(AppSetting));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)
@@ -101,7 +103,7 @@ namespace Chalkable.StiConnector.SyncModel
                 }
                 else
                 {
-                    throw new Exception(string.Format("There is no such table {0} registered for sync", tableVersion.TableName));   
+                    throw new Exception($"There is no such table {tableVersion.TableName} registered for sync");   
                 }
             }
         }

@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             bool? ownedOnly = null)
         {
             return locator.SupplementalAnnouncementService.GetSupplementalAnnouncementsSortedByDate(from ?? fromDate, to ?? toDate, includeFrom
-                , includeTo, classId, start, count, _sortDesc, ownedOnly);
+                , includeTo, classId, complete, start, count, _sortDesc, ownedOnly);
         }
 
         protected override Func<AnnouncementComplex, DateTime> SortSelector
@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
                     if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
                     if (x.LessonPlanData != null) return (x.LessonPlanData.StartDate ?? x.Created);
-                    return x.SupplementalAnnouncementData.Expires;
+                    return x.SupplementalAnnouncementData.Expires.Value;
                 };
             }
         }

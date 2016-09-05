@@ -288,32 +288,6 @@ NAMESPACE('chlk.controllers', function (){
                 JSON.stringify([true, model.getGradeLevelsIds(), model.getCurrentPage(), date]), true);
         },
 
-        [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean]],
-        function markAllAction(classId, date, isInProfile_, isDailyAttendancePeriod, isSeatingChart_){
-            var activityClass = this.getView().getCurrent().getClass();
-            var res =  this.ShowConfirmBox('Are you sure you want to Mark All Present?', '')
-                    .thenCall(this.attendanceService.markAllPresent, [classId, date, isDailyAttendancePeriod])
-                .attach(this.validateResponse_())
-                .then(function(success){
-                    this.BackgroundUpdateView(activityClass, null, 'mark-all');
-
-                    if(isSeatingChart_){
-                        if(isInProfile_)
-                            return this.redirectToPage_('class', 'attendanceSeatingChart', [classId, date, true]);
-
-                        return ria.async.BREAK;
-                    }
-
-                    return this.redirectToPage_(isInProfile_ ? 'class' : 'attendance',
-                        isInProfile_ ? 'attendanceList' : 'classList',
-                        [classId, date]);
-
-                }, this);
-
-            return this.UpdateView(activityClass, res);
-        },
-
         [[Boolean, Boolean]],
         function sortStudentsAction(byLastName){
             var model = this.getContext().getSession().get(ChlkSessionConstants.CLASS_LIST_DATA);

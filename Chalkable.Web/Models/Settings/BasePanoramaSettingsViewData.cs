@@ -5,12 +5,12 @@ namespace Chalkable.Web.Models.Settings
 {
     public class BasePanoramaSettingsViewData
     {
-        public IList<int> SchoolYearIds { get; set; }
+        public IList<int> AcadYears { get; set; }
         public IList<StandardizedTestFilterViewData> StandardizedTestFilters { get; set; }
 
-        protected BasePanoramaSettingsViewData(IList<int> schoolYearIds, IList<StandardizedTestFilter> filters)
+        protected BasePanoramaSettingsViewData(IList<int> academicYears, IList<StandardizedTestFilter> filters)
         {
-            SchoolYearIds = schoolYearIds;
+            AcadYears = academicYears;
             StandardizedTestFilters = filters != null ? StandardizedTestFilterViewData.Create(filters) : null;
         }
     }

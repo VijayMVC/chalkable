@@ -17,12 +17,12 @@ Insert Into @supplementalAnnouncements
 Select distinct
 	vwSA.*,
 	cast((Case When exists(Select * From ClassTeacher CT where CT.PersonRef = @callerId and CT.ClassRef = vwSA.ClassRef) then 1 else 0 End) as Bit),
-	cast((Case When ard.Complete is null Then 0 Else 1 End) as Bit) as Complete, 
+	cast((Case When ard.Complete is null Then 0 Else ard.Complete End) as Bit) as Complete, 
 	0 as AllCount 
 From 
 	vwSupplementalAnnouncement vwSA
 	left join AnnouncementRecipientData ard
-		on ard.AnnouncementRef = vwSA.Id
+		on ard.AnnouncementRef = vwSA.Id and ard.PersonRef = @callerId
 Where
 	Id in(Select * From @announcementIds)
 	and (@callerRole = @ADMIN_ROLE_ID or  SchoolYearRef = @schoolYearId)
@@ -32,8 +32,10 @@ Where
 			And vwSA.VisibleForStudent = 1
 		)
 
-
-Exec spSelectSupplementalAnnouncements @supplementalAnnouncements
+--This procedure was changed to make ordered selects
+--Here we don't need to order, so we create fake table
+Declare @emptyFake TAnnouncementOrder
+Exec spSelectSupplementalAnnouncements @supplementalAnnouncements, @emptyFake, 0, 0, 0
 
 Declare @saSchool Table (id int, classId int, schoolId int)
 

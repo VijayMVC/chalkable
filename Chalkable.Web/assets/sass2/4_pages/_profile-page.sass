@@ -102,13 +102,17 @@
     width: 100%
     
     td:first-child
-      width: 350px
+      width: 400px
 
     td:last-child
       overflow-x: auto
 
 .profile-page
   font-family: "Open Sans", sanf-serif
+
+  &.not-verified-health-form
+    .alerts-icon
+      background: image-url("images2/common/alerts-red.png") 0 0 no-repeat
 
   .mp-select
     width: 100px
@@ -142,12 +146,17 @@
     font-size: 30px
     font-weight: normal
 
+    &.display-name
+      width: 225px
+      overflow: hidden
+      text-overflow: ellipsis
+
   .panel-block
-    vertical-align: middle
+    vertical-align: top
     display: inline-block
 
   .central-block
-    margin: 13px 29px 0 17px
+    margin: 0 29px 0 17px
 
   pre.status
     font-family: "Open Sans", sanf-serif
@@ -350,6 +359,32 @@
     .name, .value
       line-height: 38px
 
+.student-profile-grading-popup
+  .grading-popup.popup-bubble
+    .pop-up-item
+      white-space: nowrap
 
+      .name
+        width: 90px
 
+.health-forms-grid.chlk-grid
+  .grid-content
+    a
+      text-decoration: none
 
+    .cell
+      text-decoration: none
+      text-indent: 18px
+      text-align: left
+
+    .cell.verified
+      width: 20%
+
+.verify-health-form-dialog
+  .pdf-container
+    width: 750px
+    height: 500px
+    margin: 20px
+
+.sections-info
+  margin-top: 7px

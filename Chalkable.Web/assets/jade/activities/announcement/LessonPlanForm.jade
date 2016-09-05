@@ -47,16 +47,15 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             .title-block-container
                                 +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
                             .left-top-container
-                                if !state
-                                    .categories-container.i-b
-                                        label(for="galleryCategoryId").main-lable Category:
-                                        #galleryCategoryForSearchContainer
-                                            +Select('galleryCategoryId')#galleryCategoryId
-                                                +Option('', 'Select category', true)
-                                                each item in announcement.getCategories()
-                                                    +Option(item.getId().valueOf(), item.getName())
-                                                +Option(-1, 'Add Category')
-                                        +ActionButton('lpgallerycategory', 'editCategories').special-button2.add.add-category-btn.x-hidden + Add Category
+                                .categories-container.i-b
+                                    label(for="galleryCategoryId").main-label Category:
+                                    #galleryCategoryForSearchContainer
+                                        +Select('galleryCategoryId')#galleryCategoryId
+                                            +Option('', 'Select category', !lessonPlan.getGalleryCategoryId())
+                                            each item in announcement.getCategories()
+                                                +Option(item.getId().valueOf(), item.getName(), item.getId() == lessonPlan.getGalleryCategoryId())
+                                            +Option(-1, 'Add Category')
+                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add.add-category-btn.x-hidden + Add Category
 
                     .right-block
                         .h-1
@@ -113,6 +112,22 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     data-tooltip-timeout=500,
                                     data-tooltip=Msg.Hide_From_Student_Tooltip_Message
                                 )
+                            .check-box-container
+                                label(for="ann-discussionenabled")=Msg.Class_Discussion
+                                +SlideCheckbox('discussionenabled', lessonPlan.isDiscussionEnabled(), false, false)(
+                                    data-isdiscussionenabled=lessonPlan.isDiscussionEnabled(),
+                                    data-tooltip-timeout=500,
+                                ).discussion-option
+                            .check-box-container
+                                label(for="ann-previewcommentsenabled")=Msg.Preview_Comments
+                                +SlideCheckbox('previewcommentsenabled', lessonPlan.isPreviewCommentsEnabled(), false, !lessonPlan.isDiscussionEnabled())(
+                                    data-tooltip-timeout=500,
+                                ).preview-comments-option
+                            .check-box-container
+                                label(for="ann-requirecommentsenabled")=Msg.Require_Comments
+                                +SlideCheckbox('requirecommentsenabled', lessonPlan.isRequireCommentsEnabled(), false, !lessonPlan.isDiscussionEnabled())(
+                                    data-tooltip-timeout=500,
+                                ).require-comments-option
                             if self.isStudyCenterEnabled()
                                 .check-box-container.gallery
                                     label(for="in-gallery-personal-public") Gallery

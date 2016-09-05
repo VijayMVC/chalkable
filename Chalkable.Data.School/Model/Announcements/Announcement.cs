@@ -34,6 +34,9 @@ namespace Chalkable.Data.School.Model.Announcements
         public virtual DateTime Created { get; set; }
         public virtual AnnouncementState State { get; set; }
         public virtual string Title { get; set; }
+        public virtual bool DiscussionEnabled { get; set; }
+        public virtual bool PreviewCommentsEnabled { get; set; }
+        public virtual bool RequireCommentsEnabled { get; set; }
         [NotDbFieldAttr]
         public bool IsOwner { get; set; }
         [NotDbFieldAttr]
@@ -97,6 +100,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public int StudentsCountWithAttachments { get; set; }
         public int GradingStudentsCount { get; set; }
         public int ApplicationCount { get; set; }
+        public int StandardsCount { get; set; }
         public IList<string> AttachmentNames { get; set; }
         public bool Gradable => GradableType && ClassAnnouncementData.IsScored;
         public bool GradableType => ClassAnnouncementData != null;
@@ -113,6 +117,5 @@ namespace Chalkable.Data.School.Model.Announcements
         public IList<AnnouncementStandardDetails> AnnouncementStandards { get; set; }
         public IList<AnnouncementGroup> AnnouncementGroups { get; set; }
     }
-
-
+    
 }

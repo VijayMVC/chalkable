@@ -102,7 +102,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if (additionalParams == null)
                 additionalParams = new Dictionary<string, object>();
             
-            additionalParams.Add("schoolYearId", _schoolYearId);
+            additionalParams.Add("schoolYearId", query.ClassId.HasValue ? (int?)null : _schoolYearId);
             additionalParams.Add("classId", query.ClassId);
             additionalParams.Add("teacherId", query.TeacherId);
             additionalParams.Add("studentId", query.StudentId);
@@ -164,7 +164,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return res;
         }
 
-        public AnnouncementDetails Create(int classId, DateTime created, DateTime expiresDate, int personId, int classAnnouncementTypeId)
+        public AnnouncementDetails Create(int classId, DateTime created, DateTime? expiresDate, int personId, int classAnnouncementTypeId)
         {
             var @params = new Dictionary<string, object>
             {
@@ -228,6 +228,21 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             SimpleUpdate<Announcement>(entity);
             base.Update(entity);
+        }
+
+        public void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        {
+            if (ids == null || ids.Count == 0)
+                return;
+
+            var @params = new Dictionary<string, object>
+            {
+                ["ids"] = ids,
+                ["startDate"] = startDate,
+                ["classId"] = classId
+            };
+
+            ExecuteStoredProcedure("spAdjustSupplementalAnnouncementDates", @params);
         }
     }
 

@@ -5,6 +5,7 @@ REQUIRE('chlk.models.announcement.AnnouncementAttributeViewData');
 REQUIRE('chlk.models.announcement.AnnouncementAttributeListViewData');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
+REQUIRE('chlk.models.announcement.AnnouncementComment');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.Application');
@@ -37,10 +38,11 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
                 this.announcementAssignedAttrs = SJX.fromValue(raw.announcementAssignedAttrs, String);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
+                this.announcementComments = SJX.fromArrayOfDeserializables(raw.announcementcomments, chlk.models.announcement.AnnouncementComment);
                 this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
                 this.studentAnnouncements = SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.StudentAnnouncements);
-                this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, Object);
+                this.autoGradeApps = raw.autogradeapps;
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
                 this.exempt = SJX.fromValue(raw.exempt, Boolean);
                 this.ableToRemoveStandard = SJX.fromValue(raw.canremovestandard, Boolean);
@@ -69,7 +71,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
-                this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
+                this.classId = SJX.fromValue(raw.classId || raw.classid, chlk.models.id.ClassId);
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
                 this.inGallery = SJX.fromValue(raw.inGallery, Boolean);
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
@@ -80,8 +82,10 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
                 this.imported = SJX.fromValue(raw.imported, Boolean);
 
+                this.requestId = SJX.fromValue(raw.requestId, String);
+
                 if(raw.createdAnnouncements)
-                    this.createdAnnouncements = SJX.fromValue(JSON.parse(raw.createdAnnouncements), Object);
+                    this.createdAnnouncements = JSON.parse(raw.createdAnnouncements);
 
                 if(this.autoGradeApps && this.autoGradeApps.length){
                     var autoGradeApps = [];
@@ -105,9 +109,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
                 this.studentsAnnApplicationMeta = SJX.fromArrayOfDeserializables(raw.studentsannouncementapplicationmeta,
                     chlk.models.announcement.StudentAnnouncementApplicationMeta);
-
-                console.log(raw.studentsannouncementapplicationmeta);
-                console.log(this.studentsAnnApplicationMeta);
             },
 
             ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
@@ -131,6 +132,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'grade',
             String, 'comment',
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+            ArrayOf(chlk.models.announcement.AnnouncementComment), 'announcementComments',
 
             Number, 'announcementTypeId',
             ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',
@@ -160,6 +162,9 @@ NAMESPACE('chlk.models.announcement', function () {
 
             Boolean, 'ableUseExtraCredit',
 
+            chlk.models.classes.Class, 'clazz',
+
+            String, 'requestId',
 
             [[Object]],
             Boolean, function isFeedItemHidden_(raw){

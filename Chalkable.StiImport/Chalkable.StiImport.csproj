@@ -116,8 +116,8 @@
       <HintPath>..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Observable.TraceEventSession, Version=1.0.50617.0, Culture=neutral, processorArchitecture=MSIL">
@@ -161,6 +161,7 @@
     <Compile Include="Services\SyncModelAdapters\AddressAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\AlphaGradeAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\AlternateScoreAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\AppSettingAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\AttendanceMonthAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\BellScheduleAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\CalendarDayAdapter.cs" />
@@ -201,6 +202,8 @@
     <Compile Include="Services\SyncModelAdapters\StaffSchoolAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StandardAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StandardizedTestAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StandardizedTestComponentAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StandardizedTestScoreTypeAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StandardSubjectAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentAcadSessionAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentAdapter.cs" />

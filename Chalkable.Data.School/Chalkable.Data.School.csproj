@@ -74,8 +74,8 @@
       <HintPath>..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -95,6 +95,7 @@
     <Compile Include="DataAccess\AlphaGradeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAssignedAttributeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttributeDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementCommentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AdminAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementDataAccess.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementRecipientDataAccess.cs" />
     <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\AnnouncementComment.cs" />
     <Compile Include="Model\AnnouncementRecipientData.cs" />
     <Compile Include="Model\AlphaGrade.cs" />
     <Compile Include="Model\AlternateScore.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Model\Announcements\LessonPlan.cs" />
     <Compile Include="Model\Announcements\SisActivityCopyResult.cs" />
     <Compile Include="Model\Announcements\SupplementalAnnouncement.cs" />
+    <Compile Include="Model\AppSetting.cs" />
     <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\AttendanceMonth.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
@@ -191,6 +194,7 @@
     <Compile Include="Model\StandardizedTest.cs" />
     <Compile Include="Model\StudentAnnouncementApplicationMeta.cs" />
     <Compile Include="Model\StudentCustomAlertDetail.cs" />
+    <Compile Include="Model\StudentHealthCondition.cs" />
     <Compile Include="Model\SupplementalAnnouncementRecipient.cs" />
     <Compile Include="Model\SystemSetting.cs" />
     <Compile Include="Model\GradedItem.cs" />

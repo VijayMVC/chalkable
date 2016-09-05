@@ -133,9 +133,11 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.LpGalleryCategoryId
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Array, Boolean
+                , Boolean, Boolean, Boolean
             ]],
             ria.async.Future, function saveLessonPlan(id, classId_, title_, content_, galleryCategoryId_
-                , startDate_, endDate_, hideFromStudent_, attributesListData, inGallery_) {
+                , startDate_, endDate_, hideFromStudent_, attributesListData
+                , discussionEnabled, previewCommentsEnabled, requireCommentsEnabled, inGallery_) {
                 return this.post('LessonPlan/Save.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     lessonPlanId:id.valueOf(),
                     title: title_,
@@ -146,14 +148,18 @@ NAMESPACE('chlk.services', function () {
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
                     attributes: attributesListData,
-                    inGallery: inGallery_
+                    inGallery: inGallery_,
+                    discussionEnabled: discussionEnabled,
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.LpGalleryCategoryId
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Array, Boolean]],
             ria.async.Future, function submitLessonPlan(id, classId_, title_, content_, galleryCategoryId_
-                , startDate_, endDate_, hideFromStudent_, attributesListData, inGallery_) {
+                , startDate_, endDate_, hideFromStudent_, attributesListData
+                , discussionEnabled, previewCommentsEnabled, requireCommentsEnabled, inGallery_) {
                 return this.post('LessonPlan/Submit.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     lessonPlanId:id.valueOf(),
                     title: title_ || ('test ' + id.valueOf()),
@@ -164,7 +170,10 @@ NAMESPACE('chlk.services', function () {
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
                     attributes: attributesListData,
-                    inGallery: inGallery_
+                    inGallery: inGallery_,
+                    discussionEnabled: discussionEnabled,
+                    previewCommentsEnabled: previewCommentsEnabled || false,
+                    requireCommentsEnabled: requireCommentsEnabled || false
                 });
             }
         ])

@@ -114,6 +114,8 @@ namespace Chalkable.Data.Master.DataAccess
                         conditions.Add(nameof(Application.HasStudentMyApps), query.MyApps, ConditionRelation.Equal);
                     if (query.Role == CoreRoles.TEACHER_ROLE.Id)
                         conditions.Add(nameof(Application.HasTeacherMyApps), query.MyApps, ConditionRelation.Equal);
+                    if (query.Role == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
+                        conditions.Add(nameof(Application.HasAdminMyApps), query.MyApps, ConditionRelation.Equal);
                 }
             }
 
@@ -252,7 +254,7 @@ namespace Chalkable.Data.Master.DataAccess
         public PaginatedList<Application> GetPaginatedApplications(ApplicationQuery query)
         {
             var q = BuildGetApplicationsQuery(query);
-            q = Orm.PaginationSelect(q, query.OrderBy, Orm.OrderType.Desc, query.Start, query.Count);
+            q = Orm.PaginationSelect(q, query.OrderBy, query.OrderDesc ? Orm.OrderType.Desc : Orm.OrderType.Asc, query.Start, query.Count);
             var paginatedApps = ReadPaginatedResult(q, query.Start, query.Count, r =>
             {
                 var res = new List<Application>();
@@ -420,6 +422,7 @@ namespace Chalkable.Data.Master.DataAccess
         public IList<int> GradeLevels { get; set; }
         public Guid? DeveloperId { get; set; }
         public string OrderBy { get; set; }
+        public bool OrderDesc { get; set; }
         public Guid? SchoolId { get; set; }
         public bool? Ban { get; set; }
         public bool? MyApps { get; set; }
@@ -438,7 +441,8 @@ namespace Chalkable.Data.Master.DataAccess
         {
             Start = 0;
             Count = int.MaxValue;
-            OrderBy = nameof(Application.Id);
+            OrderBy = nameof(Application.Name);
+            OrderDesc = true;
             IncludeInternal = false;
             Live = null;
             CanAttach = null;

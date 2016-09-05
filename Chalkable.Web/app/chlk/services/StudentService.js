@@ -20,15 +20,16 @@ NAMESPACE('chlk.services', function () {
 
             ArrayOf(chlk.models.grading.ClassPersonGradingInfo), 'classPersonGradingInfo',
 
-            [[chlk.models.id.ClassId, String, Boolean, Boolean, Number, Number]],
-            ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, byLastName_, start_, count_) {
+            [[chlk.models.id.ClassId, String, Boolean, Boolean, Number, Number, Boolean]],
+            ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, byLastName_, start_, count_, enrolledOnly_) {
                 return this.getPaginatedList('Student/GetStudents.json', chlk.models.people.User, {
                     classId: classId_ && classId_.valueOf(),
                     filter: filter_,
                     myStudentsOnly: myStudentsOnly_,
                     byLastName: byLastName_,
                     start: start_,
-                    count: count_
+                    count: count_,
+                    enrolledOnly: enrolledOnly_
                 });
             },
 
@@ -49,6 +50,23 @@ NAMESPACE('chlk.services', function () {
                            .then(function(model){return model.getItems();});
             },
 
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            ria.async.Future, function verifyStudentHealthForm(studentId, healthFormId) {
+                return this.get('Student/VerifyStudentHealthForm.json', ArrayOf(chlk.models.student.StudentHealthFormViewData), {
+                    studentId: studentId.valueOf(),
+                    healthFormId: healthFormId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.HealthFormId]],
+            String, function getHealthFormDocumentUri(studentId, healthFormId) {
+                //return "https://local.chalkable.com/Content/sample-3pp.pdf";
+                return this.getUrl('Student/DownloadHealthFormDocument', {
+                    studentId: studentId.valueOf(),
+                    healthFormId: healthFormId.valueOf()
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(personId) {
                 return this.get('Student/Info.json', chlk.models.student.StudentInfo, {
@@ -67,7 +85,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Student/Panorama.json', chlk.models.panorama.StudentPanoramaViewData, {
                     studentId: studentId.valueOf(),
                     standardizedTestFilters: data_ && data_.standardizedTestFilters,
-                    schoolYearIds: data_ && data_.schoolYearIds
+                    acadYears: data_ && data_.acadYears
                 });
             },
 
@@ -75,7 +93,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Student/SavePanoramaSettings.json', Boolean, {
                     studentId : studentId.valueOf(),
                     standardizedTestFilters: data.standardizedTestFilters,
-                    schoolYearIds: data.schoolYearIds
+                    acadYears: data.acadYears
                 });
             },
 
@@ -92,7 +110,7 @@ NAMESPACE('chlk.services', function () {
                 if(!panorama)
                     throw 'No panorama saved';
 
-                var items = panorama.getStudentAbsenceStats(), propRef, propName,
+                var items = panorama.getStudentAbsenceStats() || [], propRef, propName,
                     ref = ria.reflection.ReflectionClass(chlk.models.panorama.StudentAbsenceStatViewData);
 
                 switch (orderBy_){
@@ -144,7 +162,7 @@ NAMESPACE('chlk.services', function () {
                 if(!panorama)
                     throw 'No panorama saved';
 
-                var items = panorama.getStudentDisciplineStats(), propRef, propName,
+                var items = panorama.getStudentDisciplineStats() || [], propRef, propName,
                     ref = ria.reflection.ReflectionClass(chlk.models.panorama.StudentDisciplineStatViewData);
 
                 switch (orderBy_){

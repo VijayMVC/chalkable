@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -36,9 +37,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string ApplicationName { get; set; }
         public bool ShowGradingIcon { get; set; }
         public Guid? AssessmentApplicationId { get; set; }
-
-
-        protected AnnouncementViewData(Announcement announcementData):base(announcementData)
+        
+        protected AnnouncementViewData(Announcement announcementData, IList<ClaimInfo> claims) :base(announcementData)
         {
             ShortAnnouncementViewData annData = null;
             var lp = announcementData as LessonPlan;
@@ -67,7 +67,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             var classAnn = announcementData as ClassAnnouncement;
             if (classAnn != null)
             {
-                ClassAnnouncementData = ClassAnnouncementViewData.Create(classAnn);
+                ClassAnnouncementData = ClassAnnouncementViewData.Create(classAnn, claims);
                 annData = ClassAnnouncementData;
                 ClassId = classAnn.ClassRef;
                 ClassName = classAnn.ClassName;
@@ -80,7 +80,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             }
         }
 
-        protected AnnouncementViewData(AnnouncementComplex announcement):this(announcement.AnnouncementData)
+        protected AnnouncementViewData(AnnouncementComplex announcement, IList<ClaimInfo> claims) :this(announcement.AnnouncementData, claims)
         {
             AttachmentsCount = announcement.AttachmentsCount;
             AttachmentNames = announcement.AttachmentNames;
@@ -99,33 +99,33 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         }
 
 
-        public new static AnnouncementViewData Create(Announcement announcement)
+        public static AnnouncementViewData Create(Announcement announcement, IList<ClaimInfo> claims)
         {
-            return new AnnouncementViewData(announcement);
+            return new AnnouncementViewData(announcement, claims);
         }
 
-        public static AnnouncementViewData Create(AnnouncementComplex announcement, string applicationName = null)
+        public static AnnouncementViewData Create(AnnouncementComplex announcement, IList<ClaimInfo> claims, string applicationName = null)
         {
-            var res = new AnnouncementViewData(announcement);
+            var res = new AnnouncementViewData(announcement, claims);
             if (!string.IsNullOrEmpty(applicationName))
                 res.ApplicationName = applicationName;
             return res;
         }
 
-        public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements)
+        public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements, IList<ClaimInfo> claims)
         {
-            return announcements.Select(x => Create(x)).ToList();
+            return announcements.Select(x => Create(x, claims)).ToList();
         }
 
         public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements
-            , IList<AnnouncementApplication> annApps, IList<Application> applications)
+            , IList<AnnouncementApplication> annApps, IList<Application> applications, IList<ClaimInfo> claims)
         {
             var res = new List<AnnouncementViewData>();
             foreach (var ann in announcements)
             {
                 var app = applications.FirstOrDefault(a=> annApps.Any(annApp=>annApp.ApplicationRef == a.Id && annApp.AnnouncementRef == ann.Id));
                 var appName = app != null ? app.Name : null;
-                var annView = Create(ann, appName);
+                var annView = Create(ann, claims, appName);
                 if (string.IsNullOrEmpty(appName))
                     annView.ApplicationsCount = 0;
                 res.Add(annView);

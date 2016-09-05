@@ -18,7 +18,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Id = x.StaffID,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
+                Gender = x.GenderID.HasValue ? Locator.GenderMapping[x.GenderID.Value] : "U",
                 UserId = x.UserID
             };
         }
@@ -39,6 +39,11 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             var staff = entities.Select(x => new Data.School.Model.Staff { Id = x.StaffID }).ToList();
             ServiceLocatorSchool.StaffService.Delete(staff);
+        }
+
+        protected override void PrepareToDeleteInternal(IList<Staff> entities)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

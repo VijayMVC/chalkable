@@ -23,7 +23,8 @@ namespace Chalkable.Web.Models.GradingViewData
 
         public static StudentProfileGradingDetailViewData Create(Student student, StudentGradingDetails gradingDetails, GradingPeriod gp,
             IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes
-            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions,
+            IList<ClaimInfo> claims)
         {
             var classAnnouncementGroups = announcements.GroupBy(x => x.ClassRef).Select(y => new
             {
@@ -53,20 +54,19 @@ namespace Chalkable.Web.Models.GradingViewData
                 foreach (var categoryType in categoryTypes)
                 {
                     var ids = categoryType.Items.Select(x => x.ClassAnnouncementData.SisActivityId).Distinct();
+                    var maxPoints = categoryType.Items.Sum(x => x.ClassAnnouncementData.MaxScore ?? 0);
                     var studentAnnouncements =
                         gradingDetails.StudentAnnouncements.Where(x => ids.Contains(x.ActivityId)).ToList();
-
-                    var avg = studentAnnouncements.Average(x => x.NumericScore);
-
-                   
-
+                    
+                    var avg = studentAnnouncements.Sum(x => x.NumericScore ?? 0) / (maxPoints == 0 ? 1 : maxPoints) * 100; //If all activities are non gradable
+                    
                     var catType = new ClassCategoryAvg()
                     {
                         AnnouncementType = categoryType.AnnouncementType,
                         Items = categoryType.Items.Select(x => ShortAnnouncementGradeViewData.Create(
                             x.ClassAnnouncementData, 
                             studentAnnouncements.Where(sa=>sa.ActivityId == x.ClassAnnouncementData.SisActivityId).ToList(), 
-                            student.Id)).ToList(),
+                            student.Id, claims)).ToList(),
                         Avg = avg
                     };
 

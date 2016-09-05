@@ -11,14 +11,14 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public BaseApplicationViewData ApplicationInfo { get; set; }
         public IList<BaseApplicationViewData> Applications { get; set; }
         public IList<BaseApplicationViewData> RecommendedApplications { get; set; }
-        public string AuthorizationCode { get; set; }
+        public string Token { get; set; }
 
-        public static MiniQuizAppInfoViewData Create(Application miniQuizApp, IList<BaseApplicationViewData> suggestedApps, IList<BaseApplicationViewData> application, IDictionary<Guid, bool> hasMyAppsDic, int? personId, string authorizationCode)
+        public static MiniQuizAppInfoViewData Create(Application miniQuizApp, IList<BaseApplicationViewData> suggestedApps, IList<BaseApplicationViewData> application, IDictionary<Guid, bool> hasMyAppsDic, int? personId, string token)
         {
             var res = new MiniQuizAppInfoViewData
             {
                 ApplicationInfo = BaseApplicationViewData.Create(miniQuizApp),
-                AuthorizationCode = authorizationCode,
+                Token = token,
                 Applications = application.Where(a => hasMyAppsDic.ContainsKey(a.Id)).ToList(),
                 RecommendedApplications = suggestedApps.Where(a => hasMyAppsDic.ContainsKey(a.Id)).ToList()
             };

@@ -85,35 +85,46 @@ class TestFeed(BaseAuthedTestCase):
         self.assertTrue('sorttype' in dictionary_verify_settingsforfeed, 'sorttype exists')
         self.assertTrue('gradingperiodid' in dictionary_verify_settingsforfeed, 'announcementtype exists')
         
-        announcementtype = str(dictionary_verify_settingsforfeed['announcementtype'])
-        sorttype = str(dictionary_verify_settingsforfeed['sorttype'])
-        gradingperiodid = str(dictionary_verify_settingsforfeed['gradingperiodid'])
+        #announcementtype = str(dictionary_verify_settingsforfeed['announcementtype'])
+        #sorttype = str(dictionary_verify_settingsforfeed['sorttype'])
+        #gradingperiodid = str(dictionary_verify_settingsforfeed['gradingperiodid'])
     
         self.assertFalse(set(self.lesson_plan_and_activities_id_for_grading_period_2) & set(self.lesson_plan_and_activities_id_for_grading_period_1), 'Items exits in different grading perios')
-        
+
         list_for_date = []
+        last_item = None
         
         dictionary_verify_annoucementviewdatas_all = dictionary_get_items['data']['annoucementviewdatas']
         if len(dictionary_verify_annoucementviewdatas_all) > 0:
             for item in dictionary_verify_annoucementviewdatas_all:
-                type = str(item['type'])
-                if type == '3':
-                    lessonplandata = item['lessonplandata']
-                    for key, value in lessonplandata.iteritems():
-                        startdate = lessonplandata['startdate']
-                        list_for_date.append(startdate)
-                if type == '1':
-                    classannouncementdata = item ['classannouncementdata']
-                    for key2, value2 in classannouncementdata.iteritems():
-                        expiresdate = classannouncementdata['expiresdate']
-                        list_for_date.append(expiresdate)
+                if last_item != None:
+                    def get_item_date(one_item):  # creating new function
+                        if one_item['type'] == 3:
+                            return one_item['lessonplandata']['startdate']
+                        if one_item['type'] == 1:
+                            return one_item['classannouncementdata']['expiresdate']
+                        if one_item['type'] == 4:
+                            return one_item['supplementalannouncementdata']['expiresdate']
+
+                    def get_item_id(one_item):
+                        return one_item['id']
+
+                    def get_item_type(one_item):
+                        return one_item['type']
+
+                    self.assertTrue(get_item_date(last_item) >= get_item_date(item),
+                                    "Items are sorted not in latest order" + ": " +
+                                    str(get_item_date(last_item)) + " " +
+                                    str(get_item_date(item)) + " " + "item_type: " + str(get_item_type(last_item)) +
+                                    " " + "item_id: " + str(get_item_id(last_item)))
+                last_item = item
             decoded_list = [x.encode('utf-8') for x in list_for_date]
-            decoded_list_to_str = ', '.join(decoded_list)
+            #decoded_list_to_str = ', '.join(decoded_list)
             
-            sorted_list_dates = sorted(decoded_list, reverse=True)
-            reverse_list_to_str = ', '.join(sorted_list_dates)
+            #sorted_list_dates = sorted(decoded_list, reverse=True)
+            #reverse_list_to_str = ', '.join(sorted_list_dates)
             
-            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted not in latest order' + ": " + decoded_list_to_str + ' == ' + reverse_list_to_str)
+
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
     

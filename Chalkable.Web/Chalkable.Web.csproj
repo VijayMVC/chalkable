@@ -159,20 +159,20 @@
       <HintPath>..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Mindscape.Raygun4Net, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mindscape.Raygun4Net.Core.5.2.0\lib\net40\Mindscape.Raygun4Net.dll</HintPath>
+    <Reference Include="Mindscape.Raygun4Net, Version=5.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Core.5.3.1\lib\net40\Mindscape.Raygun4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Mindscape.Raygun4Net.Mvc, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.2.0\lib\net40\Mindscape.Raygun4Net.Mvc.dll</HintPath>
+    <Reference Include="Mindscape.Raygun4Net.Mvc, Version=5.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.3.1\lib\net40\Mindscape.Raygun4Net.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Mindscape.Raygun4Net4, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.2.0\lib\net40\Mindscape.Raygun4Net4.dll</HintPath>
+    <Reference Include="Mindscape.Raygun4Net4, Version=5.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.3.1\lib\net40\Mindscape.Raygun4Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Observable.TraceEventSession, Version=1.0.50929.0, Culture=neutral, processorArchitecture=MSIL">
@@ -273,16 +273,17 @@
     <Compile Include="ActionFilters\HandleErrorFilter.cs" />
     <Compile Include="ActionFilters\AuthorizationFilter.cs" />
     <Compile Include="ActionFilters\TraceControllerFilter.cs" />
+    <Compile Include="Authentication\ApplicationAuthentification.cs" />
     <Compile Include="Authentication\ChalkableAuthentication.cs" />
     <Compile Include="Authentication\ChalkableIdentity.cs" />
     <Compile Include="Authentication\ChalkablePrincipal.cs" />
     <Compile Include="Authentication\DeveloperAuthentication.cs" />
-    <Compile Include="Authentication\OauthAuthenticate.cs" />
     <Compile Include="Common\UrlFormats.cs" />
     <Compile Include="Common\ViewConstants.cs" />
     <Compile Include="Controllers\AcademicBenchmarkController.cs" />
     <Compile Include="Controllers\AdminDistrictController.cs" />
     <Compile Include="Controllers\AnnouncementAttachmentController.cs" />
+    <Compile Include="Controllers\AnnouncementCommentController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\AdminAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\ClassAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\LessonPlanController.cs" />
@@ -360,6 +361,7 @@
     <Compile Include="Models\AlphaGradeViewData.cs" />
     <Compile Include="Models\AlternateScoreViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
+    <Compile Include="Models\AnnouncementCommentViewData.cs" />
     <Compile Include="Models\AnnouncementQnAViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AdminAnnouncementRecipientViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AdminAnnouncementViewData.cs" />
@@ -386,12 +388,14 @@
     <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassComplexViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\ClassPanoramaViewData.cs" />
     <Compile Include="Models\EthnicityViewData.cs" />
     <Compile Include="Models\HomeroomViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\StudentPanoramaViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentDetailsViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentHealthFormViewData.cs" />
     <Compile Include="Models\Settings\AdminPanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\ClassProfilePanoramaSettingsViewData.cs" />
@@ -605,6 +609,10 @@
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.AcademicBenchmark\Chalkable.Data.AcademicBenchmark.csproj">
+      <Project>{61935eee-bf16-477d-aa84-30555fc0f71c}</Project>
+      <Name>Chalkable.Data.AcademicBenchmark</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
       <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>
       <Name>Chalkable.Data.Common</Name>
@@ -632,10 +640,6 @@
     <ProjectReference Include="..\Chalkable.UserTracking\Chalkable.UserTracking.csproj">
       <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
       <Name>Chalkable.UserTracking</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
-      <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
-      <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -715,6 +719,14 @@
   <ItemGroup>
     <Content Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
     <Content Include="Reports\FeedReport\FeedShortReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Reports\FeedReport\FeedDetailsDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Reports\FeedReport\FeedShortDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

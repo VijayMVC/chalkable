@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<Person> persons);
         void UpdateForImport(IList<Person> persons);
         void Delete(IList<Person> persons);
-        PersonDetails GetPersonDetails(int id);
+        PersonDetails GetPersonDetails(int id, int? schoolId = null);
         Person GetPerson(int id);
         void ActivatePerson(int id);
         void ProcessPersonFirstLogin(int id);
@@ -27,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count);
 
         CoreRole GetPersonRole(int personId);
+        void PrepareToDelete(IList<Person> persons);
     }
 
     public class PersonService : SisConnectedService, IPersonService
@@ -55,10 +56,10 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new PersonDataAccess(u).GetById(id));
         }
 
-        public PersonDetails GetPersonDetails(int id)
+        public PersonDetails GetPersonDetails(int id, int? schoolId = null)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
-            var res = DoRead(uow => new PersonDataAccess(uow).GetPersonDetails(id, Context.SchoolLocalId.Value));
+            var res = DoRead(uow => new PersonDataAccess(uow).GetPersonDetails(id, schoolId ?? Context.SchoolLocalId.Value));
 
             if (BaseSecurity.IsDistrictAdmin(Context) && Context.PersonId == res.Id)
                 res.RoleRef = Context.Role.Id;
@@ -168,6 +169,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 return CoreRoles.STUDENT_ROLE;
 
             return null;
+        }
+
+        public void PrepareToDelete(IList<Person> persons)
+        {
+            DoUpdate(uow => new PersonDataAccess(uow).PrepareToDelete(persons));
         }
     }
 }

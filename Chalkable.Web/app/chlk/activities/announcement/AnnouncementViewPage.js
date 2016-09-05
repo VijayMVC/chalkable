@@ -9,6 +9,10 @@ REQUIRE('chlk.templates.standard.AddStandardsTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementViewStandardsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.announcement.admin.AdminAnnouncementGradingTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementDiscussionTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementCommentTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementCommentAttachmentsTpl');
+REQUIRE('chlk.templates.LoadingImageTpl');
 
 REQUIRE('chlk.models.grading.AlertsEnum');
 
@@ -52,6 +56,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.row.selected .grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForStudentAttachments, 'update-attachments',
             '#attachments-block', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementDiscussionTpl, 'discussion', '.discussion-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementView, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         //make base page with accordeon support
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
@@ -72,14 +77,38 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             Array, 'zeroPercentageScores',
 
+            [ria.mvc.PartialUpdateRule(null, 'file-for-comment')],
+            VOID, function updateCommentFile(tpl, model, msg_) {
+                var tpl = new chlk.templates.announcement.AnnouncementCommentAttachmentsTpl(), attachments = model.getAttachments(),
+                    attachmentIdNode, ids = attachments.map(function(attachment){return attachment.getId().valueOf()}),
+                    oldIds, container;
+                tpl.assign(model);
+                if(model.getId() && model.getId().valueOf()){
+                    var form = this.dom.find('.post-comment-form:visible[data-id=' + model.getId().valueOf() + ']');
+                    container = form.find('.imgs-cnt');
+                    attachmentIdNode = form.find('.attachment-id');
+                }else{
+                    container = this.dom.find('.new-comment .imgs-cnt');
+                    attachmentIdNode = this.dom.find('.new-comment .attachment-id');
+                }
+                tpl.renderTo(container);
+                oldIds = attachmentIdNode.getValue() ? attachmentIdNode.getValue().split(',') : [];
+                ids = oldIds.concat(ids);
+                attachmentIdNode.setValue(ids.join(','));
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna')],
             VOID, function updateQnAPart(tpl, model, msg_) {
-                tpl.options({
-                    moreClicked: this.isMoreClicked() || false
+                var res = 0;
+
+                model.getAnnouncementQnAs().forEach(function(item){
+                    if(item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+                        res+=1;
+
+                    res+=1;
                 });
-                var container = this.dom.find('.questions-and-answers');
-                container.empty();
-                tpl.renderTo(container);
+
+                this.dom.find('.chat-link').setHTML(res ? res.toString() : '');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
@@ -94,7 +123,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     announcementId: this.getAnnouncementId(),
                     ableDropStudentScore : this.isAbleDropStudentScore(),
                     gradable: this.isAbleToGrade(),//this.isGradable(),
-                    dropped: this.isDropped()
+                    dropped: this.isDropped(),
+                    maxScore: this.getMaxScore()
                 });
                 var container = this.dom.find('.grading-part');
                 container.empty();
@@ -123,16 +153,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     block.find('.grade-input').setValue(grade);
                 });
                 return false;
-            },
-
-            [ria.mvc.DomEventBind('click', '.show-more')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function showMoreQnAsClick(node, event){
-                node.parent('.questions-and-answers')
-                    .find('.hidden-item')
-                    .removeClass('hidden-item');
-                node.remove();
-                this.setMoreClicked(true);
             },
 
             [ria.mvc.DomEventBind('click', '.decline-auto-grades')],
@@ -238,8 +258,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.grades-individual')],
-            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
-            function selectStudent(node, event, row, index){
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number, Boolean]],
+            function selectStudent(node, event, row, index, noScroll_){
                 clearTimeout(slideTimeout);
                 slideTimeout = setTimeout(function(){
                     node.find('.attachments-container:eq(' + index + ').with-data').slideDown(500);
@@ -254,42 +274,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.hideDropDown();
                 row.find('.grade-triangle').removeClass('down');
                 //this.setGrade(row.find('.grade-input'));
-            },
-
-            [ria.mvc.DomEventBind('click', '.edit-answer-link, .edit-question-link')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function editAnswerClick(node, event){
-                var row = node.parent('.row');
-                row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeOut(function(){
-                    var node = row.find('.edit-answer-input, .edit-question-input');
-                    node.fadeIn(function(){
-                        node.trigger('focus');
-                    });
-                });
-            },
-
-            [ria.mvc.DomEventBind('keyup', '.edit-answer-input, .edit-question-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function editAnswerKeyUp(node, event){
-                var row = node.parent('.row');
-                var button = row.find('.edit-answer-btn, .edit-question-btn');
-                if(row.find('.edit-answer-text, .edit-question-text').getHTML() == node.getValue())
-                    button.fadeOut();
-                else
-                    button.fadeIn();
-            },
-
-            [ria.mvc.DomEventBind('blur', '.edit-answer-input, .edit-question-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function blurAnswer(node, event){
-                var row = node.parent('.row');
-                if(node.getValue() && !row.find('.edit-answer-btn:visible, .edit-question-btn:visible').exists())
-                    row.find('.edit-answer-input, .edit-answer-btn, .edit-question-input, .edit-question-btn').fadeOut(function(){
-                        setTimeout(function(){
-                            row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeIn();
-                        }, 500);
-
-                    });
             },
 
             [ria.mvc.DomEventBind('click', '.comment-text')],
@@ -649,6 +633,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
             OVERRIDE, VOID, function onStop_() {
+                this.dom.find('.close-chat-link').trigger('click');
                 BASE();
                 new ria.dom.Dom().off('click.grading_popup');
             },
@@ -915,6 +900,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
                 var input = node.find('.grade-input');
+                var commentInput = node.find('.comment-input');
 
                 if(input.hasClass('processing'))
                     return false;
@@ -931,6 +917,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                         oldIncompleteValue = input.getData('incomplete'),
                         exemptValue = node.find('[type=checkbox][name=isexempt]').checked(),
                         oldExemptValue = input.getData('exempt'),
+                        commentValue = (commentInput.getValue() || '').trim(),
+                        oldCommentValue = (commentInput.getData('comment') || '').trim(),
                         changed = false;
 
                     if(value != oldValue && !(!value && !oldValue))
@@ -942,6 +930,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(incompleteValue && !oldIncompleteValue || !incompleteValue && oldIncompleteValue)
                         changed = true;
                     if(exemptValue && !oldExemptValue || !exemptValue && oldExemptValue)
+                        changed = true;
+                    if(commentValue != oldCommentValue && !(!commentValue && !oldCommentValue))
                         changed = true;
 
                     if(!changed)
@@ -1048,6 +1038,68 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!model.getItems().length)
                         this.dom.find('#people-list-form').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
                 }.bind(this), 1);
+            },
+
+            // ------- DISCUSSION --------
+
+            [ria.mvc.DomEventBind('click', '.comment-cancel')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function commentCancelClick(node, event){
+                var form = node.parent('form:not(.edit-form)');
+                form.find('.comment-value').setValue('');
+                form.find('.attachment-id').setValue('');
+                form.find('.img-cnt').setHTML('');
+                node.closest('.qna')
+                    .removeClass('for-reply')
+                    .removeClass('for-edit');
+            },
+
+            [ria.mvc.DomEventBind('click', '.x-remove-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function commentRemoveClick(node, event){
+                node.parent('.chat-bubble').addClass('for-delete');
+            },
+
+            [ria.mvc.DomEventBind('click', '.delete-cancel')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function commentRemoveCancelClick(node, event){
+                node.parent('.for-delete').removeClass('for-delete');
+            },
+
+            [ria.mvc.DomEventBind('click', '.reply-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function replyClick(node, event){
+                node.closest('.qna').addClass('for-reply').removeClass('for-edit');
+            },
+
+            [ria.mvc.DomEventBind('click', '.edit-grey-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function editCommentClick(node, event){
+                node.closest('.qna').addClass('for-edit').removeClass('for-reply');
+            },
+
+            [ria.mvc.DomEventBind('click', '.delete-attachment')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function deleteCommentAttachmentClick(node, event){
+                var idsNode = node.parent('form').find('.attachment-id'),
+                    ids = idsNode.getValue().split(','), currentId = node.getData('id').toString();
+
+                ids.splice(ids.indexOf(currentId), 1);
+                idsNode.setValue(ids.length ? ids.join(',') : '');
+                node.parent('.img-cnt').removeSelf();
+            },
+
+            [ria.mvc.DomEventBind('click', '.edit-form .comment-cancel')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function editCancelClick(node, event){
+                var parent = node.closest('.qna'),
+                    editForm = parent.find('>FORM.edit-form'),
+                    idNode = editForm.find('.attachment-id'),
+                    textArea = editForm.find('.comment-value'),
+                    imgCnt = editForm.find('.imgs-cnt');
+                idNode.setValue(idNode.getData('value'));
+                textArea.setValue(textArea.getData('value'));
+                imgCnt.setHTML(parent.find('>DIV.chat-bubble').find('.imgs-cnt').getHTML());
             }
         ]
     );

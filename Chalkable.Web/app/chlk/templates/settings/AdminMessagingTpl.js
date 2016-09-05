@@ -16,18 +16,12 @@ NAMESPACE('chlk.templates.settings', function () {
             Boolean, 'ableToUpdate',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.apps.Application), 'applications'
+            ArrayOf(chlk.models.apps.Application), 'applications',
 
-            //[ria.templates.ModelPropertyBind],
-            //Boolean, 'allowedForStudents',
-            //
-            //[ria.templates.ModelPropertyBind],
-            //Boolean, 'allowedForStudentsInTheSameClass',
-            //
-            //[ria.templates.ModelPropertyBind],
-            //Boolean, 'allowedForTeachersToStudents',
-            //
-            //[ria.templates.ModelPropertyBind],
-            //Boolean, 'allowedForTeachersToStudentsInTheSameClass'
+            function isAdminPanoramaEnabled() {
+                return this.getCurrentUser().getClaims().filter(function(item){
+                            return item.hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
+                        }).length > 0;
+            }
         ])
 });

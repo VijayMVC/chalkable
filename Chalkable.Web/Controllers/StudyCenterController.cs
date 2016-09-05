@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -38,11 +37,11 @@ namespace Chalkable.Web.Controllers
         }
         
         [AuthorizationFilter("Student")]
-        public ActionResult PracticeGrades(int studentId, int classId, int? standardId)
+        public async Task<ActionResult> PracticeGrades(int studentId, int classId, int? standardId)
         {
-            var stadnards = SchoolLocator.StandardService.GetStandards(classId, null, null);
             var practiceGrades = SchoolLocator.PracticeGradeService.GetPracticeGradesDetails(classId, studentId, standardId);
-            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards));
+            var stadnards = SchoolLocator.StandardService.GetStandards(classId, null, null);
+            return Json(PracticeGradeGridViewData.Create(await practiceGrades, stadnards));
         }
         
         [AuthorizationFilter("Student")]
@@ -64,10 +63,10 @@ namespace Chalkable.Web.Controllers
 
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(miniQuizApp.Url, userInfo);
+            var token = MasterLocator.ApplicationService.GetAccessToken(miniQuizApp.Id, ChalkableAuthentication.GetSessionKey());
             
             return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps.Select(BaseApplicationViewData.Create).ToList(), allApps, 
-                hasMyAppDic, Context.PersonId, authorizationCode));
+                hasMyAppDic, Context.PersonId, token));
         }
     }
 }
