@@ -43,7 +43,10 @@ mixin ImagesSliader(images)
                         ).simple-gray-button
                      each item in self.schoolsLogo()
                         .school
-                           +ActionButton('settings', 'updateReportCardsLogo')=item.getSchoolName()
+                           +FileUpload('settings', 'updateReportCardsLogo', [item.getSchoolId()])(
+                              multiple = false
+                              needFileIndex = false
+                           ).simple-gray-button=item.getSchoolName()
 
                   .add-filter-container
                      .add-circle-btn.add-school-btn +
