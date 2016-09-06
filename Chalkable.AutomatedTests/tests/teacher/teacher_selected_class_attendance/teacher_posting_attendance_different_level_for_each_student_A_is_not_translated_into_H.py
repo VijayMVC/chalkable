@@ -14,7 +14,7 @@ class TestFeed(BaseAuthedTestCase):
         decoded_list = [x.encode('utf-8') for x in final_list]
         dict_for_clas_marking_period = self.dict_for_clas_marking_period
         dict_for_marking_period_date_startdate_endate = self.dict_for_marking_period_date_startdate_endate
-        print dict_for_marking_period_date_startdate_endate
+        #print dict_for_marking_period_date_startdate_endate
 
 
         list_of_levels = ['A', 'T', None]
@@ -25,11 +25,11 @@ class TestFeed(BaseAuthedTestCase):
             for class_id, mp_id in dict_for_clas_marking_period.items():
                 for mp in mp_id:
                     start_date = str(dict_for_marking_period_date_startdate_endate[mp][0])
-                    print start_date
+                    #print start_date
                     end_date = str(dict_for_marking_period_date_startdate_endate[mp][1])
-                    print end_date
+                    #print end_date
                     date_in_correct_format = self.random_date(start_date, end_date)
-                    print date_in_correct_format
+                    #print date_in_correct_format
 
                     get_class_list = self.get('/Attendance/ClassList.json?' +
                                               'classId=' + str(14436) +

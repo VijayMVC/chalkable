@@ -63,7 +63,7 @@ class TestFeed(BaseAuthedTestCase):
                         if i['id'] == id_of_one_activity:
                             for k in i['studentannouncements']['items']:
                                 if k['studentid'] == id_of_one_student:
-                                    print k['studentid'], id_of_one_activity, one_class
+                                    #print k['studentid'], id_of_one_activity, one_class
                                     self.assertEqual(k['gradevalue'], None)
                                     self.assertEqual(k['isexempt'], False)
                                     self.assertEqual(k['isincomplete'], False)
