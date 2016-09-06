@@ -6,9 +6,13 @@ using System.IO;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
+using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
@@ -34,8 +38,13 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
+        byte[] GetReportCards(ReportCardsInputModel inputModel);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
+
+        IList<ReportCardsLogo> GetReportCardsLogos();
+        void UpdateReportCardsLogo(int? schoolId, byte[] logoIcon);
+        void DeleteReportCardsLogo(int id);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -419,6 +428,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return new DefaultRenderer().Render(dataSet, definition, format, null);
         }
 
+        public byte[] GetReportCards(ReportCardsInputModel inputModel)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+
+            throw new NotImplementedException();
+        }
+
         public FeedReportSettingsInfo GetFeedReportSettings()
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -444,6 +460,54 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolYearId.HasValue);
             ValidateDateRange(settings.StartDate, settings.EndDate);
             ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, settings.ToDictionary());
+        }
+
+        public IList<ReportCardsLogo> GetReportCardsLogos()
+        {
+            var res = DoRead(u => new DataAccessBase<ReportCardsLogo>(u).GetAll());
+            return res;
+        }
+
+        public void UpdateReportCardsLogo(int? schoolId, byte[] logoIcon)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u =>
+            {
+                var da = new DataAccessBase<ReportCardsLogo, int>(u);
+                var res = da.GetAll(new AndQueryCondition {{nameof(ReportCardsLogo.SchoolRef), schoolId}})
+                            .FirstOrDefault();
+                var logoAddress = UploadLogo(schoolId, logoIcon);
+                if (res == null)
+                {
+                    res = new ReportCardsLogo { SchoolRef = schoolId , LogoAddress = logoAddress};
+                    da.Insert(res);
+                }
+                else if (logoIcon == null)
+                {
+                    da.Delete(res.Id);
+                }
+                else
+                {
+                    res.SchoolRef = schoolId;
+                    res.LogoAddress = logoAddress;
+                    da.Update(res);
+                }
+            });
+        }
+
+        private string UploadLogo(int? schoolId, byte[] logo)
+        {
+            Trace.Assert(Context.DistrictId.HasValue);
+            var key = $"reportcardslogo_{Context.DistrictId.Value}";
+            if (schoolId.HasValue) key += $"_{schoolId.Value}";
+            ServiceLocator.StorageBlobService.AddBlob("pictureconteiner", key, logo);
+            return (new BlobHelper()).GetBlobsRelativeAddress("pictureconteiner", key);
+        }
+
+        public void DeleteReportCardsLogo(int id)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u => new DataAccessBase<ReportCardsLogo, int>(u).Delete(id));
         }
 
         private static void ValidateDateRange(DateTime? startDate, DateTime? endDate)

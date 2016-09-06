@@ -34,6 +34,9 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count)
         {
+            if (!BaseSecurity.IsSysAdmin(Context) && districtId != Context.DistrictId)
+                return new PaginatedList<Data.Master.Model.School>(new List<Data.Master.Model.School>(), start, count, 0);
+
             return DoRead(u => new SchoolDataAccess(u).GetSchools(districtId, start, count));
         }
 
