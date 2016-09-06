@@ -48,7 +48,15 @@ NAMESPACE('chlk.controls', function () {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        this.updateSelect(jQuery('#'+attributes.id), attributes);
+                        var select = jQuery('#'+attributes.id);
+
+                        this.updateSelect(select, attributes);
+
+                        if(attributes.multiple && attributes["data-placeholder"]){
+                            setTimeout(function(){
+                                select.find('+DIV').find('input').attr('placeholder', attributes["data-placeholder"]);
+                            }, 100);
+                        }
                     }.bind(this));
                 return attributes;
             }
