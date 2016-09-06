@@ -195,6 +195,7 @@
     <Compile Include="Model\Reports\BaseReportInputModel.cs" />
     <Compile Include="Model\Reports\BirthdayReportInputModel.cs" />
     <Compile Include="Model\Reports\ComprehensiveProgressInputModel.cs" />
+    <Compile Include="Model\Reports\CustomReportCardsExportModel.cs" />
     <Compile Include="Model\Reports\FeedDetailsExportModel.cs" />
     <Compile Include="Model\Reports\FeedReportInputModel.cs" />
     <Compile Include="Model\Reports\GradebookReportInputModel.cs" />
