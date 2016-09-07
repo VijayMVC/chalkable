@@ -8,7 +8,7 @@ As
 
 Declare @courseIds TGuid
 Declare @gradeId int = Cast(
-	Case When @gradeLevelCode is null Then 0
+	Case When @gradeLevelCode is null Then null
 	When @gradeLevelCode = 'K' Then 0  
 	When @gradeLevelCode = 'PK' Then -1
 	Else @gradeLevelCode End as int)
@@ -19,13 +19,13 @@ Begin
 		Select Distinct CourseRef
 		From [Standard]	
 		Where
-		((Cast(Case When GradeLevelLoRef = 'K' Then 0  
+		(@gradeId is null or ((Cast(Case When GradeLevelLoRef = 'K' Then 0  
 			  When GradeLevelLoRef = 'PK' Then -1 
-			  Else GradeLevelLoRef End as int) <= @gradeId )
+			  Else GradeLevelLoRef End as int) <= @gradeId) 
 		  ANd 
 		 (Cast(Case When GradeLevelHiRef = 'K' Then 0  
 			  When GradeLevelHiRef = 'PK' Then -1 
-			  Else GradeLevelHiRef End as int) >= @gradeId))
+			  Else GradeLevelHiRef End as int) >= @gradeId)))
 		And (@authorityId is null or AuthorityRef = @authorityId)
 		And (@documentId is null or DocumentRef = @documentId)
 		And (@subjectDocId is null or SubjectDocRef = @subjectDocId)

@@ -16,12 +16,12 @@ namespace Chalkable.Data.AcademicBenchmark.DataAccess
 
         public void BeforeSync()
         {
-            ExecuteStoredProcedure("spBeforeSync", new Dictionary<string, object>());
+            ExecuteStoredProcedure("spBeforeSync", new Dictionary<string, object>(), 5 * 60);
         }
 
         public void AfterSync()
         {
-            ExecuteStoredProcedure("spAfterSync", new Dictionary<string, object>());
+            ExecuteStoredProcedure("spAfterSync", new Dictionary<string, object>(), 5 * 60);
         }
     }
 }

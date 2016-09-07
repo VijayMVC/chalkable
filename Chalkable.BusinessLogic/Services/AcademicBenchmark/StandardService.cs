@@ -35,6 +35,12 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
             DoUpdate(u => new StandardDataAccess(u).Delete(models));
         }
 
+        public override void Delete(IList<Guid> ids)
+        {
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new StandardDataAccess(u).Delete(ids));
+        }
+
         public StandardRelationsInfo GetStandardRelations(Guid id)
         {
             using (var uow = Read())
