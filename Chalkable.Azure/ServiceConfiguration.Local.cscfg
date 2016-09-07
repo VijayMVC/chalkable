@@ -69,7 +69,7 @@
       <Setting name="Domain" value="local.chalkable.com" />
 
       <!-- other settings -->
-      <Setting name="TaskProcessorDelay" value="1" />
+      <Setting name="TaskProcessorDelay" value="-1" />
       <Setting name="DbBackupServiceUrl" value="" />
       <Setting name="PictureProcessorCount" value="1" />
       <Setting name="AllSchoolRunner.DistrictsPerThread" value="4" />

@@ -40,7 +40,7 @@ class TestFeed(BaseAuthedTestCase):
                 json_data_get_class_list_second_time = get_class_list_second_time['data']
 
                 for info_about_one_student_second_time in json_data_get_class_list_second_time:
-                    print info_about_one_student_second_time['level']
+                    #print info_about_one_student_second_time['level']
                     if info_about_one_student_second_time['readonly'] == True:
                         pass
                     else:
