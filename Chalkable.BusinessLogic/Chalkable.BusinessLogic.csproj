@@ -112,6 +112,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="wnvhtmltopdf, Version=12.16.0.0, Culture=neutral, PublicKeyToken=b12703d35a33ff98, processorArchitecture=MSIL">
+      <HintPath>..\packages\WnvHtmlToPdf_x64.12.16\lib\net40\wnvhtmltopdf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Logic\Comperators\AlphaGradeNameComperator.cs" />
@@ -294,6 +298,7 @@
     <Compile Include="Services\Master\ApplicationUploadService.cs" />
     <Compile Include="Services\Master\CustomReportTemplateService.cs" />
     <Compile Include="Services\Master\PictureServices\CustomReportTemplateIconService.cs" />
+    <Compile Include="Services\Reporting\ReportCardsRenderer.cs" />
     <Compile Include="Services\School\AppSettingService.cs" />
     <Compile Include="Services\Master\CategoryService.cs" />
     <Compile Include="Services\Master\DeveloperService.cs" />

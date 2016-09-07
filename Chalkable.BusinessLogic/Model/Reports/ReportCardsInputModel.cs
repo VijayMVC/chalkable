@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public IntList IncludeOptions { get; set; }
         private bool HasOption(ReportCardsAddionalOptions option)
         {
-            return IncludeOptions.Contains((int) option);
+            return IncludeOptions != null && IncludeOptions.Contains((int) option);
         }
         public bool IncludeAnnouncements => HasOption(ReportCardsAddionalOptions.Announcement);
         public bool IncludeAttendance => HasOption(ReportCardsAddionalOptions.Attendance);
@@ -50,6 +50,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool IncludeWithdrawnStudents => HasOption(ReportCardsAddionalOptions.WithdrawnStudents);
         public bool IncludeYearToDateInformation => HasOption(ReportCardsAddionalOptions.YearToDateInformation);
 
+        public string DefaultDataPath { get; set; }
     }
 
     public enum ReportCardsRecipientType

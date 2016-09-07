@@ -16,6 +16,7 @@ using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
+using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -38,7 +39,9 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
-        byte[] GetReportCards(ReportCardsInputModel inputModel);
+        byte[] GetReportCards(ReportCardsInputModel inputModel, string path);
+        ReportCardsRenderer.Model<CustomReportCardsExportModel> BuildCustomReportCardsExportModel(ReportCardsInputModel inputModel);
+
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
 
@@ -428,12 +431,44 @@ namespace Chalkable.BusinessLogic.Services.School
             return new DefaultRenderer().Render(dataSet, definition, format, null);
         }
 
-        public byte[] GetReportCards(ReportCardsInputModel inputModel)
+        public byte[] GetReportCards(ReportCardsInputModel inputModel, string path)
         {
             BaseSecurity.EnsureDistrictAdmin(Context);
+            if(inputModel == null) 
+                throw new ArgumentNullException(nameof(ReportCardsInputModel));
 
-            throw new NotImplementedException();
+            var defaultJsonPath = Path.Combine(path, "Reports\\DefaultCustomReportCardsJson.txt");
+            ReportCardsRenderer.Model<CustomReportCardsExportModel> exportData = null;
+            using (var file = File.OpenRead(defaultJsonPath))
+            {
+                var streamReader = new StreamReader(file);
+                var json = streamReader.ReadToEnd();
+                exportData = JsonConvert.DeserializeObject<ReportCardsRenderer.Model<CustomReportCardsExportModel>>(json);
+                exportData.Title = inputModel.Tile;
+                streamReader.Close();
+            }
+            var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            return ReportCardsRenderer.RenderToPdf(template.Layout, template.Style, exportData, path);
         }
+
+        public ReportCardsRenderer.Model<CustomReportCardsExportModel> BuildCustomReportCardsExportModel(ReportCardsInputModel inputModel)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            if (inputModel == null)
+                throw new ArgumentNullException(nameof(ReportCardsInputModel));
+           var defaultJsonPath = Path.Combine(inputModel.DefaultDataPath, "Reports\\DefaultCustomReportCardsJson.txt");
+            ReportCardsRenderer.Model<CustomReportCardsExportModel> exportData;
+            using (var file = File.OpenRead(defaultJsonPath))
+            {
+                var streamReader = new StreamReader(file);
+                var json = streamReader.ReadToEnd();
+                exportData = JsonConvert.DeserializeObject<ReportCardsRenderer.Model<CustomReportCardsExportModel>>(json);
+                exportData.Title = inputModel.Tile;
+                streamReader.Close();
+            }
+            return exportData;
+        }
+
 
         public FeedReportSettingsInfo GetFeedReportSettings()
         {

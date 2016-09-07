@@ -1,0 +1,92 @@
+﻿@using Chalkable.Web.Common
+@using Chalkable.Web.Tools
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+    <!--Fonts-->
+    <link href="//fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
+    
+    <!-- build:css /Content/role-layout.min.css -->
+    <link build:href="/app/bower/chosen/chosen.min.css" href="@Url.StaticContent("/app/bower/chosen/chosen.min.css")" rel="stylesheet" type="text/css" />
+    <link build:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
+    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
+    <link build:href="/app/chlk/index/prettify.css" href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet"/>
+    <link build:href="/app/bower/bootstrap/dist/css/bootstrap.min.css" src="@Url.StaticContent("/app/bower/bootstrap/dist/css/bootstrap.min.css")" type="text/css" rel="stylesheet"/>
+    <link build:href="/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" src="@Url.StaticContent("/app/bower/bootstrap/dist/css/bootstrap-theme.min.css")" type="text/css" rel="stylesheet"/>
+    <!-- endbuild -->
+    
+    @ChlkHelpers.RenderSiteRoot(Url)
+    
+    <!-- build:js /app/role-layout.min.js -->
+    <script build:src="/app/bower/DateJS/build/date-en-US.js" src="@Url.StaticContent("/app/bower/DateJS/build/date-en-US.js")"></script>
+    <script build:src="/app/bower/Autolinker.js/dist/Autolinker.js" src="@Url.StaticContent("/app/bower/Autolinker.js/dist/Autolinker.js")"></script>
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/bower/autosize/dist/autosize.js" src="@Url.StaticContent("/app/bower/autosize/dist/autosize.js")"></script>
+    <script build:src="/app/bower/chosen/chosen.jquery.min.js" src="@Url.StaticContent("/app/bower/chosen/chosen.jquery.min.js")"></script>
+    <script build:src="/app/bower/jcarousel/dist/jquery.jcarousel.js" src="@Url.StaticContent("/app/bower/jcarousel/dist/jquery.jcarousel.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
+    <script build:src="/app/jquery/snippet/jquery.snippet.min.js" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
+    <script build:src="/app/bower/jquery-validation/dist/jquery.validate.js" src="@Url.StaticContent("/app/bower/jquery-validation/dist/jquery.validate.js")"></script>
+    <script build:src="/app/bower/jQuery-menu-aim/jquery.menu-aim.js" src="@Url.StaticContent("/app/bower/jQuery-menu-aim/jquery.menu-aim.js")"></script>
+    <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <script build:src="/app/bower/highcharts/highcharts.js" src="@Url.StaticContent("/app/bower/highcharts/highcharts.js")"></script>
+    <script build:src="/app/bower/raygun4js/dist/raygun.vanilla.js"></script>
+    <script build:src="/app/chlk/shared.js" src='@Url.StaticContent("/app/chlk/shared.js")'></script>
+    <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
+    <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
+    <script build:src="/app/bower/cryptojslib/rollups/hmac-sha256.js" src="@Url.StaticContent("/app/bower/cryptojslib/rollups/hmac-sha256.js")"></script>
+    <script build:src="/app/bower/PDFObject/pdfobject.js" src="@Url.StaticContent("/app/bower/PDFObject/pdfobject.js")"></script>
+    <script build:src="/app/bower/jade/jade.js" src="@Url.StaticContent("/app/bower/jade/jade.js")"></script>
+    <!-- endbuild -->
+    
+    <style type="text/css">@ViewBag.Style</style>
+    <script type="text/javascript">
+        var Model = @ViewData.GetJsJsonObjectOrNull(ViewConstants.REPORT_CARDS);
+    </script>
+
+    <script type="text/jade" id="template">@ViewBag.JadeTpl</script>
+
+</head>
+    <body style="width: 1200px">
+        <div id="container" class="fluid-container">
+            <h1>Demo Report</h1>
+        </div>
+    <script>
+        var msg = "";
+        if (!jade)
+            msg = msg + " jade wasn't download";
+        else 
+            msg = msg + " jade has donwloaded";
+        
+        if (!jQuery) 
+            msg = msg + " jQuery wasn't download";
+        else
+            msg = msg + " jQuery wasn't download";
+
+        document.getElementById("container").html("<h1>" + msg + "</h1>");
+        try {
+            (function(jade, $, model) {
+                var template = $('#template').text();
+                var html = "";
+                try {
+                    html = jade.render(template, { Model: model });
+                } catch (e) {
+                    html = '<h1>Error rendering report</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+                }
+                $('#container').html(html);
+            })(jade, jQuery, Model);
+        } catch (e) {
+            var error = '<h1>Error rendering report ....</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+            jQuery('#container').html(error);
+        }
+    </script>
+    </body>
+</html>
