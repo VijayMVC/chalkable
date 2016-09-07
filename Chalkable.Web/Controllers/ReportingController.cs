@@ -12,6 +12,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
+using Chalkable.Web.Common;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 using Microsoft.Reporting.WebForms;
@@ -98,7 +99,34 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ReportCards(ReportCardsInputModel inputModel)
         {
-            return Report(()=>SchoolLocator.ReportService.GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+            var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
+            inputModel.DefaultDataPath = path;
+            var view = RenderReportView(inputModel);
+            var html = RenderRazorViewToString(view.ViewName, view.Model);
+            return Report(()=> ReportCardsRenderer.RenderToPdf(path, Settings.ScriptsRoot, html), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+        }
+
+        private ViewResult RenderReportView(ReportCardsInputModel inputModel)
+        {
+            var template = MasterLocator.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            ViewBag.JadeTpl = template.Layout;
+            ViewBag.Style = template.Style;
+            var data = SchoolLocator.ReportService.BuildCustomReportCardsExportModel(inputModel);
+            ViewData[ViewConstants.REPORT_CARDS] = JsonConvert.SerializeObject(data);
+            return View("ReportCards");
+        }
+
+        private string RenderRazorViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindView(ControllerContext, viewName, null);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
         }
 
 

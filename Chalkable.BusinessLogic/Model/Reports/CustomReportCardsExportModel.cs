@@ -6,7 +6,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
     public class CustomReportCardsExportModel
     {
         public int AcadYear { get; set; }
-        public string AcademicSessionName { get; set; }
+        public string AcadSessionName { get; set; }
         public SchoolReportCardsExportModel School { get; set; }
         public IList<TraditionalGradingScaleExportModel> TraditionalGradingScale { get; set; } 
         public IList<StandardsGradingScaleExportModel> StandardsGradingScale { get; set; }
