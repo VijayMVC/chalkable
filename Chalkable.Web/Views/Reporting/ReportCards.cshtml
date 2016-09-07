@@ -5,20 +5,21 @@
 <html>
 <head>
     <title>@ViewBag.Title</title>
-    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
-    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+    @*<meta itemprop="image" content="@Url.Content("~/favicon.ico")">*@
+    @*<link rel="icon" href="@Url.Content("~/favicon.ico")" />*@
     <!--Fonts-->
-    <link href="//fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
+    @*<link href="//fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
     <link href="//fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />*@
     
     <!-- build:css /Content/role-layout.min.css -->
+
     <link build:href="/app/bower/chosen/chosen.min.css" href="@Url.StaticContent("/app/bower/chosen/chosen.min.css")" rel="stylesheet" type="text/css" />
+    <link build:href="/app/bower/bootstrap/dist/css/bootstrap.min.css" href="@Url.StaticContent("/app/bower/bootstrap/dist/css/bootstrap.min.css")" type="text/css" rel="stylesheet" />
+    <link build:href="/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" href="@Url.StaticContent("/app/bower/bootstrap/dist/css/bootstrap-theme.min.css")" type="text/css" rel="stylesheet" />
     <link build:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
     <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
     <link build:href="/app/chlk/index/prettify.css" href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet"/>
-    <link build:href="/app/bower/bootstrap/dist/css/bootstrap.min.css" src="@Url.StaticContent("/app/bower/bootstrap/dist/css/bootstrap.min.css")" type="text/css" rel="stylesheet"/>
-    <link build:href="/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" src="@Url.StaticContent("/app/bower/bootstrap/dist/css/bootstrap-theme.min.css")" type="text/css" rel="stylesheet"/>
     <!-- endbuild -->
     
     @ChlkHelpers.RenderSiteRoot(Url)
@@ -40,26 +41,24 @@
     <script build:src="/app/bower/highcharts/highcharts.js" src="@Url.StaticContent("/app/bower/highcharts/highcharts.js")"></script>
     <script build:src="/app/bower/raygun4js/dist/raygun.vanilla.js"></script>
     <script build:src="/app/chlk/shared.js" src='@Url.StaticContent("/app/chlk/shared.js")'></script>
-    <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
-    <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
-    <script build:src="/app/bower/cryptojslib/rollups/hmac-sha256.js" src="@Url.StaticContent("/app/bower/cryptojslib/rollups/hmac-sha256.js")"></script>
     <script build:src="/app/bower/PDFObject/pdfobject.js" src="@Url.StaticContent("/app/bower/PDFObject/pdfobject.js")"></script>
     <script build:src="/app/bower/jade/jade.js" src="@Url.StaticContent("/app/bower/jade/jade.js")"></script>
     <!-- endbuild -->
     
-    <style type="text/css">@ViewBag.Style</style>
+    <style type="text/css">@Html.Raw(ViewBag.Style)</style>
     <script type="text/javascript">
         var Model = @ViewData.GetJsJsonObjectOrNull(ViewConstants.REPORT_CARDS);
+
     </script>
 
-    <script type="text/jade" id="template">@ViewBag.JadeTpl</script>
+    <script type="text/jade" id="template">@Html.Raw(ViewBag.JadeTpl)</script>
 
 </head>
     <body style="width: 1200px">
         <div id="container" class="fluid-container">
             <h1>Demo Report</h1>
         </div>
-    <script>
+    <script type="text/javascript">
         var msg = "";
         if (!jade)
             msg = msg + " jade wasn't download";
@@ -71,13 +70,13 @@
         else
             msg = msg + " jQuery wasn't download";
 
-        document.getElementById("container").html("<h1>" + msg + "</h1>");
+        document.getElementById("container").innerHTML = "<h1>" + msg + "</h1>";
         try {
             (function(jade, $, model) {
                 var template = $('#template').text();
                 var html = "";
                 try {
-                    html = jade.render(template, { Model: model });
+                    html = jade.render(template, { model: model.data });
                 } catch (e) {
                     html = '<h1>Error rendering report</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
                 }

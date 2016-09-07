@@ -9,6 +9,7 @@ using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Common.JsonContractTools;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
@@ -17,6 +18,7 @@ using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 using Microsoft.Reporting.WebForms;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Chalkable.Web.Controllers
 {
@@ -101,22 +103,25 @@ namespace Chalkable.Web.Controllers
         {
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             inputModel.DefaultDataPath = path;
-            var view = RenderReportView(inputModel);
-            var html = RenderRazorViewToString(view.ViewName, view.Model);
+            var view = BuildReportView(inputModel);
+            var html = RenderViewToString(view.ViewName, view.Model);
             return Report(()=> ReportCardsRenderer.RenderToPdf(path, Settings.ScriptsRoot, html), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
         }
 
-        private ViewResult RenderReportView(ReportCardsInputModel inputModel)
+        private ViewResult BuildReportView(ReportCardsInputModel inputModel)
         {
             var template = MasterLocator.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
             ViewBag.JadeTpl = template.Layout;
             ViewBag.Style = template.Style;
             var data = SchoolLocator.ReportService.BuildCustomReportCardsExportModel(inputModel);
-            ViewData[ViewConstants.REPORT_CARDS] = JsonConvert.SerializeObject(data);
+            ViewData[ViewConstants.REPORT_CARDS] = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ContractResolver = new LowercaseContractResolver()
+            });
             return View("ReportCards");
         }
 
-        private string RenderRazorViewToString(string viewName, object model)
+        private string RenderViewToString(string viewName, object model)
         {
             ViewData.Model = model;
             using (var sw = new StringWriter())

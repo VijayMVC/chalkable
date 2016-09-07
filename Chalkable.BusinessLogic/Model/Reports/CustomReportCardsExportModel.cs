@@ -62,6 +62,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string ClassNumber { get; set; }
         public decimal TimesTardy { get; set; }
         public string Teacher { get; set; }
+        public IList<GradingGridExportModel> GradingPeriods { get; set; }
     }
 
     public class GradingGridExportModel

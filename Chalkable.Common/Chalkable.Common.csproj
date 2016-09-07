@@ -188,6 +188,7 @@
     <Compile Include="Exceptions\UploadToCrocodocFailedException.cs" />
     <Compile Include="GlobalCache.cs" />
     <Compile Include="ImageUtils.cs" />
+    <Compile Include="JsonContractTools\LowercaseContractResolver.cs" />
     <Compile Include="ListTools.cs" />
     <Compile Include="PaginatedList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

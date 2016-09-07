@@ -70,6 +70,8 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 
         public static byte[] RenderToPdf(string basePath, string baseUrl, string html)
         {
+            baseUrl = baseUrl.StartsWith("//") ? ("https:" + baseUrl) : baseUrl;
+
             var htmlToPdfConverter = new HtmlToPdfConverter
             {
                 HtmlViewerWidth = 1200,
