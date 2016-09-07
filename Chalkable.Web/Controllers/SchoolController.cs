@@ -19,6 +19,13 @@ namespace Chalkable.Web.Controllers
             return Json(schools.Transform(SchoolViewData.Create));
         }
 
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
+        public ActionResult LocalSchools()
+        {
+            var schools = SchoolLocator.SchoolService.GetSchools();
+            return Json(LocalSchoolViewData.Create(schools));
+        }
+
         [AuthorizationFilter("SysAdmin")]
         public ActionResult UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill)
         {
