@@ -7,6 +7,8 @@ REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
 REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceRegisterReportViewData');
+REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
+REQUIRE('chlk.models.settings.ReportCardsLogo');
 
 REQUIRE('chlk.lib.ajax.IframeGetTask');
 
@@ -338,6 +340,49 @@ NAMESPACE('chlk.services', function () {
                 gradingPeriodId: gradingPeriodId.valueOf(),
                 start: 0,
                 count: 9999
+            });
+        },
+
+        [[chlk.models.id.CustomReportTemplateId, String, chlk.models.reports.ReportCardsLogoType,
+            chlk.models.reports.ReportCardsRecipientType, chlk.models.reports.ReportCardsOrderBy,
+            chlk.models.reports.StudentIdentifierEnum, Boolean,
+            ArrayOf(chlk.models.id.GroupId),
+            ArrayOf(chlk.models.id.GradingPeriodId),
+            ArrayOf(chlk.models.id.AttendanceReasonId),
+            String]],
+        ria.async.Future, function submitReportCards(templateId, title, logo, recipient, orderBy, idToPrint, includeGradedStandardsOnly
+                , groupIds, gradingPeriodIds, attendanceReasonIds, includeOptions){
+             var url = this.getUrl('Reporting/ReportCards.json',{
+                 customReportTemplateId: templateId.valueOf(),
+                 title: title,
+                 logo: logo.valueOf(),
+                 recipient: recipient.valueOf(),
+                 orderBy: orderBy.valueOf(),
+                 idToPrint: idToPrint.valueOf(),
+                 includeGradedStandardsOnly: includeGradedStandardsOnly,
+                 groupIds: this.arrayToCsv(groupIds),
+                 gradingPeriodIds: this.arrayToCsv(gradingPeriodIds),
+                 attendanceReasonIds: this.arrayToCsv(attendanceReasonIds),
+                 includeOptions: includeOptions
+            });
+            return this.getWithIframe_(url);
+        },
+
+        ria.async.Future, function listReportCardsLogo(){
+            return this.get('Reporting/ListReportCardsLogo.json', ArrayOf(chlk.models.settings.ReportCardsLogo),{});
+        },
+
+        [[Object, Number]],
+        ria.async.Future, function updateReportCardsLogo(files, schoolId_){
+            return this.uploadFiles('Reporting/UpdateReportCardsLogo.json', [files[0]], ArrayOf(chlk.models.settings.ReportCardsLogo),{
+                schoolId: schoolId_ && schoolId_.valueOf(),
+            });
+        },
+
+        [[chlk.models.id.ReportCardsLogoId]],
+        ria.async.Future, function deleteReportCardsLogo(reportCardsLogoId){
+            return this.post('Reporting/DeleteReportCardsLogo.json', ArrayOf(chlk.models.settings.ReportCardsLogo), {
+                id: reportCardsLogoId.valueOf()
             });
         },
 

@@ -1,3 +1,43 @@
+BODY
+  .recipients-list
+    padding-left: 40px
+    position: relative
+
+    &::before
+      content: 'To :'
+      position: absolute
+      left: 0
+      font: bold 16px Arial
+      top: 7px
+
+  .standards-list, .recipients-list
+
+    BUTTON
+      min-width: 35px
+
+    .button-like
+      min-width: 20px
+
+    .button-like
+      padding-right: 30px
+
+    BUTTON, .button-like
+      position: relative
+      display: inline-block
+
+      &:not(:last-child)
+        margin-right: 10px
+
+    .remove-standard, .remove-recipient
+      border: none
+      width: 32px
+      height: 32px
+      box-shadow: none
+      +icons-32-sprite(close)
+      position: absolute
+      top: -2px
+      right: -2px
+
 .top-green-info
   position: absolute
   background: #e9f6ed
@@ -242,45 +282,6 @@
       padding-bottom: 0
       cursor: pointer
       text-align: center
-
-  .recipients-list
-    padding-left: 40px
-    position: relative
-
-    &::before
-      content: 'To :'
-      position: absolute
-      left: 0
-      font: bold 16px Arial
-      top: 7px
-
-  .standards-list, .recipients-list
-
-    BUTTON
-      min-width: 35px
-
-    .button-like
-      min-width: 20px
-
-    .button-like
-      padding-right: 30px
-
-    BUTTON, .button-like
-      position: relative
-      display: inline-block
-
-      &:not(:last-child)
-        margin-right: 10px
-
-    .remove-standard, .remove-recipient
-      border: none
-      width: 32px
-      height: 32px
-      box-shadow: none
-      +icons-32-sprite(close)
-      position: absolute
-      top: -2px
-      right: -2px
 
   .drawer-icon
     width: 32px

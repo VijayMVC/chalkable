@@ -7,14 +7,20 @@ REQUIRE('chlk.activities.settings.AdminPage');
 REQUIRE('chlk.activities.settings.AppSettingsPage');
 REQUIRE('chlk.activities.settings.AdminPanoramaPage');
 REQUIRE('chlk.activities.settings.AddCourseToPanoramaDialog');
+REQUIRE('chlk.activities.settings.ReportCardsSettingsPage');
 
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.settings.AdminMessaging');
+REQUIRE('chlk.models.settings.ReportCardsSettingsViewData');
+
+
+
 REQUIRE('chlk.services.PreferenceService');
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.services.AdminDistrictService');
 REQUIRE('chlk.services.ClassService');
+REQUIRE('chlk.services.ReportingService');
 
 
 NAMESPACE('chlk.controllers', function (){
@@ -38,6 +44,9 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
 
+            [ria.mvc.Inject],
+            chlk.services.ReportingService, 'reportingService',
+
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.SYSADMIN
             ])],
@@ -52,6 +61,7 @@ NAMESPACE('chlk.controllers', function (){
                 dashboard.setAppCategoriesVisible(true);
                 dashboard.setDepartmentsVisible(true);
                 dashboard.setUpgradeSchoolsVisible(true);
+                dashboard.setCustomReportTemplatesVisible(true);
                 return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
             },
 
@@ -122,6 +132,57 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_());
 
                 return this.PushView(chlk.activities.settings.AdminPage, res);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            function reportCardsAction(){
+                var districtId = new chlk.models.id.DistrictId(window.districtId);
+                var hasPermission = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
+                var res = ria.async.wait([
+                        this.reportingService.listReportCardsLogo(),
+                        this.schoolService.getSchools(districtId, 0, 100000),
+                        this.adminDistrictService.getSettings()])
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        var res = new chlk.models.settings.ReportCardsSettingsViewData(data[0], data[1].getItems(), data[2].getApplications(), hasPermission);
+                        this.getContext().getSession().set('reportCardsSettings', res);
+                        return res;
+                    }, this);
+                return this.PushView(chlk.activities.settings.ReportCardsSettingsPage, res);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [[Object, Number]],
+            function updateReportCardsLogoAction(files, schoolId_){
+                var res = this.reportingService.updateReportCardsLogo(files, schoolId_)
+                    .attach(this.validateResponse_())
+                    .then(function(listOfLogo){
+                        var res = this.getContext().getSession().get('reportCardsSettings', null);
+                        res.setListOfLogo(listOfLogo);
+                        this.getContext().getSession().set('reportCardsSettings', res);
+                        return res;
+                    }, this);
+                return this.UpdateView(chlk.activities.settings.ReportCardsSettingsPage, res);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [[chlk.models.id.ReportCardsLogoId]],
+            function deleteReportCardsLogo(reportCardsLogoId){
+                var res = this.reportingService.deleteReportCardsLogo(reportCardsLogoId)
+                    .attach(this.validateResponse_())
+                    .then(function(listOfLogo){
+                        var res = this.getContext().getSession().get('reportCardsSettings', null);
+                        res.setListOfLogo(listOfLogo);
+                        this.getContext().getSession().set('reportCardsSettings', res);
+                        return res;
+                    }, this);
+                return this.UpdateView(chlk.activities.settings.ReportCardsSettingsPage, res);
             },
 
             [chlk.controllers.AccessForRoles([

@@ -1,0 +1,55 @@
+mixin ImagesSliader(images)
+   ul.slides
+      each image,i in images
+         input(type="radio", name="radio-btn", id="img-"+i, checked=i==0 ? 'checked' : null)
+         li.slide-container
+            .slide
+               img(src=image.address)
+               .title=image.name
+            if images.length > 1
+               .nav
+                  -var prev = i == 0 ? images.length - 1 : i - 1
+                  -var next = i >= images.length - 1 ? 0 : i + 1
+                  label(for="img-" + prev).prev='<'
+                  label(for="img-" + next).next='>'
+
+
+
+.settings
+   .report-cards
+      .action-bar.not-transparent.buttons
+         .container.panel-bg
+            .items
+               +ActionLink('settings', 'dashboardAdmin') Messaging
+               each app in self.getApplications()
+                  +ActionLink('settings', 'appSettings', app.getId())=app.getName()
+               if self.isAdminPanoramaEnabled()
+                  +ActionLink('settings', 'panoramaAdmin') Panorama
+               a.action-link.pressed  Report Cards
+
+
+         -var canUpdate = self.isAbleToUpdate();
+         .logo-section
+            h3.title Logo
+            .with-line
+
+            .schools
+               .filters-block
+                  .schools-container.filters-container
+                     .for-attribute.simple-gray-button.download-link.file District
+                        +FileUpload('settings', 'updateReportCardsLogo',[])(
+                           multiple = false
+                           needFileIndex = false
+                        ).simple-gray-button
+                     each item in self.schoolsLogo()
+                        .school
+                           +FileUpload('settings', 'updateReportCardsLogo', [item.getSchoolId()])(
+                              multiple = false
+                              needFileIndex = false
+                           ).simple-gray-button=item.getSchoolName()
+
+                  .add-filter-container
+                     .add-circle-btn.add-school-btn +
+                     span.light-grey Add School
+            .logo
+               +ImagesSliader(self.prepareImages())
