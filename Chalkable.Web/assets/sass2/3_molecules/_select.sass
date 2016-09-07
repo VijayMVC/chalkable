@@ -1,0 +1,120 @@
+body
+  .chosen-container-multi
+    .chosen-choices
+      border: 1px solid #c8c7c3
+      border-radius: 4px
+      +box-shadow(none)
+
+    .chosen-choices li.search-field input
+      line-height: 100%
+      min-width: 150px
+
+  select.flat + .chosen-container-single
+    .chosen-single
+      background: #ffffff
+      font-weight: normal
+
+    .chosen-results
+      li.active-result
+        font-weight: normal
+
+  .chosen-container-single
+    .chosen-single
+      height: 30px
+      padding: 0 0 0 14px
+      font-weight: bold
+      line-height: 30px
+
+    .chosen-default
+      color: #56554f
+
+    .chosen-results
+      margin: 0
+      padding: 0
+
+      li.highlighted
+        background: #f1f1f1
+        color: #56554f
+
+      li.active-result
+        font-weight: bold
+        padding-left: 13px
+
+  .chosen-container-active.chosen-with-drop .chosen-single div b
+    background-position: -18px 6px
+
+  .chosen-container-single .chosen-single div b
+    background-position: 0 6px
+
+  SELECT.external-items+DIV.chosen-container-multi
+    left: 140px
+    min-height: 47px
+
+    &.chosen-with-drop
+      .chosen-drop
+        left: -140px
+
+    .chosen-drop
+      width: 131px
+      top: 41px
+
+    .chosen-choices
+      overflow: visible
+      border: none
+
+      .search-field
+        float: none
+
+        INPUT
+          position: absolute
+          width: 131px !important
+          padding: 0 9px
+          line-height: 40px
+          height: 40px
+          border-radius: 3px
+          left: -140px
+          border: 1px solid #c8c7c3 !important
+
+      .search-choice
+        padding: 13px 9px
+        margin-top: 0
+        margin-bottom: 6px
+        margin-left: 1px
+        margin-right: 15px
+        +background-image(linear-gradient(top, #FEFEFE 0%, #F9F9F7 50%, #F3F2EE 100%))
+        +box-shadow(transparentize(#000, .55) 0 1px 3px, #FFFFFF 0 1px 0px inset)
+
+        &:not(:hover)
+          .search-choice-close
+            display: none
+
+        &:hover
+          color: #a4a296
+
+        SPAN
+          font-weight: bold
+          display: inline-block
+          min-width: 30px
+          text-align: center
+
+        .search-choice-close
+          width: 16px
+          height: 16px
+          border-radius: 50%
+          background: #d45151
+          color: white
+          text-align: center
+          line-height: 16px
+          top: 50%
+          left: 50%
+          margin-top: -8px
+          margin-left: -8px
+
+          &:before
+            position: absolute
+            content: 'x'
+            color: white
+            font-size: 12px
+            left: 4px
+            top: -1px
+            font-weight: bold

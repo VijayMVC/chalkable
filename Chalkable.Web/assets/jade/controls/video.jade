@@ -1,0 +1,6 @@
+mixin Video(iframe)
+    -attributes = self.processAttrs(attributes);
+    if iframe
+        iframe(attributes)
+    else
+        emded(attributes)
