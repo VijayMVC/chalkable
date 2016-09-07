@@ -32,33 +32,12 @@ namespace Chalkable.AcademicBenchmarkImport
             _sysAdminContext = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null, null);
             Log = log;
         }
-
-        void PingConnection(object o)
-        {
-            var dbService = (ImportDbService)o;
-            while (true)
-            {
-                try
-                {
-                    using (var uow = dbService.GetUowForRead())
-                    {
-                        var c = uow.GetTextCommand("select 1");
-                        c.ExecuteNonQuery();
-                    }
-                    Thread.Sleep(60 * 1000);
-                }
-                catch (Exception ex)
-                {
-                    Trace.TraceError(ex.Message);
-                }
-            }
-        }
-
+        
         public void Import()
         {
             ConnectorLocator = ConnectorLocator ?? new ConnectorLocator();
-            //var connectionStr = @"Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark_Testing;UID=chalkableadmin;Pwd=Hellowebapps1!";
-            ServiceLocator = ServiceLocator ?? new ImportAcademicBenchmarkServiceLocator(_sysAdminContext, Settings.AcademicBenchmarkDbConnectionString);
+            var connectionStr = @"Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark_Testing;UID=chalkableadmin;Pwd=Hellowebapps1!";
+            ServiceLocator = ServiceLocator ?? new ImportAcademicBenchmarkServiceLocator(_sysAdminContext, connectionStr);
 
             var lastSyncDate = ServiceLocator.SyncService.GetLastSyncDateOrNull();
 
@@ -72,7 +51,6 @@ namespace Chalkable.AcademicBenchmarkImport
         {
             Log.LogInfo("Last sync date is empty. Started full import.");
             var importResult = DownloadAllDataForImport();
-
             var dbService = (ImportDbService)ServiceLocator.DbService;
 
             dbService.BeginTransaction();
@@ -108,11 +86,12 @@ namespace Chalkable.AcademicBenchmarkImport
 
             dbService.CommitAll();
             Log.LogInfo("Transaction was commited");
+
 /////////////////////////////////////Proccessing Standardar Relations in another transaction////////////////////////////////////////////////////
             var standardIds = importResult.Standards.Select(x => x.Id).ToList();
             Log.LogInfo("Loading Standard Relations . . .");
-            var standardRelLoader = new StandardRelationsLoader(ConnectorLocator, standardIds);
-            var standardRels = standardRelLoader.Load();
+            var standardRelLoader = new LoaderBase<Guid, AcademicBenchmarkConnector.Models.StandardRelations>(standardIds);
+            var standardRels = standardRelLoader.Load(id => Task.Run(() => ConnectorLocator.StandardsConnector.GetStandardRelationsById(id)).Result);
 
             dbService.BeginTransaction();
             Log.LogInfo("Started database transaction");
@@ -157,7 +136,6 @@ namespace Chalkable.AcademicBenchmarkImport
         protected void SyncData(DateTime lastSyncDate)
         {
             var syncResult = DownloadAllDataForSync(lastSyncDate);
-
             var dbService = (ImportDbService)ServiceLocator.DbService;
 
             dbService.BeginTransaction();
@@ -302,6 +280,27 @@ namespace Chalkable.AcademicBenchmarkImport
             Log.LogInfo("Downloaded Authority, Document, Course, GradeLevel, Subject, SubjectDoc tables");
 
             return result;
+        }
+
+        protected void PingConnection(object o)
+        {
+            var dbService = (ImportDbService)o;
+            while (true)
+            {
+                try
+                {
+                    using (var uow = dbService.GetUowForRead())
+                    {
+                        var c = uow.GetTextCommand("select 1");
+                        c.ExecuteNonQuery();
+                    }
+                    Thread.Sleep(60 * 1000);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                }
+            }
         }
 
         protected IConnectorLocator ConnectorLocator { get; set; }

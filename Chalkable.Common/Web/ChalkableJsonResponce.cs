@@ -22,7 +22,6 @@ namespace Chalkable.Common.Web
         }
     }
 
-
     public class ChalkableJsonPaginatedResponse : ChalkableJsonResponce
     {
         public int PageIndex { get; private set; }

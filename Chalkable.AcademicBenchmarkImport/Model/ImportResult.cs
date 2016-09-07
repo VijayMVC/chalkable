@@ -42,14 +42,10 @@ namespace Chalkable.AcademicBenchmarkImport.Model
     public class ImportResult : ResultBase
     {
         public ImportResult()
-            :base()
-        {
-            
-        }
+        { }
 
         public ImportResult(ResultBase model) : base(model)
-        {
-        }
+        { }
     }
 
     public class SyncResult : ResultBase
@@ -73,8 +69,8 @@ namespace Chalkable.AcademicBenchmarkImport.Model
     internal class SyncData<T, TId>
     {
         public IList<T> Update { get; set; }
-        public IList<TId> Delete { get; set; }
         public IList<T> Insert { get; set; }
+        public IList<TId> Delete { get; set; }
 
         public static SyncData<Standard, Guid> Create(IList<SyncItem> syncItems, IList<Standard> models)
         {
