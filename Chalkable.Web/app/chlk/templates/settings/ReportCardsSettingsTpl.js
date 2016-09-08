@@ -13,9 +13,6 @@ NAMESPACE('chlk.templates.settings', function () {
             ArrayOf(chlk.models.settings.ReportCardsLogo), 'listOfLogo',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.school.School), 'schools',
-
-            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.Application), 'applications',
 
             Boolean, 'ableToUpdate',
@@ -40,18 +37,22 @@ NAMESPACE('chlk.templates.settings', function () {
                     }).length > 0;
             },
 
+            function getRandomParam_(){
+                return Math.random().toString(36).substr(2) + (new Date).getTime().toString(36);
+            },
+
             ArrayOf(Object), function prepareImages(){
-                var res = [];
+                var res = [], that = this;
                 var districtLogo = this.districtLogo();
 
                 if(districtLogo){
                     res.push({
                         name: 'District',
-                        address: districtLogo.getLogoAddress()
+                        address: districtLogo.getLogoAddress() ? districtLogo.getLogoAddress() + '?_=' + this.getRandomParam_() : ''
                     });
                 }
                 res = res.concat(this.schoolsLogo().map(function(x){
-                    return {name: x.getSchoolName(), address: x.getLogoAddress()};
+                    return {name: x.getSchoolName(), address: x.getLogoAddress() ? x.getLogoAddress() + '?_=' + that.getRandomParam_() : ''};
                 }));
 
                 return res;

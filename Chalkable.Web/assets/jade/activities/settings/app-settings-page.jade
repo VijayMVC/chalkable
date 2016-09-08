@@ -7,6 +7,7 @@
                     +ActionLink('settings', 'appSettings', app.getId())(class = app.getId() == self.getApp().getId() ? "pressed" : "" )=app.getName()
                 if self.isAdminPanoramaEnabled()
                     +ActionLink('settings', 'panoramaAdmin') Panorama
+                +ActionLink('settings', 'reportCards') Report Cards
 
     .iframe-wrap.partial-update
         iframe(src=self.getUrl(), width="100%", border=0, style="border: none; min-height: 700px")

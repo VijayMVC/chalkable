@@ -20,6 +20,12 @@ NAMESPACE('chlk.models.settings', function (){
         String, 'logoAddress',
 
         [ria.serialize.SerializeProperty('isdistrictlogo')],
-        Boolean, 'districtLogo'
+        Boolean, 'districtLogo',
+
+        function $(schoolId_, schoolName_){
+            BASE();
+            schoolId_ && this.setSchoolId(schoolId_);
+            schoolName_ && this.setSchoolName(schoolName_);
+        }
     ]);
 });

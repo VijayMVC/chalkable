@@ -8,6 +8,7 @@ REQUIRE('chlk.activities.settings.AppSettingsPage');
 REQUIRE('chlk.activities.settings.AdminPanoramaPage');
 REQUIRE('chlk.activities.settings.AddCourseToPanoramaDialog');
 REQUIRE('chlk.activities.settings.ReportCardsSettingsPage');
+REQUIRE('chlk.activities.settings.AddSchoolToReportCardsDialog');
 
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
@@ -142,46 +143,117 @@ NAMESPACE('chlk.controllers', function (){
                 var hasPermission = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
                 var res = ria.async.wait([
                         this.reportingService.listReportCardsLogo(),
-                        this.schoolService.getSchools(districtId, 0, 100000),
                         this.adminDistrictService.getSettings()])
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        var res = new chlk.models.settings.ReportCardsSettingsViewData(data[0], data[1].getItems(), data[2].getApplications(), hasPermission);
+                        var res = new chlk.models.settings.ReportCardsSettingsViewData(data[0], data[1].getApplications(), hasPermission);
                         this.getContext().getSession().set('reportCardsSettings', res);
                         return res;
                     }, this);
                 return this.PushView(chlk.activities.settings.ReportCardsSettingsPage, res);
             },
 
+            function showSchoolsDialogAction(){
+                var reportCardsSettings = this.getContext().getSession().get('reportCardsSettings', null),
+                    schoolIds = reportCardsSettings.getListOfLogo().filter(function(logo){return !logo.isDistrictLogo();}).map(function(school){return school.getSchoolId().valueOf()});
+                this.WidgetStart('settings', 'showSchoolsDialog', [schoolIds])
+                    .then(function(data){
+                        var ids = data.schoolIds && data.schoolIds.split(',');
+                        if(ids){
+                            var names = data.schoolNames.split(',');
+                            var schools = ids.map(function(id, index){
+                                return new chlk.models.settings.ReportCardsLogo(Number(id), names[index]);
+                            });
+
+                            var schoolsModel = reportCardsSettings.getListOfLogo().concat(schools);
+                            reportCardsSettings.setListOfLogo(schoolsModel);
+                            this.getContext().getSession().set('reportCardsSettings', reportCardsSettings);
+                            this.BackgroundUpdateView(chlk.activities.settings.ReportCardsSettingsPage, reportCardsSettings);
+                        }
+                    }, this);
+
+                return null;
+            },
+
+            [[String, Array]],
+            function showSchoolsDialogWidgetAction(requestId, excludedIds_){
+                var res = this.schoolService.getLocalSchools()
+                    .then(function(schools){
+                        return new chlk.models.settings.AddSchoolToReportCardsViewData(schools, excludedIds_, requestId);
+                    });
+
+                return this.ShadeView(chlk.activities.settings.AddSchoolToReportCardsDialog, res);
+            },
+
+            [[Object]],
+            function addSchoolToReportCardsAction(data){
+                this.WidgetComplete(data.requestId, data);
+                return this.CloseView(chlk.activities.settings.AddSchoolToReportCardsDialog);
+            },
+
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DISTRICTADMIN
             ])],
-            [[Object, Number]],
-            function updateReportCardsLogoAction(files, schoolId_){
-                var res = this.reportingService.updateReportCardsLogo(files, schoolId_)
+            [[Number, Object]],
+            function updateReportCardsLogoAction(schoolId_, files_){
+                var res = this.reportingService.updateReportCardsLogo(files_, schoolId_)
                     .attach(this.validateResponse_())
                     .then(function(listOfLogo){
                         var res = this.getContext().getSession().get('reportCardsSettings', null);
-                        res.setListOfLogo(listOfLogo);
+
+                        var newSchoolInfo = listOfLogo.filter(function(school){return schoolId_ && schoolId_ == school.getSchoolId() || !schoolId_ && school.isDistrictLogo()})[0],
+                            oldListOfLogo = res.getListOfLogo(), oldIndex;
+
+                        oldListOfLogo.forEach(function(school, index){
+                            if(schoolId_ && schoolId_ == school.getSchoolId() || !schoolId_ && school.isDistrictLogo())
+                                oldIndex = index;
+                        });
+
+                        if(!oldIndex && oldIndex !== 0)
+                            oldIndex = oldListOfLogo.length;
+
+                        oldListOfLogo[oldIndex] = newSchoolInfo;
+                        res.setListOfLogo(oldListOfLogo);
+
                         this.getContext().getSession().set('reportCardsSettings', res);
                         return res;
                     }, this);
                 return this.UpdateView(chlk.activities.settings.ReportCardsSettingsPage, res);
             },
 
+            function prepareLogoItemsAfterDelete(schoolId_){
+                var res = this.getContext().getSession().get('reportCardsSettings', null);
+
+                var oldListOfLogo = res.getListOfLogo(), oldIndex;
+
+                oldListOfLogo.forEach(function(school, index){
+                    if(schoolId_ && schoolId_ == school.getSchoolId() || school.isDistrictLogo())
+                        oldIndex = index;
+                });
+
+                oldListOfLogo.splice(oldIndex, 1);
+                res.setListOfLogo(oldListOfLogo);
+
+                this.getContext().getSession().set('reportCardsSettings', res);
+                return res;
+            },
+
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DISTRICTADMIN
             ])],
-            [[chlk.models.id.ReportCardsLogoId]],
-            function deleteReportCardsLogo(reportCardsLogoId){
-                var res = this.reportingService.deleteReportCardsLogo(reportCardsLogoId)
-                    .attach(this.validateResponse_())
-                    .then(function(listOfLogo){
-                        var res = this.getContext().getSession().get('reportCardsSettings', null);
-                        res.setListOfLogo(listOfLogo);
-                        this.getContext().getSession().set('reportCardsSettings', res);
-                        return res;
-                    }, this);
+            [[chlk.models.id.ReportCardsLogoId, Number]],
+            function deleteReportCardsLogoAction(reportCardsLogoId, schoolId_){
+                var res;
+
+                if(reportCardsLogoId)
+                    res = this.reportingService.deleteReportCardsLogo(reportCardsLogoId)
+                        .attach(this.validateResponse_())
+                        .then(function(listOfLogo){
+                            return this.prepareLogoItemsAfterDelete(schoolId_);
+                        }, this);
+                else
+                    res = ria.async.DeferredData(this.prepareLogoItemsAfterDelete(schoolId_), 100);
+
                 return this.UpdateView(chlk.activities.settings.ReportCardsSettingsPage, res);
             },
 

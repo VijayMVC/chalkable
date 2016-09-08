@@ -16,11 +16,51 @@
       font-size: 20px
 
   .report-cards
+    .slides
+      margin-bottom: 40px
+
+      .title
+        text-align: center
+        font-style: italic
+
+    .btn-cnt
+      position: relative
+      margin-bottom: 20px
+
+      .v-line
+        position: absolute
+        height: 21px
+        left: 18px
+        top: 30px
+        width: 0
+
+      &:last-child
+        .v-line
+          border-left: 1px solid #c8c7c3
+
+      .delete-btn
+        right: 10px
+
+      .with-logo::after
+        content: " "
+        position: absolute
+        width: 24px
+        height: 24px
+        top: 50%
+        right: 10px
+        margin-top: -12px
+        +icons-24-sprite(attachment)
+
     .logo-section
-      .schools
-        width: 200px
       .schools,.logo
         display: inline-block
+        vertical-align: top
+
+    .download-link
+      margin-right: 50px
+      width: 200px
+      position: relative
+
 
     .add-circle-btn
       +background(linear-gradient(top, #fff, #f2f2ee))
