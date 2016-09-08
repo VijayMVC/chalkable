@@ -12,8 +12,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 {
     public interface ISyncConnector
     {
-        Task<PaginatedList<SyncData>> GetStandardsSyncData(DateTime since, int start, int count);
-        Task<PaginatedList<SyncData>> GetTopicsSyncData(DateTime since, int start, int count);
+        Task<PaginatedList<SyncItem>> GetStandardsSyncData(DateTime since, int start, int count);
+        Task<PaginatedList<SyncItem>> GetTopicsSyncData(DateTime since, int start, int count);
     }
 
     public class SyncConnector : ConnectorBase, ISyncConnector
@@ -22,7 +22,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         {
         }
         
-        private async Task<PaginatedList<SyncData>> GetSyncDataForResource(string resource, DateTime since,
+        private async Task<PaginatedList<SyncItem>> GetSyncDataForResource(string resource, DateTime since,
             int start, int count)
         {
             var url = "sync";
@@ -34,17 +34,17 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 {"offset", start.ToString() }
             };
 
-            var res = await CallAsync<PaginatedResponse<BaseResource<SyncData>>>(url, nvc);
+            var res = await CallAsync<PaginatedResponse<BaseResource<SyncItem>>>(url, nvc);
 
-            return new PaginatedList<SyncData>(res.Resources.Select(x => x.Data), start / count, count, res.Count);
+            return new PaginatedList<SyncItem>(res.Resources.Select(x => x.Data), start / count, count, res.Count);
         }
 
-        public async Task<PaginatedList<SyncData>> GetStandardsSyncData(DateTime since, int start, int count)
+        public async Task<PaginatedList<SyncItem>> GetStandardsSyncData(DateTime since, int start, int count)
         {
             return await GetSyncDataForResource("standards", since, start, count);
         }
 
-        public async Task<PaginatedList<SyncData>> GetTopicsSyncData(DateTime since, int start, int count)
+        public async Task<PaginatedList<SyncItem>> GetTopicsSyncData(DateTime since, int start, int count)
         {
             return await GetSyncDataForResource("topics", since, start, count);
         }

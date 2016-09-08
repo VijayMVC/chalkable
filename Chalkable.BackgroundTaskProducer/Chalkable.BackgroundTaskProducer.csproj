@@ -111,6 +111,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Producers\AcademicBenchmarkImportProducer.cs" />
     <Compile Include="Producers\AllDistrictsProducer.cs" />
     <Compile Include="Producers\CleanupManager.cs" />
     <Compile Include="Producers\DbBackupProducer.cs" />

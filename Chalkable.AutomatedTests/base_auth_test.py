@@ -9,11 +9,16 @@ import time
 import json
 import random
 import ast
+import string
+from time import sleep
+
+
 
 
 
 class BaseAuthedTestCase(unittest.TestCase):
     def setUp(self):
+
         # info for the teacher
         s = requests.Session()
         payload = {'UserName': user_email, 'Password': user_pwd, 'remember': 'false'}
@@ -108,10 +113,31 @@ class BaseAuthedTestCase(unittest.TestCase):
 
         # getting grading periods
         var_grading_periods_list = re.findall('var gradingPeriods = .+', page_as_one_string)
+
         var_grading_periods_string = ''.join(var_grading_periods_list)
         var_grading_periods_cut_off_list = re.findall('"id":[0-9]+', var_grading_periods_string)
         var_grading_periods_cut_off_string = ''.join(var_grading_periods_cut_off_list)
         self.var_grading_periods_final_list = re.findall('[0-9]+', var_grading_periods_cut_off_string)
+
+
+        # getting grading periods and dates
+        self.list_for_grading_periods_and_classes = []
+        var_grading_periods_list_for_dict = re.findall('var gradingPeriods = .+', page_as_one_string)
+        var_grading_periods_string_for_dict = ''.join(var_grading_periods_list_for_dict)
+        var_grading_periods_cut_off_string_for_dict = var_grading_periods_string_for_dict[30:-3]
+        dictionary_var_grading_periods_cut_off_string_for_dict = json.loads(var_grading_periods_cut_off_string_for_dict)
+        #print dictionary_var_grading_periods_cut_off_string_for_dict, type(dictionary_var_grading_periods_cut_off_string_for_dict)
+        dictionary_var_grading_periods_cut_off_string_for_dict_data = dictionary_var_grading_periods_cut_off_string_for_dict['data']
+        for j in dictionary_var_grading_periods_cut_off_string_for_dict_data:
+            #print j['startdate'], j['enddate']
+            self.list_for_grading_periods_and_classes.append({'startdate': j['startdate'], 'enddate': j['enddate']})
+
+
+
+
+
+
+
 
 
         #gradingComments
@@ -149,6 +175,7 @@ class BaseAuthedTestCase(unittest.TestCase):
 
 
 
+
         dictionary_var_classes_advanced_data_cut_off_string_data = dictionary_var_classes_advanced_data_cut_off_string['data']
 
 
@@ -162,6 +189,8 @@ class BaseAuthedTestCase(unittest.TestCase):
         var_markingPeriods_string = ''.join(var_marking_periods_list)
         var_markingPeriods_cut_off_string = var_markingPeriods_string[31:-3]
         dictionary_var_markingPeriods_cut_off_string = json.loads(var_markingPeriods_cut_off_string)
+
+
         self.dict_for_marking_period_date_startdate_endate = {}
         dictionary_var_markingPeriods_cut_off_string_data = dictionary_var_markingPeriods_cut_off_string['data']
        # print 'dictionary_var_markingPeriods_cut_off_string_data', dictionary_var_markingPeriods_cut_off_string_data
@@ -188,9 +217,12 @@ class BaseAuthedTestCase(unittest.TestCase):
            # print 'info_for_one_class',info_for_one_class
             self.dict_for_clas_marking_period[info_for_one_class['id']] = info_for_one_class['markingperiodsid']
 
+
+
         # getting list of classes
         for k in dictionary_var_markingPeriods_cut_off_string_data:
             self.list_of_classes.append(k['id'])
+
 
         self.session = s
 
@@ -202,7 +234,7 @@ class BaseAuthedTestCase(unittest.TestCase):
 
         self.session_classmate = s_classmate
 
-    def post_instead_of_get(self, url, params, status=200, success=True):
+    def post(self, url, params, status=200, success=True):
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         try:
@@ -246,35 +278,40 @@ class BaseAuthedTestCase(unittest.TestCase):
         r = s.get(chlk_server_url + url, headers=headers)
         return self.verify_response(r, status, success)
 
-    def postJSON(self, url, obj, status=200, success=True):
+    def postJSON(self, url, obj, status=200, success=True, files=None):
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
-        r = s.post(chlk_server_url + url, json=obj, headers=headers)
+        r = s.post(chlk_server_url + url, json=obj, headers=headers, files=files)
         return self.verify_response(r, status, success)
 
-    def post(self, url, params, status=200, success=True):
+    def postJSON_Assessment(self, url, obj, status=200, success=True, files=None):
+        s = self.session
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
+        r = s.post(chlk_server_url_assessment + url, json=obj, headers=headers, files=files)
+        return self.verify_response(r, status, success, 'Success')   
 
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
 
         try:
-            r = s.post(chlk_server_url + url, data=params, headers=headers)
+            r = s.post(chlk_server_url + url, data=params, headers=headers, files=files)
         except ValueError:
             self.assertTrue(False, 'Request failed, ' + url)
             return None
 
         return self.verify_response(r, status, success)
 
-    def verify_response(self, r, status, success):
+    def verify_response(self, r, status, success, success_property='success'):
         self.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
 
         try:
             data = r.json()
         except ValueError:
-            self.assertTrue(False, 'Parse JSON failed, ' + r.url)
+            self.assertTrue(False, 'Parse JSON failed, ' + r.url + r.text)
             return None
 
-        self.assertEquals(data['success'], success, 'API success')
+        self.assertEquals(data[success_property], success,
+                          'API success ' + str(data[success_property]) + '=' + str(success))
 
         return data
 
@@ -283,13 +320,13 @@ class BaseAuthedTestCase(unittest.TestCase):
         s_student = self.session_student
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         r_student = s_student.get(chlk_server_url + url_student, headers=headers)
-        return self.verify_response_student(r_student, status, success)
+        return self.verify_response(r_student, status, success)
 
     def postJSON_student(self, url_student, obj, status=200, success=True):
         s_student = self.session_student
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         r_student = s_student.post(chlk_server_url + url_student, json=obj, headers=headers)
-        return self.verify_response_student(r_student, status, success)
+        return self.verify_response(r_student, status, success)
 
     def post_student(self, url_student, params, status=200, success=True):
         s_student = self.session_student
@@ -301,20 +338,8 @@ class BaseAuthedTestCase(unittest.TestCase):
             self.assertTrue(False, 'Request failed, ' + url_student)
             return None
 
-        return self.verify_response_student(r_student, status, success)
+        return self.verify_response(r_student, status, success)
 
-    def verify_response_student(self, r_student, status, success):
-        self.assertEquals(r_student.status_code, status, 'Response status code')
-
-        try:
-            data = r_student.json()
-        except ValueError:
-            self.assertTrue(False, 'Parse JSON failed, ' + r_student.url_student)
-            return None
-
-        self.assertEquals(data['success'], success, 'API success')
-
-        return data
     # the end of methods for the student
 
     # these methods for the foreign student
@@ -322,13 +347,13 @@ class BaseAuthedTestCase(unittest.TestCase):
         s_foreign_student = self.session_foreign_student
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         r_foreign_student = s_foreign_student.get(chlk_server_url + url_foreign_student, headers=headers)
-        return self.verify_response_foreign_student(r_foreign_student, status, success)
+        return self.verify_response(r_foreign_student, status, success)
 
     def postJSON_foreign_student(self, url_foreign_student, obj, status=200, success=True):
         s_foreign_student = self.session_foreign_student
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         r_foreign_student = s_foreign_student.post(chlk_server_url + url_foreign_student, json=obj, headers=headers)
-        return self.verify_response_foreign_student(r_foreign_student, status, success)
+        return self.verify_response(r_foreign_student, status, success)
 
     def post_foreign_student(self, url_foreign_student, params, status=200, success=True):
         s_foreign_student = self.session_foreign_student
@@ -340,20 +365,8 @@ class BaseAuthedTestCase(unittest.TestCase):
             self.assertTrue(False, 'Request failed, ' + url_foreign_student)
             return None
 
-        return self.verify_response_foreign_student(r_foreign_student, status, success)
+        return self.verify_response(r_foreign_student, status, success)
 
-    def verify_response_foreign_student(self, r_foreign_student, status, success):
-        self.assertEquals(r_foreign_student.status_code, status, 'Response status code')
-
-        try:
-            data = r_foreign_student.json()
-        except ValueError:
-            self.assertTrue(False, 'Parse JSON failed, ' + r_foreign_student.url_foreign_student)
-            return None
-
-        self.assertEquals(data['success'], success, 'API success')
-
-        return data
     # the end of methods for the foreign student
 
 
@@ -362,13 +375,13 @@ class BaseAuthedTestCase(unittest.TestCase):
         s_classmate = self.session_classmate
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         r_classmate = s_classmate.get(chlk_server_url + url_classmate, headers=headers)
-        return self.verify_response_classmate(r_classmate, status, success)
+        return self.verify_response(r_classmate, status, success)
 
     def postJSON_classmate(self, url_classmate, obj, status=200, success=True):
         s_classmate = self.session_classmate
         headers = {'X-Requested-With': 'XMLHttpRequest'}
         r_classmate = s_classmate.post(chlk_server_url + url_classmate, json=obj, headers=headers)
-        return self.verify_response_classmate(r_classmate, status, success)
+        return self.verify_response(r_classmate, status, success)
 
     def post_classmate(self, url_classmate, params, status=200, success=True):
         s_classmate = self.session_classmate
@@ -380,20 +393,8 @@ class BaseAuthedTestCase(unittest.TestCase):
             self.assertTrue(False, 'Request failed, ' + url_classmate)
             return None
 
-        return self.verify_response_classmate(r_classmate, status, success)
+        return self.verify_response(r_classmate, status, success)
 
-    def verify_response_classmate(self, r_classmate, status, success):
-        self.assertEquals(r_classmate.status_code, status, 'Response status code')
-
-        try:
-            data = r_classmate.json()
-        except ValueError:
-            self.assertTrue(False, 'Parse JSON failed, ' + r_classmate.url_student)
-            return None
-
-        self.assertEquals(data['success'], success, 'API success')
-
-        return data
     # the end of methods for classmates
 
 
@@ -402,20 +403,8 @@ class BaseAuthedTestCase(unittest.TestCase):
     def get_admin(self, url_admin, status=200, success=True):
         s_admin = self.session_admin
         r_admin = s_admin.get(chlk_server_url + url_admin)
-        return self.verify_response_admin(r_admin, status, success)
+        return self.verify_response(r_admin, status, success)
 
-    def verify_response_admin(self, r_admin, status, success):
-        self.assertEquals(r_admin.status_code, status, 'Response status code')
-
-        try:
-            data = r_admin.json()
-        except ValueError:
-            self.assertTrue(False, 'Parse JSON failed, ' + r_admin.url)
-            return None
-
-        self.assertEquals(data['success'], success, 'API success')
-
-        return data
     # the end of methods for the admin
 
     # noinspection PyMethodMayBeStatic

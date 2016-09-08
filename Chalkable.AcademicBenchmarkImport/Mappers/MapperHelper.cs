@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Configuration;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Common;
 using Chalkable.Data.AcademicBenchmark.Model;
 
 namespace Chalkable.AcademicBenchmarkImport.Mappers
 {
-
-    public static class MapperHelper
+    internal static class MapperHelper
     {
         public static Authority Map(AcademicBenchmarkConnector.Models.Authority model)
         {
@@ -127,6 +121,19 @@ namespace Chalkable.AcademicBenchmarkImport.Mappers
                 Level = model.Level,
                 SubjectDocRef = model.SubjectDocument.Id
             };
+        }
+
+        public static OperationType Map(string str)
+        {
+            switch (str)
+            {
+                case "Added":
+                    return OperationType.Insert;
+                case "Deleted":
+                    return OperationType.Delete;
+                default:
+                    return OperationType.Update;
+            }
         }
     }
 }

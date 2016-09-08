@@ -94,7 +94,7 @@ class TestFeed(BaseAuthedTestCase):
                                                     self.postJSON(
                                                         '/Grading/UpdateStudentAverage', data)
 
-                                                    print data
+                                                    #print data
 
                                                     # verifying that student has a correct score and a grading comment
                                                     class_grading_grid = self.get(

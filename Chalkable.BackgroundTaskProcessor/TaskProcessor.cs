@@ -25,6 +25,7 @@ namespace Chalkable.BackgroundTaskProcessor
             handlers.Add(BackgroundTaskTypeEnum.SisDataResync, new SisResyncTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.SisDataResyncAfterRestore, new SisResyncAfterRestoreTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.DatabaseDacPacUpdate, new DatabaseDacPacUpdateTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.AcademicBenchmarkImport, new AcademicBenchmarkImportTaskHandler());
         }
 
         private BackgroundTaskService.BackgroundTaskLog CreateLog(IServiceLocatorMaster sl, BackgroundTask task)
@@ -59,18 +60,18 @@ namespace Chalkable.BackgroundTaskProcessor
             {
                 if (!handlers.ContainsKey(task.Type))
                 {
-                    Trace.TraceError(string.Format("No task handler for task type {0}", task.Type));
+                    Trace.TraceError($"No task handler for task type {task.Type}");
                 }
                 try
                 {
                     var res = handlers[task.Type].Handle(task, log);
                     if (res) {
                         Telemetry.DispatchRequest(requestName, task.Type.ToString(), requestStartTime, requestTimer.Elapsed, true, Verbosity.Info, task.DistrictRef.ToString(), task.Id.ToString());
-                        log.LogInfo(string.Format("Task {0} processing succesfully completed", task.Id));
+                        log.LogInfo($"Task {task.Id} processing succesfully completed");
                     }
                     else {
                         Telemetry.DispatchRequest(requestName, task.Type.ToString(), requestStartTime, requestTimer.Elapsed, false, Verbosity.Error, task.DistrictRef.ToString(), task.Id.ToString());
-                        log.LogError(string.Format("Task {0} processing failed", task.Id));
+                        log.LogError($"Task {task.Id} processing failed");
                     }
                     sl.BackgroundTaskService.Complete(task.Id, res);
                 }

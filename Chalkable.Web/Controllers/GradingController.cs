@@ -165,8 +165,8 @@ namespace Chalkable.Web.Controllers
             StandardGradingGridViewData currentStandardGrid = null;
             if (currentGradingPeriod != null)
             {
-                var students = GetStudentsForGrid(classId, currentGradingPeriod.MarkingPeriodRef);
                 var gradingStandardsTask = SchoolLocator.GradingStandardService.GetGradingStandards(classId, currentGradingPeriod.Id);
+                var students = GetStudentsForGrid(classId, currentGradingPeriod.MarkingPeriodRef);
                 currentStandardGrid = StandardGradingGridViewData.Create(currentGradingPeriod, await gradingStandardsTask, students);
             }
             return Json(StandardGradingGridsViewData.Create(gradingPeriods, currentStandardGrid));

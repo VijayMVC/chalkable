@@ -17,11 +17,11 @@ namespace Chalkable.Tests.AB_Api
         {
             var abConnector = new AcademicBenchmarkConnector.Connectors.ConnectorLocator();
 
-            var syncData = Task.Run(() => abConnector.SyncConnector.GetStandardsSyncData(new DateTime(2016, 01, 01), 0, 1000)).Result;
+            var syncData = Task.Run(() => abConnector.SyncConnector.GetTopicsSyncData(new DateTime(2016, 04, 01), 0, int.MaxValue)).Result;
 
             foreach (var resorce in syncData)
             {
-                Debug.WriteLine($"{resorce.StandardId} ---- {resorce.ChangeType}");
+                Debug.WriteLine($"{resorce.Id} ---- {resorce.ChangeType}");
             }
         }
 

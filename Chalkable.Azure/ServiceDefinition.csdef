@@ -115,6 +115,9 @@
       <Setting name="TaskProducer.DbBackupProducer.Interval" />
       <Setting name="TaskProducer.DbBackupProducer.IntervalStart" />
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" />
+      <Setting name="TaskProducer.AcademicBenchmark.Interval" />
+      <Setting name="TaskProducer.AcademicBenchmark.IntervalStart" />
+      <Setting name="TaskProducer.AcademicBenchmark.IntervalEnd" />
       <!--tracking-->
       <Setting name="mixpanel-token" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />

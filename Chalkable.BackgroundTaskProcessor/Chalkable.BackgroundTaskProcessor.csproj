@@ -172,6 +172,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcademicBenchmarkImportTaskHandler.cs" />
     <Compile Include="AttendanceNotificationTaskHandler.cs" />
     <Compile Include="DatabaseDacPacUpdate\DatabaseDacPacUpdateTaskHandler.cs" />
     <Compile Include="DatabaseDacPacUpdate\JobStatHelper.cs" />
@@ -198,6 +199,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkImport\Chalkable.AcademicBenchmarkImport.csproj">
+      <Project>{40af3637-d687-428d-9c49-bbb2795ce7f3}</Project>
+      <Name>Chalkable.AcademicBenchmarkImport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
       <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
       <Name>Chalkable.BusinessLogic</Name>
