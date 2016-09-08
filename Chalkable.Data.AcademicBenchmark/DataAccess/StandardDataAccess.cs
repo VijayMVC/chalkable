@@ -14,22 +14,23 @@ namespace Chalkable.Data.AcademicBenchmark.DataAccess
         {
         }
 
-        public override void Delete(IList<Standard> entities)
+        public override void Delete(IList<Guid> keys)
         {
             var @params = new Dictionary<string, object>
             {
-                ["standardIds"] = entities.Select(x => x.Id)
+                ["standardIds"] = keys
             };
             ExecuteStoredProcedure("spDeleteStandards", @params);
         }
 
+        public override void Delete(IList<Standard> entities)
+        {
+            Delete(entities.Select(x => x.Id).ToList());
+        }
+
         public override void Delete(Guid key)
         {
-            var @params = new Dictionary<string, object>
-            {
-                ["standardIds"] = new List<Guid> { key }
-            };
-            ExecuteStoredProcedure("spDeleteStandards", @params);
+            Delete(new List<Guid> {key});
         }
 
         public StandardRelations GetStandardRelations(Guid id)

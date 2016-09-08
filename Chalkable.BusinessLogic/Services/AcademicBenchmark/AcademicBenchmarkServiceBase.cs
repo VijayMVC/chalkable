@@ -11,6 +11,7 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
     {
         void Add(IList<TModel> models);
         void Delete(IList<TModel> models);
+        void Delete(IList<TParam> ids);
         void Edit(IList<TModel> models);
         IList<TModel> GetAll();
         TModel GetByIdOrNull(TParam id);
@@ -55,6 +56,12 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
             DoUpdate(u => new DataAccessBase<TModel>(u).Delete(models));
         }
 
+        public virtual void Delete(IList<TParam> ids)
+        {
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<TModel, TParam>(u).Delete(ids));
+        }
+
         public virtual void Edit(IList<TModel> models)
         {
             BaseSecurity.EnsureSysAdmin(Context);
@@ -71,7 +78,7 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
             return ServiceLocator.DbService.GetUowForUpdate(isolationLevel);
         }
 
-        public void DoUpdate(Action<UnitOfWork> action)
+        protected void DoUpdate(Action<UnitOfWork> action)
         {
             using (var uow = Update())
             {
@@ -80,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.AcademicBenchmark
             }
         }
 
-        public T DoRead<T>(Func<UnitOfWork, T> func)
+        protected T DoRead<T>(Func<UnitOfWork, T> func)
         {
             using (var uow = Read())
             {

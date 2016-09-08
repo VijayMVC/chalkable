@@ -41,10 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\Loader.cs" />
     <Compile Include="ImportAcademicBenchmarkServiceLocator.cs" />
     <Compile Include="ImportDbService.cs" />
     <Compile Include="ImportService.cs" />
     <Compile Include="Mappers\MapperHelper.cs" />
+    <Compile Include="Model\ImportResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

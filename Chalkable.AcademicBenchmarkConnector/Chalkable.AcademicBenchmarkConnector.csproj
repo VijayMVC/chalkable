@@ -61,7 +61,7 @@
     <Compile Include="Models\Standard.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Subject.cs" />
-    <Compile Include="Models\SyncData.cs" />
+    <Compile Include="Models\SyncItem.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
