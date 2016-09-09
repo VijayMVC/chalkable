@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Chalkable.Database.School</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{be01fdc7-65d4-4d0a-8fae-ed6d67e47a44}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureDatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Chalkable.Database.School</RootNamespace>
+    <AssemblyName>Chalkable.Database.School</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DacVersion>1.0.0.0</DacVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Staging|AnyCPU' ">
+    <OutputPath>bin\Staging\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables\" />
+    <Folder Include="Views\" />
+    <Folder Include="Functions\" />
+    <Folder Include="Stored Procedures\" />
+    <Folder Include="User Defined Types\" />
+    <Folder Include="Stored Procedures\Announcements Procedures" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\PostDeploy" />
+    <Folder Include="Scripts\PreDeploy" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Address.sql" />
+    <Build Include="Tables\AdminAnnouncement.sql" />
+    <Build Include="Tables\AlphaGrade.sql" />
+    <Build Include="Tables\AlternateScore.sql" />
+    <Build Include="Tables\Announcement.sql" />
+    <Build Include="Tables\AnnouncementApplication.sql" />
+    <Build Include="Tables\AnnouncementAssignedAttribute.sql" />
+    <Build Include="Tables\AnnouncementAttachment.sql" />
+    <Build Include="Tables\AnnouncementAttribute.sql" />
+    <Build Include="Tables\AnnouncementGroup.sql" />
+    <Build Include="Tables\AnnouncementQnA.sql" />
+    <Build Include="Tables\AnnouncementRecipientData.sql" />
+    <Build Include="Tables\AnnouncementStandard.sql" />
+    <Build Include="Tables\AttendanceLevelReason.sql" />
+    <Build Include="Tables\AttendanceMonth.sql" />
+    <Build Include="Tables\AttendanceReason.sql" />
+    <Build Include="Tables\AutoGrade.sql" />
+    <Build Include="Tables\BellSchedule.sql" />
+    <Build Include="Tables\Class.sql" />
+    <Build Include="Tables\ClassAnnouncement.sql" />
+    <Build Include="Tables\ClassPeriod.sql" />
+    <Build Include="Tables\ClassPerson.sql" />
+    <Build Include="Tables\ClassroomOption.sql" />
+    <Build Include="Tables\ClassStandard.sql" />
+    <Build Include="Tables\ClassTeacher.sql" />
+    <Build Include="Tables\ContactRelationship.sql" />
+    <Build Include="Tables\CourseType.sql" />
+    <Build Include="Tables\Date.sql" />
+    <Build Include="Tables\DayType.sql" />
+    <Build Include="Tables\GradedItem.sql" />
+    <Build Include="Tables\GradeLevel.sql" />
+    <Build Include="Tables\GradingComment.sql" />
+    <Build Include="Tables\GradingPeriod.sql" />
+    <Build Include="Tables\GradingScale.sql" />
+    <Build Include="Tables\GradingScaleRange.sql" />
+    <Build Include="Tables\GradingStyle.sql" />
+    <Build Include="Tables\Group.sql" />
+    <Build Include="Tables\Infraction.sql" />
+    <Build Include="Tables\LessonPlan.sql" />
+    <Build Include="Tables\LPGalleryCategory.sql" />
+    <Build Include="Tables\MarkingPeriod.sql" />
+    <Build Include="Tables\MarkingPeriodClass.sql" />
+    <Build Include="Tables\Notification.sql" />
+    <Build Include="Tables\Period.sql" />
+    <Build Include="Tables\Person.sql" />
+    <Build Include="Tables\PersonEmail.sql" />
+    <Build Include="Tables\Phone.sql" />
+    <Build Include="Tables\PracticeGrade.sql" />
+    <Build Include="Tables\PrivateMessage.sql" />
+    <Build Include="Tables\Room.sql" />
+    <Build Include="Tables\ScheduledTimeSlot.sql" />
+    <Build Include="Tables\ScheduledTimeSlotVariation.sql" />
+    <Build Include="Tables\School.sql" />
+    <Build Include="Tables\SchoolOption.sql" />
+    <Build Include="Tables\SchoolPerson.sql" />
+    <Build Include="Tables\SchoolYear.sql" />
+    <Build Include="Tables\SectionTimeSlotVariation.sql" />
+    <Build Include="Tables\Staff.sql" />
+    <Build Include="Tables\StaffSchool.sql" />
+    <Build Include="Tables\Standard.sql" />
+    <Build Include="Tables\StandardSubject.sql" />
+    <Build Include="Tables\Student.sql" />
+    <Build Include="Tables\StudentContact.sql" />
+    <Build Include="Tables\StudentGroup.sql" />
+    <Build Include="Tables\StudentSchool.sql" />
+    <Build Include="Tables\StudentSchoolYear.sql" />
+    <Build Include="Tables\SyncVersion.sql" />
+    <Build Include="Tables\SystemSetting.sql" />
+    <Build Include="Tables\UserSchool.sql" />
+    <Build Include="Views\vwAdminAnnouncement.sql" />
+    <Build Include="Views\vwAllSchoolsActiveClasses.sql" />
+    <Build Include="Views\vwAnnouncementQnA.sql" />
+    <Build Include="Views\vwClass.sql" />
+    <Build Include="Views\vwClassAnnouncement.sql" />
+    <Build Include="Views\vwLessonPlan.sql" />
+    <Build Include="Views\vwLPGalleryCategory.sql" />
+    <Build Include="Views\vwPerson.sql" />
+    <Build Include="Functions\Split.sql" />
+    <Build Include="Stored Procedures\spAfterRestore.sql" />
+    <Build Include="Stored Procedures\spAssigAllToGroup.sql" />
+    <Build Include="Stored Procedures\spBeforeRestore.sql" />
+    <Build Include="Stored Procedures\spCreateAdminAnnouncement.sql" />
+    <Build Include="Stored Procedures\spCreateClasssAnnouncement.sql" />
+    <Build Include="Stored Procedures\spCreateFromTemplate.sql" />
+    <Build Include="Stored Procedures\spCreateLessonPlan.sql" />
+    <Build Include="Stored Procedures\spCurrentClassForTeacher.sql" />
+    <Build Include="Stored Procedures\spDeleteAnnouncements.sql" />
+    <Build Include="Stored Procedures\spDuplicateLessonPlan.sql" />
+    <Build Include="Stored Procedures\spGetAdminAnnouncementDetails.sql" />
+    <Build Include="Stored Procedures\spGetAdminCourses.sql" />
+    <Build Include="Stored Procedures\spGetAllSchoolsActiveClasses.sql" />
+    <Build Include="Stored Procedures\spGetAnnouncementRecipientPersons.sql" />
+    <Build Include="Stored Procedures\spGetAnnouncementsQnA.sql" />
+    <Build Include="Stored Procedures\spGetAttendanceReasons.sql" />
+    <Build Include="Stored Procedures\spGetClassAnnouncementDetails.sql" />
+    <Build Include="Stored Procedures\spGetClassAnnouncementsBySisActivities.sql" />
+    <Build Include="Stored Procedures\spGetClassById.sql" />
+    <Build Include="Stored Procedures\spGetGradingPeriods.sql" />
+    <Build Include="Stored Procedures\spGetGroupExplorerData.sql" />
+    <Build Include="Stored Procedures\spGetLessonPlanDetails.sql" />
+    <Build Include="Stored Procedures\spGetPersonDetails.sql" />
+    <Build Include="Stored Procedures\spGetSchedule.sql" />
+    <Build Include="Stored Procedures\spGetStandardParentsWithChilds.sql" />
+    <Build Include="Stored Procedures\spGetStartupData.sql" />
+    <Build Include="Stored Procedures\spGetStudentClasses.sql" />
+    <Build Include="Stored Procedures\spGetStudentDetails.sql" />
+    <Build Include="Stored Procedures\spGetStudentsByClass.sql" />
+    <Build Include="Stored Procedures\spGetStudentsByTeacher.sql" />
+    <Build Include="Stored Procedures\spGetTeacherClasses.sql" />
+    <Build Include="Stored Procedures\spSearchClasses.sql" />
+    <Build Include="Stored Procedures\spSearchPersons.sql" />
+    <Build Include="Stored Procedures\spSearchStaff.sql" />
+    <Build Include="Stored Procedures\spSearchStudents.sql" />
+    <Build Include="Stored Procedures\spSearchStudentsForGroup.sql" />
+    <Build Include="Stored Procedures\spSelectAdminAnnoucnement.sql" />
+    <Build Include="Stored Procedures\spSelectAnnouncementAddionalData.sql" />
+    <Build Include="Stored Procedures\spSelectClassAnnouncement.sql" />
+    <Build Include="Stored Procedures\spSelectClassDetails.sql" />
+    <Build Include="Stored Procedures\spSelectLessonPlans.sql" />
+    <Build Include="Stored Procedures\spUpdateAnnouncementRecipientData.sql" />
+    <Build Include="User Defined Types\TAddress.sql" />
+    <Build Include="User Defined Types\TAdminAnnouncement.sql" />
+    <Build Include="User Defined Types\TAlphaGrade.sql" />
+    <Build Include="User Defined Types\TAlternateScore.sql" />
+    <Build Include="User Defined Types\TAnnouncement.sql" />
+    <Build Include="User Defined Types\TAnnouncementApplication.sql" />
+    <Build Include="User Defined Types\TAnnouncementAttachment.sql" />
+    <Build Include="User Defined Types\TAnnouncementAttribute.sql" />
+    <Build Include="User Defined Types\TAnnouncementQnA.sql" />
+    <Build Include="User Defined Types\TAnnouncementRecipient.sql" />
+    <Build Include="User Defined Types\TAnnouncementStandard.sql" />
+    <Build Include="User Defined Types\TAttendanceLevelReason.sql" />
+    <Build Include="User Defined Types\TAttendanceMonth.sql" />
+    <Build Include="User Defined Types\TAttendanceReason.sql" />
+    <Build Include="User Defined Types\TBellSchedule.sql" />
+    <Build Include="User Defined Types\TClass.sql" />
+    <Build Include="User Defined Types\TClassDetails.sql" />
+    <Build Include="User Defined Types\TClassPeriod.sql" />
+    <Build Include="User Defined Types\TClassPerson.sql" />
+    <Build Include="User Defined Types\TClassroomOption.sql" />
+    <Build Include="User Defined Types\TClassStandard.sql" />
+    <Build Include="User Defined Types\TClassTeacher.sql" />
+    <Build Include="User Defined Types\TContactRelationship.sql" />
+    <Build Include="User Defined Types\TCourseType.sql" />
+    <Build Include="User Defined Types\TDate.sql" />
+    <Build Include="User Defined Types\TDayType.sql" />
+    <Build Include="User Defined Types\TGradedItem.sql" />
+    <Build Include="User Defined Types\TGradeLevel.sql" />
+    <Build Include="User Defined Types\TGradingComment.sql" />
+    <Build Include="User Defined Types\TGradingPeriod.sql" />
+    <Build Include="User Defined Types\TGradingScale.sql" />
+    <Build Include="User Defined Types\TGradingScaleRange.sql" />
+    <Build Include="User Defined Types\TGradingStyle.sql" />
+    <Build Include="User Defined Types\TGUID.sql" />
+    <Build Include="User Defined Types\TInfraction.sql" />
+    <Build Include="User Defined Types\TInt32.sql" />
+    <Build Include="User Defined Types\TIntId.sql" />
+    <Build Include="User Defined Types\TLessonPlan.sql" />
+    <Build Include="User Defined Types\TMarkingPeriod.sql" />
+    <Build Include="User Defined Types\TMarkingPeriodClass.sql" />
+    <Build Include="User Defined Types\TNotification.sql" />
+    <Build Include="User Defined Types\TPeriod.sql" />
+    <Build Include="User Defined Types\TPerson.sql" />
+    <Build Include="User Defined Types\TPersonEmail.sql" />
+    <Build Include="User Defined Types\TPhone.sql" />
+    <Build Include="User Defined Types\TPrivateMessage.sql" />
+    <Build Include="User Defined Types\TReportDownload.sql" />
+    <Build Include="User Defined Types\TReportMailDelivery.sql" />
+    <Build Include="User Defined Types\TRoom.sql" />
+    <Build Include="User Defined Types\TScheduledTimeSlot.sql" />
+    <Build Include="User Defined Types\TScheduledTimeSlotVariation.sql" />
+    <Build Include="User Defined Types\TSchool.sql" />
+    <Build Include="User Defined Types\TSchoolGradeLevel.sql" />
+    <Build Include="User Defined Types\TSchoolOption.sql" />
+    <Build Include="User Defined Types\TSchoolPerson.sql" />
+    <Build Include="User Defined Types\TSchoolYear.sql" />
+    <Build Include="User Defined Types\TSectionTimeSlotVariation.sql" />
+    <Build Include="User Defined Types\TSisUser.sql" />
+    <Build Include="User Defined Types\TStaff.sql" />
+    <Build Include="User Defined Types\TStaffSchool.sql" />
+    <Build Include="User Defined Types\TStandard.sql" />
+    <Build Include="User Defined Types\TStandardSubject.sql" />
+    <Build Include="User Defined Types\Tstring.sql" />
+    <Build Include="User Defined Types\TStudent.sql" />
+    <Build Include="User Defined Types\TStudentContact.sql" />
+    <Build Include="User Defined Types\TStudentSchool.sql" />
+    <Build Include="User Defined Types\TStudentSchoolYear.sql" />
+    <Build Include="User Defined Types\TSyncVersion.sql" />
+    <Build Include="User Defined Types\TSystemSetting.sql" />
+    <Build Include="User Defined Types\TUserSchool.sql" />
+    <Build Include="Tables\PrivateMessageRecipient.sql" />
+    <Build Include="Tables\PersonSetting.sql" />
+    <Build Include="Tables\Attachment.sql" />
+    <Build Include="Views\vwIncomeMessage.sql" />
+    <Build Include="Views\vwAnnouncementAttachment.sql" />
+    <Build Include="Views\vwAnnouncementAssignedAttribute.sql" />
+    <Build Include="Stored Procedures\spSearchStudentBySchoolYear.sql" />
+    <Build Include="Stored Procedures\spGetSentMessages.sql" />
+    <Build Include="Stored Procedures\spGetSentMessageById.sql" />
+    <Build Include="Stored Procedures\spGetPossibleMessageRecipients.sql" />
+    <Build Include="Stored Procedures\spGetPersonSettings.sql" />
+    <Build Include="Stored Procedures\spGetMessageRecipients.sql" />
+    <Build Include="Stored Procedures\spGetIncomeMessages.sql" />
+    <Build Include="Stored Procedures\spGetIncomeMessageById.sql" />
+    <Build Include="Stored Procedures\spDeletePersons.sql" />
+    <Build Include="Stored Procedures\spDeleteClasses.sql" />
+    <Build Include="User Defined Types\TPrivateMessageRecipient.sql" />
+    <Build Include="Stored Procedures\spGetShortSchoolSummaries.sql" />
+    <Build Include="Stored Procedures\spGetClassesByTeachers.sql" />
+    <Build Include="Stored Procedures\spGetClassesBySchoolYear.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesBySchool.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForClassStandards.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForClasses.sql" />
+    <Build Include="Stored Procedures\spGetListOfClassAnnouncementDetails.sql" />
+    <Build Include="Stored Procedures\spGetListOfLessonPlansDetails.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForSchoolStandards.sql" />
+    <Build Include="Stored Procedures\spGetStandardParentsSubTree.sql" />
+    <Build Include="Stored Procedures\spGetShortStaffSummary.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetAdminAnnouncementsOrderedByTitle.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetAdminAnnouncementsOrderedByDate.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetAdminAnnouncementsDetailses.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetLessonPlansOrderedByTitle.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetLessonPlansOrderedByDate.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetLessonPlansOrderedByClassName.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetLessonPlans.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetAdminAnnouncements.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spInternalSortAdminOrLp.sql" />
+    <Build Include="Stored Procedures\spGetAnnouncementApplicationRecipients.sql" />
+    <Build Include="Stored Procedures\spGetLastClassMarkingPeriod.sql" />
+    <Build Include="Stored Procedures\spGetAdminAnnouncementRecipients.sql" />
+    <Build Include="Tables\StudentCustomAlertDetail.sql" />
+    <Build Include="User Defined Types\TStudentCustomAlertDetail.sql" />
+    <Build Include="User Defined Types\TClassAnnouncementComplex.sql" />
+    <Build Include="Stored Procedures\spInsertClassAnnouncement.sql" />
+    <Build Include="User Defined Types\TInputClassAnnouncement.sql" />
+    <Build Include="Stored Procedures\spUpdateClassAnnouncement.sql" />
+    <Build Include="Stored Procedures\spDeleteAnnouncementAttribute.sql" />
+    <Build Include="Tables\StandardizedTest.sql" />
+    <Build Include="Tables\StandardizedTestComponent.sql" />
+    <Build Include="Tables\StandardizedTestScoreType.sql" />
+    <Build Include="User Defined Types\TStandardizedTest.sql" />
+    <Build Include="User Defined Types\TStandardizedTestComponent.sql" />
+    <Build Include="User Defined Types\TStandardizedTestScoreType.sql" />
+    <Build Include="Stored Procedures\spGetStandardizedTestDetails.sql" />
+    <Build Include="Stored Procedures\spCopyLessonPlansToClass.sql" />
+    <Build Include="User Defined Types\TSisActivityCopyResult.sql" />
+    <Build Include="Stored Procedures\spCopyClassAnnouncementsToClass.sql" />
+    <Build Include="Tables\SupplementalAnnouncement.sql" />
+    <Build Include="Tables\SupplementalAnnouncementRecipient.sql" />
+    <Build Include="Views\vwSupplementalAnnouncement.sql" />
+    <Build Include="Stored Procedures\spCreateSupplementalAnnouncement.sql" />
+    <Build Include="Stored Procedures\spSelectSupplementalAnnouncements.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetListOfSupplementalAnnouncementDetailsByIds.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByDate.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncements.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByClassName.sql" />
+    <Build Include="Stored Procedures\Announcements Procedures\spGetSupplementalAnnouncementsOrderedByTitle.sql" />
+    <Build Include="Tables\Ethnicity.sql" />
+    <Build Include="Tables\PersonEthnicity.sql" />
+    <Build Include="User Defined Types\TEthnicity.sql" />
+    <Build Include="User Defined Types\TPersonEthnicity.sql" />
+    <Build Include="Stored Procedures\spGetPreviousStudentSchoolYear.sql" />
+    <Build Include="Tables\Language.sql" />
+    <Build Include="User Defined Types\TLanguage.sql" />
+    <Build Include="Tables\PersonLanguage.sql" />
+    <Build Include="User Defined Types\TPersonLanguage.sql" />
+    <Build Include="Tables\Country.sql" />
+    <Build Include="User Defined Types\TCountry.sql" />
+    <Build Include="Stored Procedures\spGetClassGradingScaleRanges.sql" />
+    <Build Include="Tables\PersonNationality.sql" />
+    <Build Include="User Defined Types\TPersonNationality.sql" />
+    <Build Include="Tables\Homeroom.sql" />
+    <Build Include="User Defined Types\THomeroom.sql" />
+    <Build Include="Stored Procedures\spGetStudent.sql" />
+    <Build Include="Stored Procedures\spGetStudentsDetailsByClass.sql" />
+    <Build Include="Stored Procedures\spGetGridStandardsByPacing.sql" />
+    <Build Include="Tables\StudentAnnouncementApplicationMeta.sql" />
+    <Build Include="User Defined Types\TStudentAnnouncementApplicationMeta.sql" />
+    <Build Include="Tables\AnnouncementComment.sql" />
+    <Build Include="Stored Procedures\spGetAnnouncementComments.sql" />
+    <Build Include="Views\vwAnnouncementComment.sql" />
+    <Build Include="Tables\AnnouncementCommentAttachment.sql" />
+    <Build Include="User Defined Types\TPersonSetting.sql" />
+    <Build Include="User Defined Types\TAnnouncementCommentAttachment.sql" />
+    <Build Include="User Defined Types\TAnnouncementOrder.sql" />
+    <Build Include="Stored Procedures\spAdjustLessonPlanDates.sql" />
+    <Build Include="Stored Procedures\spAdjustSupplementalAnnouncementDates.sql" />
+    <Build Include="Stored Procedures\spGetClassDays.sql" />
+    <Build Include="Tables\AppSetting.sql" />
+    <Build Include="User Defined Types\TAppSetting.sql" />
+    <Build Include="Tables\ReportCardsLogo.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Script.000.Update sort type in PersonSettings.sql" />
+    <Build Include="User Defined Types\TAnnouncementComment.sql" />
+    <Build Include="User Defined Types\TAnnouncementAssignedAttribute.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="User Defined Types\TSupplementalAnnouncement.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Chalkable.Database.School.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\PreDeploy\001_Set_Nullable_And_Null_Order_In_ClassAnnouncement.sql" />
+    <PostDeploy Include="Scripts\PostDeploy\001_United_Read_Comments.PostDeployment.sql" />
+  </ItemGroup>
+</Project>
