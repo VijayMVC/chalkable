@@ -103,6 +103,10 @@
       <Setting name="TaskProducer.DbBackupProducer.Interval" value="86400" />
       <Setting name="TaskProducer.DbBackupProducer.IntervalStart" value="0" />
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
+
+      <Setting name="TaskProducer.AcademicBenchmark.Interval" value="120" />
+      <Setting name="TaskProducer.AcademicBenchmark.IntervalStart" value="0" />
+      <Setting name="TaskProducer.AcademicBenchmark.IntervalEnd" value="86400" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesales;AccountKey=nvwRlYL0345AdCT75axxjvW7zbHZg18Fu2ouzVTIw7QUPG/OJyWt3MVt9xUkiDObiaF8J+UWngeBdOch+ammUA==" />

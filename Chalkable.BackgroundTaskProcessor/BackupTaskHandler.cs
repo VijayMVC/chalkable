@@ -44,7 +44,7 @@ namespace Chalkable.BackgroundTaskProcessor
                     AllSchoolRunner<long>.Run(new List<AllSchoolRunner<long>.Task> { t }, Restore, CheckStatus);
                 if (!t.Success)
                 {
-                    log.LogError(string.Format("Db {0} error: Master Database", actionName));
+                    log.LogError($"Db {actionName} error: Master Database");
                     if (t.ErrorMessage != null)
                         log.LogError(t.ErrorMessage);
                     return false;

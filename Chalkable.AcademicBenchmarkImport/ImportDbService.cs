@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Data.Common;
 
@@ -82,6 +78,13 @@ namespace Chalkable.AcademicBenchmarkImport
         public void CommitAll()
         {
             base.Commit();
+            Transaction = null;
+        }
+
+        public override void Rollback()
+        {
+            base.Rollback();
+            Transaction = null;
         }
 
         public void BeginTransaction()
@@ -94,8 +97,7 @@ namespace Chalkable.AcademicBenchmarkImport
 
         public override void Dispose()
         {
-            if (OnDisposing != null)
-                OnDisposing();
+            OnDisposing?.Invoke();
         }
     }
 }
