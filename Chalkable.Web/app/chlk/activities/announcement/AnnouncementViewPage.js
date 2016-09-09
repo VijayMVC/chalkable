@@ -931,7 +931,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         changed = true;
                     if(exemptValue && !oldExemptValue || !exemptValue && oldExemptValue)
                         changed = true;
-                    if(commentValue != oldCommentValue && !(!commentValue && !oldCommentValue))
+                    if(commentValue != oldCommentValue /*&& !(!commentValue && !oldCommentValue)*/)
                         changed = true;
 
                     if(!changed)
