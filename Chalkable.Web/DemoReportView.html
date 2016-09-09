@@ -23,16 +23,26 @@
     <script build:src="/app/bower/jade/jade.js" src="https://local.chalkable.com:5001/app/bower/jade/jade.js"></script>
     <!-- endbuild -->
     
-    <style type="text/css">			
-            .logo{ width: 3in; height: 2in; float: right; }
-			.school{ width: 3in; float: right;}
+    <style type="text/css">		
+            .main-student-panel >.panel-body{ padding: 0px !important;}
+            .logo{ width: 4in; height: 2.5in; float: right; }
+			.school{ width: 4in; float: right;}
             .h1 { font-size: 18pt; font-weight: 600 }
 			.h2 { font-size: 14pt; font-weight: 600; font-style: italic }
 			.h3 { font-size: 12pt; font-weight: 600; font-style: italic }
 			.recipient-h { font-weight: 600; font-style: italic }
 			.pre {white-space: pre-wrap}
             p { color: green; }
-			.panel {box-shadow: none;}
+			.panel {
+			    box-shadow: none;
+			}
+            .panel-body {
+                padding-left: 0px !important;
+                padding-right: 0px !important;
+            }
+            .panel-body.mailing-box {
+                padding: 15px !important;
+            }
             #container, #container table { font-family: 'Open Sans', sans-serif; font-size: 11pt }
 			.classes-table { margin-bottom: 0; table-layout: fixed }
 			.classes-table td:not(.pre) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2551,7 +2561,7 @@
 </script>
 
 </head>
-    <body style="width: 1200px">
+    <body>
         <div id="container" class="fluid-container">
             <h1>Demo Report</h1>
         </div>

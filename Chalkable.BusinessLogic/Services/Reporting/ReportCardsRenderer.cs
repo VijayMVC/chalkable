@@ -30,19 +30,19 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             return res.Save();
         }
 
-        public static byte[] RenderToPdf(string basePath, string baseUrl, IList<string> htmls)
+        public static byte[] RenderToPdf(string basePath, string baseUrl, IList<string> htmls, string header, string footer)
         {
-            var files = htmls.Select(html => RenderToPdf(basePath, baseUrl, html)).ToList();
+            var files = htmls.Select(html => RenderToPdf(basePath, baseUrl, html, header, footer)).ToList();
             return MargePdfDocuments(files);
         }
 
-        public static byte[] RenderToPdf(string basePath, string baseUrl, string html)
+        public static byte[] RenderToPdf(string basePath, string baseUrl, string html, string header, string footer)
         {
             baseUrl = baseUrl.StartsWith("//") ? ("https:" + baseUrl) : baseUrl;
 
             var htmlToPdfConverter = InitializeConverter();
-            AddHeader(htmlToPdfConverter, "<h1> Header ... </h1>", baseUrl);
-            AddFooter(htmlToPdfConverter, null, baseUrl);
+            AddHeader(htmlToPdfConverter, header, baseUrl);
+            AddFooter(htmlToPdfConverter, footer, baseUrl);
 
             Directory.SetCurrentDirectory(basePath);
             var bytes = htmlToPdfConverter.ConvertHtml(html, baseUrl);
@@ -78,7 +78,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 
         private static void AddFooter(HtmlToPdfConverter converter, string htmlFooter, string baseUrl)
         {
-            var footerHtmlWithPageNumbers = new HtmlToPdfVariableElement("Page &p; of &P;", baseUrl)
+            var footerHtmlWithPageNumbers = new HtmlToPdfVariableElement(htmlFooter, baseUrl)
             {
                 FitHeight = true
             };

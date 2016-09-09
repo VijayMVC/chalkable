@@ -104,7 +104,10 @@ namespace Chalkable.Web.Controllers
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             inputModel.DefaultDataPath = path;
             IList<string> htmls = new List<string>();
-            htmls.Add(LoadDemoView(path));
+            htmls.Add(LoadDemoView(Path.Combine(path, "DemoReportView.html")));
+            var header = LoadDemoView(Path.Combine(path, "DemoReportHeader.html"));
+            var footer = LoadDemoView(Path.Combine(path, "DemoReportFooter.html"));
+
 
             //for (int i = 0; i < 3; i++)
             //{
@@ -112,12 +115,12 @@ namespace Chalkable.Web.Controllers
             //    var html = RenderViewToString(view.ViewName, view.Model);
             //    htmls.Add(html);
             //}
-            return Report(()=> ReportCardsRenderer.RenderToPdf(path, Settings.ScriptsRoot, htmls), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+            return Report(()=> ReportCardsRenderer.RenderToPdf(path, Settings.ScriptsRoot, htmls, header, footer), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
         }
 
-        private string LoadDemoView(string basePath)
+        private string LoadDemoView(string path)
         {
-            using (var file = System.IO.File.OpenRead(Path.Combine(basePath, "DemoReportView.html")))
+            using (var file = System.IO.File.OpenRead(path))
             {
                 var reader = new StreamReader(file);
                 var res = reader.ReadToEnd();

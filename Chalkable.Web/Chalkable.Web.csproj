@@ -565,6 +565,8 @@
       <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="DemoReportFooter.html" />
+    <Content Include="DemoReportHeader.html" />
     <Content Include="DemoReportView.html" />
     <Content Include="favicon.ico" />
     <Content Include="Reports\DefaultCustomReportCardsJson.txt" />
