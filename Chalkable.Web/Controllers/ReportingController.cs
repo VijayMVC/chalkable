@@ -103,9 +103,27 @@ namespace Chalkable.Web.Controllers
         {
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             inputModel.DefaultDataPath = path;
-            var view = BuildReportView(inputModel);
-            var html = RenderViewToString(view.ViewName, view.Model);
-            return Report(()=> ReportCardsRenderer.RenderToPdf(path, Settings.ScriptsRoot, html), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+            IList<string> htmls = new List<string>();
+            htmls.Add(LoadDemoView(path));
+
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    var view = BuildReportView(inputModel);
+            //    var html = RenderViewToString(view.ViewName, view.Model);
+            //    htmls.Add(html);
+            //}
+            return Report(()=> ReportCardsRenderer.RenderToPdf(path, Settings.ScriptsRoot, htmls), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+        }
+
+        private string LoadDemoView(string basePath)
+        {
+            using (var file = System.IO.File.OpenRead(Path.Combine(basePath, "DemoReportView.html")))
+            {
+                var reader = new StreamReader(file);
+                var res = reader.ReadToEnd();
+                reader.Close();
+                return res;
+            }
         }
 
         private ViewResult BuildReportView(ReportCardsInputModel inputModel)
