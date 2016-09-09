@@ -26,7 +26,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
 
-        public override IList<Group> GetAll(QueryCondition conditions = null)
+        public IList<Group> GetAll(QueryCondition conditions = null, string filter = null)
         {
             var query = new DbQuery();
             var groupTName = typeof (Group).Name;
@@ -36,6 +36,20 @@ namespace Chalkable.Data.School.DataAccess
             query.Sql.AppendFormat(Orm.SELECT_FORMAT, querySet, groupTName);
             if(conditions != null)
                 conditions.BuildSqlWhere(query, groupTName);
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query.Sql.AppendFormat(" AND (");
+                string[] sl = filter.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < sl.Length; i++)
+                {
+                    query.Parameters.Add("@filter" + i, string.Format(FILTER_FORMAT, sl[i]));
+                    query.Sql.AppendFormat($" [{typeof(Group).Name}].[{nameof(Group.Name)}] like @filter" + i + " OR");
+                }
+                query.Sql.Remove(query.Sql.Length - 2, 2);
+                query.Sql.AppendFormat(")");
+            }
+
             return ReadMany<Group>(query);
         }
 
