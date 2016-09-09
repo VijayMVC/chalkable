@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Security;
@@ -433,22 +434,23 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetReportCards(ReportCardsInputModel inputModel, string path)
         {
-            BaseSecurity.EnsureDistrictAdmin(Context);
-            if(inputModel == null) 
-                throw new ArgumentNullException(nameof(ReportCardsInputModel));
+            throw new NotImplementedException();
+            //BaseSecurity.EnsureDistrictAdmin(Context);
+            //if(inputModel == null) 
+            //    throw new ArgumentNullException(nameof(ReportCardsInputModel));
 
-            var defaultJsonPath = Path.Combine(path, "Reports\\DefaultCustomReportCardsJson.txt");
-            ReportCardsRenderer.Model<CustomReportCardsExportModel> exportData = null;
-            using (var file = File.OpenRead(defaultJsonPath))
-            {
-                var streamReader = new StreamReader(file);
-                var json = streamReader.ReadToEnd();
-                exportData = JsonConvert.DeserializeObject<ReportCardsRenderer.Model<CustomReportCardsExportModel>>(json);
-                exportData.Title = inputModel.Tile;
-                streamReader.Close();
-            }
-            var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
-            return ReportCardsRenderer.RenderToPdf(template.Layout, template.Style, exportData, path);
+            //var defaultJsonPath = Path.Combine(path, "Reports\\DefaultCustomReportCardsJson.txt");
+            //ReportCardsRenderer.Model<CustomReportCardsExportModel> exportData = null;
+            //using (var file = File.OpenRead(defaultJsonPath))
+            //{
+            //    var streamReader = new StreamReader(file);
+            //    var json = streamReader.ReadToEnd();
+            //    exportData = JsonConvert.DeserializeObject<ReportCardsRenderer.Model<CustomReportCardsExportModel>>(json);
+            //    exportData.Title = inputModel.Tile;
+            //    streamReader.Close();
+            //}
+            //var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            //return ReportCardsRenderer.RenderToPdf(template.Layout, template.Style, exportData, path);
         }
 
         public ReportCardsRenderer.Model<CustomReportCardsExportModel> BuildCustomReportCardsExportModel(ReportCardsInputModel inputModel)

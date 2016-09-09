@@ -5,6 +5,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
 {
     public class CustomReportCardsExportModel
     {
+        public string LogoHref { get; set; }
         public int AcadYear { get; set; }
         public string AcadSessionName { get; set; }
         public SchoolReportCardsExportModel School { get; set; }

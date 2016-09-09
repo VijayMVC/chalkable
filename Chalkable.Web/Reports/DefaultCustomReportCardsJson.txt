@@ -1,6 +1,7 @@
 ﻿{
                 data: {
 					acadyear : 2017,
+					logohref : "https://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_reportcardslogo_83009fe9-8594-4e33-a09e-1ef4f81d0e8d",
 					acadsessionname : "High School 2016-17",
 					school : {
 						address1 : "17 Fast Times Way",
