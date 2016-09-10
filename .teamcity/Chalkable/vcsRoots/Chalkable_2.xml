@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<vcs-root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="677426d3-8839-423c-bbe5-faee8b0e808f" type="mercurial" modification-check-interval="600" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
+<vcs-root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="677426d3-8839-423c-bbe5-faee8b0e808f" type="mercurial" modification-check-interval="600" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/10.0/project-config.xsd">
   <name>Chalkable Sources Default</name>
   <param name="branchName" value="default" />
   <param name="hgCommandPath" value="hg" />

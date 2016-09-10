@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="7276b8ce-2b31-4343-905f-185a505f95de" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="7276b8ce-2b31-4343-905f-185a505f95de" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/10.0/project-config.xsd">
   <name>Classroom Tests</name>
   <description />
   <settings>
@@ -41,7 +41,7 @@
       <vcs-entry-ref root-id="Chalkable_ChalkableTestSourcesCi" />
     </vcs-settings>
     <requirements>
-      <exists name="env.PYTHONHOME" />
+      <exists id="RQ_1" name="env.PYTHONHOME" />
     </requirements>
     <build-triggers>
       <build-trigger id="TRIGGER_7" type="schedulingTrigger">
