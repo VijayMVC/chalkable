@@ -20,6 +20,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         All
     }
 
+    public enum StudentFilterEnum
+    {
+        All,
+        MySchoolOnly,
+        MyStudentsOnly
+    }
+
     public interface IBaseAnnouncementService 
     {
         Announcement GetAnnouncementById(int id);
@@ -41,7 +48,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         Standard RemoveStandard(int announcementId, int standardId);
         void RemoveAllAnnouncementStandards(int standardId);
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
-        IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start = 0, int count = int.MaxValue);
+        IList<Person> GetAnnouncementRecipientPersons(int announcementId, StudentFilterEnum studentFilter, int start = 0, int count = int.MaxValue);
         IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate);
 
@@ -81,10 +88,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             });
         }
 
-        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start, int count)
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, StudentFilterEnum studentFilter, int start, int count)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateDataAccess(u).GetAnnouncementRecipientPersons(announcementId, start, count));
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            return DoRead(u => CreateDataAccess(u)
+                .GetAnnouncementRecipientPersons(announcementId, Context.PersonId.Value, (int)studentFilter, Context.SchoolYearId.Value, start, count));
         }
 
         

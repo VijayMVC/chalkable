@@ -68,10 +68,10 @@ namespace Chalkable.API.Endpoints
             return await Connector.Post<bool>(url, nvc);
         }
 
-        public async Task<IList<SchoolPerson>> GetAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue)
+        public async Task<IList<SchoolPerson>> GetAnnouncementRecipients(int announcementId, StudentFilterEnum? studentfilter, int start = 0, int count = int.MaxValue)
         {
             var url = "/Announcement/GetAnnouncementRecipients.json";
-            return await Connector.Get<IList<SchoolPerson>>($"{url}?announcementId={announcementId}&start={start}&count={count}");
+            return await Connector.Get<IList<SchoolPerson>>($"{url}?announcementId={announcementId}&studentFilter={(int?)studentfilter}&start={start}&count={count}");
         }
     }
 }

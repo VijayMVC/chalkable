@@ -85,12 +85,8 @@ namespace Chalkable.Data.School.DataAccess
         
         public static PersonDetails ReadPersonData(DbDataReader reader)
         {
-            if (reader != null)
-            {
-                var res = reader.Read<PersonDetails>();
-                return res;
-            }
-            return null;
+            var res = reader?.Read<PersonDetails>();
+            return res;
         }
 
 

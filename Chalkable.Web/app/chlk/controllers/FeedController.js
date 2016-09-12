@@ -202,7 +202,7 @@ NAMESPACE('chlk.controllers', function (){
                 res = this.announcementService.adjustDates(model.getClassId(), model.getSelectedAnnouncements(), model.getAdjustStartDate())
                     .then(function(data){
                         return this.getFeedItems(false, model.isImportantOnly(), model.getClassId(), 0, model.getStartDate(), model.getEndDate(),
-                            model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet(), false, JSON.parse(model.getSelectedAnnouncements()), model.getAdjustCount());
+                            model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet(), model.isInProfile(), JSON.parse(model.getSelectedAnnouncements()), model.getAdjustCount());
                     }, this)
                     .attach(this.validateResponse_());
                 return this.UpdateView(this.getView().getCurrent().getClass(), res);
@@ -270,7 +270,7 @@ NAMESPACE('chlk.controllers', function (){
         function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, isProfile_, createdAnnouncements_, adjustCount_){
 
             var annsList = isProfile_ && classId_
-                ? this.announcementService.getAnnouncementsForClassProfile(classId_, start_ | 0, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_)
+                ? this.announcementService.getAnnouncementsForClassProfile(classId_, start_ | 0, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, createdAnnouncements_)
                 : this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, createdAnnouncements_);
 
             var gps = isProfile_ && classId_
