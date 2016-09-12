@@ -1,0 +1,145 @@
+mixin ProfileInfoView(tpl)
+    model = tpl.getUser()
+    userRole = tpl.getUserRole()
+    address = model.getAddress() || null;
+    primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
+    homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
+    gradeLevelName = model.getGradeLevel && model.getGradeLevel() ? model.getGradeLevel().getName() : '';
+    statusData = tpl.getStatusData()
+    .info-view.summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(model, 140, !userRole.isStudent())
+                    .grades-container
+            #student-info-panel.right-block.panel-block.central-block
+                displayName =model.getDisplayName() || model.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                .status
+                    div(class=statusData.status, data-tooltip=statusData.statusName)
+                    | #{model.getCurrentClassName()}
+                    if(model.getCurrentClassName() && model.getRoomName() && model.getCurrentClassName().toLowerCase() != 'no class now')
+                        | &nbsp;- #{model.getRoomName()}
+                .sections-info
+                    .section-data
+                        .info-title Phone
+                        .data-info= (model.getPhones() || []).map(function (item) {return item.getValue()}).join(',')
+                    .section-data
+                        .info-title Address
+                        .data-info= model.getAddress() && model.getAddress().getValue()
+                    .section-data
+                        .info-title Email
+                        .data-info= model.getEmail()
+                    .section-data
+                        .info-title Grade
+                        .data-info= model.getGradeLevel() && model.getGradeLevel().getName()
+                    .section-data
+                        .info-title Homeroom
+                        .data-info= model.getHomeRoom() && model.getHomeRoom().getName()
+                    .section-data
+                        .info-title Counselor
+                        .data-info= model.getCounselor() && model.getCounselor().getDisplayName()
+            #glance-block-panel.right-block.panel-block
+                .glance-container
+                    if model.getAttendanceBox()
+                        +GlanceBox(null, null, tpl.buildAttendanceGlanceBoxData(), null, null, true, true)
+                    if model.getDisciplineBox()
+                        +GlanceBox(null, null, tpl.buildDisciplineGlanceBoxData(), null, null)
+                    if model.getGradesBox()
+                        +GlanceBox(null, null, tpl.buildGradesGlanceBoxData(), null, null, true, true)
+
+            .sections
+                +CloseOpen(model.getRole().getName()).today-work-panel
+                    .sections-info
+                        if model.getLogin()
+                            .section-data
+                                .info-title=Msg.Username
+                                .data-info=model.getLogin()
+                                if model.isAbleEdit() && !model.isDemoUser()
+                                    .section-buttons
+                                        +Button().special-button.blue-button#edit-info-button=Msg.Edit
+                        if model.getEmail()
+                            .section-data
+                                .info-title=Msg.Email
+                                .data-info=model.getEmail()
+                        if primaryPhone
+                            .section-data
+                                .info-title=Msg.PrimaryPhone
+                                .data-info=primaryPhone
+                        if model.getBirthDateText()
+                            .section-data
+                                .info-title=Msg.Birthday
+                                .data-info=model.getBirthDateText()
+                        if gradeLevelName
+                            .section-data
+                                .info-title=Msg.Grade_Level
+                                .data-info=gradeLevelName
+            block
+        //.sections-info.other-section
+            .section-title.pacifico=Msg.Other(true)
+
+
+mixin ProfileInfoForm(controller, tpl)
+    model = tpl.getUser()
+    userRole = tpl.getUserRole()
+    address = model.getAddress() || null;
+    primaryPhone = model.getPrimaryPhone()
+    primaryPhoneValue = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
+    homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
+    gradeLevelName = model.getGradeLevel && model.getGradeLevel() ? model.getGradeLevel().getName() : '';
+    .info-edit.summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(model, 140, !userRole.isStudent())
+                    .grades-container
+            #student-info-panel.right-block.panel-block.central-block
+                displayName =model.getDisplayName() || model.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+
+        +ActionForm(controller, 'infoEdit')#info-edit-form.with-ok
+            input(type="hidden", name="firstname", value=model.getFirstName(), readonly)
+            input(type="hidden", name="lastname", value=model.getLastName(), readonly)
+            input(type="hidden", name="id", value=model.getId())
+            input(type="hidden", name="salutation", value=model.getSalutation())
+            .sections
+                +CloseOpen(model.getRole().getName() + ' info').today-work-panel
+                    .sections-info
+                        .section-data
+                            .info-title=Msg.Username
+                            input(name='login', type='email', value=model.getLogin(), class="validate[custom[email], required]").data-info
+                            .section-buttons
+                                if model.isAbleEdit()
+                                    +Button()(type="submit").special-button.blue-button#submit-info-button=Msg.Save
+                                    +Button()(type="button").special-button.blue-button#cancell-edit-info-button=Msg.Cancel
+                        if model.getEmail()
+                            .section-data
+                                .info-title=Msg.Email
+                                .data-info=model.getEmail()
+                        if primaryPhone
+                            .section-data
+                                .info-title=Msg.Cell
+                                .data-info=primaryPhoneValue
+                        if model.getBirthDateText()
+                            .section-data
+                                .info-title=Msg.Birthday
+                                .data-info=model.getBirthDateText()
+                        if gradeLevelName
+                            .section-data
+                                .info-title=Msg.Grade_Level
+                                .data-info=gradeLevelName
+
+                if homePhone || address
+                    +CloseOpen(Msg.Home_info).today-work-panel
+                        .sections-info
+                            if homePhone
+                                .section-data
+                                    .info-title=Msg.Home_Phone
+                                    .data-info=homePhone
+                            if address
+                                .section-data
+                                    .info-title=Msg.Address
+                                    .data-info=address.getValue()
+                block
+
+
