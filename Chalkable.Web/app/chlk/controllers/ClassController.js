@@ -56,7 +56,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.announcementService.getAnnouncementsForClassProfile(classId, 0, true),
                     this.gradingPeriodService.getListByClassId(classId),
                     this.schoolYearService.listOfSchoolYearClasses(),
-                    this.classService.getScheduledDays(classId)
+                    this.userIsTeacher() ? this.classService.getScheduledDays(classId) : ria.async.DeferredData([])
                 ])
                     .attach(this.validateResponse_())
                     .then(function(result){
