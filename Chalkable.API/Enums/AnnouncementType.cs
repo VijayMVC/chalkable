@@ -8,4 +8,11 @@
         LessonPlan = 3,
         SupplementalAnnouncement = 4
     }
+
+    public enum StudentFilterEnum
+    {
+        All,
+        MySchoolOnly,
+        MyStudentsOnly
+    }
 }

@@ -53,10 +53,14 @@ namespace Chalkable.Data.School.Model
         public IList<PersonEmail> PersonEmails { get; set; }
 
         private Address _address;
+        private string _email;
+
         public string Email
         {
             get
             {
+                if (!string.IsNullOrWhiteSpace(_email))
+                    return _email;
                 if (PersonEmails == null)
                     return null;
                 var res =
@@ -64,8 +68,12 @@ namespace Chalkable.Data.School.Model
                     PersonEmails.FirstOrDefault();
                 return res?.EmailAddress;
             }
-            
+            set
+            {
+                _email = value;
+            }
         }
+
         public Address Address
         {
             get { return _address; }

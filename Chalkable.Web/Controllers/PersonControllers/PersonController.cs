@@ -29,6 +29,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
             var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value, Context.SchoolLocalId.Value);
             var schoolYear = SchoolLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);
+            var user = MasterLocator.UserService.GetBySisUserId(person.UserId.Value, Context.DistrictId);
+
+            if (BaseSecurity.IsDistrictOrTeacher(Context))
+                person.Email = user.Login;
+            else person.Email = user.Id + "@chalkable.com";
+
             return Json(CurrentPersonViewData.Create(person, district, school, schoolYear, Context.Claims));
         }
 
