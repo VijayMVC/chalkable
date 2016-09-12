@@ -1,0 +1,17 @@
+-var classAnnouncement = self.getClassAnnouncementData()
+if classAnnouncement && classAnnouncement.isGradable()
+    #attach-file-area.announcement-item.attach-file-area
+        +ActionButton('announcement', 'fileAttach', self.getId().valueOf(), self.getType())#add-attachment Attach File
+each attachment, i in self.getAnnouncementAttachments()
+    if attachment.isOwner()
+        .announcement-item.attachment
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId(), self.getModel().getType()).close-btn
+            .wrapper
+                if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+                    .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")=attachment.getName()
+                    A(href=attachment.getUrl()).download-link Download
+                else
+                    +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
+                    .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")=attachment.getName()
+                    +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId())(class=attachment.isOpenOnStart() ? 'open-on-start' : '') Open
+
