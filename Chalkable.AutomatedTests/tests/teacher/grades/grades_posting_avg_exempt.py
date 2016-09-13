@@ -65,7 +65,9 @@ class TestFeed(BaseAuthedTestCase):
 
                                                 for i in codes_comments:
                                                     if i['gradingcomment'] == None:
-                                                        i['gradingcomment'] = self.one_grading_comment
+                                                        i['gradingcomment'] = self.dict_for_codes
+                                                    if i['gradingcomment'] != None:
+                                                        i['gradingcomment'].pop('schoolref', None)
 
                                                 average_id = \
                                                         class_grading_grid_data['totalaverages'][0][
@@ -106,6 +108,8 @@ class TestFeed(BaseAuthedTestCase):
 
                                                         for i in class_grading_grid_data['totalaverages'][0]['averages']:
                                                             if i['studentid'] == one_random_student:
+                                                                for k in i['codes']:
+                                                                    k['gradingcomment'].pop('schoolref', None)
                                                                 self.assertListEqual(i['codes'], codes_comments)
                                                                 self.assertEqual(i['isexempt'], True)
 

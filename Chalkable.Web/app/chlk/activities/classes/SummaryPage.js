@@ -14,6 +14,11 @@ NAMESPACE('chlk.activities.classes', function () {
 
             Boolean, 'readonly',
 
+            OVERRIDE, function getClassScheduledDays_(model){
+                var feed = model.getClazz().getFeed();
+                return feed.getClassScheduledDays && feed.getClassScheduledDays() || [];
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.feed.Feed, null)],
             VOID, function feedUpdate(tpl, model, msg_) {
                 model.setReadonly(this.isReadonly());

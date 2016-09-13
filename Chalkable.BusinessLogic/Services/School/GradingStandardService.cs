@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var isTeacherClass = DoRead(u => new ClassTeacherDataAccess(u).Exists(classId, Context.PersonId));
             Task<Gradebook> calculateTask = null;
             if (reCalculateStandards && GradebookSecurity.CanReCalculateGradebook(Context, isTeacherClass))
-                calculateTask = ConnectorLocator.GradebookConnector.Calculate(classId);
+                calculateTask = ConnectorLocator.GradebookConnector.Calculate(classId, gradingPeriodId);
             
             var standards = ServiceLocator.StandardService.GetGridStandardsByPacing(classId, null, null, gradingPeriodId);
             if (calculateTask != null)

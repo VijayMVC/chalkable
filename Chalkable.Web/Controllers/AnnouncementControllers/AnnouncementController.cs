@@ -299,9 +299,10 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult GetAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue)
+        public ActionResult GetAnnouncementRecipients(int announcementId, int? studentFilter, int start = 0, int count = int.MaxValue)
         {
-            var res = SchoolLocator.LessonPlanService.GetAnnouncementRecipientPersons(announcementId, start, count);
+            var filterEnum = (StudentFilterEnum) (studentFilter ?? 0);
+            var res = SchoolLocator.LessonPlanService.GetAnnouncementRecipientPersons(announcementId, filterEnum, start, count);
             return Json(res.Select(ShortPersonViewData.Create));
         }
     }

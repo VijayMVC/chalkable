@@ -55,11 +55,12 @@ NAMESPACE('chlk.controllers', function (){
                     this.classService.getSummary(classId),
                     this.announcementService.getAnnouncementsForClassProfile(classId, 0, true),
                     this.gradingPeriodService.getListByClassId(classId),
-                    this.schoolYearService.listOfSchoolYearClasses()
+                    this.schoolYearService.listOfSchoolYearClasses(),
+                    this.userIsTeacher() ? this.classService.getScheduledDays(classId) : ria.async.DeferredData([])
                 ])
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var model = result[0], feedModel = result[1], gradingPeriods = result[2], classesByYears = result[3];
+                        var model = result[0], feedModel = result[1], gradingPeriods = result[2], classesByYears = result[3], classScheduledDays = result[4];
                         var teacherIds = model.getTeachersIds(), currentPersonId = this.getCurrentPerson().getId();
                         var staringEnabled = this.userIsTeacher() && teacherIds.filter(function(id){return id == currentPersonId;}).length > 0;
                         feedModel.setGradingPeriods(gradingPeriods);
@@ -69,6 +70,7 @@ NAMESPACE('chlk.controllers', function (){
                         feedModel.setClassId(classId);
                         feedModel.setStaringDisabled(!staringEnabled);
                         feedModel.setReadonly(this.isPageReadonly_('VIEW_CLASSROOM', 'VIEW_CLASSROOM_ADMIN', model));
+                        classScheduledDays && feedModel.setClassScheduledDays(classScheduledDays);
                         model.setFeed(feedModel);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
