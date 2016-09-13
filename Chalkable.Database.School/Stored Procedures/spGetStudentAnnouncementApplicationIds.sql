@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spGetStudentAnnouncementApplicationRecipients]
+﻿CREATE PROCEDURE [dbo].[spGetStudentAnnouncementApplicationIds]
 	@studentId int,
 	@schoolYearId int,
 	@appId uniqueidentifier

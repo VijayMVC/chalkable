@@ -265,10 +265,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Student", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult StudentAnnouncementApplicationRecipients()
+        public ActionResult StudentAnnouncementApplicationIds()
         {
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
-            var studentAnnouncementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetStudentAnnouncementApplicationRecipients(app.Id);
+            var studentAnnouncementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetStudentAnnouncementApplicationIds(app.Id);
             return Json(studentAnnouncementApplicationRecipient);
         }
 
