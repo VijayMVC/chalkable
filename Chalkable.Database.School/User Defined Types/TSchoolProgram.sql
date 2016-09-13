@@ -8,7 +8,5 @@
     [SIFCode] VARCHAR(10) NOT NULL,
     [NCESCode] VARCHAR(10) NOT NULL,
     [IsActive] BIT NOT NULL,
-    [IsSystem] BIT NOT NULL,
-    [RowVersion] UNIQUEIDENTIFIER NOT NULL,
-    [DistrictGuid] UNIQUEIDENTIFIER NOT NULL
+    [IsSystem] BIT NOT NULL
 )

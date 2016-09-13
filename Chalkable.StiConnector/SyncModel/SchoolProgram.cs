@@ -13,8 +13,6 @@ namespace Chalkable.StiConnector.SyncModel
         public string NCESCode { get; set; }
         public bool IsActive { get; set; }
         public bool IsSystem { get; set; }
-        public Guid RowVersion { get; set; }
-        public Guid DistrictGuid { get; set; }
         public override int DefaultOrder => 56;
     }
 }

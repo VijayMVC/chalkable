@@ -12,8 +12,6 @@ namespace Chalkable.StiConnector.SyncModel
         public DateTime? EndDate { get; set; }
         public DateTime? EndTime { get; set; }
         public decimal? DecimalValue { get; set; }
-        public Guid RowVersion { get; set; }
-        public Guid DistrictGuid { get; set; }
         public override int DefaultOrder => 57;
     }
 }

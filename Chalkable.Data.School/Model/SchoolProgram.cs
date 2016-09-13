@@ -16,7 +16,5 @@ namespace Chalkable.Data.School.Model
         public string NCESCode { get; set; }
         public bool IsActive { get; set; }
         public bool IsSystem { get; set; }
-        public Guid RowVersion { get; set; }
-        public Guid DistrictGuid { get; set; }
     }
 }

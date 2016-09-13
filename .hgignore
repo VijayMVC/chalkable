@@ -42,3 +42,7 @@ home page
 Chalkable.Web/app/**/*.min.js
 **/Chalkable.Database.*.dbmdl
 **/*.pyc
+Chalkable.Database.School/Chalkable.Database.School.jfm
+dump.rdb
+Chalkable.Database.Master/Chalkable.Database.Master.jfm
+Chalkable.Database.AcademicBenchmark/Chalkable.Database.AcademicBenchmark.jfm

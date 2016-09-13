@@ -18,11 +18,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Name = x.Name,
                 Code = x.Code,
                 Description = x.Description,
-                DistrictGuid = x.DistrictGuid,
                 IsActive = x.IsActive,
                 IsSystem = x.IsSystem,
                 NCESCode = x.NCESCode,
-                RowVersion = x.RowVersion,
                 SIFCode = x.SIFCode,
                 StateCode = x.StateCode
             };

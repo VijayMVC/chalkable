@@ -8,8 +8,5 @@
     [EndDate] DATETIME NULL,
     [EndTime] DATETIME NULL,
     [DecimalValue] DECIMAL(5, 2) NULL,
-    [RowVersion] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_StudentSchoolProgram_RowVersion] DEFAULT (NEWID()),
-	[DistrictGuid] UNIQUEIDENTIFIER NOT NULL,
     CONSTRAINT [UCC_StudentSchoolProgram_StudentID_AcadSessionID_SchoolProgramID_StartDate] UNIQUE CLUSTERED ( [StudentID], [AcadSessionID], [SchoolProgramID],[StartDate] )
-
 )

@@ -7,7 +7,5 @@
     [StartDate] DATETIME NOT NULL,
     [EndDate] DATETIME NULL,
     [EndTime] DATETIME NULL,
-    [DecimalValue] DECIMAL(5, 2) NULL,
-    [RowVersion] UNIQUEIDENTIFIER NOT NULL,
-	[DistrictGuid] UNIQUEIDENTIFIER NOT NULL
+    [DecimalValue] DECIMAL(5, 2) NULL
 )

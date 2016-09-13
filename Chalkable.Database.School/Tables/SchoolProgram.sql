@@ -9,8 +9,6 @@
     [NCESCode] VARCHAR(10) NOT NULL CONSTRAINT [DF_SchoolProgram_NCESCode] DEFAULT(''),
     [IsActive] BIT NOT NULL CONSTRAINT [DF_SchoolProgram_IsActive] DEFAULT (1),
     [IsSystem] BIT NOT NULL CONSTRAINT [DF_SchoolProgram_IsSystem] DEFAULT (0),
-    [RowVersion] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_SchoolProgram_RowVersion] DEFAULT ( NEWID() ),
-    [DistrictGuid] UNIQUEIDENTIFIER NOT NULL,
     CONSTRAINT [UNCC_SchoolProgram_Name] UNIQUE NONCLUSTERED ( [Name] ),
     CONSTRAINT [UNCC_SchoolProgram_Code] UNIQUE NONCLUSTERED ( [Code] )
 )

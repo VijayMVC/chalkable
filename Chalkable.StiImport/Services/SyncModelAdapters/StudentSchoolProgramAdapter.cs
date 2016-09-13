@@ -15,8 +15,6 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             return new Data.School.Model.StudentSchoolProgram
             {
                 Id = x.StudentSchoolProgramID,
-                DistrictGuid = x.DistrictGuid,
-                RowVersion = x.RowVersion,
                 AcadSessionId = x.AcadSessionID,
                 DecimalValue = x.DecimalValue,
                 EndDate = x.EndDate,
