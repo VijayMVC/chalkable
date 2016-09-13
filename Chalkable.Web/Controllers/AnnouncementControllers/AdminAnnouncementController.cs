@@ -8,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -43,7 +44,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var ann = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
             SchoolLocator.AdminAnnouncementService.Submit(adminAnnouncementId);
             SchoolLocator.AdminAnnouncementService.DeleteDrafts(Context.PersonId.Value);
-            ApplicationLogic.NotifyApplications(MasterLocator, ann.AnnouncementApplications, ann.Id, (int)AnnouncementTypeEnum.Admin, NotifyAppType.Attach);
+            ApplicationLogic.NotifyApplications(MasterLocator, ann.AnnouncementApplications, (int)AnnouncementTypeEnum.Admin, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Attach);
             TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewAdminItem(Context.Login, ann.AdminAnnouncementData.AdminName, appsCount, doscCount));
             return Json(true, 5);
         }

@@ -182,11 +182,11 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult RemoveFromAnnouncement(int announcementApplicationId, int announcementType)
         {
-            var appId = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId).ApplicationRef;
+            var aa = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var ann = SchoolLocator.ApplicationSchoolService.RemoveFromAnnouncement(announcementApplicationId, (AnnouncementTypeEnum)announcementType);
             var res = PrepareFullAnnouncementViewData(ann.Id, (AnnouncementTypeEnum) announcementType);
             if (res.State == (int)AnnouncementState.Created)
-                ApplicationLogic.NotifyApplications(MasterLocator, new List<Guid> { appId }, res.Id, announcementType, NotifyAppType.Remove);
+                ApplicationLogic.NotifyApplication(MasterLocator, aa.ApplicationRef , aa.Id, announcementType, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Remove);
             return Json(res, 6);
         }
 
@@ -197,7 +197,7 @@ namespace Chalkable.Web.Controllers
             var aa = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var res = PrepareFullAnnouncementViewData(aa.AnnouncementRef, (AnnouncementTypeEnum) announcementType);
             if(res.State == (int)AnnouncementState.Created)
-                ApplicationLogic.NotifyApplications(MasterLocator, new List<Guid> {aa.ApplicationRef}, aa.AnnouncementRef, announcementType, NotifyAppType.Attach);
+                ApplicationLogic.NotifyApplication(MasterLocator, aa.ApplicationRef, aa.Id, announcementType, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Attach);
             return Json(res);
         }
 

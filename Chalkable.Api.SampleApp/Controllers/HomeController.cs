@@ -79,13 +79,6 @@ namespace Chalkable.Api.SampleApp.Controllers
 
                     return RedirectToAction("Index", CurrentUser.Role.Name);
 
-                case Settings.ANNOUNCEMENT_APPLICATION_SUBMIT:
-                    AnnAppHistoryStorage.GetStorage().Add(announcementId.Value, CurrentUser.DistrictId, AnnAppStatus.Attached);
-                    break;
-                case Settings.ANNOUNCEMENT_APPLICATION_REMOVE:
-                    AnnAppHistoryStorage.GetStorage().Add(announcementId.Value, CurrentUser.DistrictId, AnnAppStatus.Removed);
-                    break;
-
                 //special private mode for miniquiz practice
                 case "practice":
 
@@ -120,6 +113,12 @@ namespace Chalkable.Api.SampleApp.Controllers
             return new PaginatedList<ApplicationContent>(res, start.Value, count.Value);
         }
 
+        protected override void HandleChalkableNotification(string mode, int? announcementApplicationId, int? announcementType)
+        {
+            CurrentUser = Task.Run(()=>GetCurrentUser(mode)).Result;
+            AnnAppHistoryStorage.GetStorage().Add(announcementApplicationId.Value, CurrentUser.DistrictId
+                , mode == Settings.ANNOUNCEMENT_APPLICATION_REMOVE ? AnnAppStatus.Removed : AnnAppStatus.Attached);
+        }
 
         protected async Task<IList<StandardRelations>> PrepareCommonCores(IEnumerable<StandardInfo> standardInfos)
         {

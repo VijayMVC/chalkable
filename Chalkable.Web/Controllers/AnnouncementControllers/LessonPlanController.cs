@@ -7,6 +7,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
@@ -71,7 +72,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 //TODO delete old drafts 
 
                 var includeDiscussion = lessonPlan.DiscussionEnabled;
-                ApplicationLogic.NotifyApplications(MasterLocator, ann.AnnouncementApplications, ann.Id, (int)AnnouncementTypeEnum.LessonPlan, NotifyAppType.Attach);
+                ApplicationLogic.NotifyApplications(MasterLocator, ann.AnnouncementApplications, (int)AnnouncementTypeEnum.LessonPlan, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Attach);
 
                 TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount, includeDiscussion));
             }

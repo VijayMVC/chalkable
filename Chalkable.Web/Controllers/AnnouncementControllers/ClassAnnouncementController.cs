@@ -8,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
@@ -84,7 +85,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             SchoolLocator.ClassAnnouncementService.Submit(annDetails.Id);
             SchoolLocator.ClassAnnouncementService.DeleteAnnouncements(classAnnouncementInfo.ClassId, annDetails.ClassAnnouncementData.ClassAnnouncementTypeRef, AnnouncementState.Draft);
             var includeDiscussion = annDetails.DiscussionEnabled;
-            ApplicationLogic.NotifyApplications(MasterLocator, annDetails.AnnouncementApplications, annDetails.Id, (int) AnnouncementTypeEnum.Class, NotifyAppType.Attach);
+            ApplicationLogic.NotifyApplications(MasterLocator, annDetails.AnnouncementApplications, (int) AnnouncementTypeEnum.Class, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Attach);
             TrackNewItemCreate(annDetails, (s, appsCount, doscCount)=> s.CreatedNewItem(Context.Login, annDetails.ClassAnnouncementData.ClassAnnouncementTypeName, annDetails.ClassAnnouncementData.ClassName, appsCount, doscCount, includeDiscussion));
             return Json(true, 5);
         }

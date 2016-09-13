@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using Chalkable.API.Helpers;
 using System.Threading.Tasks;
+using System.Web;
+using Chalkable.API.Exceptions;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Authentication;
@@ -56,68 +63,92 @@ namespace Chalkable.Web.Logic
         }
 
 
-        public static void NotifyApplications(IServiceLocatorMaster masterLocator, IList<AnnouncementApplication> annApps,
-            int announcementId, int announcemnetType, NotifyAppType type)
+        public static void NotifyApplications(IServiceLocatorMaster masterLocator, IList<AnnouncementApplication> annApps
+            , int announcemnetType, string sessionKey, NotifyAppType type)
         {
-            NotifyApplications(masterLocator, annApps.Select(x => x.ApplicationRef), announcementId, announcemnetType, type);
+            foreach (var annApp in annApps)
+                NotifyApplication(masterLocator, annApp.ApplicationRef, annApp.Id,  announcemnetType, sessionKey, type);
         }
 
-        public static void NotifyApplications(IServiceLocatorMaster masterLocator, IEnumerable<Guid> applicationIds,
-            int announcementId, int announcemnetType, NotifyAppType type)
+        public static void NotifyApplication(IServiceLocatorMaster masterLocator, Guid applicationId,
+            int announcementApplicationId, int announcemnetType, string sessionKey, NotifyAppType type)
         {
-            foreach (var appId in applicationIds)
-                Task.Run(() => NotifyApplicationAsync(masterLocator, appId, announcementId, announcemnetType, type));
+            Task.Run(()=>NotifyApplicationAsync(masterLocator, applicationId, announcementApplicationId, announcemnetType, sessionKey, type));
         }
 
-
-        public static async Task NotifyApplicationAsync(IServiceLocatorMaster masterLocator, Guid applicationId, int announcementId,
-            int announcemnetType, NotifyAppType type)
+        public static async Task NotifyApplicationAsync(IServiceLocatorMaster masterLocator, Guid applicationId, int announcementApplicationId,
+            int announcemnetType, string sessionKey, NotifyAppType type)
         {
-            var app = masterLocator.ApplicationService.GetApplicationById(applicationId);
-            var url = app.Url;
-            var sessionKey = ChalkableAuthentication.GetSessionKey();
-            var token = masterLocator.ApplicationService.GetAccessToken(applicationId, sessionKey);
-            var mode = type == NotifyAppType.Attach 
-                ? API.Settings.ANNOUNCEMENT_APPLICATION_SUBMIT 
-                : API.Settings.ANNOUNCEMENT_APPLICATION_REMOVE;
-
-            var ps = new Dictionary<string, string>
-            {
-                ["apiRoot"] = "https://" + Chalkable.Common.Settings.Domain,
-                ["announcementId"] = announcementId.ToString(),
-                ["announcementType"] = announcemnetType.ToString(),
-                ["mode"] = mode,
-                ["token"] = token,
-                ["_"] = Guid.NewGuid().ToString()
-            };
-
-            var client = new WebClient();
             try
             {
-                SignRequest(client, ps, app.SecretKey);
-                AddParams(client, ps);
-                var task = client.DownloadDataTaskAsync(url);
-                await task;
+                var app = masterLocator.ApplicationService.GetApplicationById(applicationId);
+                var url = app.Url;
+                var token = masterLocator.ApplicationService.GetAccessToken(applicationId, sessionKey);
+                var mode = type == NotifyAppType.Attach
+                    ? API.Settings.ANNOUNCEMENT_APPLICATION_SUBMIT
+                    : API.Settings.ANNOUNCEMENT_APPLICATION_REMOVE;
 
+                var ps = new Dictionary<string, string>
+                {
+                    ["apiRoot"] = "https://" + Chalkable.Common.Settings.Domain,
+                    ["announcementApplicationId"] = announcementApplicationId.ToString(),
+                    ["announcementType"] = announcemnetType.ToString(),
+                    ["mode"] = mode,
+                    ["token"] = token,
+                    ["_"] = Guid.NewGuid().ToString()
+                };
+
+                var webRequest = (HttpWebRequest)WebRequest.Create(url);
+
+                webRequest.KeepAlive = true;
+                webRequest.Credentials = CredentialCache.DefaultCredentials;
+                webRequest.Method = WebRequestMethods.Http.Post;
+                webRequest.Accept = "application/json";
+                webRequest.AllowAutoRedirect = false;
+                SignRequest(webRequest, ps, app.SecretKey);
+                PrepareParams(webRequest, ps);
+
+                var response = await webRequest.GetResponseAsync();
+                using (var stream = response.GetResponseStream())
+                {
+                    var statusCode = (response as HttpWebResponse)?.StatusCode;
+                    if (stream == null)
+                        throw new ChalkableException("Server faild to responce");
+                }
             }
             catch (WebException ex)
             {
+                throw ex;
                 //TODO handler
-                return;
+            }
+            catch (Exception e)
+            {
+                throw e;
+                //TODO handler
             }
         }
 
-        private static void AddParams(WebClient client, IDictionary<string, string> ps)
+        private static void PrepareParams(HttpWebRequest request, IDictionary<string, string> ps)
         {
+            var nvc = HttpUtility.ParseQueryString(string.Empty);
             foreach (var p in ps)
-                client.QueryString.Add(p.Key, p.Value);
+                nvc.Add(p.Key, p.Value);
+            var stream = new MemoryStream();
+            var data = Encoding.ASCII.GetBytes(nvc.ToString());
+            stream.Write(data, 0, data.Length);
+            stream.Seek(0, SeekOrigin.Begin);
+            request.ContentLength = stream.Length;
+            request.ContentType = "application/x-www-form-urlencoded";
+            stream.CopyTo(request.GetRequestStream());
+            stream.Dispose();
+
         }
 
-        private static void SignRequest(WebClient client, IDictionary<string, string> p, string secretKey)
+        private static void SignRequest(HttpWebRequest request, IDictionary<string, string> p, string secretKey)
         {
             var encodedKey = HashHelper.HexOfCumputedHash(secretKey);
             var signature = GenerateSignature(p, encodedKey);
-            client.Headers.Add(API.ChalkableAuthorization.AuthenticationHeaderName, $"{API.ChalkableAuthorization.AuthenticationSignature}:{signature}");
+            request.Headers.Add(API.ChalkableAuthorization.AuthenticationHeaderName, $"{API.ChalkableAuthorization.AuthenticationSignature}:{signature}");
         }
 
 

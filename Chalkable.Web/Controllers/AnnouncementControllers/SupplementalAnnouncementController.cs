@@ -7,6 +7,7 @@ using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
@@ -50,7 +51,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             //TODO delete old drafts 
             var studentsCount = supplementalAnnouncement.Recipients.Count;
             var includeDiscussion = supplementalAnnouncement.DiscussionEnabled;
-            ApplicationLogic.NotifyApplications(MasterLocator, ann.AnnouncementApplications, ann.Id, (int)AnnouncementTypeEnum.Supplemental, NotifyAppType.Attach);
+            ApplicationLogic.NotifyApplications(MasterLocator, ann.AnnouncementApplications, (int)AnnouncementTypeEnum.Supplemental, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Attach);
 
             TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewSupplemental(Context.Login, supplementalAnnouncement.ClassName, studentsCount, appsCount, doscCount, includeDiscussion));
             return Json(true, 5);
