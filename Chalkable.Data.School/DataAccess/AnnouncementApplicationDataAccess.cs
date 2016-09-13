@@ -102,5 +102,24 @@ namespace Chalkable.Data.School.DataAccess
             }
             return res;
         }
+
+        public IList<int> GetStudentAnnouncementApplicationRecipients(int? studentId, Guid appId, int schoolYear)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@studentId", studentId},
+                {"@schoolYearId", schoolYear},
+                {"@appId", appId}
+            };
+            using (var reader = ExecuteStoredProcedureReader("spGetStudentAnnouncementApplicationRecipients", ps))
+            {
+                var res = new List<int>();
+                while (reader.Read())
+                {
+                    res.Add(SqlTools.ReadInt32(reader, "studentAnnAppId"));
+                }
+                return res;
+            }
+        }
     }
 }
