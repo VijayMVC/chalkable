@@ -14,6 +14,9 @@ namespace Chalkable.API.Models
 
     public class StudentInfo
     {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
         [JsonProperty("gradelevel")]
         public GradeLevelInfo GradeLevel { get; set; }
 

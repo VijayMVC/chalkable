@@ -17,6 +17,21 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public override void Delete(int key)
+        {
+            Delete(new List<int> {key});
+        }
+
+        public override void Delete(IList<Student> entities)
+        {
+            Delete(entities.Select(x => x.Id).ToList());
+        }
+
+        public override void Delete(IList<int> keys)
+        {
+            ExecuteStoredProcedure("spDeleteStudents", new Dictionary<string, object> {["ids"] = keys});
+        }
+
         public Student GetById(int id, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
