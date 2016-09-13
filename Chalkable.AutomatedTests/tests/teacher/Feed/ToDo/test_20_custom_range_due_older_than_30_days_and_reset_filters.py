@@ -39,6 +39,7 @@ class TestFeed(BaseAuthedTestCase):
         self.current_date_minus2_10 = end_gr_period_minus_10.strftime("%Y-%m-%d")
 
         self.random_date_string_format = self.random_date(self.current_date_plus2_10, self.current_date_minus2_10)
+        print self.random_date_string_format
 
         self.random_date_string_format_correct_format = datetime.strptime(self.random_date_string_format,
                                                                           "%m-%d-%Y").strftime("%Y-%m-%d")

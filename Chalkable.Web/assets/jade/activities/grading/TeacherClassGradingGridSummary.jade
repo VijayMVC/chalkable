@@ -42,9 +42,9 @@
                     BUTTON.grey-button.small.cancel-comment=Msg.Cancel
         each gradingPeriod,i in self.getGradingPeriods()
             -var item = self.getCurrentGradingGrid()
-            -var selectedGradingPeriodId = item.getGradingPeriod().getId()
+            -var selectedGradingPeriodId = item && item.getGradingPeriod().getId()
             .chlk-calendar.marking-period-container(
-                class=((gradingPeriod.getId() == selectedGradingPeriodId) ? "open " : "") + ((!item.getGradingItems().length || !item.getStudents().length) ? 'no-items' : ''),
+                class=((gradingPeriod.getId() == selectedGradingPeriodId) ? "open " : "") + ((!item || !item.getGradingItems().length || !item.getStudents().length) ? 'no-items' : ''),
                 data-index=i
             )
                 .header.mp-title

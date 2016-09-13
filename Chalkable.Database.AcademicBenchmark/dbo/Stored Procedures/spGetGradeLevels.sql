@@ -25,7 +25,16 @@ Insert Into @gradeLevelIds
 		And @documentId is null or DocumentRef = @documentId
 		And @subjectDocId is null or SubjectDocRef = @subjectDocId
 
-Select Distinct GradeLevel.* From GradeLevel
+Select Distinct 
+	GradeLevel.Code,
+	GradeLevel.[Description],
+	GradeLevel.Low,
+	GradeLevel.High,
+	Cast(
+	Case When Code = 'K' Then 0  
+		 When Code = 'PK' Then -1 
+		 Else Code End as int) as [Order]
+From GradeLevel
 join @gradeLevelIds as gl on
 Cast(
 	Case When Code = 'K' Then 0  
@@ -35,3 +44,4 @@ And Cast(
 	Case When Code = 'K' Then 0  
 		 When Code = 'PK' Then -1 
 		 Else Code End as int) <= [Hi]
+Order by [Order]

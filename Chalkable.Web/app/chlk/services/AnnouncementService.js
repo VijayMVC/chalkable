@@ -105,9 +105,9 @@ NAMESPACE('chlk.services', function () {
 
 
             [[chlk.models.id.ClassId, Number, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
-                chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum]],
-            ria.async.Future, function getAnnouncementsForClassProfile(classId, start_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_){
-                return this.get('Feed/ClassFeed.json', chlk.models.feed.Feed,{
+                chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Object]],
+            ria.async.Future, function getAnnouncementsForClassProfile(classId, start_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, createdAnnouncements_){
+                return this.post('Feed/ClassFeed.json', chlk.models.feed.Feed,{
                     classId: classId.valueOf(),
                     start: start_ || 0,
                     count: 10,
@@ -117,7 +117,8 @@ NAMESPACE('chlk.services', function () {
                     sortType: sortType_ && sortType_.valueOf(),
                     fromDate: startDate_ && startDate_.toStandardFormat(),
                     toDate: endDate_ && endDate_.toStandardFormat(),
-                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
+                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
+                    createdAnnouncements: createdAnnouncements_
                 });
             },
 

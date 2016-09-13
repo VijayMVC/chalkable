@@ -147,8 +147,13 @@ class BaseAuthedTestCase(unittest.TestCase):
         dictionary_var_grading_comments_cut_off_string = json.loads(var_grading_comments_cut_off_string)
         dictionary_var_grading_comments_cut_off_string_data = dictionary_var_grading_comments_cut_off_string['data']
 
-
+        self.dict_for_codes = {}
         self.one_grading_comment = random.choice(dictionary_var_grading_comments_cut_off_string_data)
+        #print self.one_grading_comment, 'self.one_grading_comment'
+        self.dict_for_codes['comment'] = self.one_grading_comment['comment']
+        self.dict_for_codes['code'] = self.one_grading_comment['code']
+        self.dict_for_codes['id'] = self.one_grading_comment['id']
+        #print self.dict_for_codes
 
         # alphaGrades
         var_alpha_grades_list = re.findall('var alphaGrades = .+', page_as_one_string)
@@ -197,12 +202,28 @@ class BaseAuthedTestCase(unittest.TestCase):
 
         for marking_period in dictionary_var_markingPeriods_cut_off_string_data:
             self.dict_for_marking_period_date_startdate_endate[marking_period['id']] = marking_period['startdate'], marking_period['enddate']
-           # print 'marking_period', marking_period
+            #print 'marking_period', marking_period
+
 
         # getting list of marking periods
         self.list_for_marking_periods = []
-        for key,value in self.dict_for_marking_period_date_startdate_endate.iteritems():
+        self.list_for_marking_periods_dates = []
+        for key, value in self.dict_for_marking_period_date_startdate_endate.iteritems():
             self.list_for_marking_periods.append(key)
+            self.list_for_marking_periods_dates.append(value)
+
+
+        self.list_for_marking_periods_dates2 = []
+        #print self.list_for_marking_periods_dates[0][0], type(self.list_for_marking_periods_dates[0][0])
+        for k in self.list_for_marking_periods_dates:
+            for i in k:
+                self.list_for_marking_periods_dates2.append(str(i))
+
+        self.start_date_school_year = min(self.list_for_marking_periods_dates2)
+        self.end_date_school_year = max(self.list_for_marking_periods_dates2)
+
+
+
 
         # getting pairs 'class/marking period'
         var_classesToFilter_list = re.findall('var classesToFilter = .+', page_as_one_string)
@@ -278,6 +299,13 @@ class BaseAuthedTestCase(unittest.TestCase):
         r = s.get(chlk_server_url + url, headers=headers)
         return self.verify_response(r, status, success)
 
+    def get_file(self, url, status=200, success=True):
+        s = self.session
+        r = s.get(chlk_server_url + url)
+        self.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
+        return r.text
+
+
     def postJSON(self, url, obj, status=200, success=True, files=None):
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
@@ -339,7 +367,6 @@ class BaseAuthedTestCase(unittest.TestCase):
             return None
 
         return self.verify_response(r_student, status, success)
-
     # the end of methods for the student
 
     # these methods for the foreign student
@@ -366,7 +393,6 @@ class BaseAuthedTestCase(unittest.TestCase):
             return None
 
         return self.verify_response(r_foreign_student, status, success)
-
     # the end of methods for the foreign student
 
 
@@ -394,7 +420,6 @@ class BaseAuthedTestCase(unittest.TestCase):
             return None
 
         return self.verify_response(r_classmate, status, success)
-
     # the end of methods for classmates
 
 
@@ -405,6 +430,21 @@ class BaseAuthedTestCase(unittest.TestCase):
         r_admin = s_admin.get(chlk_server_url + url_admin)
         return self.verify_response(r_admin, status, success)
 
+    def get_file_admin(self, url_admin, status=200, success=True):
+        s_admin = self.session_admin
+        r_admin = s_admin.get(chlk_server_url + url_admin)
+        self.assertEquals(r_admin.status_code, status, 'Response status code: ' + str(r_admin.status_code) + ', body:' + r_admin.text)
+        return r_admin.text
+
+    def post_admin(self, url_admin, params, status=200, success=True):
+        s_admin = self.session_admin
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
+        try:
+            r_admin = s_admin.post(chlk_server_url + url_admin, data=params, headers=headers)
+        except ValueError:
+            self.assertTrue(False, 'Request failed, ' + url_admin)
+            return None
+        return self.verify_response(r_admin, status, success)
     # the end of methods for the admin
 
     # noinspection PyMethodMayBeStatic
