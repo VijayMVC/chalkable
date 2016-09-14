@@ -271,6 +271,14 @@ namespace Chalkable.Web.Controllers
             return Json(announcementApplicationRecipient);
         }
 
+        [AuthorizationFilter("Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult StudentAnnouncementApplicationIds()
+        {
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
+            var studentAnnouncementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetStudentAnnouncementApplicationIds(app.Id);
+            return Json(studentAnnouncementApplicationRecipient);
+        }
+
         private const int ATTACH_DEFAULT_PAGE_SIZE = 12;
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult MyApps(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? start, int? count)
