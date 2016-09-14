@@ -12,6 +12,10 @@ class TestFeed(BaseAuthedTestCase):
         final_list = [item for sublist in empty_list for item in sublist]
         decoded_list = [x.encode('utf-8') for x in final_list]
 
+        if ('000023' and '000032' and '000031' and '000074' and '000002_Classroom' and '000090' and '000141') in decoded_list:
+            print "all reports are switched on"
+
+
         dict_for_clas_marking_period = self.dict_for_clas_marking_period
         dict_for_marking_period_date_startdate_endate = self.dict_for_marking_period_date_startdate_endate
 
@@ -108,8 +112,7 @@ class TestFeed(BaseAuthedTestCase):
                         for info_about_one_student in json_data_get_class_list_second_time:
                             if info_about_one_student['studentid'] == studentid:
                                 for a in info_about_one_student['disciplinetypes']:
-                                    self.assertEquals(a['id'], one_reason,
-                                        'discipline infractions are equals' + " " + str(a['id']) + " " + str(one_reason) + " " + str(studentid))
+                                    self.assertEquals(a['id'], one_reason, 'discipline infractions are equals' + " " + str(a['id']) + " " + str(one_reason) + " " + str(studentid))
         else:
             self.assertTrue(('Maintain Classroom Discipline (Admin)' and 'Maintain Classroom Discipline') not in decoded_list, 'User does not have permissions to put discipline')
 

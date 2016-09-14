@@ -153,7 +153,6 @@ class BaseAuthedTestCase(unittest.TestCase):
         self.dict_for_codes['comment'] = self.one_grading_comment['comment']
         self.dict_for_codes['code'] = self.one_grading_comment['code']
         self.dict_for_codes['id'] = self.one_grading_comment['id']
-        #print self.dict_for_codes
 
         # alphaGrades
         var_alpha_grades_list = re.findall('var alphaGrades = .+', page_as_one_string)
@@ -457,7 +456,6 @@ class BaseAuthedTestCase(unittest.TestCase):
         random_date_for_attendance = start_date1 + timedelta(random.randint(0, delta))
 
         return datetime.strptime(str(random_date_for_attendance), '%Y-%m-%d').strftime('%m-%d-%Y')
-
 
 
 if __name__ == '__main__':
