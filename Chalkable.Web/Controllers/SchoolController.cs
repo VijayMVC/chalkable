@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.SchoolsViewData;
@@ -51,6 +52,14 @@ namespace Chalkable.Web.Controllers
         {
             var schoolPrograms = SchoolLocator.SchoolProgramService.GetAll();
             return Json(SchoolProgramViewData.Create(schoolPrograms));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult UserLocalSchools()
+        {
+            var schoolYears = SchoolLocator.SchoolYearService.GetSchoolYears().GroupBy(x => x.Id).Select(x => x.First());
+            var userLocalSchools = SchoolLocator.SchoolService.GetSchoolsByIds(schoolYears.Select(x => x.Id).ToList());
+            return Json(LocalSchoolViewData.Create(userLocalSchools));
         }
 
         /*[AuthorizationFilter("SysAdmin")]
