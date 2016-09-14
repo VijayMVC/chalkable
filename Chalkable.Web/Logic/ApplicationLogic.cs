@@ -17,6 +17,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models.ApplicationsViewData;
+using Mindscape.Raygun4Net;
 
 namespace Chalkable.Web.Logic
 {
@@ -62,7 +63,7 @@ namespace Chalkable.Web.Logic
             return res;
         }
 
-
+        //TODO: think to move notify Applications logic
         public static void NotifyApplications(IServiceLocatorMaster masterLocator, IList<AnnouncementApplication> annApps
             , int announcemnetType, string sessionKey, NotifyAppType type)
         {
@@ -76,6 +77,7 @@ namespace Chalkable.Web.Logic
             Task.Run(()=>NotifyApplicationAsync(masterLocator, applicationId, announcementApplicationId, announcemnetType, sessionKey, type));
         }
 
+        private static readonly RaygunClient RaygunClient = new RaygunClient();
         public static async Task NotifyApplicationAsync(IServiceLocatorMaster masterLocator, Guid applicationId, int announcementApplicationId,
             int announcemnetType, string sessionKey, NotifyAppType type)
         {
@@ -112,20 +114,29 @@ namespace Chalkable.Web.Logic
                 using (var stream = response.GetResponseStream())
                 {
                     var statusCode = (response as HttpWebResponse)?.StatusCode;
-                    if (stream == null)
-                        throw new ChalkableException("Server faild to responce");
+                    if (stream == null || (statusCode.HasValue && statusCode.Value != HttpStatusCode.OK))
+                        HandleException(new ChalkableException($"Server {url} faild to responce." +
+                                                               $"Request Parameters: {ps.Select(x => $"{x.Key}={x.Value}").JoinString("&")}"));
                 }
             }
             catch (WebException ex)
             {
-                throw ex;
-                //TODO handler
+                HandleException(ex);
             }
             catch (Exception e)
             {
-                throw e;
-                //TODO handler
+                HandleException(e);
             }
+        }
+
+        private static void HandleException(Exception e)
+        {
+#if !DEBUG
+                RaygunClient.SendInBackground(ex);
+#endif
+#if DEBUG
+            throw e;
+#endif
         }
 
         private static void PrepareParams(HttpWebRequest request, IDictionary<string, string> ps)
