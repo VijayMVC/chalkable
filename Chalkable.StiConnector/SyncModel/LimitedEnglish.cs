@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Chalkable.StiConnector.SyncModel.Attributes;
+using Chalkable.StiConnector.Attributes;
 
 namespace Chalkable.StiConnector.SyncModel
 {
+    [SisMinVersion("?.?.?.?.")]
     public class LimitedEnglish : SyncModel
     {
         public int Id { get; set; }

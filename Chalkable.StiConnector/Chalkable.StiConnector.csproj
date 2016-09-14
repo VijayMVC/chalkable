@@ -222,6 +222,7 @@
     <Compile Include="SyncModel\AttendanceCalendarDay.cs" />
     <Compile Include="SyncModel\AttendanceMonth.cs" />
     <Compile Include="SyncModel\AttendanceSetting.cs" />
+    <Compile Include="Attributes\SisMinVersionAttribute.cs" />
     <Compile Include="SyncModel\BellSchedule.cs" />
     <Compile Include="SyncModel\CalendarDay.cs" />
     <Compile Include="SyncModel\ClassroomOption.cs" />
