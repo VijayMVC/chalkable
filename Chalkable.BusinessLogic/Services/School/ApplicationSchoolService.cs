@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
@@ -25,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum type);
         IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying);
         IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId);
+        IList<int> GetStudentAnnouncementApplicationIds(Guid appId);
         void UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text);
         IList<StudentAnnouncementApplicationMeta> GetStudentAnnouncementApplicationMetaByAnnouncementId(int announcementId);
     }
@@ -215,6 +217,16 @@ namespace Chalkable.BusinessLogic.Services.School
             var adminId = Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? Context.PersonId : null;
             var schoolYear = Context.SchoolYearId.Value;
             return DoRead(u => new AnnouncementApplicationDataAccess(u).GetAnnouncementApplicationRecipients(studentId, teacherId, adminId, appId, schoolYear));
+        }
+
+        public IList<int> GetStudentAnnouncementApplicationIds(Guid appId)
+        {
+            if(Context.Role != CoreRoles.STUDENT_ROLE)
+                return new List<int>();
+            
+            var schoolYear = Context.SchoolYearId.Value;
+            var studentId = Context.PersonId.Value;
+            return DoRead(u => new AnnouncementApplicationDataAccess(u).GetStudentAnnouncementApplicationIds(studentId, appId, schoolYear));
         }
 
         public void UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text)

@@ -372,6 +372,7 @@
     <Build Include="User Defined Types\TAppSetting.sql" />
     <Build Include="Stored Procedures\spDeleteStudents.sql" />
     <Build Include="Tables\LimitedEnglish.sql" />
+    <Build Include="Stored Procedures\spGetStudentAnnouncementApplicationIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />
