@@ -126,6 +126,7 @@
     <Compile Include="DataAccess\ScheduledTimeSlotVariationDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolProgramDataAccess.cs" />
     <Compile Include="DataAccess\StaffDataAccess.cs" />
     <Compile Include="DataAccess\StandardDataAccess.cs" />
     <Compile Include="DataAccess\DateDataAccess.cs" />

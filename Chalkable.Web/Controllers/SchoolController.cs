@@ -46,6 +46,13 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult SchoolPrograms()
+        {
+            var schoolPrograms = SchoolLocator.SchoolProgramService.GetAll();
+            return Json(SchoolProgramViewData.Create(schoolPrograms));
+        }
+
         /*[AuthorizationFilter("SysAdmin")]
         public ActionResult Summary(Guid schoolId)
         {
