@@ -1,6 +1,6 @@
 ﻿CREATE TYPE [dbo].[TSchoolProgram] AS TABLE
 (
-	[SchoolProgramID] SMALLINT IDENTITY (1,1) NOT NULL,
+	[Id] INT IDENTITY (1,1) NOT NULL,
     [Code] VARCHAR(5) NOT NULL,
     [Name] VARCHAR(50) NOT NULL,
     [Description] VARCHAR(255) NOT NULL,

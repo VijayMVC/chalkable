@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[SchoolProgram]
 (
-	[SchoolProgramID] SMALLINT IDENTITY (1,1) NOT NULL CONSTRAINT [CPK_SchoolProgram] PRIMARY KEY CLUSTERED ( [SchoolProgramID] ),
+	[Id] INT IDENTITY (1,1) NOT NULL CONSTRAINT [CPK_SchoolProgram] PRIMARY KEY CLUSTERED ( [Id] ),
     [Code] VARCHAR(5) NOT NULL,
     [Name] VARCHAR(50) NOT NULL,
     [Description] VARCHAR(255) NOT NULL CONSTRAINT [DF_SchoolProgram_Description] DEFAULT (''),
