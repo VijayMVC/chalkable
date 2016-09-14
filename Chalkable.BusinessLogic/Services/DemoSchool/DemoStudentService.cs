@@ -88,6 +88,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             StudentSchoolStorage.Delete(studentSchools);
         }
 
+        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? schoolId, int? gradeLevel, int? programId,
+            int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count,
+            int? markingPeriodId, bool enrolledOnly = false)
+        {
+            throw new NotImplementedException();
+        }
+
         public Student GetById(int id, int schoolYearId)
         {
             var student = StudentStorage.GetById(id);

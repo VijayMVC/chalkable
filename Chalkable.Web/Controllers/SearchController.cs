@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.Common.Enums;
@@ -30,7 +28,7 @@ namespace Chalkable.Web.Controllers
             query = query.ToLower();
             var personList = new PersonList
             {
-                Students = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, null, teacherId, studentId, query, true, 0, 15, null, true),
+                Students = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, null, null, null, null, teacherId, studentId, query, true, 0, 15, null, true),
                 Staffs = SchoolLocator.StaffService.SearchStaff(Context.SchoolYearId.Value, null, studentId, query, true, 0, 15)
             };
             searchRes.Add(SearchTypeEnum.Persons, personList);

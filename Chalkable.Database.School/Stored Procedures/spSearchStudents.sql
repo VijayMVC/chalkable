@@ -2,6 +2,9 @@
 	@start int,
 	@count int,
 	@classId int,
+	@schoolId int,
+	@gradeLevel int,
+	@programId int,
 	@teacherId int,
 	@classmatesToid int,
 	@schoolYearId int,
@@ -13,7 +16,7 @@
 	@enrolledOnly bit
 As
 
-If @classId is null and @teacherId is null and @classmatesToid is null and @markingPeriod is null
+If @classId is null and @teacherId is null and @classmatesToid is null and @markingPeriod is null and @schoolId is null and @gradeLevel is null and @programId is null
 Begin
 	exec spSearchStudentBySchoolYear @schoolYearId, @start, @count, @filter1, @filter2, @filter3, @orderByFirstName
 End
@@ -61,24 +64,30 @@ Else Begin
 	From
 		Student
 		join StudentSchoolYear
-		on Student.Id = StudentSchoolYear.StudentRef
+			on Student.Id = StudentSchoolYear.StudentRef
 		left join (select * from ClassPerson join Class on ClassPerson.ClassRef = Class.Id) as cs
-		on Student.Id = cs.PersonRef and StudentSchoolYear.SchoolYearRef = cs.SchoolYearRef
+			on Student.Id = cs.PersonRef and StudentSchoolYear.SchoolYearRef = cs.SchoolYearRef
 		left join MarkingPeriod
-		on MarkingPeriod.Id = cs.markingPeriodRef and
-		MarkingPeriod.SchoolYearRef = @schoolYearId
+			on MarkingPeriod.Id = cs.markingPeriodRef and MarkingPeriod.SchoolYearRef = @schoolYearId
+		join StudentSchool
+			on Student.Id = StudentSchool.StudentRef
+		left join StudentSchoolProgram
+			on Student.Id = StudentSchoolProgram.StudentId
 	Where
 		StudentSchoolYear.SchoolYearRef = @schoolYearId
 		and (@teacherId is null
-		or cs.ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where ClassTeacher.PersonRef = @teacherId))
+			or cs.ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where ClassTeacher.PersonRef = @teacherId))
 		and (@classmatesToid is null
-		or cs.ClassRef in (Select ClassPerson.ClassRef From ClassPerson Where ClassPerson.PersonRef = @classmatesToid))
+			or cs.ClassRef in (Select ClassPerson.ClassRef From ClassPerson Where ClassPerson.PersonRef = @classmatesToid))
 		and (@classId is null or cs.ClassRef = @classId)
 		and ((@filter1 is null or FirstName like @filter1 or LastName like @filter1)
 		and (@filter2 is null or FirstName like @filter2 or LastName like @filter2)
 		and (@filter3 is null or FirstName like @filter3 or LastName like @filter3))
 		and (@markingPeriod is null or MarkingPeriod.Id = @markingPeriod)
 		and (@includeWithdraw = 1 or @includeWithdraw is null or (cs.IsEnrolled = 1 and StudentSchoolYear.EnrollmentStatus = 0))
+		and (@schoolId is null or StudentSchool.SchoolRef = @schoolId)
+		and (@gradeLevel is null or StudentSchoolYear.GradeLevelRef = @gradeLevel)
+		and (@programId is null or StudentSchoolProgram.SchoolProgramId = @programId)
 	Group by
 		Student.Id,
 		Student.FirstName,
