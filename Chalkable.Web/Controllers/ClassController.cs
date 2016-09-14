@@ -202,5 +202,13 @@ namespace Chalkable.Web.Controllers
         {
             return Json(SchoolLocator.ClassService.GetDays(classId));
         }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult ClassesBySchool(int schoolId, int? gradeLevelId)
+        {
+            var schoolYear = Context.SchoolYearId;
+            var classes = SchoolLocator.ClassService.GetClassesBySchool(schoolYear.Value, schoolId, gradeLevelId);
+            return Json(classes.Select(ShortClassViewData.Create));
+        }
     }
 }
