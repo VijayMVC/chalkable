@@ -1,0 +1,11 @@
++ActionLink('feed', 'doToList').inbox(title="View Feed") Feed
++ActionLink('announcement','add').add-new.new-item(title="Add new item") New Item
+if self.isAppStoreEnabled
+    +ActionLink('apps', 'myApps').apps(title="View Apps") Apps
+if self.isAssessmentEnabled
+    +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
+if self.isClassesEnabled
+    +ActionLink('district', 'summary').classes(title="View Classes") Classes
+if self.isAppStoreEnabled
+    +ActionLink('lessonplangallery', 'gallery').gallery(title="View Gallery") Gallery
++ActionLink('settings', 'dashboardAdmin').settings(title="View Settings") Settings

@@ -1,0 +1,19 @@
+.suggested-apps-block
+    .separator-line
+    if self.getSuggestedApps()
+        +CloseOpen('Suggested Apps').mp-50.mp-10
+            .suggested-apps-container.attachments-and-applications
+                if !self.getSuggestedApps().length
+                    .no-items-text.small There are no recommended apps for the attached standard
+                else
+                    +LeftRightToolbar()(fixedElementWidth = true)
+                        each app, i in self.getSuggestedApps()
+                            .app-icon-link.announcement-item.application
+                                +ActionLink('apps', 'tryToAttachFromAnnouncement', self.getAnnouncementId(), app.getId(), self.getAnnouncementType(), self.getStandardsUrlComponents())(data-tooltip='Attach', data-id=app.getId().valueOf()).attach-icon +
+                                .wrapper
+                                    -var pictureUrl = app.getBannerPictureUrl()
+                                    +LoadingImage(src=pictureUrl, id="loading-image-" + i)
+                                    .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
+                                    +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getAnnouncementId(), self.getAnnouncementType(), self.getStandardsUrlComponents()) Open
+    else
+        .title No recommended apps
