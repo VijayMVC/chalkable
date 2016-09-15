@@ -25,7 +25,7 @@ class UserSession:
     def login(self, email, password):
         payload = {'UserName': email, 'Password': password, 'remember': 'false'}
         r = self.post_html('/User/LogOn.aspx', data=payload)
-        self.parse_body_(r.text)
+        self.parse_body_(r)
         return self
 
     def parse_body_(self, page_as_one_string):
