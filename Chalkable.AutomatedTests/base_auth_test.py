@@ -14,9 +14,9 @@ from time import sleep
 
 
 class UserSession:
-    def __init__(self, unittest):
+    def __init__(self, instance):
         pass
-        self.unittest = unittest
+        self.unittest = instance
 
         self.session = requests.Session()
         self.districtId = None
@@ -78,8 +78,8 @@ class UserSession:
 
 
 class TeacherSession(UserSession):
-    def __init__(self, unittest):
-        UserSession.__init__(self, unittest)
+    def __init__(self, instance):
+        UserSession.__init__(self, instance)
 
         self.teacher_id = None
 
