@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.StiConnector.Connectors.Model.Reports.ReportCards;
+using Chalkable.StiConnector.SyncModel;
+using Student = Chalkable.StiConnector.Connectors.Model.Reports.ReportCards.Student;
 
 namespace Chalkable.BusinessLogic.Model.Reports
 {
@@ -12,7 +15,27 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public IList<TraditionalGradingScaleExportModel> TraditionalGradingScale { get; set; } 
         public IList<StandardsGradingScaleExportModel> StandardsGradingScale { get; set; }
         public bool IdToPrint { get; set; }
-        public StudentReportCardsExportModel Student { get; set; } 
+        public StudentReportCardsExportModel Student { get; set; }
+
+        public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, Address recipient, string logoRef)
+        {
+            return new CustomReportCardsExportModel
+            {
+                AcadYear = reportCard.AcadYear,
+                AcadSessionName = reportCard.AcadSessionName,
+                School = new SchoolReportCardsExportModel
+                {
+                    Address1 = reportCard.School.Address1,
+                    Address2 = reportCard.School.Address2,
+                    City = reportCard.School.City,
+                    Name = reportCard.School.Name,
+                    Phone = reportCard.School.Phone,
+                    State = reportCard.School.State,
+                    Zip = reportCard.School.Zip
+                },
+                Student = new StudentReportCardsExportModel()
+            };
+        }
     }
 
     public class SchoolReportCardsExportModel
@@ -24,6 +47,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Phone { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
+        
     }
 
     public class TraditionalGradingScaleExportModel
@@ -33,7 +57,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public decimal MaxValue { get; set; }
 
     }
-
     public class StandardsGradingScaleExportModel
     {
         public string Name { get; set; }
@@ -55,6 +78,13 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public decimal Merits { get; set; }
         public decimal Demerits { get; set; }
         public string ReportCardsComment { get; set; }
+
+        public static StudentReportCardsExportModel Create(Student studentData, Address recipient)
+        {
+            return new StudentReportCardsExportModel
+            {
+            };
+        }
     }
 
     public class ClassReportCardsExportModel

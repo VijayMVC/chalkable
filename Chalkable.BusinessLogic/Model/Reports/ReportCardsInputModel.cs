@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool IncludePromotionStatus => HasOption(ReportCardsAddionalOptions.PromotionStatus);
         public bool IncludeWithdrawnStudents => HasOption(ReportCardsAddionalOptions.WithdrawnStudents);
         public bool IncludeYearToDateInformation => HasOption(ReportCardsAddionalOptions.YearToDateInformation);
-
+        public bool IncludeComments => HasOption(ReportCardsAddionalOptions.Comments);
         public string DefaultDataPath { get; set; }
     }
 
@@ -87,6 +87,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         ParentSignature = 6,
         PromotionStatus = 7,
         WithdrawnStudents = 8,
-        YearToDateInformation = 9    
+        YearToDateInformation = 9,
+        Comments = 10    
     }
 }

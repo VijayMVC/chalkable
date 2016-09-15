@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
@@ -17,6 +18,7 @@ using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
+using Chalkable.StiConnector.Connectors.Model.Reports.ReportCards;
 using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -455,20 +457,51 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ReportCardsRenderer.Model<CustomReportCardsExportModel> BuildCustomReportCardsExportModel(ReportCardsInputModel inputModel)
         {
+            Trace.Assert(Context.SchoolYearId.HasValue);
             BaseSecurity.EnsureDistrictAdmin(Context);
             if (inputModel == null)
                 throw new ArgumentNullException(nameof(ReportCardsInputModel));
-           var defaultJsonPath = Path.Combine(inputModel.DefaultDataPath, "Reports\\DefaultCustomReportCardsJson.txt");
-            ReportCardsRenderer.Model<CustomReportCardsExportModel> exportData;
-            using (var file = File.OpenRead(defaultJsonPath))
+            var options = new ReportCardOptions
             {
-                var streamReader = new StreamReader(file);
-                var json = streamReader.ReadToEnd();
-                exportData = JsonConvert.DeserializeObject<ReportCardsRenderer.Model<CustomReportCardsExportModel>>(json);
-                exportData.Title = inputModel.Tile;
-                streamReader.Close();
+                AbsenceReasonIds = inputModel.AttendanceReasonIds,
+                AcadSessionId = Context.SchoolYearId.Value,
+                IncludeAttendance = inputModel.IncludeAttendance,
+                IncludeGradingPeriodNotes = inputModel.IncludeGradingPeriodNotes,
+                IncludeComments = inputModel.IncludeComments,
+                IncludeMeritDemerit = inputModel.IncludeMeritDemerit,
+                IncludeWithdrawnStudents = inputModel.IncludeWithdrawnStudents,
+                IncludePromotionStatus = inputModel.IncludePromotionStatus,
+                IncludeYearToDateInformation = inputModel.IncludeYearToDateInformation,
+                StudentIds = inputModel.StudentIds,
+            };
+
+            var reportCardsData = ConnectorLocator.ReportConnector.GetReportCardData(options);
+            var res = new List<CustomReportCardsExportModel>();
+            foreach (var student in reportCardsData.Students)
+            {
+                foreach (var recipient in student.Recipients)
+                {
+                    var item = new CustomReportCardsExportModel
+                    {
+                        AcadSessionName = reportCardsData.AcadSessionName,
+                        AcadYear = reportCardsData.AcadYear,
+                    };
+                    res.Add(item);
+                }
             }
-            return exportData;
+
+            throw new NotImplementedException();
+            //var defaultJsonPath = Path.Combine(inputModel.DefaultDataPath, "Reports\\DefaultCustomReportCardsJson.txt");
+            //ReportCardsRenderer.Model<CustomReportCardsExportModel> exportData;
+            //using (var file = File.OpenRead(defaultJsonPath))
+            //{
+            //    var streamReader = new StreamReader(file);
+            //    var json = streamReader.ReadToEnd();
+            //    exportData = JsonConvert.DeserializeObject<ReportCardsRenderer.Model<CustomReportCardsExportModel>>(json);
+            //    exportData.Title = inputModel.Tile;
+            //    streamReader.Close();
+            //}
+            //return exportData;
         }
 
 

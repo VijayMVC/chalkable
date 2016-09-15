@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface ICustomReportTemplateService
     {
-        CustomReportTemplate Add(string name, string layout, string style, byte[] image);
-        CustomReportTemplate Edit(Guid templateId, string name, string layout, string style, byte[] image);
+        CustomReportTemplate Add(string name, string layout, string style, byte[] image, Guid? headerId, Guid? footerId, TemplateType type);
+        CustomReportTemplate Edit(Guid templateId, string name, string layout, string style, byte[] image, Guid? headerId, Guid? footerId, TemplateType type);
         void Delete(Guid templateId);
-        IList<CustomReportTemplate> GetList();
+        IList<CustomReportTemplate> GetList(TemplateType? type);
         CustomReportTemplate GetById(Guid templateId);
         byte[] GetIcon(Guid templateId);
     }
@@ -22,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
         private const string REPORT_TEMPLATE_ICON_CONTAINER = "report_template_icon_container"; 
-        public CustomReportTemplate Add(string name, string layout, string style, byte[] icon)
+        public CustomReportTemplate Add(string name, string layout, string style, byte[] icon, Guid? headerId, Guid? footerId, TemplateType type)
         {
             BaseSecurity.EnsureSysAdmin(Context);
             var template = new CustomReportTemplate
@@ -30,17 +31,21 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Id = Guid.NewGuid(),
                 Name = name,
                 Layout = layout,
-                Style = style
+                Style = style,
+                HeaderRef = headerId,
+                FooterRef = footerId,
+                Type = (int) type
             };
             DoUpdate(u =>
             {
                 new DataAccessBase<CustomReportTemplate, Guid>(u).Insert(template);
-                ServiceLocator.CustomReportTemplateIconService.UploadPicture(template.Id, icon);
+                if(icon != null)
+                    ServiceLocator.CustomReportTemplateIconService.UploadPicture(template.Id, icon);
             });
             return template;
         }
 
-        public CustomReportTemplate Edit(Guid templateId, string name, string layout, string style, byte[] icon)
+        public CustomReportTemplate Edit(Guid templateId, string name, string layout, string style, byte[] icon, Guid? headerId, Guid? footerId, TemplateType type)
         {
             BaseSecurity.EnsureSysAdmin(Context);
             CustomReportTemplate template = null;
@@ -51,8 +56,12 @@ namespace Chalkable.BusinessLogic.Services.Master
                 template.Layout = layout;
                 template.Style = style;
                 template.Name = name;
+                template.FooterRef = footerId;
+                template.HeaderRef = headerId;
+                template.Type = (int) type;
                 da.Update(template);
-                ServiceLocator.CustomReportTemplateIconService.UploadPicture(templateId, icon);
+                if(icon != null)
+                    ServiceLocator.CustomReportTemplateIconService.UploadPicture(templateId, icon);
             });
             return template;
         }
@@ -61,8 +70,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             return ServiceLocator.CustomReportTemplateIconService.GetPicture(templateId, null, null);
         }
-
-        
 
         public void Delete(Guid templateId)
         {
@@ -74,15 +81,26 @@ namespace Chalkable.BusinessLogic.Services.Master
             });
         }
 
-        public IList<CustomReportTemplate> GetList()
+        public IList<CustomReportTemplate> GetList(TemplateType? type)
         {
-            return DoRead(u => new DataAccessBase<CustomReportTemplate>(u).GetAll());
+            var conds = new AndQueryCondition();
+            if (type.HasValue)
+                conds.Add(nameof(CustomReportTemplate.Type), (int) type);
+            return DoRead(u => new DataAccessBase<CustomReportTemplate>(u).GetAll(conds));
         }
 
         public CustomReportTemplate GetById(Guid templateId)
         {
-            return DoRead(u => new DataAccessBase<CustomReportTemplate, Guid>(u).GetById(templateId));
+            return DoRead(u =>
+            {
+                var da = new DataAccessBase<CustomReportTemplate, Guid>(u);
+                var res = da.GetById(templateId);
+                if (res.HeaderRef.HasValue)
+                    res.Header = da.GetById(res.HeaderRef.Value);
+                if (res.FooterRef.HasValue)
+                    res.Footer = da.GetById(res.FooterRef.Value);
+                return res;
+            });         
         }
-
     }
 }
