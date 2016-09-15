@@ -126,7 +126,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public PaginatedList<Person> SearchPersons(int schoolId, string filter, bool orderByFirstName, int start, int count)
         {
-            var filters = (filter != null) ? filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries) : null;
+            var filters = filter?.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
             var ps = new Dictionary<string, object>
             {
@@ -141,7 +141,7 @@ namespace Chalkable.Data.School.DataAccess
             return ExecuteStoredProcedurePaginated<Person>("spSearchPersons", ps, start, count);
         }
 
-        public void Delete(IList<int> ids)
+        public override void Delete(IList<int> ids)
         {
             var ps = new Dictionary<string, object>
             {
