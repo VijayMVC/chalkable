@@ -7,7 +7,7 @@ using Chalkable.StiConnector.Attributes;
 
 namespace Chalkable.StiConnector.SyncModel
 {
-    [SisMinVersion("?.?.?.?.")]
+    [SisMinVersion("7.3.11.21255")]
     public class LimitedEnglish : SyncModel
     {
         public int Id { get; set; }
