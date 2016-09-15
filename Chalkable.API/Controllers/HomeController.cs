@@ -26,19 +26,26 @@ namespace Chalkable.API.Controllers
 
             var standards = StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode).ToList();
 
+            if (string.IsNullOrWhiteSpace(token))
+                return new EmptyResult();
+
             if (IsChalkableCallBack(mode))
             {
                 try
                 {
                     await AuthorizeQueryRequest(token);
-                    if(mode == Settings.CONTENT_QUERY)
-                        return ChlkJsonResult(GetApplicationContents(standards, start, count), true);
-
-                    if (mode == Settings.ANNOUNCEMENT_APPLICATION_SUBMIT
-                        || mode == Settings.ANNOUNCEMENT_APPLICATION_REMOVE)
+                    switch (mode)
                     {
-                        HandleChalkableNotification(mode, announcementApplicationId, announcementType);
-                        return ChlkJsonResult(true, true);
+                        case Settings.CONTENT_QUERY:
+                            return ChlkJsonResult(GetApplicationContents(standards, start, count), true);
+
+                        case Settings.ANNOUNCEMENT_APPLICATION_SUBMIT:
+                        case Settings.ANNOUNCEMENT_APPLICATION_REMOVE:
+                            HandleChalkableNotification(mode, announcementApplicationId, announcementType);
+                            return ChlkJsonResult(true, true);
+
+                        default:
+                            throw new Exception($"Unknown mode \"{mode}\"");
                     }
                 }
                 catch (Exception ex)
@@ -46,9 +53,6 @@ namespace Chalkable.API.Controllers
                     return ChlkExceptionJsonResult(ex);
                 }
             }
-
-            if (string.IsNullOrWhiteSpace(token))
-                return new EmptyResult();
 
             await ChalkableAuthorization.AuthorizeAsync(token);
 
@@ -178,7 +182,7 @@ namespace Chalkable.API.Controllers
 
         protected virtual void HandleChalkableNotification(string mode, int? announcementApplicationId, int? announcementType)
         {
-            throw new NotImplementedException();
+            // do nothing, silently ignore
         }
 
 

@@ -1,46 +1,51 @@
 from base_auth_test import *
+import unittest
 
-class TestFeed(BaseAuthedTestCase):
+
+class TestFeed(unittest.TestCase):
+
+    def setUp(self):
+        self.teacher = TeacherSession(self).login(user_email, user_pwd)
+
+        # reset settings
+        self.teacher.post_json('/Feed/SetSettings.json?', data={})
+
     def test_feed(self):
-        # reset all filters on the feed
-        self.dict = {}
-        self.post('/Feed/SetSettings.json?', self.dict)
-
-        self.settings_data_for_mark_undone = {'option': '3'}
 
         # making all types of items as 'undone'
-        self.post('/Announcement/UnDone.json?', self.settings_data_for_mark_undone)
+        self.teacher.post_json('/Announcement/UnDone.json?', data={'option': '3'})
 
         # filter: activities
-        self.settings_data = {'announcementType': '1', 'sortType': '0'}
-        self.post('/Feed/SetSettings.json?', self.settings_data)
+        self.teacher.post_json('/Feed/SetSettings.json?', data={'announcementType': '1', 'sortType': '0'})
 
         # get all activities
-        self.dict2 = {'classId': '', 'complete': 'False', 'count': '10', 'start': '0'}
-        feed_list1 = self.post('/Feed/List.json', self.dict2)
+        feed_list1 = self.teacher.post_json('/Feed/List.json', data={
+            'classId': '',
+            'complete': 'False',
+            'count': 10,
+            'start': 0
+        })
 
-        if len(feed_list1['data']['annoucementviewdatas'])!= 0:
-            id_of_the_first_activity = feed_list1['data']['annoucementviewdatas'][0]['id']
-
-            status_of_the_first_activity_false = feed_list1['data']['annoucementviewdatas'][0]['complete']
-
-            self.assertTrue(status_of_the_first_activity_false == False, 'Activity is marked as done')
+        if len(feed_list1['data']['annoucementviewdatas']) != 0:
+            self.assertFalse(feed_list1['data']['annoucementviewdatas'][0]['complete'],
+                             'Activity is marked as done')
 
             # posting complete
-            self.dict3 = {'announcementId': str(id_of_the_first_activity), 'announcementType': '1', 'complete': 'True'}
-            self.post('/Announcement/Complete', self.dict3)
+            self.teacher.post_json('/Announcement/Complete', data={
+                'announcementId': feed_list1['data']['annoucementviewdatas'][0]['id'],
+                'announcementType': 1,
+                'complete': 'True'
+            })
 
             # get all activities
-            self.dict4 = {'classId': '', 'count': '10', 'start': '0'}
-            feed_list2 = self.post('/Feed/List.json', self.dict4)
+            feed_list2 = self.teacher.post_json('/Feed/List.json', data={'classId': '', 'count': 10, 'start': 0})
 
-            status_of_the_first_activity_true = feed_list2['data']['annoucementviewdatas'][0]['complete']
-            self.assertTrue(status_of_the_first_activity_true == True, 'Activity was not marked as done')
+            self.assertTrue(feed_list2['data']['annoucementviewdatas'][0]['complete'],
+                            'Activity was not marked as done')
 
     def tearDown(self):
         # reset all filters on the feed
-        self.dict = {}
-        self.post('/Feed/SetSettings.json?', self.dict)
+        self.teacher.post_json('/Feed/SetSettings.json?', data={})
 
 if __name__ == '__main__':
     unittest.main()

@@ -15,7 +15,6 @@ class TestFeed(BaseAuthedTestCase):
         dict_for_clas_marking_period = self.dict_for_clas_marking_period
         dict_for_marking_period_date_startdate_endate = self.dict_for_marking_period_date_startdate_endate
 
-
         if ('Maintain Classroom Discipline (Admin)' or 'Maintain Classroom Discipline') in decoded_list:
             #general call
             self.get('/Discipline/List.json?' + 'start=' + str(0))
@@ -108,11 +107,9 @@ class TestFeed(BaseAuthedTestCase):
                         for info_about_one_student in json_data_get_class_list_second_time:
                             if info_about_one_student['studentid'] == studentid:
                                 for a in info_about_one_student['disciplinetypes']:
-                                    self.assertEquals(a['id'], one_reason,
-                                        'discipline infractions are equals' + " " + str(a['id']) + " " + str(one_reason) + " " + str(studentid))
+                                    self.assertEquals(a['id'], one_reason, 'discipline infractions are equals' + " " + str(a['id']) + " " + str(one_reason) + " " + str(studentid))
         else:
             self.assertTrue(('Maintain Classroom Discipline (Admin)' and 'Maintain Classroom Discipline') not in decoded_list, 'User does not have permissions to put discipline')
-
 
 if __name__ == '__main__':
     unittest.main()
