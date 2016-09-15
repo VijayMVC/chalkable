@@ -2,7 +2,7 @@ from base_auth_test import *
 import unittest
 
 
-class TestFeed(unittest.TestCase):
+class TestMarkActivitiesAsComplete(unittest.TestCase):
 
     def setUp(self):
         self.teacher = TeacherSession(self).login(user_email, user_pwd)
@@ -10,13 +10,16 @@ class TestFeed(unittest.TestCase):
         # reset settings
         self.teacher.post_json('/Feed/SetSettings.json?', data={})
 
-    def test_feed(self):
-
         # making all types of items as 'undone'
-        self.teacher.post_json('/Announcement/UnDone.json?', data={'option': '3'})
+        self.teacher.post_json('/Announcement/UnDone.json?', data={'option': 3})
+
+    def internal_(self, announcement_type):
 
         # filter: activities
-        self.teacher.post_json('/Feed/SetSettings.json?', data={'announcementType': '1', 'sortType': '0'})
+        self.teacher.post_json('/Feed/SetSettings.json?', data={
+            'announcementType': announcement_type,
+            'sortType': 0
+        })
 
         # get all activities
         feed_list1 = self.teacher.post_json('/Feed/List.json', data={
@@ -33,7 +36,7 @@ class TestFeed(unittest.TestCase):
             # posting complete
             self.teacher.post_json('/Announcement/Complete', data={
                 'announcementId': feed_list1['data']['annoucementviewdatas'][0]['id'],
-                'announcementType': 1,
+                'announcementType': announcement_type,
                 'complete': 'True'
             })
 
@@ -42,6 +45,15 @@ class TestFeed(unittest.TestCase):
 
             self.assertTrue(feed_list2['data']['annoucementviewdatas'][0]['complete'],
                             'Activity was not marked as done')
+
+    def test_mark_activity_as_complete(self):
+        self.internal_(1)
+
+    def test_mark_supplemental_as_complete(self):
+        self.internal_(4)
+
+    def test_mark_lesson_plan_as_complete(self):
+        self.internal_(3)
 
     def tearDown(self):
         # reset all filters on the feed

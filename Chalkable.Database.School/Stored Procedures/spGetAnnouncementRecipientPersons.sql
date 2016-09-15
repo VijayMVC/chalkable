@@ -73,7 +73,7 @@ From (
 		Union
 
 		Select 
-			null as ClassRef, 
+			null as ClassRef,  -- set ClassRef null to identify Supplemental
 			SupplementalAnnouncement.SchoolYearRef,
 			null as AdminRef
 		From SupplementalAnnouncement
@@ -109,6 +109,7 @@ Begin
 	End
 	Else
 	Begin
+		--normally Supplemental has ClassRef but in this case above I set ClassRef null, that need to identify Supplemental
 		Select * From
 			vwPerson join SupplementalAnnouncementRecipient
 				On SupplementalAnnouncementRecipient.StudentRef = vwPerson.Id 
