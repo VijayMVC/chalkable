@@ -129,6 +129,7 @@
     <Compile Include="Connectors\Model\ActivityCategoryCopyResult.cs" />
     <Compile Include="Connectors\Model\ActivityCopyOptions.cs" />
     <Compile Include="Connectors\Model\ActivityCopyResult.cs" />
+    <Compile Include="Connectors\Model\ActivityDate.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
     <Compile Include="Connectors\Model\AttendanceDailySummary.cs" />
     <Compile Include="Connectors\Model\Attendances\DailySectionAbsenceSummary.cs" />
