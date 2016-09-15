@@ -9,13 +9,16 @@ using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Common.JsonContractTools;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
+using Chalkable.Web.Common;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 using Microsoft.Reporting.WebForms;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Chalkable.Web.Controllers
 {
@@ -94,6 +97,64 @@ namespace Chalkable.Web.Controllers
         {
             return Report(lessonPlanReportInputModel, SchoolLocator.ReportService.GetLessonPlanReport, "LessonPlanReport");
         }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult ReportCards(ReportCardsInputModel inputModel)
+        {
+            var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
+            inputModel.DefaultDataPath = path;
+            IList<string> htmls = new List<string>();
+            htmls.Add(LoadDemoView(Path.Combine(path, "DemoReportView.html")));
+            var header = LoadDemoView(Path.Combine(path, "DemoReportHeader.html"));
+            var footer = LoadDemoView(Path.Combine(path, "DemoReportFooter.html"));
+
+
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    var view = BuildReportView(inputModel);
+            //    var html = RenderViewToString(view.ViewName, view.Model);
+            //    htmls.Add(html);
+            //}
+            return Report(()=> ReportCardsRenderer.RenderToPdf(path, Settings.ScriptsRoot, htmls, header, footer), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+        }
+
+        private string LoadDemoView(string path)
+        {
+            using (var file = System.IO.File.OpenRead(path))
+            {
+                var reader = new StreamReader(file);
+                var res = reader.ReadToEnd();
+                reader.Close();
+                return res;
+            }
+        }
+
+        private ViewResult BuildReportView(ReportCardsInputModel inputModel)
+        {
+            var template = MasterLocator.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            ViewBag.JadeTpl = template.Layout;
+            ViewBag.Style = template.Style;
+            var data = SchoolLocator.ReportService.BuildCustomReportCardsExportModel(inputModel);
+            ViewData[ViewConstants.REPORT_CARDS] = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ContractResolver = new LowercaseContractResolver()
+            });
+            return View("ReportCards");
+        }
+
+        private string RenderViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindView(ControllerContext, viewName, null);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult FeedReport(FeedReportSettingsInfo settings, int? classId, int? format, bool? complete, int? announcementType)
@@ -201,5 +262,37 @@ namespace Chalkable.Web.Controllers
             var feedReportSettings = SchoolLocator.ReportService.GetFeedReportSettings();
             return Json(FeedReportSettingsViewData.Create(feedReportSettings, feedSettings));
         }
+
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult ListReportCardsLogo()
+        {
+            return Json(GetListOfReportCardsLogo());
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult UpdateReportCardsLogo(int? schoolId)
+        {
+            byte[] icon;
+            string filename;
+            GetFileFromRequest(out icon, out filename);
+            SchoolLocator.ReportService.UpdateReportCardsLogo(schoolId, icon);
+            return Json(GetListOfReportCardsLogo());
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult DeleteReportCardsLogo(int id)
+        {
+            SchoolLocator.ReportService.DeleteReportCardsLogo(id);
+            return Json(GetListOfReportCardsLogo());
+        }
+
+        private IList<ReportCardsLogoViewData> GetListOfReportCardsLogo()
+        {
+            var schools = SchoolLocator.SchoolService.GetSchools();
+            return ReportCardsLogoViewData.Create(SchoolLocator.ReportService.GetReportCardsLogos(), schools);
+        }
+
+        
     }
 }

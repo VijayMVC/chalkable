@@ -10,13 +10,20 @@ namespace Chalkable.Web.Controllers
     public class SchoolController : ChalkableController
     {
         
-        [AuthorizationFilter("SysAdmin")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
         public ActionResult List(Guid districtId, int? start, int? count)
         {
             count = count ?? 10;
             start = start ?? 0;
             var schools = MasterLocator.SchoolService.GetSchools(districtId, start.Value, count.Value);
             return Json(schools.Transform(SchoolViewData.Create));
+        }
+
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
+        public ActionResult LocalSchools()
+        {
+            var schools = SchoolLocator.SchoolService.GetSchools();
+            return Json(LocalSchoolViewData.Create(schools));
         }
 
         [AuthorizationFilter("SysAdmin")]

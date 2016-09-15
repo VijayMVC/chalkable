@@ -159,6 +159,16 @@
     <Compile Include="Connectors\Model\Reports\GradeVerificationReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\LessonPlanReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\MissingAssignmentsParams.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\ReportCardAddressData.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\GradingPeriod.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\GradingScale.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\ReportCard.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\ReportCardAttendanceData.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\ReportCardOptions.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\ReportCardSectionData.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\ReportCardsSchool.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\Student.cs" />
+    <Compile Include="Connectors\Model\Reports\ReportCards\StudentGradingPeriod.cs" />
     <Compile Include="Connectors\Model\Reports\SeatingChartReportPrams.cs" />
     <Compile Include="Connectors\Model\Attendances\StudentSectionAbsenceSummary.cs" />
     <Compile Include="Connectors\Model\GradebookCommect.cs" />

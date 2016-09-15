@@ -308,6 +308,7 @@
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\ClassroomOptionController.cs" />
     <Compile Include="Controllers\AnnouncementAttributeController.cs" />
+    <Compile Include="Controllers\CustomReportTemplateController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
     <Compile Include="Controllers\DemoSchoolController.cs" />
     <Compile Include="Controllers\DeveloperController.cs" />
@@ -390,12 +391,14 @@
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassComplexViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
+    <Compile Include="Models\CustomReportTemplateViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\ClassPanoramaViewData.cs" />
     <Compile Include="Models\EthnicityViewData.cs" />
     <Compile Include="Models\HomeroomViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\StudentPanoramaViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentDetailsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentHealthFormViewData.cs" />
+    <Compile Include="Models\ReportCardsLogoViewData.cs" />
     <Compile Include="Models\Settings\AdminPanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />
     <Compile Include="Models\Settings\ClassProfilePanoramaSettingsViewData.cs" />
@@ -562,7 +565,11 @@
       <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="DemoReportFooter.html" />
+    <Content Include="DemoReportHeader.html" />
+    <Content Include="DemoReportView.html" />
     <Content Include="favicon.ico" />
+    <Content Include="Reports\DefaultCustomReportCardsJson.txt" />
     <Content Include="Scripts\api\chlk-js-api.js" />
     <Content Include="Scripts\api\chlk-js-api.min.js" />
     <Content Include="Scripts\api\chlk-post-message-api.js" />
@@ -727,6 +734,7 @@
     <None Include="Reports\FeedReport\FeedShortDataSet.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\Reporting\ReportCards.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

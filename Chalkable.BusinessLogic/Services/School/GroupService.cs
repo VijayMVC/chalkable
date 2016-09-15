@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void UnssignStudentsBySchoolYear(int groupId, int schoolYearId);
         void UnassignAll(int groupId);
         
-        IList<Group> GetGroups(int ownerId);
+        IList<Group> GetGroups(int ownerId, string filter);
         IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds);
         GroupExplorer GetGroupExplorerInfo(int groupId);
 
@@ -77,9 +77,9 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<Group> GetGroups(int ownerId)
+        public IList<Group> GetGroups(int ownerId, string filter)
         {
-            return DoRead(u => new GroupDataAccess(u).GetAll(new AndQueryCondition {{Group.OWNER_REF_FIELD, ownerId}}));
+            return DoRead(u => new GroupDataAccess(u).GetAll(new AndQueryCondition {{Group.OWNER_REF_FIELD, ownerId}}, filter));
         }
 
         private void EnsureInGroupModifyPermission(Group gGroup)
