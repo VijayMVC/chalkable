@@ -22,8 +22,9 @@ class UserSession:
         self.districtId = None
         self.schoolYearId = None
 
-    def login(self, email, passwd):
-        r = self.get_html('/User/Login.json?UserName='+email+'&Password='+passwd+'&Remember=false')
+    def login(self, email, password):
+        payload = {'UserName': email, 'Password': password, 'remember': 'false'}
+        r = self.post_html('/User/LogOn.aspx', data=payload)
         self.parse_body_(r.text)
         return self
 
@@ -38,12 +39,12 @@ class UserSession:
         var_school_year_string = ''.join(var_school_year)
         self.schoolYearId = var_school_year_string[-5:-2]
 
-    def get_(self, url, status, **kwargs):
+    def get_(self, url, status=200, **kwargs):
         r = self.session.get(chlk_server_url + url, **kwargs)
         self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
         return r
 
-    def post_(self, url, status, **kwargs):
+    def post_(self, url, status=200, **kwargs):
         r = self.session.post(chlk_server_url + url, **kwargs)
         self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
         return r
@@ -84,12 +85,23 @@ class TeacherSession(UserSession):
         self.teacher_id = None
 
     def parse_body_(self, page_as_one_string):
+        pass
         # getting id of the current teacher
         tmp = re.findall('var currentChlkPerson = .+', page_as_one_string)
         tmp = ''.join(tmp)
         tmp = tmp[31:-3]
         tmp = json.loads(tmp)
         self.teacher_id = tmp['data']['id']
+
+
+class StudentSession(UserSession):
+    def parse_body_(self, page_as_one_string):
+        pass
+
+
+class DistrictAdminSession(UserSession):
+    def parse_body_(self, page_as_one_string):
+        pass
 
 
 class BaseAuthedTestCase(unittest.TestCase):
