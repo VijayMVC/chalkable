@@ -1,0 +1,51 @@
+.districts
+    h2.page-title Districts
+
+    +ActionButton('district', 'list').refresh Refresh
+
+    +Grid('district', 'page', self).not-transparent
+        +GridHead()
+            .th Id
+            .th URL
+            .th Success
+            .th Fail
+            .th Cancel
+            .th Processing
+            .th New
+            .th FC
+            .th Sync f.
+            .th
+            .th
+        each item in self.items
+            +GridBody()
+                +GridRow()
+                    .td= item.getId().valueOf()
+                    .td= item.getSisUrl()
+                    .td
+                        if item.getCompletedCompleted()
+                            +ActionLink('backgroundtask', 'logsPage', item.getCompletedId())
+                                =item.getCompletedCompleted().toString('dd/m/yy hh:min:ss')
+
+                    .td
+                        if item.getFailedCompleted()
+                            +ActionLink('backgroundtask', 'logsPage', item.getFailedId())
+                                =item.getFailedCompleted().toString('dd/m/yy hh:min:ss')
+
+                    .td
+                        if item.getCanceledCompleted()
+                            +ActionLink('backgroundtask', 'logsPage', item.getCanceledId())
+                                =item.getCanceledCompleted().toString('dd/m/yy hh:min:ss')
+
+                    .td
+                        if item.getProcessingStarted()
+                            +ActionLink('backgroundtask', 'logsPage', item.getProcessingId())
+                                =item.getProcessingStarted().toString('dd/m/yy hh:min:ss')
+
+                    .td= item.getNewScheduled() ? item.getNewScheduled().toString('dd/m/yy hh:min:ss') : ""
+
+                    .td= item.getFailCounter()
+                    .td= item.getSyncFrequency()
+                    .td.action-links
+                        +ActionLink('schools', 'list', item.getId()) info
+                    .td
+                        +ActionLink('district', 'sync', item.getId()) sync

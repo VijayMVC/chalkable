@@ -1,0 +1,37 @@
+li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|' + self.getSearchType().valueOf(), style="background: white")
+    div.site-search
+        case self.getSearchType()
+            when chlk.models.search.SearchTypeEnum.PERSONS
+                -roleId = self.getPersonInfo() && self.getPersonInfo().getRole() ? self.getPersonInfo().getRole().getId() : 0
+                -cntrl = roleId == 2 ? "teachers" : roleId == 3 ? "students" : "admins";
+                +ActionLink(cntrl, 'details', self.getId()).image-container.white.shadow
+                    div.site-search-person.search-item
+                        .icon-item
+                            +PersonImg(self.getPersonInfo(), 47)
+                        div.title= self.getDescription()
+            when chlk.models.search.SearchTypeEnum.CLASSES
+                +ActionLink('class', 'info', self.getId()).image-container.white.shadow
+                    div.site-search-class.search-item
+                        .icon-item
+                            +ClassImg(self, 45, 80).avatar
+                        div.title= self.getDescription()
+            when chlk.models.search.SearchTypeEnum.ATTACHMENTS
+                +ActionLink('announcement', 'view', self.getAnnouncementId(), self.getAnnouncementType()).image-container.white.shadow
+                    div.site-search-attachment.search-item
+                        .icon-item
+                            .img-wrapper
+                                 img(src=self.getDocumentThumbnailUrl(), width="47", height="47").avatar
+                        div.title= self.getDescription()
+            when chlk.models.search.SearchTypeEnum.ANNOUNCEMENTS
+                +ActionLink('announcement', 'view', self.getId(), self.getAnnouncementType()).image-container.white.shadow
+                    div.site-search-announcement.search-item
+                        .icon-item
+                            .icon.blue.image
+                        div.title= self.getDescription()
+            default
+                A(href="jvascript:'").image-container.white.shadow
+                    .site-search-class.search-item
+                        .icon-item
+                            .img-wrapper
+                                img(width="45", height="80").avatar
+                        div.title= self.getDescription()
