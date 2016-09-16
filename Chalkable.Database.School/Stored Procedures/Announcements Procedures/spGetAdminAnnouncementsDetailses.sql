@@ -125,3 +125,20 @@ From AnnouncementGroup
 join [Group] on [Group].Id = AnnouncementGroup.GroupRef
 Where AnnouncementRef in(select Id from @adminAnnouncements)
 
+Select
+	AdminAnnouncementStudent.AdminAnnouncementRef as AdminAnnouncementStudent_AdminAnnouncementRef,
+	AdminAnnouncementStudent.StudentRef as AdminAnnouncementStudent_StudentRef,
+	Student.Id as Student_Id,
+	Student.FirstName as Student_FirstName,
+	Student.LastName as Student_LastName,
+	Student.BirthDate as Student_BirthDate,
+	Student.Gender as Student_Gender,
+	Student.HasMedicalAlert as Student_HasMedicalAlert,
+	Student.IsAllowedInetAccess as Student_IsAllowedInetAccess,
+	Student.SpecialInstructions as Student_SpecialInstructions,
+	Student.SpEdStatus as Student_SpEdStatus,
+	Student.UserId as Student_UserId
+From AdminAnnouncementStudent
+join Student
+	on AdminAnnouncementStudent.StudentRef = Student.Id
+Where AdminAnnouncementStudent.AdminAnnouncementRef in (select Id from @adminAnnouncements)

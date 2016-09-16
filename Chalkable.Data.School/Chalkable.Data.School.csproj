@@ -153,6 +153,7 @@
     <Compile Include="Model\AlphaGrade.cs" />
     <Compile Include="Model\AlternateScore.cs" />
     <Compile Include="Model\Announcements\AdminAnnouncement.cs" />
+    <Compile Include="Model\Announcements\AdminAnnouncementStudent.cs" />
     <Compile Include="Model\Announcements\Announcement.cs" />
     <Compile Include="Model\AnnouncementApplication.cs" />
     <Compile Include="Model\AnnouncementAttachment.cs" />

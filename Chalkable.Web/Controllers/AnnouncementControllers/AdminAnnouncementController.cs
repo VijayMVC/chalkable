@@ -47,9 +47,10 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult SubmitGroupsToAnnouncement(int adminAnnouncementId, IntList groupsIds)
+        public ActionResult SubmitGroupsToAnnouncement(int adminAnnouncementId, IntList groupsIds, IntList studentsIds)
         {
             SchoolLocator.AdminAnnouncementService.SubmitGroupsToAnnouncement(adminAnnouncementId, groupsIds);
+            SchoolLocator.AdminAnnouncementService.SubmitStudentsToAnnouncement(adminAnnouncementId, studentsIds);
             return Json(true, 5);
         }
 

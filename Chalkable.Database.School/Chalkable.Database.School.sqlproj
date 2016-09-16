@@ -374,6 +374,7 @@
     <Build Include="Tables\StudentSchoolProgram.sql" />
     <Build Include="User Defined Types\TStudentSchoolProgram.sql" />
     <Build Include="User Defined Types\TSchoolProgram.sql" />
+    <Build Include="Tables\AdminAnnouncementStudent.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />

@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementDetails Edit(int adminAnnouncementId, string title, string content, DateTime? expiresDate);
         IList<string> GetLastFieldValues(int personId);
         void SubmitGroupsToAnnouncement(int adminAnnouncementId, IList<int> groupsIds);
+        void SubmitStudentsToAnnouncement(int adminAnnouncementId, IList<int> studentIds);
         AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId);
         bool Exists(string title, int? excludedLessonPlaId);
         IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete, bool ownedOnly = true, int start = 0, int count = int.MaxValue); 
@@ -145,7 +146,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             var annRecipients = new DataAccessBase<AnnouncementGroup>(unitOfWork)
                    .GetAll(new AndQueryCondition { { AnnouncementGroup.ANNOUNCEMENT_REF_FIELD, announcement.Id } });
-            if (annRecipients.Count == 0)
+            var annStudents = new DataAccessBase<AdminAnnouncementStudent>(unitOfWork)
+                   .GetAll(new AndQueryCondition { {nameof(AdminAnnouncementStudent.AdminAnnouncementRef), announcement.Id } });
+            if (annRecipients.Count == 0 && annStudents.Count == 0)
                 throw new ChalkableException("Admin Announcement has no groups. You can't sumbit admin announcement without selected groups");
             if (string.IsNullOrEmpty(announcement.Title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Admin Announcement Title "));
@@ -200,7 +203,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var ann = GetAnnouncementById(adminAnnouncementId); //security check
             DoUpdate(u => SubmitAnnouncementGroups(ann.Id, groupsIds, u));
         }
-        
+
+        public void SubmitStudentsToAnnouncement(int adminAnnouncementId, IList<int> studentIds)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var ann = GetAnnouncementById(adminAnnouncementId); //security check
+            DoUpdate(u => SubmitAnnouncementStudents(ann.Id, studentIds, u));
+        }
+
         public AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId)
         {
             return InternalGetAnnouncementById(adminAnnouncementId);
@@ -218,6 +228,21 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 AnnouncementRef = announcementId,
                 GroupRef = gId
+            }).ToList();
+            da.Insert(annRecipients);
+        }
+
+        private void SubmitAnnouncementStudents(int announcementId, IEnumerable<int> studentIds, UnitOfWork uow)
+        {
+            var da = new DataAccessBase<AdminAnnouncementStudent, int>(uow);
+            var annStudents = da.GetAll(new AndQueryCondition { { nameof(AdminAnnouncementStudent.AdminAnnouncementRef), announcementId } });
+            da.Delete(annStudents);
+            if (studentIds == null) return;
+            studentIds = studentIds.Distinct();
+            var annRecipients = studentIds.Select(studentId => new AdminAnnouncementStudent()
+            {
+                AdminAnnouncementRef = announcementId,
+                StudentRef = studentId
             }).ToList();
             da.Insert(annRecipients);
         }

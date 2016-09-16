@@ -92,6 +92,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var groups = reader.ReadList<AnnouncementGroup>(true);
             foreach (var ann in anns)
                 ann.AnnouncementGroups = groups.Where(x => x.AnnouncementRef == ann.Id).ToList();
+            reader.NextResult();
+            var students = reader.ReadList<AdminAnnouncementStudent>(true);
+            foreach (var ann in anns)
+                ann.AdminAnnouncementStudents = students.Where(x => x.AdminAnnouncementRef == ann.Id).ToList();
             return anns;
         }
 
