@@ -46,8 +46,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
             }
 
             var studentHealths = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
-
+            
             var currentSchoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYearByStudent(schoolPersonId);
+
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(schoolPersonId, currentSchoolYear.Id);
             var studentSummaryInfoTask = SchoolLocator.StudentService.GetStudentSummaryInfo(schoolPersonId, currentSchoolYear.Id);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(schoolPersonId);
 
@@ -71,7 +73,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 if (currentClass?.RoomRef != null)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
             }
-            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, await studentHealths, BaseSecurity.IsStudent(Context));
+            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, await studentHealths, await healthFormsTask, BaseSecurity.IsStudent(Context));
             return Json(res);
         }
         
@@ -112,6 +114,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
             res.HealthConditions = StudentHealthConditionViewData.Create(await stHealsConditionsTask);
             res.HealthForms = StudentHealthFormViewData.Create(await healthFormsTask);
             res.IsAbleVerifyHealthForms = await verifyHealthFormsAccess;
+            res.HasNotVerifiedHealthForm = res.HealthForms.Count > 0 &&
+                                           res.HealthForms.Any(x => !x.VerifiedDate.HasValue);
 
             var homeroom = SchoolLocator.RoomService.GetStudentHomeroomOrNull(personId, syId);
             if(homeroom != null)
@@ -142,9 +146,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public async Task<ActionResult> Schedule(int personId)
         {
             var studentHealths = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
+            var syId = GetCurrentSchoolYearId();
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(personId, syId);
             var student = SchoolLocator.StudentService.GetById(personId, GetCurrentSchoolYearId());
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
-            var res = PrepareScheduleData(StudentProfileViewData.Create(student, customAlerts, await studentHealths));
+            var res = PrepareScheduleData(StudentProfileViewData.Create(student, customAlerts, await studentHealths, await healthFormsTask));
             return Json(res);
         }
 
@@ -185,27 +191,29 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             var syId = GetCurrentSchoolYearId();
             var studentExplorerInfo = SchoolLocator.StudentService.GetStudentExplorerInfo(personId, syId);
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(personId, syId);
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
 
             MasterLocator.UserTrackingService.UsedStandardsExplorer(Context.Login, "student explorer");
-            var res = StudentExplorerViewData.Create(await studentExplorerInfo, await stHealsConditions, customAlerts, Context.Claims);
+            var res = StudentExplorerViewData.Create(await studentExplorerInfo, await stHealsConditions, customAlerts, Context.Claims, await healthFormsTask);
             return Json(res);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public async Task<ActionResult> AttendanceSummary(int studentId, int? gradingPeriodId)
         {
-            var syid = GetCurrentSchoolYearId();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syid);
+            var syId = GetCurrentSchoolYearId();
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = gradingPeriodId.HasValue
                          ? SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value)
-                         : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syid, Context.NowSchoolYearTime.Date);
+                         : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
             var studentSummary = SchoolLocator.AttendanceService.GetStudentAttendanceSummary(studentId, gradingPeriodId);
 
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
-            var res = StudentAttendanceSummaryViewData.Create(studentSummary, gp, gradingPeriods, customAlerts, await stHealsConditions);
+            var res = StudentAttendanceSummaryViewData.Create(studentSummary, gp, gradingPeriods, customAlerts, await stHealsConditions, await healthFormsTask);
             
             return Json(res);
         }
@@ -216,6 +224,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             count = count ?? 12;
 
             var syId = GetCurrentSchoolYearId();
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
 
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
@@ -224,7 +233,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 .Select(BaseApplicationViewData.Create).ToList();
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
 
-            return Json(StudentAppsViewData.Create(student, apps, customAlerts, await stHealsConditions));
+            return Json(StudentAppsViewData.Create(student, apps, customAlerts, await stHealsConditions, await healthFormsTask));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
@@ -233,6 +242,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
 
             var syId = GetCurrentSchoolYearId();
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = gradingPeriodId.HasValue
@@ -241,7 +251,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var infractionSummaries = SchoolLocator.DisciplineService.GetStudentInfractionSummary(studentId, gradingPeriodId);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
 
-            var res = StudentDisciplineSummaryViewData.Create(student, infractionSummaries, gp, gradingPeriods, customAlerts, await stHealsConditions);
+            var res = StudentDisciplineSummaryViewData.Create(student, infractionSummaries, gp, gradingPeriods, customAlerts, await stHealsConditions, await healthFormsTask);
             return Json(res);
         }
 
@@ -251,6 +261,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
 
             var syId = GetCurrentSchoolYearId();
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
             var gradingSummary = SchoolLocator.GradingStatisticService.GetStudentGradingSummary(syId, studentId);
 
@@ -263,7 +274,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
-            var res = StudentProfileGradingSummaryViewData.Create(student, gradingSummary, gp, gradingPeriods, classes, enrolledClassIds, customAlerts, await stHealsConditions);
+            var res = StudentProfileGradingSummaryViewData.Create(student, gradingSummary, gp, gradingPeriods, classes, enrolledClassIds, customAlerts, await stHealsConditions, await healthFormsTask);
             return Json(res);
         }
 
@@ -272,6 +283,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             var syId = GetCurrentSchoolYearId();
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
+            var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
             var gradingDetails = SchoolLocator.GradingStatisticService.GetStudentGradingDetails(syId, studentId, gradingPeriodId);
 
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
@@ -286,7 +298,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
 
             var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements, classAnnouncementTypes, customAlerts, 
-                await stHealsConditions, Context.Claims);
+                await stHealsConditions, Context.Claims, await healthFormsTask);
             return Json(res);
         }
 

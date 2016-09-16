@@ -39,14 +39,6 @@ NAMESPACE('chlk.models.student', function(){
         ArrayOf(chlk.models.student.StudentHealthFormViewData), 'healthForms',
         Boolean, 'ableVerifyHealthForms',
 
-        function hasNoVerifiedForm(){
-            var notVerified = this.getHealthForms() ? this.getHealthForms().filter(function(item){
-                return !item.getVerifiedDate()
-            }) : [];
-
-            return !!notVerified.length
-        },
-
         OVERRIDE, VOID, function deserialize(raw) {
             BASE(raw);
             this.studentContacts = SJX.fromArrayOfDeserializables(raw.studentcontacts, chlk.models.student.StudentContact);

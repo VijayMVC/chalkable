@@ -1,8 +1,9 @@
 -var classesInfo = self.getStudentExplorer().getClassesGradingInfo()
 -var studentName = self.getStudentExplorer().getFirstName()
 -var canPressStandards = !self.getUserRole().isAdmin()
+-var student = self.getStudentExplorer()
 
-.profile-page
+.profile-page(class=student.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
     h2.page-title=self.getTitle() || Msg.Student_profile
     +ProfileTopBar(self, 'explorer')
     if !self.getUserRole().isStudent()

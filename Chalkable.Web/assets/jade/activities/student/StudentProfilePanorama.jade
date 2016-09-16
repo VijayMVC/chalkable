@@ -2,7 +2,7 @@
 -var panoramaInfo = user.getPanoramaInfo()
 -var statusData = self.getStatusData()
 
-.profile-page.panorama-page.student-panorama.info-view
+.profile-page.panorama-page.student-panorama.info-view(class=user.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
     h2.page-title=Msg.Student_profile
 
     +ProfileTopBar(self, 'panorama')
