@@ -1,0 +1,33 @@
+div(class=(self.getClazz() || "")).dialog.info-msg.gray
+    if(self.getHeader())
+        .x-window-header: h1=self.getHeader()
+
+    .x-window-body
+        if self.isHtmlText()
+            !=self.getText()
+        else
+            pre=self.getText()
+
+        case self.getInputType()
+            when null
+                = ''
+            when 'datepicker'
+                -var attributes = self.getInputAttrs() || {}
+                .center: +DatePickerInline("value", self.getInputValue()).inline
+            default
+                -var type = self.getInputType() || "text"
+                -var attributes = self.getInputAttrs() || {}
+                .center: input(name="value", type=type, value=self.getInputValue(), class = attributes.class)
+
+        .buttons-container.center
+            input(name="button", type="hidden")
+            -var inputType = self.getInputType()
+            each button in self.getButtons()
+                -attrs = button.getAttributes() || {};
+                -attrs.disabled = inputType == "text" && button.getValue() ? "disabled" : undefined;
+                -attrs.clazz = (attrs.clazz || '') + ' ' + [button.getColor() ? button.getColor().valueOf() : 'blue', button.getClazz()].join(' ');
+                if button.getController()
+                    +ActionLinkWithPrepend(button.getController(), button.getAction(), button.getParams() || []).button.defer
+                        +Button()(id=attrs.id, class=attrs.clazz, disabled = attrs.disabled).special-button2=button.getText()
+                else
+                    +Button()(id=attrs.id, class=attrs.clazz, data-value=button.getValue() || '', disabled = attrs.disabled).special-button2.button=button.getText()
