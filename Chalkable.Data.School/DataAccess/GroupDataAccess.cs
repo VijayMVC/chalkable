@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -99,6 +100,29 @@ namespace Chalkable.Data.School.DataAccess
                 };
            return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
         }
+
+        public IList<int> GetStudentsByGroups(IList<int> groupIds)
+        {
+            if (groupIds == null || groupIds.Count == 0) return new List<int>();
+
+            var sql = new StringBuilder();
+            sql.AppendFormat(Orm.SELECT_FORMAT, $" distinct {StudentGroup.STUDENT_REF_FIELD}", nameof(StudentGroup));
+            sql.Append($" Where {StudentGroup.GROUP_REF_FIELD} In (Select * From @groupIds)");
+
+            var param = new Dictionary<string, object>
+            {
+                ["groupIds"] = groupIds
+            };
+
+            using (var reader = ExecuteReaderParametrized(sql.ToString(), param))
+            {
+                var res = new List<int>();
+                while (reader.Read())
+                    res.Add(SqlTools.ReadInt32(reader, StudentGroup.STUDENT_REF_FIELD));
+                
+                return res;
+            }
+        } 
     }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Chalkable.StiConnector.Connectors.Model.Reports.ReportCards;
 
@@ -7,6 +8,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
 {
     public class CustomReportCardsExportModel
     {
+        public string ReportDate { get; set; }
+        public string CopyRight { get; set; }
         public string LogoHref { get; set; }
         public int AcadYear { get; set; }
         public string AcadSessionName { get; set; }
@@ -16,12 +19,14 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool IdToPrint { get; set; }
         public StudentReportCardsExportModel Student { get; set; }
 
-        public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, ReportCardAddressData recipient, string logoRef)
+        public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, ReportCardAddressData recipient, string logoRef, DateTime reportDate)
         {
             return new CustomReportCardsExportModel
             {
                 AcadYear = reportCard.AcadYear,
                 AcadSessionName = reportCard.AcadSessionName,
+                ReportDate = reportDate.ToString("m/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture),
+                CopyRight = "Copyright (c) 2016 Chalkable ST.US.000031.",
                 School = new SchoolReportCardsExportModel
                 {
                     Address1 = reportCard.School.Address1,

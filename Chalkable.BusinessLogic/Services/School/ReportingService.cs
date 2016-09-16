@@ -442,11 +442,7 @@ namespace Chalkable.BusinessLogic.Services.School
             
             foreach (var data in listOfReportCards)
             {
-                var model = new ReportCardsRenderer.Model<CustomReportCardsExportModel>
-                {
-                    Data = data,
-                };
-                listOfpdf.Add(ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, model));
+                listOfpdf.Add(ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
             }
             return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
         }
@@ -464,6 +460,12 @@ namespace Chalkable.BusinessLogic.Services.School
             BaseSecurity.EnsureDistrictAdmin(Context);
             if (inputModel == null)
                 throw new ArgumentNullException(nameof(ReportCardsInputModel));
+            var studentIds = inputModel.StudentIds ?? new List<int>();
+            if (inputModel.GroupIds != null && inputModel.GroupIds.Count > 0)
+            {
+                studentIds.AddRange(ServiceLocator.GroupService.GetStudentIdsByGroups(inputModel.GroupIds));
+                studentIds = studentIds.Distinct().ToList();
+            }
             var options = new ReportCardOptions
             {
                 AbsenceReasonIds = inputModel.AttendanceReasonIds,
@@ -475,16 +477,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 IncludeWithdrawnStudents = inputModel.IncludeWithdrawnStudents,
                 IncludePromotionStatus = inputModel.IncludePromotionStatus,
                 IncludeYearToDateInformation = inputModel.IncludeYearToDateInformation,
-                StudentIds = inputModel.StudentIds,
+                StudentIds = studentIds,
             };
 
             var reportCardsData = ConnectorLocator.ReportConnector.GetReportCardData(options);
             var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
             
             var res = new List<CustomReportCardsExportModel>();
+            var currentDate = Context.NowSchoolTime;
             foreach (var student in reportCardsData.Students)
             {
-                res.AddRange(student.Recipients.Select(recipient => CustomReportCardsExportModel.Create(reportCardsData, student, recipient, logo?.LogoAddress)));
+                res.AddRange(student.Recipients.Select(recipient => CustomReportCardsExportModel.Create(reportCardsData, student, recipient, logo?.LogoAddress, currentDate)));
             }
             return res;
         }

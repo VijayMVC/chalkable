@@ -31,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         GroupExplorer GetGroupExplorerInfo(int groupId);
 
         IList<Group> GetByIds(IList<int> ids);
+        IList<int> GetStudentIdsByGroups(IList<int> groupIds);
     }
 
     public class GroupService : SchoolServiceBase, IGroupService
@@ -103,6 +104,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<Group> GetByIds(IList<int> ids)
         {
             return DoRead(u => new GroupDataAccess(u).GetByIds(ids));
+        }
+
+        public IList<int> GetStudentIdsByGroups(IList<int> groupIds)
+        {
+            return DoRead(u => new GroupDataAccess(u).GetStudentsByGroups(groupIds));
         }
 
 

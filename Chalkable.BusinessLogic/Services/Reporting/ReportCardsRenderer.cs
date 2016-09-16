@@ -12,10 +12,10 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 {
     public static class ReportCardsRenderer
     {
-        public class Model<T>
+        public class Model
         {
             public string Title { get; set; }
-            public T Data { get; set; }
+            public Object Data { get; set; }
         }
 
         public static byte[] MargePdfDocuments(IList<byte[]> files)
@@ -34,10 +34,11 @@ namespace Chalkable.BusinessLogic.Services.Reporting
         
         public static byte[] Render(string basePath, string baseUrl, CustomReportTemplate template, object dataSource)
         {
+            var model = new Model {Data = dataSource};
             baseUrl = baseUrl.StartsWith("//") ? ("https:" + baseUrl) : baseUrl;
-            var header = template.Header != null ? BuildView(baseUrl, template.Header, dataSource) : null;
-            var footer = template.Footer != null ? BuildView(baseUrl, template.Footer, dataSource) : null;
-            var bodyHtml = BuildView(baseUrl, template, dataSource);
+            var header = template.Header != null ? BuildView(baseUrl, template.Header, model) : null;
+            var footer = template.Footer != null ? BuildView(baseUrl, template.Footer, model) : null;
+            var bodyHtml = BuildView(baseUrl, template, model);
             return RenderToPdf(basePath, baseUrl, bodyHtml, header, footer);
         }
 
