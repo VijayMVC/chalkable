@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Chalkable.Common.JsonContractTools;
+using Chalkable.Data.Master.Model;
+using Newtonsoft.Json;
 using Winnovative;
 
 namespace Chalkable.BusinessLogic.Services.Reporting
@@ -28,20 +31,108 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             }
             return res.Save();
         }
+        
+        public static byte[] Render(string basePath, string baseUrl, CustomReportTemplate template, object dataSource)
+        {
+            baseUrl = baseUrl.StartsWith("//") ? ("https:" + baseUrl) : baseUrl;
+            var header = template.Header != null ? BuildView(baseUrl, template.Header, dataSource) : null;
+            var footer = template.Footer != null ? BuildView(baseUrl, template.Footer, dataSource) : null;
+            var bodyHtml = BuildView(baseUrl, template, dataSource);
+            return RenderToPdf(basePath, baseUrl, bodyHtml, header, footer);
+        }
+
+        private static string BuildView(string baseUrl, CustomReportTemplate template, object data)
+        {
+            var model = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ContractResolver = new LowercaseContractResolver()
+            });
+            return
+                $@"
+<!DOCTYPE html>
+<html>
+    <head>
+            <title></title>
+            <link href = ""http://fonts.googleapis.com/css?family=Pacifico"" rel= ""stylesheet"" type = ""text/css"" />
+            <link href = ""http://fonts.googleapis.com/css?family=Oswald"" rel=""stylesheet"" type = ""text/css"" />
+            <link href = ""http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700"" rel = ""stylesheet"" type=""text/css"" />
+            <link href = ""{baseUrl}/app/bower/chosen/chosen.min.css"" rel = ""stylesheet"" type = ""text/css"" />
+            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap.min.css"" type = ""text/css"" rel = ""stylesheet"" />                 
+            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap-theme.min.css"" type = ""text/css"" rel = ""stylesheet"" />
+            <link href = ""{baseUrl}/app/bower/jquery-ui/themes/smoothness/jquery-ui.css"" rel = ""stylesheet"" type = ""text/css"" />                                              
+            <link href = ""{baseUrl}/app/jquery/snippet/jquery.snippet.min.css"" rel = ""stylesheet"" type = ""text/css"" />
+                                                       
+
+            <script src = ""{baseUrl}/app/bower/jquery/dist/jquery.js"" ></ script >      
+            <script src = ""{baseUrl}/app/bower/jade/jade.js"" ></ script >
+            <style type = ""text/css"" >{template.Style}</style>
+
+            <script type=""text/javascript"">{model}</script>
+            <script type=""text/jade"" id=""template"">{template.Layout}</script>
+
+    </head>
+    <body>
+        <div id=""container"" class=""fluid-container"">
+              <h1> Demo Report </h1>
+     
+             </div>
+     
+         <script type=""text/javascript"" >
+              var msg = "";
+            if (!jade)
+                msg = msg + ""jade wasn't download"";
+            else
+                msg = msg + "" jade has donwloaded"";
+
+            if (!jQuery)
+                msg = msg + "" jQuery wasn't download"";
+            else
+                msg = msg + "" jQuery wasn't download"";
+
+            document.getElementById(""container"").innerHTML = ""<h1>"" + msg + ""</h1>"";
+            try
+            {{
+                (function(jade, $, model) {{
+                    var template = $('#template').text();
+                    var html = "";
+                    try
+                    {{
+                        html = jade.render(template, {{ model: model.data }});
+                    }}
+                    catch (e)
+                    {{
+                        html = '<h1>Error rendering report</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+                    }}
+                $('#container').html(html);
+                }})(jade, jQuery, Model);
+            }}
+            catch (e)
+            {{
+                var error = '<h1>Error rendering report ....</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+                jQuery('#container').html(error);
+            }}
+        </ script >
+        </ body >
+    </ html >";
+
+        }
 
         public static byte[] RenderToPdf(string basePath, string baseUrl, IList<string> htmls, string header, string footer)
         {
             var files = htmls.Select(html => RenderToPdf(basePath, baseUrl, html, header, footer)).ToList();
             return MargePdfDocuments(files);
         }
+        
 
         public static byte[] RenderToPdf(string basePath, string baseUrl, string html, string header, string footer)
         {
             baseUrl = baseUrl.StartsWith("//") ? ("https:" + baseUrl) : baseUrl;
 
             var htmlToPdfConverter = InitializeConverter();
-            AddHeader(htmlToPdfConverter, header, baseUrl);
-            AddFooter(htmlToPdfConverter, footer, baseUrl);
+            if(!string.IsNullOrWhiteSpace(header))
+                AddHeader(htmlToPdfConverter, header, baseUrl);
+            if(!string.IsNullOrWhiteSpace(footer))
+                AddFooter(htmlToPdfConverter, footer, baseUrl);
 
             Directory.SetCurrentDirectory(basePath);
             var bytes = htmlToPdfConverter.ConvertHtml(html, baseUrl);

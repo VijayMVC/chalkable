@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
@@ -15,6 +16,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Common.Storage;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
@@ -43,8 +45,6 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
         byte[] GetReportCards(ReportCardsInputModel inputModel, string path);
-        ReportCardsRenderer.Model<CustomReportCardsExportModel> BuildCustomReportCardsExportModel(ReportCardsInputModel inputModel);
-
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
 
@@ -436,28 +436,31 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetReportCards(ReportCardsInputModel inputModel, string path)
         {
-            throw new NotImplementedException();
-            //BaseSecurity.EnsureDistrictAdmin(Context);
-            //if(inputModel == null) 
-            //    throw new ArgumentNullException(nameof(ReportCardsInputModel));
-
-            //var defaultJsonPath = Path.Combine(path, "Reports\\DefaultCustomReportCardsJson.txt");
-            //ReportCardsRenderer.Model<CustomReportCardsExportModel> exportData = null;
-            //using (var file = File.OpenRead(defaultJsonPath))
-            //{
-            //    var streamReader = new StreamReader(file);
-            //    var json = streamReader.ReadToEnd();
-            //    exportData = JsonConvert.DeserializeObject<ReportCardsRenderer.Model<CustomReportCardsExportModel>>(json);
-            //    exportData.Title = inputModel.Tile;
-            //    streamReader.Close();
-            //}
-            //var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
-            //return ReportCardsRenderer.RenderToPdf(template.Layout, template.Style, exportData, path);
+            var listOfReportCards = BuilReportCardsData(inputModel);
+            var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            var listOfpdf = new List<byte[]>();
+            
+            foreach (var data in listOfReportCards)
+            {
+                var model = new ReportCardsRenderer.Model<CustomReportCardsExportModel>
+                {
+                    Data = data,
+                };
+                listOfpdf.Add(ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, model));
+            }
+            return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
         }
 
-        public ReportCardsRenderer.Model<CustomReportCardsExportModel> BuildCustomReportCardsExportModel(ReportCardsInputModel inputModel)
+        private async Task<byte[]> GenerateReportCardPdf(CustomReportCardsExportModel data, string path,
+            CustomReportTemplate template)
+        {
+            return ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data);
+        }
+
+        public IList<CustomReportCardsExportModel> BuilReportCardsData(ReportCardsInputModel inputModel)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             BaseSecurity.EnsureDistrictAdmin(Context);
             if (inputModel == null)
                 throw new ArgumentNullException(nameof(ReportCardsInputModel));
@@ -476,32 +479,14 @@ namespace Chalkable.BusinessLogic.Services.School
             };
 
             var reportCardsData = ConnectorLocator.ReportConnector.GetReportCardData(options);
+            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
+            
             var res = new List<CustomReportCardsExportModel>();
             foreach (var student in reportCardsData.Students)
             {
-                foreach (var recipient in student.Recipients)
-                {
-                    var item = new CustomReportCardsExportModel
-                    {
-                        AcadSessionName = reportCardsData.AcadSessionName,
-                        AcadYear = reportCardsData.AcadYear,
-                    };
-                    res.Add(item);
-                }
+                res.AddRange(student.Recipients.Select(recipient => CustomReportCardsExportModel.Create(reportCardsData, student, recipient, logo?.LogoAddress)));
             }
-
-            throw new NotImplementedException();
-            //var defaultJsonPath = Path.Combine(inputModel.DefaultDataPath, "Reports\\DefaultCustomReportCardsJson.txt");
-            //ReportCardsRenderer.Model<CustomReportCardsExportModel> exportData;
-            //using (var file = File.OpenRead(defaultJsonPath))
-            //{
-            //    var streamReader = new StreamReader(file);
-            //    var json = streamReader.ReadToEnd();
-            //    exportData = JsonConvert.DeserializeObject<ReportCardsRenderer.Model<CustomReportCardsExportModel>>(json);
-            //    exportData.Title = inputModel.Tile;
-            //    streamReader.Close();
-            //}
-            //return exportData;
+            return res;
         }
 
 
@@ -536,6 +521,18 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var res = DoRead(u => new DataAccessBase<ReportCardsLogo>(u).GetAll());
             return res;
+        }
+
+        public ReportCardsLogo GetLogoBySchoolId(int schoolId)
+        {
+            var conds = new AndQueryCondition {{nameof(ReportCardsLogo.SchoolRef), schoolId}};
+            return DoRead(u => new DataAccessBase<ReportCardsLogo>(u).GetAll(conds)).FirstOrDefault();
+        }
+
+        public ReportCardsLogo GetDistrictLogo()
+        {
+            var conds = new AndQueryCondition {{nameof(ReportCardsLogo.SchoolRef), null}};
+            return DoRead(u => new DataAccessBase<ReportCardsLogo>(u).GetAll(conds)).FirstOrDefault();
         }
 
         public void UpdateReportCardsLogo(int? schoolId, byte[] logoIcon)
