@@ -447,7 +447,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 if (activity == null)
                     throw new NoAnnouncementException();
 
-                AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+                if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
+                    throw new ChalkableException("You don't have permission to drop grades");
+
                 ann.Dropped = drop;
                 da.Update(ann);
                 activity.IsDropped = drop;
