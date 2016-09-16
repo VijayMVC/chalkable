@@ -1,0 +1,6 @@
+.title-block
+    .input-container
+        INPUT(data-title=self.getTitle(), type="text", name="title", class="validate[required]", value=self.getTitle(), autocomplete="off", maxlength="30",
+            placeholder="Item Name...", readonly = self.isReadonly())#title
+    BUTTON(name="submitType", value="viewImported", type="submit")#view-imported-button.top-green-info.validate-skip.x-hidden View imported items in your feed
+    +Hidden('createdAnnouncements').created-announcements

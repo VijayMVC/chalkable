@@ -1,0 +1,39 @@
+mixin AttachDialogSidebar_(tpl, name)
+    .attach-sidebar
+        +ActionLink('attach', 'file')(class = name == 'upload' ? 'active pressed' : '').upload Upload
+
+-var singleFile = true
+
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1
+        a.close.close-btn
+    .attach-content
+        if singleFile
+            +Hidden('is-for-attribute', true)#is-for-attribute
+        +AttachDialogSidebar_(self, 'upload')
+        .attach-main
+            .upload-button.enabled
+                .announcement-item.application
+                    .wrapper
+                        .attach-file.img
+                        .title Drag here
+                        .or or
+                        .for-attribute.simple-gray-button.download-link.file Choose File
+                            +FileUpload('attach', 'uploadFile', [])(
+                                needFileIndex = true
+                                dropAreaSelector = '.upload-button.enabled',
+                                multiple = !singleFile,
+                                disabledMsgController = 'attach',
+                                disabledMsgAction = 'uploadDisabled'
+                                )#add-file-attachment.simple-gray-button
+
+            +ActionForm('attach', 'complete')
+                +Hidden('requestId', self.getRequestId())
+                .files-container
+                    .files-uploaded
+                        span.files-count 0
+                        | &#32;Files Uploaded
+
+                div(style="text-align:right")
+                    input(type="submit" disabled=true)#attach-files-btn.btn-like.blue-button Attach
