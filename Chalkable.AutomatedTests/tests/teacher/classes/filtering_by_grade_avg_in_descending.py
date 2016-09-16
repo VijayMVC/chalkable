@@ -26,8 +26,8 @@ class TestFeed(BaseAuthedTestCase):
             for key in get_list_of_classes_data:
                 for key2, value2 in key.iteritems():
                     if key2 == 'average':
-                        list_for_avg.append(average)
-            print list_for_avg
+                        list_for_avg.append(value2)
+
             self.assertTrue(list_for_avg == sorted(list_for_avg, reverse=True), 'Avg sorted in descending order')
 
         else:

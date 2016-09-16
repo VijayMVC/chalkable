@@ -88,6 +88,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IAnnouncementCommentService AnnouncementCommentService { get; }
         IAppSettingService AppSettingService { get; }
+
+        ILimitedEnglishService LimitedEnglishService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -170,6 +172,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAnnouncementCommentService announcementCommentService;
         
         private IAppSettingService appSettingService;
+        private ILimitedEnglishService limitedEnglishService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -247,6 +250,7 @@ namespace Chalkable.BusinessLogic.Services.School
             countryService = new CountryService(this);
             announcementCommentService = new AnnouncementCommentService(this);
             appSettingService = new AppSettingService(this);
+            limitedEnglishService = new LimitedEnglishService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -344,5 +348,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public ICountryService CountryService => countryService;
         public IAnnouncementCommentService AnnouncementCommentService => announcementCommentService;
         public IAppSettingService AppSettingService => appSettingService;
+        public ILimitedEnglishService LimitedEnglishService => limitedEnglishService;
     }
 }

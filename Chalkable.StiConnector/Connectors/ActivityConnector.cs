@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -18,7 +17,7 @@ namespace Chalkable.StiConnector.Connectors
         private const string START_DATE_PARAM = "startDate";
         private const string START_PARAM = "start";
         private const string END_PARAM = "end";
-        private const string COOMPLETE = "complete";
+        private const string COMPLETE = "complete";
         private const string GRADED = "graded";
         private const string SORT = "sort";
         private const string SECTION_ID = "sectionId";
@@ -34,6 +33,11 @@ namespace Chalkable.StiConnector.Connectors
             return Call<Activity>(url);
         }
 
+        public void AdjustDates(IList<ActivityDate> newDates)
+        {
+            EnsureApiVersion("7.3.11.21255");
+            Put(BaseUrl + "chalkable/activities/dates", newDates);
+        }
         
         public IList<Activity> GetActivities(int sectionId, int? start, int? end, int? sort, DateTime? endDate = null, DateTime? startDate = null, bool? complete = false)
         {
@@ -48,7 +52,7 @@ namespace Chalkable.StiConnector.Connectors
             if(startDate.HasValue)
                 optionalParams.Add(START_DATE_PARAM, startDate.Value.ToString(Constants.DATE_FORMAT));
             if(complete.HasValue)
-                optionalParams.Add(COOMPLETE, complete.Value.ToString());
+                optionalParams.Add(COMPLETE, complete.Value.ToString());
             if (sort.HasValue)
                 optionalParams.Add(SORT, sort.Value.ToString());
             return  Call<IList<Activity>>(url, optionalParams);
@@ -68,7 +72,7 @@ namespace Chalkable.StiConnector.Connectors
             if(endDate.HasValue)
                 optionalParams.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
             if(complete.HasValue)
-                optionalParams.Add(COOMPLETE, complete.Value.ToString());
+                optionalParams.Add(COMPLETE, complete.Value.ToString());
             if (sort.HasValue)
                 optionalParams.Add(SORT, sort.Value.ToString());
             return Call<IList<Activity>>(url, optionalParams);
@@ -88,7 +92,7 @@ namespace Chalkable.StiConnector.Connectors
             if (endDate.HasValue)
                 optionalParams.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
             if(complete.HasValue)
-                optionalParams.Add(COOMPLETE, complete.Value.ToString());
+                optionalParams.Add(COMPLETE, complete.Value.ToString());
             if(graded.HasValue)
                 optionalParams.Add(GRADED, graded.Value.ToString());
             if(classId.HasValue)

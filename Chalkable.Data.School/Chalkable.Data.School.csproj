@@ -186,6 +186,7 @@
     <Compile Include="Model\Ethnicity.cs" />
     <Compile Include="Model\Homeroom.cs" />
     <Compile Include="Model\Language.cs" />
+    <Compile Include="Model\LimitedEnglish.cs" />
     <Compile Include="Model\LPGalleryCategory.cs" />
     <Compile Include="Model\PersonEthnicity.cs" />
     <Compile Include="Model\PersonLanguage.cs" />

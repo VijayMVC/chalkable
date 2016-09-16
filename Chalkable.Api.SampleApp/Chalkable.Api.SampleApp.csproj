@@ -159,6 +159,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Logic\ContentStorage.cs" />
+    <Compile Include="Logic\AnnAppHistoryStorage.cs" />
     <Compile Include="Models\DefaultJsonViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

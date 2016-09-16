@@ -300,8 +300,33 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     .ToDictionary(x => x.FromAnnouncementId, y => y.ToAnnouncementId);
             }
         }
-    }
 
+
+
+        public IList<Pair<int, DateTime>> AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        {
+            var @params = new Dictionary<string, object>
+            {
+                ["ids"] = ids,
+                ["startDate"] = startDate,
+                ["classId"] = classId
+            };
+
+            var res = new List<Pair<int, DateTime>>();
+
+            using (var reader = ExecuteStoredProcedureReader("spAdjustClassAnnouncementDates", @params))
+            {
+                while (reader.Read())
+                {
+                    var model = new Pair<int, DateTime>
+                    (SqlTools.ReadInt32(reader, "SisActivityId"),
+                     SqlTools.ReadDateTime(reader, "ExpiresDate"));
+                    res.Add(model);
+                }
+            }
+            return res;
+        }
+    }
 
     public class ClassAnnouncementsQuery : AnnouncementsQuery
     {

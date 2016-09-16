@@ -1842,5 +1842,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ICountryService CountryService { get { throw new NotImplementedException(); } }
         public IAnnouncementCommentService AnnouncementCommentService { get { throw new NotImplementedException(); } }
         public IAppSettingService AppSettingService { get { throw new NotImplementedException(); } }
+        public ILimitedEnglishService LimitedEnglishService { get; }
     }
 }

@@ -15,7 +15,7 @@ namespace Chalkable.StiConnector.Connectors
         }
 
         
-        public async Task<Gradebook> Calculate(int sectionId, int? gradingPeriodId = null)
+        public async Task<Gradebook> Calculate(int sectionId, int? gradingPeriodId)
         {
             var nvc = new NameValueCollection();
             if(gradingPeriodId.HasValue)

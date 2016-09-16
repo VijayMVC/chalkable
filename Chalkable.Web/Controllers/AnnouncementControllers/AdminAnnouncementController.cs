@@ -8,6 +8,8 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Authentication;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
@@ -39,10 +41,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Announcement Title "));
             
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Admin, adminAnnouncementId, attributes);
-            var res = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
+            var ann = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
             SchoolLocator.AdminAnnouncementService.Submit(adminAnnouncementId);
             SchoolLocator.AdminAnnouncementService.DeleteDrafts(Context.PersonId.Value);
-            TrackNewItemCreate(res, (s, appsCount, doscCount) => s.CreateNewAdminItem(Context.Login, res.AdminAnnouncementData.AdminName, appsCount, doscCount));
+            ApplicationLogic.NotifyApplications(MasterLocator, ann.AnnouncementApplications, (int)AnnouncementTypeEnum.Admin, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Attach);
+            TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewAdminItem(Context.Login, ann.AdminAnnouncementData.AdminName, appsCount, doscCount));
             return Json(true, 5);
         }
 

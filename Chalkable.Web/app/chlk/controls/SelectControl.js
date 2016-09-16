@@ -52,7 +52,7 @@ NAMESPACE('chlk.controls', function () {
 
                         this.updateSelect(select, attributes);
 
-                        if(attributes.multiple && attributes["data-placeholder"]){
+                        if(attributes.multiple && !attributes['placeholder-on-start-only'] && attributes["data-placeholder"]){
                             setTimeout(function(){
                                 select.find('+DIV').find('input').attr('placeholder', attributes["data-placeholder"]);
                             }, 100);

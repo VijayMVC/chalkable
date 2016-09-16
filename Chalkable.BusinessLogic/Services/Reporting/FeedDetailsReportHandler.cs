@@ -32,6 +32,8 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 anns = anns.Select(x =>
                 {
                     x.AnnouncementAttachments = new List<AnnouncementAttachment>();
+                    x.AttachmentNames = new List<string>();
+                    x.ApplicationCount = 0;
                     x.AnnouncementApplications = new List<AnnouncementApplication>();
                     return x;
                 }).ToList();

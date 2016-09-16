@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.StiConnector;
 using NUnit.Framework;
 
 namespace Chalkable.Tests.AB_Api

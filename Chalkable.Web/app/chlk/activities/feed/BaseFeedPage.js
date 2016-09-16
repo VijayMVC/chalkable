@@ -261,7 +261,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('select.prepared').removeClass('prepared');
 
                 if(model instanceof chlk.models.feed.Feed){
-                    var scheduledDays = model.getClassScheduledDays && model.getClassScheduledDays() || [];
+                    scheduledDays = model.getClassScheduledDays && model.getClassScheduledDays() || [];
                     minActivityDate = null;
                     formatedScheduledDays = scheduledDays && scheduledDays.map(function(item){return item.format('mm-dd-yy')});
                     scheduledDays = scheduledDays && scheduledDays.map(function(item){return item.getDate()});
@@ -274,10 +274,14 @@ NAMESPACE('chlk.activities.feed', function () {
                 }
             },
 
+            function getClassScheduledDays_(model){
+                return model.getClassScheduledDays && model.getClassScheduledDays() || [];
+            },
+
             OVERRIDE, VOID, function onRefresh_(model) {
                 BASE(model);
                 minActivityDate = null;
-                var classScheduledDays = model.getClassScheduledDays && model.getClassScheduledDays() || [];
+                var classScheduledDays = this.getClassScheduledDays_(model);
                 formatedScheduledDays = classScheduledDays && classScheduledDays.map(function(item){return item.format('mm-dd-yy')});
                 scheduledDays = classScheduledDays && classScheduledDays.map(function(item){return item.getDate()});
                 this.dom.find('select.prepared').removeClass('prepared');
