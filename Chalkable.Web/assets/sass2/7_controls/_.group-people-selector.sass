@@ -1,0 +1,47 @@
+.group-people-selector
+  .items-4
+    .recipient-item
+      padding: 6px 10px
+      width: 200px
+      height: 48px
+      margin-right: 24px
+
+  .items-3
+    .recipient-item
+      padding: 10px
+      width: 270px
+      height: 70px
+
+  .body-content:not(.active)
+    display: none
+
+  .recipient-item
+    display: inline-block
+    border: 1px solid #c8c7c3
+    position: relative
+    margin-top: 17px
+
+    >*
+      display: inline-block
+      vertical-align: middle
+
+    INPUT[type="checkbox"]
+      margin-right: 6px
+
+    .recipient-icon
+      margin-right: 13px
+      margin-left: 4px
+
+    .recipient-remove
+      position: absolute
+      top: -3px
+      right: -2px
+      +icons-24-sprite(small-remove)
+      width: 24px
+      height: 24px
+
+    .recipient-name
+      .main
+        font-weight: bold
+        font-size: 14px
+        color: #2f7790

@@ -253,7 +253,6 @@ NAMESPACE('chlk.services', function () {
                             info && item.setGradingByAnnouncementTypes(info);
                         }
                     });
-                    console.info(model);
                     return model;
                 }, this);
             },

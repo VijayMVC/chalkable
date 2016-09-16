@@ -1,0 +1,32 @@
+.action-bar
+   .items
+      if self.isHasOwnStudents()
+         A(data-index=1).action-link.top-link.pressed My Students
+      if self.isHasAccessToAllStudents()
+         A(data-index=2, class = self.isHasOwnStudents() ? '' : 'pressed').action-link.top-link All Students
+      if self.hasGroups()
+         A(data-index=3).action-link.top-link Groups
+      if self.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
+         A(data-index=4).action-link.top-link Selected
+
+if self.isHasOwnStudents()
+   DIV(data-index=1).x-window-body.body-content.selected
+      +RenderWith(self.getMyStudentsPart(), chlk.templates.recipients.UsersListTpl)
+if self.isHasAccessToAllStudents()
+   DIV(data-index=2, class = self.isHasOwnStudents() ? '' : 'selected').x-window-body.body-content
+      +RenderWith(self.getAllStudentsPart(), chlk.templates.recipients.UsersListTpl)
+if self.hasGroups()
+   DIV(data-index=3).x-window-body.body-content
+      +RenderWith(self.getGroupsPart(), chlk.templates.recipients.GroupsListTpl)
+if self.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
+   DIV(data-index=4).x-window-body.body-content
+      each group in self.getSelectedGroups()
+         .recipient-item.selected
+            .recipient-icon.group-icon
+            .recipient-name=group.getName()
+            .recipient-remove(data-type=chlk.models.recipients.RecipientTypeEnum.GROUP.valueOf(), data-id=group.getId().valueOf())
+      each student in self.getSelectedStudents()
+         .recipient-item.selected
+            .recipient-icon.student-icon
+            .recipient-name=student.getName()
+            .recipient-remove(data-type=chlk.models.recipients.RecipientTypeEnum.STUDENT.valueOf(), data-id=group.getId().valueOf())

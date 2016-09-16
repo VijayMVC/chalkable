@@ -21,6 +21,13 @@ NAMESPACE('chlk.models.group', function(){
             this.listRequestId = SJX.fromValue(raw.listRequestId, String);
             this.name = SJX.fromValue(raw.name, String);
             this.withStudents = SJX.fromValue(raw.hasstudents, Boolean);
+        },
+
+        [[String, chlk.models.id.GroupId]],
+        function $(name_, id_){
+            BASE();
+            name_ && this.setName(name_);
+            id_ && this.setId(id_);
         }
     ]);
 });
