@@ -15,7 +15,8 @@ namespace Chalkable.Web.Models.GradingViewData
         
         public static StudentProfileGradingSummaryViewData Create(Student student, StudentGrading gradingSummary, GradingPeriod currentGradingPeriod
             , IList<GradingPeriod> gradingPeriods, IList<Class> classes, IEnumerable<int> enrolledClassIds
-            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions
+            , IList<StudentHealthFormInfo> healthForms)
         {
 
             var avgs = gradingSummary.StudentAverages.Where(x => enrolledClassIds.Contains(x.ClassId)).ToList();
@@ -41,7 +42,7 @@ namespace Chalkable.Web.Models.GradingViewData
             }
             return new StudentProfileGradingSummaryViewData
             {
-                Student = StudentProfileViewData.Create(student, customAlerts, healthConditions),
+                Student = StudentProfileViewData.Create(student, customAlerts, healthConditions, healthForms),
                 CurrentGradingPeriod = GradingPeriodViewData.Create(currentGradingPeriod),
                 GradesByGradingPeriod = gradings
             };;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.GradingViewData;
@@ -17,16 +18,17 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> Presents { get; set; }
 
         protected StudentAttendanceSummaryViewData(Student student, IList<StudentCustomAlertDetail> customAlerts,
-            IList<StudentHealthCondition> healthConditions) : base(student, customAlerts, healthConditions)
+            IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> healthForms) 
+            : base(student, customAlerts, healthConditions, healthForms)
         {
         }
 
 
 
         public static StudentAttendanceSummaryViewData Create(StudentAttendanceSummary attendanceSummary, GradingPeriod currentGradingPeriod, IList<GradingPeriod> gradingPeriods
-            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> healthForms)
         {
-            var res = new StudentAttendanceSummaryViewData(attendanceSummary.Student, customAlerts, healthConditions)
+            var res = new StudentAttendanceSummaryViewData(attendanceSummary.Student, customAlerts, healthConditions, healthForms)
                 {
                     GradingPeriods = GradingPeriodViewData.Create(gradingPeriods)
                 };

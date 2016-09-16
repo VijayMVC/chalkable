@@ -22,7 +22,7 @@ NAMESPACE('chlk.activities.profile', function () {
                 BASE(model, msg_);
                 if(model instanceof chlk.models.student.StudentInfo){
                     var node = this.dom.find('.profile-page');
-                    if(model.hasNoVerifiedForm())
+                    if(model.isAvailableNotVerifiedHealthForm())
                         node.addClass('not-verified-health-form');
                     else
                         node.removeClass('not-verified-health-form');

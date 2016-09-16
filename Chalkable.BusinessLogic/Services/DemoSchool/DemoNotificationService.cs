@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -145,7 +146,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void AddAnnouncementNewAttachmentNotification(int announcementId, AnnouncementTypeEnum announcementType)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
-            var persons = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementRecipientPersons(announcementId);
+            var persons = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementRecipientPersons(announcementId, StudentFilterEnum.All);
             var notifications = new List<Notification>();
             foreach (var person in persons)
             {

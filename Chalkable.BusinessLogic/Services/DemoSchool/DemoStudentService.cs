@@ -194,7 +194,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public Task VerifyStudentHealthForm(int studentId, int schoolYearId, int healthFormId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CanVerifyHealthForm(int studentId, int schoolYearId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task VerifyStudentHealthForm(int studentId, int healthFormId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> HasHealthFormAccess(int studentId, int schoolYearId)
         {
             throw new NotImplementedException();
         }

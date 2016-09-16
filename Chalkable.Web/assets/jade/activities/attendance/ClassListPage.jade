@@ -5,6 +5,10 @@ mixin SummaryInfo(presentCount, allStudentsCount)
         .slide-bar
             div(style="width: " + presentPersent + "%").inner-bar
 
+if !self.isInProfile()
+    -var topData = self.getTopData()
+    +ClassesToolBarWithAll(topData, 'attendance', 'classList', [self.getDate().format('mm-dd-yy')], false, true).attendance
+
 .student-attendances-list
     h2.page-title Attendance
 
@@ -17,9 +21,6 @@ mixin SummaryInfo(presentCount, allStudentsCount)
             +ActionLink(self.isInProfile() ? 'class' : 'attendance', self.isInProfile() ? 'attendanceSeatingChart' : 'seatingChart', selectedId, self.getDate().toStandardFormat())=Msg.Seating_Chart
     .loader
     .students-list.loader-container
-        if !self.isInProfile()
-            -var topData = self.getTopData()
-            +ClassesToolBarWithAll(topData, 'attendance', 'classList', [self.getDate().format('mm-dd-yy')], false, true).attendance
         if self.getItems().length == 0
             .people-list-container
                 .header

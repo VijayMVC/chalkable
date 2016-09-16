@@ -37,14 +37,7 @@ NAMESPACE('chlk.models.student', function(){
         chlk.models.people.ShortUserInfo, 'counselor',
         chlk.models.people.EthnicityViewData, 'ethnicity',
         ArrayOf(chlk.models.student.StudentHealthFormViewData), 'healthForms',
-
-        function hasNoVerifiedForm(){
-            var notVerified = this.getHealthForms() ? this.getHealthForms().filter(function(item){
-                return !item.getVerifiedDate()
-            }) : [];
-
-            return !!notVerified.length
-        },
+        Boolean, 'ableVerifyHealthForms',
 
         OVERRIDE, VOID, function deserialize(raw) {
             BASE(raw);
@@ -70,6 +63,8 @@ NAMESPACE('chlk.models.student', function(){
             this.originalEnrollmentDate = SJX.fromDeserializable(raw.originalenrollmentdate, chlk.models.common.ChlkDate);
             this.counselor = SJX.fromDeserializable(raw.counselor, chlk.models.people.ShortUserInfo);
             this.ethnicity = SJX.fromDeserializable(raw.ethnicity, chlk.models.people.EthnicityViewData);
+
+            this.ableVerifyHealthForms = SJX.fromValue(raw.isableverifyhealthforms, Boolean);;
         }
     ]);
 });

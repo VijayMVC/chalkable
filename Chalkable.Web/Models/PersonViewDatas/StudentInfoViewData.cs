@@ -13,6 +13,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IdNameViewData<int> GradeLevel { get; set; }
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
         public IList<StudentHealthFormViewData> HealthForms { get; set; } 
+        public bool IsAbleVerifyHealthForms { get; set; }
+        public bool HasNotVerifiedHealthForm { get; set; }
         public bool HasMedicalAlert { get; set; }
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }

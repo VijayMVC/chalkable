@@ -13,11 +13,101 @@ import string
 from time import sleep
 
 
+class UserSession:
+    def __init__(self, instance):
+        pass
+        self.unittest = instance
 
+        self.session = requests.Session()
+        self.districtId = None
+        self.schoolYearId = None
+
+    def login(self, email, password):
+        payload = {'UserName': email, 'Password': password, 'remember': 'false'}
+        r = self.post_html('/User/LogOn.aspx', data=payload)
+        self.parse_body_(r)
+        return self
+
+    def parse_body_(self, page_as_one_string):
+        # getting DistrictId
+        found_sting = re.findall('var districtId = .+', page_as_one_string)
+        concatenated_str = ''.join(found_sting)
+        self.districtId = concatenated_str[18:54]
+
+        # getting SchoolYearId
+        var_school_year = re.findall('var currentSchoolYearId = .+', page_as_one_string)
+        var_school_year_string = ''.join(var_school_year)
+        self.schoolYearId = var_school_year_string[-5:-2]
+
+    def get_(self, url, status=200, **kwargs):
+        r = self.session.get(chlk_server_url + url, **kwargs)
+        self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
+        return r
+
+    def post_(self, url, status=200, **kwargs):
+        r = self.session.post(chlk_server_url + url, **kwargs)
+        self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
+        return r
+
+    def validate_json_(self, r, success_property, success):
+        try:
+            data = r.json()
+        except ValueError:
+            self.unittest.assertTrue(False, 'Parse JSON failed, ' + r.url + r.text)
+            return None
+
+        msg = 'API success ' + str(data[success_property]) + '=' + str(success)
+        self.unittest.assertEquals(data[success_property], success, msg)
+
+        return data
+
+    def get_html(self, url, **kwargs):
+        return self.get_(url, **kwargs).text
+
+    def get_json(self, url, success_property='success', success=True, **kwargs):
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
+        r = self.get_(url, headers=headers, **kwargs)
+        return self.validate_json_(r, success_property, success)
+
+    def post_html(self, url, **kwargs):
+        return self.post_(url, **kwargs).text
+
+    def post_json(self, url, success_property='success', success=True, **kwargs):
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
+        r = self.post_(url, headers=headers, **kwargs)
+        return self.validate_json_(r, success_property, success)
+
+
+class TeacherSession(UserSession):
+    def __init__(self, instance):
+        UserSession.__init__(self, instance)
+
+        self.teacher_id = None
+
+    def parse_body_(self, page_as_one_string):
+        pass
+        # getting id of the current teacher
+        tmp = re.findall('var currentChlkPerson = .+', page_as_one_string)
+        tmp = ''.join(tmp)
+        tmp = tmp[31:-3]
+        tmp = json.loads(tmp)
+        self.teacher_id = tmp['data']['id']
+
+
+class StudentSession(UserSession):
+    def parse_body_(self, page_as_one_string):
+        pass
+
+
+class DistrictAdminSession(UserSession):
+    def parse_body_(self, page_as_one_string):
+        pass
 
 
 class BaseAuthedTestCase(unittest.TestCase):
     def setUp(self):
+
+        self.teacher = TeacherSession(self).login(user_email, user_pwd)
 
         # info for the teacher
         s = requests.Session()
@@ -147,8 +237,12 @@ class BaseAuthedTestCase(unittest.TestCase):
         dictionary_var_grading_comments_cut_off_string = json.loads(var_grading_comments_cut_off_string)
         dictionary_var_grading_comments_cut_off_string_data = dictionary_var_grading_comments_cut_off_string['data']
 
-
+        self.dict_for_codes = {}
         self.one_grading_comment = random.choice(dictionary_var_grading_comments_cut_off_string_data)
+        #print self.one_grading_comment, 'self.one_grading_comment'
+        self.dict_for_codes['comment'] = self.one_grading_comment['comment']
+        self.dict_for_codes['code'] = self.one_grading_comment['code']
+        self.dict_for_codes['id'] = self.one_grading_comment['id']
 
         # alphaGrades
         var_alpha_grades_list = re.findall('var alphaGrades = .+', page_as_one_string)
@@ -197,12 +291,28 @@ class BaseAuthedTestCase(unittest.TestCase):
 
         for marking_period in dictionary_var_markingPeriods_cut_off_string_data:
             self.dict_for_marking_period_date_startdate_endate[marking_period['id']] = marking_period['startdate'], marking_period['enddate']
-           # print 'marking_period', marking_period
+            #print 'marking_period', marking_period
+
 
         # getting list of marking periods
         self.list_for_marking_periods = []
-        for key,value in self.dict_for_marking_period_date_startdate_endate.iteritems():
+        self.list_for_marking_periods_dates = []
+        for key, value in self.dict_for_marking_period_date_startdate_endate.iteritems():
             self.list_for_marking_periods.append(key)
+            self.list_for_marking_periods_dates.append(value)
+
+
+        self.list_for_marking_periods_dates2 = []
+        #print self.list_for_marking_periods_dates[0][0], type(self.list_for_marking_periods_dates[0][0])
+        for k in self.list_for_marking_periods_dates:
+            for i in k:
+                self.list_for_marking_periods_dates2.append(str(i))
+
+        self.start_date_school_year = min(self.list_for_marking_periods_dates2)
+        self.end_date_school_year = max(self.list_for_marking_periods_dates2)
+
+
+
 
         # getting pairs 'class/marking period'
         var_classesToFilter_list = re.findall('var classesToFilter = .+', page_as_one_string)
@@ -278,6 +388,13 @@ class BaseAuthedTestCase(unittest.TestCase):
         r = s.get(chlk_server_url + url, headers=headers)
         return self.verify_response(r, status, success)
 
+    def get_file(self, url, status=200, success=True):
+        s = self.session
+        r = s.get(chlk_server_url + url)
+        self.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
+        return r.text
+
+
     def postJSON(self, url, obj, status=200, success=True, files=None):
         s = self.session
         headers = {'X-Requested-With': 'XMLHttpRequest'}
@@ -339,7 +456,6 @@ class BaseAuthedTestCase(unittest.TestCase):
             return None
 
         return self.verify_response(r_student, status, success)
-
     # the end of methods for the student
 
     # these methods for the foreign student
@@ -366,7 +482,6 @@ class BaseAuthedTestCase(unittest.TestCase):
             return None
 
         return self.verify_response(r_foreign_student, status, success)
-
     # the end of methods for the foreign student
 
 
@@ -394,7 +509,6 @@ class BaseAuthedTestCase(unittest.TestCase):
             return None
 
         return self.verify_response(r_classmate, status, success)
-
     # the end of methods for classmates
 
 
@@ -405,6 +519,21 @@ class BaseAuthedTestCase(unittest.TestCase):
         r_admin = s_admin.get(chlk_server_url + url_admin)
         return self.verify_response(r_admin, status, success)
 
+    def get_file_admin(self, url_admin, status=200, success=True):
+        s_admin = self.session_admin
+        r_admin = s_admin.get(chlk_server_url + url_admin)
+        self.assertEquals(r_admin.status_code, status, 'Response status code: ' + str(r_admin.status_code) + ', body:' + r_admin.text)
+        return r_admin.text
+
+    def post_admin(self, url_admin, params, status=200, success=True):
+        s_admin = self.session_admin
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
+        try:
+            r_admin = s_admin.post(chlk_server_url + url_admin, data=params, headers=headers)
+        except ValueError:
+            self.assertTrue(False, 'Request failed, ' + url_admin)
+            return None
+        return self.verify_response(r_admin, status, success)
     # the end of methods for the admin
 
     # noinspection PyMethodMayBeStatic
@@ -417,7 +546,6 @@ class BaseAuthedTestCase(unittest.TestCase):
         random_date_for_attendance = start_date1 + timedelta(random.randint(0, delta))
 
         return datetime.strptime(str(random_date_for_attendance), '%Y-%m-%d').strftime('%m-%d-%Y')
-
 
 
 if __name__ == '__main__':

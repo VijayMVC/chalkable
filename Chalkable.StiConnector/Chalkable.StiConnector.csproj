@@ -129,6 +129,7 @@
     <Compile Include="Connectors\Model\ActivityCategoryCopyResult.cs" />
     <Compile Include="Connectors\Model\ActivityCopyOptions.cs" />
     <Compile Include="Connectors\Model\ActivityCopyResult.cs" />
+    <Compile Include="Connectors\Model\ActivityDate.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
     <Compile Include="Connectors\Model\AttendanceDailySummary.cs" />
     <Compile Include="Connectors\Model\Attendances\DailySectionAbsenceSummary.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="SyncModel\AttendanceCalendarDay.cs" />
     <Compile Include="SyncModel\AttendanceMonth.cs" />
     <Compile Include="SyncModel\AttendanceSetting.cs" />
+    <Compile Include="Attributes\SisMinVersionAttribute.cs" />
     <Compile Include="SyncModel\BellSchedule.cs" />
     <Compile Include="SyncModel\CalendarDay.cs" />
     <Compile Include="SyncModel\ClassroomOption.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="SyncModel\Homeroom.cs" />
     <Compile Include="SyncModel\Infraction.cs" />
     <Compile Include="SyncModel\Language.cs" />
+    <Compile Include="SyncModel\LimitedEnglish.cs" />
     <Compile Include="SyncModel\NullableForeignKey.cs" />
     <Compile Include="SyncModel\OrganizationAddress.cs" />
     <Compile Include="SyncModel\Person.cs" />

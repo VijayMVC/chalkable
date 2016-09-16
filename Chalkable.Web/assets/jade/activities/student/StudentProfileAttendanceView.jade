@@ -1,7 +1,7 @@
 -var user = self.getUser()
 -var currentGp = user.getCurrentGradingPeriod()
 
-.profile-page
+.profile-page(class=user.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
     h2.page-title=Msg.Student_profile
 
     +ProfileTopBar(self, 'attendance')

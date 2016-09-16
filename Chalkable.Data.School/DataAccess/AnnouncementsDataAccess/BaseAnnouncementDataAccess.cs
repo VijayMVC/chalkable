@@ -19,8 +19,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         
         private const string GET_ANNOUNCEMENT_RECIPIENT_PERSON = "spGetAnnouncementRecipientPersons";
         private const string CALLER_ID_PARAM = "callerId";
-   
-
+        
         //public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
         public abstract IList<TAnnouncement> GetAnnouncements(QueryCondition conds, int callerId); 
         public abstract TAnnouncement GetAnnouncement(int id, int callerId);
@@ -49,7 +48,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             Delete(new List<int> {announcementId});
         }
         
-        public void Delete(IList<int> announcementIds)
+        public override void Delete(IList<int> announcementIds)
         {
             var paraments = new Dictionary<string, object>()
             {
@@ -58,21 +57,23 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             ExecuteStoredProcedure("spDeleteAnnouncements", paraments);
         }
 
-        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int start, int count)
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int teacherId, int filterStudentType, int schoolYearId, int start, int count)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {"announcementId", announcementId},
-                    {"@start", start},
-                    {"@count", count}
-                };
+                    ["announcementId"] = announcementId,
+                    ["start"] = start,
+                    ["count"] = count,
+                    ["teacherId"] = teacherId,
+                    ["filterStudentType"] = filterStudentType,
+                    ["currentSchoolYearId"] = schoolYearId
+            };
             using (var reader = ExecuteStoredProcedureReader(GET_ANNOUNCEMENT_RECIPIENT_PERSON, parameters))
             {
                 var res = new List<Person>();
-                while (reader.Read())
-                {
+                while (reader.Read())                
                     res.Add(PersonDataAccess.ReadPersonData(reader));
-                }
+                
                 return res;
             }
         }

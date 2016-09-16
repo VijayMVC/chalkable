@@ -27,5 +27,11 @@ namespace Chalkable.StiConnector
             var version2 = new Version(strVersion2);
             return version1.CompareTo(version2);
         }
+
+        public static bool IsSupportedApiVersion(string requiredApiVersion, string currentApiVersion)
+        {
+            ValidateVersionFormat(requiredApiVersion);
+            return CompareVersionTo(requiredApiVersion, currentApiVersion) != 1;
+        }
     }
 }

@@ -378,6 +378,7 @@
     <Compile Include="Services\School\GradingStatisticService.cs" />
     <Compile Include="Services\School\LanguageService.cs" />
     <Compile Include="Services\School\LEService.cs" />
+    <Compile Include="Services\School\LimitedEnglishService.cs" />
     <Compile Include="Services\School\LPGalleryCategoryService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
