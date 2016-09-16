@@ -373,6 +373,7 @@
     <Build Include="Stored Procedures\spDeleteStudents.sql" />
     <Build Include="Tables\LimitedEnglish.sql" />
     <Build Include="Stored Procedures\spGetStudentAnnouncementApplicationIds.sql" />
+    <Build Include="Stored Procedures\spAdjustClassAnnouncementDates.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />
