@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Policy;
 using Chalkable.Common;
 
 namespace Chalkable.BusinessLogic.Model.Reports
@@ -9,7 +10,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public IntList GroupIds { get; set; }
         public IntList StudentIds { get; set; }
         public string Tile { get; set; }
-        public IntList GradingPeriodIds { get; set; }
+        public int GradingPeriodId { get; set; }
         public IntList AttendanceReasonIds { get; set; }
         public bool IncludeGradedStandardsOnly { get; set; }
         public int Logo { get; set; }
@@ -24,6 +25,19 @@ namespace Chalkable.BusinessLogic.Model.Reports
         {
             get { return (ReportCardsRecipientType)Recipient; }
             set { Recipient = (int)value; }
+        }
+
+        public string RecipientStr
+        {
+            get
+            {
+                switch (RecipientType)
+                {
+                    case ReportCardsRecipientType.Custodians: return "Custodians";
+                    case ReportCardsRecipientType.MailingContacts: return "Mailing Contacts";
+                    default: return "Students";
+                }
+            }
         }
 
         public int OrderBy { get; set; }

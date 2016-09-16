@@ -477,7 +477,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 IncludeWithdrawnStudents = inputModel.IncludeWithdrawnStudents,
                 IncludePromotionStatus = inputModel.IncludePromotionStatus,
                 IncludeYearToDateInformation = inputModel.IncludeYearToDateInformation,
+                IncludeGradingScales = inputModel.IncludeGradingScaleStandards || inputModel.IncludeGradingScaleTraditional,
                 StudentIds = studentIds,
+                Recipient = inputModel.RecipientStr
             };
 
             var reportCardsData = ConnectorLocator.ReportConnector.GetReportCardData(options);
