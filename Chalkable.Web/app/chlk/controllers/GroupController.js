@@ -2,8 +2,11 @@ REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.GroupService');
 REQUIRE('chlk.services.ClassService');
+REQUIRE('chlk.services.SchoolService');
+REQUIRE('chlk.services.StudentService');
 
 REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
+REQUIRE('chlk.activities.recipients.GroupSelectorDialog');
 
 NAMESPACE('chlk.controllers', function () {
 
@@ -16,6 +19,12 @@ NAMESPACE('chlk.controllers', function () {
 
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
+
+            [ria.mvc.Inject],
+            chlk.services.StudentService, 'studentService',
+
+            [ria.mvc.Inject],
+            chlk.services.SchoolService, 'schoolService',
 
             [chlk.controllers.NotChangedSidebarButton()],
             function showGroupsFromReportAction(){
@@ -31,16 +40,30 @@ NAMESPACE('chlk.controllers', function () {
             [chlk.controllers.NotChangedSidebarButton()],
             [[String, chlk.models.group.AnnouncementGroupsViewData]],
             function showWidgetAction(requestId, model) {
-                var res = this.groupService.list()
-                    .then(function(groups){
-                        this.getContext().getSession().set(ChlkSessionConstants.GROUPS_LIST, groups);
-                        model.setGroups(groups);
-                        model.setRequestId(requestId);
+                var res = ria.async.wait([
+                    this.groupService.list(),
+                    this.studentService.getStudents(null, null, true, null, 0, 15),
+                    this.studentService.getStudents(null, null, false, null, 0, 15),
+                    this.schoolService.getUserLocalSchools(),
+                    this.schoolService.getSchoolPrograms()
+                ])
+                    .then(function(result){
+                        var mode = chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS,
+                            hasAccessToAllStudents = true,
+                            hasOwnStudents = true,
+                            groupsModel = new chlk.models.recipients.GroupsListViewData(mode, hasAccessToAllStudents, hasOwnStudents, result[0]),
+                            gradeLevels = this.getContext().getSession().get(ChlkSessionConstants.GRADE_LEVELS),
+                            schools = result[3],
+                            programs = result[4],
+                            myStudentsPart = new chlk.models.recipients.UsersListViewData(mode, hasAccessToAllStudents, hasOwnStudents, true, result[1], gradeLevels, schools, programs),
+                            allStudentsPart = new chlk.models.recipients.UsersListViewData(mode, hasAccessToAllStudents, hasOwnStudents, false, result[2], gradeLevels, schools, programs)
+                        var model = new chlk.models.recipients.GroupSelectorViewData(requestId, mode, hasAccessToAllStudents, hasOwnStudents,
+                            groupsModel, myStudentsPart, allStudentsPart);
                         return model;
                     }, this)
                     .attach(this.validateResponse_());
 
-                return this.ShadeOrUpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
+                return this.ShadeOrUpdateView(chlk.activities.recipients.GroupSelectorDialog, res);
             },
 
             [chlk.controllers.NotChangedSidebarButton()],

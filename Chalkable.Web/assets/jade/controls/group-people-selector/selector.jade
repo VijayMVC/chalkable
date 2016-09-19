@@ -1,5 +1,6 @@
-mixin GroupPeopleSelector(model)
-    -self.prepare(model)
+mixin GroupPeopleSelector(tpl)
+    -var model = tpl.getModel()
+    -attributes = self.prepare(model, attributes)
     -attributes['class'] = (attributes['class'] || []).push(model.getSelectorCSSClass())
     .group-people-selector(attributes)
         .action-bar
@@ -14,25 +15,34 @@ mixin GroupPeopleSelector(model)
                     A(data-index=4).action-link.top-link Selected
 
         if model.isHasOwnStudents()
-            DIV(data-index=1).x-window-body.body-content.active
-                +RenderWith(model.getMyStudentsPart(), chlk.templates.recipients.UsersListTpl)
+            DIV(data-index=1).x-window-body.body-content.active.all-students-cnt.items-3
+                +RenderWith(model.getMyStudentsPart(), chlk.templates.controls.UsersListTpl)(
+                    userRole = tpl.getUserRole()
+                )
         if model.isHasAccessToAllStudents()
-            DIV(data-index=2, class = model.isHasOwnStudents() ? '' : 'active').x-window-body.body-content
-                +RenderWith(model.getAllStudentsPart(), chlk.templates.recipients.UsersListTpl)
+            DIV(data-index=2, class = model.isHasOwnStudents() ? '' : 'active').x-window-body.body-content.my-students-cnt.items-3
+                +RenderWith(model.getAllStudentsPart(), chlk.templates.controls.UsersListTpl)(
+                    userRole = tpl.getUserRole()
+                )
         if model.hasGroups()
-            DIV(data-index=3).x-window-body.body-content
-                +RenderWith(model.getGroupsPart(), chlk.templates.recipients.GroupsListTpl)
+            DIV(data-index=3).x-window-body.body-content.items-3
+                +RenderWith(model.getGroupsPart(), chlk.templates.controls.GroupsListTpl)(
+                    userRole = tpl.getUserRole()
+                )
         if model.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
             DIV(data-index=4).x-window-body.body-content.selected-content.items-4
-                each group in model.getSelectedGroups()
-                    .recipient-item.selected
+                each group in model.getSelectedGroups() || []
+                    .recipient-item.group-item.selected
                         .recipient-icon.group-icon
                         .recipient-name=group.getName()
                         .recipient-remove(data-type=chlk.models.recipients.RecipientTypeEnum.GROUP.valueOf(), data-id=group.getId().valueOf())
-                each student in model.getSelectedStudents()
-                    .recipient-item.selected
+                each student in model.getSelectedStudents()|| []
+                    .recipient-item.student-item.selected
                         .recipient-icon.student-icon
                         .recipient-name=student.getName()
                         .recipient-remove(data-type=chlk.models.recipients.RecipientTypeEnum.STUDENT.valueOf(), data-id=student.getId().valueOf())
+            .buttons-container
+                +Button.special-button2.cancel.close.negative-button Cancel
+                +Button()(type="submit").special-button2.blue-button.selector-submit-btn=model.getSubmitButtonText()
         
 

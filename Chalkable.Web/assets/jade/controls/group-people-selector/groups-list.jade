@@ -1,0 +1,13 @@
+.text-filter-cnt
+    INPUT(name="filter", placeholder="Search Group Names...").groups-filter.top-filter
+.top-info-cnt
+    .left-block.i-b
+        .box-checkbox.circle
+            +Checkbox('allGroups', false, false, true).all-groups-check
+        LABEL.text All
+    .right-block.i-b.right
+        .results-count=self.getGroups().length
+.persons-cnt
+    +RenderWith(self.getModel(), chlk.templates.controls.GroupsListItemsTpl)(
+        userRole = self.getUserRole()
+    )

@@ -51,6 +51,10 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            ria.async.Future, function getUserLocalSchools() {
+                return this.get('School/UserLocalSchools.json', ArrayOf(chlk.models.school.School));
+            },
+
             [[chlk.models.id.SchoolId]],
             ria.async.Future, function getSisInfo(schoolId) {
                 return this.get('chalkable2/data/schoolSisInfo.json', chlk.models.school.SchoolSisInfo, {
@@ -101,7 +105,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             ria.async.Future, function getSchoolPrograms() {
-                return this.get('School/SchoolPrograms.json', chlk.models.recipients.Program, {});
+                return this.get('School/SchoolPrograms.json', ArrayOf(chlk.models.recipients.Program), {});
             },
 
             [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, chlk.models.common.ChlkDate]],

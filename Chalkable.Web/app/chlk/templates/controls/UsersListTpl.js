@@ -1,11 +1,11 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.recipients.UsersListViewData');
 
-NAMESPACE('chlk.templates.recipients', function () {
+NAMESPACE('chlk.templates.controls', function () {
 
-    /** @class chlk.templates.recipients.UsersListTpl*/
+    /** @class chlk.templates.controls.UsersListTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/recipients/UsersList.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/controls/group-people-selector/users-list.jade')],
         [ria.templates.ModelBind(chlk.models.recipients.UsersListViewData)],
         'UsersListTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.recipients', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.GradeLevelId, 'gradeLevelId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ProgramId, 'programId',
 
             [ria.templates.ModelPropertyBind],
             String, 'filter',

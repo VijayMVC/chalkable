@@ -1,0 +1,43 @@
+.text-filter-cnt
+    INPUT(name="filter", placeholder="Search first or last name").students-filter.top-filter
+.filters-cnt
+    .filter-cnt.sort-by-cnt
+        LABEL.filter-label Sort by
+        +Select("byLastName")
+            +Option(0, "First Name", !self.isByLastName())
+            +Option(1, "Last Name", self.isByLastName())
+    .filter-cnt.school-cnt
+        LABEL.filter-label School
+        +Select("schoolId")
+            +Option('', "&nbsp;", !self.getSchoolId())
+            each school in self.getSchools() || []
+                +Option(school.getId().valueOf(), school.getName(), school.getId() == self.getSchoolId())
+    .filter-cnt.grade-level-cnt
+        LABEL.filter-label Grade
+        +Select("gradeLevelId")
+            +Option('', "&nbsp;", !self.getGradeLevelId())
+            each grade in self.getGradeLevels() || []
+                +Option(grade.getId().valueOf(), grade.getName(), grade.getId() == self.getGradeLevelId())
+    .filter-cnt.class-cnt
+        LABEL.filter-label Class
+        +Select("classId")
+            +Option('', "&nbsp;", !self.getClassId())
+            each clazz in self.getClasses() || []
+                +Option(clazz.getId().valueOf(), clazz.getName(), clazz.getId() == self.getClassId())
+    .filter-cnt.program-cnt
+        LABEL.filter-label Program
+        +Select("classId")
+            +Option('', "&nbsp;", !self.getProgramId())
+            each program in self.getPrograms() || []
+                +Option(program.getId().valueOf(), program.getName(), program.getId() == self.getProgramId())
+.top-info-cnt
+    .left-block.i-b
+        .box-checkbox.circle.v-m
+            +Checkbox('allPersons', false, false, true).all-persons-check
+        LABEL.text.v-m All
+    .right-block.i-b.right
+        .results-count=self.getUsers().getTotalCount()
+.persons-cnt
+    +RenderWith(self.getUsers(), chlk.templates.controls.PersonItemsTpl)(
+        userRole = self.getUserRole()
+    )

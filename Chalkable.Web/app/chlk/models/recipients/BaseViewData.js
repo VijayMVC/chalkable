@@ -37,6 +37,15 @@ NAMESPACE('chlk.models.recipients', function () {
                 }
             },
 
+            function getSubmitButtonText(){
+                var mode = this.getSelectorMode();
+                switch (mode){
+                    case chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS: return "Add";
+                    case chlk.models.recipients.SelectorModeEnum.SELECT_WITHOUT_GROUPS: return "Create";
+                    case chlk.models.recipients.SelectorModeEnum.EDIT_WITHOUT_GROUPS: return "Save";
+                }
+            },
+
             [[chlk.models.recipients.SelectorModeEnum, Boolean, Boolean]],
             function $(selectorMode_, hasAccessToAllStudents_, hasOwnStudents_){
                 BASE();

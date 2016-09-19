@@ -25,7 +25,6 @@ NAMESPACE('chlk.models.recipients', function () {
             String, 'submitType',
             Boolean, 'my',
             Boolean, 'hasAccessToLE',
-            chlk.models.recipients.SelectorModeEnum, 'selectorMode',
             chlk.models.common.PaginatedList, 'users',
             ArrayOf(chlk.models.grading.GradeLevel), 'gradeLevels',
             ArrayOf(chlk.models.school.School), 'schools',
