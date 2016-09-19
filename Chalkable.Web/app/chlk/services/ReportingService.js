@@ -361,7 +361,7 @@ NAMESPACE('chlk.services', function () {
                  idToPrint: idToPrint.valueOf(),
                  includeGradedStandardsOnly: includeGradedStandardsOnly,
                  groupIds: this.arrayToCsv(groupIds),
-                 gradingPeriodIds: this.arrayToCsv(gradingPeriodIds),
+                 gradingPeriodId: gradingPeriodIds && gradingPeriodIds.length > 0 ? gradingPeriodIds[0].valueOf() : null, //this.arrayToCsv(gradingPeriodIds),
                  attendanceReasonIds: this.arrayToCsv(attendanceReasonIds),
                  includeOptions: includeOptions
             });

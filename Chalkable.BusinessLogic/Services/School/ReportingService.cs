@@ -469,6 +469,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var options = new ReportCardOptions
             {
                 AbsenceReasonIds = inputModel.AttendanceReasonIds,
+                GradingPeriodId = inputModel.GradingPeriodId,
                 AcadSessionId = Context.SchoolYearId.Value,
                 IncludeAttendance = inputModel.IncludeAttendance,
                 IncludeGradingPeriodNotes = inputModel.IncludeGradingPeriodNotes,
@@ -479,7 +480,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 IncludeYearToDateInformation = inputModel.IncludeYearToDateInformation,
                 IncludeGradingScales = inputModel.IncludeGradingScaleStandards || inputModel.IncludeGradingScaleTraditional,
                 StudentIds = studentIds,
-                Recipient = inputModel.RecipientStr
+                Recipient = inputModel.RecipientStr,
+                IncludeStandards = true
             };
 
             var reportCardsData = ConnectorLocator.ReportConnector.GetReportCardData(options);
@@ -489,7 +491,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var currentDate = Context.NowSchoolTime;
             foreach (var student in reportCardsData.Students)
             {
-                res.AddRange(student.Recipients.Select(recipient => CustomReportCardsExportModel.Create(reportCardsData, student, recipient, logo?.LogoAddress, currentDate)));
+                res.AddRange(student.Recipients.Select(recipient => CustomReportCardsExportModel.Create(reportCardsData, student, recipient, logo?.LogoAddress, currentDate, inputModel)));
             }
             return res;
         }

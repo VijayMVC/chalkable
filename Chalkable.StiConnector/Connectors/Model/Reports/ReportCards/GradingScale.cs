@@ -12,6 +12,8 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports.ReportCards
         {
             Ranges = new List<GradingScaleRange>();
         }
+        public int Id { get; set; }
+        public int GradingScaleId{get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
         public List<GradingScaleRange> Ranges { get; set; }

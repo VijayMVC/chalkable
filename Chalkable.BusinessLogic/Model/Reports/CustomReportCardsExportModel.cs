@@ -19,7 +19,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool IdToPrint { get; set; }
         public StudentReportCardsExportModel Student { get; set; }
 
-        public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, ReportCardAddressData recipient, string logoRef, DateTime reportDate)
+        public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, ReportCardAddressData recipient, string logoRef, DateTime reportDate
+            , ReportCardsInputModel inputModel)
         {
             return new CustomReportCardsExportModel
             {
@@ -37,9 +38,13 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     State = reportCard.School.State,
                     Zip = reportCard.School.Zip
                 },
-                Student = StudentReportCardsExportModel.Create(studentData, recipient),
-                TraditionalGradingScale = new List<TraditionalGradingScaleExportModel>(),
-                StandardsGradingScale = new List<StandardsGradingScaleExportModel>()
+                Student = StudentReportCardsExportModel.Create(studentData, recipient, inputModel.IncludeGradedStandardsOnly),
+                TraditionalGradingScale = inputModel.IncludeGradingScaleTraditional && studentData.GradingScaleId.HasValue 
+                        ? TraditionalGradingScaleExportModel.Create(reportCard.GradingScales, studentData.GradingScaleId.Value)
+                        :  new List<TraditionalGradingScaleExportModel>(),
+                StandardsGradingScale = inputModel.IncludeGradingScaleStandards && studentData.StandardGradingScaleId.HasValue 
+                        ? StandardsGradingScaleExportModel.Create(reportCard.GradingScales, studentData.StandardGradingScaleId.Value) 
+                        : new List<StandardsGradingScaleExportModel>()
             };
         }
     }
@@ -53,7 +58,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Phone { get; set; }
         public string State { get; set; }
         public string Zip { get; set; }
-        
+
     }
     public class TraditionalGradingScaleExportModel
     {
@@ -61,11 +66,21 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public decimal MinValue { get; set; }
         public decimal MaxValue { get; set; }
 
+        public static IList<TraditionalGradingScaleExportModel> Create(IList<GradingScale> gradingScales, int gradingScaleId)
+        {
+            return new List<TraditionalGradingScaleExportModel>();
+        } 
+
     }
     public class StandardsGradingScaleExportModel
     {
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public static IList<StandardsGradingScaleExportModel> Create(IList<GradingScale> gradingScales, int standardGradingScaleId)
+        {
+            return new List<StandardsGradingScaleExportModel>();
+        }
     }
 
     public class StudentReportCardsExportModel
@@ -84,7 +99,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public decimal Demerits { get; set; }
         public string ReportCardsComment { get; set; }
 
-        public static StudentReportCardsExportModel Create(Student studentData, ReportCardAddressData recipient)
+        public static StudentReportCardsExportModel Create(Student studentData, ReportCardAddressData recipient, bool onlyGradedStandard)
         {
             return new StudentReportCardsExportModel
             {
@@ -95,7 +110,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 Demerits = studentData.Demerits,
                 Merits = studentData.Merits,
                 Recipient = RecipientsReportCardsExportModel.Create(recipient),
-                Classes = ClassReportCardsExportModel.Create(studentData.Sections),
+                Classes = ClassReportCardsExportModel.Create(studentData.Sections, onlyGradedStandard),
                 
             };
         }
@@ -109,7 +124,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Teacher { get; set; }
         public IList<GradingGridExportModel> GradingPeriods { get; set; }
 
-        public static IList<ClassReportCardsExportModel> Create(IEnumerable<ReportCardSectionData> sections)
+        public static IList<ClassReportCardsExportModel> Create(IEnumerable<ReportCardSectionData> sections, bool onlyGradedStandard)
         {
             return sections.Select(sectionData => new ClassReportCardsExportModel
             {
@@ -117,7 +132,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 Name = sectionData.Name,
                 Teacher = sectionData.Teacher,
                 TimesTardy = sectionData.TimesTardy,
-                GradingPeriods = GradingGridExportModel.Create(sectionData.GradingPeriods)
+                GradingPeriods = GradingGridExportModel.Create(sectionData.GradingPeriods, onlyGradedStandard)
             }).ToList();
         }
     }
@@ -130,7 +145,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public IList<GradedItemExportModel> GradedItems { get; set; }
         public IList<StandardGradeExportModel> Standards { get; set; }
 
-        public static IList<GradingGridExportModel> Create(IEnumerable<StudentGradingPeriod> studentGradingPeriods)
+        public static IList<GradingGridExportModel> Create(IEnumerable<StudentGradingPeriod> studentGradingPeriods, bool onlyGradedStandard)
         {
             return studentGradingPeriods.Select(x => new GradingGridExportModel
             {
@@ -138,13 +153,15 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 GradingPeriodName = x.GradingPeriodName,
                 Note = x.Note,
                 GradedItems = GradedItemExportModel.Create(x.GradedItems),
-                Standards = x.Standards.Select(s=> new StandardGradeExportModel
-                {
-                    Description = s.Description,
-                    Name = s.Name,
-                    Grade = s.Grade,
-                    Comment = s.Comments.FirstOrDefault()?.Comment
-                }).ToList()
+                Standards = x.Standards
+                            .Where(s=> !onlyGradedStandard || !string.IsNullOrWhiteSpace(s.Grade))
+                            .Select(s=> new StandardGradeExportModel
+                            {
+                                Description = s.Description,
+                                Name = s.Name,
+                                Grade = s.Grade,
+                                Comment = s.Comments.FirstOrDefault()?.Comment
+                            }).ToList()
             }).ToList();
         } 
     }
@@ -178,6 +195,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Description { get; set; }
         public string Grade { get; set; }
         public string Comment { get; set; }
+
     }
 
     public class CommentReportCardsExportModel

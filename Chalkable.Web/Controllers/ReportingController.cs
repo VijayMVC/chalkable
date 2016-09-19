@@ -3,22 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Services.Protocols;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
-using Chalkable.BusinessLogic.Services.Reporting;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Common.JsonContractTools;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
-using Chalkable.Web.Common;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 using Microsoft.Reporting.WebForms;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Chalkable.Web.Controllers
 {
