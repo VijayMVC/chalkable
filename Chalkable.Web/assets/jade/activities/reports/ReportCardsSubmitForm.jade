@@ -57,9 +57,9 @@ mixin Radio(name, value, title, selected)
                                         data-icon=self.getPictureURL(template.getId().valueOf(), 64, 64)
                                     )
                             h3 Grading Periods
-                            +Select('gradingPeriodItems', 'gradingPeriodIds')(multiple)#grading-period-select
+                            +Select('gradingPeriodItems', 'gradingPeriodId')#grading-period-select
                                 each gp in self.getGradingPeriods()
-                                    +Option(gp.getId().valueOf(), gp.getName(), false)
+                                    +Option(gp.getId().valueOf(), gp.getName(), true)
                     TR
                         TD.item-3
                             h3=Msg.Order_by
@@ -88,8 +88,9 @@ mixin Radio(name, value, title, selected)
                         TD.item-3
                             h3 Standards
                             .standards-type
-                                +Radio('includeGradedStandardsOnly', false, Msg.All, true)
-                                +Radio('includeGradedStandardsOnly', true, Msg.Graded, false)
+                                +Radio('standardType', 2, Msg.All, true)
+                                +Radio('standardType', 1, Msg.Graded, false)
+                                +Radio('standardType', 0, Msg.None, false)
                         TD.item-3
                         TD.item-3
                             h3 Include

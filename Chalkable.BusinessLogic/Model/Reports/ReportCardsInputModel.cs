@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Tile { get; set; }
         public int GradingPeriodId { get; set; }
         public IntList AttendanceReasonIds { get; set; }
-        public bool IncludeGradedStandardsOnly { get; set; }
+        public bool IncludeGradedStandardsOnly => StandardTypeEnum == StandardsType.Graded;
         public int Logo { get; set; }
         public ReportCardsLogoType LogoType
         {
@@ -46,8 +46,15 @@ namespace Chalkable.BusinessLogic.Model.Reports
             get { return (ReportCardsOrderBy)OrderBy; }
             set { OrderBy = (int)value; }
         }
-        public int IdToPrint { get; set; }
+        
+        public int StandardType { get; set; }
+        public StandardsType StandardTypeEnum
+        {
+            get { return (StandardsType)StandardType; }
+            set { StandardType = (int) value; }
+        } 
 
+        public int IdToPrint { get; set; }
         public IntList IncludeOptions { get; set; }
         private bool HasOption(ReportCardsAddionalOptions option)
         {
@@ -79,6 +86,13 @@ namespace Chalkable.BusinessLogic.Model.Reports
         None = 0,
         District = 1,
         School = 2
+    }
+
+    public enum StandardsType
+    {
+        None = 0,
+        Graded = 1,
+        All = 2
     }
 
     public enum ReportCardsOrderBy

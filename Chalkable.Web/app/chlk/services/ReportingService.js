@@ -345,13 +345,13 @@ NAMESPACE('chlk.services', function () {
 
         [[chlk.models.id.CustomReportTemplateId, String, chlk.models.reports.ReportCardsLogoType,
             chlk.models.reports.ReportCardsRecipientType, chlk.models.reports.ReportCardsOrderBy,
-            chlk.models.reports.StudentIdentifierEnum, Boolean,
+            chlk.models.reports.StudentIdentifierEnum, chlk.models.reports.ReportCardsStandards,
             ArrayOf(chlk.models.id.GroupId),
-            ArrayOf(chlk.models.id.GradingPeriodId),
+            chlk.models.id.GradingPeriodId,
             ArrayOf(chlk.models.id.AttendanceReasonId),
             String]],
-        ria.async.Future, function submitReportCards(templateId, title, logo, recipient, orderBy, idToPrint, includeGradedStandardsOnly
-                , groupIds, gradingPeriodIds, attendanceReasonIds, includeOptions){
+        ria.async.Future, function submitReportCards(templateId, title, logo, recipient, orderBy, idToPrint, standardType
+                , groupIds, gradingPeriodId, attendanceReasonIds, includeOptions){
              var url = this.getUrl('Reporting/ReportCards.json',{
                  customReportTemplateId: templateId.valueOf(),
                  title: title,
@@ -359,9 +359,9 @@ NAMESPACE('chlk.services', function () {
                  recipient: recipient.valueOf(),
                  orderBy: orderBy.valueOf(),
                  idToPrint: idToPrint.valueOf(),
-                 includeGradedStandardsOnly: includeGradedStandardsOnly,
+                 standardType: standardType.valueOf(),
                  groupIds: this.arrayToCsv(groupIds),
-                 gradingPeriodId: gradingPeriodIds && gradingPeriodIds.length > 0 ? gradingPeriodIds[0].valueOf() : null, //this.arrayToCsv(gradingPeriodIds),
+                 gradingPeriodId: gradingPeriodId.valueOf(),
                  attendanceReasonIds: this.arrayToCsv(attendanceReasonIds),
                  includeOptions: includeOptions
             });

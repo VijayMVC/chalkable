@@ -9,6 +9,13 @@ REQUIRE('chlk.models.group.Group');
 NAMESPACE('chlk.models.reports', function () {
     "use strict";
 
+    /** @class chlk.models.reports.ReportCardsStandards*/
+    ENUM('ReportCardsStandards', {
+        NONE: 0,
+        GRADED: 1,
+        ALL: 2
+    });
+
     /** @class chlk.models.reports.ReportCardsOrderBy*/
     ENUM('ReportCardsOrderBy',{
         GRADE_LEVEL: 0,
@@ -54,7 +61,7 @@ NAMESPACE('chlk.models.reports', function () {
 
         String, 'title',
 
-        String, 'gradingPeriodIds',
+        chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
         String, 'attendanceReasonIds',
 
@@ -72,7 +79,7 @@ NAMESPACE('chlk.models.reports', function () {
 
         chlk.models.reports.StudentIdentifierEnum, 'idToPrint',
 
-        Boolean, 'includeGradedStandardsOnly',
+        chlk.models.reports.ReportCardsStandards, 'standardType',
 
         ArrayOf(chlk.models.reports.CustomReportTemplate), 'templates',
 

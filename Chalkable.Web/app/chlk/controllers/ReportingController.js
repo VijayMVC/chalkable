@@ -86,9 +86,9 @@ NAMESPACE('chlk.controllers', function (){
                 model.getRecipient(),
                 model.getOrderBy(),
                 model.getIdToPrint(),
-                model.isIncludeGradedStandardsOnly(),
+                model.getStandardType(),
                 this.getIdsList(model.getGroupIds(), chlk.models.id.GroupId),
-                this.getIdsList(model.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
+                model.getGradingPeriodId(),
                 this.getIdsList(model.getAttendanceReasonIds(), chlk.models.id.AttendanceReasonId),
                 model.getIncludeOptions()
             )

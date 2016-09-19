@@ -125,6 +125,7 @@ namespace Chalkable.StiConnector.Connectors
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
                 writer.Flush();
+                var jsonStr = JsonConvert.SerializeObject(obj);
                 var startTime = DateTime.Now;
                 var arr = stream.ToArray();
                 var res = client.UploadDataTaskAsync(url, httpMethod.Method, arr);

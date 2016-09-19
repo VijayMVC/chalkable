@@ -481,7 +481,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 IncludeGradingScales = inputModel.IncludeGradingScaleStandards || inputModel.IncludeGradingScaleTraditional,
                 StudentIds = studentIds,
                 Recipient = inputModel.RecipientStr,
-                IncludeStandards = true
+                IncludeStandards = inputModel.StandardTypeEnum != StandardsType.None
             };
 
             var reportCardsData = ConnectorLocator.ReportConnector.GetReportCardData(options);
