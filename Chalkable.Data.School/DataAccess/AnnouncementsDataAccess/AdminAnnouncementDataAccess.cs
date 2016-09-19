@@ -134,8 +134,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         protected AnnouncementQueryResult InternalGetAnnouncements(string procedureName, AdminAnnouncementsQuery query, IDictionary<string, object> additionalParams)
         {
-            if(additionalParams == null)
-                additionalParams = new Dictionary<string, object>();
+            additionalParams = additionalParams ?? new Dictionary<string, object>();
 
             additionalParams.Add(STUDENT_ID, query.StudentId);
             additionalParams.Add(GRADE_LEVELS_IDS_PARAM, query.GradeLevelsIds ?? new List<int>());

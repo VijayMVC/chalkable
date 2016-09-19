@@ -285,8 +285,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     PersonId = Context.PersonId,
                     RoleId = Context.RoleId,
                     GradeLevelsIds = gradeLevels,
-                    StudentId = studentId
-                })).Announcements.Select(x => x.AdminAnnouncementData).ToList();
+                    StudentId = studentId,
+                    Now = Context.NowSchoolTime
+            })).Announcements.Select(x => x.AdminAnnouncementData).ToList();
         }
 
         public IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter)
@@ -309,7 +310,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 Count = count,
                 PersonId = Context.PersonId,
                 RoleId = Context.RoleId,
-                Sort = sortDesc
+                Sort = sortDesc,
+                GradeLevelsIds = gradeLevels,
+                Now = Context.NowSchoolTime
             })).Announcements;
         }
 
@@ -329,7 +332,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 ToTitle = toTitle,
                 IncludeFrom = includeFromTitle,
                 IncludeTo = includeToTitle,
-                Sort = sortDesc
+                Sort = sortDesc,
+                GradeLevelsIds = gradeLevels,
+                Now = Context.NowSchoolTime
             })).Announcements;
         }
 

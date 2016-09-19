@@ -103,7 +103,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if (additionalParameters != null)
                 foreach (var parameter in additionalParameters)
                 {
-                    if(ps.ContainsKey(parameter.Key)) continue;
+                    if(ps.ContainsKey(parameter.Key))
+                        continue;
+
                     ps.Add(parameter.Key, parameter.Value);
                 }
             using (var reader = ExecuteStoredProcedureReader(procedureName, ps))
