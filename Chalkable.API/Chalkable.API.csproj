@@ -94,6 +94,7 @@
     <Compile Include="Models\CoreRoles.cs" />
     <Compile Include="Models\IntList.cs" />
     <Compile Include="Models\PersonClaim.cs" />
+    <Compile Include="Models\SchoolInfo.cs" />
     <Compile Include="Models\SchoolPerson.cs" />
     <Compile Include="Models\StudentAttendance\CheckInCheckOut.cs" />
     <Compile Include="Models\StudentAttendance\Student.cs" />

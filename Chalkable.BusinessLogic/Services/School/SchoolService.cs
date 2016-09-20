@@ -66,8 +66,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Data.School.Model.School> GetSchools()
         {
-            if (!BaseSecurity.IsDistrictAdmin(Context))
-                throw new ChalkableSecurityException();
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
