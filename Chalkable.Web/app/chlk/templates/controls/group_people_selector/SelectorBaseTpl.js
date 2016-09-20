@@ -37,6 +37,14 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
 
             [ria.templates.ModelPropertyBind],
             String, 'requestId',
+            
+            function getGroupIds(){
+                return this.getSelectedGroups().map(function(item){return item.getId().valueOf()})
+            },
+
+            function getStudentIds(){
+                return this.getSelectedStudents().map(function(item){return item.getId().valueOf()})
+            },
 
             function getSelectedItemsObj(){
                 var groups = [], students = [];

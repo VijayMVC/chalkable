@@ -12,6 +12,8 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             String, 'filter',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.group.Group), 'groups'
+            ArrayOf(chlk.models.group.Group), 'groups',
+
+            Array, 'selected'
         ])
 });

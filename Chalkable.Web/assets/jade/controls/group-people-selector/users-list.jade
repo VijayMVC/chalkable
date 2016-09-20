@@ -39,5 +39,6 @@
         .results-count=self.getUsers().getTotalCount()
 .persons-cnt.items-cnt
     +RenderWith(self.getUsers(), chlk.templates.controls.group_people_selector.PersonItemsTpl)(
-        userRole = self.getUserRole()
+        userRole = self.getUserRole(),
+        selected = self.getSelected()
     )

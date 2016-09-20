@@ -1,7 +1,8 @@
+-var selected = self.getSelected()
 each student in self.getModel().getItems()
     .recipient-item.student-item
         .recipient-check-cnt.box-checkbox.circle
-            +Checkbox('personCheck', false, false, true)(
+            +Checkbox('personCheck', selected.indexOf(student.getId()) > -1, false, true)(
                 data-id=student.getId().valueOf(),
                 data-name=student.getDisplayName(),
                 data-gender=student.getGender()

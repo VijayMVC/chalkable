@@ -57,6 +57,8 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             ArrayOf(chlk.models.classes.Class), 'classes',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.recipients.Program), 'programs'
+            ArrayOf(chlk.models.recipients.Program), 'programs',
+            
+            Array, 'selected'
         ])
 });

@@ -7,5 +7,7 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/controls/group-people-selector/person-items.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
-        'PersonItemsTpl', EXTENDS(chlk.templates.PaginatedList), [])
+        'PersonItemsTpl', EXTENDS(chlk.templates.PaginatedList), [
+            Array, 'selected'
+        ])
 });
