@@ -1,0 +1,4 @@
+configs = self.getGraphConfigs()
+.separator.small-text #{Msg.Class_average}: #{self.getClassAvg() || '--'} / #{self.getMaxScore()}
+if configs
+    +Chart()(data-options=configs, noExtends = true)
