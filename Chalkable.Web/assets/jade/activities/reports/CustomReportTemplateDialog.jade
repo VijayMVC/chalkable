@@ -1,0 +1,20 @@
+.dialog.add-report-template.gray
+   .x-window-header
+      span Custom Report Template
+   .x-window-body
+      +ActionForm('customreporttemplate', 'save')
+         +Hidden("id", self.id)
+         .x-form-field
+            label File:
+            +FileUpload()(name='icon')#icon.simple-gray-button
+         .x-form-field
+            label Name:
+            input(type="text",name="name", value=self.getName())
+         .x-form-field
+            label Layout:
+            +TextArea(type="text",name="layout")=self.getLayout()
+         .x-form-field
+            label Style:
+            +TextArea(type="text",name="style")=self.getStyle()
+         +Button()(type="submit").special-button.blue-button.submit-btn Submit
+         +Button.special-button.red-button.close Cancel

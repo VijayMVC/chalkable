@@ -9,6 +9,7 @@ NAMESPACE('chlk.models.settings', function () {
             Boolean, 'appCategoriesVisible',
             Boolean, 'backgroundTaskMonitorVisible',
             Boolean, 'dbMaintenanceVisible',
-            Boolean, 'upgradeSchoolsVisible'
+            Boolean, 'upgradeSchoolsVisible',
+            Boolean, 'customReportTemplatesVisible'
         ]);
 });

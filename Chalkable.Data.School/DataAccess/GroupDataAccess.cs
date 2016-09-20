@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -26,7 +27,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
 
-        public override IList<Group> GetAll(QueryCondition conditions = null)
+        public IList<Group> GetAll(QueryCondition conditions = null, string filter = null)
         {
             var query = new DbQuery();
             var groupTName = typeof (Group).Name;
@@ -36,6 +37,20 @@ namespace Chalkable.Data.School.DataAccess
             query.Sql.AppendFormat(Orm.SELECT_FORMAT, querySet, groupTName);
             if(conditions != null)
                 conditions.BuildSqlWhere(query, groupTName);
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query.Sql.AppendFormat(" AND (");
+                string[] sl = filter.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < sl.Length; i++)
+                {
+                    query.Parameters.Add("@filter" + i, string.Format(FILTER_FORMAT, sl[i]));
+                    query.Sql.AppendFormat($" [{typeof(Group).Name}].[{nameof(Group.Name)}] like @filter" + i + " OR");
+                }
+                query.Sql.Remove(query.Sql.Length - 2, 2);
+                query.Sql.AppendFormat(")");
+            }
+
             return ReadMany<Group>(query);
         }
 
@@ -85,6 +100,29 @@ namespace Chalkable.Data.School.DataAccess
                 };
            return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
         }
+
+        public IList<int> GetStudentsByGroups(IList<int> groupIds)
+        {
+            if (groupIds == null || groupIds.Count == 0) return new List<int>();
+
+            var sql = new StringBuilder();
+            sql.AppendFormat(Orm.SELECT_FORMAT, $" distinct {StudentGroup.STUDENT_REF_FIELD}", nameof(StudentGroup));
+            sql.Append($" Where {StudentGroup.GROUP_REF_FIELD} In (Select * From @groupIds)");
+
+            var param = new Dictionary<string, object>
+            {
+                ["groupIds"] = groupIds
+            };
+
+            using (var reader = ExecuteReaderParametrized(sql.ToString(), param))
+            {
+                var res = new List<int>();
+                while (reader.Read())
+                    res.Add(SqlTools.ReadInt32(reader, StudentGroup.STUDENT_REF_FIELD));
+                
+                return res;
+            }
+        } 
     }
 
 
