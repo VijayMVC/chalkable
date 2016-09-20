@@ -2,7 +2,8 @@ each group in self.getGroups()
     .recipient-item.group-item
         .recipient-check-cnt.box-checkbox.circle
             +Checkbox('groupCheck', false, false, true)(
-                data-id=group.getId().valueOf()
+                data-id=group.getId().valueOf(),
+                data-name=group.getName()
             ).recipient-check.group-check
         .recipient-icon.group-icon
         .recipient-name=group.getName()

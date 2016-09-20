@@ -1,5 +1,8 @@
 -var recipients = self.getRecipients() || []
 +ActionButton('announcement', 'showGroups', self.getId()).add-recipients-btn.grey-button.same-on-hovere +
-each recipient in recipients
-      .grey-button.same-on-hover.button-like=recipient.getGroupName()
-            +ActionLink('announcement', 'removeRecipient', recipient.getAnnouncementId(), recipient.getGroupId()).remove-recipient
+each group in recipients
+      .grey-button.same-on-hover.button-like.group-recipient=group.getGroupName()
+            +ActionLink('announcement', 'removeRecipient', group.getAnnouncementId(), group.getGroupId()).remove-recipient
+each student in self.getAdminAnnouncementStudents() || []
+      .grey-button.same-on-hover.button-like.student-recipient=student.getDisplayName()
+            +ActionLink('announcement', 'removeRecipient', self.getId(), null, student.getId()).remove-recipient

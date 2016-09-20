@@ -39,7 +39,7 @@ NAMESPACE('chlk.controllers', function () {
 
             [chlk.controllers.NotChangedSidebarButton()],
             [[String, chlk.models.group.AnnouncementGroupsViewData]],
-            function showWidgetAction(requestId, model) {
+            function showWidgetAction(requestId, data) {
                 var res = ria.async.wait([
                     this.groupService.list(),
                     this.studentService.getStudents(null, null, true, null, 0, 15),
@@ -56,9 +56,11 @@ NAMESPACE('chlk.controllers', function () {
                             schools = result[3],
                             programs = result[4],
                             myStudentsPart = new chlk.models.recipients.UsersListViewData(mode, hasAccessToAllStudents, hasOwnStudents, true, result[1], gradeLevels, schools, programs),
-                            allStudentsPart = new chlk.models.recipients.UsersListViewData(mode, hasAccessToAllStudents, hasOwnStudents, false, result[2], gradeLevels, schools, programs)
+                            allStudentsPart = new chlk.models.recipients.UsersListViewData(mode, hasAccessToAllStudents, hasOwnStudents, false, result[2], gradeLevels, schools, programs),
+                            selectedGroups = (data.getSelected() && data.getSelected().groups) || [],
+                            selectedStudents = (data.getSelected() && data.getSelected().students) || [];
                         var model = new chlk.models.recipients.GroupSelectorViewData(requestId, mode, hasAccessToAllStudents, hasOwnStudents,
-                            groupsModel, myStudentsPart, allStudentsPart);
+                            groupsModel, myStudentsPart, allStudentsPart, selectedGroups, selectedStudents);
                         return model;
                     }, this)
                     .attach(this.validateResponse_());

@@ -54,6 +54,9 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.ableUseExtraCredit = SJX.fromValue(raw.isableuseextracredit, Boolean);
 
                 this.groupIds = SJX.fromValue(raw.groupIds, String);
+                this.studentIds = SJX.fromValue(raw.studentIds, String);
+                if(raw.selectedItems)
+                    this.selectedItems = JSON.parse(SJX.fromValue(raw.selectedItems, String));
                 this.attachments = SJX.fromValue(raw.attachments, String);
                 this.gradeViewApps = SJX.fromArrayOfDeserializables(raw.gradeviewapps, chlk.models.apps.AppAttachment);
                 this.applicationsIds = SJX.fromValue(raw.applicationsids, String);
@@ -137,6 +140,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'announcementTypeId',
             ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',
             String, 'groupIds',
+            String, 'studentIds',
+            Object, 'selectedItems',
             String, 'attachments',
             String, 'applicationsIds',
             String, 'submitType',

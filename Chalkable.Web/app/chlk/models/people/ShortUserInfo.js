@@ -115,8 +115,8 @@ NAMESPACE('chlk.models.people', function () {
                 return new chlk.models.common.Alerts(res);
             },
 
-            [[String, String, chlk.models.id.SchoolPersonId]],
-            function $(firstName_, lastName_, id_){
+            [[String, String, chlk.models.id.SchoolPersonId, String, String]],
+            function $(firstName_, lastName_, id_, displayName_, gender_){
                 BASE();
                 if(firstName_)
                     this.setFirstName(firstName_);
@@ -124,6 +124,10 @@ NAMESPACE('chlk.models.people', function () {
                     this.setLastName(lastName_);
                 if(id_)
                     this.setId(id_);
+                if(displayName_)
+                    this.setDisplayName(displayName_);
+                if(gender_)
+                    this.setGender(gender_);
             }
 
         ]);

@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.recipients.SelectorBaseTpl');
+REQUIRE('chlk.templates.controls.group_people_selector.SelectorBaseTpl');
 
 NAMESPACE('chlk.templates.recipients', function () {
 
@@ -6,5 +6,5 @@ NAMESPACE('chlk.templates.recipients', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/recipients/GroupSelectorDialog.jade')],
         [ria.templates.ModelBind(chlk.models.recipients.GroupSelectorViewData)],
-        'GroupSelectorTpl', EXTENDS(chlk.templates.recipients.SelectorBaseTpl), [])
+        'GroupSelectorTpl', EXTENDS(chlk.templates.controls.group_people_selector.SelectorBaseTpl), [])
 });

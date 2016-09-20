@@ -64,11 +64,12 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, String]],
-            ria.async.Future, function addGroupsToAnnouncement(id, groupIds_) {
+            [[chlk.models.id.AnnouncementId, String, String]],
+            ria.async.Future, function addGroupsToAnnouncement(id, groupIds_, studentsIds_) {
                 return this.post('AdminAnnouncement/SubmitGroupsToAnnouncement.json', Boolean, {
                     adminAnnouncementId:id.valueOf(),
-                    groupsids: groupIds_
+                    groupsIds: groupIds_,
+                    studentsIds: studentsIds_
                 });
             },
 

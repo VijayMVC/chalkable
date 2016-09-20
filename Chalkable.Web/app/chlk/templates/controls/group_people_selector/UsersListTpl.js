@@ -1,9 +1,9 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.recipients.UsersListViewData');
 
-NAMESPACE('chlk.templates.controls', function () {
+NAMESPACE('chlk.templates.controls.group_people_selector', function () {
 
-    /** @class chlk.templates.controls.UsersListTpl*/
+    /** @class chlk.templates.controls.group_people_selector.UsersListTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/controls/group-people-selector/users-list.jade')],
         [ria.templates.ModelBind(chlk.models.recipients.UsersListViewData)],

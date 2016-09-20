@@ -1,11 +1,11 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.recipients.GroupSelectorViewData');
 
-NAMESPACE('chlk.templates.recipients', function () {
+NAMESPACE('chlk.templates.controls.group_people_selector', function () {
 
-    /** @class chlk.templates.recipients.SelectorBaseTpl*/
+    /** @class chlk.templates.controls.group_people_selector.SelectorBaseTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/recipients/SelectorBase.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/controls/group-people-selector/selected-items.jade')],
         [ria.templates.ModelBind(chlk.models.recipients.GroupSelectorViewData)],
         'SelectorBaseTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
@@ -34,6 +34,20 @@ NAMESPACE('chlk.templates.recipients', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.recipients.SelectorModeEnum, 'selectorMode',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'requestId',
+
+            function getSelectedItemsObj(){
+                var groups = [], students = [];
+                this.getSelectedGroups().forEach(function(group){
+                    groups.push({id: group.getId().valueOf(), name: group.getName()})
+                });
+                this.getSelectedStudents().forEach(function(student){
+                    students.push({id: student.getId().valueOf(), displayname: student.getDisplayName(), gender: student.getGender()})
+                });
+                return JSON.stringify({groups: groups, students: students});
+            },
 
             function getPageTitle(){
                 var mode = this.getSelectorMode();

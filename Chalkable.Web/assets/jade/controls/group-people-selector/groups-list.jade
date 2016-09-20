@@ -3,11 +3,11 @@
 .top-info-cnt
     .left-block.i-b
         .box-checkbox.circle
-            +Checkbox('allGroups', false, false, true).all-groups-check
+            +Checkbox('allGroups', false, false, true).all-groups-check.all-items-check
         LABEL.text All
     .right-block.i-b.right
         .results-count=self.getGroups().length
-.persons-cnt
-    +RenderWith(self.getModel(), chlk.templates.controls.GroupsListItemsTpl)(
+.persons-cnt.items-cnt
+    +RenderWith(self.getModel(), chlk.templates.controls.group_people_selector.GroupsListItemsTpl)(
         userRole = self.getUserRole()
     )

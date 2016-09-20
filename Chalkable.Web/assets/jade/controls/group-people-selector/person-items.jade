@@ -2,7 +2,9 @@ each student in self.getModel().getItems()
     .recipient-item.student-item
         .recipient-check-cnt.box-checkbox.circle
             +Checkbox('personCheck', false, false, true)(
-                data-id=student.getId().valueOf()
+                data-id=student.getId().valueOf(),
+                data-name=student.getDisplayName(),
+                data-gender=student.getGender()
             ).recipient-check.student-check
         .recipient-icon.student-icon
             +PersonImg(student, 47)

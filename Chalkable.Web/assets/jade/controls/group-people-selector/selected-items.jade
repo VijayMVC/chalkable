@@ -1,0 +1,18 @@
+-var groups = self.getSelectedGroups() || []
+-var students = self.getSelectedStudents() || []
+
++Hidden('groupIds', groups.map(function(item){return item.getId().valueOf()}).join(','))
++Hidden('studentIds', students.map(function(item){return item.getId().valueOf()}).join(','))
++Hidden('selectedItems', self.getSelectedItemsObj())
+
+each group in groups
+    .recipient-item.group-item.selected
+        .recipient-icon.group-icon
+        .recipient-name=group.getName()
+        .recipient-remove(data-type=chlk.models.recipients.RecipientTypeEnum.GROUP.valueOf(), data-id=group.getId().valueOf())
+each student in students
+    .recipient-item.student-item.selected
+        .recipient-icon.student-icon
+            +PersonImg(student, 47)
+        .recipient-name=student.getDisplayName()
+        .recipient-remove(data-type=chlk.models.recipients.RecipientTypeEnum.STUDENT.valueOf(), data-id=student.getId().valueOf())

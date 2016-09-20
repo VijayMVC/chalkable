@@ -556,7 +556,13 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     var announcement = model.getAnnouncement();
-                    this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, (announcement.getRecipients() || []).map(function(item){return item.getGroupId()}));
+                    //this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, (announcement.getRecipients() || []).map(function(item){return item.getGroupId()}));
+                    this.getContext().getSession().set(ChlkSessionConstants.ADMIN_RECIPIENTS, {
+                        groups: (announcement.getRecipients() || []).map(function(item){
+                            return new chlk.models.group.Group(item.getGroupName(), item.getGroupId())
+                        }),
+                        students: announcement.getAdminAnnouncementStudents()
+                    });
                     if(date_){
                         announcement.setExpiresDate(date_);
                     }
@@ -577,7 +583,13 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     var announcement = model.getAnnouncement();
-                    this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, (announcement.getRecipients() || []).map(function(item){return item.getGroupId()}));
+                    //this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, (announcement.getRecipients() || []).map(function(item){return item.getGroupId()}));
+                    this.getContext().getSession().set(ChlkSessionConstants.ADMIN_RECIPIENTS, {
+                        groups: (announcement.getRecipients() || []).map(function(item){
+                            return new chlk.models.group.Group(item.getGroupName(), item.getGroupId())
+                        }),
+                        students: announcement.getAdminAnnouncementStudents()
+                    });
                     this.prepareAnnouncementAttachedItems(announcement);
                     return model;
                 }, this);
@@ -2746,14 +2758,12 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId]],
         function showGroupsAction(announcementId){
             this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_ID, announcementId);
-            var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []).map(function (_) { return _.valueOf() });
+            var recipients = this.getContext().getSession().get(ChlkSessionConstants.ADMIN_RECIPIENTS, []);
             this.WidgetStart('group', 'show', [{
-                    selected: groupsIds,
-                    hiddenParams: {
-                        id: announcementId
-                    }
+                    selected: recipients
                 }])
                 .then(function(data){
+                    data.setId(announcementId);
                     this.BackgroundNavigate('announcement', 'saveGroupsToAnnouncement', [data]);
                 }, this)
                 .attach(this.validateResponse_());
@@ -2763,57 +2773,75 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.FeedAnnouncementViewData]],
         function saveGroupsToAnnouncementAction(model){
-            var groups = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_LIST, []);
-            var groupIds = model.getGroupIds() ? model.getGroupIds().split(',') : [];
-            groups = groups.filter(function(item){
-                return groupIds.indexOf(item.getId().valueOf().toString()) > -1
-            });
-            var recipients = groups.map(function(item){
+            var adminRecipients = model.getSelectedItems();
+
+            if(model.getSelectedItems()){
+                if(model.getSelectedItems().groups){
+                    model.getSelectedItems().groups = model.getSelectedItems().groups.map(function(group){
+                        return new chlk.models.group.Group(group.name, new chlk.models.id.GroupId(group.id));
+                    });
+                }
+
+                if(model.getSelectedItems().students){
+                    model.getSelectedItems().students = model.getSelectedItems().students.map(function(student){
+                        return new chlk.models.people.ShortUserInfo(null, null, new chlk.models.id.SchoolPersonId(student.id), student.displayname, student.gender);
+                    });
+                }
+            }
+
+            this.getContext().getSession().set(ChlkSessionConstants.ADMIN_RECIPIENTS, model.getSelectedItems());
+
+            var recipients = adminRecipients.groups.map(function(item){
                 return new chlk.models.announcement.AdminAnnouncementRecipient(model.getId(), item.getId(), item.getName());
             });
+
             model.setRecipients(recipients);
-            this.adminAnnouncementService.addGroupsToAnnouncement(model.getId(), model.getGroupIds())
+            model.setAdminAnnouncementStudents(adminRecipients.students);
+
+            var res = this.adminAnnouncementService.addGroupsToAnnouncement(model.getId(), model.getGroupIds(), model.getStudentIds())
                 .then(function(){
-                    this.BackgroundCloseView(chlk.activities.announcement.AnnouncementGroupsDialog);
+                    this.BackgroundCloseView(chlk.activities.recipients.GroupSelectorDialog);
+                    return ria.async.BREAK;
                 }, this)
                 .attach(this.validateResponse_());
-            this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, model.getGroupIds() ? model.getGroupIds().split(',').map(function(item){return new chlk.models.id.GroupId(item)}) : []);
+
             this.BackgroundUpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, model, 'recipients');
-            return this.ShadeLoader();
+
+            return this.UpdateView(chlk.activities.recipients.GroupSelectorDialog, res);
         },
 
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId]],
-        function removeRecipientAction(announcementId, recipientId){
+        [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId, chlk.models.id.SchoolPersonId]],
+        function removeRecipientAction(announcementId, groupId_, studentId_){
 
             var res = this.ShowConfirmBox('Are you sure you want to remove that group from announcement?', '')
-                .thenCall(this.groupService.list, [])
-                .attach(this.validateResponse_())
-                .then(function(groups){
-                    var groupIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
-                    groupIds = groupIds.filter(function(id){
-                        return id != recipientId
-                    });
-                    var groupIdsStr = groupIds.map(function(item){return item.valueOf()}).join(',');
+                .then(function(data){
+                    var adminRecipients = this.getContext().getSession().get(ChlkSessionConstants.ADMIN_RECIPIENTS, []);
+                    if(groupId_)
+                        adminRecipients.groups = adminRecipients.groups.filter(function(group){return group.getId() != groupId_});
 
-                    groups = groups.filter(function(item){
-                        return groupIds.indexOf(item.getId()) > -1
-                    });
+                    if(studentId_)
+                        adminRecipients.students = adminRecipients.students.filter(function(student){return student.getId() != studentId_});
 
-                    var recipients = groups.map(function(item){
+                    var groupIds = adminRecipients.groups.map(function(group){return group.getId().valueOf()}).join(',');
+                    var studentIds = adminRecipients.students.map(function(student){return student.getId().valueOf()}).join(',');
+
+                    var recipients = adminRecipients.groups.map(function(item){
                         return new chlk.models.announcement.AdminAnnouncementRecipient(announcementId, item.getId(), item.getName());
                     });
+
                     var model = new chlk.models.announcement.FeedAnnouncementViewData();
                     model.setId(announcementId);
                     model.setRecipients(recipients);
-                    this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, groupIds);
+                    model.setAdminAnnouncementStudents(adminRecipients.students);
 
-                    return this.adminAnnouncementService.addGroupsToAnnouncement(model.getId(), groupIdsStr)
+                    return this.adminAnnouncementService.addGroupsToAnnouncement(model.getId(), groupIds, studentIds)
                         .then(function(){
                             return model;
                         }, this)
-                }, this);
+                }, this)
+                .attach(this.validateResponse_());
 
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');
         },
