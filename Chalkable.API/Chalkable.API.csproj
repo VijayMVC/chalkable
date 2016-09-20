@@ -89,6 +89,7 @@
     <Compile Include="Models\Ethnicity.cs" />
     <Compile Include="Models\ExceptionViewData.cs" />
     <Compile Include="Models\LessonPlan.cs" />
+    <Compile Include="Models\LimitedEnglish.cs" />
     <Compile Include="Models\PaginatedList.cs" />
     <Compile Include="Models\CoreRole.cs" />
     <Compile Include="Models\CoreRoles.cs" />

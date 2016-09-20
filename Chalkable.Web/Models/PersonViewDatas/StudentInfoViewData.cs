@@ -29,6 +29,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IdNameViewData<int> Nationality { get; set; }
         public bool IsHispanic { get; set; }
         public bool Lep { get; set; }
+        public int? LimitedEnglishId { get; set; }
         public bool IsForeignExchange { get; set; }
         public string StateIdNumber { get; set; }
         public string AlternateStudentNumber { get; set; }
@@ -101,6 +102,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 ? EthnicityViewData.Create(studentDetails.Ethnicity)
                 : null; 
             res.Lep = studentDetails.LimitedEnglishRef.HasValue;
+            res.LimitedEnglishId = studentDetails.LimitedEnglishRef;
             res.IsForeignExchange = studentDetails.IsForeignExchange;
             res.StateIdNumber = studentDetails.StateIdNumber;
             res.AlternateStudentNumber = studentDetails.AltStudentNumber;

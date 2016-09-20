@@ -56,5 +56,10 @@ namespace Chalkable.API.Endpoints
         {
             return await Connector.Get<IList<SchoolInfo>>($"/School/LocalSchools.json");
         }
+
+        public async Task<IList<LimitedEnglish>> GetLimitedEnglishList()
+        {
+            return await Connector.Get<IList<LimitedEnglish>>($"/LimitedEnglish/List.json");
+        } 
     }
 }

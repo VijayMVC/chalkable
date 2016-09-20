@@ -319,6 +319,7 @@
     <Compile Include="Controllers\GradingController.cs" />
     <Compile Include="Controllers\GradingPeriodController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\LimitedEnglishController.cs" />
     <Compile Include="Controllers\LPGalleryCategoryController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PeriodController.cs" />
@@ -391,6 +392,7 @@
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassComplexViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
+    <Compile Include="Models\LimitedEnglishViewData.cs" />
     <Compile Include="Models\CustomReportTemplateViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\ClassPanoramaViewData.cs" />
     <Compile Include="Models\EthnicityViewData.cs" />

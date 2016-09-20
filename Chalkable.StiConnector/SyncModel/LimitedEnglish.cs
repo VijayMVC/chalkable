@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.StiConnector.Attributes;
+﻿using Chalkable.StiConnector.Attributes;
 
 namespace Chalkable.StiConnector.SyncModel
 {
     [SisMinVersion("7.3.11.21255")]
     public class LimitedEnglish : SyncModel
     {
-        public int Id { get; set; }
+        public int LimitedEnglishID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

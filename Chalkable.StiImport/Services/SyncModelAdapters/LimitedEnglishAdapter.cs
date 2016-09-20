@@ -17,7 +17,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             return new Data.School.Model.LimitedEnglish
             {
-                Id = model.Id,
+                Id = model.LimitedEnglishID,
                 Description = model.Description,
                 Code = model.Code,
                 Name = model.Name,
