@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="FeedDetailsExportModel" nillable="true" type="FeedDetailsExportModel" />
+  <xs:complexType name="FeedDetailsExportModel">
+    <xs:complexContent mixed="false">
+      <xs:extension base="ShortFeedExportModel">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementDescription" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IsLessonPlan" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowScoreSettings" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WeightAddition" nillable="true" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WeigntMultiplier" nillable="true" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="HasAttributes" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="IsSupplemental" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StudentId" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StudentDisplayName" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StandardId" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StandardName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="StandardDescription" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="StudentOrder" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AnnouncementAttachmentId" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementAttachmentName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementAttachmentImage" type="xs:base64Binary" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AnnouncementAttachmentOrder" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Document" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AttributeId" nillable="true" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SisAttributeId" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AttributeName" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AttributeDescription" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AttributeAttachmentName" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ShortFeedExportModel">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PersonFirstName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PersonLastName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SchoolName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SchoolYear" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ExecutionDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="StartReportDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EndReportDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsAdminAnnouncement" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ClassId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AdminId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ClassName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ClassNumber" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Owners" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DayTypes" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Periods" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AnnouncementId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementType" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CategoryName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="StartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Complete" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsHidden" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TotalPoint" nillable="true" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="HasStandards" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="HasAttachments" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
