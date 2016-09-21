@@ -1,24 +1,78 @@
 .recipients-window.dialog
-  width: 1020px
+  width: 1018px
 
-  .x-window-body
-    margin-right: 0
+  .results-count
+    margin-top: 7px
+
+  .chosen-container
+    &.chosen-with-drop
+      .chosen-single
+        div
+          b
+            background-position: -12px 4px
+
+      .chosen-drop
+        border: 1px solid #c8c7c3
+
+    .chosen-single
+      height: 32px
+      background: #fff
+      border-color: #c8c7c3
+
+      >DIV
+        +background(linear-gradient(top, #ffffff, #f2f1ed))
+        border-left: 1px solid #c8c7c3
+        width: 22px
+
+        b
+          background-position: 5px 6px
+
+  .action-bar
+    display: inline-block
+    margin-bottom: 28px
+    margin-top: 0
+
+  INPUT[type="text"]
+    line-height: 24px
+    border-radius: 3px
+    border: 1px solid #c8c7c3
+    box-sizing: border-box
+    padding: 0 11px
+
+  LABEL
+    font-weight: bold
+    font-size: 12px
+    margin: 0 0 7px 2px
+    display: block
+
+  .left-block
+    LABEL
+      display: inline-block
+      margin: 0 16px
+
+  .recipients-body
+    margin: 15px 32px 30px 30px
+
+  .group-name-cnt
+    margin-bottom: 25px
+
+    .name
+      width: 100%
 
 .group-people-selector
   .items-cnt
     overflow-y: auto
-    height: 330px
-
-  .chosen-container
-    min-width: 100px
+    height: 310px
+    margin-right: -25px
 
   .text-filter-cnt
     position: relative
 
     INPUT
       position: absolute
-      top: -35px
+      top: -61px
       right: 0
+      width: 231px
 
   .filters-cnt
     .filter-cnt
@@ -27,42 +81,56 @@
       &:not(:last-child)
         margin-right: 20px
 
-    LABEL
-      font-weight: bold
+    .sort-by-cnt .chosen-container
+      width: 140px !important
 
-    .sort-by-cnt
-      width: 140px
+    .school-cnt .chosen-container
+      width: 309px !important
 
-    .school-cnt
-      width: 310px
+    .grade-level-cnt .chosen-container
+      width: 63px !important
 
-    .grade-level-cnt
-      width: 62px
+    .class-cnt .chosen-container
+      width: 174px !important
 
-    .class-cnt
-      width: 173px
-
-    .program-cnt
-      width: 188px
+    .program-cnt .chosen-container
+      width: 189px !important
 
   .top-info-cnt
     font-weight: bold
+    margin-bottom: 17px
+
+  .filters-cnt+.top-info-cnt
+    margin-top: 30px
 
   .items-4
     .recipient-item
       padding: 6px 10px
       width: 200px
       height: 48px
-      margin-right: 24px
+      line-height: 40px
+
+      .group-icon
+        margin-top: 0
+
+      &:not(:nth-child(4n))
+        margin-right: 24px
+
+      &:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4))
+        margin-top: 17px
 
   .items-3
     .recipient-item
       padding: 10px
-      width: 270px
+      width: 271px
       height: 70px
+      line-height: 70px
 
       &:not(:nth-child(3n))
-        margin-right: 37px
+        margin-right: 39px
+
+      &:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3))
+        margin-top: 17px
 
   .body-content:not(.active)
     display: none
@@ -72,7 +140,6 @@
     border: 1px solid #c8c7c3
     border-radius: 5px
     position: relative
-    margin-top: 17px
     vertical-align: top
 
     >*
@@ -86,6 +153,13 @@
       margin-right: 13px
       margin-left: 4px
 
+    .group-icon
+      width: 32px
+      height: 32px
+      +icons-32-sprite(group-icon)
+      margin-left: 8px
+      margin-top: -11px
+
     .recipient-remove
       position: absolute
       top: -3px
@@ -95,7 +169,12 @@
       height: 24px
 
     .recipient-name
-      .main
+      width: 135px
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+
+      b
         font-weight: bold
         font-size: 14px
         color: #2f7790

@@ -1,10 +1,10 @@
 .text-filter-cnt
-    INPUT(name="filter", placeholder="Search Group Names...", value=self.getFilter()).groups-filter.top-filter.submit-on-change
+    INPUT(name="filter", type="text", placeholder="Search Group Names...", value=self.getFilter()).groups-filter.top-filter.submit-on-change
 .top-info-cnt
     .left-block.i-b
-        .box-checkbox.circle
+        .box-checkbox.circle.v-m
             +Checkbox('allGroups', false, false, true).all-groups-check.all-items-check
-        LABEL.text All
+        LABEL.text.v-m All
     .right-block.i-b.right
         +ActionLink('group', 'create') Group
 .groups-cnt.items-cnt

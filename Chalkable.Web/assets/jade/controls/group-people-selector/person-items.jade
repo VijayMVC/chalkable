@@ -9,4 +9,5 @@ each student in self.getModel().getItems()
             ).recipient-check.student-check
         .recipient-icon.student-icon
             +PersonImg(student, 47)
-        .recipient-name=student.getDisplayName()
+        .recipient-name
+            b=student.getDisplayName()

@@ -1,5 +1,5 @@
 .text-filter-cnt
-    INPUT(name="filter", placeholder="Search first or last name", value=self.getFilter()).students-filter.top-filter.submit-on-change
+    INPUT(name="filter", type="text", placeholder="Search first or last name", value=self.getFilter()).students-filter.top-filter.submit-on-change
 .filters-cnt
     .filter-cnt.sort-by-cnt
         LABEL.filter-label Sort by
@@ -36,7 +36,8 @@
             +Checkbox('allPersons', false, false, true).all-persons-check.all-items-check
         LABEL.text.v-m All
     .right-block.i-b.right
-        .results-count=self.getUsers().getTotalCount()
+        -var count = self.getUsers().getTotalCount()
+        .results-count=count + (count == 1 ? " result" : " results")
 .persons-cnt.items-cnt
     +Hidden('start', 0).start-value
     .items-cnt-2

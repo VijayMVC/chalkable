@@ -16,25 +16,25 @@ mixin GroupPeopleSelector(tpl, requestId)
                     A(data-index=4).action-link.top-link Selected
 
         if model.isHasOwnStudents()
-            DIV(data-index=1).x-window-body.body-content.active.my-students-cnt.items-3
+            DIV(data-index=1).body-content.active.my-students-cnt.items-3
                 +RenderWith(model.getMyStudentsPart(), chlk.templates.controls.group_people_selector.UsersListTpl)(
                     userRole = tpl.getUserRole(),
                     selected = (model.getSelectedStudents() || []).map(function (item) {return item.getId()})
                 )
         if model.isHasAccessToAllStudents()
-            DIV(data-index=2, class = model.isHasOwnStudents() ? '' : 'active').x-window-body.body-content.all-students-cnt.items-3
+            DIV(data-index=2, class = model.isHasOwnStudents() ? '' : 'active').body-content.all-students-cnt.items-3
                 +RenderWith(model.getAllStudentsPart(), chlk.templates.controls.group_people_selector.UsersListTpl)(
                     userRole = tpl.getUserRole(),
                     selected = (model.getSelectedStudents() || []).map(function (item) {return item.getId()})
                 )
         if model.hasGroups()
-            DIV(data-index=3).x-window-body.body-content.groups-cnt.items-3
+            DIV(data-index=3).body-content.groups-cnt.items-3
                 +RenderWith(model.getGroupsPart(), chlk.templates.controls.group_people_selector.GroupsListTpl)(
                     userRole = tpl.getUserRole(),
                     selected = (model.getSelectedGroups() || []).map(function(item){return item.getId()})
                 )
         if model.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
-            DIV(data-index=4).x-window-body.body-content.selected-content.items-4
+            DIV(data-index=4).body-content.selected-content.items-4
                 +RenderWith(model, chlk.templates.controls.group_people_selector.SelectorBaseTpl)(
                     userRole = tpl.getUserRole()
                 )

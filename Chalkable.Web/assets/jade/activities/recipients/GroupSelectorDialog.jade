@@ -2,5 +2,5 @@
    .x-window-header
       .close.close-btn.dark
       h1=self.getPageTitle()
-   +ActionForm('group', 'submitGroups')
+   +ActionForm('group', 'submitGroups').recipients-body
       +GroupPeopleSelector(self, self.getRequestId())

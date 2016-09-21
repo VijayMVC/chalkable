@@ -5,14 +5,18 @@
 +Hidden('studentIds', (self.getStudentIds() || []).join(','))
 +Hidden('selectedItems', self.getSelectedItemsObj())
 
-each group in groups
-    .recipient-item.group-item.selected
-        .recipient-icon.group-icon
-        .recipient-name=group.getName()
-        .recipient-remove.remove-group(data-type=chlk.models.recipients.RecipientTypeEnum.GROUP.valueOf(), data-id=group.getId().valueOf())
-each student in students
-    .recipient-item.student-item.selected
-        .recipient-icon.student-icon
-            +PersonImg(student, 47)
-        .recipient-name=student.getDisplayName()
-        .recipient-remove.remove-student(data-type=chlk.models.recipients.RecipientTypeEnum.STUDENT.valueOf(), data-id=student.getId().valueOf())
+.items-cnt
+    .items-cnt-2
+        each group in groups
+            .recipient-item.group-item.selected
+                .recipient-icon.group-icon
+                .recipient-name
+                    b=group.getName()
+                .recipient-remove.remove-group(data-type=chlk.models.recipients.RecipientTypeEnum.GROUP.valueOf(), data-id=group.getId().valueOf())
+        each student in students
+            .recipient-item.student-item.selected
+                .recipient-icon.student-icon
+                    +PersonImg(student, 47)
+                .recipient-name
+                    b=student.getDisplayName()
+                .recipient-remove.remove-student(data-type=chlk.models.recipients.RecipientTypeEnum.STUDENT.valueOf(), data-id=student.getId().valueOf())
