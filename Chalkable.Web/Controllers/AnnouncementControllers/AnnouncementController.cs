@@ -209,7 +209,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected DateTime GenerateDefaultExpiresDate(DateTime? expiresDate)
         {
-            return expiresDate ?? (Context.SchoolYearEndDate ?? DateTime.MaxValue);
+            return expiresDate ?? Context.NowSchoolYearTime;
         }
 
         protected void TrackNewItemCreate(AnnouncementDetails ann, Action<IUserTrackingService, int, int > trackNewItemCreated)
