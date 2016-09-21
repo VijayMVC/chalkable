@@ -54,21 +54,21 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 <html>
     <head>
             <title></title>
-            <link href = ""http://fonts.googleapis.com/css?family=Pacifico"" rel= ""stylesheet"" type = ""text/css"" />
-            <link href = ""http://fonts.googleapis.com/css?family=Oswald"" rel=""stylesheet"" type = ""text/css"" />
-            <link href = ""http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700"" rel = ""stylesheet"" type=""text/css"" />
-            <link href = ""{baseUrl}/app/bower/chosen/chosen.min.css"" rel = ""stylesheet"" type = ""text/css"" />
-            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap.min.css"" type = ""text/css"" rel = ""stylesheet"" />                 
-            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap-theme.min.css"" type = ""text/css"" rel = ""stylesheet"" />
-            <link href = ""{baseUrl}/app/bower/jquery-ui/themes/smoothness/jquery-ui.css"" rel = ""stylesheet"" type = ""text/css"" />                                              
-            <link href = ""{baseUrl}/app/jquery/snippet/jquery.snippet.min.css"" rel = ""stylesheet"" type = ""text/css"" />
+            <link href = ""http://fonts.googleapis.com/css?family=Pacifico"" rel= ""stylesheet"" type = ""text/css""/>
+            <link href = ""http://fonts.googleapis.com/css?family=Oswald"" rel=""stylesheet"" type = ""text/css""/>
+            <link href = ""http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700"" rel = ""stylesheet"" type=""text/css""/>
+            <link href = ""{baseUrl}/app/bower/chosen/chosen.min.css"" rel = ""stylesheet"" type = ""text/css""/>
+            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap.min.css"" type = ""text/css"" rel = ""stylesheet""/>                 
+            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap-theme.min.css"" type = ""text/css"" rel = ""stylesheet""/>
+            <link href = ""{baseUrl}/app/bower/jquery-ui/themes/smoothness/jquery-ui.css"" rel = ""stylesheet"" type = ""text/css""/>                                              
+            <link href = ""{baseUrl}/app/jquery/snippet/jquery.snippet.min.css"" rel = ""stylesheet"" type = ""text/css""/>
                                                        
+            <script src = ""{baseUrl}/app/bower/jquery/dist/jquery.js""></script>      
+            <script src = ""{baseUrl}/app/bower/jade/jade.js"" ></script>
 
-            <script src = ""{baseUrl}/app/bower/jquery/dist/jquery.js"" ></ script >      
-            <script src = ""{baseUrl}/app/bower/jade/jade.js"" ></ script >
-            <style type = ""text/css"" >{template.Style}</style>
-
-            <script type=""text/javascript"">{model}</script>
+            <style type=""text/css"">{template.Style}</style>
+            
+            <script type=""text/javascript"">var Model = {model}</script>
             <script type=""text/jade"" id=""template"">{template.Layout}</script>
 
     </head>
@@ -76,10 +76,10 @@ namespace Chalkable.BusinessLogic.Services.Reporting
         <div id=""container"" class=""fluid-container"">
               <h1> Demo Report </h1>
      
-             </div>
+        </div>
      
-         <script type=""text/javascript"" >
-              var msg = "";
+         <script type=""text/javascript"">
+              var msg = """";
             if (!jade)
                 msg = msg + ""jade wasn't download"";
             else
@@ -95,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             {{
                 (function(jade, $, model) {{
                     var template = $('#template').text();
-                    var html = "";
+                    var html = """";
                     try
                     {{
                         html = jade.render(template, {{ model: model.data }});
@@ -112,9 +112,9 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 var error = '<h1>Error rendering report ....</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
                 jQuery('#container').html(error);
             }}
-        </ script >
-        </ body >
-    </ html >";
+        </script>
+    </body>
+</html>";
 
         }
 

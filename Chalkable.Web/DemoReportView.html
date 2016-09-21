@@ -2373,7 +2373,7 @@
 
     </script>
 
-    <script type="text/jade" id="template">-var school = model.school
+<script type="text/jade" id="template">-var school = model.school
 -var student = model.student
 -var recipient = student.recipient
 .panel.main-student-panel(class=index || index2 ? "new-page" : "")
@@ -2385,9 +2385,11 @@
 						.h1= "Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
 						.h2= school.name
 						.school-mailing.mailing-box
-							.line= school.address1 + " " + school.address2
-							.line= [school.city, school.state, school.zip].join(" ")
-							.line= school.phone
+							.line= (school.address1 || "") + " " + (school.address2 || "")
+                             if school.city && school.state && school.zip
+							    .line= [school.city, school.state, school.zip].join(" ")
+                             if school.phone
+							    .line= school.phone
 					.col-sm-4
 						if model.logohref
 							img(src=model.logohref, width="3in").logo

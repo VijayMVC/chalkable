@@ -60,7 +60,7 @@ NAMESPACE('chlk.controllers', function (){
 
             var res = ria.async.wait([
                 this.gradingPeriodService.getList(),
-                this.customReportTemplateService.list()
+                this.customReportTemplateService.list(chlk.models.reports.CustomReportTemplateType.BODY)
             ])
             .attach(this.validateResponse_())
             .then(function(res){

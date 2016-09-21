@@ -42,9 +42,10 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[Number]],
-            ria.async.Future, function list() {
+            [[chlk.models.reports.CustomReportTemplateType]],
+            ria.async.Future, function list(type_) {
                 return this.get('CustomReportTemplate/List.json', ArrayOf(chlk.models.reports.CustomReportTemplate), {
+                    type: type_ && type_.valueOf()
                 });
             },
 

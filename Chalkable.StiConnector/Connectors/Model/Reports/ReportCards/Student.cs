@@ -10,7 +10,7 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports.ReportCards
             Recipients = new List<ReportCardAddressData>();
         }
         public string AltStudentNumber { get; set; }
-        public IEnumerable<ReportCardAddressData> Attendance { get; set; }
+        public IEnumerable<ReportCardAttendanceData> Attendance { get; set; }
         public int? ClassRank { get; set; }
         public string Counselor { get; set; }
         public decimal? CumulativeCredit { get; set; }

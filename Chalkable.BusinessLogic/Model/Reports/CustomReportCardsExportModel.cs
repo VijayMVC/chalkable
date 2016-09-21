@@ -25,6 +25,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
             return new CustomReportCardsExportModel
             {
                 AcadYear = reportCard.AcadYear,
+                LogoHref = logoRef,
                 AcadSessionName = reportCard.AcadSessionName,
                 ReportDate = reportDate.ToString("m/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture),
                 CopyRight = "Copyright (c) 2016 Chalkable ST.US.000031.",
@@ -38,7 +39,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     State = reportCard.School.State,
                     Zip = reportCard.School.Zip
                 },
-                Student = StudentReportCardsExportModel.Create(studentData, recipient, inputModel.IncludeGradedStandardsOnly),
+                Student = StudentReportCardsExportModel.Create(reportCard.GradingPeriod, studentData, recipient, inputModel.IncludeGradedStandardsOnly),
                 TraditionalGradingScale = inputModel.IncludeGradingScaleTraditional && studentData.GradingScaleId.HasValue 
                         ? TraditionalGradingScaleExportModel.Create(reportCard.GradingScales, studentData.GradingScaleId.Value)
                         :  new List<TraditionalGradingScaleExportModel>(),
@@ -68,7 +69,14 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         public static IList<TraditionalGradingScaleExportModel> Create(IList<GradingScale> gradingScales, int gradingScaleId)
         {
-            return new List<TraditionalGradingScaleExportModel>();
+            var gradingScale = gradingScales.FirstOrDefault(x => x.Id == gradingScaleId);
+            if(gradingScale == null || gradingScale.Ranges == null) return new List<TraditionalGradingScaleExportModel>();
+            return gradingScale.Ranges.Select(x => new TraditionalGradingScaleExportModel
+            {
+                MaxValue = x.HighValue,
+                MinValue = x.LowValue,
+                Name = x.AlphaGrade
+            }).ToList();
         } 
 
     }
@@ -79,7 +87,13 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         public static IList<StandardsGradingScaleExportModel> Create(IList<GradingScale> gradingScales, int standardGradingScaleId)
         {
-            return new List<StandardsGradingScaleExportModel>();
+            var gradingScale = gradingScales.FirstOrDefault(x => x.Id == standardGradingScaleId);
+            if (gradingScale == null || gradingScale.Ranges == null) return new List<StandardsGradingScaleExportModel>();
+            return gradingScale.Ranges.Select(x => new StandardsGradingScaleExportModel
+            {
+                Name = x.AlphaGrade,
+                Description = gradingScale.Description + " " + x.AlphaGrade
+            }).ToList();
         }
     }
 
@@ -99,7 +113,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public decimal Demerits { get; set; }
         public string ReportCardsComment { get; set; }
 
-        public static StudentReportCardsExportModel Create(Student studentData, ReportCardAddressData recipient, bool onlyGradedStandard)
+        public static StudentReportCardsExportModel Create(GradingPeriod gradingPeriod, Student studentData, ReportCardAddressData recipient, bool onlyGradedStandard)
         {
             return new StudentReportCardsExportModel
             {
@@ -111,7 +125,14 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 Merits = studentData.Merits,
                 Recipient = RecipientsReportCardsExportModel.Create(recipient),
                 Classes = ClassReportCardsExportModel.Create(studentData.Sections, onlyGradedStandard),
-                
+                Attendances = AttendanceSummaryExportModel.Create(studentData.Attendance, "test"),
+                GradingPeriod = new GradingPeriodExportModel
+                {
+                    Announcement = gradingPeriod.Announcement,
+                    StartDate = gradingPeriod.StartDate,
+                    EndDate = gradingPeriod.EndDate,
+                    Name = gradingPeriod.Name
+                }
             };
         }
     }
@@ -181,7 +202,9 @@ namespace Chalkable.BusinessLogic.Model.Reports
             {
                 AlphaGrade = x.AlphaGrade,
                 NumericGrade = x.NumericGrade,
-                Comments = CommentReportCardsExportModel.Create(x.Comments),
+                Comments = x.Comments != null 
+                           ? CommentReportCardsExportModel.Create(x.Comments) 
+                           : new List<CommentReportCardsExportModel>(),
                 IsExempt = x.IsExempt,
                 AlphaGradeId = x.AlphaGradeId,
                 GradedItemName = x.GradedItemName
@@ -230,19 +253,29 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public decimal UnexcusedAbsences { get; set; }
         public decimal UnexcusedTardies { get; set; }
 
-        public static AttendanceSummaryExportModel Create(ReportCardAttendanceData attendance)
+        public static IList<AttendanceSummaryExportModel> Create(IEnumerable<ReportCardAttendanceData> attendances, string gradingPeriodName)
         {
-            return new AttendanceSummaryExportModel
+            return attendances.Select(attendance => Create(attendance, gradingPeriodName)).ToList();
+        }
+
+        public static AttendanceSummaryExportModel Create(ReportCardAttendanceData attendance, string gradingPeriodName)
+        {
+            var res = new AttendanceSummaryExportModel
             {
                 GradingPeriodId = attendance.GradingPeriodId,
                 UnexcusedAbsences = attendance.UnexcusedAbsences,
-                UnexcusedTardies = attendance.UnexcusedTardies,
                 ExcusedAbsences = attendance.ExcusedAbsences,
                 ExcusedTardies = attendance.ExcusedTardies,
-                Enroller = attendance.DaysEnrolled
+                UnexcusedTardies = attendance.UnexcusedTardies,
+                Enroller = attendance.DaysEnrolled,
+                GradingPeriodName = gradingPeriodName
             };
-        }
+            res.Absences = attendance.UnexcusedAbsences + attendance.ExcusedAbsences;
+            res.Tardies = attendance.ExcusedTardies + attendance.UnexcusedTardies;
+            res.Present = res.Enroller - (res.Absences + res.Tardies);
 
+            return res;
+        }
     }
 
     public class GradingPeriodExportModel

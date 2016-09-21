@@ -439,12 +439,14 @@ namespace Chalkable.BusinessLogic.Services.School
             var listOfReportCards = BuilReportCardsData(inputModel);
             var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
             var listOfpdf = new List<byte[]>();
-            
+
+            if (listOfReportCards.Count > 0)
+                listOfReportCards = new List<CustomReportCardsExportModel> {listOfReportCards[0]};
+
             foreach (var data in listOfReportCards)
-            {
                 listOfpdf.Add(ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
-            }
-            return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
+
+            return listOfpdf[0]; //ReportCardsRenderer.MargePdfDocuments(listOfpdf);
         }
 
         private async Task<byte[]> GenerateReportCardPdf(CustomReportCardsExportModel data, string path,
