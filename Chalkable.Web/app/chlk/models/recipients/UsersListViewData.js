@@ -31,15 +31,24 @@ NAMESPACE('chlk.models.recipients', function () {
             ArrayOf(chlk.models.classes.Class), 'classes',
             ArrayOf(chlk.models.recipients.Program), 'programs',
 
-            [[chlk.models.recipients.SelectorModeEnum, Boolean, Boolean, Boolean, chlk.models.common.PaginatedList,
-                ArrayOf(chlk.models.grading.GradeLevel), ArrayOf(chlk.models.school.School), ArrayOf(chlk.models.recipients.Program)]],
-            function $(selectorMode_, hasAccessToAllStudents_, hasOwnStudents_, my_, users_, gradeLevels_, schools_, programs_){
-                BASE(selectorMode_, hasAccessToAllStudents_, hasOwnStudents_);
-                my_ && this.setMy(my_);
+            [[chlk.models.common.PaginatedList,
+                ArrayOf(chlk.models.grading.GradeLevel), ArrayOf(chlk.models.school.School), ArrayOf(chlk.models.recipients.Program),
+                ArrayOf(chlk.models.classes.Class), chlk.models.id.GradeLevelId, chlk.models.id.SchoolId, chlk.models.id.ProgramId,
+                chlk.models.id.ClassId, Boolean, String
+            ]],
+            function $(users_, gradeLevels_, schools_, programs_, classes_, gradeLevelId_, schoolId_, programId_, classId_, byLastName_, filter_){
+                BASE();
                 users_ && this.setUsers(users_);
                 gradeLevels_ && this.setGradeLevels(gradeLevels_);
                 schools_ && this.setSchools(schools_);
                 programs_ && this.setPrograms(programs_);
+                classes_ && this.setClasses(classes_);
+                gradeLevelId_ && this.setGradeLevelId(gradeLevelId_);
+                schoolId_ && this.setSchoolId(schoolId_);
+                programId_ && this.setProgramId(programId_);
+                classId_ && this.setClassId(classId_);
+                byLastName_ && this.setByLastName(byLastName_);
+                filter_ && this.setFilter(filter_);
             }
         ]);
 });

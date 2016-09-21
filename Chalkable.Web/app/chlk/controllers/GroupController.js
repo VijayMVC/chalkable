@@ -5,8 +5,11 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.services.StudentService');
 
+REQUIRE('chlk.models.recipients.RecipientsSubmitViewData');
+
 REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
 REQUIRE('chlk.activities.recipients.GroupSelectorDialog');
+REQUIRE('chlk.activities.recipients.GroupCreateDialog');
 
 NAMESPACE('chlk.controllers', function () {
 
@@ -28,13 +31,56 @@ NAMESPACE('chlk.controllers', function () {
 
             [chlk.controllers.NotChangedSidebarButton()],
             function showGroupsFromReportAction(){
-                //var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []).map(function (_) { return _.valueOf() });
                 this.WidgetStart('group', 'show', [])
                     .then(function(data){
                         console.info(data);
                     }, this)
                     .attach(this.validateResponse_());
                 return null;
+            },
+
+            [chlk.controllers.NotChangedSidebarButton()],
+            function createAction(){
+                this.WidgetStart('group', 'create', [])
+                    .then(function(data){
+                        console.info(data);
+                    }, this)
+                    .attach(this.validateResponse_());
+                return null;
+            },
+
+            [chlk.controllers.NotChangedSidebarButton()],
+            [[chlk.models.recipients.RecipientsSubmitViewData]],
+            function createGroupSubmitAction(model) {
+                this.WidgetComplete(model.getRequestId(), model);
+                return null;
+            },
+
+            [chlk.controllers.NotChangedSidebarButton()],
+            [[String, chlk.models.group.AnnouncementGroupsViewData]],
+            function createWidgetAction(requestId) {
+                var res = ria.async.wait([
+                        this.studentService.getStudents(null, null, true, null, 0, 15),
+                        this.studentService.getStudents(null, null, false, null, 0, 15),
+                        this.schoolService.getUserLocalSchools(),
+                        this.schoolService.getSchoolPrograms()
+                    ])
+                    .then(function(result){
+                        var mode = chlk.models.recipients.SelectorModeEnum.SELECT_WITHOUT_GROUPS,
+                            hasAccessToAllStudents = true,
+                            hasOwnStudents = true,
+                            gradeLevels = this.getContext().getSession().get(ChlkSessionConstants.GRADE_LEVELS),
+                            schools = result[2],
+                            programs = result[3],
+                            myStudentsPart = new chlk.models.recipients.UsersListViewData(result[0], gradeLevels, schools, programs),
+                            allStudentsPart = new chlk.models.recipients.UsersListViewData(result[1], gradeLevels, schools, programs);
+                        var model = new chlk.models.recipients.GroupSelectorViewData(requestId, mode, hasAccessToAllStudents, hasOwnStudents,
+                            null, myStudentsPart, allStudentsPart);
+                        return model;
+                    }, this)
+                    .attach(this.validateResponse_());
+
+                return this.ShadeOrUpdateView(chlk.activities.recipients.GroupCreateDialog, res);
             },
 
             [chlk.controllers.NotChangedSidebarButton()],
@@ -51,12 +97,12 @@ NAMESPACE('chlk.controllers', function () {
                         var mode = chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS,
                             hasAccessToAllStudents = true,
                             hasOwnStudents = true,
-                            groupsModel = new chlk.models.recipients.GroupsListViewData(mode, hasAccessToAllStudents, hasOwnStudents, result[0]),
+                            groupsModel = new chlk.models.recipients.GroupsListViewData(result[0]),
                             gradeLevels = this.getContext().getSession().get(ChlkSessionConstants.GRADE_LEVELS),
                             schools = result[3],
                             programs = result[4],
-                            myStudentsPart = new chlk.models.recipients.UsersListViewData(mode, hasAccessToAllStudents, hasOwnStudents, true, result[1], gradeLevels, schools, programs),
-                            allStudentsPart = new chlk.models.recipients.UsersListViewData(mode, hasAccessToAllStudents, hasOwnStudents, false, result[2], gradeLevels, schools, programs),
+                            myStudentsPart = new chlk.models.recipients.UsersListViewData(result[1], gradeLevels, schools, programs),
+                            allStudentsPart = new chlk.models.recipients.UsersListViewData(result[2], gradeLevels, schools, programs),
                             selectedGroups = (data.getSelected() && data.getSelected().groups) || [],
                             selectedStudents = (data.getSelected() && data.getSelected().students) || [];
                         var model = new chlk.models.recipients.GroupSelectorViewData(requestId, mode, hasAccessToAllStudents, hasOwnStudents,
@@ -69,7 +115,7 @@ NAMESPACE('chlk.controllers', function () {
             },
 
             [chlk.controllers.NotChangedSidebarButton()],
-            [[chlk.models.announcement.FeedAnnouncementViewData]],
+            [[chlk.models.recipients.RecipientsSubmitViewData]],
             function submitGroupsAction(model) {
                 this.WidgetComplete(model.getRequestId(), model);
                 return null;
@@ -263,7 +309,7 @@ NAMESPACE('chlk.controllers', function () {
                 return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
             },
 
-            [chlk.controllers.NotChangedSidebarButton()],
+            /*[chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.group.Group]],
             function createGroupAction(model) {
                 var res = this.groupService
@@ -275,7 +321,7 @@ NAMESPACE('chlk.controllers', function () {
                     .attach(this.validateResponse_());
 
                 return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-            },
+            },*/
 
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.group.Group]],

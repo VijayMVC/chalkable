@@ -13,8 +13,11 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'GroupService', EXTENDS(chlk.services.BaseService), [
 
-            ria.async.Future, function list() {
-                return this.get('Group/GroupsList.json', ArrayOf(chlk.models.group.Group), {});
+            [[String]],
+            ria.async.Future, function list(filter_) {
+                return this.get('Group/GroupsList.json', ArrayOf(chlk.models.group.Group), {
+                    filter: filter_
+                });
             },
 
             [[chlk.models.id.GroupId]],
@@ -35,11 +38,23 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String]],
-            ria.async.Future, function create(name){
+            [[String, ArrayOf(chlk.models.id.SchoolPersonId)]],
+            ria.async.Future, function create(name, studentIds_){
                 return this.post('Group/CreateGroup.json', ArrayOf(chlk.models.group.Group),{
                     name: name
-                });
+                }).then(function(groups){
+                    var group = groups[groups.length - 1];
+                    if(!studentIds_)
+                        return group;
+
+                    return this.assignStudents(group.getId(), studentIds_)
+                        .then(function(data){
+                            return this.list()
+                                .then(function(groups){
+                                    return groups[groups.length - 1];
+                                })
+                        }.bind(this))
+                }.bind(this));
             },
 
             [[chlk.models.id.GroupId, String]],

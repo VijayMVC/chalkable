@@ -49,6 +49,7 @@ REQUIRE('chlk.models.announcement.ShowGradesToStudents');
 REQUIRE('chlk.models.announcement.FileAttachViewData');
 REQUIRE('chlk.models.people.UsersListSubmit');
 REQUIRE('chlk.models.announcement.post.AnnouncementImportPostViewData');
+REQUIRE('chlk.models.recipients.RecipientsSubmitViewData');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
@@ -2763,17 +2764,17 @@ NAMESPACE('chlk.controllers', function (){
                     selected: recipients
                 }])
                 .then(function(data){
-                    data.setId(announcementId);
-                    this.BackgroundNavigate('announcement', 'saveGroupsToAnnouncement', [data]);
+                    this.BackgroundNavigate('announcement', 'saveGroupsToAnnouncement', [data, announcementId]);
                 }, this)
                 .attach(this.validateResponse_());
             return null;
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.announcement.FeedAnnouncementViewData]],
-        function saveGroupsToAnnouncementAction(model){
-            var adminRecipients = model.getSelectedItems();
+        [[chlk.models.recipients.RecipientsSubmitViewData, chlk.models.id.AnnouncementId]],
+        function saveGroupsToAnnouncementAction(model, announcementId){
+            var adminRecipients = model.getSelectedItems(),
+                resModel = new chlk.models.announcement.FeedAnnouncementViewData();
 
             if(model.getSelectedItems()){
                 if(model.getSelectedItems().groups){
@@ -2792,20 +2793,21 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set(ChlkSessionConstants.ADMIN_RECIPIENTS, model.getSelectedItems());
 
             var recipients = adminRecipients.groups.map(function(item){
-                return new chlk.models.announcement.AdminAnnouncementRecipient(model.getId(), item.getId(), item.getName());
+                return new chlk.models.announcement.AdminAnnouncementRecipient(announcementId, item.getId(), item.getName());
             });
 
-            model.setRecipients(recipients);
-            model.setAdminAnnouncementStudents(adminRecipients.students);
+            resModel.setId(announcementId);
+            resModel.setRecipients(recipients);
+            resModel.setAdminAnnouncementStudents(adminRecipients.students);
 
-            var res = this.adminAnnouncementService.addGroupsToAnnouncement(model.getId(), model.getGroupIds(), model.getStudentIds())
+            var res = this.adminAnnouncementService.addGroupsToAnnouncement(announcementId, model.getGroupIds(), model.getStudentIds())
                 .then(function(){
                     this.BackgroundCloseView(chlk.activities.recipients.GroupSelectorDialog);
                     return ria.async.BREAK;
                 }, this)
                 .attach(this.validateResponse_());
 
-            this.BackgroundUpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, model, 'recipients');
+            this.BackgroundUpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, resModel, 'recipients');
 
             return this.UpdateView(chlk.activities.recipients.GroupSelectorDialog, res);
         },

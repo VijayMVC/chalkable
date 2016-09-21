@@ -39,19 +39,19 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             String, 'requestId',
             
             function getGroupIds(){
-                return this.getSelectedGroups().map(function(item){return item.getId().valueOf()})
+                return (this.getSelectedGroups() || []).map(function(item){return item.getId().valueOf()})
             },
 
             function getStudentIds(){
-                return this.getSelectedStudents().map(function(item){return item.getId().valueOf()})
+                return (this.getSelectedStudents() || []).map(function(item){return item.getId().valueOf()})
             },
 
             function getSelectedItemsObj(){
                 var groups = [], students = [];
-                this.getSelectedGroups().forEach(function(group){
+                (this.getSelectedGroups() || []).forEach(function(group){
                     groups.push({id: group.getId().valueOf(), name: group.getName()})
                 });
-                this.getSelectedStudents().forEach(function(student){
+                (this.getSelectedStudents() || []).forEach(function(student){
                     students.push({id: student.getId().valueOf(), displayname: student.getDisplayName(), gender: student.getGender()})
                 });
                 return JSON.stringify({groups: groups, students: students});

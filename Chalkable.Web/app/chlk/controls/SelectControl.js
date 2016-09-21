@@ -50,6 +50,10 @@ NAMESPACE('chlk.controls', function () {
                     .onActivityRefreshed(function (activity, model) {
                         var select = jQuery('#'+attributes.id);
 
+                        if(attributes.firstEmpty){
+                            select.find('option:eq(0)').html('&nbsp;');
+                        }
+
                         this.updateSelect(select, attributes);
 
                         if(attributes.multiple && !attributes['placeholder-on-start-only'] && attributes["data-placeholder"]){

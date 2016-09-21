@@ -1,11 +1,17 @@
-.group-selector-dialog
-  .dialog
-    width: 1020px
+.recipients-window.dialog
+  width: 1020px
 
-    .x-window-body
-      margin-right: 0
+  .x-window-body
+    margin-right: 0
 
 .group-people-selector
+  .items-cnt
+    overflow-y: auto
+    height: 330px
+
+  .chosen-container
+    min-width: 100px
+
   .text-filter-cnt
     position: relative
 
@@ -54,7 +60,9 @@
       padding: 10px
       width: 270px
       height: 70px
-      margin-right: 37px
+
+      &:not(:nth-child(3n))
+        margin-right: 37px
 
   .body-content:not(.active)
     display: none

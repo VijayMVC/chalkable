@@ -13,9 +13,9 @@ NAMESPACE('chlk.models.recipients', function () {
             Number, 'count',
             String, 'submitType',
 
-            [[chlk.models.recipients.SelectorModeEnum, Boolean, Boolean, ArrayOf(chlk.models.group.Group), String]],
-            function $(selectorMode_, hasAccessToAllStudents_, hasOwnStudents_, groups_, filter_){
-                BASE(selectorMode_, hasAccessToAllStudents_, hasOwnStudents_);
+            [[ArrayOf(chlk.models.group.Group), String]],
+            function $(groups_, filter_){
+                BASE();
                 groups_ && this.setGroups(groups_);
                 filter_ && this.setFilter(filter_);
             }

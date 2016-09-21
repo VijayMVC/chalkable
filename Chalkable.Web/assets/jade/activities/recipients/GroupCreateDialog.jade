@@ -2,5 +2,8 @@
    .x-window-header
       .close.close-btn.dark
       h1=self.getPageTitle()
-   +ActionForm('group', 'submitGroups')
+   +ActionForm('group', 'createGroupSubmit')
+      .group-name-cnt
+         LABEL Group Name
+         INPUT(name="name", placeholder="Group Name...")
       +GroupPeopleSelector(self, self.getRequestId())
