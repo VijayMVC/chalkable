@@ -1,4 +1,4 @@
-﻿CREATE Procedure [dbo].[spSearchStudents]
+﻿CREATE Procedure [dbo].[spSearchStudentsTmp]
 	@start int,
 	@count int,
 	@classId int,
@@ -161,3 +161,6 @@ Declare @total int
 		StudentSchoolYear.StudentRef in (select Value from @studentIds)
 		and 
 		exists (Select * From StudentSchool Where StudentRef = StudentSchoolYear.StudentRef and SchoolRef = School.Id)
+GO
+
+

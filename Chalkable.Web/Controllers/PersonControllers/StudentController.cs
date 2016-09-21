@@ -179,7 +179,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             }
             var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, schoolId, gradeLevel, programId, teacherId, classMatesToId, filter, 
                 byLastName != true, start ?? 0, count ?? 10, markingPeriodId, enrolledOnly.Value);
-            return Json(res.Transform(StudentViewData.Create));
+            return Json(res.Transform(StudentSchoolsInfoViewData.Create));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]

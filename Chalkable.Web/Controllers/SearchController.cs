@@ -42,7 +42,7 @@ namespace Chalkable.Web.Controllers
 
         public class PersonList
         {
-            public IList<Student> Students { get; set; }
+            public IList<StudentSchoolsInfo> Students { get; set; }
             public IList<Staff> Staffs { get; set; }
         }
     }
