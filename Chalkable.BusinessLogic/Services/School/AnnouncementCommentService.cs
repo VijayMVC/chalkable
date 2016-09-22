@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         AnnouncementRef = announcementId,
                         PersonRef = Context.PersonId.Value,
                         Text = text,
-                        PostedDate = Context.NowSchoolYearTime,
+                        PostedDate = Context.NowSchoolTime,
                         Hidden = ann.PreviewCommentsEnabled
                     });
                 new AnnouncementCommentAttachmentDataAccess(uow).PostAttachements(id, attachmentIds);
