@@ -88,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     adminAnnouncement.Expires = expiresDate.Value;
 
                 if(adminAnnouncement.IsSubmitted)
-                    ValidateAdminAnnouncemen(adminAnnouncement, uow, da);
+                    ValidateAdminAnnouncement(adminAnnouncement, uow, da);
                 da.Update(adminAnnouncement);
                 uow.Commit();
                 return InternalGetDetails(da, adminAnnouncementId); // da.GetDetails(adminAnnouncementId, Context.PersonId.Value, Context.RoleId);
@@ -128,7 +128,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var da = CreateAdminAnnouncementDataAccess(uow);
                 var ann = da.GetAnnouncement(announcementId, Context.PersonId.Value);
                 AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
-                ValidateAdminAnnouncemen(ann, uow, da);
+                ValidateAdminAnnouncement(ann, uow, da);
                 ServiceLocator.AnnouncementAssignedAttributeService.ValidateAttributes(res.AnnouncementAttributes);
                 if (ann.IsDraft)
                 {
@@ -140,7 +140,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        private void ValidateAdminAnnouncemen(AdminAnnouncement announcement, UnitOfWork unitOfWork, AdminAnnouncementDataAccess dataAccess)
+        private void ValidateAdminAnnouncement(AdminAnnouncement announcement, UnitOfWork unitOfWork, AdminAnnouncementDataAccess dataAccess)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var annRecipients = new DataAccessBase<AnnouncementGroup>(unitOfWork)
