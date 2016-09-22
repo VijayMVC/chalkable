@@ -64,6 +64,7 @@ namespace Chalkable.Data.School.DataAccess
             
             using (var reader = ExecuteReaderParametrized(query, new Dictionary<string, object> { { "@groupId", groupId }}))
             {
+                reader.Read();
                 var groupInfo = reader.Read<GroupInfo>();
                 reader.NextResult();
                 groupInfo.Students = reader.ReadList<Student>();

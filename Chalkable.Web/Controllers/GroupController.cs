@@ -26,15 +26,15 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult CreateGroup(string name, IntList studentsIds)
+        public ActionResult CreateGroup(string name, IntList studentIds)
         {
-            return Json(GroupViewData.Create(SchoolLocator.GroupService.AddGroup(name, studentsIds)));
+            return Json(GroupViewData.Create(SchoolLocator.GroupService.AddGroup(name, studentIds)));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult EditGroup(int groupId, string name, IntList studentsIds)
+        public ActionResult EditGroup(int groupId, string name, IntList studentIds)
         {
-            return Json(GroupViewData.Create(SchoolLocator.GroupService.EditGroup(groupId, name, studentsIds)));
+            return Json(GroupViewData.Create(SchoolLocator.GroupService.EditGroup(groupId, name, studentIds)));
         }
 
         [AuthorizationFilter("DistrictAdmin")]

@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public Group AddGroup(string name, IntList studentsIds)
+        public Group AddGroup(string name, IntList studentIds)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -39,13 +39,15 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new GroupDataAccess(uow);
                 var groupId = da.InsertWithEntityId(new Group { Name = name, OwnerRef = Context.PersonId.Value });
-                AssignStudentsToGroup(groupId, studentsIds);
+                AssignStudentsToGroup(groupId, studentIds, uow);
                 uow.Commit();
-                return da.GetById(groupId);
+                var group = da.GetById(groupId);
+                group.StudentCount = studentIds.Count;
+                return group;
             }
         }
 
-        public Group EditGroup(int groupId, string name, IntList studentsIds)
+        public Group EditGroup(int groupId, string name, IntList studentIds)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Name"));
@@ -56,22 +58,20 @@ namespace Chalkable.BusinessLogic.Services.School
                 EnsureInGroupModifyPermission(group);
                 group.Name = name;
                 da.Update(group);
-                AssignStudentsToGroup(groupId, studentsIds);
+                AssignStudentsToGroup(groupId, studentIds, uow);
                 uow.Commit();
+                group.StudentCount = studentIds.Count;
                 return group;
             }
         }
 
-        public void AssignStudentsToGroup(int groupId, IntList studentIds)
+        public void AssignStudentsToGroup(int groupId, IntList studentIds, UnitOfWork uow)
         {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                var da = new DataAccessBase<StudentGroup>(u);
-                var studentGroups = da.GetAll(new AndQueryCondition { { StudentGroup.GROUP_REF_FIELD, groupId } }).Select(x => x.StudentRef);
-                da.Delete(BuildStudentGroups(groupId, studentGroups));
-                da.Insert(BuildStudentGroups(groupId, studentIds));
-            });
+            EnsureInGroupModifyPermission(new GroupDataAccess(uow).GetById(groupId));
+            var da = new DataAccessBase<StudentGroup>(uow);
+            var studentGroups = da.GetAll(new AndQueryCondition { { StudentGroup.GROUP_REF_FIELD, groupId } }).Select(x => x.StudentRef);
+            da.Delete(BuildStudentGroups(groupId, studentGroups));
+            da.Insert(BuildStudentGroups(groupId, studentIds));
         }
 
         public void DeleteGroup(int groupId)

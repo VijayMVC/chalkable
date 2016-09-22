@@ -6,11 +6,12 @@ namespace Chalkable.Web.Models.GroupsViewData
 {
     public class GroupInfoViewData : GroupViewData
     {
-        private IList<ShortPersonViewData> Students { get; set; }
+        public IList<ShortPersonViewData> Students { get; set; }
 
         protected GroupInfoViewData(GroupInfo groupInfo) : base(groupInfo)
         {
             Students = ShortPersonViewData.Create(groupInfo.Students);
+            StudentCount = Students.Count;
         }
         public static GroupInfoViewData Create(GroupInfo gGroup)
         {
