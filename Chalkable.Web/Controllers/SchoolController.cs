@@ -57,9 +57,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult UserLocalSchools()
         {
-            var schoolYears = SchoolLocator.SchoolYearService.GetSchoolYears().GroupBy(x => x.Id).Select(x => x.First());
-            var userLocalSchools = SchoolLocator.SchoolService.GetSchoolsByIds(schoolYears.Select(x => x.Id).ToList());
-            return Json(LocalSchoolViewData.Create(userLocalSchools));
+            return Json(LocalSchoolViewData.Create(SchoolLocator.SchoolService.GetUserLocalSchools()));
         }
 
         /*[AuthorizationFilter("SysAdmin")]

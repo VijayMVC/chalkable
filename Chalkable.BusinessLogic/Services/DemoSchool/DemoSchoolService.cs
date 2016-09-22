@@ -169,6 +169,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<Data.School.Model.School> GetUserLocalSchools()
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
         {
             throw new NotImplementedException();

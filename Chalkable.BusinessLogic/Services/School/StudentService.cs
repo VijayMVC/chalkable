@@ -116,7 +116,20 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PaginatedList<StudentSchoolsInfo> SearchStudents(int schoolYearId, int? classId, int? schoolId, int? gradeLevel, int? programId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId, bool enrolledOnly = false)
         {
-            return DoRead( u => new StudentDataAccess(u).SearchStudents(schoolYearId, classId, schoolId, gradeLevel, programId, teacherId, classmatesToId, filter,
+            IList<int> schoolIds = new List<int>();
+            if (Context.Role == CoreRoles.TEACHER_ROLE)
+                schoolIds.Add(Context.SchoolLocalId.Value);
+            else 
+                if (schoolId.HasValue)
+                    if (ServiceLocator.SchoolService.GetUserLocalSchools().Any(x => x.Id == schoolId.Value))
+                        schoolIds.Add(schoolId.Value);
+                    else
+                        return new PaginatedList<StudentSchoolsInfo>(new List<StudentSchoolsInfo>(), start, count);
+                else
+                    foreach (var localSchool in ServiceLocator.SchoolService.GetUserLocalSchools())
+                        schoolIds.Add(localSchool.Id);
+
+            return DoRead( u => new StudentDataAccess(u).SearchStudents(schoolYearId, classId, schoolIds, gradeLevel, programId, teacherId, classmatesToId, filter,
                             orderByFirstName, start, count, markingPeriodId, enrolledOnly));
         }
 

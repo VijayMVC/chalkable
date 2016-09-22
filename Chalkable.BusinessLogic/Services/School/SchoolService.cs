@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StartupData GetStartupData();
         IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter, SchoolSortType? sortType);
         int GetSchoolsCount(string filter = null);
-
+        IList<Data.School.Model.School> GetUserLocalSchools();
     }
 
     public class SchoolService : SisConnectedService, ISchoolService
@@ -227,6 +227,12 @@ namespace Chalkable.BusinessLogic.Services.School
         public int GetSchoolsCount(string filter = null)
         {
             return DoRead(u => new SchoolDataAccess(u).GetShoolsCount(filter));
+        }
+
+        public IList<Data.School.Model.School> GetUserLocalSchools()
+        {
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears().GroupBy(x => x.Id).Select(x => x.First());
+            return ServiceLocator.SchoolService.GetSchoolsByIds(schoolYears.Select(x => x.Id).ToList());
         }
     }
 }

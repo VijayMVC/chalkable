@@ -56,7 +56,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public PaginatedList<StudentSchoolsInfo> SearchStudents(int schoolYearId, int? classId, int? schoolId, int? gradeLevel, int? programId, int? teacherId, int? classmatesToId, string filter, 
+        public PaginatedList<StudentSchoolsInfo> SearchStudents(int schoolYearId, int? classId, IList<int> schoolIds, int? gradeLevel, int? programId, int? teacherId, int? classmatesToId, string filter, 
             bool orderByFirstName, int start, int count, int? markingPeriod, bool enrolledOnly = false)
         {
             var filters = filter?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -66,7 +66,7 @@ namespace Chalkable.Data.School.DataAccess
                 {"@count", count},
                 {"@classId", classId},
                 {"@teacherId", teacherId},
-                {"@schoolId", schoolId},
+                {"@schoolIds", schoolIds},
                 {"@gradeLevel", gradeLevel},
                 {"@programId", programId},
                 {"@classmatesToid", classmatesToId},
