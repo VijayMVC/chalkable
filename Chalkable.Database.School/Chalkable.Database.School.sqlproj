@@ -178,7 +178,6 @@
     <Build Include="Stored Procedures\spGetClassAnnouncementsBySisActivities.sql" />
     <Build Include="Stored Procedures\spGetClassById.sql" />
     <Build Include="Stored Procedures\spGetGradingPeriods.sql" />
-    <Build Include="Stored Procedures\spGetGroupExplorerData.sql" />
     <Build Include="Stored Procedures\spGetLessonPlanDetails.sql" />
     <Build Include="Stored Procedures\spGetPersonDetails.sql" />
     <Build Include="Stored Procedures\spGetSchedule.sql" />
@@ -193,7 +192,6 @@
     <Build Include="Stored Procedures\spSearchPersons.sql" />
     <Build Include="Stored Procedures\spSearchStaff.sql" />
     <Build Include="Stored Procedures\spSearchStudents.sql" />
-    <Build Include="Stored Procedures\spSearchStudentsForGroup.sql" />
     <Build Include="Stored Procedures\spSelectAdminAnnoucnement.sql" />
     <Build Include="Stored Procedures\spSelectAnnouncementAddionalData.sql" />
     <Build Include="Stored Procedures\spSelectClassAnnouncement.sql" />

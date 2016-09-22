@@ -390,6 +390,7 @@
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassComplexViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
+    <Compile Include="Models\GroupsViewData\GroupInfoViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\ClassPanoramaViewData.cs" />
     <Compile Include="Models\EthnicityViewData.cs" />
     <Compile Include="Models\HomeroomViewData.cs" />

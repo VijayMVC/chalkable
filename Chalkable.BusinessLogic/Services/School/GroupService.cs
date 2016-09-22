@@ -92,17 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public GroupInfo Info(int groupId)
         {
-            DoRead(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                var da = new DataAccessBase<StudentGroup>(u);
-                var studentGroups = da.GetAll(new AndQueryCondition { { StudentGroup.GROUP_REF_FIELD, groupId } }).Select(x => x.StudentRef);
-                da.Delete(BuildStudentGroups(groupId, studentGroups));
-                da.Insert(BuildStudentGroups(groupId, studentIds));
-            });
-
-            return new GroupInfo();
-            
+            return DoRead(u => new GroupDataAccess(u).GetGroutInfo(groupId));
         }
 
         private void EnsureInGroupModifyPermission(Group gGroup)
