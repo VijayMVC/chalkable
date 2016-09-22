@@ -15,7 +15,8 @@ class TestFeed(BaseAuthedTestCase):
         dict_for_clas_marking_period = self.dict_for_clas_marking_period
         dict_for_marking_period_date_startdate_endate = self.dict_for_marking_period_date_startdate_endate
 
-
+        attendance_level = None
+        attendance_reason_id = ""
         if 'View Classroom Attendance' in decoded_list:
             self.get('/Attendance/AttendanceSummary.json?')
 
@@ -25,33 +26,46 @@ class TestFeed(BaseAuthedTestCase):
                     end_date = str(dict_for_marking_period_date_startdate_endate[mp][1])
                     date_in_correct_format = self.random_date(start_date, end_date)
                     get_class_list = self.get('/Attendance/ClassList.json?' +
-                                              'classId=' + str(14436) +
-                                              '&date=' + '09-22-2014')
+                                              'classId=' + str(class_id) +
+                                              '&date=' + date_in_correct_format)
 
-                    if len(get_class_list['data']) > 0:
-                        self.get('/Attendance/SetAttendanceForClass.json?' +
-                                                  'classId=' + str(14436) +
-                                                  '&date=' + '09-22-2014')
+                    list_for_true = []
+                    for j in get_class_list['data']:
+                        list_for_true.append(j['readonly'])
 
-                get_class_list_second_time = self.get('/Attendance/ClassList.json?' +
-                                                              'classId=' + str(14436) +
-                                                              '&date=' + '09-22-2014')
+                    if len(get_class_list['data']) > 0 and True not in list_for_true:
+                        list_for_students = []
+                        for info_about_one_student in get_class_list['data']:
+                            list_for_students.append({"personid": info_about_one_student['personid'],
+                                                      "level": attendance_level,
+                                                      "attendancereasonid": attendance_reason_id,
+                                                      "isdailyattendanceperiod": info_about_one_student['isdailyattendanceperiod']})
 
-                json_data_get_class_list_second_time = get_class_list_second_time['data']
+                        data = {"classId": class_id,
+                                "date": date_in_correct_format,
+                                "items": list_for_students}
 
-                for info_about_one_student_second_time in json_data_get_class_list_second_time:
-                    #print info_about_one_student_second_time['level']
-                    if info_about_one_student_second_time['readonly'] == True:
-                        pass
-                    else:
-                        self.assertTrue(str(info_about_one_student_second_time['level']) == 'None')
-                        date_in_cycle = datetime.strptime(str(info_about_one_student_second_time['date']),
-                                                          '%Y-%m-%d').strftime('%m-%d-%Y')
-                        self.assertTrue(info_about_one_student_second_time['classid'] == 14436,
-                                        'class_id is not equal')
-                        self.assertTrue(info_about_one_student_second_time['isposted'] == True,
-                                        'attendance is not posted ' + str(14436))
-                        self.assertTrue(date_in_cycle == '09-22-2014', 'dates are equal ' + str(14436))
+                        post_attendance = self.postJSON('/Attendance/SetAttendance.json', data)
+
+                        get_class_list_second_time = self.get('/Attendance/ClassList.json?' +
+                                                                      'classId=' + str(class_id) +
+                                                                      '&date=' + date_in_correct_format)
+
+                        json_data_get_class_list_second_time = get_class_list_second_time['data']
+
+                        for info_about_one_student_second_time in json_data_get_class_list_second_time:
+                            #print info_about_one_student_second_time['level']
+                            if info_about_one_student_second_time['readonly'] == True:
+                                pass
+                            else:
+                                self.assertTrue(str(info_about_one_student_second_time['level']) == 'None')
+                                date_in_cycle = datetime.strptime(str(info_about_one_student_second_time['date']),
+                                                                  '%Y-%m-%d').strftime('%m-%d-%Y')
+                                self.assertTrue(info_about_one_student_second_time['classid'] == class_id,
+                                                'class_id is not equal')
+                                self.assertTrue(info_about_one_student_second_time['isposted'] == True,
+                                                'attendance is not posted ' + str(class_id))
+                                self.assertTrue(date_in_cycle == date_in_correct_format, 'dates are equal ' + str(class_id))
 
 if __name__ == '__main__':
     unittest.main()
