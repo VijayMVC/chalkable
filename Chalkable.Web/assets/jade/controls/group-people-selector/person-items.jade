@@ -11,3 +11,4 @@ each student in self.getModel().getItems()
             +PersonImg(student, 47)
         .recipient-name
             b=student.getDisplayName()
+            .info=(student.getGradeLevel() && (student.getGradeLevel().getName() + " ")) + (student.getStudentSchools() && student.getStudentSchools()[0] && student.getStudentSchools()[0].getName())

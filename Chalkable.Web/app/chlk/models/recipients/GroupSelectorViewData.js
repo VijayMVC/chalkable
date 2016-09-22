@@ -15,13 +15,13 @@ NAMESPACE('chlk.models.recipients', function () {
             ArrayOf(chlk.models.group.Group), 'selectedGroups',
             ArrayOf(chlk.models.people.ShortUserInfo), 'selectedStudents',
             String, 'selectedItems',
-            String, 'groupName',
             String, 'requestId',
+            chlk.models.group.Group, 'groupInfo',
 
             [[String, chlk.models.recipients.SelectorModeEnum, Boolean, Boolean, chlk.models.recipients.GroupsListViewData, chlk.models.recipients.UsersListViewData,
-                chlk.models.recipients.UsersListViewData, ArrayOf(chlk.models.group.Group), ArrayOf(chlk.models.people.ShortUserInfo), String]],
+                chlk.models.recipients.UsersListViewData, ArrayOf(chlk.models.group.Group), ArrayOf(chlk.models.people.ShortUserInfo), chlk.models.group.Group]],
             function $(requestId_, selectorMode_, hasAccessToAllStudents_, hasOwnStudents_, groupsPart_, myStudentsPart_, allStudentsPart_,
-                       selectedGroups_, selectedStudents_, groupName_){
+                       selectedGroups_, selectedStudents_, groupInfo_){
                 BASE(selectorMode_, hasAccessToAllStudents_, hasOwnStudents_);
                 requestId_ && this.setRequestId(requestId_);
                 groupsPart_ && this.setGroupsPart(groupsPart_);
@@ -29,7 +29,7 @@ NAMESPACE('chlk.models.recipients', function () {
                 allStudentsPart_ && this.setAllStudentsPart(allStudentsPart_);
                 selectedGroups_ && this.setSelectedGroups(selectedGroups_);
                 selectedStudents_ && this.setSelectedStudents(selectedStudents_);
-                groupName_ && this.setGroupName(groupName_);
+                groupInfo_ && this.setGroupInfo(groupInfo_);
             }
         ]);
 });

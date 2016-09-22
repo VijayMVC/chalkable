@@ -27,7 +27,7 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             ArrayOf(chlk.models.people.ShortUserInfo), 'selectedStudents',
 
             [ria.templates.ModelPropertyBind],
-            String, 'groupName',
+            chlk.models.group.Group, 'groupInfo',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'hasOwnStudents',

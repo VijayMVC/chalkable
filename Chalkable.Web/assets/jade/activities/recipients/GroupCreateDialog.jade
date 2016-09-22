@@ -1,9 +1,12 @@
+-var groupInfo = self.getGroupInfo()
+
 .dialog.recipients-window
    .x-window-header
       .close.close-btn.dark
       h1=self.getPageTitle()
-   +ActionForm('group', 'createGroupSubmit').recipients-body
+   +ActionForm('group', 'groupSubmit').recipients-body
+      +Hidden('groupId', groupInfo && groupInfo.getId())
       .group-name-cnt
          LABEL Group Name
-         INPUT(name="name", type="text", placeholder="Group Name...").name
+         INPUT(name="name", type="text", placeholder="Group Name...", class='validate[required]', value=groupInfo && groupInfo.getName()).name
       +GroupPeopleSelector(self, self.getRequestId())

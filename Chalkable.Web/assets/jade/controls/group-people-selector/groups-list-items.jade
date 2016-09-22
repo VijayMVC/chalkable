@@ -1,6 +1,6 @@
--var selected = self.getSelected()
+-var selected = self.getSelected() || []
 each group in self.getGroups()
-    .recipient-item.group-item
+    .recipient-item.group-item(class=group.isNewAdded() ? 'new' : '', data-id = group.getId().valueOf())
         .recipient-check-cnt.box-checkbox.circle
             +Checkbox('groupCheck', selected.indexOf(group.getId()) > -1, false, true)(
                 data-id=group.getId().valueOf(),
@@ -8,4 +8,6 @@ each group in self.getGroups()
             ).recipient-check.group-check
         .recipient-icon.group-icon
         .recipient-name
-            b=group.getName()
+            b.group-name=group.getName()
+        +ActionLink('group', 'showCreateEditDialog', group.getId()).edit-group
+        .students-count=group.getStudentCount()

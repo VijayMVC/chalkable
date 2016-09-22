@@ -6,6 +6,8 @@ REQUIRE('chlk.models.people.Address');
 REQUIRE('chlk.models.people.Phone');
 REQUIRE('chlk.models.people.Role');
 REQUIRE('chlk.models.people.Claim');
+REQUIRE('chlk.models.grading.GradeLevel');
+REQUIRE('chlk.models.school.School');
 
 NAMESPACE('chlk.models.people', function () {
     "use strict";
@@ -36,6 +38,8 @@ NAMESPACE('chlk.models.people', function () {
             this.selected = SJX.fromValue(raw.selected, Boolean);
             this.demoUser = SJX.fromValue(raw.demouser, Boolean);
             this.claims = SJX.fromArrayOfDeserializables(raw.claims, chlk.models.people.Claim);
+            this.gradeLevel = SJX.fromDeserializable(raw.gradelevel, chlk.models.grading.GradeLevel);
+            this.studentSchools = SJX.fromArrayOfDeserializables(raw.studentschools, chlk.models.school.School);
         },
         Boolean, 'active',
         chlk.models.people.Address, 'address',
@@ -54,6 +58,8 @@ NAMESPACE('chlk.models.people', function () {
         Number, 'index',
         Boolean, 'selected',
         Boolean, 'demoUser',
+        chlk.models.grading.GradeLevel, 'gradeLevel',
+        ArrayOf(chlk.models.school.School), 'studentSchools',
 
         ArrayOf(chlk.models.people.Claim), 'claims',
 

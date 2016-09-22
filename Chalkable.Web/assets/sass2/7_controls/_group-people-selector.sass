@@ -39,14 +39,14 @@
     box-sizing: border-box
     padding: 0 11px
 
-  LABEL
+  LABEL:not(.checkbox-label)
     font-weight: bold
     font-size: 12px
     margin: 0 0 7px 2px
     display: block
 
   .left-block
-    LABEL
+    LABEL:not(.checkbox-label)
       display: inline-block
       margin: 0 16px
 
@@ -142,6 +142,32 @@
     position: relative
     vertical-align: top
 
+    .edit-group
+      position: absolute
+      right: 14px
+      top: 33px
+      width: 24px
+      height: 24px
+      +icons-24-sprite(arrow)
+
+    .students-count
+      position: absolute
+      line-height: 15px
+      font-size: 14px
+      font-weight: 600
+      color: #c1c1be
+      bottom: 6px
+      right: 9px
+
+    &.new
+      border-color: #1d8e17
+
+      .recipient-name b
+        color: #1d8e17
+
+      .group-icon
+        +icons-32-sprite(group-icon-green)
+
     >*
       display: inline-block
       vertical-align: middle
@@ -173,6 +199,7 @@
       white-space: nowrap
       overflow: hidden
       text-overflow: ellipsis
+      line-height: 19px
 
       b
         font-weight: bold

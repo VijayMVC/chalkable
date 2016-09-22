@@ -1,4 +1,5 @@
 REQUIRE('ria.serialize.SJX');
+REQUIRE('chlk.models.id.GroupId');
 
 NAMESPACE('chlk.models.recipients', function () {
     "use strict";
@@ -15,6 +16,7 @@ NAMESPACE('chlk.models.recipients', function () {
                 this.studentIds = SJX.fromValue(raw.studentIds, String);
                 this.requestId = SJX.fromValue(raw.requestId, String);
                 this.name = SJX.fromValue(raw.name, String);
+                this.groupId = SJX.fromValue(raw.groupid, chlk.models.id.GroupId);
                 if(raw.selectedItems)
                     this.selectedItems = JSON.parse(SJX.fromValue(raw.selectedItems, String));
             },
@@ -23,6 +25,7 @@ NAMESPACE('chlk.models.recipients', function () {
             String, 'studentIds',
             String, 'requestId',
             String, 'name',
-            Object, 'selectedItems'
+            Object, 'selectedItems',
+            chlk.models.id.GroupId, 'groupId'
         ]);
 });

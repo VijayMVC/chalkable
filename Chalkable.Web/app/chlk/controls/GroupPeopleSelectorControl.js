@@ -6,7 +6,7 @@ REQUIRE('chlk.templates.controls.group_people_selector.UsersListTpl');
 
 NAMESPACE('chlk.controls', function () {
 
-    var selectors = {}, intervalNames = ['myStudentsInterval', 'allStudentsInterval', 'groupsInterval'];
+    var selectors = {}, filterTimeout, intervalNames = ['myStudentsInterval', 'allStudentsInterval', 'groupsInterval'];
 
     /** @class chlk.controls.GroupPeopleSelectorControl */
     CLASS(
@@ -56,15 +56,34 @@ NAMESPACE('chlk.controls', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('change', '.submit-on-change')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function filterChange(node, event, selected_){
+            function filterResultsByNode_(node){
                 var type = node.parent('.body-content').getData('index'),
                     selector = node.parent('.group-people-selector');
                 if(type == 3)
                     this.updateGroups_(selector);
                 else
                     this.updateStudents_(selector, type);
+            },
+
+            [ria.mvc.DomEventBind('keyup change', '.top-filter')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function filterKeyup(node, event, selected_){
+                clearTimeout(filterTimeout);
+                var time = event.type == 'change' ? 1 : 1000, that = this;
+
+                filterTimeout = setTimeout(function(){
+                    var val = node.getValue();
+                    if(val != node.getData('value')){
+                        that.filterResultsByNode_(node);
+                        node.setData('value', val);
+                    }
+                }, time);
+            },
+
+            [ria.mvc.DomEventBind('change', '.submit-on-change')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function filterChange(node, event, selected_){
+                this.filterResultsByNode_(node);
             },
 
             function updateStudents_(selector, type, append_, start_){
