@@ -16,7 +16,7 @@ NAMESPACE('chlk.models.recipients', function () {
                 this.studentIds = SJX.fromValue(raw.studentIds, String);
                 this.requestId = SJX.fromValue(raw.requestId, String);
                 this.name = SJX.fromValue(raw.name, String);
-                this.groupId = SJX.fromValue(raw.groupid, chlk.models.id.GroupId);
+                this.groupId = SJX.fromValue(raw.groupId, chlk.models.id.GroupId);
                 if(raw.selectedItems)
                     this.selectedItems = JSON.parse(SJX.fromValue(raw.selectedItems, String));
             },

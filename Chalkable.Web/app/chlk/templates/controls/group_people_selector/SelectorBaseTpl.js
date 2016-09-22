@@ -62,7 +62,7 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
                 switch (mode){
                     case chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS: return "Select Recipients";
                     case chlk.models.recipients.SelectorModeEnum.SELECT_WITHOUT_GROUPS: return "Create Group";
-                    case chlk.models.recipients.SelectorModeEnum.EDIT_WITHOUT_GROUPS: return "Edit Group - " + this.getGroupName();
+                    case chlk.models.recipients.SelectorModeEnum.EDIT_WITHOUT_GROUPS: return "Edit Group - " + (this.getGroupInfo() && this.getGroupInfo().getName());
                     case chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS: return "People";
                 }
             }
