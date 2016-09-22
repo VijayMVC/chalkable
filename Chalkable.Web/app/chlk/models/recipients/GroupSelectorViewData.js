@@ -17,11 +17,12 @@ NAMESPACE('chlk.models.recipients', function () {
             String, 'selectedItems',
             String, 'requestId',
             chlk.models.group.Group, 'groupInfo',
+            Boolean, 'hasAccessToLE',
 
             [[String, chlk.models.recipients.SelectorModeEnum, Boolean, Boolean, chlk.models.recipients.GroupsListViewData, chlk.models.recipients.UsersListViewData,
                 chlk.models.recipients.UsersListViewData, ArrayOf(chlk.models.group.Group), ArrayOf(chlk.models.people.ShortUserInfo), chlk.models.group.Group]],
             function $(requestId_, selectorMode_, hasAccessToAllStudents_, hasOwnStudents_, groupsPart_, myStudentsPart_, allStudentsPart_,
-                       selectedGroups_, selectedStudents_, groupInfo_){
+                       selectedGroups_, selectedStudents_, groupInfo_, hasAccessToLE_){
                 BASE(selectorMode_, hasAccessToAllStudents_, hasOwnStudents_);
                 requestId_ && this.setRequestId(requestId_);
                 groupsPart_ && this.setGroupsPart(groupsPart_);
@@ -30,6 +31,7 @@ NAMESPACE('chlk.models.recipients', function () {
                 selectedGroups_ && this.setSelectedGroups(selectedGroups_);
                 selectedStudents_ && this.setSelectedStudents(selectedStudents_);
                 groupInfo_ && this.setGroupInfo(groupInfo_);
+                hasAccessToLE_ && this.setHasAccessToLE(hasAccessToLE_);
             }
         ]);
 });

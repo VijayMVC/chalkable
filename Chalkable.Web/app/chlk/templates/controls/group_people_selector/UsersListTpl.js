@@ -39,12 +39,6 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             Boolean, 'my',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'hasAccessToLE',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.recipients.SelectorModeEnum, 'selectorMode',
-
-            [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'users',
 
             [ria.templates.ModelPropertyBind],
@@ -59,6 +53,10 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.recipients.Program), 'programs',
             
-            Array, 'selected'
+            Array, 'selected',
+
+            Boolean, 'hasAccessToLE',
+
+            chlk.models.recipients.SelectorModeEnum, 'selectorMode'
         ])
 });

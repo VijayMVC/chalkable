@@ -6,14 +6,13 @@ REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.recipients.Program');
 REQUIRE('chlk.models.school.School');
 REQUIRE('chlk.models.grading.GradeLevel');
-REQUIRE('chlk.models.recipients.BaseViewData');
 
 NAMESPACE('chlk.models.recipients', function () {
     "use strict";
 
     /** @class chlk.models.recipients.UsersListViewData*/
     CLASS(
-        'UsersListViewData', EXTENDS(chlk.models.recipients.BaseViewData), [
+        'UsersListViewData', [
             Boolean, 'byLastName',
             chlk.models.id.SchoolId, 'schoolId',
             chlk.models.id.ClassId, 'classId',
@@ -24,7 +23,6 @@ NAMESPACE('chlk.models.recipients', function () {
             Number, 'count',
             String, 'submitType',
             Boolean, 'my',
-            Boolean, 'hasAccessToLE',
             chlk.models.common.PaginatedList, 'users',
             ArrayOf(chlk.models.grading.GradeLevel), 'gradeLevels',
             ArrayOf(chlk.models.school.School), 'schools',

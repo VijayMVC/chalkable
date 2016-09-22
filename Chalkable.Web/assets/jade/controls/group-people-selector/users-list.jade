@@ -25,7 +25,7 @@
         +Select("classId")(firstEmpty = true).class-id.submit-on-change
             +Option('', "&nbsp;", !self.getClassId())
             each clazz in self.getClasses() || []
-                +Option(clazz.getId().valueOf(), clazz.getName(), clazz.getId() == self.getClassId())
+                +Option(clazz.getId().valueOf(), clazz.getName() + " " + clazz.getClassName(), clazz.getId() == self.getClassId())
     .filter-cnt.program-cnt
         LABEL.filter-label Program
         +Select("programId")(firstEmpty = true).program-id.submit-on-change
@@ -34,9 +34,12 @@
                 +Option(program.getId().valueOf(), program.getName(), program.getId() == self.getProgramId())
 .top-info-cnt
     .left-block.i-b
-        .box-checkbox.circle.v-m
-            +Checkbox('allPersons', false, false, true).all-persons-check.all-items-check
-        LABEL.text.v-m All
+        if self.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
+            .box-checkbox.circle.v-m
+                +Checkbox('allPersons', false, false, true).all-persons-check.all-items-check
+            LABEL.text.v-m All
+        else if self.isHasAccessToLE()
+            +ActionLink('teachers', 'giveLECredits', self.getClassId()).le-link LEARNING EARNINGS
     .right-block.i-b.right
         -var count = self.getUsers().getTotalCount()
         .results-count=count + (count == 1 ? " result" : " results")
@@ -45,5 +48,7 @@
     .items-cnt-2
         +RenderWith(self.getUsers(), chlk.templates.controls.group_people_selector.PersonItemsTpl)(
             userRole = self.getUserRole(),
-            selected = self.getSelected()
+            selected = self.getSelected(),
+            hasAccessToLE = self.isHasAccessToLE(),
+            selectorMode = self.getSelectorMode()
         )

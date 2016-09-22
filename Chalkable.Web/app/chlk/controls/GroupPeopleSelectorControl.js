@@ -6,7 +6,7 @@ REQUIRE('chlk.templates.controls.group_people_selector.UsersListTpl');
 
 NAMESPACE('chlk.controls', function () {
 
-    var selectors = {}, filterTimeout, intervalNames = ['myStudentsInterval', 'allStudentsInterval', 'groupsInterval'];
+    var selectors = {}, itemsCount = 30, filterTimeout, intervalNames = ['myStudentsInterval', 'allStudentsInterval', 'groupsInterval'];
 
     /** @class chlk.controls.GroupPeopleSelectorControl */
     CLASS(
@@ -15,6 +15,8 @@ NAMESPACE('chlk.controls', function () {
                 BASE();
                 ASSET('~/assets/jade/controls/group-people-selector/selector.jade')(this);
             },
+
+            Boolean, 'hasAccessToLE',
 
             [ria.mvc.DomEventBind('click', '.group-people-selector .top-link:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -111,12 +113,14 @@ NAMESPACE('chlk.controls', function () {
                     classId = chlk.models.id.ClassId(parent.find('.class-id').getValue()),
                     byLastName = !!parseInt(parent.find('.by-last-name').getValue(),10),
                     filter = parent.find('.top-filter').getValue();
-                var params = [classId, filter, isMy, byLastName, start_ || 0, 15, null, schoolId, gradeLevelId, programId];
+                var params = [classId, filter, isMy, byLastName, start_ || 0, itemsCount, null, schoolId, gradeLevelId, programId];
                 var tpl = append_ ? new chlk.templates.controls.group_people_selector.PersonItemsTpl() :
                     new chlk.templates.controls.group_people_selector.UsersListTpl();
                 tpl.options({
                     selected: studentIds,
-                    userRole: this.context.getSession().get(ChlkSessionConstants.USER_ROLE)
+                    userRole: this.context.getSession().get(ChlkSessionConstants.USER_ROLE),
+                    hasAccessToLE: this.isHasAccessToLE(),
+                    selectorMode: o.selectorMode
                 });
 
                 parent.addClass('scroll-freezed');
@@ -130,7 +134,7 @@ NAMESPACE('chlk.controls', function () {
 
                 methodRef.invokeOn(serviceIns, params)
                     .then(function(students){
-                        if(students.getItems().length < 15)
+                        if(students.getItems().length < itemsCount)
                             clearInterval(o[intervalName]);
                         var model = append_ ? students : new chlk.models.recipients.UsersListViewData(students, studentsObj.gradeLevels,
                             studentsObj.schools, studentsObj.programs, studentsObj.classes, gradeLevelId, schoolId, programId, classId, byLastName, filter);
@@ -162,7 +166,8 @@ NAMESPACE('chlk.controls', function () {
                     new chlk.templates.controls.group_people_selector.GroupsListTpl();
                 tpl.options({
                     selected: groupIds,
-                    userRole: this.context.getSession().get(ChlkSessionConstants.USER_ROLE)
+                    userRole: this.context.getSession().get(ChlkSessionConstants.USER_ROLE),
+                    selectorMode: o.selectorMode
                 });
 
                 parent.addClass('scroll-freezed');
@@ -176,7 +181,7 @@ NAMESPACE('chlk.controls', function () {
 
                 methodRef.invokeOn(serviceIns, params)
                     .then(function(groups){
-                        if(groups.length < 15)
+                        if(groups.length < itemsCount)
                             clearInterval(o[intervalName]);
                         var model = new chlk.models.recipients.GroupsListViewData(groups, filter);
                         tpl.assign(model);
@@ -317,10 +322,12 @@ NAMESPACE('chlk.controls', function () {
 
             Object, function prepare(data, attributes) {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
+                this.setHasAccessToLE(data.isHasAccessToLE());
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var myStudentsPart = model.getMyStudentsPart();
                         selectors[attributes.id] = {
+                            selectorMode: model.getSelectorMode(),
                             groups: model.getSelectedGroups(),
                             students: model.getSelectedStudents(),
                             myStudentsPart: {
@@ -341,6 +348,7 @@ NAMESPACE('chlk.controls', function () {
                             o = selectors[attributes.id];
                         this.startInterval_(o, selector, 1);
                         this.startInterval_(o, selector, 2);
+                        selector.addClass(model.getSelectorCSSClass());
                         //this.startInterval_(o, selector, 3);
                     }.bind(this));
                 return attributes;
@@ -348,18 +356,18 @@ NAMESPACE('chlk.controls', function () {
 
             function startInterval_(o, selector, type){
                 var parent = selector.find('.body-content[data-index=' + type + ']'),
-                    intervalName = intervalNames[type];
+                    intervalName = intervalNames[type],
+                    isPage = selector.parent('#main').exists();
 
                 o[intervalName] = setInterval(function(){
                     if(o[intervalName] && parent.is(':visible') && !parent.hasClass('scroll-freezed')){
                         var zoom = parseFloat(ria.dom.Dom('html').getCss('zoom')) || 1,
-                            docHeight = parent.find('.items-cnt-2').height() * zoom,
+                            docHeight = (isPage ? ria.dom.Dom() : parent.find('.items-cnt-2')).height() * zoom,
                             toBottom = 500 * zoom,
-                            docParent = parent.find('.items-cnt'),
-                            count = 15;
+                            docParent = isPage ? $(window) : parent.find('.items-cnt');
 
                         if(docParent.scrollTop() > docHeight - docParent.height() - toBottom){
-                            var currentStart = parseInt(parent.find('.start-value').getValue(), 10) + count;
+                            var currentStart = parseInt(parent.find('.start-value').getValue(), 10) + itemsCount;
                             parent.find('.start-value').setValue(currentStart);
                             this.updateStudents_(selector, type, true, currentStart);
                         }

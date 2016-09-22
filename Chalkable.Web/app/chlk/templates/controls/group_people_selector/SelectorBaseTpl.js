@@ -37,6 +37,9 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
 
             [ria.templates.ModelPropertyBind],
             String, 'requestId',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'hasAccessToLE',
             
             function getGroupIds(){
                 return (this.getSelectedGroups() || []).map(function(item){return item.getId().valueOf()})

@@ -8,6 +8,10 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
         [ria.templates.TemplateBind('~/assets/jade/controls/group-people-selector/person-items.jade')],
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'PersonItemsTpl', EXTENDS(chlk.templates.PaginatedList), [
-            Array, 'selected'
+            Array, 'selected',
+
+            Boolean, 'hasAccessToLE',
+
+            chlk.models.recipients.SelectorModeEnum, 'selectorMode'
         ])
 });

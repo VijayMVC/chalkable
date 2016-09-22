@@ -4,9 +4,10 @@
         .icon
 .top-info-cnt
     .left-block.i-b
-        .box-checkbox.circle.v-m
-            +Checkbox('allGroups', false, false, true).all-groups-check.all-items-check
-        LABEL.text.v-m All
+        if self.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
+            .box-checkbox.circle.v-m
+                +Checkbox('allGroups', false, false, true).all-groups-check.all-items-check
+            LABEL.text.v-m All
     .right-block.i-b.right
         +ActionLink('group', 'showCreateEditDialog').add-group Group
             .green-plus +
@@ -14,5 +15,6 @@
     .items-cnt-2
         +RenderWith(self.getModel(), chlk.templates.controls.group_people_selector.GroupsListItemsTpl)(
             userRole = self.getUserRole(),
-            selected = self.getSelected()
+            selected = self.getSelected(),
+            selectorMode = self.getSelectorMode()
         )

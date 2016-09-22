@@ -10,6 +10,7 @@ REQUIRE('chlk.models.recipients.RecipientsSubmitViewData');
 REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
 REQUIRE('chlk.activities.recipients.GroupSelectorDialog');
 REQUIRE('chlk.activities.recipients.GroupCreateDialog');
+REQUIRE('chlk.activities.recipients.PeoplePage');
 
 NAMESPACE('chlk.controllers', function () {
 
@@ -79,20 +80,22 @@ NAMESPACE('chlk.controllers', function () {
                 return this.UpdateView(activityClass, res, 'edit-group');
             },
 
-            function getGroupPersonInfo_(requestId, type, data_, groupId_){
+            function getGroupPersonInfo_(type, requestId_, data_, groupId_){
                 var withGroups = type == chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS ||
                         type == chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS;
 
                 return ria.async.wait([
                         withGroups ? this.groupService.list() : ria.async.DeferredData([]),
-                        this.studentService.getStudents(null, null, true, null, 0, 15),
-                        this.studentService.getStudents(null, null, false, null, 0, 15),
+                        this.studentService.getStudents(null, null, true, null, 0, 30),
+                        this.studentService.getStudents(null, null, false, null, 0, 30),
                         this.schoolService.getUserLocalSchools(),
                         this.schoolService.getSchoolPrograms(),
                         groupId_ ? this.groupService.info(groupId_) : ria.async.DeferredData(null)
                     ])
                     .then(function(result){
-                        var hasAccessToAllStudents = true,
+                        var leParams = this.getContext().getSession().get(ChlkSessionConstants.LE_PARAMS, new chlk.models.school.LEParams()),
+                            hasAccessToAllStudents = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_STUDENT),
+                            hasAccessToLE = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS) && leParams.isLEIntegrated(),
                             hasOwnStudents = result[1].getItems().length > 0,
                             groupsModel = new chlk.models.recipients.GroupsListViewData(result[0]),
                             gradeLevels = this.getContext().getSession().get(ChlkSessionConstants.GRADE_LEVELS),
@@ -102,17 +105,25 @@ NAMESPACE('chlk.controllers', function () {
                             allStudentsPart = new chlk.models.recipients.UsersListViewData(result[2], gradeLevels, schools, programs),
                             selectedGroups = (data_ && data_.getSelected() && data_.getSelected().groups) || [],
                             selectedStudents = (groupId_ ? result[5].getStudents() : (data_ && data_.getSelected() && data_.getSelected().students)) || [];
-                        var model = new chlk.models.recipients.GroupSelectorViewData(requestId, type, hasAccessToAllStudents, hasOwnStudents,
-                            groupsModel, myStudentsPart, allStudentsPart, selectedGroups, selectedStudents, result[5]);
+                        var model = new chlk.models.recipients.GroupSelectorViewData(requestId_, type, hasAccessToAllStudents, hasOwnStudents,
+                            groupsModel, myStudentsPart, allStudentsPart, selectedGroups, selectedStudents, result[5], hasAccessToLE);
                         return model;
                     }, this)
                     .attach(this.validateResponse_());
             },
 
+            [chlk.controllers.SidebarButton('people')],
+            function peopleAction() {
+                var res = this.getGroupPersonInfo_(chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS);
+
+                return this.PushView(chlk.activities.recipients.PeoplePage, res);
+            },
+
             [chlk.controllers.NotChangedSidebarButton()],
             [[String, chlk.models.id.GroupId]],
             function showCreateEditDialogWidgetAction(requestId, groupId_) {
-                var res = this.getGroupPersonInfo_(requestId, groupId_ ? chlk.models.recipients.SelectorModeEnum.EDIT_WITHOUT_GROUPS : chlk.models.recipients.SelectorModeEnum.SELECT_WITHOUT_GROUPS, null, groupId_);
+                var res = this.getGroupPersonInfo_(groupId_ ? chlk.models.recipients.SelectorModeEnum.EDIT_WITHOUT_GROUPS : 
+                    chlk.models.recipients.SelectorModeEnum.SELECT_WITHOUT_GROUPS, requestId, null, groupId_);
 
                 return this.ShadeOrUpdateView(chlk.activities.recipients.GroupCreateDialog, res);
             },
@@ -120,7 +131,7 @@ NAMESPACE('chlk.controllers', function () {
             [chlk.controllers.NotChangedSidebarButton()],
             [[String, chlk.models.group.AnnouncementGroupsViewData]],
             function showWidgetAction(requestId, data) {
-                var res = this.getGroupPersonInfo_(requestId, chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS, data);
+                var res = this.getGroupPersonInfo_(chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS, requestId, data);
 
                 return this.ShadeOrUpdateView(chlk.activities.recipients.GroupSelectorDialog, res);
             },

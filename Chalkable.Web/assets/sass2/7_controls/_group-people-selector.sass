@@ -1,5 +1,16 @@
-.recipients-window.dialog
-  width: 1018px
+.recipients-window
+  width: 956px
+
+  .le-link
+    color: #2c75ba
+    text-decoration: none
+
+  &.dialog
+    width: 1018px
+
+    .items-cnt
+      overflow-y: auto
+      height: 310px
 
   .add-group
     text-decoration: none
@@ -65,9 +76,11 @@
       width: 100%
 
 .group-people-selector
+  &.view-with-groups
+    .recipient-check-cnt
+      display: none
+
   .items-cnt
-    overflow-y: auto
-    height: 310px
     margin-right: -25px
 
   .text-filter-cnt

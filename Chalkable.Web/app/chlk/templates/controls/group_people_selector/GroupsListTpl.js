@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.recipients.GroupsListViewData');
+REQUIRE('chlk.models.recipients.BaseViewData');
 
 NAMESPACE('chlk.templates.controls.group_people_selector', function () {
 
@@ -14,6 +15,8 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.group.Group), 'groups',
 
-            Array, 'selected'
+            Array, 'selected',
+
+            chlk.models.recipients.SelectorModeEnum, 'selectorMode'
         ])
 });

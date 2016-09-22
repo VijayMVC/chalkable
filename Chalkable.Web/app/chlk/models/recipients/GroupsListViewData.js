@@ -1,12 +1,11 @@
 REQUIRE('chlk.models.group.Group');
-REQUIRE('chlk.models.recipients.BaseViewData');
 
 NAMESPACE('chlk.models.recipients', function () {
     "use strict";
 
     /** @class chlk.models.recipients.GroupsListViewData*/
     CLASS(
-        'GroupsListViewData', EXTENDS(chlk.models.recipients.BaseViewData), [
+        'GroupsListViewData', [
             String, 'filter',
             ArrayOf(chlk.models.group.Group), 'groups',
             Number, 'start',
