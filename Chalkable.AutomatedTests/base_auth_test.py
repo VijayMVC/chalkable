@@ -44,6 +44,12 @@ class UserSession:
         self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
         return r
 
+    def get_file_(self, url, status=200, success=True):
+        r = self.session.get(chlk_server_url + url)
+        self.unittest.assertEquals(r.status_code, status,
+                                   'Response status code: ' + str(r.status_code) + ', body:' + r.text)
+        return r.text
+
     def post_(self, url, status=200, **kwargs):
         r = self.session.post(chlk_server_url + url, **kwargs)
         self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
@@ -78,6 +84,7 @@ class UserSession:
         return self.validate_json_(r, success_property, success)
 
 
+
 class TeacherSession(UserSession):
     def __init__(self, instance):
         UserSession.__init__(self, instance)
@@ -93,6 +100,17 @@ class TeacherSession(UserSession):
         tmp = json.loads(tmp)
         self.teacher_id = tmp['data']['id']
 
+        # getting grading periods
+        var_grading_periods_list = re.findall('var gradingPeriods = .+', page_as_one_string)
+
+        var_grading_periods_string = ''.join(var_grading_periods_list)
+        var_grading_periods_cut_off_list = re.findall('"id":[0-9]+', var_grading_periods_string)
+        var_grading_periods_cut_off_string = ''.join(var_grading_periods_cut_off_list)
+        self.var_grading_periods_final_list = re.findall('[0-9]+', var_grading_periods_cut_off_string)
+
+    def gr_periods(self):
+        list_of_gr_periods = self.var_grading_periods_final_list
+        return list_of_gr_periods
 
 class StudentSession(UserSession):
     def parse_body_(self, page_as_one_string):
@@ -104,7 +122,20 @@ class DistrictAdminSession(UserSession):
         pass
 
 
-class BaseAuthedTestCase(unittest.TestCase):
+class BaseTestCase(unittest.TestCase):
+    # noinspection PyMethodMayBeStatic
+    def random_date(self, start_date, end_date):
+        # type: (string, string) -> string
+        start_date1 = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date1 = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+        delta = (end_date1 - start_date1).days
+        random_date_for_attendance = start_date1 + timedelta(random.randint(0, delta))
+
+        return datetime.strptime(str(random_date_for_attendance), '%Y-%m-%d').strftime('%m-%d-%Y')
+
+
+class BaseAuthedTestCase(BaseTestCase):
     def setUp(self):
 
         self.teacher = TeacherSession(self).login(user_email, user_pwd)
