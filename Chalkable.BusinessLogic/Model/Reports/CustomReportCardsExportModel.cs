@@ -70,8 +70,10 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public static IList<TraditionalGradingScaleExportModel> Create(IList<GradingScale> gradingScales, int gradingScaleId)
         {
             var gradingScale = gradingScales.FirstOrDefault(x => x.Id == gradingScaleId);
-            if(gradingScale == null || gradingScale.Ranges == null) return new List<TraditionalGradingScaleExportModel>();
-            return gradingScale.Ranges.Select(x => new TraditionalGradingScaleExportModel
+            if(gradingScale?.Ranges == null)
+                return new List<TraditionalGradingScaleExportModel>();
+            return gradingScale.Ranges.OrderByDescending(x => x.HighValue)
+                .Select(x => new TraditionalGradingScaleExportModel
             {
                 MaxValue = x.HighValue,
                 MinValue = x.LowValue,
@@ -88,8 +90,9 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public static IList<StandardsGradingScaleExportModel> Create(IList<GradingScale> gradingScales, int standardGradingScaleId)
         {
             var gradingScale = gradingScales.FirstOrDefault(x => x.Id == standardGradingScaleId);
-            if (gradingScale == null || gradingScale.Ranges == null) return new List<StandardsGradingScaleExportModel>();
-            return gradingScale.Ranges.Select(x => new StandardsGradingScaleExportModel
+            if (gradingScale?.Ranges == null) return new List<StandardsGradingScaleExportModel>();
+            return gradingScale.Ranges.OrderByDescending(x=>x.HighValue)
+                .Select(x => new StandardsGradingScaleExportModel
             {
                 Name = x.AlphaGrade,
                 Description = gradingScale.Description + " " + x.AlphaGrade
@@ -268,10 +271,10 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 ExcusedTardies = attendance.ExcusedTardies,
                 UnexcusedTardies = attendance.UnexcusedTardies,
                 Enroller = attendance.DaysEnrolled,
-                GradingPeriodName = gradingPeriodName
+                GradingPeriodName = gradingPeriodName,
+                Absences = attendance.UnexcusedAbsences + attendance.ExcusedAbsences,
+                Tardies = attendance.ExcusedTardies + attendance.UnexcusedTardies
             };
-            res.Absences = attendance.UnexcusedAbsences + attendance.ExcusedAbsences;
-            res.Tardies = attendance.ExcusedTardies + attendance.UnexcusedTardies;
             res.Present = res.Enroller - (res.Absences + res.Tardies);
 
             return res;

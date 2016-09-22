@@ -438,22 +438,26 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var listOfReportCards = BuilReportCardsData(inputModel);
             var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
-            var listOfpdf = new List<byte[]>();
+            IList<byte[]> listOfpdf = new List<byte[]>();
 
-            if (listOfReportCards.Count > 0)
-                listOfReportCards = new List<CustomReportCardsExportModel> {listOfReportCards[0]};
-
+            int index = 0;
             foreach (var data in listOfReportCards)
+            {
                 listOfpdf.Add(ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
+                index++;
+            }
+            
+            //var loader = new LoaderBase<CustomReportCardsExportModel, byte[]>(listOfReportCards);
+            //listOfpdf = loader.Load(data => ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
 
-            return listOfpdf[0]; //ReportCardsRenderer.MargePdfDocuments(listOfpdf);
+            return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
         }
 
-        private async Task<byte[]> GenerateReportCardPdf(CustomReportCardsExportModel data, string path,
-            CustomReportTemplate template)
-        {
-            return ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data);
-        }
+        //private async Task<byte[]> GenerateReportCardPdf(CustomReportCardsExportModel data, string path,
+        //    CustomReportTemplate template)
+        //{
+        //    return ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data);
+        //}
 
         public IList<CustomReportCardsExportModel> BuilReportCardsData(ReportCardsInputModel inputModel)
         {

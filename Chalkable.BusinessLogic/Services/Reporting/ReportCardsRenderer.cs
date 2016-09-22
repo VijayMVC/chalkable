@@ -137,7 +137,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 
             Directory.SetCurrentDirectory(basePath);
             var bytes = htmlToPdfConverter.ConvertHtml(html, baseUrl);
-            SaveViewAndPadf(basePath, bytes, html);
+            //SaveViewAndPadf(basePath, bytes, html);
             return bytes;
         }
 
@@ -146,7 +146,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var htmlToPdfConverter = new HtmlToPdfConverter
             {
                 HtmlViewerWidth = 1200,
-                ConversionDelay = 1,
+                ConversionDelay = 0,
                 //LicenseKey = "4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=",
             };
             htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = PdfPageSize.Letter;

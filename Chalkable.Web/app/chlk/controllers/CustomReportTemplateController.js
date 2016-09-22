@@ -5,6 +5,7 @@ REQUIRE('chlk.activities.reports.CustomReportTemplateDialog');
 REQUIRE('chlk.models.reports.CustomReportTemplate');
 REQUIRE('chlk.models.reports.CustomReportTemplateList');
 REQUIRE('chlk.models.id.CustomReportTemplateId');
+REQUIRE('chlk.models.reports.CustomReportTemplateFormViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -41,14 +42,28 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.CustomReportTemplateId]],
             function updateAction(templateId) {
-                var result = this.reportTemplateService
-                    .getTemplate(templateId)
-                    .attach(this.validateResponse_());
+                var result = ria.async.wait([
+                        this.reportTemplateService.getTemplate(templateId),
+                        this.reportTemplateService.getHeaders(),
+                        this.reportTemplateService.getFooters()
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        return new chlk.models.reports.CustomReportTemplateFormViewData(data[0], data[1], data[2]);
+                    }, this);
                 return this.ShadeView(chlk.activities.reports.CustomReportTemplateDialog, result);
             },
 
             function addAction() {
-                var result = new ria.async.DeferredData(new chlk.models.reports.CustomReportTemplate);
+                var result  = ria.async.wait([
+                        this.reportTemplateService.getHeaders(),
+                        this.reportTemplateService.getFooters()
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        var template = new chlk.models.reports.CustomReportTemplate()
+                        return new chlk.models.reports.CustomReportTemplateFormViewData(template, data[1], data[2]);
+                    }, this);
                 return this.ShadeView(chlk.activities.reports.CustomReportTemplateDialog, result);
             },
 
@@ -60,7 +75,10 @@ NAMESPACE('chlk.controllers', function (){
                     model.getName(),
                     model.getLayout(),
                     model.getStyle(),
-                    model.getIcon()
+                    model.getIcon(),
+                    model.getType(),
+                    model.getHeaderId(),
+                    model.getFooterId()
                 )
                 .attach(this.validateResponse_())
                 .then(function (data) {

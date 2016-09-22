@@ -1,29 +1,22 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 
-REQUIRE('chlk.models.reports.CustomReportTemplate');
-REQUIRE('chlk.models.id.CustomReportTemplateId');
+REQUIRE('chlk.models.reports.CustomReportTemplateFormViewData');
 
 NAMESPACE('chlk.templates.reports', function () {
 
     /** @class chlk.templates.reports.CustomReportTemplateDialogTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/reports/CustomReportTemplateDialog.jade')],
-        [ria.templates.ModelBind(chlk.models.reports.CustomReportTemplate)],
+        [ria.templates.ModelBind(chlk.models.reports.CustomReportTemplateFormViewData)],
         'CustomReportTemplateDialogTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.CustomReportTemplateId, 'id',
+            chlk.models.reports.CustomReportTemplate, 'reportTemplate',
 
             [ria.templates.ModelPropertyBind],
-            String, 'name',
+            ArrayOf(chlk.models.reports.CustomReportTemplate), 'headers',
 
             [ria.templates.ModelPropertyBind],
-            String, 'layout',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'style',
-
-            [ria.templates.ModelPropertyBind],
-            Object, 'icon'
+            ArrayOf(chlk.models.reports.CustomReportTemplate), 'footers',
         ]);
 });

@@ -20,6 +20,14 @@ NAMESPACE('chlk.models.reports', function () {
             String, 'style',
             Object, 'icon',
 
+
+            [ria.serialize.SerializeProperty('headerid')],
+            chlk.models.id.CustomReportTemplateId, 'headerId',
+
+            [ria.serialize.SerializeProperty('footerid')],
+            chlk.models.id.CustomReportTemplateId, 'footerId',
+
+
             [ria.serialize.SerializeProperty('hasheader')],
             Boolean, 'availableHeader',
 

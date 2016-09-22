@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helper\Loader.cs" />
     <Compile Include="ImportAcademicBenchmarkServiceLocator.cs" />
     <Compile Include="ImportDbService.cs" />
     <Compile Include="ImportService.cs" />

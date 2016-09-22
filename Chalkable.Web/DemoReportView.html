@@ -2382,14 +2382,14 @@
 			.panel-body
 				.row
 					.col-sm-8
-						.h1= "Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
-						.h2= school.name
+						.h1="Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
+						.h2=school.name
 						.school-mailing.mailing-box
-							.line= (school.address1 || "") + " " + (school.address2 || "")
-                             if school.city && school.state && school.zip
-							    .line= [school.city, school.state, school.zip].join(" ")
-                             if school.phone
-							    .line= school.phone
+							.line=(school.address1 || "") + " " + (school.address2 || "")
+							if school.city && school.state && school.zip
+								.line=[school.city, school.state, school.zip].join(" ")
+							if school.phone
+								.line=school.phone
 					.col-sm-4
 						if model.logohref
 							img(src=model.logohref, width="3in").logo
@@ -2402,7 +2402,6 @@
 								.recipient-h.line=recipient.recipientname
 								.line= recipient.addressline1 + " " + recipient.addressline2
 								.line= [recipient.city, recipient.state, recipient.postalcode].join(" ")
-									
 					.col-sm-4
 						table.table.table-bordered.right-table.school
 							tbody
@@ -2488,23 +2487,23 @@
 																td.first Notes
 																td(colspan = gpColspan + 1)= lastGp.note
 							hr
-		if student.gradingPeriod
+		if student.gradingperiod
 			.panel
 				.panel-body
 					.row
 						.col-sm-12
-							.h3=student.gradingPeriod.name + " Announcement"
-							em=student.gradingPeriod.announcement || "Grading Period Announcement"
+							.h3=student.gradingperiod.name + " Announcement"
+							em=student.gradingperiod.announcement || "Grading Period Announcement"
 		.panel(style="page-break-inside: avoid")
 			.panel-body
 				.row
 					.col-sm-6
-						if student.attendance && student.attendance[0]
+						if student.attendances && student.attendances[0]
 							table.table.table-bordered.attendance-table
 								thead
 									tr.active
 										td Attendance
-										each gp in student.attendance
+										each gp in student.attendances
 											td= gp.gradingperiodname || ("GP-" + gp.gradingperiodid)
 										td Total
 								tbody
@@ -2513,9 +2512,9 @@
 									for prop in items
 										tr
 											td.pre=names[prop]
-											each item in student.attendance || []
+											each item in student.attendances || []
 												td=item[prop]
-											-var sum =  student.attendance.reduce(function(sum, current) {return sum + current[prop];}, 0)
+											-var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
 											td=sum
 					.col-sm-6
 						table.table.table-bordered.traditional-table

@@ -190,6 +190,7 @@
     <Compile Include="ImageUtils.cs" />
     <Compile Include="JsonContractTools\LowercaseContractResolver.cs" />
     <Compile Include="ListTools.cs" />
+    <Compile Include="LoaderBase.cs" />
     <Compile Include="PaginatedList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionTools.cs" />
