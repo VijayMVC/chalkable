@@ -13,7 +13,8 @@ mixin GroupPeopleSelector(tpl, requestId)
                 if model.hasGroups()
                     A(data-index=3).action-link.top-link Groups
                 if model.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
-                    A(data-index=4).action-link.top-link Selected
+                    -var selectedCount = (model.getSelectedStudents() || []).length + (model.getSelectedGroups() || []).length;
+                    A(data-index=4).action-link.top-link.selected-link='Selected ' + (selectedCount ? '(' + selectedCount + ')' : '')
 
         if model.isHasOwnStudents()
             DIV(data-index=1).body-content.active.my-students-cnt.items-3

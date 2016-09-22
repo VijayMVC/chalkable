@@ -19,11 +19,17 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('click', '.group-people-selector .top-link:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             function topLinkClick(node, event) {
-                var parent = node.parent('.group-people-selector');
+                var parent = node.parent('.group-people-selector'),
+                    selectorId = parent.getAttr('id'),
+                    o = selectors[selectorId];
                 parent.find('.top-link.pressed').removeClass('pressed');
                 parent.find('.body-content.active').removeClass('active');
                 node.addClass('pressed');
                 parent.find('.body-content[data-index=' + node.getData('index') + ']').addClass('active');
+                o.activityDom.addClass('partial-update');
+                setTimeout(function(){
+                    o.activityDom.removeClass('partial-update');
+                }, 100);
             },
 
             [ria.mvc.DomEventBind('change', '.school-id, .grade-level-id')],
@@ -35,10 +41,11 @@ NAMESPACE('chlk.controls', function () {
                     type = parent.getData('index'),
                     selector = node.parent('.group-people-selector'),
                     schoolId = parent.find('.school-id').getValue(),
-                    gradeLevelId = parent.find('.grade-level-id').getValue();
+                    gradeLevelId = parent.find('.grade-level-id').getValue(),
+                    isMy = type == 1, studentsObj = isMy ? o.myStudentsPart : o.allStudentsPart;
 
                 if(!schoolId){
-                    o.classes = [];
+                    studentsObj.classes = [];
                     this.updateStudents_(selector, type);
                 }else{
                     var serviceIns = this.getContext().getService(chlk.services.ClassService),
@@ -50,7 +57,7 @@ NAMESPACE('chlk.controls', function () {
 
                     methodRef.invokeOn(serviceIns, params)
                         .then(function(classes){
-                            o.classes = classes || [];
+                            studentsObj.classes = classes || [];
                             this.updateStudents_(selector, type);
                         }.bind(this));
                 }
@@ -220,8 +227,10 @@ NAMESPACE('chlk.controls', function () {
 
             function updateSelected_(selector, o){
                 var model = new chlk.models.recipients.GroupSelectorViewData(null, null, null, null, null, null, null,
-                    o.groups, o.students);
+                    o.groups, o.students), selectedCount = o.groups.length + o.students.length,
+                    selectedText = 'Selected ' + (selectedCount ? '(' + selectedCount + ')' : '');
                 var cnt = selector.find('.selected-content'), tpl = new chlk.templates.controls.group_people_selector.SelectorBaseTpl();
+                selector.find('.selected-link').setHTML(selectedText);
 
                 tpl.assign(model);
                 tpl.renderTo(cnt.empty());
