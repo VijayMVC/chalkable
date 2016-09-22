@@ -102,11 +102,8 @@ namespace Chalkable.Data.School.DataAccess
                 dictionarySchools.Add(school);
             }
 
-            int a;
             foreach (var student in students)
             {
-                if (student.Id == 3796 || student.Id == 3804 || student.Id == 3720 || student.Id == 5527 || student.Id == 5845 || student.Id == 3028)
-                    a = 1;
                 student.StudentSchools = stSchool[student.Id].Distinct().ToList();
                 student.GradeLevel = ssy.First(x => x.StudentRef == student.Id).GradeLevel;
             }

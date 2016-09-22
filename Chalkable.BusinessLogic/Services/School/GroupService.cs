@@ -12,25 +12,12 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IGroupService
     {
-        void AddGroup(string name);
-        Group EditGroup(int groupId, string name);
+        Group AddGroup(string name, IntList studentsIds);
+        Group EditGroup(int groupId, string name, IntList studentsIds);
         void DeleteGroup(int groupId);
-        
-        void AssignStudents(int groupId, IList<int> studentIds);
-        void AssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId);
-        void AssignStudentsBySchoolYear(int groupId, int schoolYearId);
-        void AssignAll(int groupId);
 
-        void UnssignStudents(int groupId, IList<int> studentIds);
-        void UnssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId);
-        void UnssignStudentsBySchoolYear(int groupId, int schoolYearId);
-        void UnassignAll(int groupId);
-        
         IList<Group> GetGroups(int ownerId, string filter);
-        IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds);
-        GroupExplorer GetGroupExplorerInfo(int groupId);
-
-        IList<Group> GetByIds(IList<int> ids);
+        GroupInfo Info(int groupId);
     }
 
     public class GroupService : SchoolServiceBase, IGroupService
@@ -39,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void AddGroup(string name)
+        public Group AddGroup(string name, IntList studentsIds)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -47,10 +34,18 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Name"));
 
             BaseSecurity.EnsureDistrictAdmin(Context);
-            DoUpdate(u => new GroupDataAccess(u).Insert(new Group { Name = name, OwnerRef  = Context.PersonId.Value}));
+
+            using (var uow = Update())
+            {
+                var da = new GroupDataAccess(uow);
+                var groupId = da.InsertWithEntityId(new Group { Name = name, OwnerRef = Context.PersonId.Value });
+                AssignStudentsToGroup(groupId, studentsIds);
+                uow.Commit();
+                return da.GetById(groupId);
+            }
         }
 
-        public Group EditGroup(int groupId, string name)
+        public Group EditGroup(int groupId, string name, IntList studentsIds)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Name"));
@@ -61,9 +56,22 @@ namespace Chalkable.BusinessLogic.Services.School
                 EnsureInGroupModifyPermission(group);
                 group.Name = name;
                 da.Update(group);
+                AssignStudentsToGroup(groupId, studentsIds);
                 uow.Commit();
                 return group;
             }
+        }
+
+        public void AssignStudentsToGroup(int groupId, IntList studentIds)
+        {
+            DoUpdate(u =>
+            {
+                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
+                var da = new DataAccessBase<StudentGroup>(u);
+                var studentGroups = da.GetAll(new AndQueryCondition { { StudentGroup.GROUP_REF_FIELD, groupId } }).Select(x => x.StudentRef);
+                da.Delete(BuildStudentGroups(groupId, studentGroups));
+                da.Insert(BuildStudentGroups(groupId, studentIds));
+            });
         }
 
         public void DeleteGroup(int groupId)
@@ -82,110 +90,30 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new GroupDataAccess(u).GetAll(new AndQueryCondition {{Group.OWNER_REF_FIELD, ownerId}}, filter));
         }
 
+        public GroupInfo Info(int groupId)
+        {
+            DoRead(u =>
+            {
+                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
+                var da = new DataAccessBase<StudentGroup>(u);
+                var studentGroups = da.GetAll(new AndQueryCondition { { StudentGroup.GROUP_REF_FIELD, groupId } }).Select(x => x.StudentRef);
+                da.Delete(BuildStudentGroups(groupId, studentGroups));
+                da.Insert(BuildStudentGroups(groupId, studentIds));
+            });
+
+            return new GroupInfo();
+            
+        }
+
         private void EnsureInGroupModifyPermission(Group gGroup)
         {
             if (gGroup.OwnerRef != Context.PersonId)
                 throw new ChalkableSecurityException("Only owner can modify group");
         }
-        
-        public IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds)
-        {
-            return DoRead( u => new GroupDataAccess(u).GetStudentForGroup(groupId, schoolYearId, gradeLevelId, classesIds, coursesIds));
-        }
-
-        public GroupExplorer GetGroupExplorerInfo(int groupId)
-        {
-            if(!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
-            return DoRead(u => new GroupDataAccess(u).GetGroupExplorerData(groupId, Context.PersonId.Value, Context.NowSchoolTime.Date));
-        }
-
-        public IList<Group> GetByIds(IList<int> ids)
-        {
-            return DoRead(u => new GroupDataAccess(u).GetByIds(ids));
-        }
-
-
-        public void AssignStudents(int groupId, IList<int> studentIds)
-        {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                var da = new StudentGroupDataAccess(u);
-                var studentGroups = da.GetAll(new AndQueryCondition {{StudentGroup.GROUP_REF_FIELD, groupId}});
-                studentIds = studentIds.Where(id => studentGroups.All(sg => sg.StudentRef != id)).ToList();
-                da.Insert(BuildStudentGroups(groupId, studentIds));
-            });
-        }
-
-        public void UnssignStudents(int groupId, IList<int> studentIds)
-        {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new StudentGroupDataAccess(u).Delete(BuildStudentGroups(groupId, studentIds));
-            });
-        }
-
-        public void AssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
-        {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new StudentGroupDataAccess(u).AssignStudentsBySchoolYear(groupId, schoolYearId, gradeLevelId);
-            });
-        }
-
-        public void AssignStudentsBySchoolYear(int groupId, int schoolYearId)
-        {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new StudentGroupDataAccess(u).AssignStudentsBySchoolYear(groupId, schoolYearId, null);
-            });
-        }
-
-        public void UnssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
-        {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new StudentGroupDataAccess(u).UnassignStudentsBySchoolYear(groupId, schoolYearId, gradeLevelId);
-            });
-        }
-
-        public void UnssignStudentsBySchoolYear(int groupId, int schoolYearId)
-        {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new StudentGroupDataAccess(u).UnassignStudentsBySchoolYear(groupId, schoolYearId, null);
-            });
-        }
 
         private IList<StudentGroup> BuildStudentGroups(int groupId, IEnumerable<int> studentIds)
         {
             return studentIds.Select(x => new StudentGroup {GroupRef = groupId, StudentRef = x}).ToList();
-        }
-
-
-        public void AssignAll(int groupId)
-        {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new StudentGroupDataAccess(u).AssignAllStudentsToGroup(groupId, Context.NowSchoolTime.Date);
-            });
-
-        }
-
-        public void UnassignAll(int groupId)
-        {
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new StudentGroupDataAccess(u).UnassignAllStudentsFromGroup(groupId);
-            });
         }
     }
 }

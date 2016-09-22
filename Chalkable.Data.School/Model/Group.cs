@@ -17,8 +17,6 @@ namespace Chalkable.Data.School.Model
 
         [NotDbFieldAttr]
         public int StudentCount { get; set; }
-        [NotDbFieldAttr]
-        public bool HasStudents { get { return StudentCount > 0; } }
     }
 
     public class StudentGroup
@@ -76,5 +74,10 @@ namespace Chalkable.Data.School.Model
         {
             get { return GroupRef != null; }
         }
+    }
+
+    public class GroupInfo : Group
+    {
+        public IList<Student> Students { get; set; } 
     }
 }
