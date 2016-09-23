@@ -1,4 +1,5 @@
-﻿using Chalkable.Data.Common;
+﻿using System.Collections.Generic;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -14,5 +15,10 @@ namespace Chalkable.Data.School.Model
 
         [DataEntityAttr]
         public Group Group { get; set; }
+
+        [NotDbFieldAttr]
+        public int StudentCount { get; set; }
+
+        public IList<Student> Students { get; set; } 
     }
 }

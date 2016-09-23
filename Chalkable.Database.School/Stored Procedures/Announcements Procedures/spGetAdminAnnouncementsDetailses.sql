@@ -120,9 +120,18 @@ Select
 	AnnouncementGroup.AnnouncementRef as AnnouncementGroup_AnnouncementRef,
 	AnnouncementGroup.GroupRef as AnnouncementGroup_GroupRef,
 	[Group].Id as Group_Id,
-	[Group].Name as Group_Name
+	[Group].Name as Group_Name,
+	[Student].Id as Student_Id,
+	[Student].FirstName as Student_FirstName,
+	[Student].LastName as Student_LastName,
+	[Student].Gender as Student_Gender
 From AnnouncementGroup
-join [Group] on [Group].Id = AnnouncementGroup.GroupRef
+join [Group] 
+	on [Group].Id = AnnouncementGroup.GroupRef
+join StudentGroup
+		on StudentGroup.GroupRef = [Group].Id
+	join Student
+		on Student.Id = StudentGroup.StudentRef
 Where AnnouncementRef in(select Id from @adminAnnouncements)
 
 Select
