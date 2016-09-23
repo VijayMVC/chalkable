@@ -12,6 +12,15 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
 
             Boolean, 'hasAccessToLE',
 
-            chlk.models.recipients.SelectorModeEnum, 'selectorMode'
+            chlk.models.recipients.SelectorModeEnum, 'selectorMode',
+
+            [[chlk.models.people.User]],
+            Boolean, function canViewInfo(user){
+                var currentRole = this.getUserRole();
+                var currentUser = this.getCurrentUser();
+                return !currentRole || !currentUser || currentUser.getId() == user.getId()
+                    || currentRole.isTeacher() || currentRole.isAdmin()
+                    || currentRole.isStudent() && user.getRole().getId() == chlk.models.common.RoleEnum.TEACHER.valueOf();
+            }
         ])
 });

@@ -110,7 +110,7 @@ NAMESPACE('chlk.controls', function () {
                     gradeLevelId = chlk.models.id.GradeLevelId(parent.find('.grade-level-id').getValue()),
                     schoolId = chlk.models.id.SchoolId(parent.find('.school-id').getValue()),
                     programId = chlk.models.id.ProgramId(parent.find('.program-id').getValue()),
-                    classId = chlk.models.id.ClassId(parent.find('.class-id').getValue()),
+                    classId = chlk.models.id.ClassId(selector.find('.main-class-id').getValue() || parent.find('.class-id').getValue()),
                     byLastName = !!parseInt(parent.find('.by-last-name').getValue(),10),
                     filter = parent.find('.top-filter').getValue();
                 var params = [classId, filter, isMy, byLastName, start_ || 0, itemsCount, null, schoolId, gradeLevelId, programId];

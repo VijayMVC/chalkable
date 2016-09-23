@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.recipients.UsersListTpl');
+REQUIRE('chlk.templates.group_people_selector.UsersListTpl');
 
 NAMESPACE('chlk.templates.recipients', function () {
 
@@ -7,5 +7,5 @@ NAMESPACE('chlk.templates.recipients', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/recipients/UsersListItems.jade')],
         [ria.templates.ModelBind(chlk.models.recipients.UsersListViewData)],
-        'UsersListItemsTpl', EXTENDS(chlk.templates.recipients.UsersListTpl), [])
+        'UsersListItemsTpl', EXTENDS(chlk.templates.group_people_selector.UsersListTpl), [])
 });

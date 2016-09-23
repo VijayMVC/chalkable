@@ -1,0 +1,2 @@
+li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|' + self.getSearchType().valueOf(), style="background: white")
+   div.title(class = (self.getSearchType() == chlk.models.search.SearchTypeEnum.PERSONS) ? "student" : "group" )= self.getDescription()

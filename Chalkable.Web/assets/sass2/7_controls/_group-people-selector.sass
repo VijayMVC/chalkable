@@ -77,8 +77,14 @@
 
 .group-people-selector
   &.view-with-groups
-    .recipient-check-cnt
-      display: none
+    .recipient-item
+      .recipient-check-cnt
+        display: none
+
+  li.active-result
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
 
   .items-cnt
     margin-right: -25px
@@ -189,7 +195,10 @@
       .group-icon
         +icons-32-sprite(group-icon-green)
 
-    >*
+    &>a
+      display: block
+
+    .inner-item
       display: inline-block
       vertical-align: middle
 

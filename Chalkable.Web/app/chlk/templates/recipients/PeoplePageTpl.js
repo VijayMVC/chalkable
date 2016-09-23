@@ -6,5 +6,8 @@ NAMESPACE('chlk.templates.recipients', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/recipients/PeoplePage.jade')],
         [ria.templates.ModelBind(chlk.models.recipients.GroupSelectorViewData)],
-        'PeoplePageTpl', EXTENDS(chlk.templates.controls.group_people_selector.SelectorBaseTpl), [])
+        'PeoplePageTpl', EXTENDS(chlk.templates.controls.group_people_selector.SelectorBaseTpl), [
+            [ria.templates.ModelPropertyBind],
+            chlk.models.classes.ClassesForTopBar, 'topData'
+        ])
 });

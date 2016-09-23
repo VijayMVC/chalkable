@@ -1,14 +1,23 @@
+mixin RecipientItemBlock_(student)
+    .recipient-check-cnt.box-checkbox.circle.inner-item
+        +Checkbox('personCheck', selected.indexOf(student.getId()) > -1, false, true)(
+            data-id=student.getId().valueOf(),
+            data-name=student.getDisplayName(),
+            data-gender=student.getGender()
+        ).recipient-check.student-check
+    .recipient-icon.student-icon.inner-item
+        +PersonImg(student, 47)
+    .recipient-name.inner-item(data-tooltip-type="overflow", data-tooltip=student.getDisplayName())
+        b=student.getDisplayName()
+        .info=(student.getGradeLevel() && (student.getGradeLevel().getName() + " ")) + (student.getStudentSchools() && student.getStudentSchools()[0] && student.getStudentSchools()[0].getName())
+
 -var selected = self.getSelected()
+-var viewMode = self.getSelectorMode() == chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
 each student in self.getModel().getItems()
+    -var showLink = viewMode && self.canViewInfo(student)
     .recipient-item.student-item
-        .recipient-check-cnt.box-checkbox.circle
-            +Checkbox('personCheck', selected.indexOf(student.getId()) > -1, false, true)(
-                data-id=student.getId().valueOf(),
-                data-name=student.getDisplayName(),
-                data-gender=student.getGender()
-            ).recipient-check.student-check
-        .recipient-icon.student-icon
-            +PersonImg(student, 47)
-        .recipient-name
-            b=student.getDisplayName()
-            .info=(student.getGradeLevel() && (student.getGradeLevel().getName() + " ")) + (student.getStudentSchools() && student.getStudentSchools()[0] && student.getStudentSchools()[0].getName())
+        if showLink
+            +ProfileLink(student)
+                +RecipientItemBlock_(student)
+        else
+            +RecipientItemBlock_(student)

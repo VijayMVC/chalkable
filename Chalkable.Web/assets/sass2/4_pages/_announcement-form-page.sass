@@ -1,3 +1,55 @@
+.recipients-list
+  padding: 4px 23px
+  position: relative
+  border: 1px solid #c8c7c3
+  +box-shadow(rgba(0, 0, 0, 0.1) 0 1px 3px inset, rgba(255, 255, 255, 0.5) 0 1px 1px)
+  background: #fff
+  border-radius: 4px
+
+  &::before
+    content: 'To'
+    position: absolute
+    left: 8px
+    font-size: 11px
+    font-weight: 600
+    top: 5px
+
+  .add-recipients-btn
+    position: absolute
+    width: 24px
+    height: 24px
+    +icons-24-sprite(users_add)
+    top: 5px
+    right: 5px
+
+    &:not(:hover)
+      opacity: 0.5
+
+  .recipient-search
+    border: none
+    +box-shadow(none)
+
+  .recipient-item
+    min-width: 20px
+    display: inline-block
+    background: #ededed
+    height: 20px
+    line-height: 20px
+    padding: 0 20px 0 8px
+    border-radius: 3px
+    position: relative
+    margin-left: 5px
+    font-weight: bold
+    color: #56554f
+
+    .remove-recipient
+      position: absolute
+      width: 24px
+      height: 24px
+      +icons-24-sprite(small-remove)
+      top: -2px
+      cursor: pointer
+
 .top-green-info
   position: absolute
   background: #e9f6ed
@@ -243,17 +295,6 @@
       cursor: pointer
       text-align: center
 
-  .recipients-list
-    padding-left: 40px
-    position: relative
-
-    &::before
-      content: 'To :'
-      position: absolute
-      left: 0
-      font: bold 16px Arial
-      top: 7px
-
   .standards-list, .recipients-list
 
     BUTTON
@@ -272,7 +313,7 @@
       &:not(:last-child)
         margin-right: 10px
 
-    .remove-standard, .remove-recipient
+    .remove-standard
       border: none
       width: 32px
       height: 32px

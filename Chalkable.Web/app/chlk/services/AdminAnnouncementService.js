@@ -66,7 +66,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, String, String]],
             ria.async.Future, function addGroupsToAnnouncement(id, groupIds_, studentsIds_) {
-                return this.post('AdminAnnouncement/SubmitGroupsToAnnouncement.json', Boolean, {
+                return this.post('AdminAnnouncement/SubmitGroupsToAnnouncement.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     adminAnnouncementId:id.valueOf(),
                     groupsIds: groupIds_,
                     studentsIds: studentsIds_

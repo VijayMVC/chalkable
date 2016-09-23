@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.AdminAnnouncementFormTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
+REQUIRE('chlk.templates.recipients.RecipientsSearchTpl');
 
 REQUIRE('chlk.activities.announcement.BaseAnnouncementFormPage');
 
@@ -22,10 +23,23 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.group-ids').setValue(model.getGroupIds());
             },
 
+            [ria.mvc.DomEventBind('change', '.recipient-search')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function searchChange(node, event, selected_){
+                this.dom.find('.recipient-submit').trigger('click');
+            },
+
             [ria.mvc.DomEventBind('click', '.add-recipients .title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function addRecipientsClick(node, event){
                 jQuery(node.parent('.add-recipients').find('.add-recipients-btn').valueOf()).click();
+            },
+
+            [ria.mvc.DomEventBind('click', '.recipients-list')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function recipientsClick(node, event){
+                if(!ria.dom.Dom(event.target).is('a') && !ria.dom.Dom(event.target).is('input'))
+                    node.find('.recipient-search').trigger('focus');
             },
 
             [ria.mvc.DomEventBind('keypress', 'input')],

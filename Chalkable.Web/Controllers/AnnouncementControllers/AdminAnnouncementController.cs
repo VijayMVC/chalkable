@@ -9,6 +9,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.PersonViewDatas;
+using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -51,7 +52,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             SchoolLocator.AdminAnnouncementService.SubmitGroupsToAnnouncement(adminAnnouncementId, groupsIds);
             SchoolLocator.AdminAnnouncementService.SubmitStudentsToAnnouncement(adminAnnouncementId, studentsIds);
-            return Json(true, 5);
+            var viewData = PrepareFullAnnouncementViewData(adminAnnouncementId, AnnouncementTypeEnum.Admin);
+            return Json(viewData);
         }
 
         [AuthorizationFilter("DistrictAdmin")]

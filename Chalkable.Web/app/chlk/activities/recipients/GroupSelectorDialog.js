@@ -17,7 +17,7 @@ NAMESPACE('chlk.activities.recipients', function(){
 
                 groupNodes.forEach(function(groupNode){
                     groupNode.find('.group-name').setHTML(model.getName());
-                    groupNode.find('.students-count').setHTML(model.getStudentCount());
+                    groupNode.find('.students-count').setHTML(model.getStudentCount().toString());
                 });
             }
         ]);

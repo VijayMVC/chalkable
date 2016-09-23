@@ -17,6 +17,14 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Search/Search.json', ArrayOf(chlk.models.search.SearchItem), {
                     query: query_
                 });
+            },
+
+            [[ArrayOf(chlk.models.search.SearchTypeEnum), String]],
+            ria.async.Future, function searchByTypes(types, query_) {
+                return this.get('Search/Search.json', ArrayOf(chlk.models.search.SearchItem), {
+                    includedSearchType: this.arrayToCsv(types),
+                    query: query_
+                });
             }
         ])
 });

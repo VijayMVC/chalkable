@@ -1,13 +1,13 @@
 -var selected = self.getSelected() || []
 each group in self.getGroups()
     .recipient-item.group-item(class=group.isNewAdded() ? 'new' : '', data-id = group.getId().valueOf())
-        .recipient-check-cnt.box-checkbox.circle
+        .recipient-check-cnt.box-checkbox.circle.inner-item
             +Checkbox('groupCheck', selected.indexOf(group.getId()) > -1, false, true)(
                 data-id=group.getId().valueOf(),
                 data-name=group.getName()
             ).recipient-check.group-check
-        .recipient-icon.group-icon
-        .recipient-name
+        .recipient-icon.group-icon.inner-item
+        .recipient-name.inner-item(data-tooltip-type="overflow", data-tooltip=group.getName())
             b.group-name=group.getName()
         +ActionLink('group', 'showCreateEditDialog', group.getId()).edit-group
         .students-count=group.getStudentCount()
