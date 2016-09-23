@@ -38,6 +38,7 @@ namespace Chalkable.Web.Models
             mapper.Add(SearchTypeEnum.Announcements, new SearchAnnouncementBuilder(SearchTypeEnum.Announcements));
             mapper.Add(SearchTypeEnum.Attachments, new SearchAttachmentBuilder(SearchTypeEnum.Attachments));
             mapper.Add(SearchTypeEnum.Classes, new SearchClassBuilder(SearchTypeEnum.Classes));
+            mapper.Add(SearchTypeEnum.Group, new SearchGroupBuilder(SearchTypeEnum.Group));
         }
     }
 
@@ -128,6 +129,19 @@ namespace Chalkable.Web.Models
         }
     }
 
+    public class GroupSearchViewData : SearchViewData
+    {
+        public static SearchViewData Create(Group gGroup)
+        {
+            return new GroupSearchViewData
+            {
+                Id = gGroup.Id.ToString(),
+                Description = gGroup.Name,
+                SearchType = (int)SearchTypeEnum.Group
+            };
+        }
+    }
+
 
     public abstract class BaseSearchResultBuilder
     {
@@ -210,6 +224,22 @@ namespace Chalkable.Web.Models
         }
     }
 
+    public class SearchGroupBuilder : BaseSearchResultBuilder
+    {
+        public SearchGroupBuilder(SearchTypeEnum searchTypeEnum)
+            : base(searchTypeEnum)
+        {
+        }
+
+        public override IList<SearchViewData> Build(object searchRes)
+        {
+            var groups = searchRes as IList<Group>;
+            if (groups == null || (SearchTypeEnum)searchType != SearchTypeEnum.Group)
+                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
+            return groups.Select(GroupSearchViewData.Create).ToList();
+        }
+    }
+
 
     public enum SearchTypeEnum
     {
@@ -218,5 +248,8 @@ namespace Chalkable.Web.Models
         Announcements = 2,
         Attachments = 3,
         Classes = 4,
+        Student = 5,
+        Staff = 6,
+        Group = 7
     }
 }

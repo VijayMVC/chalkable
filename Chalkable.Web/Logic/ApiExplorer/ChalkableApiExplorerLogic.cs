@@ -100,7 +100,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             RegisterApiMethodDefaults<TeacherController>(x => x.GetTeachers("", null, null, DemoSchoolConstants.AlgebraClassId, null, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<PrivateMessageController>(x => x.Send(DemoSchoolConstants.Student2, null, "test msg", "test msg body"), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<StudentController>(x => x.Schedule(DemoSchoolConstants.Student1), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<SearchController>(x => x.Search("algebra"), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<SearchController>(x => x.Search("algebra", null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<SchoolYearController>(x => x.List(null, null, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<SchoolYearController>(x => x.CurrentSchoolYear(), ApiMethodCallType.Get);
 
