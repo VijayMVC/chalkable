@@ -375,6 +375,7 @@
     <Build Include="Tables\AdminAnnouncementStudent.sql" />
     <Build Include="Stored Procedures\spSearchStudentsTmp.sql" />
     <Build Include="Stored Procedures\spSearchStudentBySchoolYearTmp.sql" />
+    <Build Include="User Defined Types\TStudentGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />

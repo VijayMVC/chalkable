@@ -42,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 AssignStudentsToGroup(groupId, studentIds, uow);
                 uow.Commit();
                 var group = da.GetById(groupId);
-                group.StudentCount = studentIds.Count;
+                group.StudentCount = studentIds?.Count ?? 0;
                 return group;
             }
         }
@@ -60,7 +60,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Update(group);
                 AssignStudentsToGroup(groupId, studentIds, uow);
                 uow.Commit();
-                group.StudentCount = studentIds.Count;
+                group.StudentCount = studentIds?.Count ?? 0;
                 return group;
             }
         }
@@ -69,9 +69,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             EnsureInGroupModifyPermission(new GroupDataAccess(uow).GetById(groupId));
             var da = new DataAccessBase<StudentGroup>(uow);
-            var studentGroups = da.GetAll(new AndQueryCondition { { StudentGroup.GROUP_REF_FIELD, groupId } }).Select(x => x.StudentRef);
-            da.Delete(BuildStudentGroups(groupId, studentGroups));
-            da.Insert(BuildStudentGroups(groupId, studentIds));
+            var groupStudents = da.GetAll(new AndQueryCondition { { StudentGroup.GROUP_REF_FIELD, groupId } }).Select(x => x.StudentRef).ToList();
+            if(groupStudents.Count > 0)
+                da.Delete(BuildStudentGroups(groupId, groupStudents));
+            if(studentIds != null)
+                da.Insert(BuildStudentGroups(groupId, studentIds));
         }
 
         public void DeleteGroup(int groupId)
