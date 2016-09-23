@@ -44,7 +44,7 @@
       <Setting name="AesSecretKey" value="5E9F42ED7A2E51D39CD63EA9BDE5AAD9DA2B86532CC57DABC2636F8B3A95D48E"/>
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
+      <Certificate name="Certificate1" thumbprint="1736CA672BDA47F90BC378D9BE9D28E176973848" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="Chalkable.BackgroundTaskProcessor">
