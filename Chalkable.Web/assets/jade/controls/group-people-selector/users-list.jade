@@ -54,7 +54,9 @@
     .items-cnt-2
         +RenderWith(self.getUsers(), chlk.templates.controls.group_people_selector.PersonItemsTpl)(
             userRole = self.getUserRole(),
+            currentUser = self.getCurrentUser(),
             selected = self.getSelected(),
             hasAccessToLE = self.isHasAccessToLE(),
-            selectorMode = self.getSelectorMode()
+            selectorMode = self.getSelectorMode(),
+            messagingDisabled = self.isMessagingDisabled()
         )

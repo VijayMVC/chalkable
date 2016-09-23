@@ -56,6 +56,8 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             Array, 'selected',
 
             Boolean, 'hasAccessToLE',
+            
+            Boolean, 'messagingDisabled',
 
             chlk.models.recipients.SelectorModeEnum, 'selectorMode'
         ])

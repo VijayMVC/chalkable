@@ -17,6 +17,20 @@ NAMESPACE('chlk.controls', function () {
             },
 
             Boolean, 'hasAccessToLE',
+            
+            function isMessagingDisabled(isMy_){
+                var disableMessaging, isStudent = this.context.getSession().get(ChlkSessionConstants.USER_ROLE).isStudent();
+                var messagingSettings = this.context.getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
+                if(isStudent){
+                    disableMessaging = isMy_ && !messagingSettings.isAllowedForStudents() ||
+                        !isMy_ && !messagingSettings.isAllowedForTeachersToStudents();
+                }else{
+                    disableMessaging = !messagingSettings.isAllowedForTeachersToStudents() ||
+                        !isMy_ && messagingSettings.isAllowedForTeachersToStudentsInTheSameClass();
+                }
+                
+                return this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_DISABLED) || disableMessaging;
+            },
 
             [ria.mvc.DomEventBind('click', '.group-people-selector .top-link:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -96,31 +110,39 @@ NAMESPACE('chlk.controls', function () {
             },
 
             function updateStudents_(selector, type, append_, start_){
-                var selectorId = selector.getAttr('id'),
+                var selectorId = selector.getAttr('id'), params,
                     o = selectors[selectorId], isMy = type == 1, studentsObj = isMy ? o.myStudentsPart : o.allStudentsPart,
                     studentsData = o.students || [],
                     studentIds = studentsData.map(function(student){return student.getId()}),
-                    intervalName = intervalNames[type];
+                    intervalName = intervalNames[type],
+                    isStudent = this.getUserRole().isStudent(),
+                    getTeachers = isStudent && !isMy,
+                    service = getTeachers ? chlk.services.TeacherService : chlk.services.StudentService;
 
                 var parent = selector.find('.body-content[data-index=' + type + ']'),
                     dom = append_ ? parent.find('.items-cnt-2') : parent;
-                var serviceIns = this.getContext().getService(chlk.services.StudentService);
-                var ref = ria.reflection.ReflectionClass(chlk.services.StudentService);
-                var methodRef = ref.getMethodReflector('getStudents'),
+                var serviceIns = this.getContext().getService(service);
+                var ref = ria.reflection.ReflectionClass(service);
+                var methodRef = ref.getMethodReflector(getTeachers ? 'getTeachers' : 'getStudents'),
                     gradeLevelId = chlk.models.id.GradeLevelId(parent.find('.grade-level-id').getValue()),
                     schoolId = chlk.models.id.SchoolId(parent.find('.school-id').getValue()),
                     programId = chlk.models.id.ProgramId(parent.find('.program-id').getValue()),
                     classId = chlk.models.id.ClassId(selector.find('.main-class-id').getValue() || parent.find('.class-id').getValue()),
                     byLastName = !!parseInt(parent.find('.by-last-name').getValue(),10),
                     filter = parent.find('.top-filter').getValue();
-                var params = [classId, filter, isMy, byLastName, start_ || 0, itemsCount, null, schoolId, gradeLevelId, programId];
+                if(getTeachers)
+                    params = [classId, filter, byLastName, start_ || 0, itemsCount, true];
+                else
+                    params = [classId, filter, !isStudent && isMy, byLastName, start_ || 0, itemsCount, null, schoolId, gradeLevelId, programId];
                 var tpl = append_ ? new chlk.templates.controls.group_people_selector.PersonItemsTpl() :
                     new chlk.templates.controls.group_people_selector.UsersListTpl();
                 tpl.options({
                     selected: studentIds,
                     userRole: this.context.getSession().get(ChlkSessionConstants.USER_ROLE),
+                    currentUser: this.context.getSession().get(ChlkSessionConstants.CURRENT_PERSON, null),
                     hasAccessToLE: this.isHasAccessToLE(),
-                    selectorMode: o.selectorMode
+                    selectorMode: o.selectorMode,
+                    messagingDisabled: studentsObj.isMessagingDisabled
                 });
 
                 parent.addClass('scroll-freezed');
@@ -167,6 +189,7 @@ NAMESPACE('chlk.controls', function () {
                 tpl.options({
                     selected: groupIds,
                     userRole: this.context.getSession().get(ChlkSessionConstants.USER_ROLE),
+                    currentUser: this.context.getSession().get(ChlkSessionConstants.CURRENT_PERSON, null),
                     selectorMode: o.selectorMode
                 });
 
@@ -334,13 +357,15 @@ NAMESPACE('chlk.controls', function () {
                                 gradeLevels: myStudentsPart.getGradeLevels(),
                                 schools: myStudentsPart.getSchools(),
                                 programs: myStudentsPart.getPrograms(),
-                                classes: myStudentsPart.getClasses()
+                                classes: myStudentsPart.getClasses(),
+                                isMessagingDisabled: this.isMessagingDisabled(true)
                             },
                             allStudentsPart: {
                                 gradeLevels: myStudentsPart.getGradeLevels(),
                                 schools: myStudentsPart.getSchools(),
                                 programs: myStudentsPart.getPrograms(),
-                                classes: myStudentsPart.getClasses()
+                                classes: myStudentsPart.getClasses(),
+                                isMessagingDisabled: this.isMessagingDisabled()
                             },
                             activityDom: activity.getDom()
                         };

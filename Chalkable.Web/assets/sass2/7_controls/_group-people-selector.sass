@@ -169,6 +169,19 @@
     position: relative
     vertical-align: top
 
+    .message-button
+      position: absolute
+      right: 11px
+      width: 28px
+      height: 20px
+      top: 50%
+      margin-top: -10px
+      background: image-url("images2/common/message.png") 0 0 no-repeat
+      +transition(opacity 0.2s)
+
+      &:not(:hover)
+        opacity: 0.2
+
     .edit-group
       position: absolute
       right: 14px

@@ -40,7 +40,7 @@ NAMESPACE('chlk.models.people', function () {
                 BASE();
                 this.id = id;
                 this.name = name;
-                this.namelowered = nameLowered;
+                this.nameLowered = nameLowered;
                 this.description = description;
             }
     ]);

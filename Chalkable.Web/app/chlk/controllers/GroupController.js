@@ -4,6 +4,7 @@ REQUIRE('chlk.services.GroupService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.services.StudentService');
+REQUIRE('chlk.services.TeacherService');
 
 REQUIRE('chlk.models.recipients.RecipientsSubmitViewData');
 
@@ -27,6 +28,9 @@ NAMESPACE('chlk.controllers', function () {
 
             [ria.mvc.Inject],
             chlk.services.StudentService, 'studentService',
+
+            [ria.mvc.Inject],
+            chlk.services.TeacherService, 'teacherService',
 
             [ria.mvc.Inject],
             chlk.services.SchoolService, 'schoolService',
@@ -84,21 +88,23 @@ NAMESPACE('chlk.controllers', function () {
             function getGroupPersonInfo_(type, requestId_, data_, groupId_, topData_){
                 var withGroups = this.userIsAdmin() && (type == chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS ||
                         type == chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS),
-                    isView = type == chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS,
-                    classId = topData_ && topData_.getSelectedItemId();
+                    isView = type == chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS, itemsCount = 30,
+                    classId = topData_ && topData_.getSelectedItemId(), isStudent = this.getCurrentRole().isStudent();
 
                 return ria.async.wait([
                         withGroups ? this.groupService.list() : ria.async.DeferredData([]),
-                        this.studentService.getStudents(classId, null, true, null, 0, 30),
-                        this.studentService.getStudents(classId, null, false, null, 0, 30),
+                        this.studentService.getStudents(classId, null, !isStudent, null, 0, itemsCount),
+                        isStudent ? this.teacherService.getTeachers(classId, null, null, 0, itemsCount, true) :
+                            this.studentService.getStudents(classId, null, false, null, 0, itemsCount),
                         (!isView || this.userIsAdmin() ) ? this.schoolService.getUserLocalSchools() : ria.async.DeferredData([]),
-                        this.schoolService.getSchoolPrograms(),
+                        isStudent ? ria.async.DeferredData([]) : this.schoolService.getSchoolPrograms(),
                         groupId_ ? this.groupService.info(groupId_) : ria.async.DeferredData(null)//,
                         //classId_ ? this.classService.getClassesBySchool(classId_) : ria.async.DeferredData(null)
                     ])
                     .then(function(result){
                         var leParams = this.getContext().getSession().get(ChlkSessionConstants.LE_PARAMS, new chlk.models.school.LEParams()),
-                            hasAccessToAllStudents = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_STUDENT) && (!classId || !classId.valueOf()),
+                            hasAccessToAllStudents = (isStudent || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_STUDENT)) &&
+                                (!classId || !classId.valueOf()),
                             hasAccessToLE = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS) && leParams.isLEIntegrated(),
                             hasOwnStudents = result[1].getItems().length > 0,
                             groupsModel = new chlk.models.recipients.GroupsListViewData(result[0]),

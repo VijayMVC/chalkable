@@ -16,5 +16,6 @@
         +RenderWith(self.getModel(), chlk.templates.controls.group_people_selector.GroupsListItemsTpl)(
             userRole = self.getUserRole(),
             selected = self.getSelected(),
-            selectorMode = self.getSelectorMode()
+            selectorMode = self.getSelectorMode(),
+            currentUser = self.getCurrentUser()
         )

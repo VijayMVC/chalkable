@@ -1,4 +1,4 @@
-mixin RecipientItemBlock_(student)
+mixin RecipientItemBlock_(student, viewMode, isMessagingDisabled)
     .recipient-check-cnt.box-checkbox.circle.inner-item
         +Checkbox('personCheck', selected.indexOf(student.getId()) > -1, false, true)(
             data-id=student.getId().valueOf(),
@@ -9,15 +9,19 @@ mixin RecipientItemBlock_(student)
         +PersonImg(student, 47)
     .recipient-name.inner-item(data-tooltip-type="overflow", data-tooltip=student.getDisplayName())
         b=student.getDisplayName()
-        .info=(student.getGradeLevel() && (student.getGradeLevel().getName() + " ")) + (student.getStudentSchools() && student.getStudentSchools()[0] && student.getStudentSchools()[0].getName())
+        if student.getRole().getNameLowered() == 'student'
+            .info=(student.getGradeLevel() && (student.getGradeLevel().getName() + " ")) + (student.getStudentSchools() && student.getStudentSchools()[0] && student.getStudentSchools()[0].getName())
+    if viewMode && !isMessagingDisabled
+        +ActionLink('message', 'sendToPerson', null, student.getId(), student.getFirstName(), student.getLastName()).message-button
 
 -var selected = self.getSelected()
 -var viewMode = self.getSelectorMode() == chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
+-var isMessagingDisabled = self.getUserRole().isAdmin() || self.isMessagingDisabled()
 each student in self.getModel().getItems()
     -var showLink = viewMode && self.canViewInfo(student)
     .recipient-item.student-item
         if showLink
             +ProfileLink(student)
-                +RecipientItemBlock_(student)
+                +RecipientItemBlock_(student, viewMode, isMessagingDisabled)
         else
-            +RecipientItemBlock_(student)
+            +RecipientItemBlock_(student, viewMode, isMessagingDisabled)
