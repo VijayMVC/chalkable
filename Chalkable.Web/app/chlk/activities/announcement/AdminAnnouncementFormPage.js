@@ -26,7 +26,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '.recipient-search')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function searchChange(node, event, selected_){
-                this.dom.find('.recipient-submit').trigger('click');
+                if(this.dom.find('[name=recipient][type=hidden]').getValue())
+                    this.dom.find('.recipient-submit').trigger('click');
             },
 
             [ria.mvc.DomEventBind('click', '.add-recipients .title')],

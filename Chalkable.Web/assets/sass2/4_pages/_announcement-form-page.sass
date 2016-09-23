@@ -1,5 +1,5 @@
 .recipients-list
-  padding: 4px 23px
+  padding: 4px 26px 0
   position: relative
   border: 1px solid #c8c7c3
   +box-shadow(rgba(0, 0, 0, 0.1) 0 1px 3px inset, rgba(255, 255, 255, 0.5) 0 1px 1px)
@@ -9,7 +9,7 @@
   &::before
     content: 'To'
     position: absolute
-    left: 8px
+    left: 11px
     font-size: 11px
     font-weight: 600
     top: 5px
@@ -19,7 +19,7 @@
     width: 24px
     height: 24px
     +icons-24-sprite(users_add)
-    top: 5px
+    top: 2px
     right: 5px
 
     &:not(:hover)
@@ -28,6 +28,12 @@
   .recipient-search
     border: none
     +box-shadow(none)
+    font-weight: bold
+    font-style: italic
+    font-size: 12px
+    color: #56554f
+    min-height: 20px
+    height: 20px
 
   .recipient-item
     min-width: 20px
@@ -41,12 +47,13 @@
     margin-left: 5px
     font-weight: bold
     color: #56554f
+    margin-bottom: 5px
 
     .remove-recipient
       position: absolute
       width: 24px
       height: 24px
-      +icons-24-sprite(small-remove)
+      +icons-24-sprite(small-remove-bold)
       top: -2px
       cursor: pointer
 
@@ -168,6 +175,9 @@
       margin: 0
 
 .announcement-form
+  #title
+    padding-left: 13px
+
   .lesson-plan-import-popup
     padding: 0
     right: -49px

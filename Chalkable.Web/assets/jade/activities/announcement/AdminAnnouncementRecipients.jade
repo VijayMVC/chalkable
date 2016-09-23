@@ -10,6 +10,8 @@ each student in self.getAdminAnnouncementStudents() || []
       name="recipient"
       clearAfterSelect = false
       withButton = true,
-      listCls = "recipients-search"
+      listCls = "recipients-search",
+      alwaysAtBottom = true,
+      minLength = 1
 ).recipient-search
 Button(type="submit", name="submitType", value="recipient").x-hidden.recipient-submit.validate-skip

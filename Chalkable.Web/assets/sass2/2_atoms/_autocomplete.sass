@@ -8,6 +8,42 @@
   &.site-search
     top: 51px !important
 
+  &.recipients-search
+    max-height: 200px
+    width: 250px !important
+
+    li
+      height: 39px
+      line-height: 39px
+      font-weight: bold
+      font-size: 13px
+      color: #56554f
+      padding: 0 10px 0 25px
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      background: #fff
+      position: relative
+      width: 100% !important
+      box-sizing: border-box
+
+      &:hover
+        background: #efefef
+        border: none
+
+      &.group::after
+        content: " "
+        position: absolute
+        width: 24px
+        height: 24px
+        +icons-24-sprite(group)
+        top: 50%
+        left: 0
+        margin-top: -12px
+
+      STRONG
+        color: #2c75ba
+
   li
     a
       color: #6e6e6e
