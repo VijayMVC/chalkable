@@ -28,6 +28,19 @@ header
     &:hover
       background: #437d97
 
+  .report-cards-link
+    position: relative
+    width: 30px
+
+    &::before
+      content: ' '
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      +icons-24-sprite(custom-report, 0, 2px, 2px)
+
   .notifications-link
     position: relative
     width: 30px

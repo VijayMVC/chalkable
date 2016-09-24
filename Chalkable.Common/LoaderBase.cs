@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Chalkable.AcademicBenchmarkImport.Helper
+namespace Chalkable.Common
 {
     public class LoaderBase<TQueueItem, TResultItem>
     {
-        public LoaderBase(IEnumerable<TQueueItem> queue)
+        public LoaderBase(IEnumerable<TQueueItem> queue, int maxThreadCount = 10)
         {
             _inputQueue = new ConcurrentQueue<TQueueItem>(queue);
             _outputResult = new ConcurrentBag<TResultItem>();
             _pool = new List<Thread>();
+            _maxThreadCount = maxThreadCount;
         }
 
         private void Worker(object o)
@@ -34,7 +35,7 @@ namespace Chalkable.AcademicBenchmarkImport.Helper
         {
             _getFunc = getFunc;
 
-            for (var i = 0; i < 10; ++i)
+            for (var i = 0; i < _maxThreadCount; ++i)
             {
                 var currentTh = new Thread(Worker);
                 currentTh.Start();
@@ -56,6 +57,7 @@ namespace Chalkable.AcademicBenchmarkImport.Helper
         private readonly ConcurrentQueue<TQueueItem> _inputQueue;
         private readonly ConcurrentBag<TResultItem> _outputResult;
         private readonly IList<Thread> _pool;
-        private Func<TQueueItem, TResultItem> _getFunc;      
+        private Func<TQueueItem, TResultItem> _getFunc;
+        private int _maxThreadCount;
     }
 }

@@ -21,7 +21,10 @@ NAMESPACE('chlk.templates.settings', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'dbMaintenanceVisible',
             [ria.templates.ModelPropertyBind],
-            Boolean, 'upgradeSchoolsVisible'
+            Boolean, 'upgradeSchoolsVisible',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'customReportTemplatesVisible'
 
         ])
 });

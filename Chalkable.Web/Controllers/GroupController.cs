@@ -10,11 +10,11 @@ namespace Chalkable.Web.Controllers
     public class GroupController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult GroupsList()
+        public ActionResult GroupsList(string filter = null)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var groups = SchoolLocator.GroupService.GetGroups(Context.PersonId.Value);
+            var groups = SchoolLocator.GroupService.GetGroups(Context.PersonId.Value, filter);
             return Json(groups.Select(GroupViewData.Create).ToList());
         }
 

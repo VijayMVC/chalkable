@@ -69,7 +69,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError(string.Format("Producer {0} throws an exception", taskProducer.Key));
+                    Trace.TraceError($"Producer {taskProducer.Key} throws an exception");
                     Trace.TraceError(ex.Message);
                 }
             }

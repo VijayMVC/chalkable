@@ -93,12 +93,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             GroupStorage.Update(group);
             return group;
         }
-
-        
-        public IList<Group> GetGroups(int ownerId)
-        {
-            return GroupStorage.GetAll().Where(x => x.OwnerRef == ownerId).ToList();
-        }
         
         public IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds)
         {
@@ -146,6 +140,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<int> GetStudentIdsByGroups(IList<int> groupIds)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void AssignStudents(int groupId, IList<int> studentIds)
         {
@@ -184,6 +183,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
 
         public void UnassignAll(int groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Group> GetGroups(int ownerId, string filter)
         {
             throw new NotImplementedException();
         }
