@@ -76,10 +76,18 @@
       width: 100%
 
 .group-people-selector
+  .buttons-container
+    text-align: right
+    margin-top: 20px
+
   &.view-with-groups
     .recipient-item
       .recipient-check-cnt
         display: none
+
+  &.select-without-groups, &.edit-without-groups
+    .empty-group
+      background: image-url("images2/common/empty-group.png") no-repeat 50% 50%
 
   li.active-result
     white-space: nowrap

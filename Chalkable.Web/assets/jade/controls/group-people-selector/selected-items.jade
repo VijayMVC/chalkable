@@ -5,7 +5,7 @@
 +Hidden('studentIds', (self.getStudentIds() || []).join(','))
 +Hidden('selectedItems', self.getSelectedItemsObj())
 
-.items-cnt
+.items-cnt(class = (!groups.length && !students.length) ? "empty-group" : "")
     .items-cnt-2
         each group in groups
             .recipient-item.group-item.selected(data-id=group.getId().valueOf())

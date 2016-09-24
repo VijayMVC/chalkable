@@ -54,7 +54,7 @@ mixin GroupPeopleSelector(tpl, requestId)
                     currentUser = tpl.getCurrentUser(),
                 )
             .buttons-container
-                +Button.special-button2.cancel.close.negative-button Cancel
+                +Button.special-button2.cancel.close Cancel
                 +Button()(type="submit").special-button2.blue-button.selector-submit-btn=model.getSubmitButtonText()
         
 
