@@ -15,21 +15,22 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
         public string Summary { get; set; }
 
-        protected StudentDisciplineSummaryViewData(Student student, IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
+        protected StudentDisciplineSummaryViewData(Student student, IList<StudentCustomAlertDetail> customAlerts
+            , IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> healthForms)
         {
-            Student = StudentProfileViewData.Create(student, customAlerts, healthConditions);
+            Student = StudentProfileViewData.Create(student, customAlerts, healthConditions, healthForms);
         }
 
         public static StudentDisciplineSummaryViewData Create(Student student, IList<InfractionSummaryInfo> infractionsSummary
             , GradingPeriod currentGradingPeriod, IList<GradingPeriod> gradingPeriods, IList<StudentCustomAlertDetail> customAlerts
-            , IList<StudentHealthCondition> healthConditions)
+            , IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> healthForms)
         {
             
             string summary = $"{student.FirstName} is doing great. No discipline issues.";
             if (infractionsSummary.Sum(x => x.Occurrences) > 0)
                 summary = $"{student.FirstName} is having disciplinary issues";
             var disciplineBoxes = infractionsSummary.Select(StudentDisciplineBoxViewData.Create).ToList();
-            var res = new StudentDisciplineSummaryViewData(student, customAlerts, healthConditions)
+            var res = new StudentDisciplineSummaryViewData(student, customAlerts, healthConditions, healthForms)
                           {
                               CurrentGradingPeriod = GradingPeriodViewData.Create(currentGradingPeriod),
                               Summary = summary,

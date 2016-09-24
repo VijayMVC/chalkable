@@ -5,7 +5,7 @@
     if topItems && self.getTotalAvgPerDate() && self.getPeersAvgPerDate()
         .grading-chart-part.relative
             .panel-header.relative=Msg.You_vs_Peers
-                +Select('clazzSelect', 'grading', 'summaryAll', [true])
+                +Select('clazzSelect', null, 'grading', 'summaryAll', [true])
                     +Option('', '11th Grade', true)
                     each clazz in topItems
                         if clazz.getId() && clazz.getId().valueOf()

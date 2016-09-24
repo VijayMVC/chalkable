@@ -16,12 +16,14 @@ namespace Chalkable.API.Endpoints
         {
             return await Connector.Get<SchoolPerson>("/Person/Me.json");
         }
+
         public async Task<StudentInfo> GetStudentInfo(int personId)
         {
             return await Connector.Get<StudentInfo>($"/Student/Info.json?personId={personId}");
         }
 
-        public async Task<IList<StudentInfo>> GetStudents(string filter, bool? myStudentsOnly = null, int start = 0, int count = int.MaxValue,
+        public async Task<IList<StudentInfo>> GetStudents(string filter, bool? myStudentsOnly = null, int start = 0,
+            int count = int.MaxValue,
             int? classId = null, bool? byLastName = null, int? markingPeriodId = null, bool? enrolledOnly = null)
         {
             var filters = new Dictionary<string, string>();
@@ -49,5 +51,15 @@ namespace Chalkable.API.Endpoints
 
             return await Connector.Get<IList<StudentInfo>>($"/Student/GetStudents.json?{f}");
         }
+
+        public async Task<IList<SchoolInfo>> GetDistrictSchools()
+        {
+            return await Connector.Get<IList<SchoolInfo>>($"/School/LocalSchools.json");
+        }
+
+        public async Task<IList<LimitedEnglish>> GetLimitedEnglishList()
+        {
+            return await Connector.Get<IList<LimitedEnglish>>($"/LimitedEnglish/List.json");
+        } 
     }
 }

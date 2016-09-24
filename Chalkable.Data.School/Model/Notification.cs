@@ -6,12 +6,12 @@ namespace Chalkable.Data.School.Model
 {
     public class Notification
     {
-        public const string ID_FIELD = "Id";
-        public const string TYPE_FIELD = "Type";
-        public const string SHOWN_FIELD = "Shown";
-        public const string CREATED_FIELD = "Created";
-        public const string PERSON_REF_FIELD = "PersonRef";
-        public const string ROLE_REF_FIELD = "RoleRef";
+        public const string ID_FIELD = nameof(Id);
+        public const string TYPE_FIELD = nameof(Type);
+        public const string SHOWN_FIELD = nameof(Shown);
+        public const string CREATED_FIELD = nameof(Created);
+        public const string PERSON_REF_FIELD = nameof(PersonRef);
+        public const string ROLE_REF_FIELD = nameof(RoleRef);
 
         [IdentityFieldAttr]
         [PrimaryKeyFieldAttr]

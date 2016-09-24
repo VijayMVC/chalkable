@@ -89,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     adminAnnouncement.Expires = expiresDate.Value;
 
                 if(adminAnnouncement.IsSubmitted)
-                    ValidateAdminAnnouncemen(adminAnnouncement, uow, da);
+                    ValidateAdminAnnouncement(adminAnnouncement, uow, da);
                 da.Update(adminAnnouncement);
                 uow.Commit();
                 return InternalGetDetails(da, adminAnnouncementId); // da.GetDetails(adminAnnouncementId, Context.PersonId.Value, Context.RoleId);
@@ -129,7 +129,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var da = CreateAdminAnnouncementDataAccess(uow);
                 var ann = da.GetAnnouncement(announcementId, Context.PersonId.Value);
                 AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
-                ValidateAdminAnnouncemen(ann, uow, da);
+                ValidateAdminAnnouncement(ann, uow, da);
                 ServiceLocator.AnnouncementAssignedAttributeService.ValidateAttributes(res.AnnouncementAttributes);
                 if (ann.IsDraft)
                 {
@@ -141,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        private void ValidateAdminAnnouncemen(AdminAnnouncement announcement, UnitOfWork unitOfWork, AdminAnnouncementDataAccess dataAccess)
+        private void ValidateAdminAnnouncement(AdminAnnouncement announcement, UnitOfWork unitOfWork, AdminAnnouncementDataAccess dataAccess)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var annRecipients = new DataAccessBase<AnnouncementGroup>(unitOfWork)
@@ -310,8 +310,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     PersonId = Context.PersonId,
                     RoleId = Context.RoleId,
                     GradeLevelsIds = gradeLevels,
-                    StudentId = studentId
-                })).Announcements.Select(x => x.AdminAnnouncementData).ToList();
+                    StudentId = studentId,
+                    Now = Context.NowSchoolTime
+            })).Announcements.Select(x => x.AdminAnnouncementData).ToList();
         }
 
         public IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter)
@@ -334,7 +335,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 Count = count,
                 PersonId = Context.PersonId,
                 RoleId = Context.RoleId,
-                Sort = sortDesc
+                Sort = sortDesc,
+                GradeLevelsIds = gradeLevels,
+                Now = Context.NowSchoolTime
             })).Announcements;
         }
 
@@ -354,7 +357,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 ToTitle = toTitle,
                 IncludeFrom = includeFromTitle,
                 IncludeTo = includeToTitle,
-                Sort = sortDesc
+                Sort = sortDesc,
+                GradeLevelsIds = gradeLevels,
+                Now = Context.NowSchoolTime
             })).Announcements;
         }
 

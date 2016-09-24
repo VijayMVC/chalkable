@@ -32,7 +32,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var processedLastDate = tasks.Max(x => x.Completed);
             var now = DateTime.UtcNow;
 
-            if ((now - processedLastDate).Value.Hours >= FREQUENCY)
+            if ((now - processedLastDate).Value.TotalHours >= FREQUENCY)
                 sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.AcademicBenchmarkImport, DateTime.UtcNow, null, "", BackgroundTask.GLOBAL_DOMAIN);
         }
     }

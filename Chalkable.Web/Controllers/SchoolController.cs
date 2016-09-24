@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.Data.Common.Enums;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.SchoolsViewData;
 
@@ -11,13 +12,21 @@ namespace Chalkable.Web.Controllers
     public class SchoolController : ChalkableController
     {
         
-        [AuthorizationFilter("SysAdmin")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
         public ActionResult List(Guid districtId, int? start, int? count)
         {
             count = count ?? 10;
             start = start ?? 0;
             var schools = MasterLocator.SchoolService.GetSchools(districtId, start.Value, count.Value);
             return Json(schools.Transform(SchoolViewData.Create));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new []{ AppPermissionType.User })]
+        public ActionResult LocalSchools()
+        {
+            
+            var schools = SchoolLocator.SchoolService.GetSchools();
+            return Json(LocalSchoolViewData.Create(schools));
         }
 
         [AuthorizationFilter("SysAdmin")]

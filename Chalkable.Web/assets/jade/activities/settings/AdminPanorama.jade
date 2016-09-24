@@ -10,6 +10,7 @@
                     +ActionLink('settings', 'appSettings', app.getId())=app.getName()
                 if self.isAdminPanoramaEnabled()
                     +ActionLink('settings', 'panoramaAdmin').pressed Panorama
+                +ActionLink('settings', 'reportCards') Report Cards
     .summary-view
         +ActionForm('settings', 'panoramaSubmit').panorama-form.no-working
             +Hidden('filters').filters-value

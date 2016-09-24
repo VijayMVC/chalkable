@@ -58,5 +58,8 @@ namespace Chalkable.API.Models
 
         [JsonProperty("isiepactive")]
         public bool SpecialEducation { get; set; }
+
+        [JsonProperty("limitedenglishid")]
+        public int? LimitedEnglishId { get; set; }
     }
 }

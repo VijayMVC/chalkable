@@ -46,6 +46,7 @@ namespace Chalkable.Api.SampleApp.Controllers
             //var relationsTask = Connector.Standards.GetListOfStandardRelations(ids);
 
             var isSchoolDay = await Connector.Calendar.IsSchoolDay(null);
+            var limitedEnglishList = Connector.Person.GetLimitedEnglishList();
 
             var studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, new DateTime(2015,12,22,12,0,0));
             studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, new DateTime(2015, 12, 23, 12, 0, 0));
@@ -61,8 +62,9 @@ namespace Chalkable.Api.SampleApp.Controllers
                 //Standards = await standardsTask,
                 //Relations = await relationsTask,
                 IsSchoolDay = isSchoolDay,
-                Me = await Connector.Person.GetMe()
-        }));
+                Me = await Connector.Person.GetMe(),
+                LimitedEnglishList = await limitedEnglishList
+            }));
         }
 
         public async Task<ActionResult> ContentAttach(int announcementApplicationId, string contentId)

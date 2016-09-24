@@ -28,7 +28,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string RoomNumber { get; set; }
 
         protected StudentSummaryViewData(Student student, Room room, IList<StudentCustomAlertDetail> customAlerts,
-            IList<StudentHealthCondition> healthConditions) : base(student, customAlerts, healthConditions)
+            IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> studentHealthForms) 
+            : base(student, customAlerts, healthConditions, studentHealthForms)
         {
             if (room == null) return;
             RoomId = room.Id;
@@ -37,9 +38,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
 
         public static StudentSummaryViewData Create(StudentSummaryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes
-            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions, bool isStudent = false)
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> studentHealthForms, bool isStudent = false)
         {
-            var res = new StudentSummaryViewData(studentSummary.StudentInfo, room, customAlerts, healthConditions)
+            var res = new StudentSummaryViewData(studentSummary.StudentInfo, room, customAlerts, healthConditions, studentHealthForms)
             {
                 ClassesSection = ClassViewData.Create(classes),
                 AttendanceBox =

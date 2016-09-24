@@ -34,6 +34,8 @@ namespace Chalkable.API
         public const string SETTINGS_MODE = "settingsview";
         public const string STUDENT_PROFILE_MODE = "studentprofileview";
         public const string CONTENT_QUERY = "content-query";
+        public const string ANNOUNCEMENT_APPLICATION_SUBMIT = "announcement-application-submit";
+        public const string ANNOUNCEMENT_APPLICATION_REMOVE = "announcement-application-remove";
 
         public const string CALL_ID_PARAM = "callid";
 

@@ -188,11 +188,13 @@
     <Compile Include="Model\Ethnicity.cs" />
     <Compile Include="Model\Homeroom.cs" />
     <Compile Include="Model\Language.cs" />
+    <Compile Include="Model\LimitedEnglish.cs" />
     <Compile Include="Model\LPGalleryCategory.cs" />
     <Compile Include="Model\PersonEthnicity.cs" />
     <Compile Include="Model\PersonLanguage.cs" />
     <Compile Include="Model\PersonNationality.cs" />
     <Compile Include="Model\PersonSetting.cs" />
+    <Compile Include="Model\ReportCardsLogo.cs" />
     <Compile Include="Model\SchoolProgram.cs" />
     <Compile Include="Model\StandardizedTest.cs" />
     <Compile Include="Model\StudentAnnouncementApplicationMeta.cs" />

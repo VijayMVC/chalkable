@@ -1,5 +1,5 @@
 user = self.getUser()
-.profile-page
+.profile-page(class=user.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
     h2.page-title=Msg.Profile
     +UserProfileTopBar(self, self.getUser(), 'details')
     .summary-view

@@ -352,6 +352,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             BaseSecurity.EnsureTeacher(Context);
             if (startDate < Context.SchoolYearStartDate || startDate > Context.SchoolYearEndDate)
                 throw new ChalkableException("Start date should be between school year start and end date");
+
+            var newDates = DoRead(u => CreateClassAnnouncementDataAccess(u).AdjustDates(ids, startDate, classId));
+
+            var activityDates = newDates.Select(x => new ActivityDate {ActivityId = x.First, Date = x.Second}).ToList();
+            ConnectorLocator.ActivityConnector.AdjustDates(activityDates);
         }
 
         public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)
@@ -442,7 +447,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 if (activity == null)
                     throw new NoAnnouncementException();
 
-                AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+                if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
+                    throw new ChalkableException("You don't have permission to drop grades");
+
                 ann.Dropped = drop;
                 da.Update(ann);
                 activity.IsDropped = drop;

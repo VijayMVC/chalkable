@@ -15,8 +15,8 @@ namespace Chalkable.Web.Models.GradingViewData
         public List<ClassAvg> ClassAvgs { get; set; } 
 
         protected StudentProfileGradingDetailViewData(Student person, IList<StudentCustomAlertDetail> customAlerts,
-            IList<StudentHealthCondition> healthConditions)
-            : base(person, customAlerts, healthConditions)
+            IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> healthForms)
+            : base(person, customAlerts, healthConditions, healthForms)
         {
         }
 
@@ -24,7 +24,7 @@ namespace Chalkable.Web.Models.GradingViewData
         public static StudentProfileGradingDetailViewData Create(Student student, StudentGradingDetails gradingDetails, GradingPeriod gp,
             IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes
             , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions,
-            IList<ClaimInfo> claims)
+            IList<ClaimInfo> claims, IList<StudentHealthFormInfo> healthForms)
         {
             var classAnnouncementGroups = announcements.GroupBy(x => x.ClassRef).Select(y => new
             {
@@ -33,7 +33,7 @@ namespace Chalkable.Web.Models.GradingViewData
             });
 
 
-            var res = new StudentProfileGradingDetailViewData(student, customAlerts, healthConditions)
+            var res = new StudentProfileGradingDetailViewData(student, customAlerts, healthConditions, healthForms)
             {
                 CurrentGradingPeriod = GradingPeriodViewData.Create(gp),
                 ClassAvgs = new List<ClassAvg>()

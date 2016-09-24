@@ -182,8 +182,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult RemoveFromAnnouncement(int announcementApplicationId, int announcementType)
         {
+            var aa = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var ann = SchoolLocator.ApplicationSchoolService.RemoveFromAnnouncement(announcementApplicationId, (AnnouncementTypeEnum)announcementType);
-            return Json(PrepareFullAnnouncementViewData(ann.Id, (AnnouncementTypeEnum)announcementType), 6);
+            var res = PrepareFullAnnouncementViewData(ann.Id, (AnnouncementTypeEnum) announcementType);
+            if (res.State == (int)AnnouncementState.Created)
+                ApplicationLogic.NotifyApplication(MasterLocator, aa.ApplicationRef , aa.Id, announcementType, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Remove);
+            return Json(res, 6);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
@@ -191,7 +195,10 @@ namespace Chalkable.Web.Controllers
         {
             SchoolLocator.ApplicationSchoolService.AttachAppToAnnouncement(announcementApplicationId, (AnnouncementTypeEnum)announcementType);
             var aa = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
-            return Json(PrepareFullAnnouncementViewData(aa.AnnouncementRef, (AnnouncementTypeEnum)announcementType));
+            var res = PrepareFullAnnouncementViewData(aa.AnnouncementRef, (AnnouncementTypeEnum) announcementType);
+            if(res.State == (int)AnnouncementState.Created)
+                ApplicationLogic.NotifyApplication(MasterLocator, aa.ApplicationRef, aa.Id, announcementType, ChalkableAuthentication.GetSessionKey(), NotifyAppType.Attach);
+            return Json(res);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Announcement })]
@@ -262,6 +269,14 @@ namespace Chalkable.Web.Controllers
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
             var announcementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationRecipients(studentId, app.Id);
             return Json(announcementApplicationRecipient);
+        }
+
+        [AuthorizationFilter("Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult StudentAnnouncementApplicationIds()
+        {
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
+            var studentAnnouncementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetStudentAnnouncementApplicationIds(app.Id);
+            return Json(studentAnnouncementApplicationRecipient);
         }
 
         private const int ATTACH_DEFAULT_PAGE_SIZE = 12;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Attributes;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.StiConnector.SyncModel
 {
@@ -8,21 +10,32 @@ namespace Chalkable.StiConnector.SyncModel
     {
         public IDictionary<string, long?> TablesToSync { get; private set; }
         public IDictionary<string, Type> Types { get; private set; }
-        private IDictionary<string, object> results; 
+        private IDictionary<string, object> results;
+
+        private readonly string _apiVersion;
 
         private void RegisterType(Type type)
         {
             if (!type.IsSubclassOf(typeof(SyncModel)))
                 throw new Exception("Sync model class should be inherited from SyncModel");
+
+            if (type.IsDefined(typeof (SisMinVersionAttribute), true))
+            {
+                var attr = (SisMinVersionAttribute) Attribute.GetCustomAttribute(type, typeof (SisMinVersionAttribute));
+                if (!VersionHelper.IsSupportedApiVersion(attr.MinVersion, _apiVersion))
+                    return;
+            }
+
             TablesToSync.Add(type.Name, null);
             Types.Add(type.Name, type);
         }
             
-        public SyncContext()
+        public SyncContext(string apiVersion)
         {
             TablesToSync = new Dictionary<string, long?>();
             results = new Dictionary<string, object>();
             Types = new Dictionary<string, Type>();
+            _apiVersion = apiVersion;
             
             RegisterType(typeof(School));
             RegisterType(typeof(SchoolOption));
@@ -91,6 +104,7 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(Homeroom));
             
             RegisterType(typeof(AppSetting));
+            RegisterType(typeof(LimitedEnglish));
 
             RegisterType(typeof(SchoolProgram));
             RegisterType(typeof(StudentSchoolProgram));

@@ -24,8 +24,9 @@ namespace Chalkable.BackgroundTaskProducer
             cp.AddProducer("Cleanup Manager", new CleanupManager("CleanupManager"));
             cp.AddProducer("Db backup Producer", new DbBackupProducer("DbBackupProducer"));
             cp.AddProducer("Academic Benchmark Producer", new AcademicBenchmarkImportProducer("AcademicBenchmark"));
-            var raygunClient = new RaygunClient();
-            raygunClient.ApplicationVersion = CompilerHelper.Version;      
+
+            var raygunClient = new RaygunClient {ApplicationVersion = CompilerHelper.Version};
+
             while (true)
             {
                 try
