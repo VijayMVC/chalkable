@@ -256,11 +256,22 @@ NAMESPACE('chlk.controls', function () {
             function updateSelected_(selector, o){
                 var model = new chlk.models.recipients.GroupSelectorViewData(null, null, null, null, null, null, null,
                     o.groups, o.students), selectedCount = o.groups.length + o.students.length,
-                    selectedText = 'Selected ' + (selectedCount ? '(' + selectedCount + ')' : '');
-                var cnt = selector.find('.selected-content'), tpl = new chlk.templates.controls.group_people_selector.SelectorBaseTpl();
+                    selectedText = 'Selected ' + (selectedCount ? '(' + selectedCount + ')' : ''),
+                    btn = selector.find('.group-submit'), cnt = selector.find('.selected-content'),
+                    tpl = new chlk.templates.controls.group_people_selector.SelectorBaseTpl();
+
                 selector.find('.selected-link').setHTML(selectedText);
 
                 tpl.assign(model);
+
+                if(tpl.isSubmitDisabled()){
+                    btn.setAttr('disabled', 'disabled');
+                    btn.setProp('disabled', true);
+                }else{
+                    btn.removeAttr('disabled');
+                    btn.setProp('disabled', false);
+                }
+
                 tpl.renderTo(cnt.empty());
             },
 

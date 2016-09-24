@@ -41,6 +41,21 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'hasAccessToLE',
             
+            function isSubmitDisabled(){
+                return this.isTabSelected(4) && !(this.getSelectedGroups() || []).length && !(this.getSelectedStudents() || []).length
+            },
+
+            function isTabSelected(index){
+                var mode = this.getSelectorMode();
+                switch (index){
+                    case 1: return mode == chlk.models.recipients.SelectorModeEnum.SELECT_WITH_GROUPS ||
+                        mode == chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS;
+                    case 2: return this.isTabSelected(1) && !this.isHasOwnStudents();
+                    case 3: return false;
+                    case 4: return !this.isTabSelected(1);
+                }
+            },
+            
             function getGroupIds(){
                 return (this.getSelectedGroups() || []).map(function(item){return item.getId().valueOf()})
             },
