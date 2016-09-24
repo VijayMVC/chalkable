@@ -15,17 +15,6 @@ namespace Chalkable.BusinessLogic.Services.School
         Group AddGroup(string name, IntList studentsIds);
         Group EditGroup(int groupId, string name, IntList studentsIds);
         void DeleteGroup(int groupId);
-
-        void UnssignStudents(int groupId, IList<int> studentIds);
-        void UnssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId);
-        void UnssignStudentsBySchoolYear(int groupId, int schoolYearId);
-        void UnassignAll(int groupId);
-        
-        IList<Group> GetGroups(int ownerId, string filter);
-        IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds);
-        GroupExplorer GetGroupExplorerInfo(int groupId);
-
-        IList<Group> GetByIds(IList<int> ids);
         IList<Group> GetGroups(int ownerId, string filter);
         GroupInfo Info(int groupId);
         IList<int> GetStudentIdsByGroups(IList<int> groupIds);
@@ -76,7 +65,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void AssignStudentsToGroup(int groupId, IntList studentIds, UnitOfWork uow)
+        private void AssignStudentsToGroup(int groupId, IntList studentIds, UnitOfWork uow)
         {
             EnsureInGroupModifyPermission(new GroupDataAccess(uow).GetById(groupId));
             var da = new DataAccessBase<StudentGroup>(uow);
@@ -106,6 +95,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public GroupInfo Info(int groupId)
         {
             return DoRead(u => new GroupDataAccess(u).GetGroutInfo(groupId));
+        }
+
+        public IList<int> GetStudentIdsByGroups(IList<int> groupIds)
+        {
+            return DoRead(u => new GroupDataAccess(u).GetStudentsByGroups(groupIds));
         }
 
         private void EnsureInGroupModifyPermission(Group gGroup)
