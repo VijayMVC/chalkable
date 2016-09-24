@@ -1,6 +1,7 @@
 -var user = self.getUser()
 -var currentGp = user.getCurrentGradingPeriod()
-.profile-page
+
+.profile-page(class=user.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
     h2.page-title=Msg.Student_profile
     +ProfileTopBar(self, 'discipline')
     .summary-view
@@ -15,7 +16,7 @@
                             displayName =user.getDisplayName() || user.getFullName()
                             h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
                             .status=user.getSummary()
-                            +Select('markingPeriodSelect', 'students', 'discipline', [user.getId().valueOf()]).mp-select
+                            +Select('markingPeriodSelect', null, 'students', 'discipline', [user.getId().valueOf()]).mp-select
                                 each gp,i in user.getGradingPeriods()
                                     +Option(gp.getId().valueOf(), gp.getName(), gp.getId() == currentGp.getId())(data-additional-params = [gp.getStartDate().format('mm-dd-yy')])
                     td

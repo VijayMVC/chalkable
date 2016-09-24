@@ -4,12 +4,12 @@ class TestFeed(BaseAuthedTestCase):
     def test_feed(self):
         # reset all filters on the feed
         self.dict = {}
-        self.post('/Feed/SetSettings.json?', self.dict)
+        self.post_admin('/Feed/SetSettings.json?', self.dict)
 
         self.settings_data_for_mark_undone = {'option': '3'}
 
         # making all types of items as 'undone'
-        self.post('/Announcement/UnDone.json?', self.settings_data_for_mark_undone)
+        self.post_admin('/Announcement/UnDone.json?', self.settings_data_for_mark_undone)
 
         # getting grading periods
         list_for_start_date = []
@@ -39,7 +39,6 @@ class TestFeed(BaseAuthedTestCase):
         self.current_date_minus2_10 = end_mp_period_minus_10.strftime("%Y-%m-%d")
 
         self.random_date_string_format = self.random_date(self.current_date_plus2_10, self.current_date_minus2_10)
-        print self.random_date_string_format
 
         self.random_date_string_format_correct_format = datetime.strptime(self.random_date_string_format,
                                                                           "%m-%d-%Y").strftime("%Y-%m-%d")
@@ -53,15 +52,15 @@ class TestFeed(BaseAuthedTestCase):
         # filter: custom range, earliest
         self.settings_data = {'sortType': '0', 'fromDate': self.current_date_minus_10,
                               'toDate': self.current_date_plus_10}
-        self.post('/Feed/SetSettings.json?', self.settings_data)
+        self.post_admin('/Feed/SetSettings.json?', self.settings_data)
 
         # marking all items 'Items older than 30 days'
         self.settings_data = {'option': '2'}
-        self.post('/Announcement/Done.json?', self.settings_data)
+        self.post_admin('/Announcement/Done.json?', self.settings_data)
 
         # reset all filters on the feed
         self.dict = {}
-        self.post('/Feed/SetSettings.json?', self.dict)
+        self.post_admin('/Feed/SetSettings.json?', self.dict)
 
         self.do_feed_list_and_verify(0)
 

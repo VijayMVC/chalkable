@@ -26,22 +26,33 @@ namespace Chalkable.API.Controllers
 
             var standards = StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode).ToList();
 
-            if (mode == Settings.CONTENT_QUERY)
+            if (string.IsNullOrWhiteSpace(token))
+                return new EmptyResult();
+
+            if (IsChalkableCallBack(mode))
             {
                 try
                 {
                     await AuthorizeQueryRequest(token);
-                    var res = GetApplicationContents(standards, start, count);
-                    return ChlkJsonResult(res, true);
+                    switch (mode)
+                    {
+                        case Settings.CONTENT_QUERY:
+                            return ChlkJsonResult(GetApplicationContents(standards, start, count), true);
+
+                        case Settings.ANNOUNCEMENT_APPLICATION_SUBMIT:
+                        case Settings.ANNOUNCEMENT_APPLICATION_REMOVE:
+                            HandleChalkableNotification(mode, announcementApplicationId, announcementType);
+                            return ChlkJsonResult(true, true);
+
+                        default:
+                            throw new Exception($"Unknown mode \"{mode}\"");
+                    }
                 }
                 catch (Exception ex)
                 {
                     return ChlkExceptionJsonResult(ex);
                 }
             }
-
-            if (string.IsNullOrWhiteSpace(token))
-                return new EmptyResult();
 
             await ChalkableAuthorization.AuthorizeAsync(token);
 
@@ -52,6 +63,15 @@ namespace Chalkable.API.Controllers
         
             return await ResolveAction(mode, announcementApplicationId, studentId, announcementId, announcementType,
                 attributeId, StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode), contentId);
+        }
+
+
+
+        private bool IsChalkableCallBack(string mode)
+        {
+            return mode == Settings.CONTENT_QUERY
+                   || mode == Settings.ANNOUNCEMENT_APPLICATION_SUBMIT
+                   || mode == Settings.ANNOUNCEMENT_APPLICATION_REMOVE;
         }
 
         protected virtual async Task<SchoolPerson> GetCurrentUser(string mode)
@@ -74,7 +94,10 @@ namespace Chalkable.API.Controllers
 
         private IList<string> GetQueryIdentityParams()
         {
-            var orderedPrKeys = Request.QueryString.AllKeys.OrderBy(x => x).ToList();
+            var paramNames = Request.QueryString.AllKeys.Length > 0
+                ? Request.QueryString.AllKeys
+                : Request.Form.AllKeys;
+            var orderedPrKeys = paramNames.OrderBy(x => x).ToList();
             return orderedPrKeys.Select(prKey => Request.Params[prKey])
                                 .Where(prValue => !string.IsNullOrWhiteSpace(prValue))
                                 .ToList();
@@ -156,6 +179,12 @@ namespace Chalkable.API.Controllers
         {
             throw new NotImplementedException();
         }
+
+        protected virtual void HandleChalkableNotification(string mode, int? announcementApplicationId, int? announcementType)
+        {
+            // do nothing, silently ignore
+        }
+
 
         protected abstract Task<ActionResult> ResolveAction(string mode, int? announcementApplicationId,
             int? studentId, int? announcementId, int? announcementType, int? attributeId,

@@ -13,11 +13,132 @@ import string
 from time import sleep
 
 
+class UserSession:
+    def __init__(self, instance):
+        pass
+        self.unittest = instance
+
+        self.session = requests.Session()
+        self.districtId = None
+        self.schoolYearId = None
+
+    def login(self, email, password):
+        payload = {'UserName': email, 'Password': password, 'remember': 'false'}
+        r = self.post_html('/User/LogOn.aspx', data=payload)
+        self.parse_body_(r)
+        return self
+
+    def parse_body_(self, page_as_one_string):
+        # getting DistrictId
+        found_sting = re.findall('var districtId = .+', page_as_one_string)
+        concatenated_str = ''.join(found_sting)
+        self.districtId = concatenated_str[18:54]
+
+        # getting SchoolYearId
+        var_school_year = re.findall('var currentSchoolYearId = .+', page_as_one_string)
+        var_school_year_string = ''.join(var_school_year)
+        self.schoolYearId = var_school_year_string[-5:-2]
+
+    def get_(self, url, status=200, **kwargs):
+        r = self.session.get(chlk_server_url + url, **kwargs)
+        self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
+        return r
+
+    def get_file_(self, url, status=200, success=True):
+        r = self.session.get(chlk_server_url + url)
+        self.unittest.assertEquals(r.status_code, status,
+                                   'Response status code: ' + str(r.status_code) + ', body:' + r.text)
+        return r.text
+
+    def post_(self, url, status=200, **kwargs):
+        r = self.session.post(chlk_server_url + url, **kwargs)
+        self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
+        return r
+
+    def validate_json_(self, r, success_property, success):
+        try:
+            data = r.json()
+        except ValueError:
+            self.unittest.assertTrue(False, 'Parse JSON failed, ' + r.url + r.text)
+            return None
+
+        msg = 'API success ' + str(data[success_property]) + '=' + str(success)
+        self.unittest.assertEquals(data[success_property], success, msg)
+
+        return data
+
+    def get_html(self, url, **kwargs):
+        return self.get_(url, **kwargs).text
+
+    def get_json(self, url, success_property='success', success=True, **kwargs):
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
+        r = self.get_(url, headers=headers, **kwargs)
+        return self.validate_json_(r, success_property, success)
+
+    def post_html(self, url, **kwargs):
+        return self.post_(url, **kwargs).text
+
+    def post_json(self, url, success_property='success', success=True, **kwargs):
+        headers = {'X-Requested-With': 'XMLHttpRequest'}
+        r = self.post_(url, headers=headers, **kwargs)
+        return self.validate_json_(r, success_property, success)
 
 
 
-class BaseAuthedTestCase(unittest.TestCase):
+class TeacherSession(UserSession):
+    def __init__(self, instance):
+        UserSession.__init__(self, instance)
+
+        self.teacher_id = None
+
+    def parse_body_(self, page_as_one_string):
+        pass
+        # getting id of the current teacher
+        tmp = re.findall('var currentChlkPerson = .+', page_as_one_string)
+        tmp = ''.join(tmp)
+        tmp = tmp[31:-3]
+        tmp = json.loads(tmp)
+        self.teacher_id = tmp['data']['id']
+
+        # getting grading periods
+        var_grading_periods_list = re.findall('var gradingPeriods = .+', page_as_one_string)
+
+        var_grading_periods_string = ''.join(var_grading_periods_list)
+        var_grading_periods_cut_off_list = re.findall('"id":[0-9]+', var_grading_periods_string)
+        var_grading_periods_cut_off_string = ''.join(var_grading_periods_cut_off_list)
+        self.var_grading_periods_final_list = re.findall('[0-9]+', var_grading_periods_cut_off_string)
+
+    def gr_periods(self):
+        list_of_gr_periods = self.var_grading_periods_final_list
+        return list_of_gr_periods
+
+class StudentSession(UserSession):
+    def parse_body_(self, page_as_one_string):
+        pass
+
+
+class DistrictAdminSession(UserSession):
+    def parse_body_(self, page_as_one_string):
+        pass
+
+
+class BaseTestCase(unittest.TestCase):
+    # noinspection PyMethodMayBeStatic
+    def random_date(self, start_date, end_date):
+        # type: (string, string) -> string
+        start_date1 = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date1 = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+        delta = (end_date1 - start_date1).days
+        random_date_for_attendance = start_date1 + timedelta(random.randint(0, delta))
+
+        return datetime.strptime(str(random_date_for_attendance), '%Y-%m-%d').strftime('%m-%d-%Y')
+
+
+class BaseAuthedTestCase(BaseTestCase):
     def setUp(self):
+
+        self.teacher = TeacherSession(self).login(user_email, user_pwd)
 
         # info for the teacher
         s = requests.Session()
@@ -153,7 +274,6 @@ class BaseAuthedTestCase(unittest.TestCase):
         self.dict_for_codes['comment'] = self.one_grading_comment['comment']
         self.dict_for_codes['code'] = self.one_grading_comment['code']
         self.dict_for_codes['id'] = self.one_grading_comment['id']
-        #print self.dict_for_codes
 
         # alphaGrades
         var_alpha_grades_list = re.findall('var alphaGrades = .+', page_as_one_string)
@@ -457,7 +577,6 @@ class BaseAuthedTestCase(unittest.TestCase):
         random_date_for_attendance = start_date1 + timedelta(random.randint(0, delta))
 
         return datetime.strptime(str(random_date_for_attendance), '%Y-%m-%d').strftime('%m-%d-%Y')
-
 
 
 if __name__ == '__main__':

@@ -14,11 +14,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IList<StudentClassExplorerViewData> ClassesGradingInfo { get; set; } 
 
         public static StudentExplorerViewData Create(StudentExplorerInfo studentExplorerInfo, IList<StudentHealthCondition> healthConditions
-            , IList<StudentCustomAlertDetail> customAlerts, IList<ClaimInfo> claims)
+            , IList<StudentCustomAlertDetail> customAlerts, IList<ClaimInfo> claims, IList<StudentHealthFormInfo> healthForms)
         {
             var res =  new StudentExplorerViewData
                 {
-                    Student = StudentProfileViewData.Create(studentExplorerInfo.Student, customAlerts, healthConditions),
+                    Student = StudentProfileViewData.Create(studentExplorerInfo.Student, customAlerts, healthConditions, healthForms),
                     ClassesGradingInfo = StudentClassExplorerViewData.Create(studentExplorerInfo.ClassesGradingInfo, claims)
                 };
             res.ClassesGradingInfo = res.ClassesGradingInfo

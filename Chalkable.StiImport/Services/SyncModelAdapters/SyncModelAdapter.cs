@@ -143,6 +143,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 {typeof(PersonNationality), new PersonNationalityAdapter(this) },
                 {typeof(Homeroom), new HomeroomAdapter(this) },
                 {typeof(AppSetting), new AppSettingAdapter(this) },
+                {typeof(LimitedEnglish), new LimitedEnglishAdapter(this) }
                 {typeof(SchoolProgram), new SchoolProgramAdapter(this) },
                 {typeof(StudentSchoolProgram), new StudentSchoolProgramAdapter(this) }
             };

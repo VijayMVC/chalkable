@@ -88,6 +88,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IAnnouncementCommentService AnnouncementCommentService { get; }
         IAppSettingService AppSettingService { get; }
 
+        ILimitedEnglishService LimitedEnglishService { get; }
+
         ISchoolProgramService SchoolProgramService { get; }
         IStudentSchoolProgramService StudentSchoolProgramService { get; }
     }
@@ -172,6 +174,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAnnouncementCommentService announcementCommentService;
         
         private IAppSettingService appSettingService;
+        private ILimitedEnglishService limitedEnglishService;
 
         private ISchoolProgramService schoolProgramService;
         private IStudentSchoolProgramService studentSchoolProgramService;
@@ -252,6 +255,7 @@ namespace Chalkable.BusinessLogic.Services.School
             countryService = new CountryService(this);
             announcementCommentService = new AnnouncementCommentService(this);
             appSettingService = new AppSettingService(this);
+            limitedEnglishService = new LimitedEnglishService(this);
             schoolProgramService = new SchoolProgramService(this);
             studentSchoolProgramService = new StudentSchoolProgramService(this);
         }
@@ -351,6 +355,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public ICountryService CountryService => countryService;
         public IAnnouncementCommentService AnnouncementCommentService => announcementCommentService;
         public IAppSettingService AppSettingService => appSettingService;
+        public ILimitedEnglishService LimitedEnglishService => limitedEnglishService;
         public ISchoolProgramService SchoolProgramService => schoolProgramService;
         public IStudentSchoolProgramService StudentSchoolProgramService => studentSchoolProgramService;
     }

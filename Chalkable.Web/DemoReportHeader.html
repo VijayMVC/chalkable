@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <!--Fonts-->
+    <link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
+
+    <!-- build:css /Content/role-layout.min.css -->
+
+    <link build:href="/app/bower/chosen/chosen.min.css" href="https://local.chalkable.com:5001/app/bower/chosen/chosen.min.css" rel="stylesheet" type="text/css" />
+    <link build:href="/app/bower/bootstrap/dist/css/bootstrap.min.css" href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link build:href="/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet" />
+    <link build:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="https://local.chalkable.com:5001/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="https://local.chalkable.com:5001/app/jquery/snippet/jquery.snippet.min.css" rel="stylesheet" type="text/css" />
+    <!-- endbuild -->
+    <!-- build:js /app/role-layout.min.js -->
+    <script build:src="/app/bower/jquery/dist/jquery.min.js" src="https://local.chalkable.com:5001/app/bower/jquery/dist/jquery.js"></script>
+    <script build:src="/app/bower/jade/jade.js" src="https://local.chalkable.com:5001/app/bower/jade/jade.js"></script>
+    <!-- endbuild -->
+
+    <style type="text/css">
+        #container{ font-family: 'Open Sans', sans-serif;}
+        .h1 {
+            font-size: 14pt;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .h2 {
+            font-size: 14pt;
+            font-weight: normal;
+            font-style: italic;
+            float: right
+        }
+
+        .panel {
+            box-shadow: none;
+        }
+
+
+        .new-page {
+            page-break-before: always;
+        }
+    </style>
+    <script type="text/javascript">
+        var Model = {
+  "title": null,
+  "data": {
+    "acadsessionname": "High School 2016-17",
+    "school": {
+      "name": "Greene High School",
+      "city": "Hometowne",
+      "address1": "17 Fast Times Way",
+      "address2": "",
+      "phone": "",
+      "state": "",
+      "zip": "          "
+    },
+    "idtoprint": false,
+    "student": {
+      "studentid": 123,
+      "altstudentnumber": "43534STU",
+      "attendances": null,
+      "gradelevel": "12th Grade",
+      "homeroomteacher": "Mrs. Bluth",
+      "name": "George Michael Bluth"
+    }
+  }
+};
+
+    </script>
+
+    <script type="text/jade" id="template">-var school = model.school
+-var student = model.student
+.panel
+    .h1= "Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
+    .h2= school.name
+
+    </script>
+
+</head>
+<body style="width: 1200px">
+    <div id="container" class="fluid-container">
+        <h1>Demo Report</h1>
+    </div>
+    <script type="text/javascript">
+        var msg = "";
+        if (!jade)
+            msg = msg + " jade wasn't download";
+        else
+            msg = msg + " jade has donwloaded";
+
+        if (!jQuery)
+            msg = msg + " jQuery wasn't download";
+        else
+            msg = msg + " jQuery wasn't download";
+
+        document.getElementById("container").innerHTML = "<h1>" + msg + "</h1>";
+        try {
+            (function(jade, $, model) {
+                var template = $('#template').text();
+                var html = "";
+                try {
+                    html = jade.render(template, { model: model.data });
+                } catch (e) {
+                    html = '<h1>Error rendering report</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+                }
+                $('#container').html(html);
+            })(jade, jQuery, Model);
+        } catch (e) {
+            var error = '<h1>Error rendering report ....</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+            jQuery('#container').html(error);
+        }
+    </script>
+</body>
+</html>

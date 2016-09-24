@@ -29,6 +29,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool? MailingAddressIsListed { get; set; }
         public int? PhysicalAddressID { get; set; }
         public bool ResidesOutOfDistrict { get; set; }
+        [NullableForeignKey]
         public short? LimitedEnglishID { get; set; }
         public short? MigrantFamilyID { get; set; }
         public string BirthCertNumber { get; set; }

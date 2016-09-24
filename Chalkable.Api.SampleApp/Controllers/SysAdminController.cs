@@ -1,4 +1,6 @@
 ﻿using System.Web.Mvc;
+using Chalkable.Api.SampleApp.Logic;
+using Chalkable.Api.SampleApp.Models;
 
 namespace Chalkable.Api.SampleApp.Controllers
 {
@@ -6,7 +8,12 @@ namespace Chalkable.Api.SampleApp.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var history = AnnAppHistoryStorage.GetStorage().GetHistory(null);
+            var res = DefaultJsonViewData.Create(new
+            {
+                History = history
+            });
+            return View("Index", res);
         }
     }
 }

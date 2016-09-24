@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -179,7 +178,7 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorMaster = new ServiceLocatorMaster(sysadminCntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
             Log.LogInfo("download data to resync");
-            context = new SyncContext();
+            context = new SyncContext(connectorLocator.ApiVersion);
 
             var tablesToResync = new List<string>
             {
@@ -447,7 +446,7 @@ namespace Chalkable.StiImport.Services
 
         public void DownloadSyncData()
         {
-            context = new SyncContext();
+            context = new SyncContext(connectorLocator.ApiVersion);
             var currentVersions = ServiceLocatorSchool.SyncService.GetVersions();
             context.SetCurrentVersions(currentVersions);
             //Tables we need all data

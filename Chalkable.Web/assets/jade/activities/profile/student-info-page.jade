@@ -67,7 +67,7 @@ mixin ParentProfileInfoView(contacts)
 -var forms = person.getHealthForms()
 -var hasForms = forms && forms.length
 
-.profile-page.view-mode(class=person.hasNoVerifiedForm() ? 'not-verified-health-form' : '')
+.profile-page.view-mode(class=person.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
     h2.page-title=Msg.Student_profile
     +ProfileTopBar(self, 'info')
     +ProfileInfoView(self)

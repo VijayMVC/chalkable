@@ -1,0 +1,7 @@
+-var recipients = self.getGroups() || []
+-var ids = recipients.map(function(group){return group.getId().valueOf()}).join(',')
++Hidden('groupIds', ids)#group-ids-value
+Button(type="submit", name="submitType", value="addRecipients").add-recipients-btn.grey-button +
+each recipient in recipients
+      .grey-button.same-on-hover.button-like=recipient.getName()
+            .remove-recipient(data-id=recipient.getId().valueOf())

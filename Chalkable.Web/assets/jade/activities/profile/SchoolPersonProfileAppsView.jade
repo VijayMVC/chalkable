@@ -1,7 +1,7 @@
 -var user = self.getUser()
 -var apps = self.getApplications()
 -var isStudent = self.getUserRole().isStudent()
-.profile-page
+.profile-page(class=user.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
     h2.page-title= isStudent ? Msg.Student_profile : Msg.Profile
     +ProfileTopBar(self, 'apps')
     #top-panel

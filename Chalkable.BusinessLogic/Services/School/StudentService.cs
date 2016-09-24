@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Configuration;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -38,7 +39,8 @@ namespace Chalkable.BusinessLogic.Services.School
         Task<IList<StudentHealthCondition>> GetStudentHealthConditions(int studentId);
         Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId, int schoolYearId);
         byte[] DownloadStudentHealthFormDocument(int studentId, int healthFormId);
-        Task VerifyStudentHealthForm(int studentId, int healthFormId);
+        Task VerifyStudentHealthForm(int studentId, int schoolYearId, int healthFormId);
+        Task<bool> CanVerifyHealthForm(int studentId, int schoolYearId);
         Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId);
         Task<StudentExplorerInfo> GetStudentExplorerInfo(int studentId, int schoolYearId);
         Task<StudentPanoramaInfo> Panorama(int studentId, IList<int> acadYears, IList<StandardizedTestFilter> standardizedTestFilters);
@@ -182,25 +184,34 @@ namespace Chalkable.BusinessLogic.Services.School
         public async Task<IList<StudentHealthFormInfo>> GetStudentHealthForms(int studentId, int schoolYearId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            if (!await HasHealthFormAccess())
+            if (!await HasHealthFormAccess(studentId, schoolYearId))
                 return new List<StudentHealthFormInfo>();
             var healthForms = await ConnectorLocator.StudentConnector.GetStudentHealthForms(studentId, schoolYearId, Context.PersonId.Value);
             return healthForms == null ? new List<StudentHealthFormInfo>() : StudentHealthFormInfo.Create(healthForms).OrderBy(x => x.Name).ToList();
         }
 
-        private async Task<bool> HasHealthFormAccess()
+        private async Task<bool> HasHealthFormAccess(int studentId, int schoolYearId)
         {
             return CanGetHealthConditions() && await ConnectorLocator.StudentConnector.HasHealthLicenses();
+        }
+
+        public async Task<bool> CanVerifyHealthForm(int studentId, int schoolYearId)
+        {
+            var hashHealthLicensesTask = HasHealthFormAccess(studentId, schoolYearId);
+            return Context.PersonId.HasValue 
+                && IsTeacherStudent(Context.PersonId.Value, studentId, schoolYearId)
+                &&  await hashHealthLicensesTask;
         } 
+
         
-        public async Task VerifyStudentHealthForm(int studentId, int healthFormId)
+        public async Task VerifyStudentHealthForm(int studentId, int schoolYearId, int healthFormId)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
 
             BaseSecurity.EnsureAdminOrTeacher(Context);
-            if (!CanGetHealthConditions())
-                throw new ChalkableSecurityException();
+            if (!await CanVerifyHealthForm(studentId, schoolYearId))
+                throw new ChalkableSecurityException("You have no access to verify health forms for this student");
 
             var formReadReceipts = new StudentHealthFormReadReceipt
             {
