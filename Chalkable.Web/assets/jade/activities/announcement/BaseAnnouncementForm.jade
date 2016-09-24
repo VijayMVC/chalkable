@@ -48,8 +48,8 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                         .add-recipients
                             .recipients-list
                                 +RenderWith(announcement, chlk.templates.announcement.AdminAnnouncementRecipientsTpl)(
-                                userRole = userRole
-                                studyCenterEnabled = self.isStudyCenterEnabled()
+                                    userRole = userRole
+                                    studyCenterEnabled = self.isStudyCenterEnabled()
                                 )
                 .title-block-container
                     +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)

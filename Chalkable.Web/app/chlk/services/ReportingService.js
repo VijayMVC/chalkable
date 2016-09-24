@@ -349,9 +349,9 @@ NAMESPACE('chlk.services', function () {
             ArrayOf(chlk.models.id.GroupId),
             chlk.models.id.GradingPeriodId,
             ArrayOf(chlk.models.id.AttendanceReasonId),
-            String]],
+            String, ArrayOf(chlk.models.id.SchoolPersonId)]],
         ria.async.Future, function submitReportCards(templateId, title, logo, recipient, orderBy, idToPrint, standardType
-                , groupIds, gradingPeriodId, attendanceReasonIds, includeOptions){
+                , groupIds_, gradingPeriodId_, attendanceReasonIds_, includeOptions_, studentIds_){
              var url = this.getUrl('Reporting/ReportCards.json',{
                  customReportTemplateId: templateId.valueOf(),
                  title: title,
@@ -360,10 +360,11 @@ NAMESPACE('chlk.services', function () {
                  orderBy: orderBy.valueOf(),
                  idToPrint: idToPrint.valueOf(),
                  standardType: standardType.valueOf(),
-                 groupIds: this.arrayToCsv(groupIds),
-                 gradingPeriodId: gradingPeriodId.valueOf(),
-                 attendanceReasonIds: this.arrayToCsv(attendanceReasonIds),
-                 includeOptions: includeOptions
+                 groupIds: groupIds_ && this.arrayToCsv(groupIds_),
+                 gradingPeriodId: gradingPeriodId_.valueOf(),
+                 attendanceReasonIds: this.arrayToCsv(attendanceReasonIds_),
+                 includeOptions: includeOptions_,
+                 studentIds: studentIds_ && this.arrayToCsv(studentIds_)
             });
             return this.getWithIframe_(url);
         },

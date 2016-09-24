@@ -2782,22 +2782,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.recipients.RecipientsSubmitViewData, chlk.models.id.AnnouncementId]],
         function saveGroupsToAnnouncementAction(model, announcementId){
-            if(model.getSelectedItems()){
-                if(model.getSelectedItems().groups){
-                    model.getSelectedItems().groups = model.getSelectedItems().groups.map(function(group){
-                        return new chlk.models.group.Group(group.name, new chlk.models.id.GroupId(group.id));
-                    });
-                }
-
-                if(model.getSelectedItems().students){
-                    model.getSelectedItems().students = model.getSelectedItems().students.map(function(student){
-                        return new chlk.models.people.ShortUserInfo(null, null, new chlk.models.id.SchoolPersonId(student.id), student.displayname, student.gender);
-                    });
-                }
-            }
-
             var res = this.addGroupsToAnnouncement_(announcementId, model.getGroupIds(), model.getStudentIds());
-            this.BackgroundCloseView(chlk.activities.recipients.GroupSelectorDialog);
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');
         },
 

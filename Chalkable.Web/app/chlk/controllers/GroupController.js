@@ -36,25 +36,6 @@ NAMESPACE('chlk.controllers', function () {
             chlk.services.SchoolService, 'schoolService',
 
             [chlk.controllers.NotChangedSidebarButton()],
-            [[String]],
-            function showGroupsFromReportAction(groupIds_){
-                var groupsIds = groupIds_ ? groupIds_.split(',') : [];
-                this.WidgetStart('group', 'show', [{selected: groupsIds}])
-                    .then(function(model){
-                        var groups = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_LIST, []);
-                        var groupIds = model.getGroupIds() ? model.getGroupIds().split(',') : [];
-                        groups = groups.filter(function(item){
-                            return groupIds.indexOf(item.getId().valueOf().toString()) > -1
-                        });
-                        this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, model.getGroupIds() ? model.getGroupIds().split(',').map(function(item){return new chlk.models.id.GroupId(item)}) : []);
-                        this.BackgroundUpdateView(chlk.activities.reports.ReportCardsDialog, new chlk.models.reports.ReportCardRecipientsViewData(groups), 'recipients');
-                        this.BackgroundCloseView(chlk.activities.announcement.AnnouncementGroupsDialog);
-                    }, this)
-                    .attach(this.validateResponse_());
-                return null;
-            },
-
-            [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.id.GroupId]],
             function showCreateEditDialogAction(groupId_){
                 var activityClass = this.getView().getCurrent().getClass();
@@ -168,6 +149,7 @@ NAMESPACE('chlk.controllers', function () {
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.recipients.RecipientsSubmitViewData]],
             function submitGroupsAction(model) {
+                this.BackgroundCloseView(chlk.activities.recipients.GroupSelectorDialog);
                 this.WidgetComplete(model.getRequestId(), model);
                 return null;
             },
