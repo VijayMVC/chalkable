@@ -1,0 +1,139 @@
+.student-panorama
+  .panorama-demographics-tab
+    TABLE
+      width: 100%
+
+    TD
+      width: 25%
+      vertical-align: top
+
+    .info-title
+      width: 42%
+      margin-right: 0
+      vertical-align: top
+
+      &:before
+        content: ''
+
+    .data-info
+      width: 58%
+
+  .chlk-grid
+    .cell
+      word-break: break-all
+
+      &:not(.center)
+        text-align: left
+        padding: 0 10px
+
+        &.active-sort
+          padding-right: 15px
+
+      &.code
+        width: 5%
+
+      &.periods, &.primary
+        width: 7%
+
+      &.category, &.demerits
+        width: 8%
+
+      &.level, &.date, &.disposition-date, &.infraction, &.disposition
+        width: 14%
+
+      &.reason
+        width: 22%
+
+.panorama-page
+
+  .students-grid
+    .cell:not(.name)
+      padding: 0 5px
+
+  .stats-container
+    .top-bar
+      text-align: center
+
+  .chart-label-y
+    text-align: left
+    overflow: visible
+
+  .highcharts-container
+    &::before
+      content: none
+
+  .cell
+    word-break: break-all
+
+    &.checks
+      width: 5%
+
+    &.name
+      width: 25%
+
+    &.ethnicity, &.hispanic, &.iep-active, &.retained
+      width: 4%
+
+      &.active-sort::before
+        right: 5px
+
+  h3
+    margin-top: 24px
+
+  .chart-content
+    height: 300px
+
+  .chart-container
+    &:not(.small-chart)
+      height: 300px
+    width: 100%
+
+  .tab-headers
+    margin: -15px -20px
+
+  .add-supplemental-btn
+    padding: 0
+    width: 24px
+    height: 24px
+    border: none
+    +box-shadow(none)
+    +icons-24-sprite(supplemental)
+    margin: -10px 0
+
+    &:hover
+      +icons-24-sprite(supplemental)
+
+
+  .add-subject-container
+    margin-top: 20px
+
+  .course-type-header
+    margin-bottom: 10px
+    position: relative
+
+  .main-text
+    font-size: 18px
+    margin-right: 10px
+
+  .current-year
+    margin: 0 10px
+    font-style: italic
+    font-size: 14px
+
+  .previous-years
+    LABEL
+      margin: 0 10px
+      font-size: 14px
+      font-weight: 600
+
+.add-course-to-panorama-dialog
+  SELECT
+    width: 265px
+
+  .dialog
+    width: 300px
+
+  .chosen-container
+    display: block
+    margin: 20px auto
+

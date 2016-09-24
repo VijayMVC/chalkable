@@ -1,0 +1,9 @@
+-var htmlValue = self.getHighlightedText(self.getDescription())
+li(
+    data-title = self.getDescription(),
+    data-value = self.getId().valueOf() + '|' + self.getSearchType().valueOf(),
+    class = (self.getSearchType() == chlk.models.search.SearchTypeEnum.PERSONS) ? "student" : "group",
+    data-tooltip-type="overflow",
+    data-tooltip = self.getDescription()
+)
+    |!{htmlValue}
