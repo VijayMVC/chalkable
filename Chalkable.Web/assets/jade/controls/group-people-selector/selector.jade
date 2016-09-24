@@ -1,0 +1,60 @@
+mixin GroupPeopleSelector(tpl, requestId)
+    -var model = tpl.getModel()
+    -attributes = self.prepare(model, attributes)
+    -var topData = model.getTopData()
+    -var isStudent = self.getUserRole().isStudent()
+    -var mainClassId = topData && topData.getSelectedItemId()&& topData.getSelectedItemId().valueOf()
+    .group-people-selector(attributes)
+        +Hidden('requestId', requestId)
+        +Hidden('mainClassId', mainClassId).main-class-id
+        .action-bar
+            .items
+                if model.isHasOwnStudents()
+                    A(data-index=1).action-link.top-link.pressed= isStudent ? 'Classmates' : 'My Students'
+                if model.isHasAccessToAllStudents()
+                    A(data-index=2, class = model.isHasOwnStudents() ? '' : 'pressed').action-link.top-link= isStudent ? 'My Teachers' : 'All Students'
+                if self.userIsAdmin() && model.hasGroups()
+                    A(data-index=3).action-link.top-link Groups
+                if model.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
+                    -var selectedCount = (model.getSelectedStudents() || []).length + (model.getSelectedGroups() || []).length;
+                    A(data-index=4).action-link.top-link.selected-link='Selected ' + (selectedCount ? '(' + selectedCount + ')' : '')
+
+        if model.isHasOwnStudents()
+            DIV(data-index=1).body-content.active.my-students-cnt.items-3
+                +RenderWith(model.getMyStudentsPart(), chlk.templates.controls.group_people_selector.UsersListTpl)(
+                    userRole = tpl.getUserRole(),
+                    currentUser = tpl.getCurrentUser(),
+                    selected = (model.getSelectedStudents() || []).map(function (item) {return item.getId()}),
+                    hasAccessToLE = model.isHasAccessToLE(),
+                    selectorMode = model.getSelectorMode(),
+                    messagingDisabled = self.isMessagingDisabled(true)
+                )
+        if model.isHasAccessToAllStudents()
+            DIV(data-index=2, class = model.isHasOwnStudents() ? '' : 'active').body-content.all-students-cnt.items-3
+                +RenderWith(model.getAllStudentsPart(), chlk.templates.controls.group_people_selector.UsersListTpl)(
+                    userRole = tpl.getUserRole(),
+                    currentUser = tpl.getCurrentUser(),
+                    selected = (model.getSelectedStudents() || []).map(function (item) {return item.getId()}),
+                    hasAccessToLE = model.isHasAccessToLE(),
+                    selectorMode = model.getSelectorMode(),
+                    messagingDisabled = self.isMessagingDisabled()
+                )
+        if self.userIsAdmin() && model.hasGroups()
+            DIV(data-index=3).body-content.groups-cnt.items-3
+                +RenderWith(model.getGroupsPart(), chlk.templates.controls.group_people_selector.GroupsListTpl)(
+                    userRole = tpl.getUserRole(),
+                    currentUser = tpl.getCurrentUser(),
+                    selected = (model.getSelectedGroups() || []).map(function(item){return item.getId()}),
+                    selectorMode = model.getSelectorMode()
+                )
+        if model.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
+            DIV(data-index=4).body-content.selected-content.items-4
+                +RenderWith(model, chlk.templates.controls.group_people_selector.SelectorBaseTpl)(
+                    userRole = tpl.getUserRole(),
+                    currentUser = tpl.getCurrentUser(),
+                )
+            .buttons-container
+                +Button()(type="button").special-button2.cancel.close Cancel
+                +Button()(type="submit").special-button2.blue-button.selector-submit-btn=model.getSubmitButtonText()
+        
+
