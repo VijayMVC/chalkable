@@ -5,6 +5,7 @@
   +box-shadow(rgba(0, 0, 0, 0.1) 0 1px 3px inset, rgba(255, 255, 255, 0.5) 0 1px 1px)
   background: #fff
   border-radius: 4px
+  min-height: 24px
 
   &::before
     content: 'To'
@@ -23,7 +24,7 @@
     right: 5px
 
     &:not(:hover)
-      opacity: 0.5
+      opacity: 0.35
 
   .recipient-search
     border: none
@@ -48,6 +49,54 @@
     font-weight: bold
     color: #56554f
     margin-bottom: 5px
+
+    &.group-recipient
+      padding-left: 23px
+
+      &::before
+        content: " "
+        position: absolute
+        width: 24px
+        height: 24px
+        +icons-24-sprite(group)
+        top: 50%
+        left: 0
+        margin-top: -12px
+
+    &:hover
+      .group-info
+        display: block
+
+    .group-info
+      padding: 7px 7px 7px 11px
+      line-height: 30px
+      width: 136px
+      font-size: 13px
+      display: none
+      position: absolute
+      z-index: 999
+      left: 50%
+      margin-left: -78px
+
+      &::before
+        left: 50%
+        margin-left: -6px
+
+      .count-text
+        font-weight: bold
+        color: #56554f
+        line-height: 22px
+        height: 26px
+
+      .members
+        overflow-y: auto
+        max-height: 130px
+
+      li
+        color: #237291
+        list-style: none
+        font-weight: normal
+        padding-left: 4px
 
     .remove-recipient
       position: absolute
@@ -266,6 +315,10 @@
 
   .top-table
     table-layout: fixed
+
+    .date-picker-label
+      position: absolute
+      margin-top: -22px
 
   .table, .left-block
     width: 100%

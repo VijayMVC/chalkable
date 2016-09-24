@@ -1,8 +1,18 @@
 -var recipients = self.getRecipients() || []
 +ActionLink('announcement', 'showGroups', self.getId()).add-recipients-btn
 each group in recipients
-      .recipient-item.group-recipient=group.getGroupName()
+      .recipient-item.group-recipient.relative=group.getGroupName()
             +ActionLink('announcement', 'removeRecipient', group.getAnnouncementId(), group.getGroupId()).remove-recipient
+            .chat-bubble.absolute.top.group-info
+                  -var count = group.getStudentCount()
+                  .count-text=count + " member" + (count == 1 ? "" : "s")
+                  .members
+                        -var names = group.getStudentsDisplayName() || []
+                        each member in names
+                              li(data-tooltip-type="overflow", data-tooltip=member).member.text-ellipsis=member
+                        if names.length < count
+                              li.ellipsis ...
+
 each student in self.getAdminAnnouncementStudents() || []
       .recipient-item.student-recipient=student.getDisplayName()
             +ActionLink('announcement', 'removeRecipient', self.getId(), null, student.getId()).remove-recipient
