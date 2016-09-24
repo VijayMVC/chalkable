@@ -9,7 +9,7 @@
             {
                 res = res.TrimEnd('/');
                 pathes[i] = pathes[i].TrimStart('/');
-                res = string.Format("{0}/{1}", res, pathes[i]);
+                res = $"{res}/{pathes[i]}";
             }
             return res;
         }

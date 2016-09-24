@@ -19,8 +19,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         
         private const string GET_ANNOUNCEMENT_RECIPIENT_PERSON = "spGetAnnouncementRecipientPersons";
         private const string CALLER_ID_PARAM = "callerId";
-   
-
+        
         //public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
         public abstract IList<TAnnouncement> GetAnnouncements(QueryCondition conds, int callerId); 
         public abstract TAnnouncement GetAnnouncement(int id, int callerId);
@@ -104,7 +103,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if (additionalParameters != null)
                 foreach (var parameter in additionalParameters)
                 {
-                    if(ps.ContainsKey(parameter.Key)) continue;
+                    if(ps.ContainsKey(parameter.Key))
+                        continue;
+
                     ps.Add(parameter.Key, parameter.Value);
                 }
             using (var reader = ExecuteStoredProcedureReader(procedureName, ps))

@@ -40,6 +40,7 @@ NAMESPACE('chlk.models.people', function () {
                 this.specialInstructions = SJX.fromValue(raw.specialinstructions, String);
                 this.spedStatus = SJX.fromValue(raw.spedstatus, String);
                 this.healthConditions = SJX.fromArrayOfDeserializables(raw.healthconditions, chlk.models.people.HealthCondition);
+                this.availableNotVerifiedHealthForm = SJX.fromValue(raw.hasnotverifiedhealthform, Boolean)
 
                 this.role = null;
                 if(raw.role && raw.role.id != undefined) {
@@ -70,6 +71,8 @@ NAMESPACE('chlk.models.people', function () {
             String, 'spedStatus',
             ArrayOf(chlk.models.people.HealthCondition), 'healthConditions',
             ArrayOf(String), 'studentCustomAlertDetails',
+
+            Boolean, 'availableNotVerifiedHealthForm',
 
             [[Array]],
             VOID, function addMedicalAlerts_(alerts){

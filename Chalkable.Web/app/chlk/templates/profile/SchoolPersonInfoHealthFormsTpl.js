@@ -13,6 +13,9 @@ NAMESPACE('chlk.templates.profile', function () {
             ArrayOf(chlk.models.student.StudentHealthFormViewData), 'healthForms',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.SchoolPersonId, 'id'
+            chlk.models.id.SchoolPersonId, 'id',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableVerifyHealthForms',
         ]);
 });

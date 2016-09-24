@@ -9,6 +9,7 @@ REQUIRE('chlk.models.school.SchoolSisInfo');
 REQUIRE('chlk.models.district.District');
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.Success');
+REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.recipients.Program');
 
 
@@ -27,6 +28,9 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            ria.async.Future, function getLocalSchools() {
+                return this.get('School/LocalSchools.json', ArrayOf(chlk.models.common.NameId), {});
+            },
 
             [[chlk.models.id.DistrictId]],
             ria.async.Future, function getSchoolsForImport(districtId) {

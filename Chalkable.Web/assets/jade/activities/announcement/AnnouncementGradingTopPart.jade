@@ -17,10 +17,11 @@ autoCount = self.getAutoGradeCount()
                     +Hidden('announcementId', self.getAnnouncementId())
 
 .section
+    -var tooltipText = !self.isAbleDropStudentScore() ? "You don't have permission to drop grades" : "";
     +ActionForm('announcement', 'setAnnouncementDropped')
         +Hidden('announcementId', self.getAnnouncementId())
         span Drop:
-        +SlideCheckbox("dropped", self.isDropped(), false, false).drop-unDrop-checkbox
+        +SlideCheckbox("dropped", self.isDropped(), !self.isAbleDropStudentScore(), !self.isAbleDropStudentScore())(data-tooltip=tooltipText).drop-unDrop-checkbox
 
 if self.isLEIntegrated()
     .section

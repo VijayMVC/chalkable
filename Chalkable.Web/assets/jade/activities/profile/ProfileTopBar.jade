@@ -22,7 +22,7 @@ mixin StudentClassesInfo(user)
 mixin StudentProfileSummaryInfo(tpl, pressedLinkName, renderClassesInfo)
     -user = tpl.getUser() 
     -statusData = tpl.getStatusData()
-    .profile-page
+    .profile-page(class=user.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
         h2.page-title=Msg.Student_profile
 
         +ProfileTopBar(tpl, pressedLinkName)

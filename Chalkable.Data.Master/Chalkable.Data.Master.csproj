@@ -109,6 +109,7 @@
     <Compile Include="Model\ApplicationSchoolOption.cs" />
     <Compile Include="Model\BackgroundTask.cs" />
     <Compile Include="Model\ChalkableDepartment.cs" />
+    <Compile Include="Model\CustomReportTemplate.cs" />
     <Compile Include="Model\DatabaseBackupRestoreTaskData.cs" />
     <Compile Include="Model\DatabaseDacPacUpdateTaskData.cs" />
     <Compile Include="Model\DatabaseUpdateTaskData.cs" />

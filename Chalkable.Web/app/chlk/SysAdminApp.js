@@ -11,7 +11,7 @@ REQUIRE('chlk.controllers.StorageController');
 REQUIRE('chlk.controllers.DepartmentsController');
 REQUIRE('chlk.controllers.DbMaintenanceController');
 REQUIRE('chlk.controllers.StandardController');
-
+REQUIRE('chlk.controllers.CustomReportTemplateController');
 
 NAMESPACE('chlk', function (){
 

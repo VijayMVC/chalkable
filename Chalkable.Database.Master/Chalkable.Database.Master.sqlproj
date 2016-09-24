@@ -135,6 +135,7 @@
     <Build Include="User Defined Types\TApplicationSchoolOption.sql" />
     <Build Include="Stored Procedures\spGetApplicationsBanInfo.sql" />
     <Build Include="Stored Procedures\spUpdateAssessmentEnabled.sql" />
+    <Build Include="Tables\CustomReportTemplate.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\Pre-Deploy\002_HasDistricAdminSettingsToHasDistrictAdminSettings.PreDeployment.sql" />

@@ -10,11 +10,11 @@ namespace Chalkable.Web.Extensions
     {
         public static string StaticContent(this UrlHelper helper, string url)
         {
-//#if DEBUG
-            //return helper.Content("~" + url);
-//#else
+#if DEBUG
+            return "https:" + CompilerHelper.ScriptsRoot + url;
+#else
             return CompilerHelper.ScriptsRoot + url;
-//#endif
+#endif
         }
     }
 }
