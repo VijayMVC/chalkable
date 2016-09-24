@@ -7,20 +7,20 @@
     <link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
     <link href="http://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
-    
+
     <!-- build:css /Content/role-layout.min.css -->
 
-    <link build:href="/app/bower/chosen/chosen.min.css" href="https://local.chalkable.com:5001/app/bower/chosen/chosen.min.css" rel="stylesheet" type="text/css" />
-    <link build:href="/app/bower/bootstrap/dist/css/bootstrap.min.css" href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-    <link build:href="/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet" />
-    <link build:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="https://local.chalkable.com:5001/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
-    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="https://local.chalkable.com:5001/app/jquery/snippet/jquery.snippet.min.css" rel="stylesheet" type="text/css" />
-    <!-- endbuild --> 
+    <!--<link build:href="/app/bower/chosen/chosen.min.css" href="https://local.chalkable.com:5001/app/bower/chosen/chosen.min.css" rel="stylesheet" type="text/css" />-->
+    <link href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet" />
+    <!--<link build:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="https://local.chalkable.com:5001/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />-->
+    <!--<link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="https://local.chalkable.com:5001/app/jquery/snippet/jquery.snippet.min.css" rel="stylesheet" type="text/css" />-->
+    <!-- endbuild -->
 
-    
+    <!-- -->
     <!-- build:js /app/role-layout.min.js -->
-    <script build:src="/app/bower/jquery/dist/jquery.min.js" src="https://local.chalkable.com:5001/app/bower/jquery/dist/jquery.js"></script>
-    <script build:src="/app/bower/jade/jade.js" src="https://local.chalkable.com:5001/app/bower/jade/jade.js"></script>
+    <script src="https://local.chalkable.com:5001/app/bower/jquery/dist/jquery.js"></script>
+    <script src="https://local.chalkable.com:5001/app/bower/jade/jade.js"></script>
     <!-- endbuild -->
     
     <style type="text/css">		
@@ -2373,192 +2373,195 @@
 
     </script>
 
-<script type="text/jade" id="template">-var school = model.school
--var student = model.student
--var recipient = student.recipient
-.panel.main-student-panel(class=index || index2 ? "new-page" : "")
-	.panel-body
-		.panel
-			.panel-body
-				.row
-					.col-sm-8
-						.h1="Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
-						.h2=school.name
-						.school-mailing.mailing-box
-							.line=(school.address1 || "") + " " + (school.address2 || "")
-							if school.city && school.state && school.zip
-								.line=[school.city, school.state, school.zip].join(" ")
-							if school.phone
-								.line=school.phone
-					.col-sm-4
-						if model.logohref
-							img(src=model.logohref, width="3in").logo
-		.panel
-			.panel-body
-				.row
-					.col-sm-8
-						.panel.recipient-parent
-							.panel-body.mailing-box
-								.recipient-h.line=recipient.recipientname
-								.line= recipient.addressline1 + " " + recipient.addressline2
-								.line= [recipient.city, recipient.state, recipient.postalcode].join(" ")
-					.col-sm-4
-						table.table.table-bordered.right-table.school
-							tbody
-								tr
-									td School Year
-									td=model.acadsessionname
-								tr
-									td Homeroom Teacher
-									td=student.homeroomteacher
-								tr
-									td Grade Level
-									td=student.gradelevel
-								if student.promoted
-									tr
-										td Status
-										td Promoted
-		if student.classes && student.classes.length
-			.panel
-				.panel-body
-					.row
-						.col-sm-12
-							table.table.classes-table
-								thead.classes-header
-									-var gps = student.classes[0].gradingperiods || []
-									tr
-										th
-										th.teacher-name
-										th.right-border
-										each gp in gps
-											-var gradeditems = gp.gradeditems || []
-											th(colspan=gradeditems.length + 1).right-border.text-center= gp.gradingperiodname
-									tr
-										th Class
-										th.teacher-name Teacher
-										th.right-border Section												
-										each gp in gps
-											-var gradeditems = gp.gradeditems || []
-											th Std
-											each gi, i in gradeditems
-												th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.gradeditemname
-								tbody
-									tr
-										-var span = 3 + gps.length
-										-gps.forEach(function(gp){ span = span + (gp.gradeditems || []).length })
-										td(colspan= span).w-100
-											each item in student.classes
-												-var gps = item.gradingperiods || []
-												table.table.table-bordered.classes-table
-													thead.classes-header
-														tr.active
-															th=item.name
-															th.teacher-name=item.teacher
-															th.right-border=item.classnumber
-															each gp in gps
-																-var gradeditems = gp.gradeditems || []
-																th
-																each gi, i in gradeditems
-																	th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + gi.numericgrade
-													tbody
-														-var standards = gps[0].standards || []
-														each standard, si in standards
-															tr.standards-row
-																if si == 0
-																	td(rowspan = standards.length).first Standards
-																td(colspan = 2).right-border.description= standard.name + ' - ' + standard.description
-																each gp,i in gps
-																	-var gradeditems = gp.gradeditems || []
-																	td(colspan = gradeditems.length + 1)= standard.grade || '-'
-														-var lastGp = gps[gps.length - 1]
-														-var lastGIs = lastGp.gradeditems
-														-var itemsWithComments = lastGIs.filter(function(item){return item.comments})
-														-var gpColspan = 1
-														-gps.forEach(function(gp){gpColspan = gpColspan + 1 + gp.gradeditems.length})
-														if itemsWithComments.length
-															each cItem, index in itemsWithComments
-																tr.comments-row
-																	if index == 0
-																		td(rowspan = itemsWithComments.length).first Comments
-																	td=cItem.gradeditemname
-																	td(colspan = gpColspan).pre=cItem.comments.map(function(item){return item.comment}).join('\n')
-														if lastGp.note
-															tr.notes-row
-																td.first Notes
-																td(colspan = gpColspan + 1)= lastGp.note
-							hr
-		if student.gradingperiod
-			.panel
-				.panel-body
-					.row
-						.col-sm-12
-							.h3=student.gradingperiod.name + " Announcement"
-							em=student.gradingperiod.announcement || "Grading Period Announcement"
-		.panel(style="page-break-inside: avoid")
-			.panel-body
-				.row
-					.col-sm-6
-						if student.attendances && student.attendances[0]
-							table.table.table-bordered.attendance-table
-								thead
-									tr.active
-										td Attendance
-										each gp in student.attendances
-											td= gp.gradingperiodname || ("GP-" + gp.gradingperiodid)
-										td Total
-								tbody
-									-var items = ['enrolled', 'present', 'absences', 'excusedabsences', 'unexcusedabsences', 'tardies', 'excusedtardies', 'unexcusedtardies'];
-									-var names = { enrolled: 'Enrolled', present: 'Present', absences: 'Absent', excusedabsences: '    Excused', unexcusedabsences: '    Unexcused', tardies: 'Tardy', excusedtardies: '    Excused', unexcusedtardies: '    Unexcused'}
-									for prop in items
-										tr
-											td.pre=names[prop]
-											each item in student.attendances || []
-												td=item[prop]
-											-var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
-											td=sum
-					.col-sm-6
-						table.table.table-bordered.traditional-table
-							thead
-								tr.active
-									td(colspan = 3) Grading Scale - Traditional
-							tbody
-								each grade in model.traditionalgradingscale
-									tr
-										td=grade.name
-										td=grade.minvalue
-										td=grade.maxvalue
-				.row
-					.col-sm-6
-						table.table.table-bordered.merits-table
-							thead
-								tr.active
-									td Merits/Demerits
-									td Total
-							tbody
-								tr
-									td Merits
-									td=student.merits
-								tr
-									td Demerits
-									td=student.merits
-					.col-sm-6
-						table.table.table-bordered.standards-table
-							thead
-								tr.active
-									td(colspan = 2) Grading Scale - Standards
-							tbody
-								each grade in model.standardsgradingscale
-									tr
-										td=grade.name
-										td=grade.description
-		.panel
-			.panel-body
-				.row
-					.col-sm-12
-						.signature-block
-							.signature-block-line
-							em.text Parent or Guardian Signature
-						.clear-both
+<script type="text/jade" id="template">
+-var arr = [1,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3]
+each arrItem, index in arr
+  -var school = model.school
+  -var student = model.student
+  -var recipient = student.recipient
+  .panel.main-student-panel(class=index > 0 ? "new-page" : "")
+      .panel-body
+          .panel
+              .panel-body
+                  .row
+                      .col-sm-8
+                          .h1="Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
+                          .h2=school.name
+                          .school-mailing.mailing-box
+                              .line=(school.address1 || "") + " " + (school.address2 || "")
+                              if school.city && school.state && school.zip
+                                  .line=[school.city, school.state, school.zip].join(" ")
+                              if school.phone
+                                  .line=school.phone
+                      .col-sm-4
+                          if model.logohref
+                              img(src=model.logohref, width="3in").logo
+          .panel
+              .panel-body
+                  .row
+                      .col-sm-8
+                          .panel.recipient-parent
+                              .panel-body.mailing-box
+                                  .recipient-h.line=recipient.recipientname
+                                  .line= recipient.addressline1 + " " + recipient.addressline2
+                                  .line= [recipient.city, recipient.state, recipient.postalcode].join(" ")
+                      .col-sm-4
+                          table.table.table-bordered.right-table.school
+                              tbody
+                                  tr
+                                      td School Year
+                                      td=model.acadsessionname
+                                  tr
+                                      td Homeroom Teacher
+                                      td=student.homeroomteacher
+                                  tr
+                                      td Grade Level
+                                      td=student.gradelevel
+                                  if student.promoted
+                                      tr
+                                          td Status
+                                          td Promoted
+          if student.classes && student.classes.length
+              .panel
+                  .panel-body
+                      .row
+                          .col-sm-12
+                              table.table.classes-table
+                                  thead.classes-header
+                                      -var gps = student.classes[0].gradingperiods || []
+                                      tr
+                                          th
+                                          th.teacher-name
+                                          th.right-border
+                                          each gp in gps
+                                              -var gradeditems = gp.gradeditems || []
+                                              th(colspan=gradeditems.length + 1).right-border.text-center= gp.gradingperiodname
+                                      tr
+                                          th Class
+                                          th.teacher-name Teacher
+                                          th.right-border Section
+                                          each gp in gps
+                                              -var gradeditems = gp.gradeditems || []
+                                              th Std
+                                              each gi, i in gradeditems
+                                                  th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.gradeditemname
+                                  tbody
+                                      tr
+                                          -var span = 3 + gps.length
+                                          -gps.forEach(function(gp){ span = span + (gp.gradeditems || []).length })
+                                          td(colspan= span).w-100
+                                              each item in student.classes
+                                                  -var gps = item.gradingperiods || []
+                                                  table.table.table-bordered.classes-table
+                                                      thead.classes-header
+                                                          tr.active
+                                                              th=item.name
+                                                              th.teacher-name=item.teacher
+                                                              th.right-border=item.classnumber
+                                                              each gp in gps
+                                                                  -var gradeditems = gp.gradeditems || []
+                                                                  th
+                                                                  each gi, i in gradeditems
+                                                                      th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + gi.numericgrade
+                                                      tbody
+                                                          -var standards = gps[0].standards || []
+                                                          each standard, si in standards
+                                                              tr.standards-row
+                                                                  if si == 0
+                                                                      td(rowspan = standards.length).first Standards
+                                                                  td(colspan = 2).right-border.description= standard.name + ' - ' + standard.description
+                                                                  each gp,i in gps
+                                                                      -var gradeditems = gp.gradeditems || []
+                                                                      td(colspan = gradeditems.length + 1)= standard.grade || '-'
+                                                          -var lastGp = gps[gps.length - 1]
+                                                          -var lastGIs = lastGp.gradeditems
+                                                          -var itemsWithComments = lastGIs.filter(function(item){return item.comments})
+                                                          -var gpColspan = 1
+                                                          -gps.forEach(function(gp){gpColspan = gpColspan + 1 + gp.gradeditems.length})
+                                                          if itemsWithComments.length
+                                                              each cItem, index in itemsWithComments
+                                                                  tr.comments-row
+                                                                      if index == 0
+                                                                          td(rowspan = itemsWithComments.length).first Comments
+                                                                      td=cItem.gradeditemname
+                                                                      td(colspan = gpColspan).pre=cItem.comments.map(function(item){return item.comment}).join('\n')
+                                                          if lastGp.note
+                                                              tr.notes-row
+                                                                  td.first Notes
+                                                                  td(colspan = gpColspan + 1)= lastGp.note
+                              hr
+          if student.gradingperiod
+              .panel
+                  .panel-body
+                      .row
+                          .col-sm-12
+                              .h3=student.gradingperiod.name + " Announcement"
+                              em=student.gradingperiod.announcement || "Grading Period Announcement"
+          .panel(style="page-break-inside: avoid")
+              .panel-body
+                  .row
+                      .col-sm-6
+                          if student.attendances && student.attendances[0]
+                              table.table.table-bordered.attendance-table
+                                  thead
+                                      tr.active
+                                          td Attendance
+                                          each gp in student.attendances
+                                              td= gp.gradingperiodname || ("GP-" + gp.gradingperiodid)
+                                          td Total
+                                  tbody
+                                      -var items = ['enrolled', 'present', 'absences', 'excusedabsences', 'unexcusedabsences', 'tardies', 'excusedtardies', 'unexcusedtardies'];
+                                      -var names = { enrolled: 'Enrolled', present: 'Present', absences: 'Absent', excusedabsences: '    Excused', unexcusedabsences: '    Unexcused', tardies: 'Tardy', excusedtardies: '    Excused', unexcusedtardies: '    Unexcused'}
+                                      for prop in items
+                                          tr
+                                              td.pre=names[prop]
+                                              each item in student.attendances || []
+                                                  td=item[prop]
+                                              -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
+                                              td=sum
+                      .col-sm-6
+                          table.table.table-bordered.traditional-table
+                              thead
+                                  tr.active
+                                      td(colspan = 3) Grading Scale - Traditional
+                              tbody
+                                  each grade in model.traditionalgradingscale
+                                      tr
+                                          td=grade.name
+                                          td=grade.minvalue
+                                          td=grade.maxvalue
+                  .row
+                      .col-sm-6
+                          table.table.table-bordered.merits-table
+                              thead
+                                  tr.active
+                                      td Merits/Demerits
+                                      td Total
+                              tbody
+                                  tr
+                                      td Merits
+                                      td=student.merits
+                                  tr
+                                      td Demerits
+                                      td=student.merits
+                      .col-sm-6
+                          table.table.table-bordered.standards-table
+                              thead
+                                  tr.active
+                                      td(colspan = 2) Grading Scale - Standards
+                              tbody
+                                  each grade in model.standardsgradingscale
+                                      tr
+                                          td=grade.name
+                                          td=grade.description
+          .panel
+              .panel-body
+                  .row
+                      .col-sm-12
+                          .signature-block
+                              .signature-block-line
+                              em.text Parent or Guardian Signature
+                          .clear-both
 </script>
 
 </head>
@@ -2567,19 +2570,6 @@
             <h1>Demo Report</h1>
         </div>
     <script type="text/javascript">
-        var msg = "";
-        if (!jade)
-            msg = msg + " jade wasn't download";
-        else 
-            msg = msg + " jade has donwloaded";
-        
-        if (!jQuery) 
-            msg = msg + " jQuery wasn't download";
-        else
-            msg = msg + " jQuery wasn't download";
-
-        document.getElementById("container").innerHTML = "<h1>" + msg + "</h1>";
-        try {
             (function(jade, $, model) {
                 var template = $('#template').text();
                 var html = "";
@@ -2590,10 +2580,6 @@
                 }
                 $('#container').html(html);
             })(jade, jQuery, Model);
-        } catch (e) {
-            var error = '<h1>Error rendering report ....</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
-            jQuery('#container').html(error);
-        }
     </script>
     </body>
 </html>

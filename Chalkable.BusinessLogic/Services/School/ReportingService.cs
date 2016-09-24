@@ -440,11 +440,11 @@ namespace Chalkable.BusinessLogic.Services.School
             var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
             IList<byte[]> listOfpdf = new List<byte[]>();
 
-            int index = 0;
+            //int index = 0;
             foreach (var data in listOfReportCards)
             {
                 listOfpdf.Add(ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
-                index++;
+                //index++;
             }
             
             //var loader = new LoaderBase<CustomReportCardsExportModel, byte[]>(listOfReportCards);

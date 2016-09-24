@@ -57,12 +57,9 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             <link href = ""http://fonts.googleapis.com/css?family=Pacifico"" rel= ""stylesheet"" type = ""text/css""/>
             <link href = ""http://fonts.googleapis.com/css?family=Oswald"" rel=""stylesheet"" type = ""text/css""/>
             <link href = ""http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700"" rel = ""stylesheet"" type=""text/css""/>
-            <link href = ""{baseUrl}/app/bower/chosen/chosen.min.css"" rel = ""stylesheet"" type = ""text/css""/>
             <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap.min.css"" type = ""text/css"" rel = ""stylesheet""/>                 
             <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap-theme.min.css"" type = ""text/css"" rel = ""stylesheet""/>
-            <link href = ""{baseUrl}/app/bower/jquery-ui/themes/smoothness/jquery-ui.css"" rel = ""stylesheet"" type = ""text/css""/>                                              
-            <link href = ""{baseUrl}/app/jquery/snippet/jquery.snippet.min.css"" rel = ""stylesheet"" type = ""text/css""/>
-                                                       
+                                                      
             <script src = ""{baseUrl}/app/bower/jquery/dist/jquery.js""></script>      
             <script src = ""{baseUrl}/app/bower/jade/jade.js"" ></script>
 
@@ -75,43 +72,21 @@ namespace Chalkable.BusinessLogic.Services.Reporting
     <body>
         <div id=""container"" class=""fluid-container"">
               <h1> Demo Report </h1>
-     
-        </div>
-     
+        </div>    
          <script type=""text/javascript"">
-              var msg = """";
-            if (!jade)
-                msg = msg + ""jade wasn't download"";
-            else
-                msg = msg + "" jade has donwloaded"";
-
-            if (!jQuery)
-                msg = msg + "" jQuery wasn't download"";
-            else
-                msg = msg + "" jQuery wasn't download"";
-
-            document.getElementById(""container"").innerHTML = ""<h1>"" + msg + ""</h1>"";
-            try
-            {{
-                (function(jade, $, model) {{
-                    var template = $('#template').text();
-                    var html = """";
-                    try
-                    {{
-                        html = jade.render(template, {{ model: model.data }});
-                    }}
-                    catch (e)
-                    {{
-                        html = '<h1>Error rendering report</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
-                    }}
-                $('#container').html(html);
-                }})(jade, jQuery, Model);
-            }}
-            catch (e)
-            {{
-                var error = '<h1>Error rendering report ....</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
-                jQuery('#container').html(error);
-            }}
+            (function(jade, $, model) {{
+                var template = $('#template').text();
+                var html = """";
+                try
+                {{
+                    html = jade.render(template, {{ model: model.data }});
+                }}
+                catch (e)
+                {{
+                    html = '<h1>Error rendering report</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+                }}
+            $('#container').html(html);
+            }})(jade, jQuery, Model);
         </script>
     </body>
 </html>";
@@ -147,7 +122,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             {
                 HtmlViewerWidth = 1200,
                 ConversionDelay = 0,
-                //LicenseKey = "4W9+bn19bn5ue2B+bn1/YH98YHd3d3c=",
+                LicenseKey = "zUNQQlNXQlNaVlZCU1BMUkJRU0xTUExbW1tbQlI=",
             };
             htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = PdfPageSize.Letter;
             htmlToPdfConverter.PdfDocumentOptions.PdfPageOrientation = PdfPageOrientation.Portrait;
@@ -157,7 +132,10 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             htmlToPdfConverter.PdfDocumentOptions.LeftMargin = 18;
             htmlToPdfConverter.PdfDocumentOptions.ShowFooter = true;
             htmlToPdfConverter.PdfDocumentOptions.ShowHeader = true;
-            htmlToPdfConverter.PrepareRenderPdfPageEvent += e => { e.Page.ShowHeader = e.PageNumber > 1; };
+            htmlToPdfConverter.PrepareRenderPdfPageEvent += e =>
+            {
+                e.Page.ShowHeader = e.IsNewPage;           
+            };
             return htmlToPdfConverter;
         }
 
