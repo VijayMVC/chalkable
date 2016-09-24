@@ -15,18 +15,18 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, String, FileList]],
+            [[String, String, Object]],
             ria.async.Future, function addDepartment(name, keywords, files) {
-                return this.uploadFiles('ChalkableDepartment/create.json', files, chlk.models.departments.Department, {
+                return this.uploadFiles('ChalkableDepartment/create.json', [files[0]], chlk.models.departments.Department, {
                     name: name,
                     keywords: keywords
                 });
             },
 
-            [[chlk.models.id.DepartmentId, String, String, FileList]],
+            [[chlk.models.id.DepartmentId, String, String, Object]],
             ria.async.Future, function updateDepartment(id, name, keywords, files) {
 
-                return this.uploadFiles('ChalkableDepartment/update.json', files, chlk.models.departments.Department, {
+                return this.uploadFiles('ChalkableDepartment/update.json', [files[0]], chlk.models.departments.Department, {
                     chalkableDepartmentId: id.valueOf(),
                     name: name,
                     keywords: keywords

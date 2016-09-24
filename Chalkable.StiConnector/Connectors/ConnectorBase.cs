@@ -125,6 +125,7 @@ namespace Chalkable.StiConnector.Connectors
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
                 writer.Flush();
+                var jsonStr = JsonConvert.SerializeObject(obj);
                 var startTime = DateTime.Now;
                 var arr = stream.ToArray();
                 var res = client.UploadDataTaskAsync(url, httpMethod.Method, arr);
@@ -132,7 +133,13 @@ namespace Chalkable.StiConnector.Connectors
                 var timeString = $"{time.Minutes}:{time.Seconds}.{time.Milliseconds}";
                 Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
 
-                return await res;
+                var result = await res;
+                //var stream2 = new MemoryStream();
+                //stream2.Write(result, 0, result.Length);
+                //var reader = new StreamReader(stream2);
+                //var resStr = reader.ReadToEnd();
+
+                return result;
             }
             catch (WebException ex)
             {
