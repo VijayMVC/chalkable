@@ -112,10 +112,12 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.reports.SubmitReportCardsViewData]],
         function addRecipient_(model){
-            var recipient = model.getReportRecipient(), groupId, studentId, arr = recipient.split('|'),
+            var recipient = model.getReportRecipient(), arr = recipient.split('|'),
                 parsedSelected = model.getParsedSelected(),type = parseInt(arr[1], 10),
                 id = parseInt(arr[0], 10), selected = JSON.parse(model.getSelectedItems()), res;
             if(type == chlk.models.search.SearchTypeEnum.PERSONS.valueOf()){
+                if(selected.students.map(function (item) {return item.id}).indexOf(id) > -1)
+                    return null;
                 res = this.studentService.getInfo(new chlk.models.id.SchoolPersonId(id))
                     .then(function(info){
                         parsedSelected.students.push(info);
@@ -127,8 +129,9 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.reports.ReportCardRecipientsViewData(parsedSelected.groups, parsedSelected.students, selected);
                     });
             }
-
-            else
+            else{
+                if(selected.groups.map(function (item) {return item.id}).indexOf(id) > -1)
+                    return null;
                 res = this.groupService.info(new chlk.models.id.GroupId(id))
                     .then(function(info){
                         parsedSelected.groups.push(info);
@@ -138,6 +141,7 @@ NAMESPACE('chlk.controllers', function (){
                         });
                         return new chlk.models.reports.ReportCardRecipientsViewData(parsedSelected.groups, parsedSelected.students, selected);
                     });
+            }                
 
             return this.UpdateView(chlk.activities.reports.ReportCardsDialog, res, 'recipients');
         },

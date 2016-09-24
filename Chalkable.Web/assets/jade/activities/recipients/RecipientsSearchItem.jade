@@ -2,7 +2,7 @@
 li(
     data-title = self.getDescription(),
     data-value = self.getId().valueOf() + '|' + self.getSearchType().valueOf(),
-    class = (self.getSearchType() == chlk.models.search.SearchTypeEnum.PERSONS) ? "student" : "group",
+    class = self.getItemCls(),
     data-tooltip-type="overflow",
     data-tooltip = self.getDescription()
 )

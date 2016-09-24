@@ -93,10 +93,16 @@ NAMESPACE('chlk.controls', function () {
                         fixedInstance[k] = item[k];
                     tpl.assign(fixedInstance);
                     
+                    var options = {};
+                    
                     if(tpl.setQuery)
-                        tpl.options({
-                            query: this.term
-                        });
+                        options.query = this.term;
+                    
+                    if(attrs.disabledValues)
+                        options.disabledValues = attrs.disabledValues;
+                    
+                    if(options.query || options.disabledValues)
+                        tpl.options(options);
                     
                     var li = jQuery.parseHTML(tpl.render());
                     var id =ria.dom.Dom.GID();

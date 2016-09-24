@@ -2799,11 +2799,19 @@ NAMESPACE('chlk.controllers', function (){
             var groupIds = adminRecipients.groups.map(function(group){return group.getId().valueOf()});
             var studentIds = adminRecipients.students.map(function(student){return student.getId().valueOf()});
 
-            if(groupId)
-                groupIds.push(groupId);
+            if(groupId){
+                if(groupIds.indexOf(groupId) > -1)
+                    return null;
 
-            if(studentId)
+                groupIds.push(groupId);
+            }
+
+            if(studentId){
+                if(studentIds.indexOf(studentId) > -1)
+                    return null;
+
                 studentIds.push(studentId);
+            }
 
             var res = this.addGroupsToAnnouncement_(announcementId, groupIds.join(','), studentIds.join(','));
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');

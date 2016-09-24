@@ -1,4 +1,5 @@
 -var recipients = self.getRecipients() || []
+-var students = self.getAdminAnnouncementStudents() || []
 +ActionLink('announcement', 'showGroups', self.getId()).add-recipients-btn
 each group in recipients
       .recipient-item.group-recipient.relative=group.getGroupName()
@@ -13,7 +14,7 @@ each group in recipients
                         if names.length < count
                               li.ellipsis ...
 
-each student in self.getAdminAnnouncementStudents() || []
+each student in students
       .recipient-item.student-recipient=student.getDisplayName()
             +ActionLink('announcement', 'removeRecipient', self.getId(), null, student.getId()).remove-recipient
 +SearchBox(chlk.services.SearchService, "searchByTypes", chlk.templates.recipients.RecipientsSearchTpl, [chlk.models.search.SearchTypeEnum.STUDENT,chlk.models.search.SearchTypeEnum.GROUP])(
@@ -22,6 +23,7 @@ each student in self.getAdminAnnouncementStudents() || []
       withButton = true,
       listCls = "recipients-search",
       alwaysAtBottom = true,
-      minLength = 1
+      minLength = 1,
+      disabledValues= {groups: recipients, students: students}
 ).recipient-search
 Button(type="submit", name="submitType", value="recipient").x-hidden.recipient-submit.validate-skip
