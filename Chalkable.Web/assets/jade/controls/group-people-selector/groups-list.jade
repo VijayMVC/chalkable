@@ -8,6 +8,7 @@
             .box-checkbox.circle.v-m
                 +Checkbox('allGroups', false, false, true).all-groups-check.all-items-check
             LABEL.text.v-m All
+    .center-block=self.getCountText()
     .right-block.i-b.right
         +ActionLink('group', 'showCreateEditDialog').add-group Group
             .green-plus +

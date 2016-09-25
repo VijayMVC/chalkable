@@ -47,8 +47,7 @@
         else if self.isHasAccessToLE()
             +ActionLink('teachers', 'giveLECredits', self.getClassId()).le-link LEARNING EARNINGS
     .right-block.i-b.right
-        -var count = self.getUsers().getTotalCount()
-        .results-count=count + (count == 1 ? " result" : " results")
+        .results-count=self.getCountText()
 .persons-cnt.items-cnt
     +Hidden('start', 0).start-value
     .items-cnt-2

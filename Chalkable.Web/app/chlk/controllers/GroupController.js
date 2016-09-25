@@ -101,8 +101,8 @@ NAMESPACE('chlk.controllers', function () {
                             gradeLevels = this.getContext().getSession().get(ChlkSessionConstants.GRADE_LEVELS),
                             schools = result[3],
                             programs = result[4],
-                            myStudentsPart = new chlk.models.recipients.UsersListViewData(result[1], gradeLevels, schools, programs),
-                            allStudentsPart = new chlk.models.recipients.UsersListViewData(result[2], gradeLevels, schools, programs),
+                            myStudentsPart = new chlk.models.recipients.UsersListViewData(result[1], true, gradeLevels, schools, programs),
+                            allStudentsPart = new chlk.models.recipients.UsersListViewData(result[2], false, gradeLevels, schools, programs),
                             selectedGroups = (data_ && data_.getSelected() && data_.getSelected().groups) || [],
                             selectedStudents = (groupId_ ? result[5].getStudents() : (data_ && data_.getSelected() && data_.getSelected().students)) || [];
                         var model = new chlk.models.recipients.GroupSelectorViewData(requestId_, type, hasAccessToAllStudents, hasOwnStudents,

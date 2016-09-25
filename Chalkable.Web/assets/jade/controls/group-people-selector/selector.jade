@@ -27,7 +27,8 @@ mixin GroupPeopleSelector(tpl, requestId)
                     selected = (model.getSelectedStudents() || []).map(function (item) {return item.getId()}),
                     hasAccessToLE = model.isHasAccessToLE(),
                     selectorMode = model.getSelectorMode(),
-                    messagingDisabled = self.isMessagingDisabled(true)
+                    messagingDisabled = self.isMessagingDisabled(true),
+                    allCount = model.getMyStudentsPart().getUsers().getTotalCount()
                 )
         if model.isHasAccessToAllStudents()
             DIV(data-index=2, class = tpl.isTabSelected(2) ? 'active' : '').body-content.all-students-cnt.items-3
@@ -37,7 +38,8 @@ mixin GroupPeopleSelector(tpl, requestId)
                     selected = (model.getSelectedStudents() || []).map(function (item) {return item.getId()}),
                     hasAccessToLE = model.isHasAccessToLE(),
                     selectorMode = model.getSelectorMode(),
-                    messagingDisabled = self.isMessagingDisabled()
+                    messagingDisabled = self.isMessagingDisabled(),
+                    allCount = model.getAllStudentsPart().getUsers().getTotalCount()
                 )
         if self.userIsAdmin() && model.hasGroups()
             DIV(data-index=3).body-content.groups-cnt.items-3
@@ -45,7 +47,8 @@ mixin GroupPeopleSelector(tpl, requestId)
                     userRole = tpl.getUserRole(),
                     currentUser = tpl.getCurrentUser(),
                     selected = (model.getSelectedGroups() || []).map(function(item){return item.getId()}),
-                    selectorMode = model.getSelectorMode()
+                    selectorMode = model.getSelectorMode(),
+                    allCount = model.getGroupsPart().getGroups().length
                 )
         if model.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
             DIV(data-index=4, class = tpl.isTabSelected(4) ? 'active' : '').body-content.selected-content.items-4

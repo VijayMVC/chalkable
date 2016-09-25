@@ -17,6 +17,20 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
 
             Array, 'selected',
 
-            chlk.models.recipients.SelectorModeEnum, 'selectorMode'
+            chlk.models.recipients.SelectorModeEnum, 'selectorMode',
+
+            Number, 'allCount',
+
+            function getCountText() {
+                var currentCount = this.getGroups().length, allCount = this.getAllCount();
+
+                var res = currentCount;
+                
+                if(allCount > currentCount)
+                    res += ' of ' + allCount;
+
+                res += ' Group' + (currentCount == 1 ? "" : "s");
+                return res;
+            }
         ])
 });

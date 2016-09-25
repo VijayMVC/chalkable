@@ -136,14 +136,20 @@ NAMESPACE('chlk.controls', function () {
                     params = [classId, filter, !isStudent && isMy, byLastName, start_ || 0, itemsCount, null, schoolId, gradeLevelId, programId];
                 var tpl = append_ ? new chlk.templates.controls.group_people_selector.PersonItemsTpl() :
                     new chlk.templates.controls.group_people_selector.UsersListTpl();
-                tpl.options({
+
+                var options = {
                     selected: studentIds,
                     userRole: this.context.getSession().get(ChlkSessionConstants.USER_ROLE),
                     currentUser: this.context.getSession().get(ChlkSessionConstants.CURRENT_PERSON, null),
                     hasAccessToLE: this.isHasAccessToLE(),
                     selectorMode: o.selectorMode,
                     messagingDisabled: studentsObj.isMessagingDisabled
-                });
+                };
+
+                if(!append_)
+                    options.allCount = studentsObj.count;
+
+                tpl.options(options);
 
                 parent.addClass('scroll-freezed');
 
@@ -158,7 +164,7 @@ NAMESPACE('chlk.controls', function () {
                     .then(function(students){
                         if(students.getItems().length < itemsCount)
                             clearInterval(o[intervalName]);
-                        var model = append_ ? students : new chlk.models.recipients.UsersListViewData(students, studentsObj.gradeLevels,
+                        var model = append_ ? students : new chlk.models.recipients.UsersListViewData(students, isMy, studentsObj.gradeLevels,
                             studentsObj.schools, studentsObj.programs, studentsObj.classes, gradeLevelId, schoolId, programId, classId, byLastName, filter);
                         tpl.assign(model);
                         if(!append_)
@@ -190,7 +196,8 @@ NAMESPACE('chlk.controls', function () {
                     selected: groupIds,
                     userRole: this.context.getSession().get(ChlkSessionConstants.USER_ROLE),
                     currentUser: this.context.getSession().get(ChlkSessionConstants.CURRENT_PERSON, null),
-                    selectorMode: o.selectorMode
+                    selectorMode: o.selectorMode,
+                    allCount: o.groupsCount
                 });
 
                 parent.addClass('scroll-freezed');
@@ -362,9 +369,11 @@ NAMESPACE('chlk.controls', function () {
                         var myStudentsPart = model.getMyStudentsPart();
                         selectors[attributes.id] = {
                             selectorMode: model.getSelectorMode(),
+                            groupsCount: model.getGroupsPart().getGroups().length,
                             groups: ria.__API.clone(model.getSelectedGroups()),
                             students: ria.__API.clone(model.getSelectedStudents()),
                             myStudentsPart: {
+                                count: model.getMyStudentsPart().getUsers().getTotalCount(),
                                 gradeLevels: myStudentsPart.getGradeLevels(),
                                 schools: myStudentsPart.getSchools(),
                                 programs: myStudentsPart.getPrograms(),
@@ -372,6 +381,7 @@ NAMESPACE('chlk.controls', function () {
                                 isMessagingDisabled: this.isMessagingDisabled(true)
                             },
                             allStudentsPart: {
+                                count: model.getAllStudentsPart().getUsers().getTotalCount(),
                                 gradeLevels: myStudentsPart.getGradeLevels(),
                                 schools: myStudentsPart.getSchools(),
                                 programs: myStudentsPart.getPrograms(),
