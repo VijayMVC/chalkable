@@ -8,6 +8,7 @@
         +Select("byLastName").by-last-name.submit-on-change
             +Option(0, "First Name", !self.isByLastName())
             +Option(1, "Last Name", self.isByLastName())
+
     if self.getUserRole().isAdmin()
         .filter-cnt.school-cnt
             LABEL.filter-label School
@@ -17,12 +18,17 @@
                     +Option(school.getId().valueOf(), school.getName(), school.getId() == self.getSchoolId())
     else
         +Hidden('classId').school-id
-    .filter-cnt.grade-level-cnt
-        LABEL.filter-label Grade
-        +Select("gradeLevelId")(firstEmpty = true).grade-level-id
-            +Option('', "", !self.getGradeLevelId())
-            each grade in self.getGradeLevels() || []
-                +Option(grade.getId().valueOf(), grade.getName(), grade.getId() == self.getGradeLevelId())
+
+    if self.getUserRole().isStudent()
+        +Hidden('gradeLevelId').grade-level-id
+    else
+        .filter-cnt.grade-level-cnt
+            LABEL.filter-label Grade
+            +Select("gradeLevelId")(firstEmpty = true).grade-level-id
+                +Option('', "", !self.getGradeLevelId())
+                each grade in self.getGradeLevels() || []
+                    +Option(grade.getId().valueOf(), grade.getName(), grade.getId() == self.getGradeLevelId())
+
     if self.getUserRole().isAdmin()
         .filter-cnt.class-cnt
             LABEL.filter-label Class
@@ -32,12 +38,16 @@
                     +Option(clazz.getId().valueOf(), clazz.getName() + " " + clazz.getClassNumber(), clazz.getId() == self.getClassId())
     else
         +Hidden('classId').class-id
-    .filter-cnt.program-cnt
-        LABEL.filter-label Program
-        +Select("programId")(firstEmpty = true).program-id.submit-on-change
-            +Option('', "", !self.getProgramId())
-            each program in self.getPrograms() || []
-                +Option(program.getId().valueOf(), program.getName(), program.getId() == self.getProgramId())
+
+    if self.getUserRole().isStudent()
+        +Hidden('programId').program-id
+    else
+        .filter-cnt.program-cnt
+            LABEL.filter-label Program
+            +Select("programId")(firstEmpty = true).program-id.submit-on-change
+                +Option('', "", !self.getProgramId())
+                each program in self.getPrograms() || []
+                    +Option(program.getId().valueOf(), program.getName(), program.getId() == self.getProgramId())
 .top-info-cnt
     .left-block.i-b
         if self.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
