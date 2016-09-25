@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.recipients', function(){
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.recipients.PeoplePageTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.controls.group_people_selector.GroupsListItemsTpl, '', '.groups-cnt .items-cnt-2', ria.mvc.PartialUpdateRuleActions.Append)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.controls.group_people_selector.GroupsListItemsTpl, '', '.groups-cnt .items-cnt-2', ria.mvc.PartialUpdateRuleActions.Prepend)],
         'PeoplePage', EXTENDS(chlk.activities.lib.TemplatePage),[
             [ria.mvc.PartialUpdateRule(null, 'edit-group')],
             VOID, function editGroup(tpl, model, msg_) {

@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.recipients', function(){
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.recipients.GroupSelectorTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.controls.group_people_selector.GroupsListItemsTpl, '', '.groups-cnt .items-cnt-2', ria.mvc.PartialUpdateRuleActions.Append)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.controls.group_people_selector.GroupsListItemsTpl, '', '.groups-cnt .items-cnt-2', ria.mvc.PartialUpdateRuleActions.Prepend)],
         'GroupSelectorDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
             [ria.mvc.PartialUpdateRule(null, 'edit-group')],
             VOID, function editGroup(tpl, model, msg_) {
