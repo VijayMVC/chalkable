@@ -36,8 +36,7 @@ namespace Chalkable.AcademicBenchmarkImport
         public void Import()
         {
             ConnectorLocator = ConnectorLocator ?? new ConnectorLocator();
-            var connectionStr = @"Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableAcademicBenchmark_Testing;UID=chalkableadmin;Pwd=Hellowebapps1!";
-            ServiceLocator = ServiceLocator ?? new ImportAcademicBenchmarkServiceLocator(_sysAdminContext, connectionStr);
+            ServiceLocator = ServiceLocator ?? new ImportAcademicBenchmarkServiceLocator(_sysAdminContext);
 
             var lastSyncDate = ServiceLocator.SyncService.GetLastSyncDateOrNull();
 
