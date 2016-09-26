@@ -94,7 +94,7 @@ namespace Chalkable.Data.School.DataAccess
                 {"@enrolledOnly", enrolledOnly }
             };
 
-            return ExecuteStoredProcedurePaginated("spSearchStudentsTmp", ps, ReadStudentInfo,  start, count);
+            return ExecuteStoredProcedurePaginated("spSearchStudents", ps, ReadStudentInfo,  start, count);
         }
 
         private static IList<StudentSchoolsInfo> ReadStudentInfo(DbDataReader reader)

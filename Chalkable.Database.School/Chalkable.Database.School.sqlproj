@@ -378,8 +378,6 @@
     <Build Include="User Defined Types\TStudentSchoolProgram.sql" />
     <Build Include="User Defined Types\TSchoolProgram.sql" />
     <Build Include="Tables\AdminAnnouncementStudent.sql" />
-    <Build Include="Stored Procedures\spSearchStudentsTmp.sql" />
-    <Build Include="Stored Procedures\spSearchStudentBySchoolYearTmp.sql" />
     <Build Include="User Defined Types\TStudentGroup.sql" />
   </ItemGroup>
   <ItemGroup>

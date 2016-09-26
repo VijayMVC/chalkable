@@ -2,7 +2,7 @@
 	@start int,
 	@count int,
 	@classId int,
-	@schoolId int = null,
+	@schoolIds TInt32 READONLY,
 	@gradeLevel int = null,
 	@programId int = null,
 	@teacherId int,
@@ -33,17 +33,9 @@ Declare @t Table
 		Total int
 	)
 
-If @classId is null and @teacherId is null and @classmatesToid is null and @markingPeriod is null and @schoolId is null and @gradeLevel is null and @programId is null
-Begin
-	insert into @t
-	exec spSearchStudentBySchoolYearTmp @schoolYearId, @start, @count, @filter1, @filter2, @filter3, @orderByFirstName
-End
-Else Begin
-
-	Declare @includeWithdraw bit = 1
-	If @classId is not null
-	Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents
-							From ClassroomOption Where Id = @classId)
+Declare @includeWithdraw bit = 1
+If @classId is not null
+Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents From ClassroomOption Where Id = @classId)
 
 	Insert Into
 		@t
@@ -60,7 +52,7 @@ Else Begin
 		Student.PhotoModifiedDate,
 		Student.UserId,
 		Cast (Case When min(StudentSchoolYear.EnrollmentStatus) <> 0 or (max(cast(cs.IsEnrolled As int)) = 0 and @classId is not null) Then 1
-			  Else 0 End As bit) As IsWithdrawn,
+				Else 0 End As bit) As IsWithdrawn,
 		Total = count(*) over()
 	From
 		Student
@@ -86,7 +78,7 @@ Else Begin
 		and (@filter3 is null or FirstName like @filter3 or LastName like @filter3))
 		and (@markingPeriod is null or MarkingPeriod.Id = @markingPeriod)
 		and (@includeWithdraw = 1 or @includeWithdraw is null or (cs.IsEnrolled = 1 and StudentSchoolYear.EnrollmentStatus = 0))
-		and (@schoolId is null or StudentSchool.SchoolRef = @schoolId)
+		and (StudentSchool.SchoolRef in (select [Value] from @schoolIds))
 		and (@gradeLevel is null or StudentSchoolYear.GradeLevelRef = @gradeLevel)
 		and (@programId is null or StudentSchoolProgram.SchoolProgramId = @programId)
 	Group by
@@ -105,9 +97,8 @@ Else Begin
 		Case When @orderByFirstName = 1 Then FirstName
 		Else LastName End
 	OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
-End
 
-Declare @total int
+	Declare @total int
 	Set @total = (Select Top 1 Total f From @t Where @enrolledOnly is null or @enrolledOnly = 0 or IsWithdrawn = 0)
 
 	Select IsNull(@total, 0) As AllCount
@@ -158,6 +149,7 @@ Declare @total int
 		and
 		(@enrolledOnly is null or @enrolledOnly = 0 or StudentSchoolYear.EnrollmentStatus = 0)
 		and
-		StudentSchoolYear.StudentRef in (select Value from @studentIds)
+		StudentSchoolYear.StudentRef in (select [Value] from @studentIds)
 		and 
 		exists (Select * From StudentSchool Where StudentRef = StudentSchoolYear.StudentRef and SchoolRef = School.Id)
+	GO

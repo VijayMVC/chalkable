@@ -1,4 +1,4 @@
-﻿Create Procedure spSearchStudentBySchoolYear
+﻿Create Procedure [dbo].[spSearchStudentBySchoolYear]
 @schoolYearId int,
 @start int,
 @count int,
@@ -52,3 +52,4 @@ Else
 LastName
 End
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+GO
