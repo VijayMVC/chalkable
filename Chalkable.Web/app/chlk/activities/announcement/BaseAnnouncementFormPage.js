@@ -23,6 +23,18 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this._handler = null;
             },
 
+            OVERRIDE, VOID, function onRender_(model) {
+                BASE(model);
+
+                jQuery('.item-content').trigger('focus');
+            },
+
+            OVERRIDE, VOID, function onPartialRender_(model, msg_) {
+                BASE(model, msg_);
+
+                jQuery('.item-content').trigger('focus');
+            },
+
             [ria.mvc.DomEventBind('change', '#expiresdate')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function dueDateChange(node, event){
@@ -168,8 +180,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                         that.dom.find('.new-item-dropdown').hide();
                         that.dom.find('.drop-down-container').hide();
                     }
-
                 };
+
                 new ria.dom.Dom().on('click.dropdown', this._handler);
             },
 
