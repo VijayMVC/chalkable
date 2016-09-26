@@ -170,21 +170,15 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (CoreRoles.STUDENT_ROLE == SchoolLocator.Context.Role)
                 classMatesToId = Context.PersonId;
             else
-            {
                 if (myStudentsOnly == true)
-                {
                     if (Context.Claims.HasPermission(ClaimInfo.VIEW_STUDENT) || Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_STUDENTS))
-                    {
-                        if (CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
                             teacherId = SchoolLocator.Context.PersonId;
-                    }
                     else
                         throw new ChalkableException($"User has no required ({ClaimInfo.VIEW_STUDENT} or {ClaimInfo.VIEW_CLASSROOM_STUDENTS}) permission for watch \"My Students\"");
-                }
                 else
                     if (!Context.Claims.HasPermission(ClaimInfo.VIEW_STUDENT))
                         throw new ChalkableException($"User has no required ({ClaimInfo.VIEW_STUDENT}) permission for watch \"Whole Students\"");
-            }
+            
             var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, schoolId, gradeLevel, programId, teacherId, classMatesToId, filter, 
                 byLastName != true, start ?? 0, count ?? 10, markingPeriodId, enrolledOnly.Value);
             return Json(res.Transform(StudentSchoolsInfoViewData.Create));

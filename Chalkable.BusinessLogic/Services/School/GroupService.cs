@@ -89,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Group> GetGroups(int ownerId, string filter)
         {
-            return DoRead(u => new GroupDataAccess(u).GetAll(new AndQueryCondition {{Group.OWNER_REF_FIELD, ownerId}}, filter));
+            return DoRead(u => new GroupDataAccess(u).GetAll(new AndQueryCondition {{Group.OWNER_REF_FIELD, ownerId}}, filter)).OrderBy(x => x.Name).ToList();
         }
 
         public GroupInfo Info(int groupId)

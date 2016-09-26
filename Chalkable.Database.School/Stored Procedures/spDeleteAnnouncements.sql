@@ -14,6 +14,9 @@ Delete From AnnouncementComment Where AnnouncementRef in (Select Value From @ann
 /*DELETE AnnouncementGroups*/
 Delete From AnnouncementGroup Where AnnouncementRef in (Select Value From @announcementIdList)
 
+/*DELETE AdminAnnouncementStudent*/
+Delete From AdminAnnouncementStudent Where AdminAnnouncementRef in (Select Value From @announcementIdList)
+
 /*DELETE AdminAnnouncement*/
 Delete From AdminAnnouncement Where Id in (Select Value From @announcementIdList)
 
