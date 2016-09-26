@@ -67,7 +67,7 @@ begin transaction
 		set @announcementId = SCOPE_IDENTITY()
 
 		insert into ClassAnnouncement(Id, ClassRef, ClassAnnouncementTypeRef, Expires, SchoolYearRef, Dropped, MayBeDropped, MaxScore, VisibleForStudent, WeightAddition, WeightMultiplier, IsScored)
-		values(@announcementId, @classId, @classAnnouncementTypeId, @expires, @schoolYearId, 0, 0, 0, 1, 0, 1, 1)
+		values(@announcementId, @classId, @classAnnouncementTypeId, @expires, @schoolYearId, 0, 0, 100, 1, 0, 1, 1)
 
 
 		/*GET CONTENT FROM PREV ANNOUNCEMENT*/
