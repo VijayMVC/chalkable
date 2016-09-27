@@ -89,9 +89,9 @@ namespace Chalkable.StiConnector.Connectors
             return Download(BaseUrl + "reports/seatingchart", ps);
         }
 
-        public ReportCard GetReportCardData(ReportCardOptions options)
+        public async Task<ReportCard> GetReportCardData(ReportCardOptions options)
         {
-            return Post<ReportCard, ReportCardOptions>($"{BaseUrl}reports/reportcard", options);
+            return await PostAsync<ReportCard, ReportCardOptions>($"{BaseUrl}reports/reportcard", options);
         }
     }
 }

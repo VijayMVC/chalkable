@@ -18,9 +18,11 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             public Object Data { get; set; }
         }
 
+        private const string LicenseKey = "zUNQQlNXQlNaVlZCU1BMUkJRU0xTUExbW1tbQlI=";
+
         public static byte[] MargePdfDocuments(IList<byte[]> files)
         {
-            var res = new Document {AutoCloseAppendedDocs = true};
+            var res = new Document {AutoCloseAppendedDocs = true, LicenseKey = LicenseKey};
             foreach (var file in files)
             {
                 using (var stream = new MemoryStream())
@@ -122,7 +124,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             {
                 HtmlViewerWidth = 1200,
                 ConversionDelay = 0,
-                LicenseKey = "zUNQQlNXQlNaVlZCU1BMUkJRU0xTUExbW1tbQlI=",
+                LicenseKey = LicenseKey
             };
             htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = PdfPageSize.Letter;
             htmlToPdfConverter.PdfDocumentOptions.PdfPageOrientation = PdfPageOrientation.Portrait;
