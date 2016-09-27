@@ -176,15 +176,15 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 GradingPeriodId = x.GradingPeriodId,
                 GradingPeriodName = x.GradingPeriodName,
                 Note = x.Note,
-                GradedItems = GradedItemExportModel.Create(x.GradedItems),
-                Standards = x.Standards
+                GradedItems = x.GradedItems != null ? GradedItemExportModel.Create(x.GradedItems) : new List<GradedItemExportModel>(),
+                Standards = x.Standards?
                             .Where(s=> !onlyGradedStandard || !string.IsNullOrWhiteSpace(s.Grade))
                             .Select(s=> new StandardGradeExportModel
                             {
                                 Description = s.Description,
                                 Name = s.Name,
                                 Grade = s.Grade,
-                                Comment = s.Comments.FirstOrDefault()?.Comment
+                                Comment = s.Comments?.FirstOrDefault()?.Comment
                             }).ToList()
             }).ToList();
         } 
