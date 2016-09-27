@@ -196,6 +196,7 @@
     <Compile Include="Services\SyncModelAdapters\ScheduledTimeSlotVariationAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SchoolAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SchoolOptionAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\SchoolProgramAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SectionStaffAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SectionTermAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SectionTimeSlotVariationAdapter.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Services\SyncModelAdapters\StudentCustomAlertDetailAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentScheduleTermAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentSchoolAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StudentSchoolProgramAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SyncModelAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SyncModelWrapper.cs" />
     <Compile Include="Services\SyncModelAdapters\SystemSettingAdapter.cs" />

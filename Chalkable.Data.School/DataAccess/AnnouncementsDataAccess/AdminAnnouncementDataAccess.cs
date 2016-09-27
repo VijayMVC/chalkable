@@ -89,9 +89,31 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             var anns = base.BuildGetDetailsesResult(reader);
             reader.NextResult();
-            var groups = reader.ReadList<AnnouncementGroup>(true);
+
+            IList<AnnouncementGroup> annGroups = new List<AnnouncementGroup>();
+            IDictionary<int, IList<Student>> groupStudents = new Dictionary<int, IList<Student>>();
+            IList<Student> students;
+            while (reader.Read())
+            {
+                var annGroup = reader.Read<AnnouncementGroup>(true);
+                if(! annGroups.Any(x => x.GroupRef == annGroup.GroupRef && x.AnnouncementRef == annGroup.AnnouncementRef))
+                    annGroups.Add(annGroup);
+
+                var student = reader.Read<Student>(true);
+                if (!groupStudents.TryGetValue(annGroup.GroupRef, out students))
+                    groupStudents.Add(annGroup.GroupRef, students = new List<Student>());
+                students.Add(student);
+            }
+
+            foreach (var annGroup in annGroups)
+                annGroup.Students = groupStudents[annGroup.GroupRef].Distinct().ToList();
+
             foreach (var ann in anns)
-                ann.AnnouncementGroups = groups.Where(x => x.AnnouncementRef == ann.Id).ToList();
+                ann.AnnouncementGroups = annGroups.Where(x => x.AnnouncementRef == ann.Id).ToList();
+            reader.NextResult();
+            var adminAnnStudents = reader.ReadList<AdminAnnouncementStudent>(true);
+            foreach (var ann in anns)
+                ann.AdminAnnouncementStudents = adminAnnStudents.Where(x => x.AdminAnnouncementRef == ann.Id).ToList();
             return anns;
         }
 

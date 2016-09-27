@@ -10,19 +10,22 @@ NAMESPACE('chlk.models.announcement', function () {
     CLASS(
         'AdminAnnouncementRecipient', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-            [ria.serialize.SerializeProperty('announcementid')],
             chlk.models.id.AnnouncementId, 'announcementId',
 
-            [ria.serialize.SerializeProperty('groupid')],
             chlk.models.id.GroupId, 'groupId',
 
-            [ria.serialize.SerializeProperty('groupname')],
             String, 'groupName',
 
-             VOID, function deserialize(raw){
+            Number, 'studentCount',
+
+            ArrayOf(String), 'studentsDisplayName',
+
+            VOID, function deserialize(raw){
                 this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
                 this.groupId = SJX.fromValue(raw.groupid, chlk.models.id.GroupId);
                 this.groupName = SJX.fromValue(raw.groupname, String);
+                this.studentCount = SJX.fromValue(raw.studentcount, Number);
+                this.studentsDisplayName = SJX.fromArrayOfValues(raw.studentsdisplayname, String);
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId, String]],

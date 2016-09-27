@@ -1,4 +1,4 @@
-﻿Create Procedure spSearchStudentBySchoolYear
+﻿Create Procedure [dbo].[spSearchStudentBySchoolYear]
 @schoolYearId int,
 @start int,
 @count int,
@@ -9,25 +9,6 @@
 
 As
 
-Declare @t Table
-(
-[Id] [int] NOT NULL,
-[FirstName] [nvarchar](255) NOT NULL,
-[LastName] [nvarchar](255) NOT NULL,
-[BirthDate] [datetime2](7) NULL,
-[Gender] [nvarchar](255) NULL,
-[HasMedicalAlert] [bit] NOT NULL,
-[IsAllowedInetAccess] [bit] NOT NULL,
-[SpecialInstructions] [varchar](4096) NOT NULL,
-[SpEdStatus] [nvarchar](256) NULL,
-[PhotoModifiedDate] [datetime2](7) NULL,
-[UserId] [int] NOT NULL,
-IsWithdrawn bit,
-Total int
-)
-
-Insert Into
-@t
 Select
 Student.Id,
 Student.FirstName,
@@ -71,24 +52,4 @@ Else
 LastName
 End
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
-
-Declare @total int
-Set @total = (Select Top 1 Total f From @t)
-
-Select isnull(@total, 0) As AllCount
-
-Select
-[Id],
-[FirstName],
-[LastName],
-[BirthDate],
-[Gender],
-[HasMedicalAlert],
-[IsAllowedInetAccess],
-[SpecialInstructions],
-[SpEdStatus],
-[PhotoModifiedDate],
-[UserId],
-IsWithdrawn
-From
-@t
+GO

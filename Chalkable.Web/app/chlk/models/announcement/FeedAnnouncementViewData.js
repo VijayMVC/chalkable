@@ -54,6 +54,9 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.ableUseExtraCredit = SJX.fromValue(raw.isableuseextracredit, Boolean);
 
                 this.groupIds = SJX.fromValue(raw.groupIds, String);
+                this.studentIds = SJX.fromValue(raw.studentIds, String);
+                if(raw.selectedItems)
+                    this.selectedItems = JSON.parse(SJX.fromValue(raw.selectedItems, String));
                 this.attachments = SJX.fromValue(raw.attachments, String);
                 this.gradeViewApps = SJX.fromArrayOfDeserializables(raw.gradeviewapps, chlk.models.apps.AppAttachment);
                 this.applicationsIds = SJX.fromValue(raw.applicationsids, String);
@@ -77,6 +80,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
                 this.filter = SJX.fromValue(raw.filter, String);
                 this.recipientIds = SJX.fromValue(raw.recipientIds, String);
+                this.recipient = SJX.fromValue(raw.recipient, String);
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
@@ -113,6 +117,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
             String, 'recipientIds',
+            String, 'recipient',
             Boolean, 'imported',
             Boolean, 'inGallery',
             Object, 'createdAnnouncements',
@@ -137,6 +142,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'announcementTypeId',
             ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',
             String, 'groupIds',
+            String, 'studentIds',
+            Object, 'selectedItems',
             String, 'attachments',
             String, 'applicationsIds',
             String, 'submitType',

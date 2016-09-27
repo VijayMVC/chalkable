@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Web.ActionFilters;
@@ -11,7 +12,7 @@ namespace Chalkable.Web.Controllers
     public class SchoolController : ChalkableController
     {
         
-        [AuthorizationFilter("SysAdmin")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
         public ActionResult List(Guid districtId, int? start, int? count)
         {
             count = count ?? 10;
@@ -22,10 +23,16 @@ namespace Chalkable.Web.Controllers
 
         [AuthorizationFilter("DistrictAdmin, Teacher", true, new []{ AppPermissionType.User })]
         public ActionResult LocalSchools()
-        {
-            
+        {  
             var schools = SchoolLocator.SchoolService.GetSchools();
             return Json(LocalSchoolViewData.Create(schools));
+        }
+
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult UserLocalSchools()
+        {
+            return Json(LocalSchoolViewData.Create(SchoolLocator.SchoolService.GetUserLocalSchools()));
         }
 
         [AuthorizationFilter("SysAdmin")]
@@ -55,38 +62,11 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        /*[AuthorizationFilter("SysAdmin")]
-        public ActionResult Summary(Guid schoolId)
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult SchoolPrograms()
         {
-            if (SchoolLocator.Context.SchoolId != schoolId)
-                SchoolLocator = MasterLocator.SchoolServiceLocator(schoolId);
-            var school = MasterLocator.SchoolService.GetById(schoolId);
-            return Json(SchoolInfoViewData.Create(school));
+            var schoolPrograms = SchoolLocator.SchoolProgramService.GetAll();
+            return Json(SchoolProgramViewData.Create(schoolPrograms));
         }
-
-        [AuthorizationFilter("SysAdmin")]
-        public ActionResult People(Guid schoolId, int? roolId, Guid? gradeLevelId, int? start, int? count)
-        {
-            var school = MasterLocator.SchoolService.GetById(schoolId);
-            if (SchoolLocator.Context.SchoolId != schoolId)
-                SchoolLocator = MasterLocator.SchoolServiceLocator(school.Id);
-            var persons = SchoolLocator.PersonService.GetPersons();
-            var studentsCount = persons.Count(x => x.RoleRef == CoreRoles.STUDENT_ROLE.Id);
-            var teachersCount = persons.Count(x => x.RoleRef == CoreRoles.TEACHER_ROLE.Id);
-            var adminsCount = persons.Count(x => x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id)
-                              + persons.Count(x => x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id)
-                              + persons.Count(x => x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id);
-            var resView = SchoolPeopleViewData.Create(school, studentsCount, teachersCount, adminsCount);
-            return Json(resView);
-        }
-
-        [AuthorizationFilter("SysAdmin")]
-        public ActionResult GetPersons(Guid schoolId, int? roleId, IntList gradeLevelIds, int? start, int? count, bool? byLastName)
-        {
-            if (SchoolLocator.Context.SchoolId != schoolId)
-                SchoolLocator = MasterLocator.SchoolServiceLocator(schoolId);
-            var roleName = roleId.HasValue ? CoreRoles.GetById(roleId.Value).LoweredName : null;
-            return Json(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, null, roleName, null, gradeLevelIds));
-        }*/
     }
 }

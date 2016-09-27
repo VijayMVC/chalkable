@@ -1,6 +1,20 @@
 //TODO refactor
+mixin DatePicker_(announcementItem, classScheduleDateRanges)
+    .date-picker-container
+        label(for="expiresdate").date-picker-label Due Date
+        +DatePicker('expiresdate', announcementItem.getExpiresDate())(
+            data-options={
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateRanges: classScheduleDateRanges
+            },
+            data-value=announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().format('mm/dd/yy') : ''
+            placeholder=Msg.Due_date,
+            class='validate[required]'
+        )#expiresdate
+        .calendar-mark ?
+
 mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges, user)
-    -console.log(announcement)
     -var classAnnouncement = announcement.getClassAnnouncementData()
     -var adminAnnouncement = announcement.getAdminAnnouncementData()
     -var announcementItem = classAnnouncement || adminAnnouncement
@@ -25,18 +39,18 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
     -var isAdmin = userRole.isAdmin()
 
     -var needStandardsBlock = !isAdmin && (standards.length > 0 || announcement.isCanAddStandard())
-    if isAdmin
-        -var recipients = announcement.getRecipients() || []
-        .add-recipients-container
-            .add-recipients
-                .recipients-list
-                    +RenderWith(announcement, chlk.templates.announcement.AdminAnnouncementRecipientsTpl)(
-                        userRole = userRole
-                        studyCenterEnabled = self.isStudyCenterEnabled()
-                    )
     .table.top-table
         .left-block
             .left-block-container
+                if isAdmin
+                    -var recipients = announcement.getRecipients() || []
+                    .add-recipients-container
+                        .add-recipients
+                            .recipients-list
+                                +RenderWith(announcement, chlk.templates.announcement.AdminAnnouncementRecipientsTpl)(
+                                    userRole = userRole
+                                    studyCenterEnabled = self.isStudyCenterEnabled()
+                                )
                 .title-block-container
                     +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
                 if types
@@ -54,7 +68,10 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                                                 data-typename=item.getName()
                                             )
         .right-block
-            .h-1
+            if isAdmin
+                +DatePicker_(announcementItem, classScheduleDateRanges)
+            else
+                .h-1
     .table
         .left-block(class=needStandardsBlock ? 'with-standards' : '')
             .left-block-container
@@ -77,23 +94,11 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
             if !state
                 input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
         .right-block
-            if !isAdmin
+            if isAdmin
+                .h-1
+            else
                 A.advanced-options-btn(href="javascript:;" data-tooltip="Show advanced options")
-            .date-picker-container
-                label(for="expiresdate") Due Date
-                +DatePicker('expiresdate', announcementItem.getExpiresDate())(
-                    data-options={
-                        showOtherMonths: true,
-                        selectOtherMonths: true,
-                        //inCurrentMp: true
-                        dateRanges: classScheduleDateRanges
-                    },
-                    data-value=announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().format('mm/dd/yy') : ''
-                    placeholder=Msg.Due_date,
-                    class='validate[required]'
-                )#expiresdate
-                .calendar-mark ?
-            if !isAdmin
+                +DatePicker_(announcementItem, classScheduleDateRanges)
                 .max-score-container
                     -var maxScore = !classAnnouncement.isGradable() && classAnnouncement.getMaxScore() > 0 ? '0' : classAnnouncement.getMaxScore()
                     label(for="ann-max-score") Max Score

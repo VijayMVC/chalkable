@@ -42,6 +42,7 @@ REQUIRE('chlk.controls.PanoramaFilterControl');
 REQUIRE('chlk.controls.DoubleSelectControl');
 REQUIRE('chlk.controls.TabsControl');
 REQUIRE('chlk.controls.PdfDocumentControl');
+REQUIRE('chlk.controls.GroupPeopleSelectorControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
@@ -153,7 +154,6 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.LE_PARAMS, chlk.models.school.LEParams);
                 this.saveInSession(session, ChlkSessionConstants.ASSESSMENT_ENABLED, Boolean);
-                this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
                 this.saveInSession(session, ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, ArrayOf(chlk.models.announcement.AnnouncementAttributeType));
                 this.saveInSession(session, ChlkSessionConstants.MESSAGING_DISABLED, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.YEARS, ArrayOf(Number));

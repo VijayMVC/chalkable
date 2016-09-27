@@ -14,6 +14,9 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementCreate)],
         'BaseAnnouncementFormTpl', EXTENDS(chlk.templates.ChlkTemplate), [
+
+
+
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.FeedAnnouncementViewData, 'announcement',
 

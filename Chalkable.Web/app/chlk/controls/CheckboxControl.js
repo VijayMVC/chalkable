@@ -25,7 +25,7 @@ NAMESPACE('chlk.controls', function () {
                         var node = ria.dom.Dom('#' + attributes.id);
 
                         if(!node.hasClass('processed'))
-                            this.addEvents(attributes.id, value, activity.getDom());
+                            this.addEvents(attributes.id, value, activity && activity.getDom());
 
                         node.addClass('processed');
                     }.bind(this));

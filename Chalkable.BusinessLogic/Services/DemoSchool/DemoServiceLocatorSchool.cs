@@ -1843,5 +1843,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IAnnouncementCommentService AnnouncementCommentService { get { throw new NotImplementedException(); } }
         public IAppSettingService AppSettingService { get { throw new NotImplementedException(); } }
         public ILimitedEnglishService LimitedEnglishService { get; }
+        public ISchoolProgramService SchoolProgramService { get { throw new NotImplementedException(); } }
+        public IStudentSchoolProgramService StudentSchoolProgramService { get { throw new NotImplementedException(); } }
     }
 }

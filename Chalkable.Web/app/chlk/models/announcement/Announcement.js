@@ -6,6 +6,7 @@ REQUIRE('chlk.models.announcement.LessonPlanViewData');
 REQUIRE('chlk.models.announcement.AdminAnnouncementViewData');
 REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.models.announcement.SupplementalAnnouncementViewData');
+REQUIRE('chlk.models.people.ShortUserInfo');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -24,6 +25,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.adminAnnouncementData = SJX.fromDeserializable(raw.adminannouncementdata, chlk.models.announcement.AdminAnnouncementViewData);
                 this.classAnnouncementData = SJX.fromDeserializable(raw.classannouncementdata, chlk.models.announcement.ClassAnnouncementViewData);
                 this.supplementalAnnouncementData = SJX.fromDeserializable(raw.supplementalannouncementdata, chlk.models.announcement.SupplementalAnnouncementViewData);
+                this.adminAnnouncementStudents = SJX.fromArrayOfDeserializables(raw.adminannouncementstudents, chlk.models.people.ShortUserInfo);
                 this.shortContent = SJX.fromValue(raw.shortcontent, String);
                 this.complete = SJX.fromValue(raw.complete, Boolean);
                 this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
@@ -42,6 +44,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.announcement.AdminAnnouncementViewData, 'adminAnnouncementData',
             chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData',
             chlk.models.announcement.SupplementalAnnouncementViewData, 'supplementalAnnouncementData',
+            ArrayOf(chlk.models.people.ShortUserInfo), 'adminAnnouncementStudents',
             String, 'shortContent',
             String, 'attachmentNames',
             Boolean, 'complete',

@@ -316,6 +316,14 @@ NAMESPACE('chlk.services', function () {
                     teacherId: teacherId_ && teacherId_.valueOf(),
                     filter: filter_
                 });
+            },
+
+            [[chlk.models.id.SchoolId, chlk.models.id.GradeLevelId]],
+            ria.async.Future, function getClassesBySchool(schoolId, gradeLevel_) {
+                return this.get('Class/ClassesBySchool.json', ArrayOf(chlk.models.classes.Class), {
+                    schoolId: schoolId.valueOf(),
+                    gradeLevel: gradeLevel_ && gradeLevel_.valueOf()
+                });
             }
         ])
 });

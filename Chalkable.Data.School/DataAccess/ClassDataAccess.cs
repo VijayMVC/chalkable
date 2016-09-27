@@ -233,5 +233,38 @@ namespace Chalkable.Data.School.DataAccess
                 return reader.ReadList<Date>();
             }
         }
+
+        public IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId)
+        {
+            var query =
+                $@"SELECT DISTINCT [{nameof(Class)}].* FROM [{nameof(SchoolYear)}]
+                    join [{nameof(Class)}]
+                        on [{nameof(SchoolYear)}].[{nameof(SchoolYear.Id)}] = [{nameof(Class)}].[{nameof(Class.SchoolYearRef)}]
+                    WHERE
+                          [{nameof(SchoolYear)}].[{nameof(SchoolYear.Id)}] = @{nameof(schoolYearId)}
+                          AND
+                          [{nameof(SchoolYear)}].[{nameof(SchoolYear.SchoolRef)}] = @{nameof(schoolId)}
+                          AND (
+                                @{nameof(gradeLevelId)} IS NULL 
+                                OR 
+                                (
+                                    @{nameof(gradeLevelId)} >=  [{nameof(Class)}].[{nameof(Class.MinGradeLevelRef)}]
+                                    AND
+                                    @{nameof(gradeLevelId)} <=  [{nameof(Class)}].[{nameof(Class.MaxGradeLevelRef)}]  
+                                )
+                              )";
+
+            var @params = new Dictionary<string, object>
+            {
+                [$"{nameof(schoolYearId)}"] = schoolYearId,
+                [$"{nameof(schoolId)}"] = schoolId,
+                [$"{nameof(gradeLevelId)}"] = gradeLevelId
+            };
+
+            using (var reader = ExecuteReaderParametrized(query, @params))
+            {
+                return reader.ReadList<Class>();
+            }
+        }
     }
 }

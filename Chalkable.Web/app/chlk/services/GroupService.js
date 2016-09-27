@@ -13,8 +13,11 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'GroupService', EXTENDS(chlk.services.BaseService), [
 
-            ria.async.Future, function list() {
-                return this.get('Group/GroupsList.json', ArrayOf(chlk.models.group.Group), {});
+            [[String]],
+            ria.async.Future, function list(filter_) {
+                return this.get('Group/GroupsList.json', ArrayOf(chlk.models.group.Group), {
+                    filter: filter_
+                });
             },
 
             [[chlk.models.id.GroupId]],
@@ -35,18 +38,27 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String]],
-            ria.async.Future, function create(name){
-                return this.post('Group/CreateGroup.json', ArrayOf(chlk.models.group.Group),{
-                    name: name
+            [[String, ArrayOf(chlk.models.id.SchoolPersonId)]],
+            ria.async.Future, function create(name, studentIds_){
+                return this.post('Group/CreateGroup.json', chlk.models.group.Group,{
+                    name: name,
+                    studentIds: this.arrayToCsv(studentIds_ || [])
                 });
             },
 
-            [[chlk.models.id.GroupId, String]],
-            ria.async.Future, function editName(groupId, name){
-                return this.post('Group/EditGroupName.json', ArrayOf(chlk.models.group.Group),{
+            [[chlk.models.id.GroupId, String, ArrayOf(chlk.models.id.SchoolPersonId)]],
+            ria.async.Future, function edit(groupId, name, studentIds_){
+                return this.post('Group/EditGroup.json', chlk.models.group.Group,{
                     groupId: groupId && groupId.valueOf(),
-                    name: name
+                    name: name,
+                    studentIds: this.arrayToCsv(studentIds_ || [])
+                });
+            },
+
+            [[chlk.models.id.GroupId]],
+            ria.async.Future, function info(groupId){
+                return this.post('Group/Info.json', chlk.models.group.Group,{
+                    groupId: groupId && groupId.valueOf()
                 });
             },
 

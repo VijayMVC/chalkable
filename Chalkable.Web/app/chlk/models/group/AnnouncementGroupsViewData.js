@@ -12,7 +12,7 @@ NAMESPACE('chlk.models.group', function(){
     CLASS(
         'AnnouncementGroupsViewData', EXTENDS(chlk.models.group.GroupsListViewData), IMPLEMENTS(ria.serialize.IDeserializable), [
 
-            ArrayOf(chlk.models.id.GroupId), 'selected',
+            Object, 'selected',
             String, 'requestId',
             Object, 'hiddenParams',
 
@@ -29,7 +29,7 @@ NAMESPACE('chlk.models.group', function(){
 
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
-                this.selected = SJX.fromArrayOfValues(raw.selected, chlk.models.id.GroupId) || [];
+                this.selected = raw.selected;
                 this.requestId = SJX.fromValue(raw.requestId, String);
                 this.hiddenParams = raw.hiddenParams || null;
             }

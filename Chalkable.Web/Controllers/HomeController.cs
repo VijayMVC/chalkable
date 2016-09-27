@@ -340,6 +340,9 @@ namespace Chalkable.Web.Controllers
             var classesList = ClassComplexViewData.Create(classes, startupData.Rooms, dayTypes).ToList();
             PrepareJsonData(classesList, ViewConstants.CLASSES);
 
+            var gradeLevel = SchoolLocator.GradeLevelService.GetGradeLevels();
+            PrepareJsonData(GradeLevelViewData.Create(gradeLevel), ViewConstants.GRADE_LEVELS);
+
             ProcessMethodAndCallTime(() => PrepareClassesAdvancedData(startupData), timeCallBuilder, "Retrieving Activity Category from Inow");
             PrepareClassesAdvancedData(startupData);
             

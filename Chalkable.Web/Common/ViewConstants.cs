@@ -68,5 +68,7 @@
         public const string ASSESSMENT_ENABLED = "AssessmentEnabled";
 
         public const string USER_LOGIN = "UserLogin";
+
+        public const string REPORT_CARDS = "ReportCards";
     }
 }

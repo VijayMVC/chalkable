@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model.Reports;
+using Chalkable.StiConnector.Connectors.Model.Reports.ReportCards;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -85,6 +87,11 @@ namespace Chalkable.StiConnector.Connectors
         public byte[] SeatingChartReport(SeatingChartReportPrams ps)
         {
             return Download(BaseUrl + "reports/seatingchart", ps);
+        }
+
+        public async Task<ReportCard> GetReportCardData(ReportCardOptions options)
+        {
+            return await PostAsync<ReportCard, ReportCardOptions>($"{BaseUrl}reports/reportcard", options);
         }
     }
 }

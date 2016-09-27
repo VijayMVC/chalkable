@@ -4,7 +4,7 @@
             .right.saved-block saved
         .close.close-btn
 
-    +ActionForm('group', 'submitGroups')
+    +ActionForm('group', 'submitGroups').no-working
         +Hidden('groupIds', self.getSelected().map(function(item){return item.valueOf()}).join(',')).group-ids
         +Hidden('requestId', self.getRequestId())
         -var hiddenParams = self.getHiddenParams()

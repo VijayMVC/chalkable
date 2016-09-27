@@ -108,7 +108,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('people')],
             function indexStudentAction() {
                 var classId = this.getCurrentClassId();
-                return this.Redirect('students', 'my', [classId]);
+                return this.Redirect('group', 'people', [classId]);
             },
 
             [chlk.controllers.Permissions([
@@ -117,7 +117,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('people')],
             function indexTeacherAction() {
                 var classId = this.getCurrentClassId();
-                return this.Redirect('students', 'my', [classId]);
+                return this.Redirect('group', 'people', [classId]);
             },
 
             function getInfoPageClass(){

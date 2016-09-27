@@ -71,7 +71,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, 
+        public PaginatedList<StudentSchoolsInfo> SearchStudents(int schoolYearId, int? classId, IList<int> schoolIds, int? gradeLevel, int? programId, int? teacherId, int? classmatesToId, string filter, 
             bool orderByFirstName, int start, int count, int? markingPeriod, bool enrolledOnly = false)
         {
             var filters = filter?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -81,6 +81,9 @@ namespace Chalkable.Data.School.DataAccess
                 {"@count", count},
                 {"@classId", classId},
                 {"@teacherId", teacherId},
+                {"@schoolIds", schoolIds},
+                {"@gradeLevel", gradeLevel},
+                {"@programId", programId},
                 {"@classmatesToid", classmatesToId},
                 {"@schoolYearId", schoolYearId},
                 {"@filter1", filters!=null && filters.Length>0 ? "%"+filters[0]+"%" : null},
@@ -90,7 +93,37 @@ namespace Chalkable.Data.School.DataAccess
                 {"@markingPeriod", markingPeriod},
                 {"@enrolledOnly", enrolledOnly }
             };
-            return ExecuteStoredProcedurePaginated<Student>("spSearchStudents", ps, start, count);
+
+            return ExecuteStoredProcedurePaginated("spSearchStudents", ps, ReadStudentInfo,  start, count);
+        }
+
+        private static IList<StudentSchoolsInfo> ReadStudentInfo(DbDataReader reader)
+        {
+            var students = reader.ReadList<StudentSchoolsInfo>();
+            reader.NextResult();
+
+            IList<StudentSchoolYear> ssy = new List<StudentSchoolYear>();
+            IDictionary <int, IList<Model.School>> stSchool = new Dictionary<int, IList<Model.School>>();
+            IList<Model.School> dictionarySchools;
+            while (reader.Read())
+            {
+                var ssyItem = reader.Read<StudentSchoolYear>();
+                ssyItem.GradeLevel = reader.Read<GradeLevel>(true);
+                ssy.Add(ssyItem);
+
+                var school = reader.Read<Model.School>();
+                if (!stSchool.TryGetValue(ssyItem.StudentRef, out dictionarySchools))
+                    stSchool.Add(ssyItem.StudentRef, dictionarySchools = new List<Model.School>());
+                dictionarySchools.Add(school);
+            }
+
+            foreach (var student in students)
+            {
+                student.StudentSchools = stSchool[student.Id].Distinct().ToList();
+                student.GradeLevel = ssy.First(x => x.StudentRef == student.Id).GradeLevel;
+            }
+
+            return students;
         }
 
         public IList<int> GetEnrollmentStudentsIds(int schoolYearId, int? gradeLevelId)

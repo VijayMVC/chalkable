@@ -68,6 +68,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
         public IPersonPictureService PersonPictureService { get { return personPictureService; } }
         public IPictureService DepartmentIconService { get { return departmentIconService; } }
+        public IPictureService CustomReportTemplateIconService { get; }
         public IApplicationService ApplicationService { get { return applicationService; } }
         public ICategoryService CategoryService { get { return categoryService; } }
         public IApplicationUploadService ApplicationUploadService { get { return applicationUploadService; } }
@@ -89,5 +90,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
         public IDbMaintenanceService DbMaintenanceService { get{throw new NotImplementedException();} }
         public IAcademicBenchmarkService AcademicBenchmarkService { get{throw new NotImplementedException();} }
+        public ICustomReportTemplateService CustomReportTemplateService { get {throw new NotImplementedException();} }
     }
 }

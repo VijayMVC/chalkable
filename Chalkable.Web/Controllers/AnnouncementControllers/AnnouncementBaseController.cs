@@ -4,12 +4,12 @@ using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ApplicationsViewData;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -127,6 +127,10 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             
             if (ann.AnnouncementGroups != null)
                 annViewData.Recipients = AdminAnnouncementGroupViewData.Create(ann.AnnouncementGroups);
+
+            if (ann.AdminAnnouncementStudents != null)
+                annViewData.AdminAnnouncementStudents = StudentViewData.Create(ann.AdminAnnouncementStudents.Select(x => x.Student).ToList());
+
             return annViewData;
         }
         

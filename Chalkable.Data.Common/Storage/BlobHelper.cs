@@ -125,13 +125,13 @@ namespace Chalkable.Data.Common.Storage
             }
         }
 
-        public string GetBlobsRelativeAddress(string containerName)
+        public string GetBlobsRelativeAddress(string containerName, string key = null)
         {
             var conteiner = GetBlobClient().GetContainerReference(containerName);
             if (conteiner.Exists())
             {
                 var conteinerAddress = conteiner.Uri.ToString();
-                return conteinerAddress + "/" + BuildBlobAddress(containerName, "");
+                return conteinerAddress + "/" + BuildBlobAddress(containerName, key ?? "");
             }
             throw new BlobNotFoundException(string.Format("Container {0} doesn't exists", containerName));
         }

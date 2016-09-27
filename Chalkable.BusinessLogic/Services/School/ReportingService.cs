@@ -4,14 +4,24 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
+using Chalkable.Data.Common.Storage;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
+using Chalkable.StiConnector.Connectors.Model.Reports.ReportCards;
+using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -34,8 +44,13 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
+        byte[] GetReportCards(ReportCardsInputModel inputModel, string path);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
+
+        IList<ReportCardsLogo> GetReportCardsLogos();
+        void UpdateReportCardsLogo(int? schoolId, byte[] logoIcon);
+        void DeleteReportCardsLogo(int id);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -419,6 +434,76 @@ namespace Chalkable.BusinessLogic.Services.School
             return new DefaultRenderer().Render(dataSet, definition, format, null);
         }
 
+        public byte[] GetReportCards(ReportCardsInputModel inputModel, string path)
+        {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            var inowReportCardTask = Task.Run(()=>GetInowReportData(inputModel)); 
+            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
+            var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            
+            var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
+            IList<byte[]> listOfpdf = new List<byte[]>();
+
+            //int index = 0;
+            foreach (var data in listOfReportCards)
+            {
+                listOfpdf.Add(ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
+                //index++;
+            }
+            
+            //var loader = new LoaderBase<CustomReportCardsExportModel, byte[]>(listOfReportCards);
+            //listOfpdf = loader.Load(data => ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
+
+            return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
+        }
+
+
+        private IList<CustomReportCardsExportModel> BuildReportCardsData(ReportCard inowData, string logoAddress,
+            ReportCardsInputModel inputModel)
+        {
+            var res = new List<CustomReportCardsExportModel>();
+            var currentDate = Context.NowSchoolTime;
+            foreach (var student in inowData.Students)
+            {
+                res.AddRange(student.Recipients.Select(recipient => CustomReportCardsExportModel.Create(inowData, student, recipient, logoAddress, currentDate, inputModel)));
+            }
+            return res;
+        } 
+
+        private async Task<ReportCard> GetInowReportData(ReportCardsInputModel inputModel)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            if (inputModel == null)
+                throw new ArgumentNullException(nameof(ReportCardsInputModel));
+            var studentIds = inputModel.StudentIds ?? new List<int>();
+            if (inputModel.GroupIds != null && inputModel.GroupIds.Count > 0)
+            {
+                studentIds.AddRange(ServiceLocator.GroupService.GetStudentIdsByGroups(inputModel.GroupIds));
+                studentIds = studentIds.Distinct().ToList();
+            }
+            var options = new ReportCardOptions
+            {
+                AbsenceReasonIds = inputModel.AttendanceReasonIds,
+                GradingPeriodId = inputModel.GradingPeriodId,
+                AcadSessionId = Context.SchoolYearId.Value,
+                IncludeAttendance = inputModel.IncludeAttendance,
+                IncludeGradingPeriodNotes = inputModel.IncludeGradingPeriodNotes,
+                IncludeComments = inputModel.IncludeComments,
+                IncludeMeritDemerit = inputModel.IncludeMeritDemerit,
+                IncludeWithdrawnStudents = inputModel.IncludeWithdrawnStudents,
+                IncludePromotionStatus = inputModel.IncludePromotionStatus,
+                IncludeYearToDateInformation = inputModel.IncludeYearToDateInformation,
+                IncludeGradingScales = inputModel.IncludeGradingScaleStandards || inputModel.IncludeGradingScaleTraditional,
+                StudentIds = studentIds,
+                Recipient = inputModel.RecipientStr,
+                IncludeStandards = inputModel.StandardTypeEnum != StandardsType.None
+            };
+            return await ConnectorLocator.ReportConnector.GetReportCardData(options);
+        }
+
+
         public FeedReportSettingsInfo GetFeedReportSettings()
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -444,6 +529,66 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolYearId.HasValue);
             ValidateDateRange(settings.StartDate, settings.EndDate);
             ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, settings.ToDictionary());
+        }
+
+        public IList<ReportCardsLogo> GetReportCardsLogos()
+        {
+            var res = DoRead(u => new DataAccessBase<ReportCardsLogo>(u).GetAll());
+            return res;
+        }
+
+        public ReportCardsLogo GetLogoBySchoolId(int schoolId)
+        {
+            var conds = new AndQueryCondition {{nameof(ReportCardsLogo.SchoolRef), schoolId}};
+            return DoRead(u => new DataAccessBase<ReportCardsLogo>(u).GetAll(conds)).FirstOrDefault();
+        }
+
+        public ReportCardsLogo GetDistrictLogo()
+        {
+            var conds = new AndQueryCondition {{nameof(ReportCardsLogo.SchoolRef), null}};
+            return DoRead(u => new DataAccessBase<ReportCardsLogo>(u).GetAll(conds)).FirstOrDefault();
+        }
+
+        public void UpdateReportCardsLogo(int? schoolId, byte[] logoIcon)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u =>
+            {
+                var da = new DataAccessBase<ReportCardsLogo, int>(u);
+                var res = da.GetAll(new AndQueryCondition {{nameof(ReportCardsLogo.SchoolRef), schoolId}})
+                            .FirstOrDefault();
+                var logoAddress = UploadLogo(schoolId, logoIcon);
+                if (res == null)
+                {
+                    res = new ReportCardsLogo { SchoolRef = schoolId , LogoAddress = logoAddress};
+                    da.Insert(res);
+                }
+                else if (logoIcon == null)
+                {
+                    da.Delete(res.Id);
+                }
+                else
+                {
+                    res.SchoolRef = schoolId;
+                    res.LogoAddress = logoAddress;
+                    da.Update(res);
+                }
+            });
+        }
+
+        private string UploadLogo(int? schoolId, byte[] logo)
+        {
+            Trace.Assert(Context.DistrictId.HasValue);
+            var key = $"reportcardslogo_{Context.DistrictId.Value}";
+            if (schoolId.HasValue) key += $"_{schoolId.Value}";
+            ServiceLocator.StorageBlobService.AddBlob("pictureconteiner", key, logo);
+            return (new BlobHelper()).GetBlobsRelativeAddress("pictureconteiner", key);
+        }
+
+        public void DeleteReportCardsLogo(int id)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u => new DataAccessBase<ReportCardsLogo, int>(u).Delete(id));
         }
 
         private static void ValidateDateRange(DateTime? startDate, DateTime? endDate)

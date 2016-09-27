@@ -12,7 +12,6 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.AcademicBenchmark.Model;
 using Chalkable.Data.Master.Model;
-using Chalkable.AcademicBenchmarkImport.Helper;
 using Chalkable.AcademicBenchmarkImport.Model;
 
 namespace Chalkable.AcademicBenchmarkImport

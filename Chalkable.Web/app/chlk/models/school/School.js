@@ -1,6 +1,8 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.school.Timezone');
 REQUIRE('chlk.models.district.District');
 REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.id.SchoolYearId');
 
 NAMESPACE('chlk.models.school', function () {
     "use strict";
