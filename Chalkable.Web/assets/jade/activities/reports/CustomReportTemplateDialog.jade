@@ -1,0 +1,37 @@
+.dialog.add-report-template.gray
+   -var template = self.getReportTemplate()
+   .x-window-header
+      span Custom Report Template
+   .x-window-body
+      +ActionForm('customreporttemplate', 'save')
+         +Hidden("id", template.getId())
+         .x-form-field
+            label File:
+            +FileUpload()(name='icon')#icon.simple-gray-button
+         .x-form-field
+            label Name:
+            input(type="text",name="name", value=template.getName())
+         .x-form-field
+            label Type:
+            +Select('types', 'type')#types
+               +Option(chlk.models.reports.CustomReportTemplateType.BODY, 'Body', template.getType() == chlk.models.reports.CustomReportTemplateType.BODY)
+               +Option(chlk.models.reports.CustomReportTemplateType.HEADER, 'Header', template.getType() == chlk.models.reports.CustomReportTemplateType.HEADER)
+               +Option(chlk.models.reports.CustomReportTemplateType.FOOTER, 'Footer', template.getType() == chlk.models.reports.CustomReportTemplateType.FOOTER)
+         .x-form-field
+            label Header:
+            +Select('headers', 'headerid')#headers
+               each header in self.getHeaders()
+                  +Option(header.getId(), header.getName(), header.getId() == template.getHeaderId())
+         .x-form-field
+            label Footer:
+            +Select('footers', 'footerid')#footers
+               each footer in self.getFooters()
+                  +Option(footer.getId(), footer.getName(), footer.getId() == template.getFooterId())
+         .x-form-field
+            label Layout:
+            textarea(type="text",name="layout", style="word-wrap: break-word; resize: horizontal; width: 1000px; height: 400px;")=template.getLayout()
+         .x-form-field
+            label Style:
+            textarea(type="text",name="style", style="word-wrap: break-word; resize: horizontal; width: 1000px; height: 400px;")=template.getStyle()
+         +Button()(type="submit").special-button.blue-button.submit-btn Submit
+         +Button.special-button.red-button.close Cancel
