@@ -5,11 +5,8 @@ using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
-using Chalkable.Web.Controllers;
-using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
@@ -22,23 +19,22 @@ namespace Chalkable.Web.Models
 
         public static IList<SearchViewData> Create(IDictionary<SearchTypeEnum, Object> searchResult)
         {
-            IDictionary<SearchTypeEnum, BaseSearchResultBuilder> mapper = new Dictionary<SearchTypeEnum, BaseSearchResultBuilder>();
+            IDictionary<SearchTypeEnum, ISearchBuilder> mapper = new Dictionary<SearchTypeEnum, ISearchBuilder>();
             var res = new List<SearchViewData>();
             PreperingBuilderMapper(mapper);
             foreach (var searchValue in searchResult)
-            {
                 res.AddRange(mapper[searchValue.Key].Build(searchValue.Value));
-            }
             return res;
         }
 
-        private static void PreperingBuilderMapper(IDictionary<SearchTypeEnum, BaseSearchResultBuilder> mapper)
+        private static void PreperingBuilderMapper(IDictionary<SearchTypeEnum, ISearchBuilder> mapper)
         {
-            mapper.Add(SearchTypeEnum.Persons, new SearchPersonBuilder(SearchTypeEnum.Persons));
-            mapper.Add(SearchTypeEnum.Announcements, new SearchAnnouncementBuilder(SearchTypeEnum.Announcements));
-            mapper.Add(SearchTypeEnum.Attachments, new SearchAttachmentBuilder(SearchTypeEnum.Attachments));
-            mapper.Add(SearchTypeEnum.Classes, new SearchClassBuilder(SearchTypeEnum.Classes));
-            mapper.Add(SearchTypeEnum.Group, new SearchGroupBuilder(SearchTypeEnum.Group));
+            mapper.Add(SearchTypeEnum.Student, new DefaultSearchResultBuilder<StudentSchoolsInfo>(PersonSearchViewData.Create));
+            mapper.Add(SearchTypeEnum.Staff, new DefaultSearchResultBuilder<Staff>(PersonSearchViewData.Create));
+            mapper.Add(SearchTypeEnum.Announcements, new DefaultSearchResultBuilder<Announcement>(AnnouncementSearchViewData.Create));
+            mapper.Add(SearchTypeEnum.Attachments, new DefaultSearchResultBuilder<AnnouncementAttachmentInfo>(AttachmentSearchViewData.Create));
+            mapper.Add(SearchTypeEnum.Classes, new DefaultSearchResultBuilder<ClassDetails>(ClassSearchViewData.Create));
+            mapper.Add(SearchTypeEnum.Group, new DefaultSearchResultBuilder<Group>(GroupSearchViewData.Create));
         }
     }
 
@@ -142,101 +138,26 @@ namespace Chalkable.Web.Models
         }
     }
 
-
-    public abstract class BaseSearchResultBuilder
+    public interface ISearchBuilder
     {
-        protected int searchType;
-        public BaseSearchResultBuilder(SearchTypeEnum searchTypeEnum)
-        {
-            searchType = (int)searchTypeEnum;
-        }
-
-        public abstract IList<SearchViewData> Build(Object searchRes);
-    }
-    public class SearchPersonBuilder : BaseSearchResultBuilder
-    {
-        public SearchPersonBuilder(SearchTypeEnum searchTypeEnum)
-            : base(searchTypeEnum)
-        {
-        }
-
-        
-        public override IList<SearchViewData> Build(Object searchRes)
-        {
-            var personList = searchRes as SearchController.PersonList;
-            if (personList == null || (SearchTypeEnum)searchType != SearchTypeEnum.Persons)
-                throw new ChalkableException("Invalid search View Builder for such search type");
-
-            var res = new List<SearchViewData>();
-            if(personList.Students.Count > 0)
-                res.AddRange(personList.Students.Select(PersonSearchViewData.Create));
-            if (personList.Staffs.Count > 0)
-                res.AddRange(personList.Staffs.Select(PersonSearchViewData.Create));
-            return res;
-        }
+        IList<SearchViewData> Build(object searchRes);
     }
 
-    public class SearchAnnouncementBuilder : BaseSearchResultBuilder
+    public class DefaultSearchResultBuilder<TSearchItem> : ISearchBuilder
     {
-        public SearchAnnouncementBuilder(SearchTypeEnum searchTypeEnum)
-            : base(searchTypeEnum)
+        protected Func<TSearchItem, SearchViewData> _dataCreator;
+        public DefaultSearchResultBuilder(Func<TSearchItem, SearchViewData> dataCreator)
         {
+            _dataCreator = dataCreator;
         }
 
-        public override IList<SearchViewData> Build(Object searchRes)
+        public virtual IList<SearchViewData> Build(object searchRes)
         {
-            var announcements = searchRes as IList<Announcement>;
-            if (announcements == null || (SearchTypeEnum)searchType != SearchTypeEnum.Announcements)
+            var reslist = searchRes as IList<TSearchItem>;
+            if (reslist == null)
                 throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
 
-            return announcements.Select(AnnouncementSearchViewData.Create).ToList();
-        }
-    }
-    public class SearchAttachmentBuilder : BaseSearchResultBuilder
-    {
-        public SearchAttachmentBuilder(SearchTypeEnum searchTypeEnum)
-            : base(searchTypeEnum)
-        {
-        }
-
-        public override IList<SearchViewData> Build(Object searchRes)
-        {
-            var attachment = searchRes as IList<AnnouncementAttachmentInfo>;
-            if (attachment == null || (SearchTypeEnum)searchType != SearchTypeEnum.Attachments)
-                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
-
-            return attachment.Select(AttachmentSearchViewData.Create).ToList();
-        }
-    }
-    public class SearchClassBuilder : BaseSearchResultBuilder
-    {
-        public SearchClassBuilder(SearchTypeEnum searchTypeEnum)
-            : base(searchTypeEnum)
-        {
-        }
-
-        public override IList<SearchViewData> Build(object searchRes)
-        {
-            var classes = searchRes as IList<ClassDetails>;
-            if (classes == null || (SearchTypeEnum)searchType != SearchTypeEnum.Classes)
-                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
-            return classes.Select(ClassSearchViewData.Create).ToList();
-        }
-    }
-
-    public class SearchGroupBuilder : BaseSearchResultBuilder
-    {
-        public SearchGroupBuilder(SearchTypeEnum searchTypeEnum)
-            : base(searchTypeEnum)
-        {
-        }
-
-        public override IList<SearchViewData> Build(object searchRes)
-        {
-            var groups = searchRes as IList<Group>;
-            if (groups == null || (SearchTypeEnum)searchType != SearchTypeEnum.Group)
-                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
-            return groups.Select(GroupSearchViewData.Create).ToList();
+            return reslist.Select(_dataCreator).ToList();
         }
     }
 
