@@ -2,6 +2,7 @@ REQUIRE('chlk.models.recipients.GroupsListViewData');
 REQUIRE('chlk.models.recipients.UsersListViewData');
 REQUIRE('chlk.models.group.Group');
 REQUIRE('chlk.models.people.ShortUserInfo');
+REQUIRE('chlk.models.recipients.BaseViewData');
 
 NAMESPACE('chlk.models.recipients', function () {
     "use strict";

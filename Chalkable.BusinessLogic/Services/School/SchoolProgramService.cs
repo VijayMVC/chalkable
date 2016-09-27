@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -36,7 +37,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<SchoolProgram> GetAll()
         {
-            return DoRead(u => new SchoolProgramDataAccess(u).GetAll());
+            var conds = new AndQueryCondition {{nameof(SchoolProgram.IsActive), true}};
+            return DoRead(u => new SchoolProgramDataAccess(u).GetAll(conds)).OrderBy(x=>x.Name).ToList();
         }
     }
 }
