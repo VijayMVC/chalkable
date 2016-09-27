@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.Common;
 using Chalkable.Common.Web;
@@ -34,6 +36,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             return new StudentViewData(student);
         }
-        
+
+        public static IList<StudentViewData> Create(IList<Student> students)
+        {
+            return students.Select(Create).ToList();
+        }
+
     }
 }

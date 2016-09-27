@@ -27,7 +27,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool IsAbleUseExtraCredit { get; set; }
         public IList<BaseApplicationViewData> SuggestedApps { get; set; }
         public IList<BaseApplicationViewData> AppsWithContent { get; set; } 
-        public IList<AdminAnnouncementGroupViewData> Recipients { get; set; } 
+        public IList<AdminAnnouncementGroupViewData> Recipients { get; set; }
+        public IList<StudentViewData> AdminAnnouncementStudents { get; set; }
         public IList<AnnouncementCommentViewData> AnnouncementComments { get; set; }
 
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IList<ClaimInfo> claims)

@@ -92,6 +92,18 @@ NAMESPACE('chlk.controls', function () {
                     for(var k in item) if (item.hasOwnProperty(k))
                         fixedInstance[k] = item[k];
                     tpl.assign(fixedInstance);
+                    
+                    var options = {};
+                    
+                    if(tpl.setQuery)
+                        options.query = this.term;
+                    
+                    if(attrs.disabledValues)
+                        options.disabledValues = attrs.disabledValues;
+                    
+                    if(options.query || options.disabledValues)
+                        tpl.options(options);
+                    
                     var li = jQuery.parseHTML(tpl.render());
                     var id =ria.dom.Dom.GID();
                     jQuery(li).attr("data-id", id);
@@ -157,7 +169,9 @@ NAMESPACE('chlk.controls', function () {
             [[String, Object, Function, Function, Boolean, String]],
             Object, function getAutoCompleteConfig_(id, attrs, serviceF, selectHandler, categorized, groupingField_){
                 return {
+                    //position: attrs.alwaysAtBottom ? { my: "left bottom", at: "left bottom", collision: "none" } : undefined,
                     minLength: this.getMinLength(),
+                    delay: 1000,
                     source: function( request, response ) {
                         var node = this.element;
                         node.addClass('pending');

@@ -67,4 +67,10 @@ namespace Chalkable.Data.School.Model
         public IList<PersonLanguage> PersonLanguages { get; set; }
         public PersonLanguage PrimaryPersonLanguage => PersonLanguages?.FirstOrDefault(x => x.IsPrimary);
     }
+
+    public class StudentSchoolsInfo : Student
+    {
+        public IList<School> StudentSchools { get; set; }
+        public GradeLevel GradeLevel { get; set; }
+    }
 }

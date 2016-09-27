@@ -10,7 +10,7 @@ REQUIRE('chlk.models.district.District');
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.Success');
 REQUIRE('chlk.models.common.NameId');
-
+REQUIRE('chlk.models.recipients.Program');
 
 
 NAMESPACE('chlk.services', function () {
@@ -53,6 +53,10 @@ NAMESPACE('chlk.services', function () {
                 return this.get('School/Summary.json', chlk.models.school.SchoolDetails, {
                     schoolId: schoolId.valueOf()
                 });
+            },
+
+            ria.async.Future, function getUserLocalSchools() {
+                return this.get('School/UserLocalSchools.json', ArrayOf(chlk.models.school.School));
             },
 
             [[chlk.models.id.SchoolId]],
@@ -102,6 +106,10 @@ NAMESPACE('chlk.services', function () {
 
             ria.async.Future, function getTimezones() {
                 return this.getPaginatedList('School/ListTimezones.json', chlk.models.school.Timezone, {});
+            },
+
+            ria.async.Future, function getSchoolPrograms() {
+                return this.get('School/SchoolPrograms.json', ArrayOf(chlk.models.recipients.Program), {});
             },
 
             [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, chlk.models.common.ChlkDate]],

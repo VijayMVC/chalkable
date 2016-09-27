@@ -6,5 +6,5 @@ mixin Checkbox(name, val, disabled, withLabel, isReadOnly)
     +Hidden(name, false)(data-value=val, class="hidden-checkbox", id=attributes.id + '-hidden', readonly = isReadOnly)
     input(name = name, type="checkbox", class="checkbox")(attributes)
     if withLabel
-        label(for = attributes.id)
+        label(for = attributes.id).checkbox-label
 

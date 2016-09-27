@@ -16,7 +16,6 @@ NAMESPACE('chlk.models.student', function(){
     CLASS('StudentInfo', EXTENDS(chlk.models.student.StudentSummary),[
 
         ArrayOf(chlk.models.student.StudentContact), 'studentContacts',
-        chlk.models.grading.GradeLevel, 'gradeLevel',
         Number, 'age',
         Boolean, 'hispanic',
         Boolean, 'IEPActive',
@@ -43,7 +42,6 @@ NAMESPACE('chlk.models.student', function(){
             BASE(raw);
             this.studentContacts = SJX.fromArrayOfDeserializables(raw.studentcontacts, chlk.models.student.StudentContact);
             this.healthForms = SJX.fromArrayOfDeserializables(raw.healthforms, chlk.models.student.StudentHealthFormViewData);
-            this.gradeLevel = SJX.fromDeserializable(raw.gradelevel, chlk.models.grading.GradeLevel);
             this.age = SJX.fromValue(raw.age, Number);
             this.hispanic = SJX.fromValue(raw.hispanic, Boolean);
             this.IEPActive = SJX.fromValue(raw.isiepactive, Boolean);

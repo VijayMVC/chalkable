@@ -117,6 +117,7 @@ namespace Chalkable.Web.Controllers
 
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
+            PrepareJsonData(SchoolLocator.SchoolYearService.GetYears(), ViewConstants.YEARS);
 
             var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
@@ -338,6 +339,9 @@ namespace Chalkable.Web.Controllers
             var dayTypes = SchoolLocator.DayTypeService.GetDayTypes(classes.SelectMany(x => x.ClassPeriods, (a, b) => b.DayTypeRef).ToList());
             var classesList = ClassComplexViewData.Create(classes, startupData.Rooms, dayTypes).ToList();
             PrepareJsonData(classesList, ViewConstants.CLASSES);
+
+            var gradeLevel = SchoolLocator.GradeLevelService.GetGradeLevels();
+            PrepareJsonData(GradeLevelViewData.Create(gradeLevel), ViewConstants.GRADE_LEVELS);
 
             ProcessMethodAndCallTime(() => PrepareClassesAdvancedData(startupData), timeCallBuilder, "Retrieving Activity Category from Inow");
             PrepareClassesAdvancedData(startupData);

@@ -1,42 +1,114 @@
-BODY
+.add-recipients-container
   .recipients-list
-    padding-left: 40px
+    padding: 4px 26px 0
     position: relative
+    border: 1px solid #c8c7c3
+    +box-shadow(rgba(0, 0, 0, 0.1) 0 1px 3px inset, rgba(255, 255, 255, 0.5) 0 1px 1px)
+    background: #fff
+    border-radius: 4px
+    min-height: 24px
 
     &::before
-      content: 'To :'
+      content: 'To'
       position: absolute
-      left: 0
-      font: bold 16px Arial
-      top: 7px
+      left: 11px
+      font-size: 11px
+      font-weight: 600
+      top: 5px
 
-  .standards-list, .recipients-list
-
-    BUTTON
-      min-width: 35px
-
-    .button-like
-      min-width: 20px
-
-    .button-like
-      padding-right: 30px
-
-    BUTTON, .button-like
-      position: relative
-      display: inline-block
-
-      &:not(:last-child)
-        margin-right: 10px
-
-    .remove-standard, .remove-recipient
+    .add-recipients-btn
+      position: absolute
+      width: 24px
+      height: 24px
+      +icons-24-sprite(users_add)
+      top: 2px
+      right: 5px
       border: none
-      width: 32px
-      height: 32px
       box-shadow: none
-      +icons-32-sprite(close)
-      position: absolute
-      top: -2px
-      right: -2px
+
+      &:not(:hover)
+        opacity: 0.35
+
+    .recipient-search
+      border: none
+      +box-shadow(none)
+      font-weight: bold
+      font-style: italic
+      font-size: 12px
+      color: #56554f
+      min-height: 20px
+      height: 20px
+
+    .recipient-item
+      min-width: 20px
+      display: inline-block
+      background: #ededed
+      height: 20px
+      line-height: 20px
+      padding: 0 20px 0 8px
+      border-radius: 3px
+      position: relative
+      margin-left: 5px
+      font-weight: bold
+      color: #56554f
+      margin-bottom: 5px
+
+      &.group-recipient
+        padding-left: 23px
+
+        &::before
+          content: " "
+          position: absolute
+          width: 24px
+          height: 24px
+          +icons-24-sprite(group)
+          top: 50%
+          left: 0
+          margin-top: -12px
+
+      &:hover
+        .group-info
+          display: block
+
+      .group-info
+        padding: 7px 7px 7px 11px
+        line-height: 30px
+        width: 136px
+        font-size: 13px
+        display: none
+        position: absolute
+        z-index: 999
+        left: 50%
+        margin-left: -78px
+
+        &::before
+          left: 50%
+          margin-left: -6px
+
+        .count-text
+          font-weight: bold
+          color: #56554f
+          line-height: 22px
+          height: 26px
+
+        .members
+          overflow-y: auto
+          max-height: 130px
+
+        li
+          color: #237291
+          list-style: none
+          font-weight: normal
+          padding-left: 4px
+
+      .remove-recipient
+        position: absolute
+        width: 24px
+        height: 24px
+        +icons-24-sprite(small-remove-bold)
+        top: -2px
+        cursor: pointer
+        right: 0
 
 .top-green-info
   position: absolute
@@ -156,6 +228,9 @@ BODY
       margin: 0
 
 .announcement-form
+  #title
+    padding-left: 13px
+
   .lesson-plan-import-popup
     padding: 0
     right: -49px
@@ -245,6 +320,10 @@ BODY
   .top-table
     table-layout: fixed
 
+    .date-picker-label
+      position: absolute
+      margin-top: -22px
+
   .table, .left-block
     width: 100%
 
@@ -282,6 +361,34 @@ BODY
       padding-bottom: 0
       cursor: pointer
       text-align: center
+
+  .standards-list, .recipients-list
+
+    BUTTON
+      min-width: 35px
+
+    .button-like
+      min-width: 20px
+
+    .button-like
+      padding-right: 30px
+
+    BUTTON, .button-like
+      position: relative
+      display: inline-block
+
+      &:not(:last-child)
+        margin-right: 10px
+
+    .remove-standard
+      border: none
+      width: 32px
+      height: 32px
+      box-shadow: none
+      +icons-32-sprite(close)
+      position: absolute
+      top: -2px
+      right: -2px
 
   .drawer-icon
     width: 32px

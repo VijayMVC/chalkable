@@ -18,7 +18,6 @@ mixin Radio(name, value, title, selected)
 
         .x-window-body
             +Hidden('attendanceReasonIds', '')#absence-reasons
-            +Hidden('studentIds', '')#student-ids-value
             +Hidden('gradingPeriodIds', '')#grading-periods
             .report-content
                 if !self.isAbleDownload()
@@ -29,7 +28,7 @@ mixin Radio(name, value, title, selected)
                             .add-recipients-container
                                 .add-recipients
                                     .recipients-list
-                                        -var groupsModel = new chlk.models.reports.ReportCardRecipientsViewData(self.getGroups())
+                                        -var groupsModel = new chlk.models.reports.ReportCardRecipientsViewData([], [], {groups:[], students:[]})
                                         +RenderWith(groupsModel, chlk.templates.reports.ReportCardRecipientsTpl)
                     TR
                         TD(colspan="3").item-3

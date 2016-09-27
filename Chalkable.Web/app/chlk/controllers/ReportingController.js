@@ -3,12 +3,12 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ReportingService');
 REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.CustomReportTemplateService');
+REQUIRE('chlk.services.StudentService');
+REQUIRE('chlk.services.GroupService');
 
 REQUIRE('chlk.activities.reports.StudentReportDialog');
 REQUIRE('chlk.activities.reports.ReportCardsDialog');
 REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
-
-
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -21,6 +21,12 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.GradingPeriodService, 'gradingPeriodService',
+
+        [ria.mvc.Inject],
+        chlk.services.StudentService, 'studentService',
+
+        [ria.mvc.Inject],
+        chlk.services.GroupService, 'groupService',
 
         [ria.mvc.Inject],
         chlk.services.CustomReportTemplateService, 'customReportTemplateService',
@@ -76,8 +82,11 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.reports.SubmitReportCardsViewData]],
         function submitReportCardsAction(model){
             if(model.getSubmitType() == "addRecipients"){
-                return this.Redirect('group', 'showGroupsFromReport', [model.getGroupIds()])
+                return this.Redirect('reporting', 'showGroupsFromReport', [model.getParsedSelected()])
             }
+
+            if(model.getSubmitType() == 'recipient')
+                return this.addRecipient_(model);
 
             var result = this.reportingService.submitReportCards(
                 model.getCustomReportTemplateId(),
@@ -90,7 +99,8 @@ NAMESPACE('chlk.controllers', function (){
                 this.getIdsList(model.getGroupIds(), chlk.models.id.GroupId),
                 model.getGradingPeriodId(),
                 this.getIdsList(model.getAttendanceReasonIds(), chlk.models.id.AttendanceReasonId),
-                model.getIncludeOptions()
+                model.getIncludeOptions(),
+                this.getIdsList(model.getStudentIds(), chlk.models.id.SchoolPersonId)
             )
             .attach(this.validateResponse_())
             .then(function () {
@@ -100,6 +110,61 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.reports.ReportCardsDialog, result);
         },
 
+        [[chlk.models.reports.SubmitReportCardsViewData]],
+        function addRecipient_(model){
+            var recipient = model.getReportRecipient(), arr = recipient.split('|'),
+                parsedSelected = model.getParsedSelected(),type = parseInt(arr[1], 10),
+                id = parseInt(arr[0], 10), selected = JSON.parse(model.getSelectedItems()), res;
+            if(type == chlk.models.search.SearchTypeEnum.PERSONS.valueOf()){
+                if(selected.students.map(function (item) {return item.id}).indexOf(id) > -1)
+                    return null;
+                res = this.studentService.getInfo(new chlk.models.id.SchoolPersonId(id))
+                    .then(function(info){
+                        parsedSelected.students.push(info);
+                        selected.students.push({
+                            id: id,
+                            displayname: info.getDisplayName(),
+                            gender: info.getGender()
+                        });
+                        return new chlk.models.reports.ReportCardRecipientsViewData(parsedSelected.groups, parsedSelected.students, selected);
+                    });
+            }
+            else{
+                if(selected.groups.map(function (item) {return item.id}).indexOf(id) > -1)
+                    return null;
+                res = this.groupService.info(new chlk.models.id.GroupId(id))
+                    .then(function(info){
+                        parsedSelected.groups.push(info);
+                        selected.groups.push({
+                            id: id,
+                            name: info.getName()
+                        });
+                        return new chlk.models.reports.ReportCardRecipientsViewData(parsedSelected.groups, parsedSelected.students, selected);
+                    });
+            }                
 
+            return this.UpdateView(chlk.activities.reports.ReportCardsDialog, res, 'recipients');
+        },
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        [[Object]],
+        function showGroupsFromReportAction(selected){
+            this.WidgetStart('group', 'show', [{
+                    selected: selected
+                }])
+                .then(function(model){
+                    this.BackgroundNavigate('reporting', 'saveGroupsToReport', [model]);
+                }, this)
+                .attach(this.validateResponse_());
+            return null;
+        },
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        [[chlk.models.recipients.RecipientsSubmitViewData]],
+        function saveGroupsToReportAction(model){
+            var selected = model.getParsedSelected();
+            var model = new chlk.models.reports.ReportCardRecipientsViewData(selected.groups, selected.students, model.getSelectedItems());
+            return this.UpdateView(chlk.activities.reports.ReportCardsDialog, ria.async.DeferredData(model), 'recipients');
+        }
     ])
 });

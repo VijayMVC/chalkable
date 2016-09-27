@@ -114,6 +114,14 @@ mixin Glue_()
                                         button(data-tooltip = recipient.getGroupName(), data-tooltip-type="overflow").same-on-hover= recipient.getGroupName()
                                         = ' '
 
+                        if self.getAdminAnnouncementStudents() && self.getAdminAnnouncementStudents().length > 0
+                            .standards-container
+                                .title Students:
+                                .standard-list
+                                    each recipient in self.getAdminAnnouncementStudents()
+                                        button(data-tooltip = recipient.getDisplayName(), data-tooltip-type="overflow").same-on-hover= recipient.getDisplayName()
+                                        = ' '
+
         -var attachments = self.getAnnouncementAttachments() || []
         -var applications = self.getApplications() || []
         if attachments.length + applications.length

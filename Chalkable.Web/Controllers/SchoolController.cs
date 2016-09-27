@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Web.ActionFilters;
@@ -53,6 +54,19 @@ namespace Chalkable.Web.Controllers
         {
             MasterLocator.SchoolService.UpdateAssessmentEnabled(districtId, schoolId, enabled);
             return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult SchoolPrograms()
+        {
+            var schoolPrograms = SchoolLocator.SchoolProgramService.GetAll();
+            return Json(SchoolProgramViewData.Create(schoolPrograms));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult UserLocalSchools()
+        {
+            return Json(LocalSchoolViewData.Create(SchoolLocator.SchoolService.GetUserLocalSchools()));
         }
 
         /*[AuthorizationFilter("SysAdmin")]

@@ -49,13 +49,17 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var select = jQuery('#'+attributes.id);
-                        this.updateSelect(select, attributes);
+
                         if(hiddenName_)
                             select.parents('form').on('submit', function(){
                                 var selVal = select.val(),
                                     value = Array.isArray(selVal) ? selVal.join(',') : selVal;
                                 jQuery(this).find('[name=' + hiddenName_ + ']').val(value);
-                            })
+                            });
+
+                        if(attributes.firstEmpty){
+                            select.find('option:eq(0)').html('&nbsp;');
+                        }
 
                         this.updateSelect(select, attributes);
 

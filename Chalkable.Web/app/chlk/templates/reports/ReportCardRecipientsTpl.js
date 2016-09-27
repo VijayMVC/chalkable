@@ -9,6 +9,12 @@ NAMESPACE('chlk.templates.reports', function () {
         [ria.templates.ModelBind(chlk.models.reports.ReportCardRecipientsViewData)],
         'ReportCardRecipientsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.group.Group), 'groups'
+            ArrayOf(chlk.models.group.Group), 'groups',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.people.ShortUserInfo), 'students',
+
+            [ria.templates.ModelPropertyBind],
+            Object, 'selectedItems'
         ])
 });

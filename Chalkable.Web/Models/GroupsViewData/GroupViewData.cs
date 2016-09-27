@@ -6,14 +6,14 @@ namespace Chalkable.Web.Models.GroupsViewData
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool HasStudents { get; set; }
+        public int StudentCount { get; set; }
 
         protected GroupViewData(){}
         protected GroupViewData(Group gGroup)
         {
             Id = gGroup.Id;
             Name = gGroup.Name;
-            HasStudents = gGroup.HasStudents;
+            StudentCount = gGroup.StudentCount;
         }
         public static GroupViewData Create(Group gGroup)
         {

@@ -54,11 +54,16 @@ NAMESPACE('chlk', function (){
                     return item.hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN)
                         || item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN);
                 }).length > 0;
+                var isPeopleEnabled = this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS, []).filter(function(item){
+                        return item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_STUDENT)
+                            || item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_STUDENTS);
+                    }).length > 0;
 
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
                     isAssessmentEnabled: isAssessmentEnabled || isStudyCenterEnabled,
-                    isClassesEnabled: isClassesEnabled
+                    isClassesEnabled: isClassesEnabled,
+                    isPeopleEnabled: isPeopleEnabled
                 };
                 return BASE()
                     .then(function(data){

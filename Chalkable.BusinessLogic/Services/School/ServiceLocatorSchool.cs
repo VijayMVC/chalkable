@@ -3,7 +3,6 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.BusinessLogic.Services.School.PanoramaSettings;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -90,6 +89,9 @@ namespace Chalkable.BusinessLogic.Services.School
         IAppSettingService AppSettingService { get; }
 
         ILimitedEnglishService LimitedEnglishService { get; }
+
+        ISchoolProgramService SchoolProgramService { get; }
+        IStudentSchoolProgramService StudentSchoolProgramService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -174,6 +176,9 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAppSettingService appSettingService;
         private ILimitedEnglishService limitedEnglishService;
 
+        private ISchoolProgramService schoolProgramService;
+        private IStudentSchoolProgramService studentSchoolProgramService;
+
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
         {
@@ -251,6 +256,8 @@ namespace Chalkable.BusinessLogic.Services.School
             announcementCommentService = new AnnouncementCommentService(this);
             appSettingService = new AppSettingService(this);
             limitedEnglishService = new LimitedEnglishService(this);
+            schoolProgramService = new SchoolProgramService(this);
+            studentSchoolProgramService = new StudentSchoolProgramService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -349,5 +356,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IAnnouncementCommentService AnnouncementCommentService => announcementCommentService;
         public IAppSettingService AppSettingService => appSettingService;
         public ILimitedEnglishService LimitedEnglishService => limitedEnglishService;
+        public ISchoolProgramService SchoolProgramService => schoolProgramService;
+        public IStudentSchoolProgramService StudentSchoolProgramService => studentSchoolProgramService;
     }
 }

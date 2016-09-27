@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Student> GetTeacherStudents(int teacherId, int schoolYearId);
         bool IsTeacherStudent(int teacherId, int studentId, int schoolYearId);
         IList<Student> GetClassStudents(int classId, int? markingPeriodId, bool? isEnrolled = null);
-        PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId, bool enrolledOnly = false);
+        PaginatedList<StudentSchoolsInfo> SearchStudents(int schoolYearId, int? classId, int? schoolId, int? gradeLevel, int? programId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId, bool enrolledOnly = false);
         Student GetById(int id, int schoolYearId);
         int GetEnrolledStudentsCount();
 
@@ -116,9 +116,22 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new StudentDataAccess(u).GetStudents(classId, markingPeriodId, isEnrolled));
         }
 
-        public PaginatedList<Student> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId, bool enrolledOnly = false)
+        public PaginatedList<StudentSchoolsInfo> SearchStudents(int schoolYearId, int? classId, int? schoolId, int? gradeLevel, int? programId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId, bool enrolledOnly = false)
         {
-            return DoRead( u => new StudentDataAccess(u).SearchStudents(schoolYearId, classId, teacherId, classmatesToId, filter,
+            IList<int> schoolIds = new List<int>();
+            if (Context.Role == CoreRoles.TEACHER_ROLE)
+                schoolIds.Add(Context.SchoolLocalId.Value);
+            else 
+                if (schoolId.HasValue)
+                    if (ServiceLocator.SchoolService.GetUserLocalSchools().Any(x => x.Id == schoolId.Value))
+                        schoolIds.Add(schoolId.Value);
+                    else
+                        return new PaginatedList<StudentSchoolsInfo>(new List<StudentSchoolsInfo>(), start, count);
+                else
+                    foreach (var localSchool in ServiceLocator.SchoolService.GetUserLocalSchools())
+                        schoolIds.Add(localSchool.Id);
+
+            return DoRead( u => new StudentDataAccess(u).SearchStudents(schoolYearId, classId, schoolIds, gradeLevel, programId, teacherId, classmatesToId, filter,
                             orderByFirstName, start, count, markingPeriodId, enrolledOnly));
         }
 

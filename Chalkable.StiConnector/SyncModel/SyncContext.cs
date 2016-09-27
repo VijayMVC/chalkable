@@ -105,6 +105,9 @@ namespace Chalkable.StiConnector.SyncModel
             
             RegisterType(typeof(AppSetting));
             RegisterType(typeof(LimitedEnglish));
+
+            RegisterType(typeof(SchoolProgram));
+            RegisterType(typeof(StudentSchoolProgram));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

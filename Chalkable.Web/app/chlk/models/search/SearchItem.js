@@ -13,7 +13,10 @@ NAMESPACE('chlk.models.search', function () {
         APPLICATIONS: 1,
         ANNOUNCEMENTS: 2,
         ATTACHMENTS: 3,
-        CLASSES: 4
+        CLASSES: 4,
+        STUDENT: 5,
+        STAFF: 6,
+        GROUP: 7
     });
 
     "use strict";
