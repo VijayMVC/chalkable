@@ -436,8 +436,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetReportCards(ReportCardsInputModel inputModel, string path)
         {
-            var listOfReportCards = BuilReportCardsData(inputModel);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            var inowReportCardTask = Task.Run(()=>GetInowReportData(inputModel)); 
+            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
             var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            
+            var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
             IList<byte[]> listOfpdf = new List<byte[]>();
 
             //int index = 0;
@@ -453,13 +457,20 @@ namespace Chalkable.BusinessLogic.Services.School
             return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
         }
 
-        //private async Task<byte[]> GenerateReportCardPdf(CustomReportCardsExportModel data, string path,
-        //    CustomReportTemplate template)
-        //{
-        //    return ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data);
-        //}
 
-        public IList<CustomReportCardsExportModel> BuilReportCardsData(ReportCardsInputModel inputModel)
+        private IList<CustomReportCardsExportModel> BuildReportCardsData(ReportCard inowData, string logoAddress,
+            ReportCardsInputModel inputModel)
+        {
+            var res = new List<CustomReportCardsExportModel>();
+            var currentDate = Context.NowSchoolTime;
+            foreach (var student in inowData.Students)
+            {
+                res.AddRange(student.Recipients.Select(recipient => CustomReportCardsExportModel.Create(inowData, student, recipient, logoAddress, currentDate, inputModel)));
+            }
+            return res;
+        } 
+
+        private async Task<ReportCard> GetInowReportData(ReportCardsInputModel inputModel)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
@@ -489,17 +500,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 Recipient = inputModel.RecipientStr,
                 IncludeStandards = inputModel.StandardTypeEnum != StandardsType.None
             };
-
-            var reportCardsData = ConnectorLocator.ReportConnector.GetReportCardData(options);
-            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
-            
-            var res = new List<CustomReportCardsExportModel>();
-            var currentDate = Context.NowSchoolTime;
-            foreach (var student in reportCardsData.Students)
-            {
-                res.AddRange(student.Recipients.Select(recipient => CustomReportCardsExportModel.Create(reportCardsData, student, recipient, logo?.LogoAddress, currentDate, inputModel)));
-            }
-            return res;
+            return await ConnectorLocator.ReportConnector.GetReportCardData(options);
         }
 
 

@@ -19,12 +19,12 @@
                +Option(chlk.models.reports.CustomReportTemplateType.FOOTER, 'Footer', template.getType() == chlk.models.reports.CustomReportTemplateType.FOOTER)
          .x-form-field
             label Header:
-            +Select('headers', 'headerId')#headers
+            +Select('headers', 'headerid')#headers
                each header in self.getHeaders()
                   +Option(header.getId(), header.getName(), header.getId() == template.getHeaderId())
          .x-form-field
             label Footer:
-            +Select('footers', 'footerId')#footers
+            +Select('footers', 'footerid')#footers
                each footer in self.getFooters()
                   +Option(footer.getId(), footer.getName(), footer.getId() == template.getFooterId())
          .x-form-field
