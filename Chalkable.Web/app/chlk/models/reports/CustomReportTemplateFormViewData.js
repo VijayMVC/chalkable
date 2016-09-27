@@ -16,14 +16,14 @@ NAMESPACE('chlk.models.reports', function () {
             [[chlk.models.reports.CustomReportTemplate,
                 ArrayOf(chlk.models.reports.CustomReportTemplate),
                 ArrayOf(chlk.models.reports.CustomReportTemplate)]],
-            function $(template, headers, footers){
+            function $(template_, headers_, footers_){
                 BASE();
-                if(template)
-                    this.setReportTemplate(template);
-                if(headers)
-                    this.setHeaders(headers);
-                if(footers)
-                    this.setFooters(footers);
+                if(template_)
+                    this.setReportTemplate(template_);
+                if(headers_)
+                    this.setHeaders(headers_);
+                if(footers_)
+                    this.setFooters(footers_);
             }
         ]);
 });

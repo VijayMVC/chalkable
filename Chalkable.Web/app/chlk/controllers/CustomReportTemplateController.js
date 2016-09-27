@@ -62,7 +62,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(data){
                         var template = new chlk.models.reports.CustomReportTemplate()
-                        return new chlk.models.reports.CustomReportTemplateFormViewData(template, data[1], data[2]);
+                        return new chlk.models.reports.CustomReportTemplateFormViewData(template, data[0], data[1]);
                     }, this);
                 return this.ShadeView(chlk.activities.reports.CustomReportTemplateDialog, result);
             },
