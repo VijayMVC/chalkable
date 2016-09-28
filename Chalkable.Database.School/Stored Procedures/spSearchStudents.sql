@@ -13,7 +13,8 @@
 	@filter3 nvarchar(50),
 	@orderByFirstName bit,
 	@markingPeriod int,
-	@enrolledOnly bit
+	@enrolledOnly bit,
+	@callerId int
 As
 
 Declare @t Table
@@ -73,9 +74,6 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		and (@classmatesToid is null
 			or cs.ClassRef in (Select ClassPerson.ClassRef From ClassPerson Where ClassPerson.PersonRef = @classmatesToid))
 		and (@classId is null or cs.ClassRef = @classId)
-		and ((@filter1 is null or FirstName like @filter1 or LastName like @filter1)
-		and (@filter2 is null or FirstName like @filter2 or LastName like @filter2)
-		and (@filter3 is null or FirstName like @filter3 or LastName like @filter3))
 		and (@markingPeriod is null or MarkingPeriod.Id = @markingPeriod)
 		and (@includeWithdraw = 1 or @includeWithdraw is null or (cs.IsEnrolled = 1 and StudentSchoolYear.EnrollmentStatus = 0))
 		and (StudentSchool.SchoolRef in (select [Value] from @schoolIds))
@@ -93,10 +91,7 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		Student.SpEdStatus,
 		Student.PhotoModifiedDate,
 		Student.UserId
-	Order By
-		Case When @orderByFirstName = 1 Then FirstName
-		Else LastName End
-	OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+	
 
 	Declare @total int
 	Set @total = (Select Top 1 Total f From @t Where @enrolledOnly is null or @enrolledOnly = 0 or IsWithdrawn = 0)
@@ -115,10 +110,25 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		[SpEdStatus],
 		[PhotoModifiedDate],
 		[UserId],
-		IsWithdrawn
+		IsWithdrawn,
+		cast(Case When Exists(select * from ClassPerson join ClassTeacher 
+				   On ClassPerson.ClassRef = ClassTeacher.ClassRef 
+					  and ClassPerson.PersonRef = [Id] and ClassTeacher.PersonRef = @callerId) 
+			Then 1 Else 0 End as bit) As IsMyStudent,
+		cast(Case When Exists(select * from ClassPerson studClasses1 join ClassPerson studClasses2
+					On studClasses1.ClassRef = studClasses2.ClassRef
+						and studClasses1.PersonRef = [Id] and studClasses2.PersonRef = @callerId)
+			 Then 1 Else 0 End as bit) as IsClassmate
 	From
 		@t
-	Where @enrolledOnly is null or @enrolledOnly = 0 or IsWithdrawn = 0
+	Where (@enrolledOnly is null or @enrolledOnly = 0 or IsWithdrawn = 0)
+		and ((@filter1 is null or FirstName like @filter1 or LastName like @filter1)
+		and (@filter2 is null or FirstName like @filter2 or LastName like @filter2)
+		and (@filter3 is null or FirstName like @filter3 or LastName like @filter3))
+	Order By
+		Case When @orderByFirstName = 1 Then FirstName
+		Else LastName End
+	OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
 	declare
 		@acadYear int =  (Select top 1 AcadYear from SchoolYear where Id = @schoolYearId)
@@ -152,4 +162,4 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		StudentSchoolYear.StudentRef in (select [Value] from @studentIds)
 		and 
 		exists (Select * From StudentSchool Where StudentRef = StudentSchoolYear.StudentRef and SchoolRef = School.Id)
-	GO
+GO
