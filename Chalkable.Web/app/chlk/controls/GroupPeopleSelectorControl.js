@@ -19,17 +19,11 @@ NAMESPACE('chlk.controls', function () {
             Boolean, 'hasAccessToLE',
             
             function isMessagingDisabled(isMy_){
-                var disableMessaging, isStudent = this.context.getSession().get(ChlkSessionConstants.USER_ROLE).isStudent();
-                var messagingSettings = this.context.getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
-                if(isStudent){
-                    disableMessaging = isMy_ && !messagingSettings.isAllowedForStudents() ||
-                        !isMy_ && !messagingSettings.isAllowedForTeachersToStudents();
-                }else{
-                    disableMessaging = !messagingSettings.isAllowedForTeachersToStudents() ||
-                        !isMy_ && messagingSettings.isAllowedForTeachersToStudentsInTheSameClass();
-                }
-                
-                return this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_DISABLED) || disableMessaging;
+                return this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_DISABLED);
+            },
+
+            function getMessagingSettings(){
+                return this.context.getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
             },
 
             [ria.mvc.DomEventBind('click', '.group-people-selector .top-link:not(.pressed)')],
@@ -143,7 +137,8 @@ NAMESPACE('chlk.controls', function () {
                     currentUser: this.context.getSession().get(ChlkSessionConstants.CURRENT_PERSON, null),
                     hasAccessToLE: this.isHasAccessToLE(),
                     selectorMode: o.selectorMode,
-                    messagingDisabled: studentsObj.isMessagingDisabled
+                    messagingDisabled: this.isMessagingDisabled(),
+                    messagingSettings: this.getMessagingSettings()
                 };
 
                 if(!append_)

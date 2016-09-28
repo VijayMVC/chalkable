@@ -14,6 +14,8 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
 
             Boolean, 'messagingDisabled',
 
+            Object, 'messagingSettings',
+
             chlk.models.recipients.SelectorModeEnum, 'selectorMode',
 
             [[chlk.models.people.User]],
@@ -23,6 +25,21 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
                 return !currentRole || !currentUser || currentUser.getId() == user.getId()
                     || currentRole.isTeacher() || currentRole.isAdmin()
                     || currentRole.isStudent() && user.getRole().getId() == chlk.models.common.RoleEnum.TEACHER.valueOf();
+            },
+
+            function showMsgIcon(student)
+            {
+                var enableMessaging, isStudent = this.getUserRole().isStudent();
+                var msgSettings = this.messagingSettings;
+                if(isStudent){
+                    enableMessaging = msgSettings.isAllowedForStudents() &&
+                        (!msgSettings.isAllowedForStudentsInTheSameClass() || student.isClassmate());
+                }else{
+                    enableMessaging = msgSettings.isAllowedForTeachersToStudents() &&
+                        (student.isMystudent() || !msgSettings.isAllowedForTeachersToStudentsInTheSameClass());
+                }
+
+                return !this.isMessagingDisabled() && enableMessaging;
             }
         ])
 });

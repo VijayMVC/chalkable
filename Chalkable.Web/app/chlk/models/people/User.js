@@ -40,6 +40,8 @@ NAMESPACE('chlk.models.people', function () {
             this.claims = SJX.fromArrayOfDeserializables(raw.claims, chlk.models.people.Claim);
             this.gradeLevel = SJX.fromDeserializable(raw.gradelevel, chlk.models.grading.GradeLevel);
             this.studentSchools = SJX.fromArrayOfDeserializables(raw.studentschools, chlk.models.school.School);
+            this.classmate = SJX.fromValue(raw.isclassmate, Boolean);
+            this.mystudent = SJX.fromValue(raw.ismystudent, Boolean);
         },
         Boolean, 'active',
         chlk.models.people.Address, 'address',
@@ -62,6 +64,9 @@ NAMESPACE('chlk.models.people', function () {
         ArrayOf(chlk.models.school.School), 'studentSchools',
 
         ArrayOf(chlk.models.people.Claim), 'claims',
+
+        Boolean, 'classmate',
+        Boolean, 'mystudent',
 
         [[chlk.models.people.UserPermissionEnum]],
         Boolean, function hasPermission(userPermission){
