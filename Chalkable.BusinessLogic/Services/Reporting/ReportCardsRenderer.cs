@@ -138,7 +138,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 
             Directory.SetCurrentDirectory(basePath);
             var bytes = htmlToPdfConverter.ConvertHtml(html, baseUrl);
-            SaveViewAndPadf(basePath, bytes, html);
+            //SaveViewAndPadf(basePath, bytes, html);
             return bytes;
         }
 
