@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
@@ -45,6 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
         byte[] GetReportCards(ReportCardsInputModel inputModel, string path);
+        Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
 
@@ -443,7 +445,6 @@ namespace Chalkable.BusinessLogic.Services.School
             
             var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
             IList<byte[]> listOfpdf = new List<byte[]>();
-
             //int index = 0;
             foreach (var data in listOfReportCards)
             {
@@ -457,6 +458,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
         }
 
+        public async Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel)
+        {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            var inowReportCardTask = GetInowReportData(inputModel);
+            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
+            return BuildReportCardsData(await inowReportCardTask, logo?.LogoAddress, inputModel);
+        }
 
         private IList<CustomReportCardsExportModel> BuildReportCardsData(ReportCard inowData, string logoAddress,
             ReportCardsInputModel inputModel)

@@ -245,7 +245,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
     public class AttendanceSummaryExportModel
     {
-        public decimal Enroller { get; set; }
+        public decimal Enrolled { get; set; }
         public decimal Present { get; set; }
         public decimal Absences { get; set; }
         public decimal Tardies { get; set; }
@@ -270,12 +270,12 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 ExcusedAbsences = attendance.ExcusedAbsences,
                 ExcusedTardies = attendance.ExcusedTardies,
                 UnexcusedTardies = attendance.UnexcusedTardies,
-                Enroller = attendance.DaysEnrolled,
+                Enrolled = attendance.DaysEnrolled,
                 GradingPeriodName = gradingPeriodName,
                 Absences = attendance.UnexcusedAbsences + attendance.ExcusedAbsences,
                 Tardies = attendance.ExcusedTardies + attendance.UnexcusedTardies
             };
-            res.Present = res.Enroller - (res.Absences + res.Tardies);
+            res.Present = res.Enrolled - (res.Absences + res.Tardies);
 
             return res;
         }
