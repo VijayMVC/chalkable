@@ -59,9 +59,9 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             <link href = ""http://fonts.googleapis.com/css?family=Pacifico"" rel= ""stylesheet"" type = ""text/css""/>
             <link href = ""http://fonts.googleapis.com/css?family=Oswald"" rel=""stylesheet"" type = ""text/css""/>
             <link href = ""http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700"" rel = ""stylesheet"" type=""text/css""/>
+
             <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap.min.css"" type = ""text/css"" rel = ""stylesheet""/>                 
-            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap-theme.min.css"" type = ""text/css"" rel = ""stylesheet""/>
-                                                      
+            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap-theme.min.css"" type = ""text/css"" rel = ""stylesheet""/>                                                     
             <script src = ""{baseUrl}/app/bower/jquery/dist/jquery.js""></script>      
             <script src = ""{baseUrl}/app/bower/jade/jade.js"" ></script>
 
@@ -94,6 +94,30 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 </html>";
 
         }
+
+
+        private static string PrepareBaseUrl(string scripRoot)
+        {
+#if DEBUG
+            return "https:" + scripRoot;
+#else
+            return scripRoot;
+#endif
+        }
+
+        private static string BuildLinks(string scripRoot)
+        {
+            var baseUrl = PrepareBaseUrl(scripRoot);
+#if DEBUG
+            return $@"<link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap.min.css"" type = ""text/css"" rel = ""stylesheet""/>                 
+            <link href = ""{baseUrl}/app/bower/bootstrap/dist/css/bootstrap-theme.min.css"" type = ""text/css"" rel = ""stylesheet""/>                                                     
+            <script src = ""{baseUrl}/app/bower/jquery/dist/jquery.js""></script>      
+            <script src = ""{baseUrl}/app/bower/jade/jade.js"" ></script>";
+#else
+            return $@"";
+#endif
+        }
+
 
         public static byte[] RenderToPdf(string basePath, string baseUrl, IList<string> htmls, string header, string footer)
         {
