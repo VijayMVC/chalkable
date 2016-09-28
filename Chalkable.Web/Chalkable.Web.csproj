@@ -736,6 +736,7 @@
     <None Include="Reports\FeedReport\FeedShortDataSet.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\Reporting\ReportCards.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
