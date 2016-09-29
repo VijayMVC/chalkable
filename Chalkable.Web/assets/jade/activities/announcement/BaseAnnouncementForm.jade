@@ -189,7 +189,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                 userRole = userRole
             )
         .attach-btn-area.attributes-attach-area(class = announcement.getAnnouncementAttributes().length ? '' : 'x-hidden')
-            +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Add Attribute
+            +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Attribute
                 span.plus +
 
         if !isAdmin

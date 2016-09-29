@@ -49,7 +49,7 @@ if self.needButtons
         )(type="button")#add-attachments.simple-gray-button Attach
         +ActionLink('announcement', 'addAttribute', self.getId(), self.getModel().getType(), self.isDialog())(
             class = (!self.getAnnouncementAttributes() || !self.getAnnouncementAttributes().length) ? '' : 'x-hidden'
-        ).attach-attribute-btn.main-attach-attribute-btn Add Attribute
+        ).attach-attribute-btn.main-attach-attribute-btn Attribute
             span.plus +
 
 each item, i in items
