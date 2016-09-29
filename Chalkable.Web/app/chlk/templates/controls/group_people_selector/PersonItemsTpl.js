@@ -39,7 +39,7 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
                         (student.isMystudent() || !msgSettings.isAllowedForTeachersToStudentsInTheSameClass());
                 }
 
-                return !this.isMessagingDisabled() && enableMessaging;
+                return !this.getUserRole().isAdmin() && !this.isMessagingDisabled() && enableMessaging;
             }
         ])
 });
