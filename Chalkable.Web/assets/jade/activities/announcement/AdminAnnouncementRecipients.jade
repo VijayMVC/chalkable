@@ -24,6 +24,7 @@ each student in students
       listCls = "recipients-search",
       alwaysAtBottom = true,
       minLength = 1,
-      disabledValues= {groups: recipients, students: students}
+      disabledValues= {groups: recipients, students: students},
+      placeholder="Enter Person or group..."
 ).recipient-search
 Button(type="submit", name="submitType", value="recipient").x-hidden.recipient-submit.validate-skip
