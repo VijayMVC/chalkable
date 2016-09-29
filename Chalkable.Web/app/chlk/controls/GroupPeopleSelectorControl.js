@@ -264,6 +264,8 @@ NAMESPACE('chlk.controls', function () {
 
                 selector.find('.selected-link').setHTML(selectedText);
 
+                selector.find('.results-count').setHTML(o.students.length + ' selected');
+
                 tpl.assign(model);
 
                 if(tpl.isSubmitDisabled()){
