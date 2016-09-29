@@ -263,7 +263,6 @@ NAMESPACE('chlk.controls', function () {
                     tpl = new chlk.templates.controls.group_people_selector.SelectorBaseTpl();
 
                 selector.find('.selected-link').setHTML(selectedText);
-
                 selector.find('.results-count').setHTML(o.students.length + ' selected');
 
                 tpl.assign(model);
@@ -316,6 +315,12 @@ NAMESPACE('chlk.controls', function () {
 
                 o.groups = groupsData;
                 this.updateSelected_(selector, o);
+
+                var btn = selector.find('.selector-submit-btn');
+                if(o.groups.length == 0)
+                    btn.setAttr('disabled', true);
+                else
+                    btn.setAttr('disabled', false);
             },
 
             function updateSelectedStudentsByNodes_(nodes, add_) {
@@ -356,6 +361,12 @@ NAMESPACE('chlk.controls', function () {
 
                 o.students = studentsData;
                 this.updateSelected_(selector, o);
+
+                var btn = selector.find('.selector-submit-btn');
+                if(o.students.length == 0)
+                    btn.setAttr('disabled', true);
+                else
+                    btn.setAttr('disabled', false);
             },
 
             Object, function prepare(data, attributes) {
