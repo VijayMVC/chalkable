@@ -53,14 +53,17 @@ where
 					where ar.AnnouncementRef = vwAdminAnnouncement.Id and @now between SchoolYear.StartDate and SchoolYear.EndDate
 				)
 		 )
-	and (@studentId is null or 				
-			exists
+	and (@studentId is null 				
+		 or	exists
 			(
 				select * from AnnouncementGroup ar
 				join StudentGroup on StudentGroup.GroupRef = ar.GroupRef
 				where StudentGroup.StudentRef = @studentId and AnnouncementRef = vwAdminAnnouncement.Id
 			)
+		 or exists
+			(
+				select * from AdminAnnouncementStudent
+				Where AdminAnnouncementRef = vwAdminAnnouncement.Id And StudentRef = @studentId
+			)
 		)
-
-
-
+GO
