@@ -2825,8 +2825,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId, chlk.models.id.SchoolPersonId]],
         function removeRecipientAction(announcementId, groupId_, studentId_){
+            var recipientType = groupId_ ? "group" : "student";
 
-            var res = this.ShowConfirmBox('Are you sure you want to remove that group from announcement?', '')
+            var res = this.ShowConfirmBox('Are you sure you want to remove this ' + recipientType + ' from announcement?', '')
                 .then(function(data){
                     var adminRecipients = this.getContext().getSession().get(ChlkSessionConstants.ADMIN_RECIPIENTS, []);
                     if(groupId_)
