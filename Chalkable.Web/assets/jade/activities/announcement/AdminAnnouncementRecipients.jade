@@ -1,6 +1,6 @@
 -var recipients = self.getRecipients() || []
 -var students = self.getAdminAnnouncementStudents() || []
-+ActionLink('announcement', 'showGroups', self.getId()).add-recipients-btn
++ActionLink('announcement', 'showGroups', self.getId())(data-tooltip="Add people or groups").add-recipients-btn
 each group in recipients
       .recipient-item.group-recipient.relative=group.getGroupName()
             +ActionLink('announcement', 'removeRecipient', group.getAnnouncementId(), group.getGroupId()).remove-recipient
