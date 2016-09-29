@@ -8,6 +8,7 @@ REQUIRE('chlk.lib.exception.DataException');
 REQUIRE('chlk.lib.exception.ChalkableException');
 REQUIRE('chlk.lib.exception.ChalkableSisException');
 REQUIRE('chlk.lib.exception.NoAnnouncementException');
+REQUIRE('chlk.lib.exception.ChalkableApiException');
 REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.ChalkableSisNotSupportVersionException');
 REQUIRE('chlk.lib.exception.FileSizeExceedException');
@@ -202,7 +203,7 @@ NAMESPACE('chlk.services', function () {
                     .then(function(response){
                         if(response.success != true){
                             _DEBUG && console.error("ChalkableApiException", response.data.Message, response.data.StackTrace);
-                            return ria.async.BREAK;
+                            throw chlk.lib.exception.ChalkableApiException();
                         }
                         return response;
                     })

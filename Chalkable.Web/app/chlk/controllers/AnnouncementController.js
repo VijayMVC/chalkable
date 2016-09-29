@@ -698,6 +698,10 @@ NAMESPACE('chlk.controllers', function (){
                         app.getEncodedSecretKey(),
                         app.getAccessToken())
                     //.attach(this.validateResponse_())
+                    .catchException(chlk.lib.exception.ChalkableApiException, function(e){
+                        this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), null, 'app-contents-fail');
+                        throw e;
+                    }, this)
                     .catchError(function(e){
                         this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), null, 'app-contents-fail');
                         throw e;
@@ -714,6 +718,7 @@ NAMESPACE('chlk.controllers', function (){
                         else
                             this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType(), isDialog_), null, 'app-contents-fail');
                     }, this);
+
         },
 
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
