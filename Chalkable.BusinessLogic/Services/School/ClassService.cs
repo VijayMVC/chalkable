@@ -275,7 +275,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId)
         {
-            return DoRead(u => new ClassDataAccess(u).GetClassesBySchool(schoolYearId, schoolId, gradeLevelId));
+            return DoRead(u => new ClassDataAccess(u).GetClassesBySchool(schoolYearId, schoolId, gradeLevelId)).OrderBy(x => x.Name).ToList();
         }
 
         public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)
