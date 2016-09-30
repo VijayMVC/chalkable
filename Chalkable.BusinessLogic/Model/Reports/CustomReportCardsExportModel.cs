@@ -205,7 +205,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
             return studentGradedItems.Select(x => new GradedItemExportModel
             {
                 AlphaGrade = x.AlphaGrade,
-                NumericGrade = x.NumericGrade,
+                NumericGrade = x.NumericGrade == null ? (decimal?)null : decimal.Round(x.NumericGrade.Value),
                 Comments = x.Comments != null 
                            ? CommentReportCardsExportModel.Create(x.Comments) 
                            : new List<CommentReportCardsExportModel>(),
