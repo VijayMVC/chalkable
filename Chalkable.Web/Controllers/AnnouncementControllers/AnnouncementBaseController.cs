@@ -27,6 +27,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return PrepareFullAnnouncementViewData(announcementId, type, forRead);
         }
 
+        //TODO: refactor
         protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, AnnouncementTypeEnum? announcementType, bool forRead = false)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -58,6 +59,9 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                     annView.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, ann, annAttsInfo);
                     var autoGrades = SchoolLocator.StudentAnnouncementService.GetAutoGradesByAnnouncementId(ann.Id);
                     annView.AutoGradeApps = AutoGradeViewData.Create(autoGrades);
+                    //var studentAttachmentsIds = annView.StudentAnnouncements.Items.Select(x => x.Attachments.Select(y => y.Id).ToList()).SelectMany(x => x).ToList();
+                    //annView.AnnouncementAttachments = annView.AnnouncementAttachments.Where(x => !studentAttachmentsIds.Contains(x.Id)).ToList();
+
                 }
                 var studentAnnouncementApplicationMeta = SchoolLocator.ApplicationSchoolService.GetStudentAnnouncementApplicationMetaByAnnouncementId(ann.Id);
                 annView.StudentsAnnouncementApplicationMeta = StudentAnnouncementApplicationMetaViewData.Create(studentAnnouncementApplicationMeta);
@@ -93,6 +97,13 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 var options = SchoolLocator.ClassroomOptionService.GetClassOption(annView.ClassId.Value, true);
                 annView.IsAbleUseExtraCredit = options != null && options.IsAveragingMethodPoints;
             }
+
+            //foreach (var annn in annView.AnnouncementAttachments)
+            //{
+            //    //annn.Attachment.IsOwner = true;
+            //    annn.Attachment.IsTeacherAttachment = true;
+            //}
+
             return annView;
         }
 
@@ -114,6 +125,12 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 ann.GradingStudentsCount = ann.StudentAnnouncements.Count(x => x.IsGraded);
             }
             var annViewData = AnnouncementDetailedViewData.Create(ann, Context.PersonId.Value, attachments, attrAttachmentInfo, Context.Claims);
+
+            if (ann.StudentAnnouncements?.Count > 0)
+            {
+                var nonStudentsAtts = ann.AnnouncementAttachments.Where(x => ann.StudentAnnouncements.All(st => x.Attachment.PersonRef != st.StudentId)).Select(x => x.Id).ToList();
+                annViewData.AnnouncementAttachments = annViewData.AnnouncementAttachments.Where(x => nonStudentsAtts.Contains(x.Id)).ToList();
+            }
 
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
             annViewData.ApplicationsCount = annViewData.Applications.Count;

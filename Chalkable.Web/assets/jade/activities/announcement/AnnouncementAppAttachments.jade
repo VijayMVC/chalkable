@@ -57,5 +57,4 @@ each item, i in items
         -console.log(self.getAssessmentApplicationId())
         +AnnouncementFormApplicationItem(item, i, self.getAssessmentApplicationId())
     else
-        if item.isTeachersAttachment() || self.getUserRole().isAdmin()
-            +AnnouncementFormAttachmentItem(item, i)
+        +AnnouncementFormAttachmentItem(item, i)
