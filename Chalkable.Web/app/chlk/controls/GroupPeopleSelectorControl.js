@@ -238,9 +238,17 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [ria.mvc.DomEventBind('change', '.student-check')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function studentSelect(node, event, selected_){
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function studentSelect(node, event){
                 this.updateSelectedStudentsByNodes_(node, node.is(':checked'));
+            },
+
+            [ria.mvc.DomEventBind('click', '.recipient-item.student-item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function studentBlockClick(node, event){
+                var checkNode = node.find('.student-check');
+                checkNode.trigger('change');
+                //this.updateSelectedStudentsByNodes_(checkNode, checkNode.is(':checked'));
             },
 
             [ria.mvc.DomEventBind('click', '.remove-group')],
