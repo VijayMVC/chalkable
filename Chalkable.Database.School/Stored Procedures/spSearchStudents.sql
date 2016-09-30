@@ -34,6 +34,8 @@ Declare @t Table
 		Total int
 	)
 
+declare @acadYear int =  (Select top 1 AcadYear from SchoolYear where Id = @schoolYearId);
+
 Declare @includeWithdraw bit = 1
 If @classId is not null
 Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents From ClassroomOption Where Id = @classId)
@@ -59,6 +61,8 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		Student
 		join StudentSchoolYear
 			on Student.Id = StudentSchoolYear.StudentRef
+		join SchoolYear
+			on SchoolYear.Id = StudentSchoolYear.SchoolYearRef
 		left join (select * from ClassPerson join Class on ClassPerson.ClassRef = Class.Id) as cs
 			on Student.Id = cs.PersonRef and StudentSchoolYear.SchoolYearRef = cs.SchoolYearRef
 		left join MarkingPeriod
@@ -68,7 +72,7 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		left join StudentSchoolProgram
 			on Student.Id = StudentSchoolProgram.StudentId
 	Where
-		StudentSchoolYear.SchoolYearRef = @schoolYearId
+		SchoolYear.AcadYear = @acadYear
 		and (@teacherId is null
 			or cs.ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where ClassTeacher.PersonRef = @teacherId))
 		and (@classmatesToid is null
@@ -130,11 +134,7 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		Else LastName End
 	OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
-	declare
-		@acadYear int =  (Select top 1 AcadYear from SchoolYear where Id = @schoolYearId)
-
-	declare
-		@studentIds TInt32
+	declare @studentIds TInt32
 
 	insert into @studentIds
 	select [Id] From @t	Where @enrolledOnly is null or @enrolledOnly = 0 or IsWithdrawn = 0
