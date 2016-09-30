@@ -121,7 +121,7 @@ namespace Chalkable.Web.Controllers
                 var footer = template.Footer != null ? PrepareReportView(template.Footer, model) : null;
                 reports.Add(ReportCardsRenderer.RenderToPdf(path, CompilerHelper.ScriptsRoot, main, header, footer));
             }
-            return ReportCardsRenderer.MargePdfDocuments(reports);
+            return ReportCardsRenderer.MergePdfDocuments(reports);
         }
 
         private ActionResult DemoReportCards(ReportCardsInputModel inputModel)

@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 
         private const string LicenseKey = "zUNQQlNXQlNaVlZCU1BMUkJRU0xTUExbW1tbQlI=";
 
-        public static byte[] MargePdfDocuments(IList<byte[]> files)
+        public static byte[] MergePdfDocuments(IList<byte[]> files)
         {
             var res = new Document {AutoCloseAppendedDocs = true, LicenseKey = LicenseKey};
             foreach (var file in files)
@@ -122,7 +122,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
         public static byte[] RenderToPdf(string basePath, string baseUrl, IList<string> htmls, string header, string footer)
         {
             var files = htmls.Select(html => RenderToPdf(basePath, baseUrl, html, header, footer)).ToList();
-            return MargePdfDocuments(files);
+            return MergePdfDocuments(files);
         }
         
 

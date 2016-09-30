@@ -455,7 +455,7 @@ namespace Chalkable.BusinessLogic.Services.School
             //var loader = new LoaderBase<CustomReportCardsExportModel, byte[]>(listOfReportCards);
             //listOfpdf = loader.Load(data => ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
 
-            return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
+            return ReportCardsRenderer.MergePdfDocuments(listOfpdf);
         }
 
         public async Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel)
