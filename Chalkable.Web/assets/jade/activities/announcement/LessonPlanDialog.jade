@@ -143,9 +143,9 @@
                         if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
                             +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
                     .bottom-block
+                        +ActionButton('announcement', 'discard', announcement.getType(), true).add-loader-btn=Msg.Discard
                         +Button()(
                             type="submit",
                             name="submitType",
                             value="submit"
-                        ).special-button.blue-button.submit-btn.submit-announcement.big-button=Msg.Save
-                        +ActionLink('announcement', 'discard', announcement.getType(), true).grey-link.not-blue.add-loader-btn=Msg.Discard
+                        ).special-button.blue-button.submit-btn.submit-announcement=Msg.Save

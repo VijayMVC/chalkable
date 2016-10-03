@@ -161,22 +161,22 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                     if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
                         +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
                 .bottom-block
-                    +Button()(
-                        type="submit",
-                        name="submitType",
-                        value=state ? "submitOnEdit" : "submit"
-                    ).special-button.blue-button.submit-btn.submit-announcement.big-button
-                        =Msg.Save
                     if state
                         +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName(), announcement.getType())
                             +Button()(
                             type="button",
-                            ).special-button.red-button.big-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
+                            ).special-button.red-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
                     else
-                        +ActionLink('announcement', 'discard', announcement.getType()).grey-link.not-blue.add-loader-btn=Msg.Discard
+                        +ActionButton('announcement', 'discard', announcement.getType()).add-loader-btn=Msg.Discard
+                    +Button()(
+                        type="submit",
+                        name="submitType",
+                        value=state ? "submitOnEdit" : "submit"
+                    ).special-button.blue-button.submit-btn.submit-announcement
+                        =Msg.Save
                 if state
                     .duplicate-btn-container
-                        +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId(), announcement.getType()).big-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
+                        +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId(), announcement.getType()).blue-button.submit-btn=Msg.Duplicate
 
             if !classId
                 if topItems.length
