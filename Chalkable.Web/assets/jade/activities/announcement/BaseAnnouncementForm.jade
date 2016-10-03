@@ -75,7 +75,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
     .table
         .left-block(class=needStandardsBlock ? 'with-standards' : '')
             .left-block-container
-                +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
+                +TextArea(name="content", placeholder="Assignment...").item-content= announcement.getContent()
                 if needStandardsBlock
                     .add-standards-container
                         .add-standards
