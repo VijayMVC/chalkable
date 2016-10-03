@@ -3,7 +3,6 @@ import unittest
 
 
 class TestFeed(unittest.TestCase):
-
     def setUp(self):
         self.teacher = TeacherSession(self).login(user_email, user_pwd)
 

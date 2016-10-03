@@ -1,20 +1,20 @@
 from base_auth_test import *
+import unittest
 
-class TestFeed(BaseAuthedTestCase):
-    def test_feed(self):
-        # reset all filters on the feed
-        self.dict = {}
-        self.post('/Feed/SetSettings.json?', self.dict)
+class TestCustomRangeAllTypesOfItems(BaseTestCase):
+    def setUp(self):
+        self.teacher = TeacherSession(self).login(user_email, user_pwd)
 
-        self.settings_data_for_mark_undone = {'option': '3'}
+        # reset settings
+        self.teacher.post_json('/Feed/SetSettings.json?', data={})
 
         # making all types of items as 'undone'
-        self.post('/Announcement/UnDone.json?', self.settings_data_for_mark_undone)
+        self.teacher.post_json('/Announcement/UnDone.json?', data={'option': 3})
 
         # getting grading periods
         list_for_start_date = []
         list_for_end_date = []
-        get_grading_periods = self.get('/GradingPeriod/List.json?')
+        get_grading_periods = self.teacher.get_json('/GradingPeriod/List.json?')
         get_first_period = get_grading_periods['data']
         if len(get_first_period) > 0:
             for item in get_first_period:
@@ -49,45 +49,51 @@ class TestFeed(BaseAuthedTestCase):
         self.current_date_minus_10 = random_date_minus_10.strftime("%Y-%m-%d")
         self.current_date_plus_10 = random_date_plus_10.strftime("%Y-%m-%d")
 
-        self.settings_data = {'sortType': '0', 'fromDate': self.current_date_minus_10, 'toDate': self.current_date_plus_10}
-        self.post('/Feed/SetSettings.json?', self.settings_data)
+        # filter: custom range, earliest
+        self.teacher.post_json('/Feed/SetSettings.json?', data={'sortType': '0',
+                                                                'fromDate': self.current_date_minus_10,
+                                                                'toDate': self.current_date_plus_10})
 
-        self.do_feed_list_and_verify(0)
+    def internal_(self):
+        def list_items_json_unicode(start, count):
+            list_items_json_unicode = self.teacher.get_json(
+                '/Feed/List.json?start=' + str(start) + '&classId=&complete=false&count=' + str(count))
+            dictionary_verify_annoucementviewdatas_all = list_items_json_unicode['data']['annoucementviewdatas']
 
-    def do_feed_list_and_verify(self, start, count=2000):
-        # get a current time
-        self.current_time = time.strftime('%Y-%m-%d')
+            return dictionary_verify_annoucementviewdatas_all
 
-        list_items_json_unicode = self.get('/Feed/List.json?start='+str(start)+'&classId=&complete=false&count='+str(count))
-        dictionary_verify_annoucementviewdatas_all = list_items_json_unicode['data']['annoucementviewdatas']
+        def get_lesson_plan_start_date(one_item):
+            if one_item['type'] == 3:
+                return one_item['lessonplandata']['startdate']
 
-        for item in dictionary_verify_annoucementviewdatas_all:
-            def get_item_date(one_item):
-                if one_item['type'] == 1:
-                    return one_item['classannouncementdata']['expiresdate']
-                if one_item['type'] == 4:
-                    return one_item['supplementalannouncementdata']['expiresdate']
+        def get_lesson_plan_end_date(one_item):
+            if one_item['type'] == 3:
+                return one_item['lessonplandata']['enddate']
 
-            def get_lesson_plan_start_date(one_item):
-                if one_item['type'] == 3:
-                    return one_item['lessonplandata']['startdate']
+        def get_item_date(one_item):
+            if one_item['type'] == 1:
+                return one_item['classannouncementdata']['expiresdate']
+            if one_item['type'] == 4:
+                return one_item['supplementalannouncementdata']['expiresdate']
 
-            def get_lesson_plan_end_date(one_item):
-                if one_item['type'] == 3:
-                    return one_item['lessonplandata']['enddate']
-
+        for item in list_items_json_unicode(0, 2500):
             if item['type'] == 1 or item['type'] == 4:
-                self.assertTrue((get_item_date(item) >= self.current_date_minus_10) and (get_item_date(item) <= self.current_date_plus_10), 'Activities and supplementals out off the custom range are shown ' + str(item["id"]))
+                self.assertTrue(
+                    (get_item_date(item) >= self.current_date_minus_10) and (get_item_date(item) <= self.current_date_plus_10),
+                    'Activities and supplementals out off the custom range are shown ' + str(item["id"]))
 
             if item['type'] == 3:
                 self.assertTrue(
-                    (get_lesson_plan_start_date(item) >= self.current_date_minus_10 and get_lesson_plan_start_date(item) <= self.current_date_plus_10),
+                    (get_lesson_plan_start_date(item) >= self.current_date_minus_10 and get_lesson_plan_start_date(
+                        item) <= self.current_date_plus_10),
                     'Only items out off the custom range are shown ' + str(item["id"]))
 
+    def test_mark_done_all_items(self):
+        self.internal_()
+
     def tearDown(self):
-        #reset all filters on the feed
-        self.dict = {}
-        self.post('/Feed/SetSettings.json?', self.dict)
+        # reset all filters on the feed
+        self.teacher.post_json('/Feed/SetSettings.json?', data={})
 
 if __name__ == '__main__':
     unittest.main()

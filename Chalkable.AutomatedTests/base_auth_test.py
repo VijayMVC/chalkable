@@ -39,6 +39,14 @@ class UserSession:
         var_school_year_string = ''.join(var_school_year)
         self.schoolYearId = var_school_year_string[-5:-2]
 
+        # getting grading periods
+        var_grading_periods_list = re.findall('var gradingPeriods = .+', page_as_one_string)
+
+        var_grading_periods_string = ''.join(var_grading_periods_list)
+        var_grading_periods_cut_off_list = re.findall('"id":[0-9]+', var_grading_periods_string)
+        var_grading_periods_cut_off_string = ''.join(var_grading_periods_cut_off_list)
+        self.var_grading_periods_final_list = re.findall('[0-9]+', var_grading_periods_cut_off_string)
+
     def get_(self, url, status=200, **kwargs):
         r = self.session.get(chlk_server_url + url, **kwargs)
         self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
@@ -83,6 +91,9 @@ class UserSession:
         r = self.post_(url, headers=headers, **kwargs)
         return self.validate_json_(r, success_property, success)
 
+    def gr_periods(self):
+        list_of_gr_periods = self.var_grading_periods_final_list
+        return list_of_gr_periods
 
 
 class TeacherSession(UserSession):
@@ -112,14 +123,38 @@ class TeacherSession(UserSession):
         list_of_gr_periods = self.var_grading_periods_final_list
         return list_of_gr_periods
 
+
 class StudentSession(UserSession):
     def parse_body_(self, page_as_one_string):
         pass
 
 
 class DistrictAdminSession(UserSession):
+    def __init__(self, instance):
+        UserSession.__init__(self, instance)
+
+        self.admin_id = None
+
     def parse_body_(self, page_as_one_string):
         pass
+
+        # getting grading periods
+        var_grading_periods_list = re.findall('var gradingPeriods = .+', page_as_one_string)
+
+        var_grading_periods_string = ''.join(var_grading_periods_list)
+        var_grading_periods_cut_off_list = re.findall('"id":[0-9]+', var_grading_periods_string)
+        var_grading_periods_cut_off_string = ''.join(var_grading_periods_cut_off_list)
+        self.var_grading_periods_final_list = re.findall('[0-9]+', var_grading_periods_cut_off_string)
+
+    def login(self, email, password):
+        UserSession.login(self, email, password)
+        r_admin = self.get_html('/User/SwitchToDistrictAdmin.aspx')
+        self.parse_body_(r_admin)
+        return self
+
+    def gr_periods(self):
+        list_of_gr_periods = self.var_grading_periods_final_list
+        return list_of_gr_periods
 
 
 class BaseTestCase(unittest.TestCase):
@@ -137,7 +172,6 @@ class BaseTestCase(unittest.TestCase):
 
 class BaseAuthedTestCase(BaseTestCase):
     def setUp(self):
-
         self.teacher = TeacherSession(self).login(user_email, user_pwd)
 
         # info for the teacher
@@ -253,14 +287,6 @@ class BaseAuthedTestCase(BaseTestCase):
             #print j['startdate'], j['enddate']
             self.list_for_grading_periods_and_classes.append({'startdate': j['startdate'], 'enddate': j['enddate']})
 
-
-
-
-
-
-
-
-
         #gradingComments
         var_grading_comments_list = re.findall('var gradingComments = .+', page_as_one_string)
         var_grading_comments_string = ''.join(var_grading_comments_list)
@@ -297,24 +323,13 @@ class BaseAuthedTestCase(BaseTestCase):
                     self.dic_for_class_allowed_standard[i['classid']] = []
                 self.dic_for_class_allowed_standard[i['classid']].append(k['id'])
 
-
-
-
-
         dictionary_var_classes_advanced_data_cut_off_string_data = dictionary_var_classes_advanced_data_cut_off_string['data']
-
-
-
-
-
-
 
         # getting marking periods
         var_marking_periods_list = re.findall('var markingPeriods = .+', page_as_one_string)
         var_markingPeriods_string = ''.join(var_marking_periods_list)
         var_markingPeriods_cut_off_string = var_markingPeriods_string[31:-3]
         dictionary_var_markingPeriods_cut_off_string = json.loads(var_markingPeriods_cut_off_string)
-
 
         self.dict_for_marking_period_date_startdate_endate = {}
         dictionary_var_markingPeriods_cut_off_string_data = dictionary_var_markingPeriods_cut_off_string['data']
@@ -324,14 +339,12 @@ class BaseAuthedTestCase(BaseTestCase):
             self.dict_for_marking_period_date_startdate_endate[marking_period['id']] = marking_period['startdate'], marking_period['enddate']
             #print 'marking_period', marking_period
 
-
         # getting list of marking periods
         self.list_for_marking_periods = []
         self.list_for_marking_periods_dates = []
         for key, value in self.dict_for_marking_period_date_startdate_endate.iteritems():
             self.list_for_marking_periods.append(key)
             self.list_for_marking_periods_dates.append(value)
-
 
         self.list_for_marking_periods_dates2 = []
         #print self.list_for_marking_periods_dates[0][0], type(self.list_for_marking_periods_dates[0][0])
@@ -341,9 +354,6 @@ class BaseAuthedTestCase(BaseTestCase):
 
         self.start_date_school_year = min(self.list_for_marking_periods_dates2)
         self.end_date_school_year = max(self.list_for_marking_periods_dates2)
-
-
-
 
         # getting pairs 'class/marking period'
         var_classesToFilter_list = re.findall('var classesToFilter = .+', page_as_one_string)
@@ -358,12 +368,9 @@ class BaseAuthedTestCase(BaseTestCase):
            # print 'info_for_one_class',info_for_one_class
             self.dict_for_clas_marking_period[info_for_one_class['id']] = info_for_one_class['markingperiodsid']
 
-
-
         # getting list of classes
         for k in dictionary_var_markingPeriods_cut_off_string_data:
             self.list_of_classes.append(k['id'])
-
 
         self.session = s
 
@@ -424,7 +431,6 @@ class BaseAuthedTestCase(BaseTestCase):
         r = s.get(chlk_server_url + url)
         self.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
         return r.text
-
 
     def postJSON(self, url, obj, status=200, success=True, files=None):
         s = self.session
@@ -515,7 +521,6 @@ class BaseAuthedTestCase(BaseTestCase):
         return self.verify_response(r_foreign_student, status, success)
     # the end of methods for the foreign student
 
-
     # these methods for classmate
     def get_classmate(self, url_classmate, status=200, success=True):
         s_classmate = self.session_classmate
@@ -541,8 +546,6 @@ class BaseAuthedTestCase(BaseTestCase):
 
         return self.verify_response(r_classmate, status, success)
     # the end of methods for classmates
-
-
 
     # these methods for the admin
     def get_admin(self, url_admin, status=200, success=True):
@@ -577,7 +580,6 @@ class BaseAuthedTestCase(BaseTestCase):
         random_date_for_attendance = start_date1 + timedelta(random.randint(0, delta))
 
         return datetime.strptime(str(random_date_for_attendance), '%Y-%m-%d').strftime('%m-%d-%Y')
-
 
 if __name__ == '__main__':
     unittest.main()

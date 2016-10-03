@@ -31,7 +31,7 @@ class TestFeed(BaseAuthedTestCase):
             self.assertTrue(list_for_students == sorted(list_for_students), 'Students sorted in ascending order')
         else:
             data = {"schoolYearId": str(school_year), "start": str(0), "count": str(100), "sortType": str(0), "teacherId":str(id_of_current_teacher)}
-            get_list_of_classes = self.post_instead_of_get('/Class/ClassesStats.json?', data, success=False)
+            get_list_of_classes = self.post('/Class/ClassesStats.json?', data, success=False)
 
 if __name__ == '__main__':
     unittest.main()
