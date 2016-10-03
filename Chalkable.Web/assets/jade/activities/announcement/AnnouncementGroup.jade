@@ -1,0 +1,10 @@
++ActionForm('group', self.getId() ? 'editGroupName' : 'createGroup').group-container
+    +Hidden('id', self.getId())
+    +Hidden('announcementid', self.getAnnouncementId())
+    +Hidden('listRequestId', self.getListRequestId())
+    INPUT(type="text",data-value=self.getName(), value = self.getName(), class=self.getId() ? '' : 'temporary', name="name", class='validate[required]').group-name
+    Button(disabled='disabled', style = self.getId() ? 'display:none;' : '', type="submit").special-button2.blue-button.create-group ok
+    if self.getId()
+        +ActionLink('group', 'tryDeleteGroup', self.getListRequestId(), self.getId(), self.getAnnouncementId()).delete-btn
+    else
+        .delete-btn
