@@ -96,6 +96,40 @@ NAMESPACE('chlk.lib.mvc', function () {
             VOID, function reset() {
                 while (this.getCurrent() !== null)
                     this.stopActivity_(this.pop_());
+            },
+
+            [[String, String, Array, String, Boolean, String, Object]],
+            chlk.models.common.InfoMsg, function getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_){
+                var buttons = [];
+                if(buttons_){
+                    var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
+                    buttons_.forEach(function(item){
+                        buttons.push(serializer.deserialize(item, chlk.models.common.Button));
+                    });
+                }else{
+                    buttons.push(new chlk.models.common.Button('Ok'));
+                }
+                return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_);
+            },
+
+            [[String, String, Array, String, Boolean]],
+            ria.async.Future, function ShowMsgBox(text_, header_, buttons_, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_) {
+                var model = this.getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_);
+                return this.showModal(chlk.activities.common.InfoMsgDialog, model);
+            },
+
+            ria.async.Future, function ShowLeaveConfirmBox() {
+                return this.ShowMsgBox("<b>Are you sure you want to leave this page?</b></br>You will lose unsaved changes.", null,
+                    [{text: 'Cancel'}, {text: 'OK', clazz: 'blue-button', value: 'ok'}], 'leave-msg', true)
+                    .then(function (mrResult) {
+                        if (!mrResult)
+                            return ria.async.BREAK;
+
+                        return mrResult;
+                    })
+                    .then(function (data) {
+                        return data == 'ok';
+                    });
             }
         ]);
 });

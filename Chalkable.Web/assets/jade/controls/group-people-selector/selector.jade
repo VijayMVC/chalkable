@@ -58,6 +58,10 @@ mixin GroupPeopleSelector(tpl, requestId)
                     userRole = tpl.getUserRole(),
                     currentUser = tpl.getCurrentUser(),
                 )
+            -var groupIds = (model.getSelectedGroups() || []).map(function(item){return item.getId().valueOf()}).join(',')
+            -var studentIds = (model.getSelectedStudents() || []).map(function(item){return item.getId().valueOf()}).join(',')
+            +Hidden('selectedGroups', groupIds).selected-groups-on-start
+            +Hidden('selectedStudents', studentIds).selected-students-on-start
             .buttons-container
                 +Button()(type="button").special-button2.cancel.close Cancel
                 BUTTON(
