@@ -1,0 +1,51 @@
+.grades-page.grading-summary-grid.final-page
+    -var selectedId = self.getClassId()
+    -var gp = self.getCurrentFinalGrade()
+    -var selectedGradingPeriodId = gp && gp.getGradingPeriod().getId()
+    .autocomplete-list.final-grades
+
+    if self.isInProfile()
+        .buttons-group.right
+            +ActionButton('grading', "summaryGridClassProfile", selectedId)=Msg.Item(true)
+            +ActionButton('grading', "standardsGridClassProfile", selectedId)=Msg.Standard(true)
+            +ActionButton('grading', "finalGradesClassProfile", selectedId).pressed=Msg.Final_Grade(true)
+        .clear-fix
+    else
+        -var topData = self.getTopData()
+        +ClassesToolBarWithAll(topData, 'grading', 'finalGrades', null, null, null)
+        h2.page-title=Msg.Final_Grade(true)
+        .action-bar
+            .items
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
+                if self.isLEIntegrated() && self.isHasAccessToLE()
+                    +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+    .mps-container
+        each gradingPeriod,i in self.getGradingPeriods()
+            -var ableEdit = self.isAbleEdit()
+            -var ableEditDirectValue = self.isAbleEditDirectValue()
+            div(
+                class=(gradingPeriod.getId() == selectedGradingPeriodId) ? "open" : "",
+                data-index=i,
+                data-grading-period-id=gradingPeriod.getId(),
+                data-able-edit=ableEdit,
+                data-able-edit-direct-value=ableEditDirectValue
+            ).chlk-calendar.marking-period-container.big-grading-period-container
+                .header.mp-title
+
+                    span.mp-name=gradingPeriod.getFinalTitleText()
+
+                    .collapse
+                div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                    if gradingPeriod.getId() == selectedGradingPeriodId
+                        +RenderWith(gp, chlk.templates.grading.GradingPeriodFinalGradeTpl)(
+                            classId = selectedId,
+                            ableEdit = ableEdit,
+                            ableEditDirectValue = ableEditDirectValue,
+                            gradingComments = self.getGradingComments()
+                        )
+                    else
+                        +ActionForm('grading', 'loadGradingPeriodFinalGradesSummary').load-grading-period
+                            +Hidden('classId', selectedId)
+                            +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())

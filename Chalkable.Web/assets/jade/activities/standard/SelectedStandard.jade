@@ -1,0 +1,7 @@
+.item-block.selected-item.selected(
+    data-tooltip=self.getTooltip()
+    data-id=self.getId().valueOf(),
+)
+    .item-name=self.getName()
+    if self.getDescription()
+        .item-description= (self.getName() ? '  -  ' : '') + self.getDescription()

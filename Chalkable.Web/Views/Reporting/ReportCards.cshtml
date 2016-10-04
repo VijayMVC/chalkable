@@ -1,0 +1,48 @@
+﻿@using Chalkable.Web.Common
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <!--Fonts-->
+    <link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
+
+    <!-- build:css /Content/report-cards.min.css -->
+
+    <link build:href="/app/bower/bootstrap/dist/css/bootstrap.min.css" href="@Url.StaticContent("/app/bower/bootstrap/dist/css/bootstrap.min.css")" type="text/css" rel="stylesheet" />
+    <link build:href="/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" href="@Url.StaticContent("/app/bower/bootstrap/dist/css/bootstrap-theme.min.css")" type="text/css" rel="stylesheet" />
+    <!-- endbuild -->
+
+    <!-- build:js /app/report-cards.min.js -->
+    <script build:src="/app/bower/jquery/dist/jquery.min.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/bower/jade/jade.js" src="@Url.StaticContent("/app/bower/jade/jade.js")"></script>
+    <!-- endbuild -->
+
+    <style type="text/css">@Html.Raw(ViewBag.Style)</style>
+    <script type="text/javascript">
+        var Model = @ViewData.GetJsJsonObjectOrNull(ViewConstants.REPORT_CARDS);
+    </script>
+
+    <script type="text/jade" id="template">@Html.Raw(ViewBag.JadeTpl)</script>
+
+</head>
+    <body style="width: 1200px">
+        <div id="container" class="fluid-container">
+            <h1>Demo Report</h1>
+        </div>
+        <script type="text/javascript">
+            (function(jade, $, model) {
+                var template = $('#template').text();
+                var html = "";
+                try {
+                    html = jade.render(template, { model: model.data });
+                } catch (e) {
+                    html = '<h1>Error rendering report</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+                }
+                $('#container').html(html);
+            })(jade, jQuery, Model);
+        </script>
+    </body>
+</html>
