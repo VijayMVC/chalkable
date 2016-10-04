@@ -2481,72 +2481,73 @@ each arrItem, index in arr
                                                       td.first Notes
                                                       td(colspan = gpColspan + 1)= lastGp.note
                   hr
-      if student.gradingperiod
-          .row
-              .col-sm-12
-                  .h3=student.gradingperiod.name + " Announcement"
-                  em=student.gradingperiod.announcement || "Grading Period Announcement"
-      .row.m-b-0(style="page-break-inside: avoid")
-          .col-sm-6
-              if student.attendances && student.attendances[0]
-                  table.table.table-bordered.attendance-table
+      div(style="page-break-inside: avoid")
+          if student.gradingperiod
+              .row
+                  .col-sm-12
+                      .h3=student.gradingperiod.name + " Announcement"
+                      em=student.gradingperiod.announcement || "Grading Period Announcement"
+          .row.m-b-0
+              .col-sm-6
+                  if student.attendances && student.attendances[0]
+                      table.table.table-bordered.attendance-table
+                          thead
+                              tr.active
+                                  td Attendance
+                                  each gp in student.attendances
+                                      td= gp.gradingperiodname || ("GP-" + gp.gradingperiodid)
+                                  td Total
+                          tbody
+                              -var items = ['enrolled', 'present', 'absences', 'excusedabsences', 'unexcusedabsences', 'tardies', 'excusedtardies', 'unexcusedtardies'];
+                              -var names = { enrolled: 'Enrolled', present: 'Present', absences: 'Absent', excusedabsences: '    Excused', unexcusedabsences: '    Unexcused', tardies: 'Tardy', excusedtardies: '    Excused', unexcusedtardies: '    Unexcused'}
+                              for prop in items
+                                  tr
+                                      td.pre=names[prop]
+                                      each item in student.attendances || []
+                                          td=item[prop]
+                                      -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
+                                      td=sum
+              .col-sm-6
+                  table.table.table-bordered.traditional-table
                       thead
                           tr.active
-                              td Attendance
-                              each gp in student.attendances
-                                  td= gp.gradingperiodname || ("GP-" + gp.gradingperiodid)
+                              td(colspan = 3) Grading Scale - Traditional
+                      tbody
+                          each grade in model.traditionalgradingscale
+                              tr
+                                  td=grade.name
+                                  td=grade.minvalue
+                                  td=grade.maxvalue
+          .row.m-t-0
+              .col-sm-6
+                  table.table.table-bordered.merits-table
+                      thead
+                          tr.active
+                              td Merits/Demerits
                               td Total
                       tbody
-                          -var items = ['enrolled', 'present', 'absences', 'excusedabsences', 'unexcusedabsences', 'tardies', 'excusedtardies', 'unexcusedtardies'];
-                          -var names = { enrolled: 'Enrolled', present: 'Present', absences: 'Absent', excusedabsences: '    Excused', unexcusedabsences: '    Unexcused', tardies: 'Tardy', excusedtardies: '    Excused', unexcusedtardies: '    Unexcused'}
-                          for prop in items
+                          tr
+                              td Merits
+                              td=student.merits
+                          tr
+                              td Demerits
+                              td=student.merits
+              .col-sm-6
+                  table.table.table-bordered.standards-table
+                      thead
+                          tr.active
+                              td(colspan = 2) Grading Scale - Standards
+                      tbody
+                          each grade in model.standardsgradingscale
                               tr
-                                  td.pre=names[prop]
-                                  each item in student.attendances || []
-                                      td=item[prop]
-                                  -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
-                                  td=sum
-          .col-sm-6
-              table.table.table-bordered.traditional-table
-                  thead
-                      tr.active
-                          td(colspan = 3) Grading Scale - Traditional
-                  tbody
-                      each grade in model.traditionalgradingscale
-                          tr
-                              td=grade.name
-                              td=grade.minvalue
-                              td=grade.maxvalue
-      .row.m-t-0
-          .col-sm-6
-              table.table.table-bordered.merits-table
-                  thead
-                      tr.active
-                          td Merits/Demerits
-                          td Total
-                  tbody
-                      tr
-                          td Merits
-                          td=student.merits
-                      tr
-                          td Demerits
-                          td=student.merits
-          .col-sm-6
-              table.table.table-bordered.standards-table
-                  thead
-                      tr.active
-                          td(colspan = 2) Grading Scale - Standards
-                  tbody
-                      each grade in model.standardsgradingscale
-                          tr
-                              td=grade.name
-                              td=grade.description
-      .row
-          .col-sm-12
-              .signature-block
-                  .signature-block-line
-                  em.text Parent or Guardian Signature
-              .clear-both
+                                  td=grade.name
+                                  td=grade.description
+          .row
+              .col-sm-12
+                  .signature-block
+                      .signature-block-line
+                      em.text Parent or Guardian Signature
+                  .clear-both
 </script>
 
 </head>
