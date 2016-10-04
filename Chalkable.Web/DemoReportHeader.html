@@ -6,27 +6,33 @@
     <link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
     <link href="http://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
-    <link href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-    <link href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet" />
     <script src="https://local.chalkable.com:5001/app/bower/jquery/dist/jquery.js"></script>
     <script src="https://local.chalkable.com:5001/app/bower/jade/jade.js"></script>
     <style type="text/css">
+        body {margin: 0}
+        * {box-sizing: border-box;}
         #container{ font-family: 'Open Sans', sans-serif;}
-        .h1 {
+        .h1, .h2 {
+            margin-top: 20px;
+            margin-bottom: 10px;
             font-size: 14pt;
+            line-height: 1.1;
+        }
+
+        .h1 {
             font-weight: 600;
             display: inline-block;
         }
 
         .h2 {
-            font-size: 14pt;
             font-weight: normal;
             font-style: italic;
             float: right
         }
 
         .panel {
-            box-shadow: none;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
         }
 
 

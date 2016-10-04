@@ -7,14 +7,34 @@
     <link href="http://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
     
-    <link href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-    <link href="https://local.chalkable.com:5001/app/bower/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet" />
-    
     <script src="https://local.chalkable.com:5001/app/bower/jquery/dist/jquery.js"></script>
     <script src="https://local.chalkable.com:5001/app/bower/jade/jade.js"></script>
     
-    <style type="text/css">		
-            .main-student-panel >.panel-body{ padding: 0px !important;}
+    <style type="text/css">
+            body {margin: 0}
+            * {box-sizing: border-box;}
+            .col-sm-12, .col-sm-4, .col-sm-6, .col-sm-8{position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;float: left;}
+            .col-sm-12 {width: 100%;}
+            .col-sm-4 {width: 33.33333333%;}
+            .col-sm-6 {width: 50%;}
+            .col-sm-8 {width: 66.66666667%;}
+            .h1, .h2, .h3{margin-top: 20px;margin-bottom: 10px;line-height: 1.1;}
+            .row {margin-top: 15px; margin-bottom: 50px; padding: 1px;margin-right: -15px;margin-left: -15px;}
+            .row:before {display: table;content: " ";}
+            .row:after {display: table;content: " ";clear: both;}
+            .row:last-child {margin-bottom: 35px;}
+            .row.m-t-0 {margin-top: 0}
+            .row.m-b-0 {margin-bottom: 0}
+            .main-student-panel { padding: 1px;}
+            .recipient-parent {border: 1px solid rgba(229, 229,227, 0.45); border-radius: 4px;}
+            .mailing-box{padding: 15px;}
+            table {width: 100%;margin-bottom: 20px;border-collapse: collapse; }
+            .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border:1px solid #8a8a8a; }
+            .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {padding: 8px;line-height: 1.42857143;vertical-align: top;}
+            th {text-align: left;}
+            .table>thead>tr.active>td, .table>thead>tr.active>th{background-color: #f5f5f5;}
+            hr {border: 0; margin-bottom: -40px; margin-top: 40px;border-top: 1px solid #8a8a8a;}
+
             .logo{ width: 4in; height: 2.5in; float: right; }
 			.school{ width: 4in; float: right;}
             .h1 { font-size: 18pt; font-weight: 600 }
@@ -23,16 +43,6 @@
 			.recipient-h { font-weight: 600; font-style: italic }
 			.pre {white-space: pre-wrap}
             p { color: green; }
-			.panel {
-			    box-shadow: none;
-			}
-            .panel-body {
-                padding-left: 0px !important;
-                padding-right: 0px !important;
-            }
-            .panel-body.mailing-box {
-                padding: 15px !important;
-            }
             #container, #container table { font-family: 'Open Sans', sans-serif; font-size: 11pt }
 			.classes-table { margin-bottom: 0; table-layout: fixed }
 			.classes-table td:not(.pre) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -42,9 +52,6 @@
 			.new-page { page-break-before: always; }
 			.signature-block {display: inline-block; float: right; width: 4in;}
 			.signature-block-line {background: black; height: 1px;}
-			.recipient-parent {border-color: rgba(229, 229,227, 0.45);}
-			hr {border-top-color: #8a8a8a; border-top-width: 0.5px; margin-bottom: -40px; margin-top: 40px;}
-			.table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border-color: #8a8a8a; }
 			.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th { border-top: none; }
 			.table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border-bottom-width: 1px; }
 			td.w-100 { width: 100% !important; padding: 0 !important }
@@ -61,7 +68,8 @@
 			.comments-row +TR.notes-row td:not(:first-child){border-top: 1px solid #8a8a8a}
 			.notes-row td:last-child, .standards-row .description{border-left: none !important}
 			.notes-row td:first-child{border: none !important}
-			.classes-table td.first{text-indent: 15px; font-style: italic}</style>
+			.classes-table td.first{text-indent: 15px; font-style: italic}
+    </style>
     <script type="text/javascript">
         var Model = {
   "title": null,
@@ -2369,189 +2377,176 @@ each arrItem, index in arr
   -var school = model.school
   -var student = model.student
   -var recipient = student.recipient
-  .panel.main-student-panel(class=index > 0 ? "new-page" : "")
-      .panel-body
-          .panel
-              .panel-body
-                  .row
-                      .col-sm-8
-                          .h1="Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
-                          .h2=school.name
-                          .school-mailing.mailing-box
-                              .line=(school.address1 || "") + " " + (school.address2 || "")
-                              if school.city && school.state && school.zip
-                                  .line=[school.city, school.state, school.zip].join(" ")
-                              if school.phone
-                                  .line=school.phone
-                      .col-sm-4
-                          if model.logohref
-                              img(src=model.logohref, width="3in").logo
-          .panel
-              .panel-body
-                  .row
-                      .col-sm-8
-                          .panel.recipient-parent
-                              .panel-body.mailing-box
-                                  .recipient-h.line=recipient.recipientname
-                                  .line= recipient.addressline1 + " " + recipient.addressline2
-                                  .line= [recipient.city, recipient.state, recipient.postalcode].join(" ")
-                      .col-sm-4
-                          table.table.table-bordered.right-table.school
-                              tbody
-                                  tr
-                                      td School Year
-                                      td=model.acadsessionname
-                                  tr
-                                      td Homeroom Teacher
-                                      td=student.homeroomteacher
-                                  tr
-                                      td Grade Level
-                                      td=student.gradelevel
-                                  if student.promoted
-                                      tr
-                                          td Status
-                                          td Promoted
-          if student.classes && student.classes.length
-              .panel
-                  .panel-body
-                      .row
-                          .col-sm-12
-                              table.table.classes-table
-                                  thead.classes-header
-                                      -var gps = student.classes[0].gradingperiods || []
-                                      tr
-                                          th
-                                          th.teacher-name
-                                          th.right-border
-                                          each gp in gps
-                                              -var gradeditems = gp.gradeditems || []
-                                              th(colspan=gradeditems.length + 1).right-border.text-center= gp.gradingperiodname
-                                      tr
-                                          th Class
-                                          th.teacher-name Teacher
-                                          th.right-border Section
-                                          each gp in gps
-                                              -var gradeditems = gp.gradeditems || []
-                                              th Std
-                                              each gi, i in gradeditems
-                                                  th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.gradeditemname
-                                  tbody
-                                      tr
-                                          -var span = 3 + gps.length
-                                          -gps.forEach(function(gp){ span = span + (gp.gradeditems || []).length })
-                                          td(colspan= span).w-100
-                                              each item in student.classes
-                                                  -var gps = item.gradingperiods || []
-                                                  table.table.table-bordered.classes-table
-                                                      thead.classes-header
-                                                          tr.active
-                                                              th=item.name
-                                                              th.teacher-name=item.teacher
-                                                              th.right-border=item.classnumber
-                                                              each gp in gps
-                                                                  -var gradeditems = gp.gradeditems || []
-                                                                  th
-                                                                  each gi, i in gradeditems
-                                                                      th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + gi.numericgrade
-                                                      tbody
-                                                          -var standards = gps[0].standards || []
-                                                          each standard, si in standards
-                                                              tr.standards-row
-                                                                  if si == 0
-                                                                      td(rowspan = standards.length).first Standards
-                                                                  td(colspan = 2).right-border.description= standard.name + ' - ' + standard.description
-                                                                  each gp,i in gps
-                                                                      -var gradeditems = gp.gradeditems || []
-                                                                      td(colspan = gradeditems.length + 1)= standard.grade || '-'
-                                                          -var lastGp = gps[gps.length - 1]
-                                                          -var lastGIs = lastGp.gradeditems
-                                                          -var itemsWithComments = lastGIs.filter(function(item){return item.comments})
-                                                          -var gpColspan = 1
-                                                          -gps.forEach(function(gp){gpColspan = gpColspan + 1 + gp.gradeditems.length})
-                                                          if itemsWithComments.length
-                                                              each cItem, index in itemsWithComments
-                                                                  tr.comments-row
-                                                                      if index == 0
-                                                                          td(rowspan = itemsWithComments.length).first Comments
-                                                                      td=cItem.gradeditemname
-                                                                      td(colspan = gpColspan).pre=cItem.comments.map(function(item){return item.comment}).join('\n')
-                                                          if lastGp.note
-                                                              tr.notes-row
-                                                                  td.first Notes
-                                                                  td(colspan = gpColspan + 1)= lastGp.note
-                              hr
-          if student.gradingperiod
-              .panel
-                  .panel-body
-                      .row
-                          .col-sm-12
-                              .h3=student.gradingperiod.name + " Announcement"
-                              em=student.gradingperiod.announcement || "Grading Period Announcement"
-          .panel(style="page-break-inside: avoid")
-              .panel-body
-                  .row
-                      .col-sm-6
-                          if student.attendances && student.attendances[0]
-                              table.table.table-bordered.attendance-table
-                                  thead
-                                      tr.active
-                                          td Attendance
-                                          each gp in student.attendances
-                                              td= gp.gradingperiodname || ("GP-" + gp.gradingperiodid)
-                                          td Total
-                                  tbody
-                                      -var items = ['enrolled', 'present', 'absences', 'excusedabsences', 'unexcusedabsences', 'tardies', 'excusedtardies', 'unexcusedtardies'];
-                                      -var names = { enrolled: 'Enrolled', present: 'Present', absences: 'Absent', excusedabsences: '    Excused', unexcusedabsences: '    Unexcused', tardies: 'Tardy', excusedtardies: '    Excused', unexcusedtardies: '    Unexcused'}
-                                      for prop in items
-                                          tr
-                                              td.pre=names[prop]
-                                              each item in student.attendances || []
-                                                  td=item[prop]
-                                              -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
-                                              td=sum
-                      .col-sm-6
-                          table.table.table-bordered.traditional-table
-                              thead
-                                  tr.active
-                                      td(colspan = 3) Grading Scale - Traditional
-                              tbody
-                                  each grade in model.traditionalgradingscale
-                                      tr
-                                          td=grade.name
-                                          td=grade.minvalue
-                                          td=grade.maxvalue
-                  .row
-                      .col-sm-6
-                          table.table.table-bordered.merits-table
-                              thead
-                                  tr.active
-                                      td Merits/Demerits
-                                      td Total
-                              tbody
-                                  tr
-                                      td Merits
-                                      td=student.merits
-                                  tr
-                                      td Demerits
-                                      td=student.merits
-                      .col-sm-6
-                          table.table.table-bordered.standards-table
-                              thead
-                                  tr.active
-                                      td(colspan = 2) Grading Scale - Standards
-                              tbody
-                                  each grade in model.standardsgradingscale
-                                      tr
-                                          td=grade.name
-                                          td=grade.description
-          .panel
-              .panel-body
-                  .row
-                      .col-sm-12
-                          .signature-block
-                              .signature-block-line
-                              em.text Parent or Guardian Signature
-                          .clear-both
+  .main-student-panel(class=index > 0 ? "new-page" : "")
+      .row
+          .col-sm-8
+              .h1="Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
+              .h2=school.name
+              .school-mailing
+                  .line=(school.address1 || "") + " " + (school.address2 || "")
+                  if school.city && school.state && school.zip
+                      .line=[school.city, school.state, school.zip].join(" ")
+                  if school.phone
+                      .line=school.phone
+          .col-sm-4
+              if model.logohref
+                  img(src=model.logohref, width="3in").logo
+      .row
+          .col-sm-8
+              .recipient-parent
+                  .mailing-box
+                      .recipient-h.line=recipient.recipientname
+                      .line= recipient.addressline1 + " " + recipient.addressline2
+                      .line= [recipient.city, recipient.state, recipient.postalcode].join(" ")
+          .col-sm-4
+              table.table.table-bordered.right-table.school
+                  tbody
+                      tr
+                          td School Year
+                          td=model.acadsessionname
+                      tr
+                          td Homeroom Teacher
+                          td=student.homeroomteacher
+                      tr
+                          td Grade Level
+                          td=student.gradelevel
+                      if student.promoted
+                          tr
+                              td Status
+                              td Promoted
+      if student.classes && student.classes.length
+          .row
+              .col-sm-12
+                  table.table.classes-table
+                      thead.classes-header
+                          -var gps = student.classes[0].gradingperiods || []
+                          tr
+                              th
+                              th.teacher-name
+                              th.right-border
+                              each gp in gps
+                                  -var gradeditems = gp.gradeditems || []
+                                  th(colspan=gradeditems.length + 1).right-border.text-center= gp.gradingperiodname
+                          tr
+                              th Class
+                              th.teacher-name Teacher
+                              th.right-border Section
+                              each gp in gps
+                                  -var gradeditems = gp.gradeditems || []
+                                  th Std
+                                  each gi, i in gradeditems
+                                      th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.gradeditemname
+                      tbody
+                          tr
+                              -var span = 3 + gps.length
+                              -gps.forEach(function(gp){ span = span + (gp.gradeditems || []).length })
+                              td(colspan= span).w-100
+                                  each item in student.classes
+                                      -var gps = item.gradingperiods || []
+                                      table.table.table-bordered.classes-table
+                                          thead.classes-header
+                                              tr.active
+                                                  th=item.name
+                                                  th.teacher-name=item.teacher
+                                                  th.right-border=item.classnumber
+                                                  each gp in gps
+                                                      -var gradeditems = gp.gradeditems || []
+                                                      th
+                                                      each gi, i in gradeditems
+                                                          th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + gi.numericgrade
+                                          tbody
+                                              -var standards = gps[0].standards || []
+                                              each standard, si in standards
+                                                  tr.standards-row
+                                                      if si == 0
+                                                          td(rowspan = standards.length).first Standards
+                                                      td(colspan = 2).right-border.description= standard.name + ' - ' + standard.description
+                                                      each gp,i in gps
+                                                          -var gradeditems = gp.gradeditems || []
+                                                          td(colspan = gradeditems.length + 1)= standard.grade || '-'
+                                              -var lastGp = gps[gps.length - 1]
+                                              -var lastGIs = lastGp.gradeditems
+                                              -var itemsWithComments = lastGIs.filter(function(item){return item.comments})
+                                              -var gpColspan = 1
+                                              -gps.forEach(function(gp){gpColspan = gpColspan + 1 + gp.gradeditems.length})
+                                              if itemsWithComments.length
+                                                  each cItem, index in itemsWithComments
+                                                      tr.comments-row
+                                                          if index == 0
+                                                              td(rowspan = itemsWithComments.length).first Comments
+                                                          td=cItem.gradeditemname
+                                                          td(colspan = gpColspan).pre=cItem.comments.map(function(item){return item.comment}).join('\n')
+                                              if lastGp.note
+                                                  tr.notes-row
+                                                      td.first Notes
+                                                      td(colspan = gpColspan + 1)= lastGp.note
+                  hr
+      if student.gradingperiod
+          .row
+              .col-sm-12
+                  .h3=student.gradingperiod.name + " Announcement"
+                  em=student.gradingperiod.announcement || "Grading Period Announcement"
+      .row.m-b-0(style="page-break-inside: avoid")
+          .col-sm-6
+              if student.attendances && student.attendances[0]
+                  table.table.table-bordered.attendance-table
+                      thead
+                          tr.active
+                              td Attendance
+                              each gp in student.attendances
+                                  td= gp.gradingperiodname || ("GP-" + gp.gradingperiodid)
+                              td Total
+                      tbody
+                          -var items = ['enrolled', 'present', 'absences', 'excusedabsences', 'unexcusedabsences', 'tardies', 'excusedtardies', 'unexcusedtardies'];
+                          -var names = { enrolled: 'Enrolled', present: 'Present', absences: 'Absent', excusedabsences: '    Excused', unexcusedabsences: '    Unexcused', tardies: 'Tardy', excusedtardies: '    Excused', unexcusedtardies: '    Unexcused'}
+                          for prop in items
+                              tr
+                                  td.pre=names[prop]
+                                  each item in student.attendances || []
+                                      td=item[prop]
+                                  -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
+                                  td=sum
+          .col-sm-6
+              table.table.table-bordered.traditional-table
+                  thead
+                      tr.active
+                          td(colspan = 3) Grading Scale - Traditional
+                  tbody
+                      each grade in model.traditionalgradingscale
+                          tr
+                              td=grade.name
+                              td=grade.minvalue
+                              td=grade.maxvalue
+      .row.m-t-0
+          .col-sm-6
+              table.table.table-bordered.merits-table
+                  thead
+                      tr.active
+                          td Merits/Demerits
+                          td Total
+                  tbody
+                      tr
+                          td Merits
+                          td=student.merits
+                      tr
+                          td Demerits
+                          td=student.merits
+          .col-sm-6
+              table.table.table-bordered.standards-table
+                  thead
+                      tr.active
+                          td(colspan = 2) Grading Scale - Standards
+                  tbody
+                      each grade in model.standardsgradingscale
+                          tr
+                              td=grade.name
+                              td=grade.description
+      .row
+          .col-sm-12
+              .signature-block
+                  .signature-block-line
+                  em.text Parent or Guardian Signature
+              .clear-both
 </script>
 
 </head>
