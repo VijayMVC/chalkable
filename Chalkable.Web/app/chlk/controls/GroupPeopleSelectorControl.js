@@ -26,6 +26,27 @@ NAMESPACE('chlk.controls', function () {
                 return this.context.getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
             },
 
+            [ria.mvc.DomEventBind('click', '.group-people-selector .group-remove')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function groupRemoveClick(node, event) {
+                this.context.getDefaultView().ShowConfirmBox('Are you sure you want to delete this group?')
+                    .then(function(){
+                        var parent = node.parent(),
+                            check = parent.find('.group-check');
+                        if(check.is(':checked')){
+                            check.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
+                            this.updateSelectedGroupsByNodes_(check, false);
+                        }
+
+                        parent.find('.recipient-remove-hidden').trigger('click');
+
+                        setTimeout(function(){
+                            node.parent('.recipient-item').removeSelf();
+                        }, 1);
+
+                    }.bind(this));
+            },
+
             [ria.mvc.DomEventBind('click', '.group-people-selector .top-link:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             function topLinkClick(node, event) {

@@ -318,28 +318,34 @@ NAMESPACE('chlk.controllers', function () {
                 return this.ShadeView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
             },
 
-            [chlk.controllers.NotChangedSidebarButton()],
-            [[String, chlk.models.id.GroupId, chlk.models.id.AnnouncementId]],
-            function tryDeleteGroupAction(listRequestId, groupId, announcementId_) {
+            /*[chlk.controllers.NotChangedSidebarButton()],
+            [[chlk.models.id.GroupId]],
+            function tryDeleteGroupAction(groupId) {
                 this.ShowConfirmBox('Are you sure you want to delete this group?', "whoa.", null, 'negative-button')
                     .then(function (data) {
-                        return this.BackgroundNavigate('group', 'deleteGroup', [listRequestId, groupId, announcementId_]);
+                        return this.BackgroundNavigate('group', 'deleteGroup', [groupId]);
                     }, this);
                 return null;
-            },
+            },*/
 
             [chlk.controllers.NotChangedSidebarButton()],
-            [[String, chlk.models.id.GroupId, chlk.models.id.AnnouncementId]],
-            function deleteGroupAction(listRequestId, groupId, announcementId_) {
+            [[chlk.models.id.GroupId]],
+            function deleteGroupAction(groupId) {
                 var res = this.groupService
                     .deleteGroup(groupId)
                     .then(function (groups) {
-                        this.afterGroupEdit_(listRequestId, groups, announcementId_);
-                        return new chlk.models.group.GroupsListViewData(listRequestId, groups, announcementId_);
+                        var recipients = this.getContext().getSession().get(ChlkSessionConstants.ADMIN_RECIPIENTS, null);
+                        if(recipients){
+                            recipients.groups = recipients.groups.filter(function(group){return group.getId() != groupId});
+                            this.getContext().getSession().set(ChlkSessionConstants.ADMIN_RECIPIENTS, recipients);
+                        }
+
+                        this.BackgroundUpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, groupId, 'remove-group');
+                        return ria.async.BREAK;
                     }, this)
                     .attach(this.validateResponse_());
 
-                return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
+                return this.UpdateView(this.getView().getCurrent().getClass(), res);
             },
 
             /*[chlk.controllers.NotChangedSidebarButton()],
