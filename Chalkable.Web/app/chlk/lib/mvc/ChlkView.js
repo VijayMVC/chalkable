@@ -118,15 +118,19 @@ NAMESPACE('chlk.lib.mvc', function () {
                 return this.showModal(chlk.activities.common.InfoMsgDialog, model);
             },
 
-            ria.async.Future, function ShowLeaveConfirmBox() {
-                return this.ShowMsgBox("<b>Are you sure you want to leave this page?</b></br>You will lose unsaved changes.", null,
-                    [{text: 'Cancel'}, {text: 'OK', clazz: 'blue-button', value: 'ok'}], 'leave-msg', true)
+            ria.async.Future, function ShowConfirmBox(text, clazz_) {
+                return this.ShowMsgBox(text, null,
+                    [{text: 'Cancel'}, {text: 'OK', clazz: 'blue-button', value: 'ok'}], clazz_, true)
                     .then(function (mrResult) {
                         if (!mrResult)
                             return ria.async.BREAK;
 
                         return mrResult;
-                    })
+                    });
+            },
+
+            ria.async.Future, function ShowLeaveConfirmBox() {
+                return this.ShowConfirmBox("<b>Are you sure you want to leave this page?</b></br>You will lose unsaved changes.", 'leave-msg')
                     .then(function (data) {
                         return data == 'ok';
                     });

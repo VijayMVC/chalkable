@@ -23,6 +23,11 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.group-ids').setValue(model.getGroupIds());
             },
 
+            [ria.mvc.PartialUpdateRule(null, 'remove-group')],
+            VOID, function removeGroup(tpl, groupId, msg_) {
+                this.dom.find('.group-recipient[data-id=' + groupId + ']').removeSelf();
+            },
+
             [ria.mvc.DomEventBind('change', '.recipient-search')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function searchChange(node, event, selected_){
