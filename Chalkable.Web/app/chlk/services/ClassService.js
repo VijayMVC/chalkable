@@ -251,14 +251,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-            ria.async.Future, function detailedCourseTypes(schoolYearId, gradeLevelId) {
-                return this.get('Class/DetailedCourseTypes.json', ArrayOf(chlk.models.classes.CourseType), {
-                    schoolYearId: schoolYearId.valueOf(),
-                    gradeLevelId: gradeLevelId.valueOf()
-                });
-            },
-
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getInfo(classId){
                 return this.get('Class/ClassInfo.json', chlk.models.classes.ClassInfo,{
