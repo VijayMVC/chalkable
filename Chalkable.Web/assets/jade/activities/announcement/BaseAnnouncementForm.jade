@@ -214,4 +214,4 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                 type="submit",
                 name="submitType",
                 value=state ? "submitOnEdit" : "submit"
-            ).special-button.blue-button.submit-btn.submit-announcement=(state ? Msg.Save : Msg.Submit)
+            ).special-button.blue-button.submit-btn.submit-announcement=Msg.Save
