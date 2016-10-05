@@ -124,7 +124,7 @@ NAMESPACE('chlk.controls', function () {
                 this.filterResultsByNode_(node);
             },
 
-            function updateStudents_(selector, type, append_, start_){
+            function updateStudents_(selector, type, append_, start_, allItems_){
                 var selectorId = selector.getAttr('id'), params,
                     o = selectors[selectorId], isMy = type == 1, studentsObj = isMy ? o.myStudentsPart : o.allStudentsPart,
                     studentsData = o.students || [],
@@ -144,11 +144,12 @@ NAMESPACE('chlk.controls', function () {
                     programId = chlk.models.id.ProgramId(parent.find('.program-id').getValue()),
                     classId = chlk.models.id.ClassId(selector.find('.main-class-id').getValue() || parent.find('.class-id').getValue()),
                     byLastName = !!parseInt(parent.find('.by-last-name').getValue(),10),
-                    filter = parent.find('.top-filter').getValue();
+                    filter = parent.find('.top-filter').getValue(),
+                    count = allItems_ ? 99999 : itemsCount;
                 if(getTeachers)
-                    params = [classId, filter, byLastName, start_ || 0, itemsCount, true];
+                    params = [classId, filter, byLastName, start_ || 0, count, true];
                 else
-                    params = [classId, filter, !isStudent && isMy, byLastName, start_ || 0, itemsCount, null, schoolId, gradeLevelId, programId];
+                    params = [classId, filter, !isStudent && isMy, byLastName, start_ || 0, count, null, schoolId, gradeLevelId, programId];
                 var tpl = append_ ? new chlk.templates.controls.group_people_selector.PersonItemsTpl() :
                     new chlk.templates.controls.group_people_selector.UsersListTpl();
 
@@ -172,24 +173,29 @@ NAMESPACE('chlk.controls', function () {
                 if(!append_){
                     clearInterval(o[intervalName]);
                     o[intervalName] = null;
-                    this.startInterval_(o, selector, type);
+                    if(!allItems_) this.startInterval_(o, selector, type);
                     o.activityDom.addClass('partial-update');
                 }
 
-                methodRef.invokeOn(serviceIns, params)
+                var res = methodRef.invokeOn(serviceIns, params)
                     .then(function(students){
-                        if(students.getItems().length < itemsCount)
-                            clearInterval(o[intervalName]);
                         var model = append_ ? students : new chlk.models.recipients.UsersListViewData(students, isMy, studentsObj.gradeLevels,
                             studentsObj.schools, studentsObj.programs, studentsObj.classes, gradeLevelId, schoolId, programId, classId, byLastName, filter);
                         tpl.assign(model);
                         if(!append_)
                             dom.empty();
                         tpl.renderTo(dom);
-                        o.activityDom.removeClass('partial-update');
+                        if(!allItems_) o.activityDom.removeClass('partial-update');
                         this.context.getDefaultView().notifyControlRefreshed();
                         parent.removeClass('scroll-freezed');
+
+                        if(students.getItems().length < count){
+                            parent.find('.items-cnt').addClass('all-loaded');
+                            clearInterval(o[intervalName]);
+                        }
                     }, this);
+
+                return res;
             },
 
             function updateGroups_(selector, append_){
@@ -249,7 +255,19 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('change', '.all-persons-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function allPersonsSelect(node, event, selected_){
-                this.updateSelectedStudentsByNodes_(node.parent('.body-content').find('.recipient-check'), node.is(':checked'));
+                var parent = node.parent('.body-content'),
+                    $parent = parent.$;
+                if(node.is(':checked') && !parent.find('.items-cnt').hasClass('all-loaded')){
+                    var selector = node.parent('.group-people-selector'),
+                        type = parent.getData('index');
+                    this.updateStudents_(selector, type, false, 0, true)
+                        .then(function(){
+                            $parent.find('.all-persons-check').setChecked(true);
+                            this.updateSelectedStudentsByNodes_($parent.find('.recipient-check'), true);
+                        }.bind(this));
+                }
+                else
+                    this.updateSelectedStudentsByNodes_($parent.find('.recipient-check'), node.is(':checked'));
             },
 
             [ria.mvc.DomEventBind('change', '.group-check')],
@@ -261,7 +279,7 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('change', '.student-check')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function studentSelect(node, event){
-                this.updateSelectedStudentsByNodes_(node, node.is(':checked'));
+                this.updateSelectedStudentsByNodes_(node.$, node.is(':checked'));
             },
 
             [ria.mvc.DomEventBind('click', '.recipient-item.student-item')],
@@ -269,7 +287,6 @@ NAMESPACE('chlk.controls', function () {
             function studentBlockClick(node, event){
                 var checkNode = node.find('.student-check');
                 checkNode.trigger('change');
-                //this.updateSelectedStudentsByNodes_(checkNode, checkNode.is(':checked'));
             },
 
             [ria.mvc.DomEventBind('click', '.remove-group')],
@@ -281,7 +298,7 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('click', '.remove-student')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function studentRemove(node, event){
-                this.updateSelectedStudentsByNodes_(node, false);
+                this.updateSelectedStudentsByNodes_(node.$, false);
             },
 
             function updateSelected_(selector, o){
@@ -353,35 +370,38 @@ NAMESPACE('chlk.controls', function () {
             },
 
             function updateSelectedStudentsByNodes_(nodes, add_) {
-                var selector = nodes.parent('.group-people-selector'),
+                var $selector = nodes.parents('.group-people-selector'),
+                    selector = new ria.dom.Dom($selector),
                     selectorId = selector.getAttr('id'),
                     o = selectors[selectorId], id, name, gender, index, check,
                     studentsData = o.students || [],
                     studentIds = studentsData.map(function(student){return student.getId().valueOf()});
 
                 if(add_){
-                    nodes.forEach(function(node){
-                        id = parseInt(node.getData('id'), 10);
+                    nodes.each(function(i, item){
+                        var node = $(this);
+                        id = parseInt(node.data('id'), 10);
                         if(!id)
-                            id = node.getData('id');
+                            id = node.data('id');
                         if(studentIds.indexOf(id) == -1){
                             id = new chlk.models.id.SchoolPersonId(id);
-                            name = node.getData('name').toString();
-                            gender = node.getData('gender');
+                            name = node.data('name').toString();
+                            gender = node.data('gender');
                             studentsData.push(new chlk.models.people.ShortUserInfo(null, null, id, name, gender));
-                            check = selector.find('.student-check[data-id=' + id + ']:not(:checked)');
-                            check.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [true]);
+                            check = $selector.find('.student-check[data-id=' + id + ']:not(:checked)');
+                            check.setChecked(true);
                         }
                     });
                 }else{
-                    nodes.forEach(function(node){
-                        id = parseInt(node.getData('id'), 10);
+                    nodes.each(function(i, item){
+                        var node = $(this);
+                        id = parseInt(node.data('id'), 10);
                         if(!id)
-                            id = node.getData('id');
+                            id = node.data('id');
                         index = studentIds.indexOf(id);
                         if(index > -1){
-                            check = selector.find('.student-check[data-id=' + id + ']:checked');
-                            check.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
+                            check = $selector.find('.student-check[data-id=' + id + ']:checked');
+                            check.setChecked(false);
                             studentsData.splice(index, 1);
                             studentIds.splice(index, 1);
                         }
@@ -396,6 +416,8 @@ NAMESPACE('chlk.controls', function () {
                     btn.setAttr('disabled', true);
                 else
                     btn.setAttr('disabled', false);
+
+                o.activityDom.removeClass('partial-update');
             },
 
             Object, function prepare(data, attributes) {

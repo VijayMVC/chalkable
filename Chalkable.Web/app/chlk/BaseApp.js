@@ -226,6 +226,35 @@ NAMESPACE('chlk', function (){
 
                 var tooltipTimeOut;
 
+                jQuery.fn.extend({setItemsChecked : function(value){
+                    var jNode;
+                    jQuery(this).each(function(index, item){
+                        jNode = jQuery(this);
+                        if(!!item.getAttribute('checked') != !!value){
+                            jNode.prop('checked', value);
+                            value ? this.setAttribute('checked', 'checked') : this.removeAttribute('checked');
+                            value && this.setAttribute('checked', 'checked');
+                            var node = jNode.parent().find('.hidden-checkbox');
+                            node.val(value);
+                            node.data('value', value);
+                            node.attr('data-value', value);
+                        }
+                    });
+                }});
+
+                jQuery.fn.extend({setChecked : function(value){
+                    var jNode = this, item = this[0];
+                    if(!!item.getAttribute('checked') != !!value){
+                        jNode.prop('checked', value);
+                        value ? item.setAttribute('checked', 'checked') : item.removeAttribute('checked');
+                        value && item.setAttribute('checked', 'checked');
+                        var node = jNode.parent().find('.hidden-checkbox');
+                        node.val(value);
+                        node.data('value', value);
+                        node.attr('data-value', value);
+                    }
+                }});
+
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
                     if(!jQuery(this).data('wasClick') && !tooltipTimeOut){
