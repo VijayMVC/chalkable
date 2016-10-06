@@ -2,29 +2,30 @@
 -var students = self.getAdminAnnouncementStudents() || []
 +ActionLink('announcement', 'showGroups', self.getId())(data-tooltip="Add people or groups").add-recipients-btn
 each group in recipients
-      .recipient-item.group-recipient.relative(data-id=group.getGroupId())=group.getGroupName()
-            +ActionLink('announcement', 'removeRecipient', group.getAnnouncementId(), group.getGroupId()).remove-recipient
-            .chat-bubble.absolute.top.group-info
-                  -var count = group.getStudentCount()
-                  .count-text=count + " member" + (count == 1 ? "" : "s")
-                  .members
-                        -var names = group.getStudentsDisplayName() || []
-                        each member in names
-                              li(data-tooltip-type="overflow", data-tooltip=member).member.text-ellipsis=member
-                        if names.length < count
-                              li.ellipsis ...
+    .recipient-item.group-recipient.relative(data-id=group.getGroupId().valueOf())=group.getGroupName()
+        +ActionLink('announcement', 'removeRecipient', group.getAnnouncementId(), group.getGroupId()).remove-recipient
+        .chat-bubble.absolute.top.group-info
+            -var count = group.getStudentCount()
+            .count-text=count + " member" + (count == 1 ? "" : "s")
+            .members
+                -var names = group.getStudentsDisplayName() || []
+                each member in names
+                    li(data-tooltip-type="overflow", data-tooltip=member).member.text-ellipsis=member
+                if names.length < count
+                    li.ellipsis ...
 
 each student in students
-      .recipient-item.student-recipient=student.getDisplayName()
-            +ActionLink('announcement', 'removeRecipient', self.getId(), null, student.getId()).remove-recipient
+    .recipient-item.student-recipient(data-id=student.getId().valueOf())=student.getDisplayName()
+        +ActionLink('announcement', 'removeRecipient', self.getId(), null, student.getId()).remove-recipient
 +SearchBox(chlk.services.SearchService, "searchByTypes", chlk.templates.recipients.RecipientsSearchTpl, [chlk.models.search.SearchTypeEnum.STUDENT,chlk.models.search.SearchTypeEnum.GROUP])(
-      name="recipient"
-      clearAfterSelect = false
-      withButton = true,
-      listCls = "recipients-search",
-      alwaysAtBottom = true,
-      minLength = 1,
-      disabledValues= {groups: recipients, students: students},
-      placeholder="Enter Person or group..."
+    name="recipient",
+    noCloseOnSelect = true,
+    withButton = true,
+    listCls = "recipients-search",
+    alwaysAtBottom = true,
+    minLength = 1,
+    disabledValues= {groups: recipients, students: students},
+    placeholder="Enter Person or group..."
 ).recipient-search
++Hidden('recipientsToAdd').recipients-to-add
 Button(type="submit", name="submitType", value="recipient").x-hidden.recipient-submit.validate-skip

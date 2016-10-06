@@ -80,7 +80,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
                 this.filter = SJX.fromValue(raw.filter, String);
                 this.recipientIds = SJX.fromValue(raw.recipientIds, String);
-                this.recipient = SJX.fromValue(raw.recipient, String);
+                this.recipientsToAdd = raw.recipientsToAdd ? raw.recipientsToAdd.split(',') : [];
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
@@ -117,7 +117,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.announcement.StudentAnnouncementApplicationMeta), 'studentsAnnApplicationMeta',
             String, 'recipientIds',
-            String, 'recipient',
+            Array, 'recipientsToAdd',
             Boolean, 'imported',
             Boolean, 'inGallery',
             Object, 'createdAnnouncements',

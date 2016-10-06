@@ -1950,7 +1950,7 @@ NAMESPACE('chlk.controllers', function (){
             var submitType = model.getSubmitType();
 
             if(submitType == 'recipient')
-                return this.addRecipient_(model.getId(), model.getRecipient());
+                return this.addRecipients_(model.getId(), model.getRecipientsToAdd());
 
             if (submitType == 'saveNoUpdate'){
                 this.setNotAblePressSidebarButton(true);
@@ -2788,35 +2788,41 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');
         },
 
-        [[chlk.models.id.AnnouncementId, String]],
-        function addRecipient_(announcementId, recipient){
+        [[chlk.models.id.AnnouncementId, ArrayOf(String)]],
+        function addRecipients_(announcementId, recipients){
+            if(recipients.length){
+                var adminRecipients = this.getContext().getSession().get(ChlkSessionConstants.ADMIN_RECIPIENTS, []),
+                    groupIds = adminRecipients.groups.map(function(group){return group.getId().valueOf()}),
+                    studentIds = adminRecipients.students.map(function(student){return student.getId().valueOf()}),
+                    groupId, studentId;
 
-            var groupId, studentId, arr = recipient.split('|'), type = parseInt(arr[1], 10), id = parseInt(arr[0], 10);
-            if(type == chlk.models.search.SearchTypeEnum.PERSONS.valueOf())
-                studentId = id;
-            else
-                groupId = id;
+                recipients.forEach(function(recipient){
+                    studentId = null;
+                    groupId = null;
+                    var arr = recipient.split('|'), type = parseInt(arr[1], 10), id = parseInt(arr[0], 10);
+                    if(type == chlk.models.search.SearchTypeEnum.PERSONS.valueOf())
+                        studentId = id;
+                    else
+                        groupId = id;
 
-            var adminRecipients = this.getContext().getSession().get(ChlkSessionConstants.ADMIN_RECIPIENTS, []);
-            var groupIds = adminRecipients.groups.map(function(group){return group.getId().valueOf()});
-            var studentIds = adminRecipients.students.map(function(student){return student.getId().valueOf()});
+                    if(groupId){
+                        if(groupIds.indexOf(groupId) > -1)
+                            return null;
 
-            if(groupId){
-                if(groupIds.indexOf(groupId) > -1)
-                    return null;
+                        groupIds.push(groupId);
+                    }
 
-                groupIds.push(groupId);
+                    if(studentId){
+                        if(studentIds.indexOf(studentId) > -1)
+                            return null;
+
+                        studentIds.push(studentId);
+                    }
+                });
+
+                var res = this.addGroupsToAnnouncement_(announcementId, groupIds.join(','), studentIds.join(','));
+                return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');
             }
-
-            if(studentId){
-                if(studentIds.indexOf(studentId) > -1)
-                    return null;
-
-                studentIds.push(studentId);
-            }
-
-            var res = this.addGroupsToAnnouncement_(announcementId, groupIds.join(','), studentIds.join(','));
-            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

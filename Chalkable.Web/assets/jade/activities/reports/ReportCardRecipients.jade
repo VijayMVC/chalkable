@@ -6,19 +6,20 @@
 +Hidden('selectedItems', JSON.stringify(self.getSelectedItems())).selected-values
 +Hidden('studentIds', studentIds)#student-ids-value
 each recipient in recipients
-      .recipient-item.group-recipient=recipient.getName()
-            .remove-recipient.remove-group(data-id=recipient.getId().valueOf())
+    .recipient-item.group-recipient(data-id=recipient.getId().valueOf())=recipient.getName()
+        .remove-recipient.remove-group(data-id=recipient.getId().valueOf())
 each student in students
-      .recipient-item.student-recipient=student.getDisplayName()
-            .remove-recipient.remove-student(data-id=student.getId().valueOf())
+    .recipient-item.student-recipient(data-id=student.getId().valueOf())=student.getDisplayName()
+        .remove-recipient.remove-student(data-id=student.getId().valueOf())
 +SearchBox(chlk.services.SearchService, "searchByTypes", chlk.templates.recipients.RecipientsSearchTpl, [chlk.models.search.SearchTypeEnum.STUDENT,chlk.models.search.SearchTypeEnum.GROUP])(
-      name="reportRecipient"
-      clearAfterSelect = false
-      withButton = true,
-      listCls = "recipients-search",
-      alwaysAtBottom = true,
-      minLength = 1,
-      disabledValues = {groups: recipients, students: students}
+    name="reportRecipient"
+    noCloseOnSelect = true,
+    withButton = true,
+    listCls = "recipients-search",
+    alwaysAtBottom = true,
+    minLength = 1,
+    disabledValues = {groups: recipients, students: students}
 ).recipient-search
++Hidden('recipientsToAdd').recipients-to-add
 Button(type="submit", name="submitType", value="addRecipients").add-recipients-btn
 Button(type="submit", name="submitType", value="recipient").x-hidden.recipient-submit.validate-skip

@@ -86,7 +86,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if(model.getSubmitType() == 'recipient')
-                return this.addRecipient_(model);
+                return this.addRecipients_(model);
 
             var result = this.reportingService.submitReportCards(
                 model.getCustomReportTemplateId(),
@@ -111,38 +111,39 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.reports.SubmitReportCardsViewData]],
-        function addRecipient_(model){
-            var recipient = model.getReportRecipient(), arr = recipient.split('|'),
-                parsedSelected = model.getParsedSelected(),type = parseInt(arr[1], 10),
-                id = parseInt(arr[0], 10), selected = JSON.parse(model.getSelectedItems()), res;
-            if(type == chlk.models.search.SearchTypeEnum.PERSONS.valueOf()){
-                if(selected.students.map(function (item) {return item.id}).indexOf(id) > -1)
-                    return null;
-                res = this.studentService.getInfo(new chlk.models.id.SchoolPersonId(id))
-                    .then(function(info){
-                        parsedSelected.students.push(info);
+        function addRecipients_(model){
+            if(!model.getRecipientsToAdd())
+                return null;
+
+            var recipients = model.getRecipientsToAdd().split(','),
+                parsedSelected = model.getParsedSelected(),
+                selected = JSON.parse(model.getSelectedItems());
+            recipients.forEach(function(recipient){
+                var arr = recipient.split('|'),
+                    id = parseInt(arr[0], 10),
+                    type = parseInt(arr[1], 10),
+                    description = arr[2];
+                if(type == chlk.models.search.SearchTypeEnum.PERSONS.valueOf()){
+                    if(selected.students.map(function (item) {return item.id}).indexOf(id) == -1){
+                        parsedSelected.students.push(new chlk.models.people.ShortUserInfo(null, null, new chlk.models.id.SchoolPersonId(id), description, arr[3]));
                         selected.students.push({
                             id: id,
-                            displayname: info.getDisplayName(),
-                            gender: info.getGender()
+                            displayname: description,
+                            gender: arr[3]
                         });
-                        return new chlk.models.reports.ReportCardRecipientsViewData(parsedSelected.groups, parsedSelected.students, selected);
-                    });
-            }
-            else{
-                if(selected.groups.map(function (item) {return item.id}).indexOf(id) > -1)
-                    return null;
-                res = this.groupService.info(new chlk.models.id.GroupId(id))
-                    .then(function(info){
-                        parsedSelected.groups.push(info);
+                    }
+                }else{
+                    if(selected.groups.map(function (item) {return item.id}).indexOf(id) == -1){
+                        parsedSelected.groups.push(new chlk.models.group.Group(description, new chlk.models.id.GroupId(id)));
                         selected.groups.push({
                             id: id,
-                            name: info.getName()
+                            name: description
                         });
-                        return new chlk.models.reports.ReportCardRecipientsViewData(parsedSelected.groups, parsedSelected.students, selected);
-                    });
-            }                
+                    }
+                }
+            });
 
+            var res = ria.async.DeferredData(new chlk.models.reports.ReportCardRecipientsViewData(parsedSelected.groups, parsedSelected.students, selected), 10);
             return this.UpdateView(chlk.activities.reports.ReportCardsDialog, res, 'recipients');
         },
 

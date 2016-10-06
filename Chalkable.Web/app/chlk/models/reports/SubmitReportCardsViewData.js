@@ -77,7 +77,7 @@ NAMESPACE('chlk.models.reports', function () {
         Boolean, 'ableDownload',
         Boolean, 'ableToReadSSNumber',
         String, 'selectedItems',
-        String, 'reportRecipient',
+        String, 'recipientsToAdd',
         
         function getParsedSelected(){
             var selectedItems = this.selectedItems ? JSON.parse(this.selectedItems ) : {groups:[], students:[]};
