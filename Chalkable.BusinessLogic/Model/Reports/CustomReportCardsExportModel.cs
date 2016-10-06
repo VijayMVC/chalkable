@@ -136,7 +136,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     EndDate = gradingPeriod.EndDate,
                     Name = gradingPeriod.Name
                 },
-                HomeRoomTeacher = studentData.HomeroomTeacher
+                HomeRoomTeacher = studentData.HomeroomTeacher,
+                Promoted = studentData.Promoted
             };
         }
     }
