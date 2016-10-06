@@ -47,6 +47,7 @@ class UserSession:
         var_grading_periods_cut_off_string = ''.join(var_grading_periods_cut_off_list)
         self.var_grading_periods_final_list = re.findall('[0-9]+', var_grading_periods_cut_off_string)
 
+
     def get_(self, url, status=200, **kwargs):
         r = self.session.get(chlk_server_url + url, **kwargs)
         self.unittest.assertEquals(r.status_code, status, 'Response status code: ' + str(r.status_code) + ', body:' + r.text)
@@ -108,6 +109,12 @@ class UserSession:
 
         return decoded_list_for_permissions
 
+    def school_year(self):
+        current_school_year = self.schoolYearId
+        return current_school_year
+
+
+
 class TeacherSession(UserSession):
     def __init__(self, instance):
         UserSession.__init__(self, instance)
@@ -124,6 +131,27 @@ class TeacherSession(UserSession):
         tmp = json.loads(tmp)
         self.teacher_id = tmp['data']['id']
 
+        # getting pairs 'class/marking period'
+        var_classesToFilter_list = re.findall('var classesToFilter = .+', page_as_one_string)
+        var_classesToFilter_string = ''.join(var_classesToFilter_list)
+        var_markingPeriods_cut_off_string = var_classesToFilter_string[31:-3]
+        dictionary_var_markingPeriods_cut_off_string = json.loads(var_markingPeriods_cut_off_string)
+        self.dict_for_clas_marking_period = {}
+        self.empty_list_of_classes = []
+        self.dictionary_var_markingPeriods_cut_off_string_data = dictionary_var_markingPeriods_cut_off_string['data']
+
+    def id_of_current_teacher(self):
+        teacher_id = self.teacher_id
+        return teacher_id
+
+    def list_of_classes(self):
+        for info_for_one_class in self.dictionary_var_markingPeriods_cut_off_string_data:
+            self.dict_for_clas_marking_period[info_for_one_class['id']] = info_for_one_class['markingperiodsid']
+
+        # getting list of classes
+        for k in self.dictionary_var_markingPeriods_cut_off_string_data:
+            self.empty_list_of_classes.append(k['id'])
+        return self.empty_list_of_classes
 
 class StudentSession(UserSession):
     def parse_body_(self, page_as_one_string):
