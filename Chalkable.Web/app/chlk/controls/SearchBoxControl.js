@@ -5,7 +5,7 @@ REQUIRE('ria.templates.Template');
 
 NAMESPACE('chlk.controls', function () {
 
-    var wasButtonClicked, selected;
+    var wasButtonClicked, selectedWithCtrl;
 
     /** @class chlk.controls.SearchBoxControl */
     CLASS(
@@ -157,10 +157,10 @@ NAMESPACE('chlk.controls', function () {
                     (function(){
                         var originalCloseMethod = $node.data("ui-autocomplete").close;
                         $node.data("ui-autocomplete").close = function(event) {
-                            if (!selected){
+                            if (!selectedWithCtrl){
                                 originalCloseMethod.apply( this, arguments );
                             }
-                            selected = false;
+                            selectedWithCtrl = false;
                         };
                     })();
 
@@ -199,7 +199,8 @@ NAMESPACE('chlk.controls', function () {
                         return selectHandler(event, ui, false);
                     },
                     select: function( event, ui ){
-                        selected = true;
+                        if(event.ctrlKey)
+                            selectedWithCtrl = true;
                         return selectHandler(event, ui, true);
                     },
                     change: function( event, ui ) {
