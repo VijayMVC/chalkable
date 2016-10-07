@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public IList<StandardsGradingScaleExportModel> StandardsGradingScale { get; set; }
         public bool IdToPrint { get; set; }
         public StudentReportCardsExportModel Student { get; set; }
+        public bool IncludeSignature { get; set; }
 
         public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, ReportCardAddressData recipient, string logoRef, DateTime reportDate
             , ReportCardsInputModel inputModel)
@@ -45,7 +46,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
                         :  new List<TraditionalGradingScaleExportModel>(),
                 StandardsGradingScale = inputModel.IncludeGradingScaleStandards && studentData.StandardGradingScaleId.HasValue 
                         ? StandardsGradingScaleExportModel.Create(reportCard.GradingScales, studentData.StandardGradingScaleId.Value) 
-                        : new List<StandardsGradingScaleExportModel>()
+                        : new List<StandardsGradingScaleExportModel>(),
+                IncludeSignature = inputModel.IncludeParentSignature
             };
         }
     }
