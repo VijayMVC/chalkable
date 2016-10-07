@@ -50,12 +50,15 @@ NAMESPACE('chlk.controls', function () {
                     .onActivityRefreshed(function (activity, model) {
                         var select = jQuery('#'+attributes.id);
 
-                        if(hiddenName_)
-                            select.parents('form').on('submit', function(){
+                        if(hiddenName_){
+                            select.parent().find('[name=' + hiddenName_ + ']').val(select.val());
+
+                            select.on('change', function(){
                                 var selVal = select.val(),
                                     value = Array.isArray(selVal) ? selVal.join(',') : selVal;
-                                jQuery(this).find('[name=' + hiddenName_ + ']').val(value);
+                                jQuery(this).parent().find('[name=' + hiddenName_ + ']').val(value);
                             });
+                        }
 
                         if(attributes.firstEmpty){
                             select.find('option:eq(0)').html('&nbsp;');

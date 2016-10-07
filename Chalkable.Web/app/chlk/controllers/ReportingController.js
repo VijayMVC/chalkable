@@ -89,7 +89,12 @@ NAMESPACE('chlk.controllers', function (){
                 return this.addRecipients_(model);
 
             if(!model.getGradingPeriodId() || !model.getGradingPeriodId().valueOf()){
-                this.ShowMsgBox('Please select Grading Period');
+                this.ShowMsgBox('Grading Period field is required.');
+                return null;
+            }
+
+            if(!model.getAttendanceReasonIds()){
+                this.ShowMsgBox('Absence Reasons field is required.');
                 return null;
             }
 
