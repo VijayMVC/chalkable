@@ -56,7 +56,7 @@ mixin Radio(name, value, title, selected)
                                         data-icon=self.getPictureURL(template.getId().valueOf(), 64, 64)
                                     )
                             h3 Grading Periods
-                            +Select('gradingPeriodItems', 'gradingPeriodId')(firstEmpty = true)#grading-period-select
+                            +Select('gradingPeriodItems', 'gradingPeriodId')(firstEmpty = true, data-placeholder="Select")#grading-period-select
                                 +Option('', '')
                                 each gp in self.getGradingPeriods()
                                     +Option(gp.getId().valueOf(), gp.getName())
@@ -104,7 +104,7 @@ mixin Radio(name, value, title, selected)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.PARENT_SIGNATURE.valueOf(), 'Parent Signature', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.PROMOTION_STATUS.valueOf(), 'Promotion Status', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.WITHDRAWN_STUDENTS.valueOf(), 'Withdrawn Students', false)
-                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.YEAR_TO_DATE_INFORMATION.valueOf(), 'Year to Date Iinformation', false)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.YEAR_TO_DATE_INFORMATION.valueOf(), 'Year to Date Information', false)
 
         .images-for-load-cnt
             each template in self.getTemplates()
