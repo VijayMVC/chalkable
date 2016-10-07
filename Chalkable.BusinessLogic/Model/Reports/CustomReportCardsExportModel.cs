@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Chalkable.StiConnector.Connectors.Model.Reports.ReportCards;
 
 namespace Chalkable.BusinessLogic.Model.Reports
@@ -36,7 +37,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     Address2 = reportCard.School.Address2,
                     City = reportCard.School.City,
                     Name = reportCard.School.Name,
-                    Phone = reportCard.School.Phone,
+                    Phone = FormatSchoolPhone(reportCard.School.Phone),
                     State = reportCard.School.State,
                     Zip = reportCard.School.Zip
                 },
@@ -49,6 +50,19 @@ namespace Chalkable.BusinessLogic.Model.Reports
                         : new List<StandardsGradingScaleExportModel>(),
                 IncludeSignature = inputModel.IncludeParentSignature
             };
+        }
+
+        private static string FormatSchoolPhone(string tel)
+        {
+            if (string.IsNullOrWhiteSpace(tel) || tel.Length != 10)
+                return tel;
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tel.Substring(0, 3)).Append(".")
+                .Append(tel.Substring(3, 3)).Append(".")
+                .Append(tel.Substring(6, 4));
+
+            return builder.ToString();
         }
     }
 
