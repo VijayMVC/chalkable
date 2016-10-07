@@ -1,0 +1,25 @@
+.admin-summary-page
+    h2.page-title=self.getSchoolName()
+    if self.getUserRole().isAdmin()
+        .action-bar
+            .items
+                +ActionLink('schools', "classesSummary", self.getSchoolId(), self.getSchoolName()).pressed=Msg.Classes
+                +ActionLink('schools', "teachersSummary", self.getSchoolId(), self.getSchoolName())=Msg.Teachers
+    +ActionForm('schools', 'classesStatistic').school-statistic-form
+        .form-container
+            if self.getUserRole().isAdmin()
+                +Select("schoolYearId")#school-year-select.flat
+                    each year in self.getSchoolYears()
+                        +Option(year.getId(), year.getName(), self.getSchoolYearId() == year.getId())
+                Button(type="submit", name="submitType", value="schoolYear").x-hidden.year-submit
+            else
+                +Hidden('schoolYearId', self.getSchoolYearId())
+
+            input(type="text", name="filter", placeholder="Search a Class...", value=self.getFilter(), data-value=self.getFilter()).statistic-filter.filter-input
+            Button(type="submit", name="submitType", value="filter").x-hidden.filter-submit
+            +Hidden('schoolId', self.getSchoolId() && self.getSchoolId().valueOf())
+            +Hidden('schoolName', self.getSchoolName())
+            +Hidden('teacherId', self.getTeacherId() && self.getTeacherId().valueOf())
+            .clear-fix
+        .grid-container
+            +RenderWith(self.getItemsStatistic(), chlk.templates.school.SchoolClassesStatisticTpl)
