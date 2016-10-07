@@ -1,0 +1,159 @@
+﻿@using System.Configuration
+@using Chalkable.Common
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<title>Developer</title>
+	<meta name="description" content="Web Apps for your school">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- build:css /Content/developer-info.min.css -->
+    <link build:href="/Content/index.css" href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link build:href="/Content/validation/template.css" href="@Url.StaticContent("/Content/validation/template.css")" rel="stylesheet" type="text/css" />
+    <!-- endbuild -->
+
+    <style>
+        .formErrorContent {
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+	<header role="banner">
+		<div class="wrap">
+			<div class="logo">
+				<h1><a href="@Url.Content("~/")">Chalkable</a></h1>
+			</div>
+			<nav>
+				<ul class="mainNav">
+					<li><a href="@Url.Content("~/")" class='lg'>Login</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+	<section id="tagline">
+		<div class="wrap">
+			<div class="taglineMessage">
+                <h1>API FOR SCHOOL DATA. <br>
+                    APP STORE FOR DISTRIBUTION.</h1>
+                <p>70/30 split. You keep 70.</p>
+                <a id="dev-signup-button" href="@Url.Content("~/")" class="btnBig developers">Sign Up</a>
+                <a id="view-docs" href="@Url.Content("~/Developer/DeveloperDocs")" class="btnBig">View Docs</a>
+                <p class="signup"><a href="https://www.youtube.com/watch?v=T1ccDPTC-PA">Check out a quick video introduction about submitting and testing apps in Chalkable.</a></p>
+			</div>
+		</div>
+	</section>
+
+	<section id="features">
+			<div id="appStore" class="feature feature1">
+				<div class="wrap">
+					<figure>
+						<img src="@Url.StaticContent("/Content/images2/index/illustration-1.png")" alt="App store image">
+					</figure>
+					<div class="description">
+						<h1>iFrame</h1>
+						<p>Frame canvases display your web app in Chalkable. Our RESTful API provides access to powerful school data points such as student and teacher scheduling, real time attendance, announcements, grading records, discipline records and more. We encourage you, the developer, to push the limits of what can be done with big data and today's web technologies.</p>
+                        <p>Use the API to authenticate the user...</p>
+                    </div>
+				</div>
+			</div>
+
+			<div class="feature feature2">
+				<div class="wrap">
+					<figure>
+						<img src="@Url.StaticContent("/Content/images2/index/illustration-2.png")" alt="Platform image">
+					</figure>
+					<div class="description">
+						<h1>API</h1>
+                        <p>With the API your app can authenticate users, identify user roles (student/teacher/admin), read announcements, gather scheduling data, push grades to the Chalkable gradebook, and so much more.
+                            View our documentation page to learn more about the Chalkable experience: how our app store works, how teachers and students will use your app within the context of Chalkable, and how our platform uses basic Javascript callback functions for integration. Sign up to immediately receive an API key and make your first calls with the live API Explorer.</p>
+                    </div>
+				</div>
+			</div>
+	</section>
+
+	<footer>
+		<div class="wrap">
+			<div class="footerTop">
+				<ul>
+                    <li>
+                        <ul class="links">
+                            <li><a target="_blank" href="http://www.chalkable.com/blog/">Blog</a></li>
+                            <li><a target="_blank" href="http://chalkable.uservoice.com/">Feedback</a></li>
+                        </ul>
+
+                    <li>
+                        <ul class="socials">
+                            <li><a target="_blank" href="https://twitter.com/chalkable">Follow us</a></li>
+                            <li><a target="_blank" href="https://www.facebook.com/chalkable">Like us</a></li>
+                            
+                        </ul>
+                    <li>
+                        <ul class="socials2">
+                            <li>(800) 844-0884</li>
+                        </ul>
+                    </ul>
+			</div> <!-- /footerTop -->
+
+			<div class="footerBottom">
+				<p>@ChlkHelpers.RenderChlkCopyrightYear()</p>
+			</div>
+		</div>
+	</footer>    
+
+<div id="dev-signup-form">
+    <div id="dev-signup-makeLogin" class="loginContainer">
+        <header>
+            <h1>Signup</h1>
+            <span class="close"></span>
+        </header>
+
+        <form action="#" id="sign-up-form" method="post">
+            <p class="hide banner"></p>
+            <p>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email2" class="validate[required,custom[email]]">
+            </p>
+
+            <p>
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password2" class="validate[required,minSize[@Settings.MinPasswordLength]]">
+            </p>
+
+            <p>
+                <label for="password">Password Again</label>
+                <input type="password" name="confirm-password" id="confirm-password2" class="validate[required, equals[password2]]">
+            </p>
+
+            <p>
+                <button type="submit">SIGNUP</button>
+            </p>
+
+        </form>
+
+    </div>
+</div>
+    @ChlkHelpers.RenderSiteRoot(Url)
+
+    <!-- build:js /app/developer-info.min.js -->
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
+    <script build:src="/app/chlk/index/main.js" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
+    <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    <!-- endbuild -->
+
+    @ChlkHelpers.GoogleAnalytics()
+    @ChlkHelpers.MixPanel()
+</body>
+</html>
+
+
+
+
+
+
+
