@@ -124,6 +124,8 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
                 window.currentChlkPerson.claims = window.userClaims;
+                window.attendanceReasons.sort(function(a,b){return (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 0) });
+
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIODS, ArrayOf(chlk.models.schoolYear.MarkingPeriod));
                 this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);
