@@ -101,10 +101,10 @@ mixin Radio(name, value, title, selected)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_SCALE_STANDARDS.valueOf(), 'Grading Scale - Standards', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_SCALE_TRADITIONAL.valueOf(), 'Grading Scale - Traditional', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.MERIT_DEMERIT.valueOf(), 'Merit/Demerit', false)
-                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.PARENT_SIGNATURE.valueOf(), 'Parent Signature', false)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.PARENT_SIGNATURE.valueOf(), 'Parent Signature', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.PROMOTION_STATUS.valueOf(), 'Promotion Status', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.WITHDRAWN_STUDENTS.valueOf(), 'Withdrawn Students', false)
-                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.YEAR_TO_DATE_INFORMATION.valueOf(), 'Year to Date Information', false)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.YEAR_TO_DATE_INFORMATION.valueOf(), 'Year to Date Information', true)
 
         .images-for-load-cnt
             each template in self.getTemplates()
