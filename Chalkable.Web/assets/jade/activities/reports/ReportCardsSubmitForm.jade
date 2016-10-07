@@ -64,10 +64,10 @@ mixin Radio(name, value, title, selected)
                         TD.item-3
                             h3=Msg.Order_by
                             .order-by
-                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.GRADE_LEVEL.valueOf(), Msg.Grade_Level, true)
+                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.GRADE_LEVEL.valueOf(), Msg.Grade_Level, false)
                                 +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.HOME_ROOM.valueOf(), 'Homeroom', false)
                                 +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.POST_CODE.valueOf(), Msg.Grade_Level, false)
-                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.STUDENT_DISPLAY_NAME.valueOf(), Msg.Student_display_name, false)
+                                +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.STUDENT_DISPLAY_NAME.valueOf(), Msg.Student_display_name, true)
                                 +Radio('orderBy', chlk.models.reports.ReportCardsOrderBy.STUDENT_IDENTIFIER.valueOf(), Msg.Student_ID, false)
 
                         TD.item-3
