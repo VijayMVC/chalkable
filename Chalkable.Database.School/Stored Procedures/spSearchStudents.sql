@@ -68,7 +68,7 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		left join MarkingPeriod
 			on MarkingPeriod.Id = cs.markingPeriodRef and MarkingPeriod.SchoolYearRef = @schoolYearId
 		join StudentSchool
-			on Student.Id = StudentSchool.StudentRef
+			on Student.Id = StudentSchool.StudentRef and StudentSchool.SchoolRef = SchoolYear.SchoolRef
 		left join StudentSchoolProgram
 			on Student.Id = StudentSchoolProgram.StudentId
 	Where
@@ -80,7 +80,7 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		and (@classId is null or cs.ClassRef = @classId)
 		and (@markingPeriod is null or MarkingPeriod.Id = @markingPeriod)
 		and (@includeWithdraw = 1 or @includeWithdraw is null or (cs.IsEnrolled = 1 and StudentSchoolYear.EnrollmentStatus = 0))
-		and (StudentSchool.SchoolRef in (select [Value] from @schoolIds))
+		and (SchoolYear.SchoolRef in (select [Value] from @schoolIds))
 		and (@gradeLevel is null or StudentSchoolYear.GradeLevelRef = @gradeLevel)
 		and (@programId is null or StudentSchoolProgram.SchoolProgramId = @programId)
 	Group by
@@ -160,6 +160,8 @@ Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents Fr
 		(@enrolledOnly is null or @enrolledOnly = 0 or StudentSchoolYear.EnrollmentStatus = 0)
 		and
 		StudentSchoolYear.StudentRef in (select [Value] from @studentIds)
+		and
+		(School.Id in (select [Value] from @schoolIds))
 		and 
 		exists (Select * From StudentSchool Where StudentRef = StudentSchoolYear.StudentRef and SchoolRef = School.Id)
 GO

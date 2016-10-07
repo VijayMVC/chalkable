@@ -83,9 +83,9 @@ NAMESPACE('chlk.controllers', function () {
 
                 return ria.async.wait([
                         withGroups ? this.groupService.list() : ria.async.DeferredData([]),
-                        this.studentService.getStudents(classId, null, !isStudent, null, 0, itemsCount),
+                        this.studentService.getStudents(classId, null, !isStudent, null, 0, itemsCount, true),
                         isStudent ? this.teacherService.getTeachers(classId, null, null, 0, itemsCount, true) :
-                            this.studentService.getStudents(classId, null, false, null, 0, itemsCount),
+                            this.studentService.getStudents(classId, null, false, null, 0, itemsCount, true),
                         (!isView || this.userIsAdmin() ) ? this.schoolService.getUserLocalSchools() : ria.async.DeferredData([]),
                         isStudent ? ria.async.DeferredData([]) : this.schoolService.getSchoolPrograms(),
                         groupId_ ? this.groupService.info(groupId_) : ria.async.DeferredData(null)//,
