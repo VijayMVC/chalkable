@@ -47,6 +47,14 @@ NAMESPACE('chlk.controls', function () {
                     }.bind(this));
             },
 
+            [ria.mvc.DomEventBind('keypress', '.group-people-selector input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function inputKeyPress(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER){
+                    event.preventDefault();
+                }
+            },
+
             [ria.mvc.DomEventBind('click', '.group-people-selector .top-link:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             function topLinkClick(node, event) {

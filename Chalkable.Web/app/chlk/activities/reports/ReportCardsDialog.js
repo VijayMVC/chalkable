@@ -90,6 +90,14 @@ NAMESPACE('chlk.activities.reports', function(){
 
                     chosenC.find('.active-result:eq(' + index + ')').prepend(img);
                 });
+            },
+
+            [ria.mvc.DomEventBind('keypress', 'input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function inputKeyPress(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER){
+                    event.preventDefault();
+                }
             }
         ]);
 });
