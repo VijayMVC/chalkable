@@ -78,7 +78,11 @@ NAMESPACE('chlk.controls', function () {
                     if(Array.isArray(value))
                         value = JSON.stringify(value);
                     ria.dom.Dom('#' + id + '-hidden').setValue(value);
-                    node.setValue(attrs.textValue ? item['get' + attrs.textValue.capitalize()]() : li.data('title'));
+                    var textValue = attrs.textValue ? item['get' + attrs.textValue.capitalize()]() : li.data('title');
+                    if(!attrs.noCopyText)
+                        node.setValue(textValue);
+                    else
+                        node.setData('text-value', textValue);
                     if (triggerChange)
                         node.trigger('change', {selected: item});
                     return false;

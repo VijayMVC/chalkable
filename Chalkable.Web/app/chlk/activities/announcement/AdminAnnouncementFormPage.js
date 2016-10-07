@@ -46,7 +46,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         cls = isPerson ? 'student-recipient' : 'group-recipient';
 
                     if(!node.parent().find('.' + cls + '[data-id=' + id + ']').exists()){
-                        var recipientHTML = '<div class="recipient-item ' + cls + '" data-id="' + id + '">' + node.getValue() + '<a class="remove-recipient"></a></div>';
+                        var recipientHTML = '<div class="recipient-item ' + cls + '" data-id="' + id + '">' + node.getData('text-value') + '<a class="remove-recipient"></a></div>';
 
                         new ria.dom.Dom()
                             .fromHTML(recipientHTML)
