@@ -691,6 +691,9 @@ NAMESPACE('chlk.controllers', function (){
                 buttons = [{text: 'DELETE', clazz: 'negative-button', value: 'ok'}, {text: 'Cancel'}];
             return this.ShowMsgBox(msgText, "whoa.", buttons, null, false, 'text', "")
                 .then(function (mrResult) {
+                    if(!mrResult)
+                        return ria.async.BREAK;
+
                     if (appName != mrResult)
                         return this.ShowAlertBox("Incorrect application name provided", "Invalid application name")
                             .thenBreak();
