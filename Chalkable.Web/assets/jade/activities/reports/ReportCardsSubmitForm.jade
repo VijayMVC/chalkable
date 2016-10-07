@@ -81,7 +81,7 @@ mixin Radio(name, value, title, selected)
                                 +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, false)
                         TD.item-3
                             h3 Absence Reasons
-                            +Select('attendanceReasons', 'attendanceReasonIds')(multiple).reasons-select
+                            +Select('attendanceReasons', 'attendanceReasonIds')(multiple, data-placeholder = "Select Absence Reasons").reasons-select
                                 each reason in self.getReasons()
                                     +Option(reason.getId().valueOf(), reason.getName(), true)
                     TR
