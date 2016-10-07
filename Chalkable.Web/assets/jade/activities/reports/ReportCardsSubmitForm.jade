@@ -45,9 +45,9 @@ mixin Radio(name, value, title, selected)
                         TD.item-3
                             h3 Logo
                             .logo
-                                +Radio('logo', chlk.models.reports.ReportCardsLogoType.DISTRICT.valueOf(), 'District', true)
+                                +Radio('logo', chlk.models.reports.ReportCardsLogoType.DISTRICT.valueOf(), 'District', false)
                                 +Radio('logo', chlk.models.reports.ReportCardsLogoType.SCHOOL.valueOf(), 'School', false)
-                                +Radio('logo', chlk.models.reports.ReportCardsLogoType.NONE.valueOf(), 'None', false)
+                                +Radio('logo', chlk.models.reports.ReportCardsLogoType.NONE.valueOf(), 'None', true)
                         TD.item-3
                             h3 Layout
                             +Select('customReportTemplate', 'customReportTemplateId').custom-template-select
