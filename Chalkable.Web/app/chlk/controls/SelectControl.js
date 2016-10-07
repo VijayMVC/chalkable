@@ -60,11 +60,21 @@ NAMESPACE('chlk.controls', function () {
                             });
                         }
 
+                        select.on('chosen:hiding_dropdown', function(){
+                            var selVal = select.val();
+                            if(!selVal && attributes["data-placeholder"])
+                                select.find('+DIV').find('SPAN').html(attributes["data-placeholder"]);
+                        });
+
                         if(attributes.firstEmpty){
                             select.find('option:eq(0)').html('&nbsp;');
                         }
 
                         this.updateSelect(select, attributes);
+
+                        if(attributes.firstEmpty && attributes["data-placeholder"]){
+                            select.find('+DIV').find('SPAN').html(attributes["data-placeholder"]);
+                        }
 
                         if(attributes.multiple && !attributes['placeholder-on-start-only'] && attributes["data-placeholder"]){
                             setTimeout(function(){
