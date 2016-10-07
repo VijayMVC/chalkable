@@ -56,7 +56,7 @@ mixin Radio(name, value, title, selected)
                                         data-icon=self.getPictureURL(template.getId().valueOf(), 64, 64)
                                     )
                             h3 Grading Periods
-                            +Select('gradingPeriodItems', 'gradingPeriodId')(firstEmpty = true, class="validate[required]").required-select#grading-period-select
+                            +Select('gradingPeriodItems', 'gradingPeriodId')(firstEmpty = true)#grading-period-select
                                 +Option('', '')
                                 each gp in self.getGradingPeriods()
                                     +Option(gp.getId().valueOf(), gp.getName())

@@ -18,7 +18,8 @@ each student in students
     listCls = "recipients-search",
     alwaysAtBottom = true,
     minLength = 1,
-    disabledValues = {groups: recipients, students: students}
+    disabledValues = {groups: recipients, students: students},
+    placeholder = (recipients.length || students.length) ? "" : "Type or select groups/students"
 ).recipient-search
 +Hidden('recipientsToAdd').recipients-to-add
 Button(type="submit", name="submitType", value="addRecipients").add-recipients-btn.validate-skip

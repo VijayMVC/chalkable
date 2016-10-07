@@ -88,6 +88,11 @@ NAMESPACE('chlk.controllers', function (){
             if(model.getSubmitType() == 'recipient')
                 return this.addRecipients_(model);
 
+            if(!model.getGradingPeriodId() || !model.getGradingPeriodId().valueOf()){
+                this.ShowMsgBox('Please select Grading Period');
+                return null;
+            }
+
             var result = this.reportingService.submitReportCards(
                 model.getCustomReportTemplateId(),
                 model.getTitle(),
