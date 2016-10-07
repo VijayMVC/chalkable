@@ -88,9 +88,9 @@ mixin Radio(name, value, title, selected)
                         TD.item-3
                             h3 Standards
                             .standards-type
-                                +Radio('standardType', 2, Msg.All, true)
+                                +Radio('standardType', 2, Msg.All, false)
                                 +Radio('standardType', 1, Msg.Graded, false)
-                                +Radio('standardType', 0, Msg.None, false)
+                                +Radio('standardType', 0, Msg.None, true)
                         TD.item-3
                         TD.item-3
                             h3 Include
