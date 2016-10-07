@@ -74,6 +74,10 @@ NAMESPACE('chlk.activities.reports', function(){
                 idsNode.setValue(ids.join(','));
                 selectedNode.setValue(JSON.stringify(selectedO));
                 node.parent('.recipient-item').removeSelf();
+
+                if(!selectedO.students.length && !selectedO.groups.length)
+                    this.dom.find('.recipient-search').setAttr('placeholder', "Type or select groups/students");
+
             },
 
             [ria.mvc.DomEventBind('chosen:showing_dropdown', '.custom-template-select')],
