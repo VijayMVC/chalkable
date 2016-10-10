@@ -11,6 +11,14 @@ NAMESPACE('chlk.activities.reports', function(){
         [ria.mvc.TemplateBind(chlk.templates.reports.ReportCardsSubmitFormTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.reports.ReportCardRecipientsTpl, 'recipients', '.recipients-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         'ReportCardsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
+            Array, 'reasons',
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                this.setReasons(model.getReasons() || []);
+            },
+
             [ria.mvc.DomEventBind('change', '.recipient-search')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function searchChange(node, event, selected_){
@@ -98,6 +106,37 @@ NAMESPACE('chlk.activities.reports', function(){
                 if(event.keyCode == ria.dom.Keys.ENTER){
                     event.preventDefault();
                 }
+            },
+
+            OVERRIDE, Object, function isReadyForClosing() {
+                var includeArray = this.dom.find('.include-select').getValue() || [],
+                    oEnum = chlk.models.reports.ReportCardsAdditionalOptions;
+
+                if(
+                    this.dom.find('#group-ids-value').getValue() ||
+                    this.dom.find('#student-ids-value').getValue() ||
+                    this.dom.find('#student-ids-value').getValue() ||
+                    this.dom.find('.report-title').getValue() != "Report Card" ||
+                    parseInt(this.dom.find('[name=recipient]:checked').getValue(), 10) != 0 ||
+                    parseInt(this.dom.find('[name=logo]:checked').getValue(), 10) != 0 ||
+                    this.dom.find('.custom-template-select').getValue() != this.dom.find('.custom-template-select').find('option:eq(0)').getValue() ||
+                    parseInt(this.dom.find('[name=orderBy]:checked').getValue(), 10) != 3 ||
+                    parseInt(this.dom.find('[name=idToPrint]:checked').getValue(), 10) != 3 ||
+                    this.dom.find('#grading-period-select').getValue() ||
+                    (this.dom.find('.reasons-select').getValue() || []).length != this.getReasons().length ||
+                    parseInt(this.dom.find('[name=standardType]:checked').getValue(), 10) != 0 ||
+                    includeArray.length != 7 ||
+                    includeArray.indexOf(oEnum.ANNOUNCEMENT.valueOf().toString()) == -1 ||
+                    includeArray.indexOf(oEnum.ATTENDANCE.valueOf().toString()) == -1 ||
+                    includeArray.indexOf(oEnum.GRADING_PERIOD_NOTES.valueOf().toString()) == -1 ||
+                    includeArray.indexOf(oEnum.GRADING_SCALE_STANDARDS.valueOf().toString()) == -1 ||
+                    includeArray.indexOf(oEnum.GRADING_SCALE_TRADITIONAL.valueOf().toString()) == -1 ||
+                    includeArray.indexOf(oEnum.PARENT_SIGNATURE.valueOf().toString()) == -1 ||
+                    includeArray.indexOf(oEnum.YEAR_TO_DATE_INFORMATION.valueOf().toString()) == -1
+                )
+                    return this.view.ShowLeaveConfirmBox();
+
+                return true;
             }
         ]);
 });

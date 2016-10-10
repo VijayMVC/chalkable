@@ -94,7 +94,7 @@ mixin Radio(name, value, title, selected)
                         TD.item-3
                         TD.item-3
                             h3 Include
-                            +Select('includeOptionValues', 'includeOptions')(multiple).reasons-select
+                            +Select('includeOptionValues', 'includeOptions')(multiple).include-select
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ANNOUNCEMENT.valueOf(), 'Announcement', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ATTENDANCE.valueOf(), 'Attendance', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_PERIOD_NOTES.valueOf(), 'Grading Period Note', true)
