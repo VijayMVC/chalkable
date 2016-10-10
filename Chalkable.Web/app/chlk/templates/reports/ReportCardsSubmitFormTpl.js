@@ -13,6 +13,9 @@ NAMESPACE('chlk.templates.reports', function () {
             ArrayOf(chlk.models.reports.CustomReportTemplate), 'templates',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.reports.StudentIdentifierEnum, 'idToPrint',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
             [ria.templates.ModelPropertyBind],

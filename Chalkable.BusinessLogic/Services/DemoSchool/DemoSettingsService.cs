@@ -45,6 +45,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public int? GetStudentIdentityDisplayOrNull()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
