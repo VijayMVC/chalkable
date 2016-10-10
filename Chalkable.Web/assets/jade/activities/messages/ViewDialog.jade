@@ -10,7 +10,7 @@
                     .text=self.subject
                 .body
                     label.title Message:
-                    +TextArea()(readonly).text=self.body
+                    p.text!=self.linkify(self.body)
                 br
                 .form-buttons
                     if !self.isDisabledMessaging()
