@@ -50,18 +50,31 @@ NAMESPACE('chlk.controls', function () {
                     .onActivityRefreshed(function (activity, model) {
                         var select = jQuery('#'+attributes.id);
 
-                        if(hiddenName_)
-                            select.parents('form').on('submit', function(){
+                        if(hiddenName_){
+                            select.parent().find('[name=' + hiddenName_ + ']').val(select.val());
+
+                            select.on('change', function(){
                                 var selVal = select.val(),
                                     value = Array.isArray(selVal) ? selVal.join(',') : selVal;
-                                jQuery(this).find('[name=' + hiddenName_ + ']').val(value);
+                                jQuery(this).parent().find('[name=' + hiddenName_ + ']').val(value);
                             });
+                        }
+
+                        select.on('chosen:hiding_dropdown', function(){
+                            var selVal = select.val();
+                            if(!selVal && attributes["data-placeholder"])
+                                select.find('+DIV').find('SPAN').html(attributes["data-placeholder"]);
+                        });
 
                         if(attributes.firstEmpty){
                             select.find('option:eq(0)').html('&nbsp;');
                         }
 
                         this.updateSelect(select, attributes);
+
+                        if(attributes.firstEmpty && attributes["data-placeholder"]){
+                            select.find('+DIV').find('SPAN').html(attributes["data-placeholder"]);
+                        }
 
                         if(attributes.multiple && !attributes['placeholder-on-start-only'] && attributes["data-placeholder"]){
                             setTimeout(function(){

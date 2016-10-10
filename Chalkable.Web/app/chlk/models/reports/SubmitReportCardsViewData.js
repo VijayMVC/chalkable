@@ -50,7 +50,8 @@ NAMESPACE('chlk.models.reports', function () {
         PARENT_SIGNATURE: 6,
         PROMOTION_STATUS: 7,
         WITHDRAWN_STUDENTS: 8,
-        YEAR_TO_DATE_INFORMATION: 9
+        YEAR_TO_DATE_INFORMATION: 9,
+        COMMENTS: 10
     });
 
     /** @class chlk.models.reports.SubmitReportCardsViewData*/
@@ -77,7 +78,7 @@ NAMESPACE('chlk.models.reports', function () {
         Boolean, 'ableDownload',
         Boolean, 'ableToReadSSNumber',
         String, 'selectedItems',
-        String, 'reportRecipient',
+        String, 'recipientsToAdd',
         
         function getParsedSelected(){
             var selectedItems = this.selectedItems ? JSON.parse(this.selectedItems ) : {groups:[], students:[]};
@@ -109,7 +110,7 @@ NAMESPACE('chlk.models.reports', function () {
 
         [[ArrayOf(chlk.models.reports.CustomReportTemplate), ArrayOf(chlk.models.schoolYear.GradingPeriod)
             , ArrayOf(chlk.models.attendance.AttendanceReason), Boolean, Boolean]],
-        function $(templates_, gradingPeriods_, reasons_, ableDownload_, isAbleToReadSSNumber_){
+        function $(templates_, gradingPeriods_, reasons_, ableDownload_, isAbleToReadSSNumber_, defaultIdToPrint_){
             BASE();
             if(templates_)
                 this.setTemplates(templates_);
@@ -121,6 +122,9 @@ NAMESPACE('chlk.models.reports', function () {
                 this.setAbleDownload(ableDownload_);
             if(isAbleToReadSSNumber_)
                 this.setAbleToReadSSNumber(isAbleToReadSSNumber_);
+            if(defaultIdToPrint_)
+                this.setIdToPrint(chlk.models.reports.StudentIdentifierEnum(defaultIdToPrint_ + 1));
+            else this.setIdToPrint(chlk.models.reports.StudentIdentifierEnum.NONE);
         }
     ]);
 });

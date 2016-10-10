@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.WebPages;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.AcademicBenchmark;
@@ -151,9 +151,11 @@ namespace Chalkable.Web.Controllers
                 }
                 context = chalkablePrincipal.Context;
             }
-
-            ChalkableAuthentication.UpdateLoginTimeOut(context);
             
+            var method = GetType().GetMethod(ControllerContext.RouteData.Values["action"].ToString());
+            if(method != null && !method.GetCustomAttributes(typeof(IgnoreTimeOut), true).Any())
+                ChalkableAuthentication.UpdateLoginTimeOut(context);
+
             InitServiceLocators(context);
         }
         
@@ -276,5 +278,10 @@ namespace Chalkable.Web.Controllers
                 SerializationDepth = 4
             };
         }
+    }
+
+    public class IgnoreTimeOut : Attribute
+    {
+        
     }
 }

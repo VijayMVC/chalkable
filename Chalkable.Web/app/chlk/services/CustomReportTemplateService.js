@@ -14,7 +14,7 @@ NAMESPACE('chlk.services', function () {
                 , chlk.models.id.CustomReportTemplateId
                 , chlk.models.id.CustomReportTemplateId]],
             ria.async.Future, function create(name, layout, style, files, type, headerId_, footerId_) {
-                return this.uploadFiles('CustomReportTemplate/Create.json', [files[0]], chlk.models.reports.CustomReportTemplate, {
+                return this.uploadFiles('CustomReportTemplate/Create.json', files[0] ? [files[0]] : [], chlk.models.reports.CustomReportTemplate, {
                     name: name,
                     layout: layout,
                     style: style,
@@ -30,7 +30,7 @@ NAMESPACE('chlk.services', function () {
                 , chlk.models.id.CustomReportTemplateId]],
             ria.async.Future, function update(templateId, name, layout, style, files, type, headerId_, footerId_) {
 
-                return this.uploadFiles('CustomReportTemplate/Update.json', [files[0]], chlk.models.reports.CustomReportTemplate, {
+                return this.uploadFiles('CustomReportTemplate/Update.json', files[0] ? [files[0]] : [], chlk.models.reports.CustomReportTemplate, {
                     templateId: templateId.valueOf(),
                     name: name,
                     layout: layout,
@@ -55,6 +55,10 @@ NAMESPACE('chlk.services', function () {
                 return this.post('CustomReportTemplate/Delete.json', Boolean, {
                     templateId: id.valueOf()
                 });
+            },
+
+            ria.async.Future, function getDefaultStudentIdToPrint(){
+                return this.get('CustomReportTemplate/DefaultStudentIdToPrint.json', Number);
             },
 
             [[chlk.models.reports.CustomReportTemplateType]],

@@ -11,3 +11,5 @@ each group in self.getGroups()
             b.group-name=group.getName()
         +ActionLink('group', 'showCreateEditDialog', group.getId()).edit-group
         .students-count=group.getStudentCount()
+        .recipient-remove.group-remove(data-tooltip = "Delete Group")
+        +ActionLink('group', 'deleteGroup', group.getId()).recipient-remove-hidden.x-hidden

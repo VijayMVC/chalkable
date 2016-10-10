@@ -23,10 +23,44 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.group-ids').setValue(model.getGroupIds());
             },
 
+            [ria.mvc.PartialUpdateRule(null, 'remove-group')],
+            VOID, function removeGroup(tpl, groupId, msg_) {
+                this.dom.find('.group-recipient[data-id=' + groupId + ']').removeSelf();
+            },
+
             [ria.mvc.DomEventBind('change', '.recipient-search')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function searchChange(node, event, selected_){
-                if(this.dom.find('[name=recipient][type=hidden]').getValue())
+                var value = this.dom.find('[name=recipient][type=hidden]').getValue();
+                if(value){
+                    var recipientsNode = this.dom.find('.recipients-to-add'),
+                        selected = recipientsNode.getValue();
+                    selected = selected ? selected.split(',') : [];
+                    selected.push(value);
+                    recipientsNode.setValue(selected.join(','));
+
+                    var arr = value.split('|'),
+                        id = parseInt(arr[0], 10) || arr[0],
+                        type = parseInt(arr[1], 10),
+                        isPerson = type == chlk.models.search.SearchTypeEnum.PERSONS.valueOf(),
+                        cls = isPerson ? 'student-recipient' : 'group-recipient';
+
+                    if(!node.parent().find('.' + cls + '[data-id=' + id + ']').exists()){
+                        var recipientHTML = '<div class="recipient-item ' + cls + '" data-id="' + id + '">' + node.getData('text-value') + '<a class="remove-recipient"></a></div>';
+
+                        new ria.dom.Dom()
+                            .fromHTML(recipientHTML)
+                            .insertBefore(node);
+
+                        new ria.dom.Dom('.recipients-search').find('li[data-value^="' + id + '|' + type + '"]').addClass('disabled');
+                    }
+                }
+            },
+
+            [ria.mvc.DomEventBind('autocomplete-close', '.recipient-search')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function searchClose(node, event){
+                if(this.dom.find('.recipients-to-add').getValue())
                     this.dom.find('.recipient-submit').trigger('click');
             },
 

@@ -59,6 +59,8 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             
             Boolean, 'messagingDisabled',
 
+            Object, 'messagingSettings',
+
             chlk.models.recipients.SelectorModeEnum, 'selectorMode',
 
             Number, 'allCount',

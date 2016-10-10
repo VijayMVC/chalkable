@@ -42,7 +42,13 @@ NAMESPACE('chlk.templates.controls.group_people_selector', function () {
             Boolean, 'hasAccessToLE',
             
             function isSubmitDisabled(){
-                return this.isTabSelected(4) && !(this.getSelectedGroups() || []).length && !(this.getSelectedStudents() || []).length
+                if(this.isTabSelected(1))
+                    return !(this.getSelectedGroups() || []).length;
+
+                if(this.isTabSelected(2))
+                    return !(this.getSelectedStudents() || []).length;
+
+                return this.isTabSelected(4) && (!(this.getSelectedGroups() || []).length && !(this.getSelectedStudents() || []).length);
             },
 
             function isTabSelected(index){

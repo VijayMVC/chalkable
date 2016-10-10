@@ -36,7 +36,7 @@ namespace Chalkable.Web.Controllers
             return Json(new PaginatedList<NotificationsByDateViewData>(NotificationsByDateViewData.Create(dictionary), str / dayCount, dayCount, resCount));
         }
 
-        [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
+        [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student"), IgnoreTimeOut]
         public ActionResult GetUnShownCount()
         {
             return Json(SchoolLocator.NotificationService.GetUnshownNotificationsCount());

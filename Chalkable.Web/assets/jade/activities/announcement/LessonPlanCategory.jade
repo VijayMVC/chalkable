@@ -1,12 +1,12 @@
 -var categoryId = self.getId();
 -var isNotAbleModify = self.getOwnerId() != null && self.getCurrentUser().getId() != self.getOwnerId();
-+ActionForm('lpgallerycategory', self.getId() ? 'editName' : 'create').group-container
++ActionForm('lpgallerycategory', self.getId() ? 'editName' : 'create').category-cnt
     +Hidden('id', categoryId ? categoryId.valueOf() : null)
     if isNotAbleModify
-        div(data-value=self.getName(), style="height: 22px;").group-name=self.getName()
+        div(data-value=self.getName(), style="height: 22px;").category-name=self.getName()
     else
-        INPUT(type="text",data-value=self.getName(), value = self.getName(), class=categoryId ? '' : 'temporary', name="name", class='validate[required]').group-name
-    Button(disabled='disabled', style = self.getId() ? 'display:none;' : '', type="submit").special-button2.blue-button.create-group ok
+        INPUT(type="text",data-value=self.getName(), value = self.getName(), class=categoryId ? '' : 'temporary', name="name", class='validate[required]').category-name
+    Button(disabled='disabled', style = self.getId() ? 'display:none;' : '', type="submit").special-button2.blue-button.create-category ok
     if self.getId()
         if self.getLessonPlansCount() > 0 || isNotAbleModify
             +ActionLink('lpgallerycategory', 'tryDelete', categoryId)(

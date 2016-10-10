@@ -12,6 +12,13 @@
       font-size: 24px
       color: #1d1d1d
 
+  .add-recipients-container
+    .recipients-list
+      padding: 4px 26px 0 63px
+
+      &::before
+        content: 'Students'
+
   .custom-template-select +DIV.chosen-container-single .chosen-results li.active-result
     padding-left: 8px
 
@@ -36,7 +43,7 @@
     td.item-3:nth-child(3)
       width: 435px
 
-      .chosen-container
+      .chosen-container, SELECT
         width: 100% !important
 
   .text-block
@@ -50,7 +57,6 @@
       line-height: 32px
 
     INPUT
-      font-style: italic
       line-height: 30px
       width: 100%
       box-sizing: border-box

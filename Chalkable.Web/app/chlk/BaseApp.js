@@ -124,6 +124,8 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
                 window.currentChlkPerson.claims = window.userClaims;
+                window.attendanceReasons.sort(function(a,b){return (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 0) });
+
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIODS, ArrayOf(chlk.models.schoolYear.MarkingPeriod));
                 this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);
@@ -226,6 +228,35 @@ NAMESPACE('chlk', function (){
 
                 var tooltipTimeOut;
 
+                jQuery.fn.extend({setItemsChecked : function(value){
+                    var jNode;
+                    jQuery(this).each(function(index, item){
+                        jNode = jQuery(this);
+                        if(!!item.getAttribute('checked') != !!value){
+                            jNode.prop('checked', value);
+                            value ? this.setAttribute('checked', 'checked') : this.removeAttribute('checked');
+                            value && this.setAttribute('checked', 'checked');
+                            var node = jNode.parent().find('.hidden-checkbox');
+                            node.val(value);
+                            node.data('value', value);
+                            node.attr('data-value', value);
+                        }
+                    });
+                }});
+
+                jQuery.fn.extend({setChecked : function(value){
+                    var jNode = this, item = this[0];
+                    if(!!item.getAttribute('checked') != !!value){
+                        jNode.prop('checked', value);
+                        value ? item.setAttribute('checked', 'checked') : item.removeAttribute('checked');
+                        value && item.setAttribute('checked', 'checked');
+                        var node = jNode.parent().find('.hidden-checkbox');
+                        node.val(value);
+                        node.data('value', value);
+                        node.attr('data-value', value);
+                    }
+                }});
+
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
                     if(!jQuery(this).data('wasClick') && !tooltipTimeOut){
@@ -241,10 +272,11 @@ NAMESPACE('chlk', function (){
                         }else{
                             var node = jQuery(this),
                                 offset = node.offset(),
-                                showTooltip = true;
-                            var value = node.data('tooltip');
-                            var type = node.data('tooltip-type');
-                            var clazz = node.data('tooltip-class');
+                                showTooltip = true,
+                                value = node.data('tooltip'),
+                                type = node.data('tooltip-type'),
+                                clazz = node.data('tooltip-class'),
+                                onBottom = node.data('tooltip-position') == "bottom";
                             if(type == "overflow"){
                                 showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
                             }
@@ -259,8 +291,12 @@ NAMESPACE('chlk', function (){
                                     tooltip.show();
 
                                 tooltip.find('.tooltip-content').html(node.data('tooltip'));
-                                tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
-                                    .css('top', offset.top - tooltip.height());
+                                tooltip.css('left', offset.left + (node.width() - tooltip.width())/2);
+
+                                if(onBottom)
+                                    tooltip.css('top', offset.top + node.height() + 20).addClass('bottom');
+                                else
+                                    tooltip.css('top', offset.top - tooltip.height());
                                 clazz && tooltip.addClass(clazz);
                             }
                         }
@@ -282,6 +318,7 @@ NAMESPACE('chlk', function (){
                     var tooltip = jQuery('#chlk-tooltip-item');
                     tooltip.hide();
                     clazz && tooltip.removeClass(clazz);
+                    tooltip.removeClass('bottom');
                     tooltip.find('.tooltip-content').html('');
                 });
 

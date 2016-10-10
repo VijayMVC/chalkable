@@ -1,7 +1,7 @@
 -var htmlValue = self.getHighlightedText(self.getDescription())
 li(
     data-title = self.getDescription(),
-    data-value = self.getId().valueOf() + '|' + self.getSearchType().valueOf(),
+    data-value = self.getRecipientValue(),
     class = self.getItemCls(),
     data-tooltip-type="overflow",
     data-tooltip = self.getDescription()

@@ -2,8 +2,8 @@
 if classAnnouncement && classAnnouncement.isGradable()
     #attach-file-area.announcement-item.attach-file-area
         +ActionButton('announcement', 'fileAttach', self.getId().valueOf(), self.getType())#add-attachment Attach File
-each attachment, i in self.getAnnouncementAttachments()
-    if attachment.isOwner()
+if self.getStudentAnnouncements() && self.getStudentAnnouncements().getItems() && self.getStudentAnnouncements().getItems().length > 0
+    each attachment, i in self.getStudentAnnouncements().getItems()[0].getAttachments()
         .announcement-item.attachment
             +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId(), self.getModel().getType()).close-btn
             .wrapper
@@ -14,4 +14,3 @@ each attachment, i in self.getAnnouncementAttachments()
                     +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
                     .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")=attachment.getName()
                     +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId())(class=attachment.isOpenOnStart() ? 'open-on-start' : '') Open
-

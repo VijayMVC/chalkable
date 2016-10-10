@@ -145,17 +145,16 @@ mixin SupplementalAnnouncementTypeToolBar(types, announcement)
                     if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
                         +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
                 .bottom-block
+                    if state
+                        +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName(), announcement.getType())
+                            +Button()(type="button").special-button.red-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
+                    else
+                        +ActionButton('announcement', 'discard', announcement.getType()).add-loader-btn=Msg.Discard
                     +Button()(
                         type="submit",
                         name="submitType",
                         value=state ? "submitOnEdit" : "submit"
-                    ).special-button.blue-button.submit-btn.submit-announcement.big-button
-                        =(state ? Msg.Save : Msg.Submit)
-                    if state
-                        +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName(), announcement.getType())
-                            +Button()(type="button").special-button.red-button.big-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
-                    else
-                        +ActionLink('announcement', 'discard', announcement.getType()).grey-link.not-blue.add-loader-btn=Msg.Discard
+                    ).special-button.blue-button.submit-btn.submit-announcement=Msg.Save
 
             if !classId
                 if topItems.length

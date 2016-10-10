@@ -72,5 +72,8 @@ namespace Chalkable.Data.School.Model
     {
         public IList<School> StudentSchools { get; set; }
         public GradeLevel GradeLevel { get; set; }
+
+        public bool IsClassmate { get; set; }
+        public bool IsMyStudent { get; set; }
     }
 }

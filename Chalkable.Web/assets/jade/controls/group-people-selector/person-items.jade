@@ -19,9 +19,10 @@ mixin RecipientItemBlock_(student, viewMode, isMessagingDisabled)
 -var isMessagingDisabled = self.getUserRole().isAdmin() || self.isMessagingDisabled()
 each student in self.getModel().getItems()
     -var showLink = viewMode && self.canViewInfo(student)
+    -var showMsgButton = self.showMsgIcon(student);
     .recipient-item.student-item
         if showLink
             +ProfileLink(student)
-                +RecipientItemBlock_(student, viewMode, isMessagingDisabled)
+                +RecipientItemBlock_(student, viewMode, !showMsgButton)
         else
             +RecipientItemBlock_(student, viewMode, isMessagingDisabled)

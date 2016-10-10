@@ -1,4 +1,4 @@
-chlk_server_url = 'https://dev.chalkable.com'
+chlk_server_url = 'https://dev.chalkable.com/'
 
 chlk_server_url_assessment = 'https://assessment-dev.chalkable.com'
 
