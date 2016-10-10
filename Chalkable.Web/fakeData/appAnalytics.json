@@ -1,0 +1,43 @@
+{"data": {
+        "devBalance": {
+          "balance": "400"
+        },
+		"appInstalls":{
+			"totalCount":1,
+			"stats":[
+				{"installCount":400, "summary":"Jan 1"},
+				{"installCount":1234, "summary":"5"},
+				{"installCount":500, "summary":"10"},
+				{"installCount":150, "summary":"15"},
+				{"installCount":400, "summary":"20"},
+				{"installCount":556, "summary":"25"},
+				{"installCount":277, "summary":"Jan 30"}
+			]
+		},
+		"appViews":{
+			"stats":[
+
+				{"viewsCount":800, "summary":"Jan 1", "type": "teacher"},
+				{"viewsCount":300, "summary":"5", "type": "teacher"},
+				{"viewsCount":210, "summary":"10", "type": "teacher"},
+				{"viewsCount":150, "summary":"15", "type": "teacher"},
+				{"viewsCount":100, "summary":"20", "type": "teacher"},
+				{"viewsCount":200, "summary":"25", "type": "teacher"},
+				{"viewsCount":300, "summary":"Jan 30", "type": "student"},
+                {"viewsCount":100, "summary":"Jan 1", "type": "student"},
+                {"viewsCount":300, "summary":"5", "type": "student"},
+                {"viewsCount":500, "summary":"10", "type": "student"},
+                {"viewsCount":150, "summary":"15", "type": "student"},
+                {"viewsCount":100, "summary":"20", "type": "student"},
+                {"viewsCount":200, "summary":"25", "type": "student"},
+                {"viewsCount":600, "summary":"Jan 30", "type": "student"},
+                {"viewsCount":100, "summary":"Jan 1", "type": "admin"},
+                {"viewsCount":300, "summary":"5", "type": "admin"},
+                {"viewsCount":210, "summary":"10", "type": "admin"},
+                {"viewsCount":150, "summary":"15", "type": "admin"},
+                {"viewsCount":100, "summary":"20", "type": "admin"},
+                {"viewsCount":800, "summary":"25", "type": "admin"},
+                {"viewsCount":900, "summary":"Jan 30", "type": "admin"}
+			]
+		}
+}, "success":true}

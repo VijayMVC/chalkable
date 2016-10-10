@@ -1,0 +1,5 @@
+div
+    actions = {currentAction: 'day', day: 'day', week: 'week', month: 'month'}
+    -var topData = self.getTopData()
+    -var param = topData.getSelectedItemId()
+    +Calendar(self, chlk.templates.calendar.announcement.DayCalendarBodyTpl, self.getModel(), 'calendar', actions, param ? [param] : [''])
