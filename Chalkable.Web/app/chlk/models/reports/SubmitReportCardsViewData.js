@@ -123,7 +123,7 @@ NAMESPACE('chlk.models.reports', function () {
                 this.setAbleToReadSSNumber(isAbleToReadSSNumber_);
             if(defaultIdToPrint_)
                 this.setIdToPrint(chlk.models.reports.StudentIdentifierEnum(defaultIdToPrint_ + 1));
-            else this.setDefaultIdToPrint(chlk.models.reports.StudentIdentifierEnum.NONE);
+            else this.setIdToPrint(chlk.models.reports.StudentIdentifierEnum.NONE);
         }
     ]);
 });
