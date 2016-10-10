@@ -57,6 +57,10 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            ria.async.Future, function getDefaultStudentIdToPrint(){
+                return this.get('CustomReportTemplate/DefaultStudentIdToPrint.json', Number);
+            },
+
             [[chlk.models.reports.CustomReportTemplateType]],
             ria.async.Future, function list(type_) {
                 return this.get('CustomReportTemplate/List.json', ArrayOf(chlk.models.reports.CustomReportTemplate), {

@@ -51,5 +51,11 @@ namespace Chalkable.Web.Controllers
             var res = MasterLocator.CustomReportTemplateService.GetById(templateId);
             return Json(CustomReportTemplateViewData.Create(res));
         }
+
+        [AuthorizationFilter("DistrictAdmin, SysAdmin")]
+        public ActionResult DefaultStudentIdToPrint()
+        {
+            return Json(SchoolLocator.SettingsService.GetStudentIdentityDisplayOrNull());
+        }
     }
 }

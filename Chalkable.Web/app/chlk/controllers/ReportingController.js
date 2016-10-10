@@ -66,14 +66,15 @@ NAMESPACE('chlk.controllers', function (){
 
             var res = ria.async.wait([
                 this.gradingPeriodService.getList(),
-                this.customReportTemplateService.list(chlk.models.reports.CustomReportTemplateType.BODY)
+                this.customReportTemplateService.list(chlk.models.reports.CustomReportTemplateType.BODY),
+                this.customReportTemplateService.getDefaultStudentIdToPrint()
             ])
             .attach(this.validateResponse_())
             .then(function(res){
                 var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
                 var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT);
                 var isAbleToReadSSNumber = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER);
-                return new chlk.models.reports.SubmitReportCardsViewData(res[1], res[0], reasons,ableDownload,isAbleToReadSSNumber);
+                return new chlk.models.reports.SubmitReportCardsViewData(res[1], res[0], reasons,ableDownload,isAbleToReadSSNumber, res[2]);
             }, this);
 
             return this.ShadeView(chlk.activities.reports.ReportCardsDialog, res);
