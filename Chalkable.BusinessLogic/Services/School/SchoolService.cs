@@ -230,7 +230,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<Data.School.Model.School> GetUserLocalSchools()
         {
             var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears().GroupBy(x => x.SchoolRef).Select(x => x.First());
-            return ServiceLocator.SchoolService.GetSchoolsByIds(schoolYears.Select(x => x.SchoolRef).ToList());
+            return ServiceLocator.SchoolService.GetSchoolsByIds(schoolYears.Select(x => x.SchoolRef).ToList()).OrderBy(x => x.Name).ToList();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<SystemSetting> settings);
         SystemSetting GetSetting(string category, string setting);
         void Delete(IList<SystemSetting> settings);
+        int? GetStudentIdentityDisplayOrNull();
     }
 
     public class SettingsService : SchoolServiceBase, ISettingsService
@@ -53,6 +54,15 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new DataAccessBase<SystemSetting>(u).Delete(settings));
+        }
+
+        public int? GetStudentIdentityDisplayOrNull()
+        {
+            var setting = GetSetting("District", "StudentIdentityDisplay");
+            if (string.IsNullOrWhiteSpace(setting?.Value))
+                return null;
+
+            return int.Parse(setting.Value);
         }
     }
 }

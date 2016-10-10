@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Chalkable.StiConnector.Connectors.Model.Reports.ReportCards;
 
 namespace Chalkable.BusinessLogic.Model.Reports
@@ -18,6 +19,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public IList<StandardsGradingScaleExportModel> StandardsGradingScale { get; set; }
         public bool IdToPrint { get; set; }
         public StudentReportCardsExportModel Student { get; set; }
+        public bool IncludeSignature { get; set; }
 
         public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, ReportCardAddressData recipient, string logoRef, DateTime reportDate
             , ReportCardsInputModel inputModel)
@@ -35,7 +37,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     Address2 = reportCard.School.Address2,
                     City = reportCard.School.City,
                     Name = reportCard.School.Name,
-                    Phone = reportCard.School.Phone,
+                    Phone = FormatSchoolPhone(reportCard.School.Phone),
                     State = reportCard.School.State,
                     Zip = reportCard.School.Zip
                 },
@@ -45,8 +47,22 @@ namespace Chalkable.BusinessLogic.Model.Reports
                         :  new List<TraditionalGradingScaleExportModel>(),
                 StandardsGradingScale = inputModel.IncludeGradingScaleStandards && studentData.StandardGradingScaleId.HasValue 
                         ? StandardsGradingScaleExportModel.Create(reportCard.GradingScales, studentData.StandardGradingScaleId.Value) 
-                        : new List<StandardsGradingScaleExportModel>()
+                        : new List<StandardsGradingScaleExportModel>(),
+                IncludeSignature = inputModel.IncludeParentSignature
             };
+        }
+
+        private static string FormatSchoolPhone(string tel)
+        {
+            if (string.IsNullOrWhiteSpace(tel) || tel.Length != 10)
+                return tel;
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(tel.Substring(0, 3)).Append(".")
+                .Append(tel.Substring(3, 3)).Append(".")
+                .Append(tel.Substring(6, 4));
+
+            return builder.ToString();
         }
     }
 
@@ -135,7 +151,9 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     StartDate = gradingPeriod.StartDate,
                     EndDate = gradingPeriod.EndDate,
                     Name = gradingPeriod.Name
-                }
+                },
+                HomeRoomTeacher = studentData.HomeroomTeacher,
+                Promoted = studentData.Promoted
             };
         }
     }
@@ -204,7 +222,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
             return studentGradedItems.Select(x => new GradedItemExportModel
             {
                 AlphaGrade = x.AlphaGrade,
-                NumericGrade = x.NumericGrade,
+                NumericGrade = x.NumericGrade == null ? (decimal?)null : decimal.Round(x.NumericGrade.Value),
                 Comments = x.Comments != null 
                            ? CommentReportCardsExportModel.Create(x.Comments) 
                            : new List<CommentReportCardsExportModel>(),

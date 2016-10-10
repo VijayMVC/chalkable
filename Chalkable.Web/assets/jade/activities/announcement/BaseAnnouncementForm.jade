@@ -75,7 +75,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
     .table
         .left-block(class=needStandardsBlock ? 'with-standards' : '')
             .left-block-container
-                +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
+                +TextArea(name="content", placeholder="Assignment...").item-content= announcement.getContent()
                 if needStandardsBlock
                     .add-standards-container
                         .add-standards
@@ -189,7 +189,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                 userRole = userRole
             )
         .attach-btn-area.attributes-attach-area(class = announcement.getAnnouncementAttributes().length ? '' : 'x-hidden')
-            +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Add Attribute
+            +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Attribute
                 span.plus +
 
         if !isAdmin
@@ -199,12 +199,6 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                 if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
                     +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
         .bottom-block
-            +Button()(
-                type="submit",
-                name="submitType",
-                value=state ? "submitOnEdit" : "submit"
-            ).special-button.blue-button.submit-btn.submit-announcement.big-button
-                =(state ? Msg.Save : Msg.Submit)
             if state
                 +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName(), announcement.getType())(
                     disabled=disableDeleteBtn
@@ -213,6 +207,11 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                         type="button",
                         data-tooltip = disableDeleteBtn ? Msg.Delete_announcement_btn_tooltip : '',
                         class=disableDeleteBtn ? 'disabled' : ''
-                    ).special-button.red-button.big-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
+                    ).special-button.red-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
             else
-                +ActionLink('announcement', 'discard', announcement.getType()).grey-link.not-blue.add-loader-btn=Msg.Discard
+                +ActionButton('announcement', 'discard', announcement.getType()).add-loader-btn=Msg.Discard
+            +Button()(
+                type="submit",
+                name="submitType",
+                value=state ? "submitOnEdit" : "submit"
+            ).special-button.blue-button.submit-btn.submit-announcement=Msg.Save

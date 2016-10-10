@@ -13,10 +13,15 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IList<School> StudentSchools { get; set; }
         public GradeLevel GradeLevel { get; set; }
 
+        public bool IsClassmate { get; set; }
+        public bool IsMyStudent { get; set; }
+
         protected StudentSchoolsInfoViewData(StudentSchoolsInfo studentsSchoolsInfo) : base(studentsSchoolsInfo)
         {
             StudentSchools = studentsSchoolsInfo.StudentSchools;
             GradeLevel = studentsSchoolsInfo.GradeLevel;
+            IsClassmate = studentsSchoolsInfo.IsClassmate;
+            IsMyStudent = studentsSchoolsInfo.IsMyStudent;
         }
 
         public static StudentSchoolsInfoViewData Create(StudentSchoolsInfo studentsSchoolsInfo)

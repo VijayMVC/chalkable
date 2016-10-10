@@ -91,16 +91,30 @@ NAMESPACE('chlk.activities.lib', function () {
 
             function onDialogClick(node, event) {
                 if(ria.dom.Dom(event.target).is('#chlk-dialogs>DIV')){
-                    this.close();
-                    return false;
+                    return this.tryClose_();
                 }
+            },
+
+            function tryClose_(){
+                var result = this.isReadyForClosing();
+
+                if (result === true)
+                    this.close();
+
+                if (result instanceof ria.async.Future) {
+                    result.then(function (yes) {
+                        if (yes === true)
+                            this.close();
+                    }, this)
+                }
+
+                return false;
             },
 
             [ria.mvc.DomEventBind('click', '.close')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onCloseBtnClick(node, event) {
-                this.close();
-                return false;
+                return this.tryClose_();
             },
 
             [ria.mvc.DomEventBind('click', '.disable-on-click')],

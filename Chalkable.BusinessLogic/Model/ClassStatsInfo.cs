@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Model
                 DisciplinesCount = section.DisciplineCount,
                 AbsenceCount = section.AbsenceCount,
                 Presence = section.EnrollmentCount != 0 ?
-                    AttendanceService.CalculatePresencePercent(section.AbsenceCount, section.EnrollmentCount) : (decimal?) null,
+                    AttendanceService.CalculatePresencePercent(section.AbsenceCount, section.EnrollmentCount) : 0,
                 DepartmentRef = @class?.ChalkableDepartmentRef,
                 ClassNumber = @class?.ClassNumber,
                 TeacherIds = classTeachers?.Select(x => x.PersonRef).ToList()

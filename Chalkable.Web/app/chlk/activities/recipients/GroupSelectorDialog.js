@@ -19,6 +19,40 @@ NAMESPACE('chlk.activities.recipients', function(){
                     groupNode.find('.group-name').setHTML(model.getName());
                     groupNode.find('.students-count').setHTML(model.getStudentCount().toString());
                 });
+            },
+
+            OVERRIDE, Object, function isReadyForClosing() {
+                var selectedGroupsOnStart = this.dom.find('.selected-groups-on-start').getValue(),
+                    selectedStudentsOnStart = this.dom.find('.selected-students-on-start').getValue(),
+                    selectedGroups = this.dom.find('.selected-groups').getValue(),
+                    selectedStudents = this.dom.find('.selected-students').getValue(),
+                    equal = true;
+
+                selectedGroupsOnStart = selectedGroupsOnStart ? selectedGroupsOnStart.split(',') : [];
+                selectedStudentsOnStart = selectedStudentsOnStart ? selectedStudentsOnStart.split(',') : [];
+                selectedGroups = selectedGroups ? selectedGroups.split(',') : [];
+                selectedStudents = selectedStudents ? selectedStudents.split(',') : [];
+
+                var arr = [[selectedGroupsOnStart, selectedGroups], [selectedStudentsOnStart, selectedStudents]];
+
+                arr.forEach(function(checkItems){
+                    var selectedOnStart = checkItems[0],
+                        selected = checkItems[1];
+
+                    if(selectedOnStart.length != selected.length)
+                        equal = false;
+                    else
+                        selectedOnStart.forEach(function(item){
+                            if(selected.indexOf(item) == -1)
+                                equal = false;
+                        });
+                });
+
+                if (!equal) {
+                    return this.view.ShowLeaveConfirmBox();
+                }
+
+                return true;
             }
         ]);
 });

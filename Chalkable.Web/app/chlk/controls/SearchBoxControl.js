@@ -5,7 +5,7 @@ REQUIRE('ria.templates.Template');
 
 NAMESPACE('chlk.controls', function () {
 
-    var wasButtonClicked;
+    var wasButtonClicked, selectedWithCtrl;
 
     /** @class chlk.controls.SearchBoxControl */
     CLASS(
@@ -67,8 +67,9 @@ NAMESPACE('chlk.controls', function () {
 
             [[ria.dom.Dom, Function, ClassOf(ria.templates.Template), Object, ria.mvc.IActivity, Object]],
             VOID, function reanimate_(node, serviceF, tplClass, attrs, activity, model) {
-                var id = node.getAttr("id");
-                var tpl = new tplClass();
+                var id = node.getAttr("id"),
+                    tpl = new tplClass(),
+                    $node = jQuery(node.valueOf());
 
                 var selectHandler = attrs.attrs || function( event, ui, triggerChange) {
                     var item = ui.item;
@@ -77,7 +78,11 @@ NAMESPACE('chlk.controls', function () {
                     if(Array.isArray(value))
                         value = JSON.stringify(value);
                     ria.dom.Dom('#' + id + '-hidden').setValue(value);
-                    node.setValue(attrs.textValue ? item['get' + attrs.textValue.capitalize()]() : li.data('title'));
+                    var textValue = attrs.textValue ? item['get' + attrs.textValue.capitalize()]() : li.data('title');
+                    if(!attrs.noCopyText)
+                        node.setValue(textValue);
+                    else
+                        node.setData('text-value', textValue);
                     if (triggerChange)
                         node.trigger('change', {selected: item});
                     return false;
@@ -140,7 +145,7 @@ NAMESPACE('chlk.controls', function () {
                    jQuery(this).toggleClass('x-hidden');
                 });
 
-                jQuery(node.valueOf())
+                $node
                     .autocomplete(autocompleteConfig)
                     .focus(function(){
                         var minLength = node.getAttr('minLength') || 0;
@@ -152,8 +157,19 @@ NAMESPACE('chlk.controls', function () {
                     .data( "ui-autocomplete" )
                     ._renderItem = renderItemFunction;
 
+                if(attrs.noCloseOnSelect)
+                    (function(){
+                        var originalCloseMethod = $node.data("ui-autocomplete").close;
+                        $node.data("ui-autocomplete").close = function(event) {
+                            if (!selectedWithCtrl){
+                                originalCloseMethod.apply( this, arguments );
+                            }
+                            selectedWithCtrl = false;
+                        };
+                    })();
+
                 if (this.isCategorized())
-                    jQuery(node.valueOf())
+                    $node
                         .data( "ui-autocomplete" )
                         ._renderMenu = renderMenuFunction;
 
@@ -161,7 +177,7 @@ NAMESPACE('chlk.controls', function () {
                 var triggerBtnId = this.getTriggerBtnId() || '';
                 if (triggerBtnId){
                     jQuery('#' + triggerBtnId).click(function(){
-                        jQuery(node.valueOf()).autocomplete("search", jQuery(node.valueOf()).val());
+                        $node.autocomplete("search", $node.val());
                     })
                 }
             },
@@ -187,6 +203,8 @@ NAMESPACE('chlk.controls', function () {
                         return selectHandler(event, ui, false);
                     },
                     select: function( event, ui ){
+                        if(event.ctrlKey)
+                            selectedWithCtrl = true;
                         return selectHandler(event, ui, true);
                     },
                     change: function( event, ui ) {
@@ -199,7 +217,6 @@ NAMESPACE('chlk.controls', function () {
                     close: function( event, ui ) {
                         if(attrs.clearAfterSelect && !wasButtonClicked){
                             ria.dom.Dom('#' + id).setValue(null);
-
                         }
                         if(wasButtonClicked){
                             var node = jQuery('#' + id);
@@ -215,6 +232,7 @@ NAMESPACE('chlk.controls', function () {
                             menu.removeClass(attrs.listCls);
 
                         wasButtonClicked = false;
+                        ria.dom.Dom('#' + id).trigger('autocomplete-close');
                     },
                     open: function( event, ui ) {
                         var menu = new ria.dom.Dom('.ui-autocomplete.ui-menu:visible');

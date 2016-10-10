@@ -44,6 +44,12 @@ NAMESPACE('chlk.lib.ajax', function () {
                         }
                       }
 
+                    if(!this._files.length){
+                        for(var param in this._params)if (this._params.hasOwnProperty(param)) {
+                            formData.append(param, this._params[param]);
+                        }
+                    }
+
                       this._xhr.open(this._method.valueOf(), this.getUrl_(), true);
 
                       this._xhr.send(formData);

@@ -60,7 +60,7 @@ studentAnnouncements = self.getItems()
             .attachments-container-2
                 each attachment, i in item.getAttachments()
                     .announcement-item.attachment
-                        if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+                        if attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER
                             .wrapper
                                 A(href=attachment.getUrl()).download-link Download
                                 .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")=attachment.getName()

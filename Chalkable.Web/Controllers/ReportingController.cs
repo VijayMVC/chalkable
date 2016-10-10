@@ -15,6 +15,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Common;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Tools;
@@ -102,7 +103,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ReportCards(ReportCardsInputModel inputModel)
         {
-            return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+    //          return DemoReportCards(inputModel);
+
+               return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
         }
 
         private byte[] GetReportCards(ReportCardsInputModel inputModel)
@@ -111,17 +114,19 @@ namespace Chalkable.Web.Controllers
             inputModel.DefaultDataPath = path;
             var dataTask = Task.Run(() => SchoolLocator.ReportService.BuildReportCardsData(inputModel));
             var template = MasterLocator.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            var templateRenderer = new TemplateRenderer(path);
             var data = dataTask.Result;
             IList<byte[]> reports = new List<byte[]>();
             foreach (var dataItem in data)
             {
-                var model = new ReportCardsRenderer.Model {Data = dataItem};
-                var main = PrepareReportView(template, model);
-                var header = template.Header != null ? PrepareReportView(template.Header, model) : null;
-                var footer = template.Footer != null ? PrepareReportView(template.Footer, model) : null;
-                reports.Add(ReportCardsRenderer.RenderToPdf(path, CompilerHelper.ScriptsRoot, main, header, footer));
+                var model = new {Data = dataItem};
+                var main = PrepareReportView(template, model, templateRenderer);
+                var header = template.Header != null ? PrepareReportView(template.Header, model, templateRenderer) : null;
+                var footer = template.Footer != null ? PrepareReportView(template.Footer, model, templateRenderer) : null;
+                reports.Add(DocumentRenderer.RenderToPdf(path, CompilerHelper.ScriptsRoot, main, header, footer));
             }
-            return ReportCardsRenderer.MargePdfDocuments(reports);
+            templateRenderer.Dispose();
+            return DocumentRenderer.MergePdfDocuments(reports);
         }
 
         private ActionResult DemoReportCards(ReportCardsInputModel inputModel)
@@ -130,14 +135,18 @@ namespace Chalkable.Web.Controllers
             inputModel.DefaultDataPath = path;
 
             IList<string> htmls = new List<string>();
+            //string header = LoadDemoView(Path.Combine(path, "Header2016-09-30--13-21-26.html"));
+            //string footer = LoadDemoView(Path.Combine(path, "Footer2016-09-30--13-21-26.html"));
+
             string header = LoadDemoView(Path.Combine(path, "DemoReportHeader.html"));
             string footer = LoadDemoView(Path.Combine(path, "DemoReportFooter.html"));
 
             for (int i = 0; i < 1; i++)
             {
-                htmls.Add(LoadDemoView(Path.Combine(path, "DemoReportView.html")));
+                //htmls.Add(LoadDemoView(Path.Combine(path, "2016-09-30--13-21-26.html")));
+                htmls.Add(LoadDemoView(Path.Combine(path, "DemoReportViewNew.html")));
             }
-            return Report(() => ReportCardsRenderer.RenderToPdf(path, Settings.ScriptsRoot, htmls, header, footer), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+            return Report(() => DocumentRenderer.RenderToPdf(path, Settings.ScriptsRoot, htmls, header, footer), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
         }
         private string LoadDemoView(string path)
         {
@@ -150,20 +159,16 @@ namespace Chalkable.Web.Controllers
             }
         }
 
-        private string PrepareReportView(CustomReportTemplate template, object data)
+        private string PrepareReportView(CustomReportTemplate template, object data, TemplateRenderer renderer)
         {
-            var view = BuildReportView(template, data);
+            var view = BuildReportView(template, data, renderer);
             return RenderViewToString(view.ViewName, view.Model);
         }
 
-        private ViewResult BuildReportView(CustomReportTemplate template, object data)
+        private ViewResult BuildReportView(CustomReportTemplate template, object data, TemplateRenderer renderer)
         {
-            ViewBag.JadeTpl = template.Layout;
+            ViewBag.Template = renderer.Render(template.Layout, data);
             ViewBag.Style = template.Style;
-            ViewData[ViewConstants.REPORT_CARDS] = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
-            {
-                ContractResolver = new LowercaseContractResolver()
-            });
             return View("ReportCards");
         }
 

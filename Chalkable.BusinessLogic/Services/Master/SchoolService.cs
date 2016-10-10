@@ -37,12 +37,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (!BaseSecurity.IsSysAdmin(Context) && districtId != Context.DistrictId)
                 return new PaginatedList<Data.Master.Model.School>(new List<Data.Master.Model.School>(), start, count, 0);
 
-            return DoRead(u => new SchoolDataAccess(u).GetSchools(districtId, start, count));
+            return new PaginatedList<Data.Master.Model.School>(DoRead(u => new SchoolDataAccess(u).GetSchools(districtId, start, count)).OrderBy(x => x.Name), start, count, 0);
         }
 
         public IList<Data.Master.Model.School> GetAll()
         {
-            return DoRead(u => new SchoolDataAccess(u).GetAll());
+            return DoRead(u => new SchoolDataAccess(u).GetAll()).OrderBy(x => x.Name).ToList();
         }
         
         public Data.Master.Model.School GetById(Guid districtRef, int localId)

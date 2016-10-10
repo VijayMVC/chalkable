@@ -1,8 +1,8 @@
 -var groups = self.getSelectedGroups() || []
 -var students = self.getSelectedStudents() || []
 
-+Hidden('groupIds', (self.getGroupIds() || []).join(','))
-+Hidden('studentIds', (self.getStudentIds() || []).join(','))
++Hidden('groupIds', (self.getGroupIds() || []).join(',')).selected-groups
++Hidden('studentIds', (self.getStudentIds() || []).join(',')).selected-students
 +Hidden('selectedItems', self.getSelectedItemsObj())
 
 .items-cnt(class = (!groups.length && !students.length) ? "empty-group" : "")

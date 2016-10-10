@@ -118,6 +118,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PaginatedList<StudentSchoolsInfo> SearchStudents(int schoolYearId, int? classId, int? schoolId, int? gradeLevel, int? programId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId, bool enrolledOnly = false)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+
             IList<int> schoolIds = new List<int>();
             if (Context.Role == CoreRoles.TEACHER_ROLE)
                 schoolIds.Add(Context.SchoolLocalId.Value);
@@ -132,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         schoolIds.Add(localSchool.Id);
 
             return DoRead( u => new StudentDataAccess(u).SearchStudents(schoolYearId, classId, schoolIds, gradeLevel, programId, teacherId, classmatesToId, filter,
-                            orderByFirstName, start, count, markingPeriodId, enrolledOnly));
+                            orderByFirstName, start, count, markingPeriodId, Context.PersonId.Value, enrolledOnly));
         }
 
         public async Task<StudentSummaryInfo> GetStudentSummaryInfo(int studentId, int schoolYearId)

@@ -17,7 +17,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData'
+            chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements'
         ])
 });

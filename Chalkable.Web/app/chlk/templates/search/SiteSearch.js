@@ -41,6 +41,20 @@ NAMESPACE('chlk.templates.search', function () {
 
             String, 'query',
 
+            function getRecipientValue(){
+                var arr = [],
+                    isGroup = this.searchType == chlk.models.search.SearchTypeEnum.GROUP;
+
+                arr.push(this.id.valueOf());
+                arr.push(this.searchType.valueOf());
+                arr.push(this.description);
+                if(!isGroup){
+                    arr.push(this.personInfo.getGender());
+                }
+
+                return arr.join('|');
+            },
+
             function getAttachmentUrl(){
                 return "/AnnouncementAttachment/DownloadAttachment.json?width=47&height=47&needsDownload=false&announcementAttachmentId=" + this.id
             },

@@ -132,6 +132,8 @@ div(class = (noComplete ? "no-complete " : "") + (self.hasFilters() ? 'settings-
                         +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
                         +Option(typesEnum.LESSON_PLAN.valueOf(), 'Lesson Plan Only', typesEnum.LESSON_PLAN == self.getAnnType())
                         +Option(typesEnum.SUPPLEMENTAL_ANNOUNCEMENT.valueOf(), 'Supplemental Only', typesEnum.SUPPLEMENTAL_ANNOUNCEMENT == self.getAnnType())
+                        if self.getUserRole().isStudent()
+                            +Option(typesEnum.ADMIN.valueOf(), 'Admin Only', typesEnum.ADMIN == self.getAnnType())
                 +Select('sorttype')(data-placeholder = 'Sort').sortSelect.submit-after-select
                     +Option(0, 'Due Date: Earliest', self.getSortType() == chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_ASCENDING)
                     +Option(1, 'Due Date: Latest', self.getSortType() == chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_DESCENDING)

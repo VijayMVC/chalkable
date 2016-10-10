@@ -2,8 +2,7 @@ from base_auth_test import *
 import unittest
 
 
-class TestFeed(unittest.TestCase):
-
+class TestFeed(BaseTestCase):
     def setUp(self):
         self.teacher = TeacherSession(self).login(user_email, user_pwd)
 

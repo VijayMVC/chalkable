@@ -438,24 +438,19 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetReportCards(ReportCardsInputModel inputModel, string path)
         {
-            Trace.Assert(Context.SchoolLocalId.HasValue);
-            var inowReportCardTask = Task.Run(()=>GetInowReportData(inputModel)); 
-            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
-            var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            //Trace.Assert(Context.SchoolLocalId.HasValue);
+            //var inowReportCardTask = Task.Run(()=>GetInowReportData(inputModel)); 
+            //var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
+            //var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
             
-            var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
-            IList<byte[]> listOfpdf = new List<byte[]>();
-            //int index = 0;
-            foreach (var data in listOfReportCards)
-            {
-                listOfpdf.Add(ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
-                //index++;
-            }
-            
-            //var loader = new LoaderBase<CustomReportCardsExportModel, byte[]>(listOfReportCards);
-            //listOfpdf = loader.Load(data => ReportCardsRenderer.Render(path, Settings.ScriptsRoot, template, data));
-
-            return ReportCardsRenderer.MargePdfDocuments(listOfpdf);
+            //var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
+            //IList<byte[]> listOfpdf = new List<byte[]>();
+            //foreach (var data in listOfReportCards)
+            //{
+            //    listOfpdf.Add(DocumentRenderer.Render(path, Settings.ScriptsRoot, template, data));
+            //}
+            //return DocumentRenderer.MergePdfDocuments(listOfpdf);
+            throw new NotImplementedException();
         }
 
         public async Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel)

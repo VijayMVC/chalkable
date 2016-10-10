@@ -10,7 +10,7 @@
             LABEL.text.v-m All
     .center-block=self.getCountText()
     .right-block.i-b.right
-        +ActionLink('group', 'showCreateEditDialog').add-group Group
+        +ActionLink('group', 'showCreateEditDialog')(data-tooltip="Create Group").add-group Group
             .green-plus +
 .groups-cnt.items-cnt
     .items-cnt-2

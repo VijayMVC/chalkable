@@ -177,7 +177,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                         throw new ChalkableException($"User has no required ({ClaimInfo.VIEW_STUDENT} or {ClaimInfo.VIEW_CLASSROOM_STUDENTS}) permission for watch \"My Students\"");
                 else
                     if (!Context.Claims.HasPermission(ClaimInfo.VIEW_STUDENT))
-                        throw new ChalkableException($"User has no required ({ClaimInfo.VIEW_STUDENT}) permission for watch \"Whole Students\"");
+                        throw new ChalkableException($"User has no required ({ClaimInfo.VIEW_STUDENT}) permission for watch \"All Students\"");
             
             var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, schoolId, gradeLevel, programId, teacherId, classMatesToId, filter, 
                 byLastName != true, start ?? 0, count ?? 10, markingPeriodId, enrolledOnly.Value);
