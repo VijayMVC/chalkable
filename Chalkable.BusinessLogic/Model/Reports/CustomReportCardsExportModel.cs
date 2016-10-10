@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     State = reportCard.School.State,
                     Zip = reportCard.School.Zip
                 },
-                Student = StudentReportCardsExportModel.Create(reportCard.GradingPeriod, studentData, recipient, inputModel.IncludeGradedStandardsOnly),
+                Student = StudentReportCardsExportModel.Create(reportCard.GradingPeriod, studentData, recipient, inputModel.IncludeGradedStandardsOnly, inputModel.IncludeComments),
                 TraditionalGradingScale = inputModel.IncludeGradingScaleTraditional && studentData.GradingScaleId.HasValue 
                         ? TraditionalGradingScaleExportModel.Create(reportCard.GradingScales, studentData.GradingScaleId.Value)
                         :  new List<TraditionalGradingScaleExportModel>(),
@@ -132,7 +132,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public decimal Demerits { get; set; }
         public string ReportCardsComment { get; set; }
 
-        public static StudentReportCardsExportModel Create(GradingPeriod gradingPeriod, Student studentData, ReportCardAddressData recipient, bool onlyGradedStandard)
+        public static StudentReportCardsExportModel Create(GradingPeriod gradingPeriod, Student studentData, ReportCardAddressData recipient, bool onlyGradedStandard, bool includeNote)
         {
             return new StudentReportCardsExportModel
             {
@@ -143,7 +143,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 Demerits = studentData.Demerits,
                 Merits = studentData.Merits,
                 Recipient = RecipientsReportCardsExportModel.Create(recipient),
-                Classes = ClassReportCardsExportModel.Create(studentData.Sections, onlyGradedStandard),
+                Classes = ClassReportCardsExportModel.Create(studentData.Sections, onlyGradedStandard, includeNote),
                 Attendances = AttendanceSummaryExportModel.Create(studentData.Attendance, "test"),
                 GradingPeriod = new GradingPeriodExportModel
                 {
@@ -166,7 +166,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Teacher { get; set; }
         public IList<GradingGridExportModel> GradingPeriods { get; set; }
 
-        public static IList<ClassReportCardsExportModel> Create(IEnumerable<ReportCardSectionData> sections, bool onlyGradedStandard)
+        public static IList<ClassReportCardsExportModel> Create(IEnumerable<ReportCardSectionData> sections, bool onlyGradedStandard, bool includeNote)
         {
             return sections.Select(sectionData => new ClassReportCardsExportModel
             {
@@ -174,7 +174,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 Name = sectionData.Name,
                 Teacher = sectionData.Teacher,
                 TimesTardy = sectionData.TimesTardy,
-                GradingPeriods = GradingGridExportModel.Create(sectionData.GradingPeriods, onlyGradedStandard)
+                GradingPeriods = GradingGridExportModel.Create(sectionData.GradingPeriods, onlyGradedStandard, includeNote)
             }).ToList();
         }
     }
@@ -187,13 +187,13 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public IList<GradedItemExportModel> GradedItems { get; set; }
         public IList<StandardGradeExportModel> Standards { get; set; }
 
-        public static IList<GradingGridExportModel> Create(IEnumerable<StudentGradingPeriod> studentGradingPeriods, bool onlyGradedStandard)
+        public static IList<GradingGridExportModel> Create(IEnumerable<StudentGradingPeriod> studentGradingPeriods, bool onlyGradedStandard, bool includeNote)
         {
             return studentGradingPeriods.Select(x => new GradingGridExportModel
             {
                 GradingPeriodId = x.GradingPeriodId,
                 GradingPeriodName = x.GradingPeriodName,
-                Note = x.Note,
+                Note = includeNote ? x.Note : null,
                 GradedItems = x.GradedItems != null ? GradedItemExportModel.Create(x.GradedItems) : new List<GradedItemExportModel>(),
                 Standards = x.Standards?
                             .Where(s=> !onlyGradedStandard || !string.IsNullOrWhiteSpace(s.Grade))

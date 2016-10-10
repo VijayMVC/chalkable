@@ -50,7 +50,8 @@ NAMESPACE('chlk.models.reports', function () {
         PARENT_SIGNATURE: 6,
         PROMOTION_STATUS: 7,
         WITHDRAWN_STUDENTS: 8,
-        YEAR_TO_DATE_INFORMATION: 9
+        YEAR_TO_DATE_INFORMATION: 9,
+        COMMENTS: 10
     });
 
     /** @class chlk.models.reports.SubmitReportCardsViewData*/
