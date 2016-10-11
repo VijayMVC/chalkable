@@ -140,20 +140,42 @@ class TeacherSession(UserSession):
         self.empty_list_of_classes = []
         self.dictionary_var_markingPeriods_cut_off_string_data = dictionary_var_markingPeriods_cut_off_string['data']
 
+        # getting marking periods
+        var_marking_periods_list = re.findall('var markingPeriods = .+', page_as_one_string)
+        var_markingPeriods_string = ''.join(var_marking_periods_list)
+        var_markingPeriods_cut_off_string2 = var_markingPeriods_string[31:-3]
+        dictionary_var_markingPeriods_cut_off_string2 = json.loads(var_markingPeriods_cut_off_string2)
+        self.dict_for_marking_period_date_startdate_endate = {}
+        self.dictionary_var_markingPeriods_cut_off_string_data2 = dictionary_var_markingPeriods_cut_off_string2['data']
+
     def id_of_current_teacher(self):
         teacher_id = self.teacher_id
         return teacher_id
 
     def list_of_classes(self):
-        for info_for_one_class in self.dictionary_var_markingPeriods_cut_off_string_data:
-            self.dict_for_clas_marking_period[info_for_one_class['id']] = info_for_one_class['markingperiodsid']
-
         # getting list of classes
         for k in self.dictionary_var_markingPeriods_cut_off_string_data:
             self.empty_list_of_classes.append(k['id'])
         return self.empty_list_of_classes
 
+    def classes_marking_periods(self):
+        for info_for_one_class in self.dictionary_var_markingPeriods_cut_off_string_data:
+            self.dict_for_clas_marking_period[info_for_one_class['id']] = info_for_one_class['markingperiodsid']
+        return self.dict_for_clas_marking_period
+
+    def marking_periods_with_dates(self):
+        for marking_period in self.dictionary_var_markingPeriods_cut_off_string_data2:
+            self.dict_for_marking_period_date_startdate_endate[marking_period['id']] = marking_period['startdate'], \
+                                                                                       marking_period['enddate']
+        return self.dict_for_marking_period_date_startdate_endate
+
+
 class StudentSession(UserSession):
+    def __init__(self, instance):
+        UserSession.__init__(self, instance)
+
+        self.student_id = None
+
     def parse_body_(self, page_as_one_string):
         UserSession.parse_body_(self, page_as_one_string)
 
