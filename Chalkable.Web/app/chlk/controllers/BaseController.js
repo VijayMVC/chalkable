@@ -342,12 +342,12 @@ NAMESPACE('chlk.controllers', function (){
                return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_);
            },
 
-           ria.async.Future, function ShowAlertBox(text, header_, isHtmlText_) {
+           ria.async.Future, function ShowAlertBox(text, header_, isHtmlText_, class_) {
                return this.ShowMsgBox(text, header_, [{
                        text: 'OK',
                        value: 'ok',
                        clazz: 'blue-button'
-                   }], null, isHtmlText_)
+                   }], class_, isHtmlText_)
                    .then(function () { return null; });
            },
 

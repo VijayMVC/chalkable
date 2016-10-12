@@ -99,7 +99,7 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
-            var result = this.reportingService.submitReportCards(
+            this.reportingService.submitReportCards(
                 model.getCustomReportTemplateId(),
                 model.getTitle(),
                 model.getLogo(),
@@ -113,12 +113,13 @@ NAMESPACE('chlk.controllers', function (){
                 model.getIncludeOptions(),
                 this.getIdsList(model.getStudentIds(), chlk.models.id.SchoolPersonId)
             )
-            .attach(this.validateResponse_())
-            .then(function () {
+            .attach(this.validateResponse_());
+
+            setTimeout(function(){
                 this.BackgroundCloseView(chlk.activities.reports.ReportCardsDialog);
-            }, this)
-            .thenBreak();
-            return this.UpdateView(chlk.activities.reports.ReportCardsDialog, result);
+            }.bind(this), 100);
+
+            return this.ShowAlertBox('<b>Your report is being prepared.<br>You will receive a notification when it\'s ready!</b>', null, true, 'report'), null ;
         },
 
         [[chlk.models.reports.SubmitReportCardsViewData]],
