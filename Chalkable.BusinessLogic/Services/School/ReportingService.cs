@@ -11,6 +11,7 @@ using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -456,6 +457,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public async Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
+            if(!ServiceLocator.ServiceLocatorMaster.DistrictService.IsReportCardsEnabled())
+                throw new ChalkableSecurityException("This district hasn't access Report Cards!");
+
             var inowReportCardTask = GetInowReportData(inputModel);
             var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
             return BuildReportCardsData(await inowReportCardTask, logo?.LogoAddress, inputModel);

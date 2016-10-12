@@ -17,6 +17,7 @@
     [FailCounter]      INT              NOT NULL,
     [FailDelta]        INT              NOT NULL,
     [StateCode]        NVARCHAR (2)     NULL,
+	[IsReportCardsEnabled]	BIT			NOT NULL Default 0
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

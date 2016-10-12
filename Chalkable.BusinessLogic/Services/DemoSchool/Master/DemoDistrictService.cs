@@ -57,6 +57,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword,
+            string timeZone, string stateCode, bool isReportCardsEnabled)
+        {
+            throw new NotImplementedException();
+        }
+
         public PaginatedList<District> GetDistricts(int start = 0, int count = Int32.MaxValue)
         {
             throw new NotImplementedException();
@@ -85,6 +91,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public bool IsOnline(Guid id)
         {
             return true;
+        }
+
+        public void UpdateReportCardsEnabled(Guid districtId, bool enabled)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsReportCardsEnabled()
+        {
+            throw new NotImplementedException();
         }
 
         public static District CreateDemoDistrict(Guid id)

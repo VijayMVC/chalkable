@@ -115,7 +115,26 @@ NAMESPACE('chlk.controllers', function (){
                 })
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.district.DistrictSummaryPage, result, isFilter ? null : chlk.activities.lib.DontShowLoader());
-        }
+        },
 
+        [[chlk.models.id.DistrictId, Boolean]],
+        function enableReportCardsAction(districtId){
+            return this.updateReportCardsEnabled(districtId, true);
+        },
+
+        [[chlk.models.id.DistrictId, Boolean]],
+        function disableReportCardsAction(districtId    ){
+            return this.updateReportCardsEnabled(districtId, false);
+        },
+
+        [[chlk.models.id.DistrictId, Boolean, Boolean]],
+        function updateReportCardsEnabled(districtId, enabled){
+            this.districtService.UpdateReportCardsEnabled(districtId, enabled)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
+                }, this);
+            return null;
+        }
     ])
 });
