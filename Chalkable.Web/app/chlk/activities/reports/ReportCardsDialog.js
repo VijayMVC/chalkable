@@ -13,10 +13,13 @@ NAMESPACE('chlk.activities.reports', function(){
         'ReportCardsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
             Array, 'reasons',
 
+            chlk.models.reports.StudentIdentifierEnum, 'idToPrint',
+
             [[Object]],
             OVERRIDE, VOID, function onRefresh_(model){
                 BASE(model);
                 this.setReasons(model.getReasons() || []);
+                this.setIdToPrint(model.getIdToPrint() || chlk.models.reports.StudentIdentifierEnum.NONE);
             },
 
             [ria.mvc.DomEventBind('change', '.recipient-search')],
@@ -121,7 +124,7 @@ NAMESPACE('chlk.activities.reports', function(){
                     parseInt(this.dom.find('[name=logo]:checked').getValue(), 10) != 0 ||
                     this.dom.find('.custom-template-select').getValue() != this.dom.find('.custom-template-select').find('option:eq(0)').getValue() ||
                     parseInt(this.dom.find('[name=orderBy]:checked').getValue(), 10) != 3 ||
-                    parseInt(this.dom.find('[name=idToPrint]:checked').getValue(), 10) != 3 ||
+                    parseInt(this.dom.find('[name=idToPrint]:checked').getValue(), 10) != this.getIdToPrint().valueOf() ||
                     this.dom.find('#grading-period-select').getValue() ||
                     (this.dom.find('.reasons-select').getValue() || []).length != this.getReasons().length ||
                     parseInt(this.dom.find('[name=standardType]:checked').getValue(), 10) != 0 ||

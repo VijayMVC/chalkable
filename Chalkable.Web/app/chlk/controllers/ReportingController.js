@@ -74,7 +74,7 @@ NAMESPACE('chlk.controllers', function (){
                 var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
                 var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT);
                 var isAbleToReadSSNumber = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER);
-                return new chlk.models.reports.SubmitReportCardsViewData(res[1], res[0], reasons,ableDownload,isAbleToReadSSNumber, res[2]);
+                return new chlk.models.reports.SubmitReportCardsViewData(res[1], res[0], reasons,ableDownload,isAbleToReadSSNumber, res[2] || chlk.models.reports.StudentIdentifierEnum.NONE);
             }, this);
 
             return this.ShadeView(chlk.activities.reports.ReportCardsDialog, res);
