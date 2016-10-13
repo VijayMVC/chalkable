@@ -12,7 +12,7 @@ class TestTeacherSendingMessages(BaseTestCase):
 
     def internal_(self):
         # creating 1 message for the student
-        post_send = self.teacher.post_json('/PrivateMessage/Send.json', data={"body": "this is a body", "personId": 3688, "subject": "this is a subject"}, success=False) # student CATALINA AYERS
+        post_send = self.teacher.post_json('/PrivateMessage/Send.json', data={"body": "this is a body", "classId": 13861, "subject": "this is a subject"}, success=False)
 
     def test_teacher_doesnt_send_message(self):
         self.internal_()
