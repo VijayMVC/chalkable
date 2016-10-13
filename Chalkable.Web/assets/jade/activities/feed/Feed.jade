@@ -131,7 +131,7 @@ div(class = (noComplete ? "no-complete " : "") + (self.hasFilters() ? 'settings-
                         +Option(null, 'All Types', !self.getAnnType())
                         +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
                         if self.getUserRole().isStudent()
-                            +Option(typesEnum.ADMIN.valueOf(), 'Admin Only', typesEnum.ADMIN == self.getAnnType())
+                            +Option(typesEnum.ADMIN.valueOf(), 'Admin Announcement Only', typesEnum.ADMIN == self.getAnnType())
                         +Option(typesEnum.LESSON_PLAN.valueOf(), 'Lesson Plan Only', typesEnum.LESSON_PLAN == self.getAnnType())
                         +Option(typesEnum.SUPPLEMENTAL_ANNOUNCEMENT.valueOf(), 'Supplemental Only', typesEnum.SUPPLEMENTAL_ANNOUNCEMENT == self.getAnnType())
                 +Select('sorttype')(data-placeholder = 'Sort').sortSelect.submit-after-select
