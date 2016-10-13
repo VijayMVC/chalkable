@@ -97,6 +97,7 @@ mixin Radio(name, value, title, selected)
                             +Select('includeOptionValues', 'includeOptions')(multiple).include-select
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ANNOUNCEMENT.valueOf(), 'Announcement', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ATTENDANCE.valueOf(), 'Attendance', true)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.COMMENTS.valueOf(), 'Comments', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_PERIOD_NOTES.valueOf(), 'Grading Period Note', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_SCALE_STANDARDS.valueOf(), 'Grading Scale - Standards', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_SCALE_TRADITIONAL.valueOf(), 'Grading Scale - Traditional', true)
@@ -105,7 +106,6 @@ mixin Radio(name, value, title, selected)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.PROMOTION_STATUS.valueOf(), 'Promotion Status', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.WITHDRAWN_STUDENTS.valueOf(), 'Withdrawn Students', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.YEAR_TO_DATE_INFORMATION.valueOf(), 'Year to Date Information', true)
-                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.COMMENTS.valueOf(), 'Comments', false)
 
         .images-for-load-cnt
             each template in self.getTemplates()
