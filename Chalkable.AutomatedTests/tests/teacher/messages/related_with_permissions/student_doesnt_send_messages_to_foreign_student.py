@@ -17,5 +17,11 @@ class TestStudentSendingMessages(BaseTestCase):
     def test_student_doesnt_send_messages_to_foreign_student(self):
         self.internal_(3765) # student TRACEY BURRIS
 
+    def tearDown(self):
+        update_messaging_settings = self.admin.get_json(
+            '/School/UpdateMessagingSettings.json?' + 'studentMessaging=' + str(True) +
+            '&studentToClassOnly=' + str(False) + '&teacherToStudentMessaging=' + str(
+                True) + '&teacherToClassOnly=' + str(False))
+
 if __name__ == '__main__':
     unittest.main()

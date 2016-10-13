@@ -47,5 +47,11 @@ class TestStudentSendingMessages(BaseTestCase):
     def test_sending_message_to_classmate(self):
         self.internal_()
 
+    def tearDown(self):
+        update_messaging_settings = self.admin.get_json(
+            '/School/UpdateMessagingSettings.json?' + 'studentMessaging=' + str(True) +
+            '&studentToClassOnly=' + str(False) + '&teacherToStudentMessaging=' + str(
+                True) + '&teacherToClassOnly=' + str(False))
+
 if __name__ == '__main__':
     unittest.main()
