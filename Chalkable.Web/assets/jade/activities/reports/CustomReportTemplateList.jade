@@ -1,0 +1,20 @@
+.report-templates
+   style(type="text/css", scoped) .pre { white-space: pre-wrap; word-break: break-all; }
+   .action-bar.not-transparent
+      .container.panel-bg
+         +ActionLink('customreporttemplate', 'add').chlk-add.opacity-button Add Report Template
+   +Grid().not-transparent
+      +GridHead()
+         .th
+         .th Name
+         .th
+      +GridBody()
+         each item in self.getTemplates()
+            +GridRow()
+               .td
+                  img.avatar.avatar47(src=self.getPictureURL(item.getId(), 24, 24))
+               .td= item.getName()
+               .td.action-links
+                  +ActionLink('customreporttemplate', 'update', item.getId()).profile
+                  +ActionLink('customreporttemplate', 'delete', item.getId()).remove
+
