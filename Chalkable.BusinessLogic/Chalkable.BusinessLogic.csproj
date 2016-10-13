@@ -390,6 +390,7 @@
     <Compile Include="Services\School\LimitedEnglishService.cs" />
     <Compile Include="Services\School\LPGalleryCategoryService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
+    <Compile Include="Services\School\MealTypeService.cs" />
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
     <Compile Include="Services\School\Notifications\NotificationService.cs" />
     <Compile Include="Services\School\Notifications\NotificationTemplateProvider.cs" />
