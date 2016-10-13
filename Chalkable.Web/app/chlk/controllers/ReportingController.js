@@ -89,6 +89,11 @@ NAMESPACE('chlk.controllers', function (){
             if(model.getSubmitType() == 'recipient')
                 return this.addRecipients_(model);
 
+            if(!model.getTitle()){
+                this.ShowMsgBox('Title field is required.');
+                return null;
+            }
+
             if(!model.getGradingPeriodId() || !model.getGradingPeriodId().valueOf()){
                 this.ShowMsgBox('Grading Period field is required.');
                 return null;
