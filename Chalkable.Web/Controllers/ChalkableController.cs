@@ -138,6 +138,9 @@ namespace Chalkable.Web.Controllers
                 SchoolLocator.Context.OAuthApplication = app.Url;
                 SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(app.Url);
 
+                if(SchoolLocator.Context.LoginTimeOut.HasValue)
+                    GlobalCache.UpdateExpiryUserInfo(authAppInfo.SessionKey, new TimeSpan(0, 0, SchoolLocator.Context.LoginTimeOut.Value));
+
                 return;
             }            
 

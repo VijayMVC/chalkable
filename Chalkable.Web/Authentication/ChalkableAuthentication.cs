@@ -124,11 +124,11 @@ namespace Chalkable.Web.Authentication
             if (context?.LoginTimeOut != null)
             {
                 var httpCookie = HttpContext.Current.Request.Cookies[SESSION_KEY_COOKIE_NAME];
-                if (httpCookie != null)
+                if (!string.IsNullOrWhiteSpace(httpCookie?.Value))
                 {
-                    httpCookie.Expires = DateTime.Now.AddSeconds((double)context.LoginTimeOut);
+                    httpCookie.Expires = DateTime.Now.AddSeconds(context.LoginTimeOut.Value);
                     HttpContext.Current.Response.Cookies.Set(httpCookie);
-                    GlobalCache.UpdateExpiryUserInfo(GetSessionKey(), new TimeSpan(0, 0, (int)context.LoginTimeOut));
+                    GlobalCache.UpdateExpiryUserInfo(GetSessionKey(), new TimeSpan(0, 0, context.LoginTimeOut.Value));
                 }
             }
         }
