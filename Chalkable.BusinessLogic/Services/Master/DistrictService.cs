@@ -1,6 +1,7 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -10,11 +11,13 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IDistrictService
     {
         District GetByIdOrNull(Guid id);
-        District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone, string stateCode);
+        District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone, string stateCode, bool isReportCardsEnabled);
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
         PaginatedList<DistrictSyncStatus> GetDistrictsSyncStatus(int start = 0, int count = int.MaxValue);
         void Update(District district);
         bool IsOnline(Guid id);
+        void UpdateReportCardsEnabled(Guid districtId, bool enabled);
+        bool IsReportCardsEnabled();
     }
 
     public class DistrictService : MasterServiceBase, IDistrictService
@@ -30,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone, string stateCode)
+        public District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone, string stateCode, bool isReportCardsEnabled)
         {
             BaseSecurity.EnsureSysAdminOrDistrictRegistrator(Context);
             string server;
@@ -57,7 +60,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                         IsDemoDistrict = false,
                         SyncFrequency = SYNC_FREQUENCY,
                         MaxSyncFrequency = MAX_SYNC_FREQUENCY,
-                        StateCode = stateCode
+                        StateCode = stateCode,
+                        IsReportCardsEnabled = isReportCardsEnabled
                     };
                 da.Insert(res);
                 uow.Commit();
@@ -121,6 +125,25 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var l = da.GetOnline(new[] { id });
                 return (l.Count > 0) ;
             }
+        }
+
+        public void UpdateReportCardsEnabled(Guid districtId, bool enabled)
+        {
+            using (var uow = Update())
+            {
+                var da = new DistrictDataAccess(uow);
+                var district = da.GetByIdOrNull(districtId);
+                if(district == null)
+                    throw new ChalkableException("No district with Id = " + districtId);
+                district.IsReportCardsEnabled = enabled;
+                da.Update(district);
+                uow.Commit();
+            }
+        }
+
+        public bool IsReportCardsEnabled()
+        {
+            return DoRead(u => new DistrictDataAccess(u).GetByIdOrNull(Context.DistrictId.Value)).IsReportCardsEnabled;
         }
     }
 }

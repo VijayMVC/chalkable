@@ -42,7 +42,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 ["personId"] = personId,
                 ["roles"] = roles ?? new List<int>(),
-                ["filter"] = keyword,
+                ["filter"] = '%' + keyword + '%',
                 ["read"] = read,
                 ["start"] = start,
                 ["count"] = count,
@@ -93,7 +93,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 ["personId"] = callerId,
                 ["roles"] = roles ?? new List<int>(),
-                ["filter"] = keyword,
+                ["filter"] = '%' + keyword + '%',
                 ["start"] = start,
                 ["count"] = count,
                 ["classOnly"] = classOnly,

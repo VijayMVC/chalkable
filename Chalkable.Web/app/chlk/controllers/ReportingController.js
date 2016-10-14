@@ -74,7 +74,7 @@ NAMESPACE('chlk.controllers', function (){
                 var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
                 var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT);
                 var isAbleToReadSSNumber = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER);
-                return new chlk.models.reports.SubmitReportCardsViewData(res[1], res[0], reasons,ableDownload,isAbleToReadSSNumber, res[2]);
+                return new chlk.models.reports.SubmitReportCardsViewData(res[1], res[0], reasons,ableDownload,isAbleToReadSSNumber, res[2] || chlk.models.reports.StudentIdentifierEnum.NONE);
             }, this);
 
             return this.ShadeView(chlk.activities.reports.ReportCardsDialog, res);
@@ -88,6 +88,16 @@ NAMESPACE('chlk.controllers', function (){
 
             if(model.getSubmitType() == 'recipient')
                 return this.addRecipients_(model);
+
+            if(!model.getTitle()){
+                this.ShowMsgBox('Title field is required.');
+                return null;
+            }
+
+            if(!model.getCustomReportTemplateId() || !model.getCustomReportTemplateId().valueOf()){
+                this.ShowMsgBox('Layout field is required.');
+                return null;
+            }
 
             if(!model.getGradingPeriodId() || !model.getGradingPeriodId().valueOf()){
                 this.ShowMsgBox('Grading Period field is required.');

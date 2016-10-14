@@ -50,10 +50,10 @@ NAMESPACE('chlk.templates', function () {
                 }
 
                 if (sizeW_ && sizeH_)
-                    return url + '-' + sizeW_ + 'x' + sizeH_;
+                    return this.getNoCachedUrl_(url + '-' + sizeW_ + 'x' + sizeH_);
                 if (sizeW_)
-                    return url + '-' + sizeW_ + 'x' + sizeW_;
-                return url;
+                    return this.getNoCachedUrl_(url + '-' + sizeW_ + 'x' + sizeW_);
+                return this.getNoCachedUrl_(url);
             },
 
             [[String, Number, Number]],
@@ -63,10 +63,14 @@ NAMESPACE('chlk.templates', function () {
                 sizeH_ = sizeH_ &&  this.getClosestSize_(sizeH_, [80, 164]);
 
                 if (sizeW_ && sizeH_)
-                    return url + '-' + sizeW_ + 'x' + sizeH_;
+                    return this.getNoCachedUrl_(url + '-' + sizeW_ + 'x' + sizeH_);
                 if (sizeW_)
-                    return url + '-' + sizeW_ + 'x' + sizeW_;
-                return url;
+                    return this.getNoCachedUrl_(url + '-' + sizeW_ + 'x' + sizeW_);
+                return this.getNoCachedUrl_(url);
+            },
+
+            function getNoCachedUrl_(url){
+                return url + '?_=' + Math.random().toString(36).substr(2) + (new Date).getTime().toString(36);
             },
 
             [[Object, Number]],

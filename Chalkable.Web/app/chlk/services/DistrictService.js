@@ -36,6 +36,14 @@ NAMESPACE('chlk.services', function () {
                 return this.post('District/Info.json', chlk.models.district.District, {
                     districtId: id.valueOf()
                 });
+            },
+
+            [[chlk.models.id.DistrictId, Boolean]],
+            ria.async.Future, function UpdateReportCardsEnabled(districtId, enabled){
+                return this.post('District/UpdateReportCardsEnabled.json', Boolean,{
+                    districtId: districtId && districtId.valueOf(),
+                    enabled: enabled
+                });
             }
         ])
 });

@@ -6,6 +6,7 @@
          .assessment-option
             span.assessment-option-title Assessment Access
             +ActionCheckbox('assessmentEnabled', school.isAssessmentEnabled(), false, true, 'schools', 'enableAssessment', 'disableAssessment', [null, school.getId()])
+         span.report_cards-option
          span.upgraded-date=school.getStudyCenterEnabledTill() || ''
          +ActionButton('schools', 'upgradeSchool', school.getId()).special-button.blue-button.upgrade-school-btn Upgrade School
          if school.isUpgraded()

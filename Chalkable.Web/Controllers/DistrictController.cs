@@ -31,7 +31,7 @@ namespace Chalkable.Web.Controllers
                     throw new Exception("The link keys do not match.");
                 if (district == null)
                 {
-                    sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.RedirectUrl, data.SisUserName, data.SisPassword, timeZone, data.DistrictState);
+                    sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.RedirectUrl, data.SisUserName, data.SisPassword, timeZone, data.DistrictState, data.IsReportCardsEnabled);
                 }
                 else
                 {
@@ -83,6 +83,13 @@ namespace Chalkable.Web.Controllers
         {
             var result = MasterLocator.DistrictService.GetByIdOrNull(districtId);
             return Json(DistrictViewData.Create(result));
+        }
+
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult UpdateReportCardsEnabled(Guid districtId, bool enabled)
+        {
+            MasterLocator.DistrictService.UpdateReportCardsEnabled(districtId, enabled);
+            return Json(true);
         }
     }
 }

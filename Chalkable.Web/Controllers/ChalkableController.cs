@@ -151,10 +151,6 @@ namespace Chalkable.Web.Controllers
                 }
                 context = chalkablePrincipal.Context;
             }
-            
-            var method = GetType().GetMethod(ControllerContext.RouteData.Values["action"].ToString());
-            if(method != null && !method.GetCustomAttributes(typeof(IgnoreTimeOut), true).Any())
-                ChalkableAuthentication.UpdateLoginTimeOut(context);
 
             InitServiceLocators(context);
         }
@@ -278,10 +274,20 @@ namespace Chalkable.Web.Controllers
                 SerializationDepth = 4
             };
         }
+
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+            if(!filterContext.RouteData.Values.ContainsKey("IgnoreTimeOut"))
+                ChalkableAuthentication.UpdateLoginTimeOut(Context);
+        }
     }
 
-    public class IgnoreTimeOut : Attribute
+    public class IgnoreTimeOut : ActionFilterAttribute
     {
-        
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            filterContext.RouteData.Values.Add("IgnoreTimeOut", "1");
+        }
     }
 }

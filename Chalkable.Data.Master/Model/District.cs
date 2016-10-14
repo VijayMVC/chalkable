@@ -30,6 +30,7 @@ namespace Chalkable.Data.Master.Model
         public int FailCounter { get; set; }
         public int FailDelta { get; set; }
         public string StateCode { get; set; }
+        public bool IsReportCardsEnabled { get; set; }
         [NotDbFieldAttr]
         public bool IsDemoDistrict { get; set; }
     }
