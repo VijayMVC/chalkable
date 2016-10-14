@@ -18,6 +18,7 @@ NAMESPACE('chlk.lib.ajax', function () {
             OVERRIDE, VOID, function transferComplete_(evt) {
                 if (this._xhr.status == 401)   {
                     this._completer.completeError(chlk.lib.exception.NotAuthorizedException());
+                    document.location.href = WEB_SITE_ROOT;
                     return;
                 }
                 BASE(evt);
