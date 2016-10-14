@@ -59,14 +59,14 @@ namespace Chalkable.Web.Controllers
             return Redirect("/Home/" + role + ".aspx");
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher"), IgnoreTimeOut]
         public ActionResult SwitchToDistrictAdmin()
         {
             SwitchToRole(CoreRoles.DISTRICT_ADMIN_ROLE);
             return Redirect<HomeController>(x => x.DistrictAdmin());
         }
 
-        [AuthorizationFilter("DistrictAdmin")]
+        [AuthorizationFilter("DistrictAdmin"), IgnoreTimeOut]
         public ActionResult SwitchToTeacher()
         {
             SwitchToRole(CoreRoles.TEACHER_ROLE);
