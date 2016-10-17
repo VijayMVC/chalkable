@@ -28,7 +28,10 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         void AddEndMarkingPeriodNotification(int toPersonId, int markingPeriodId, int endDays, bool isNextMpNotExist, bool isNextMpNotAssignedToClass);
         void AddAttendanceNotification(int toPersonId, IList<Person> persons);
         void AddAttendanceNotificationToStudent(int toPersonId, int classAttendanceId);
+
+        void AddReportProcessedNotification(int toPersonId, int roleId, string reportName, string reportId, string errorMessage, bool processingSucced);
         void MarkAsShown(int[] notificationIds);
+        
     }
     
     public class NotificationService : SchoolServiceBase, INotificationService
@@ -145,6 +148,15 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotifications(notifications);
         }
 
+        public void AddReportProcessedNotification(int toPersonId, int roleId, string reportName, string reportId, string errorMessage, bool processingSucced)
+        {
+            var person = ServiceLocator.PersonService.GetPerson(toPersonId);
+            person.RoleRef = roleId;
+            var notification = processingSucced
+                ? builder.BuildReportSucceedNotification(person, reportName, reportId)
+                : builder.BuildReportFailedNotification(person, reportName, errorMessage);
+            AddNotification(notification);
+        }
         public void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementTypeEnum announcementType, int fromPersonId)
         {
             List<Person> peopleToNotify = new List<Person>();
@@ -172,7 +184,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var notification = peopleToNotify.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(Context.NowSchoolTime, announcement, x, fromPerson)).ToList();
             AddNotifications(notification);
         }
-
 
         public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId, AnnouncementTypeEnum announcementType)
         {

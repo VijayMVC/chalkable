@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
@@ -14,6 +16,7 @@ using Chalkable.Common.JsonContractTools;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Common;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
@@ -103,9 +106,26 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ReportCards(ReportCardsInputModel inputModel)
         {
-    //          return DemoReportCards(inputModel);
+            Trace.Assert(Context.DistrictId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            
+            var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
+            inputModel.DefaultDataPath = path;
+            inputModel.ContentUrl = CompilerHelper.ScriptsRoot;
+            var data = new ReportProcessingTaskData(Context, inputModel, inputModel.ContentUrl);
 
-               return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
+            var scheduleTime = DateTime.UtcNow.AddDays(-20);
+
+            var sysAdminLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            sysAdminLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.ReportProcessing, scheduleTime,
+                Context.DistrictId, data.ToString(), $"{Context.DistrictId.Value}_report_processing");
+
+            return Json(true);
+            //          return DemoReportCards(inputModel);
+
+            //         return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
         }
 
         private byte[] GetReportCards(ReportCardsInputModel inputModel)
@@ -209,6 +229,11 @@ namespace Chalkable.Web.Controllers
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {
             return Report(() => reportAction(reportInputModel), reportFileName, reportInputModel.FormatTyped, DownloadReportFile);
+        }
+        
+        public ActionResult DownloadReport(string reportId, string reportName)
+        {
+            return Report(() =>SchoolLocator.ReportService.DownloadReport(reportId), reportName, ReportingFormat.Pdf, DownloadReportFile);
         }
 
         private ActionResult Report(Func<byte[]> reportAction, string reportFileName, ReportingFormat formatType

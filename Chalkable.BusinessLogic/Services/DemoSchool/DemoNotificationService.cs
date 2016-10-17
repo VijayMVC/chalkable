@@ -126,6 +126,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
+        public void AddReportProcessedNotification(int toPersonId, int roleId, string reportName, string reportAddress,
+            string errorMessage, bool processingSucced)
+        {
+            throw new NotImplementedException();
+        }
+
         public void MarkAsShown(int[] notificationIds)
         {
             Trace.Assert(Context.PersonId.HasValue);

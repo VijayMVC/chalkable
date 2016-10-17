@@ -362,7 +362,6 @@
     <Compile Include="Logic\ApiExplorer\ChalkableApiExplorerLogic.cs" />
     <Compile Include="Logic\ApplicationLogic.cs" />
     <Compile Include="Logic\ClassLogic.cs" />
-    <Compile Include="Logic\TemplateRenderer.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\AuthorityViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\CourseViewData.cs" />

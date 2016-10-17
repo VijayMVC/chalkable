@@ -19,7 +19,8 @@ NAMESPACE('chlk.models.bgtasks', function () {
             RE_SYNC: 11,
             RE_SYNC_AR: 12,
             DACPAC_UPDATE: 13,
-            AB_IMPORT: 14
+            AB_IMPORT: 14,
+            REPORT_PROCESSING: 15,
         });
 
 
@@ -45,7 +46,8 @@ NAMESPACE('chlk.models.bgtasks', function () {
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.PICTURE_IMPORT] = "Picture Import";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.RE_SYNC] = "Re Sync";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.DACPAC_UPDATE] = "DACPAC Deploy";
-                this._types[chlk.models.bgtasks.BgTaskTypeEnum.AB_IMPORT] = "AB Import";
+              this._types[chlk.models.bgtasks.BgTaskTypeEnum.AB_IMPORT] = "AB Import";
+              this._types[chlk.models.bgtasks.BgTaskTypeEnum.REPORT_PROCESSING] = "Report Processing";
                if(typeId_)
                    this.setTypeId(typeId_);
             },

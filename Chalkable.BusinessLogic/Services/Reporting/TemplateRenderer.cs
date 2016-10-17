@@ -6,7 +6,7 @@ using Chalkable.Common.JsonContractTools;
 using JavaScriptEngineSwitcher.V8;
 using Newtonsoft.Json;
 
-namespace Chalkable.Web.Logic
+namespace Chalkable.BusinessLogic.Services.Reporting
 {
     public class TemplateRenderer : IDisposable
     {
@@ -18,7 +18,7 @@ namespace Chalkable.Web.Logic
             @"Views\Reporting\TemplateRenderer.js"
         }; 
 
-        public TemplateRenderer(string path)
+        public TemplateRenderer(string baseServerPath)
         {
             JsEngine = new V8JsEngine();
             var contentToRun = new StringBuilder();
@@ -27,7 +27,7 @@ namespace Chalkable.Web.Logic
             {
                 foreach (var fileAddress in scriptFileAddresses)
                 {
-                    var fullAddress = Path.Combine(path, fileAddress);
+                    var fullAddress = Path.Combine(baseServerPath, fileAddress);
                     fileStream = File.OpenRead(fullAddress);
                     using (var reader = new StreamReader(fileStream))
                     {
@@ -48,8 +48,8 @@ namespace Chalkable.Web.Logic
         }
 
         public string Render(string template, object data)
-        {
-            var jsonData = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+        {  
+            var jsonData = JsonConvert.SerializeObject(new {Data = data}, Formatting.Indented, new JsonSerializerSettings
             {
                 ContractResolver = new LowercaseContractResolver()
             });

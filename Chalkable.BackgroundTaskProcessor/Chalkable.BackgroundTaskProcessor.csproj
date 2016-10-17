@@ -165,11 +165,21 @@
       <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="wnvhtmltopdf, Version=12.16.0.0, Culture=neutral, PublicKeyToken=b12703d35a33ff98, processorArchitecture=MSIL">
+      <HintPath>..\packages\WnvHtmlToPdf_x64.12.16\lib\net40\wnvhtmltopdf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\packages\WnvHtmlToPdf_x64.12.16\lib\net40\wnvinternal.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcademicBenchmarkImportTaskHandler.cs" />
@@ -184,6 +194,7 @@
     <Compile Include="ITaskHandler.cs" />
     <Compile Include="PictureImportTaskHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportCardTaskHandler.cs" />
     <Compile Include="SisImportDataTaskHandler.cs" />
     <Compile Include="SisResyncTaskHandler.cs" />
     <Compile Include="TaskProcessor.cs" />
@@ -219,6 +230,10 @@
       <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
       <Name>Chalkable.Data.Master</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
+      <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
+      <Name>Chalkable.Data.School</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
@@ -226,10 +241,6 @@
     <ProjectReference Include="..\Chalkable.StiImport\Chalkable.StiImport.csproj">
       <Project>{C7406CA4-FF85-4BF9-A729-1A5AFAB7F5B4}</Project>
       <Name>Chalkable.StiImport</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chalkable.Web\Chalkable.Web.csproj">
-      <Project>{60802BF0-AF2E-47F8-A792-7135DC7565D0}</Project>
-      <Name>Chalkable.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

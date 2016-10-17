@@ -53,6 +53,7 @@ namespace Chalkable.Data.School.Model
         Application = 6,
         MarkingPeriodEnding = 7,
         Attendance = 8,
-        NoTakeAttendance = 9
+        NoTakeAttendance = 9,
+        ReportProcessing = 10
     }
 }
