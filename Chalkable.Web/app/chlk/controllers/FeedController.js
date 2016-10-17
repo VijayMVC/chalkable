@@ -88,7 +88,10 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                 }, this)
-                .catchError(function(){
+                .catchException(chlk.lib.exception.NotAuthorizedException, function (exception) {
+                    document.location.href = WEB_SITE_ROOT;
+                })
+                .catchError(function(e){
                     if(notificationsInterval < notificationsMaxInterval){
                         clearInterval(notificationsTimer);
                         notificationsInterval *= 2;
