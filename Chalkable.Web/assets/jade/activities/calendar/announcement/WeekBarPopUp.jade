@@ -1,0 +1,15 @@
+.calendar-popup.popup-bubble
+    announcements = self.getAdminAnnouncements();
+    .announcements-list
+        h2 Admin Announcements
+        ul.day-announcements
+            each item in announcements
+                li.items
+                    +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.ADMIN).pop-up-announcement
+                        div
+                            +TooltipWithOverflow(item.getTitle()).item-title
+    if !self.getUserRole().isStudent() && !self.isNoPlusButton()
+        +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann
+
+
+
