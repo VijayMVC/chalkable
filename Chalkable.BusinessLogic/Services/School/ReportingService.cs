@@ -47,6 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
         byte[] GetReportCards(ReportCardsInputModel inputModel, string path);
+        byte[] DownloadReport(string reportId);
         Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
@@ -439,19 +440,31 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetReportCards(ReportCardsInputModel inputModel, string path)
         {
-            //Trace.Assert(Context.SchoolLocalId.HasValue);
-            //var inowReportCardTask = Task.Run(()=>GetInowReportData(inputModel)); 
-            //var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
-            //var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
-            
-            //var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
-            //IList<byte[]> listOfpdf = new List<byte[]>();
-            //foreach (var data in listOfReportCards)
-            //{
-            //    listOfpdf.Add(DocumentRenderer.Render(path, Settings.ScriptsRoot, template, data));
-            //}
-            //return DocumentRenderer.MergePdfDocuments(listOfpdf);
-            throw new NotImplementedException();
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            var inowReportCardTask = Task.Run(()=>GetInowReportData(inputModel)); 
+            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
+            var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            var templateRenderer = new TemplateRenderer(path);
+            var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
+            IList<byte[]> listOfpdf = new List<byte[]>();
+            string headerTpl = null, footerTpl = null;
+            foreach (var data in listOfReportCards)
+            {
+                var bodyTpl = templateRenderer.Render(template.Layout, data);
+                if (template.Header != null)
+                    headerTpl = templateRenderer.Render(template.Header.Layout, data);
+                if (template.Footer != null)
+                    footerTpl = templateRenderer.Render(template.Footer.Layout, data);
+                var report = DocumentRenderer.RenderToPdf(path, inputModel.ContentUrl, bodyTpl, template.Style, headerTpl,
+                    template.Header?.Style, footerTpl, template.Footer?.Style);
+                listOfpdf.Add(report);
+            }
+            return DocumentRenderer.MergePdfDocuments(listOfpdf);
+        }
+
+        public byte[] DownloadReport(string reportId)
+        {
+            return ServiceLocator.StorageBlobService.GetBlobContent("reports", reportId);
         }
 
         public async Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel)

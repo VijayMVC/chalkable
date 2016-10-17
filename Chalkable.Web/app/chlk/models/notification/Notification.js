@@ -25,7 +25,8 @@ NAMESPACE('chlk.models.notification', function () {
             APPLICATION: 6,
             MARKING_PERIOD_ENDING: 7,
             ATTENDANCE: 8,
-            NO_TAKE_ATTENDANCE: 9
+            NO_TAKE_ATTENDANCE: 9,
+            REPORT: 10
         });
 
     "use strict";

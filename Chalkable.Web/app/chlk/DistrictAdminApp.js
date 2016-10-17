@@ -22,6 +22,7 @@ REQUIRE('chlk.controllers.LessonPlanGalleryController');
 REQUIRE('chlk.controllers.LpGalleryCategoryController');
 REQUIRE('chlk.controllers.AnnouncementCommentController');
 REQUIRE('chlk.controllers.ReportingController');
+REQUIRE('chlk.controllers.NotificationController');
 
 REQUIRE('chlk.services.SearchService');
 REQUIRE('chlk.templates.search.SiteSearch');

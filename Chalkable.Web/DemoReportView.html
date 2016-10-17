@@ -2486,7 +2486,7 @@ each arrItem, index in arr
                                                       -var gradeditems = gp.gradeditems || []
                                                       th
                                                       each gi, i in gradeditems
-                                                          th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + gi.numericgrade
+                                                          th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + Math.round(gi.numericgrade)
                                           tbody
                                               -var standards = gps[0].standards || []
                                               each standard, si in standards

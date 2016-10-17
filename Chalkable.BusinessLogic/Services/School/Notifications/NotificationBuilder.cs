@@ -57,6 +57,13 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
             var appBudgetBalance = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.APP_BUDGET_BALANCE_NOTIFICATION);
             RenderService.RegisterMainRenderer(NotificationTemplateProvider.APP_BUDGET_BALANCE_NOTIFICATION, new TemplateRenderer(appBudgetBalance), false);
+
+            var reportComplete = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.REPORT_PROCESSING_SUCCESSED_NOTIFICATION);
+            RenderService.RegisterMainRenderer(NotificationTemplateProvider.REPORT_PROCESSING_SUCCESSED_NOTIFICATION, new TemplateRenderer(reportComplete), false);
+
+            var reportFailed = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.REPORT_PROCESSING_FAILED_NOTIFICATION);
+            RenderService.RegisterMainRenderer(NotificationTemplateProvider.REPORT_PROCESSING_FAILED_NOTIFICATION, new TemplateRenderer(reportFailed), false);
+            
         }
 
         public NotificationBuilder(IServiceLocatorSchool serviceLocator)
@@ -263,6 +270,28 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                     };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN,
                        NotificationType.MarkingPeriodEnding, recipient, null, null, markingPeriod, null, null, otherModel);
+        }
+
+        public Notification BuildReportSucceedNotification(Person recipient, string reportName, string reportId)
+        {
+            var otherModel = new
+            {
+                ReportName = reportName,
+                ReportAddress = $"https://{Settings.Domain}/Reporting/DownloadReport?reportId={reportId}&reportName={reportName}"
+            };
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.REPORT_PROCESSING_SUCCESSED_NOTIFICATION,
+                NotificationType.ReportProcessing, recipient, null, null, null, null, null, otherModel);
+        }
+
+        public Notification BuildReportFailedNotification(Person recipient, string reportName, string errorMessage)
+        {
+            var otherModel = new
+            {
+                ReportName = reportName,
+                ErrorMessage = errorMessage
+            };
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.REPORT_PROCESSING_FAILED_NOTIFICATION,
+                NotificationType.ReportProcessing, recipient, null, null, null, null, null, otherModel);
         }
 
         public Notification BuildAttendanceNotificationToAdmin(DateTime created, Person recipient, IList<Person> persons)

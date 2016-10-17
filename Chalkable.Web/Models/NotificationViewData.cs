@@ -66,6 +66,8 @@ namespace Chalkable.Web.Models
             res.Add(NotificationType.MarkingPeriodEnding, new SimpleNotificationBuilder(NotificationType.MarkingPeriodEnding));
             res.Add(NotificationType.Attendance, new SimpleNotificationBuilder(NotificationType.Attendance));
             res.Add(NotificationType.NoTakeAttendance, new SimpleNotificationBuilder(NotificationType.NoTakeAttendance));
+            res.Add(NotificationType.ReportProcessing, new SimpleNotificationBuilder(NotificationType.ReportProcessing));
+
             return res;
         }
     }
