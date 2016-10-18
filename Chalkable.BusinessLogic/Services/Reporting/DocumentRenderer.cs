@@ -118,7 +118,6 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 
         private static void AddFooter(HtmlToPdfConverter converter, string htmlFooter, string baseUrl)
         {
-
             converter.PdfDocumentOptions.ShowFooter = true;
             var footerHtmlWithPageNumbers = new HtmlToPdfVariableElement(htmlFooter, baseUrl)
             {

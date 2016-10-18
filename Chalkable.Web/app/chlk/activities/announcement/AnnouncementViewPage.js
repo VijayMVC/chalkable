@@ -415,6 +415,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     announcementId: this.getAnnouncementId(),
                     gradable: this.isAbleToGrade(),
                     dropped: this.isDropped(),
+                    ableDropStudentScore : this.isAbleDropStudentScore(),
                     LEIntegrated: this.isLEIntegrated()
                 });
                 tpl.renderTo(this.dom.find('.student-announcements-top-panel').empty());
