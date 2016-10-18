@@ -48,6 +48,8 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
         byte[] GetReportCards(ReportCardsInputModel inputModel, string path);
         byte[] DownloadReport(string reportId);
+        void ScheduleReportCardTask(ReportCardsInputModel inputModel);
+        void GenerateReportCard(ReportCardsInputModel inputModel);
         Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
@@ -460,6 +462,37 @@ namespace Chalkable.BusinessLogic.Services.School
                 listOfpdf.Add(report);
             }
             return DocumentRenderer.MergePdfDocuments(listOfpdf);
+        }
+
+
+
+        public void ScheduleReportCardTask(ReportCardsInputModel inputModel)
+        {
+            Trace.Assert(Context.DistrictId.HasValue);
+            var data = new ReportProcessingTaskData(Context, inputModel, inputModel.ContentUrl);
+            var scheduleTime = DateTime.UtcNow.AddDays(-20);
+
+            ServiceLocator.ServiceLocatorMaster.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.GenerateReport, scheduleTime,
+                Context.DistrictId, data.ToString(), $"{Context.DistrictId.Value}_report_processing");
+
+        }
+
+        public void GenerateReportCard(ReportCardsInputModel inputModel)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.DistrictId.HasValue);
+            try
+            {
+                var content = ServiceLocator.ReportService.GetReportCards(inputModel, inputModel.DefaultDataPath);
+                var reportId = $"reportcard_{Context.DistrictId.Value}_{Context.PersonId.Value}_{Guid.NewGuid()}";
+                ServiceLocator.StorageBlobService.AddBlob("reports", reportId, content);
+                ServiceLocator.NotificationService.AddReportProcessedNotification(Context.PersonId.Value, Context.RoleId, "Report Cards", reportId, null, true);
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.NotificationService.AddReportProcessedNotification(Context.PersonId.Value, Context.RoleId, "Report Cards", null, "We had an issue building your report. Please try again.", false);
+                throw e;
+            }
         }
 
         public byte[] DownloadReport(string reportId)

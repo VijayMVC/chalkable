@@ -52,7 +52,7 @@ namespace Chalkable.Data.Master.Model
         SisDataResyncAfterRestore = 12,
         DatabaseDacPacUpdate = 13,
         AcademicBenchmarkImport = 14,
-        ReportProcessing = 15
+        GenerateReport = 15
     }
 
     public enum BackgroundTaskStateEnum

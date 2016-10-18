@@ -106,22 +106,10 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ReportCards(ReportCardsInputModel inputModel)
         {
-            Trace.Assert(Context.DistrictId.HasValue);
-            Trace.Assert(Context.SchoolLocalId.HasValue);
-            Trace.Assert(Context.PersonId.HasValue);
-            Trace.Assert(Context.SchoolYearId.HasValue);
-            
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             inputModel.DefaultDataPath = path;
             inputModel.ContentUrl = CompilerHelper.ScriptsRoot;
-            var data = new ReportProcessingTaskData(Context, inputModel, inputModel.ContentUrl);
-
-            var scheduleTime = DateTime.UtcNow.AddDays(-20);
-
-            var sysAdminLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            sysAdminLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.ReportProcessing, scheduleTime,
-                Context.DistrictId, data.ToString(), $"{Context.DistrictId.Value}_report_processing");
-
+            SchoolLocator.ReportService.ScheduleReportCardTask(inputModel);
             return Json(true);
             //          return DemoReportCards(inputModel);
 
