@@ -106,47 +106,14 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ReportCards(ReportCardsInputModel inputModel)
         {
-            Trace.Assert(Context.DistrictId.HasValue);
-            Trace.Assert(Context.SchoolLocalId.HasValue);
-            Trace.Assert(Context.PersonId.HasValue);
-            Trace.Assert(Context.SchoolYearId.HasValue);
-            
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             inputModel.DefaultDataPath = path;
             inputModel.ContentUrl = CompilerHelper.ScriptsRoot;
-            var data = new ReportProcessingTaskData(Context, inputModel, inputModel.ContentUrl);
-
-            var scheduleTime = DateTime.UtcNow.AddDays(-20);
-
-            var sysAdminLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            sysAdminLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.ReportProcessing, scheduleTime,
-                Context.DistrictId, data.ToString(), $"{Context.DistrictId.Value}_report_processing");
-
+            SchoolLocator.ReportService.ScheduleReportCardTask(inputModel);
             return Json(true);
             //          return DemoReportCards(inputModel);
 
             //         return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
-        }
-
-        private byte[] GetReportCards(ReportCardsInputModel inputModel)
-        {
-            var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
-            inputModel.DefaultDataPath = path;
-            var dataTask = Task.Run(() => SchoolLocator.ReportService.BuildReportCardsData(inputModel));
-            var template = MasterLocator.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
-            var templateRenderer = new TemplateRenderer(path);
-            var data = dataTask.Result;
-            IList<byte[]> reports = new List<byte[]>();
-            foreach (var dataItem in data)
-            {
-                var model = new {Data = dataItem};
-                var main = PrepareReportView(template, model, templateRenderer);
-                var header = template.Header != null ? PrepareReportView(template.Header, model, templateRenderer) : null;
-                var footer = template.Footer != null ? PrepareReportView(template.Footer, model, templateRenderer) : null;
-                reports.Add(DocumentRenderer.RenderToPdf(path, CompilerHelper.ScriptsRoot, main, header, footer));
-            }
-            templateRenderer.Dispose();
-            return DocumentRenderer.MergePdfDocuments(reports);
         }
 
         private ActionResult DemoReportCards(ReportCardsInputModel inputModel)

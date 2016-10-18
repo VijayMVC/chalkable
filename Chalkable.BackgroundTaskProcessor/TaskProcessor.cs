@@ -26,7 +26,7 @@ namespace Chalkable.BackgroundTaskProcessor
             handlers.Add(BackgroundTaskTypeEnum.SisDataResyncAfterRestore, new SisResyncAfterRestoreTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.DatabaseDacPacUpdate, new DatabaseDacPacUpdateTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.AcademicBenchmarkImport, new AcademicBenchmarkImportTaskHandler());
-            handlers.Add(BackgroundTaskTypeEnum.ReportProcessing, new ReportCardTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.GenerateReport, new ReportCardTaskHandler());
         }
 
         private BackgroundTaskService.BackgroundTaskLog CreateLog(IServiceLocatorMaster sl, BackgroundTask task)

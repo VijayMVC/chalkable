@@ -116,7 +116,7 @@ namespace Chalkable.Web.Controllers
         public IServiceLocatorMaster MasterLocator { get; protected set; }
         public IServiceLocatorSchool SchoolLocator { get; protected set; }
         public IAcademicBenchmarkServiceLocator AcademicBenchmarkLocator { get; protected set; }
-        protected UserContext Context => SchoolLocator != null ? SchoolLocator.Context : MasterLocator.Context;
+        protected UserContext Context => SchoolLocator?.Context ?? MasterLocator?.Context;
 
         protected override void Initialize(RequestContext requestContext)
         {
