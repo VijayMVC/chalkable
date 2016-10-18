@@ -751,7 +751,6 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\Reporting\ReportCards.cshtml" />
-    <Content Include="Views\Reporting\TemplateRenderer.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
