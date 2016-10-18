@@ -106,8 +106,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ReportCards(ReportCardsInputModel inputModel)
         {
-            var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
-            inputModel.DefaultDataPath = path;
+            //var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
+            //inputModel.DefaultDataPath = path;
             inputModel.ContentUrl = CompilerHelper.ScriptsRoot;
             SchoolLocator.ReportService.ScheduleReportCardTask(inputModel);
             return Json(true);

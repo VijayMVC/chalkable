@@ -14,8 +14,8 @@ namespace Chalkable.BusinessLogic.Services.Reporting
         private readonly V8JsEngine JsEngine;
         private static readonly IList<string> scriptFileAddresses = new List<string>
         {
-            @"app\bower\jade\jade.js",
-            @"Views\Reporting\TemplateRenderer.js"
+            @"Scripts\jade.js",
+            @"Scripts\TemplateRenderer.js"
         }; 
 
         public TemplateRenderer(string baseServerPath)
