@@ -1,0 +1,80 @@
+studentAnnouncements = self.getItems()
+
+.silver-panel.student-announcements-top-panel
+    +RenderWith(self.getModel(), chlk.templates.announcement.StudentAnnouncementsTpl)(
+        LEIntegrated = self.isLEIntegrated(),
+        classId = self.getClassId(),
+        dropped = self.isDropped(),
+        ableDropStudentScore = self.isAbleDropStudentScore(),
+        announcementId = self.getAnnouncementId()
+    )
++ListView(self)().grades-individual.people-list.grading
+    items = self.getSortedStudentAnnouncements()
+    each item, i in items
+        readonly = self.isReadonly()
+        student = item.getStudentInfo()
+        ablePutOnlyZero = !self.getSchoolOptions().isAllowScoreEntryForUnexcused() && item.isUnExcusedAbsent()
+        .row(class=(item.getState() == 0 ? 'z-0' : 'z-10') + (self.isGradable() && !readonly ? '' : ' readonly') + (item.needStrikeThrough() ? ' dropped-value' : ''), index=i).fixed-bg
+            +Hidden('readonly', readonly)
+            .top-content(id = "top-content-" + item.getStudentInfo().getId().valueOf())
+                value = item.getGradeValue()
+                lbl = 'A - F'
+                owner = self.getOwner()
+                alertsEnum = chlk.models.grading.AlertsEnum
+                +ActionForm('announcement', 'updateAnnouncementGrade')(
+                    class = (item.isEmptyGrade() ? "empty-grade-form" : ""),
+                    data-able-drop=self.isAbleDropStudentScore()
+                ).update-grade-form
+                    +Hidden('id', item.getId())
+                    +Hidden('announcementid', item.getAnnouncementId())
+                    +Hidden('studentid', student.getId())
+                    +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow.person-img-container
+                        +PersonImg(student, 47)
+                    .name-block
+                        +ProfileLink(student, 'student')
+                            .wrapper
+                                p= student.getFullName()
+                                if student.isWithdrawn()
+                                    div(data-tooltip=Msg.Withdrawn).withdrawn
+                        if !readonly
+                            .grade-options.selected
+                                +ActionLink('grading', 'getGradeCommentsFromView').comment-text= (item.getComment() ? Msg.Commented : Msg.Comment)
+                                .small-pop-up.popup-bubble.top
+                                    +TextArea(name="comment", maxlength=500, data-comment=item.getComment(), placeholder=Msg.Enter_when_done).comment-input.with-grid-focus= item.getComment()
+                                    .grading-comments-list
+                    div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
+                        if item.getAttachments() && item.getAttachments().length
+                            .grade-triangle
+                        .grade-container
+                            +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
+                                userRole = self.getUserRole()
+                                maxScore = self.getMaxScore()
+                                ableDropStudentScore = self.isAbleDropStudentScore()
+                                ableToExempt = self.isAbleToExempt(),
+                                readonly = readonly,
+                                rowIndex = i,
+                                ablePutOnlyZero=ablePutOnlyZero,
+
+                            )
+        .attachments-container.z-10.sub-row(class = ((item.getAttachments().length || self.getApplications().length) ? 'with-data' : '') )
+            .attachments-container-2
+                each attachment, i in item.getAttachments()
+                    .announcement-item.attachment
+                        if attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER
+                            .wrapper
+                                A(href=attachment.getUrl()).download-link Download
+                                .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")=attachment.getName()
+                        else
+                            +AppAttachmentGradingBlock(attachment, attachment.getThumbnailUrl()).announcement-item.attachment
+                                +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open
+
+                each app, i in self.getApplications()
+                    -var isBanned = false
+                    .announcement-item.attachment
+                        -var appPictureUrl = (app.getImageUrl && app.getImageUrl()) || self.getPictureURL(app.getBigPictureId(), 170, 110)
+                        +AppAttachmentGradingBlock(app, appPictureUrl, self.getStudentAnnApplicationMetaText(app.getAnnouncementApplicationId(), student.getId())).announcement-item.application
+                            +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId(), self.getStandardsUrlComponents()) Open
+                        -var grade = self.getAppGrade(app.getAnnouncementApplicationId(), student.getId())
+                        if grade
+                            .app-auto-grade Auto grade #{grade}
+
