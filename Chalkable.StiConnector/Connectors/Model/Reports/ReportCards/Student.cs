@@ -28,7 +28,5 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports.ReportCards
         public string StateIDNumber { get; set; }
         public int StudentId { get; set; }
         public string StudentNumber { get; set; }
-        public int? GradingScaleId { get; set; }
-        public int? StandardGradingScaleId { get; set; }
     }
 }
