@@ -15,6 +15,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class UserController : ChalkableController
     {
+        [IgnoreTimeOut]
         public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime, int? acadSessionId, string returnUrl)
         {
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
@@ -27,7 +28,7 @@ namespace Chalkable.Web.Controllers
             return Redirect<HomeController>(x => x.Index());
         }
         
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student"), IgnoreTimeOut]
         public ActionResult RedirectToINow()
         {
             if (!Context.DistrictId.HasValue)
@@ -37,6 +38,7 @@ namespace Chalkable.Web.Controllers
             return Redirect(url);
         }
 
+        [IgnoreTimeOut]
         public ActionResult LogOn(string userName, string password, bool remember)
         {
             if(string.IsNullOrEmpty(userName))
@@ -73,25 +75,28 @@ namespace Chalkable.Web.Controllers
             return Redirect<HomeController>(x => x.Teacher());
         }
 
+        [IgnoreTimeOut]
         private void SwitchToRole(CoreRole role)
         {
             var context = MasterLocator.UserService.SwitchToRole(role);
             ChalkableAuthentication.SignIn(context, false, context.LoginTimeOut);
         }
 
+        [IgnoreTimeOut]
         public ActionResult LogOut()
         {
             ChalkableAuthentication.SignOut();
             DeveloperAuthentication.SignOut();
             return Json(new { success = true, data = new { success = true } }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [IgnoreTimeOut]
         public ActionResult Confirm(string key)
         {
             return Confirm(key, AfterConfirmAction);
         }
 
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student"), IgnoreTimeOut]
         public ActionResult ActivateUser(string newUserEmail)
         {
             if (!Context.PersonId.HasValue)
@@ -120,7 +125,8 @@ namespace Chalkable.Web.Controllers
             MasterLocator.UserTrackingService.ChangedPassword(Context.Login);
             return Json(true);
         }
-        
+
+        [IgnoreTimeOut]
         public ActionResult ResetPassword(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -136,7 +142,8 @@ namespace Chalkable.Web.Controllers
                 return Json(e);
             }*/
         }
-   
+
+        [IgnoreTimeOut]
         private ActionResult AfterConfirmAction(UserContext context)
         {
             if (context.PersonId.HasValue)
@@ -151,6 +158,7 @@ namespace Chalkable.Web.Controllers
             return Redirect<HomeController>(c => c.Index());
         }
 
+        [IgnoreTimeOut]
         protected ActionResult Confirm(string key, Func<UserContext, ActionResult> redirectAction)
         {
             var context = LogOn(false, us => us.Login(key));
@@ -164,12 +172,14 @@ namespace Chalkable.Web.Controllers
             return Redirect<HomeController>(c => c.Index());
         }
 
+        [IgnoreTimeOut]
         protected UserContext LogOn(bool remember, Func<IUserService, UserContext> logOnAction)
         {
             var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             return LogOn(remember, serviceLocator.UserService, logOnAction);
         }
 
+        [IgnoreTimeOut]
         protected UserContext LogOn(bool remember, IUserService userService, Func<IUserService, UserContext> logOnAction)
         {
             var context = logOnAction(userService);
@@ -182,6 +192,7 @@ namespace Chalkable.Web.Controllers
             return context;
         }
 
+        [IgnoreTimeOut]
         public ActionResult GetAccessToken(string login, string password, string clientId, string clientSecret, string redirectUri)
         {
             // THIS WAS REMOVED WITH ACS SUPPORT
