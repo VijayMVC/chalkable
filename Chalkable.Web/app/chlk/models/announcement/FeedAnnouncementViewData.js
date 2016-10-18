@@ -66,7 +66,8 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.galleryCategoryId = SJX.fromValue(raw.galleryCategoryId, chlk.models.id.LpGalleryCategoryId);
                 this.hiddenFromStudents = this.isFeedItemHidden_(raw);
-                this.announcementTypeId = SJX.fromValue(raw.announcementTypeId, Number);
+                if(parseInt(raw.announcementTypeId, 10))
+                    this.announcementTypeId = SJX.fromValue(raw.announcementTypeId, Number);
                 this.maxScore = SJX.fromValue(raw.maxscore, Number);
                 this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
                 this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
