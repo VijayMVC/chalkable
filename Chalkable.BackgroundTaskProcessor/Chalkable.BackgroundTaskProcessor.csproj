@@ -242,6 +242,10 @@
       <Project>{C7406CA4-FF85-4BF9-A729-1A5AFAB7F5B4}</Project>
       <Name>Chalkable.StiImport</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Web\Chalkable.Web.csproj">
+      <Project>{60802bf0-af2e-47f8-a792-7135dc7565d0}</Project>
+      <Name>Chalkable.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets" Condition="Exists('..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" />
