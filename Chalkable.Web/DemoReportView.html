@@ -12,6 +12,8 @@
     
     <style type="text/css">
         body {margin: 0}
+        .traditional-table td:first-child:not(:last-child) {width: 20%}
+        .traditional-table td:last-child:not(:first-child) {width: 40%}
         * {box-sizing: border-box;}
         .col-sm-12, .col-sm-4, .col-sm-6, .col-sm-8{position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;float: left;}
         .col-sm-12 {width: 100%;}
@@ -86,56 +88,168 @@
       "state": "",
       "zip": "          "
     },
-    "traditionalgradingscale": [
-      {
-        "name": "A",
-        "minvalue": 89.5,
-        "maxvalue": 120.0
-      },
-      {
-        "name": "B",
-        "minvalue": 79.5,
-        "maxvalue": 89.499
-      },
-      {
-        "name": "C",
-        "minvalue": 69.5,
-        "maxvalue": 79.499
-      },
-      {
-        "name": "D",
-        "minvalue": 59.5,
-        "maxvalue": 69.499
-      },
-      {
-        "name": "F",
-        "minvalue": 0.0,
-        "maxvalue": 59.499
-      }
-    ],
+    "traditionalgradingscales": [{
+      classes:['Algebra', 'Geometry', 'Physics', 'Chemistry'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 89.5,
+          "maxvalue": 120.0
+        },
+        {
+          "name": "B",
+          "minvalue": 79.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }, {
+      classes:['Mathematics', 'Astronomy'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 88.55555,
+          "maxvalue": 130.0
+        },
+        {
+          "name": "B",
+          "minvalue": 78.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }, {
+      classes:['Mathematics'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 88.55555,
+          "maxvalue": 130.0
+        },
+        {
+          "name": "B",
+          "minvalue": 78.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }],
     "includesignature" : true,
-    "standardsgradingscale": [
-      {
-        "name": "A",
-        "description": "Description A"
-      },
-      {
-        "name": "B",
-        "description": "Description B"
-      },
-      {
-        "name": "C",
-        "description": "Description C"
-      },
-      {
-        "name": "D",
-        "description": "Description D"
-      },
-      {
-        "name": "F",
-        "description": "Description F"
-      }
-    ],
+    "standardsgradingscales": [{
+      classes:['Algebra', 'Geometry', 'Physics', 'Chemistry'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }, {
+      classes:['Mathematics', 'Astronomy'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }, {
+      classes:['Mathematics'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }],
     "idtoprint": false,
     "student": {
       "studentid": 123,
@@ -2540,19 +2654,6 @@ each arrItem, index in arr
                                           td=item[prop]
                                       -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
                                       td=sum
-              .col-sm-6
-                  table.table.table-bordered.traditional-table
-                      thead
-                          tr.active
-                              td(colspan = 3) Grading Scale - Traditional
-                      tbody
-                          each grade in model.traditionalgradingscale
-                              tr
-                                  td=grade.name
-                                  td=grade.minvalue
-                                  td=grade.maxvalue
-          .row.m-t-0
-              .col-sm-6
                   table.table.table-bordered.merits-table
                       thead
                           tr.active
@@ -2566,15 +2667,27 @@ each arrItem, index in arr
                               td Demerits
                               td=student.merits
               .col-sm-6
-                  table.table.table-bordered.standards-table
-                      thead
-                          tr.active
-                              td(colspan = 2) Grading Scale - Standards
-                      tbody
-                          each grade in model.standardsgradingscale
-                              tr
-                                  td=grade.name
-                                  td=grade.description
+                  each item in model.traditionalgradingscales || []
+                      table.table.table-bordered.traditional-table
+                          thead
+                              tr.active
+                                  td(colspan = 3) Grading Scale - Traditional (#{(item.classes || []).join(', ')})
+                          tbody
+                              each grade in item.ranges
+                                  tr
+                                      td=grade.name
+                                      td=grade.minvalue
+                                      td=grade.maxvalue
+                  each item in model.standardsgradingscales || []
+                      table.table.table-bordered.standards-table
+                          thead
+                              tr.active
+                                  td(colspan = 2) Grading Scale - Standards (#{(item.classes || []).join(', ')})
+                          tbody
+                              each grade in item.ranges
+                                  tr
+                                      td=grade.name
+                                      td=grade.description
           .row
               .col-sm-12
                   if model.includesignature
