@@ -7,6 +7,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Microsoft.Data.Edm.Expressions;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Chalkable.BusinessLogic.Services.Master
@@ -157,7 +158,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data, string domain)
         {
-            BaseSecurity.EnsureSysAdmin(Context);
+            if(!CanScheduleTask(type))
+                throw new ChalkableSecurityException();
             var task = new BackgroundTask
                 {
                     Created = DateTime.UtcNow,
@@ -171,6 +173,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 };
             DoUpdate(u => new BackgroundTaskDataAccess(u).Insert(task));
             return task;
+        }
+
+        private bool CanScheduleTask(BackgroundTaskTypeEnum type)
+        {
+            return BaseSecurity.IsSysAdmin(Context) || type == BackgroundTaskTypeEnum.GenerateReport;
         }
 
         public BackgroundTask GetTaskToProcess(DateTime now)

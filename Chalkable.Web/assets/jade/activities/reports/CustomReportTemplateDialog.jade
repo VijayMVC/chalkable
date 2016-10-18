@@ -7,7 +7,10 @@
          +Hidden("id", template.getId())
          .x-form-field
             label File:
-            +FileUpload()(name='icon')#icon.simple-gray-button
+            .i-b.template-icon
+                .template-icon-cnt
+                    img(src=(template.getId() && self.getPictureURL(template.getId(), 256, 256)), width=256).template-img
+                +FileUpload()(name='icon')#icon.simple-gray-button
          .x-form-field
             label Name:
             input(type="text",name="name", value=template.getName())

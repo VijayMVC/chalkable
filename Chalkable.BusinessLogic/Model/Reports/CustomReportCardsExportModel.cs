@@ -15,16 +15,17 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public int AcadYear { get; set; }
         public string AcadSessionName { get; set; }
         public SchoolReportCardsExportModel School { get; set; }
-        public IList<TraditionalGradingScaleExportModel> TraditionalGradingScale { get; set; } 
-        public IList<StandardsGradingScaleExportModel> StandardsGradingScale { get; set; }
+        public IList<GradingScaleExportModel<TraditionalGradingScaleRangeExportModel>> TraditionalGradingScales { get; set; } 
+        public IList<GradingScaleExportModel<StandardsGradingScaleRangeExportModel>> StandardsGradingScales { get; set; }
         public bool IdToPrint { get; set; }
         public StudentReportCardsExportModel Student { get; set; }
         public bool IncludeSignature { get; set; }
+        public ReportCardsRecipientType RecipientType { get; set; }
 
         public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, ReportCardAddressData recipient, string logoRef, DateTime reportDate
             , ReportCardsInputModel inputModel)
         {
-            return new CustomReportCardsExportModel
+            var res = new CustomReportCardsExportModel
             {
                 AcadYear = reportCard.AcadYear,
                 LogoHref = logoRef,
@@ -42,14 +43,19 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     Zip = reportCard.School.Zip
                 },
                 Student = StudentReportCardsExportModel.Create(reportCard.GradingPeriod, studentData, recipient, inputModel.IncludeGradedStandardsOnly, inputModel.IncludeComments),
-                TraditionalGradingScale = inputModel.IncludeGradingScaleTraditional && studentData.GradingScaleId.HasValue 
-                        ? TraditionalGradingScaleExportModel.Create(reportCard.GradingScales, studentData.GradingScaleId.Value)
-                        :  new List<TraditionalGradingScaleExportModel>(),
-                StandardsGradingScale = inputModel.IncludeGradingScaleStandards && studentData.StandardGradingScaleId.HasValue 
-                        ? StandardsGradingScaleExportModel.Create(reportCard.GradingScales, studentData.StandardGradingScaleId.Value) 
-                        : new List<StandardsGradingScaleExportModel>(),
-                IncludeSignature = inputModel.IncludeParentSignature
+                IncludeSignature = inputModel.IncludeParentSignature,
+                RecipientType = inputModel.RecipientType,
+                TraditionalGradingScales = new List<GradingScaleExportModel<TraditionalGradingScaleRangeExportModel>>(),
+                StandardsGradingScales = new List<GradingScaleExportModel<StandardsGradingScaleRangeExportModel>>(),
+                IdToPrint = inputModel.IdToPrint != 0 // 0 - this is NONE option on ui.
             };
+            if (inputModel.IncludeGradingScaleTraditional)
+                res.TraditionalGradingScales = GradingScaleExportModel<TraditionalGradingScaleRangeExportModel>.Create(reportCard.GradingScales,
+                        studentData.Sections, s => s.GradingScaleId, TraditionalGradingScaleRangeExportModel.Create);
+            if(inputModel.IncludeGradingScaleStandards)
+                res.StandardsGradingScales = GradingScaleExportModel<StandardsGradingScaleRangeExportModel>.Create(reportCard.GradingScales,
+                        studentData.Sections, s => s.StandardGradingScaleId, StandardsGradingScaleRangeExportModel.Create);
+            return res;
         }
 
         private static string FormatSchoolPhone(string tel)
@@ -77,42 +83,65 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Zip { get; set; }
 
     }
-    public class TraditionalGradingScaleExportModel
+
+    public class GradingScaleExportModel<TGradingScaleRange>
+    {
+        public IList<string> Classes { get; set; }
+        public IList<TGradingScaleRange> Ranges { get; set; }
+
+        public static IList<GradingScaleExportModel<TGradingScaleRange>> Create(IList<GradingScale> gradingScales, IEnumerable<ReportCardSectionData> sections
+            , Func<ReportCardSectionData, int?> getGradingScaleId  
+            , Func<GradingScaleRange, GradingScale, TGradingScaleRange> gradingScaleRangeCreator)
+        {
+            sections = sections.Where(x => getGradingScaleId(x).HasValue).ToList();
+            if (!sections.Any()) return new List<GradingScaleExportModel<TGradingScaleRange>>();
+
+            var gsClasses = sections.GroupBy(x => getGradingScaleId(x).Value).ToDictionary(x => x.Key, x => x.Select(s => s.Name).ToList());
+
+            var res = new List<GradingScaleExportModel<TGradingScaleRange>>();
+            foreach (var kv in gsClasses)
+            {
+                var gradingScale = gradingScales.FirstOrDefault(x => x.Id == kv.Key);
+                if (gradingScale?.Ranges == null) continue;
+                res.Add(new GradingScaleExportModel<TGradingScaleRange>
+                {
+                    Classes = kv.Value,
+                    Ranges = gradingScale.Ranges.OrderByDescending(x => x.HighValue)
+                                     .Select(x => gradingScaleRangeCreator(x, gradingScale)).ToList()
+                });
+            }
+            return res;
+        }
+    }
+
+    public class TraditionalGradingScaleRangeExportModel
     {
         public string Name { get; set; }
         public decimal MinValue { get; set; }
         public decimal MaxValue { get; set; }
 
-        public static IList<TraditionalGradingScaleExportModel> Create(IList<GradingScale> gradingScales, int gradingScaleId)
+        public static TraditionalGradingScaleRangeExportModel Create(GradingScaleRange range, GradingScale gradingScale)
         {
-            var gradingScale = gradingScales.FirstOrDefault(x => x.Id == gradingScaleId);
-            if(gradingScale?.Ranges == null)
-                return new List<TraditionalGradingScaleExportModel>();
-            return gradingScale.Ranges.OrderByDescending(x => x.HighValue)
-                .Select(x => new TraditionalGradingScaleExportModel
+            return new TraditionalGradingScaleRangeExportModel
             {
-                MaxValue = x.HighValue,
-                MinValue = x.LowValue,
-                Name = x.AlphaGrade
-            }).ToList();
-        } 
-
+                MaxValue = range.HighValue,
+                MinValue = range.LowValue,
+                Name = range.AlphaGrade
+            };
+        }
     }
-    public class StandardsGradingScaleExportModel
+    public class StandardsGradingScaleRangeExportModel
     {
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public static IList<StandardsGradingScaleExportModel> Create(IList<GradingScale> gradingScales, int standardGradingScaleId)
+        public static StandardsGradingScaleRangeExportModel Create(GradingScaleRange range, GradingScale gradingScale)
         {
-            var gradingScale = gradingScales.FirstOrDefault(x => x.Id == standardGradingScaleId);
-            if (gradingScale?.Ranges == null) return new List<StandardsGradingScaleExportModel>();
-            return gradingScale.Ranges.OrderByDescending(x=>x.HighValue)
-                .Select(x => new StandardsGradingScaleExportModel
+            return new StandardsGradingScaleRangeExportModel
             {
-                Name = x.AlphaGrade,
-                Description = gradingScale.Description + " " + x.AlphaGrade
-            }).ToList();
+                Name = range.AlphaGrade,
+                Description = gradingScale.Description + " " + range.AlphaGrade
+            };
         }
     }
 

@@ -7,13 +7,3 @@
         .attach-main
             .iframe-wrap.partial-update
                 iframe(src=self.getUrl(), width="100%", border=0, style="border: none; min-height: 500px")
-
-            if self.isAttachButtonVisible()
-                div(style="text-align:right;margin-right:18px;margin-top: 5px")
-                    button.blue-button.mid-button#add-app(
-                        data-announcement-app-id=self.getAnnouncementApplicationId().valueOf()
-                        data-announcement-id=self.getAttachOptions().getAnnouncementId().valueOf()
-                        data-announcement-type=self.getAttachOptions().getAnnouncementType().valueOf()
-                        data-advanced-app=1,
-                        disabled="disabled"
-                        ) Attach

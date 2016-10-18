@@ -326,6 +326,15 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                     }
                 }
+            },
+
+            [ria.mvc.DomEventBind('focus', '#ann-max-score')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function maxScoreFocus(node, event){
+                setTimeout(function(){
+                    node.valueOf()[0].setSelectionRange(0, (node.getValue() || '').length);
+                }, 1);
+
             }
         ]
     );

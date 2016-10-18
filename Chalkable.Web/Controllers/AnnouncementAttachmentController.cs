@@ -165,7 +165,7 @@ namespace Chalkable.Web.Controllers
             if (attachment != null && attachment.AnnouncementRef == announcementId)
                 SchoolLocator.AnnouncementAttachmentService.Delete(announcementAttachmentId);
 
-            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType);
+            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType, Context.Role == CoreRoles.STUDENT_ROLE);
             return Json(res, 6);
         }
         

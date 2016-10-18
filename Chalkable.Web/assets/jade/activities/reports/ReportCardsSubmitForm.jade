@@ -34,7 +34,7 @@ mixin Radio(name, value, title, selected)
                         TD(colspan="3").item-3
                             .text-block
                                 label Title
-                                input(type="text", name="title", placeholder='Report Card', value="Report Card", maxlength=75).report-title
+                                input(type="text", name="title", value="Report Card", maxlength=75).report-title
                     TR
                         TD.item-3
                             h3 Recipient
@@ -50,7 +50,8 @@ mixin Radio(name, value, title, selected)
                                 +Radio('logo', chlk.models.reports.ReportCardsLogoType.NONE.valueOf(), 'None', true)
                         TD.item-3
                             h3 Layout
-                            +Select('customReportTemplate', 'customReportTemplateId').custom-template-select
+                            +Select('customReportTemplate', 'customReportTemplateId')(firstEmpty = true, data-placeholder="Select").custom-template-select
+                                +Option('', '')
                                 each template in self.getTemplates()
                                     +Option(template.getId().valueOf(), template.getName())(
                                         data-icon=self.getPictureURL(template.getId().valueOf(), 64, 64)
@@ -97,6 +98,7 @@ mixin Radio(name, value, title, selected)
                             +Select('includeOptionValues', 'includeOptions')(multiple).include-select
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ANNOUNCEMENT.valueOf(), 'Announcement', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.ATTENDANCE.valueOf(), 'Attendance', true)
+                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.COMMENTS.valueOf(), 'Comments', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_PERIOD_NOTES.valueOf(), 'Grading Period Note', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_SCALE_STANDARDS.valueOf(), 'Grading Scale - Standards', true)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.GRADING_SCALE_TRADITIONAL.valueOf(), 'Grading Scale - Traditional', true)
@@ -105,7 +107,6 @@ mixin Radio(name, value, title, selected)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.PROMOTION_STATUS.valueOf(), 'Promotion Status', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.WITHDRAWN_STUDENTS.valueOf(), 'Withdrawn Students', false)
                                 +Option(chlk.models.reports.ReportCardsAdditionalOptions.YEAR_TO_DATE_INFORMATION.valueOf(), 'Year to Date Information', true)
-                                +Option(chlk.models.reports.ReportCardsAdditionalOptions.COMMENTS.valueOf(), 'Comments', false)
 
         .images-for-load-cnt
             each template in self.getTemplates()

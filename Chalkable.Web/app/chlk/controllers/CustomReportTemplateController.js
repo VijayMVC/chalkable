@@ -69,6 +69,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.reports.CustomReportTemplate]],
             function saveAction(model){
+                this.view.getCurrent().close();
                 var result = this.reportTemplateService
                     .saveTemplate(
                     model.getId(),
@@ -82,7 +83,6 @@ NAMESPACE('chlk.controllers', function (){
                 )
                 .attach(this.validateResponse_())
                 .then(function (data) {
-                    this.view.getCurrent().close();
                     return this.getList_();
                 }, this);
                 return this.UpdateView(chlk.activities.reports.CustomReportTemplateListPage, result);

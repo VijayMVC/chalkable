@@ -11,6 +11,7 @@ using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -46,7 +47,9 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
         byte[] GetReportCards(ReportCardsInputModel inputModel, string path);
-        Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel);
+        byte[] DownloadReport(string reportId);
+        void ScheduleReportCardTask(ReportCardsInputModel inputModel);
+        void GenerateReportCard(ReportCardsInputModel inputModel);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
 
@@ -438,27 +441,64 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetReportCards(ReportCardsInputModel inputModel, string path)
         {
-            //Trace.Assert(Context.SchoolLocalId.HasValue);
-            //var inowReportCardTask = Task.Run(()=>GetInowReportData(inputModel)); 
-            //var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
-            //var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
-            
-            //var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
-            //IList<byte[]> listOfpdf = new List<byte[]>();
-            //foreach (var data in listOfReportCards)
-            //{
-            //    listOfpdf.Add(DocumentRenderer.Render(path, Settings.ScriptsRoot, template, data));
-            //}
-            //return DocumentRenderer.MergePdfDocuments(listOfpdf);
-            throw new NotImplementedException();
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            var inowReportCardTask = Task.Run(()=>GetInowReportData(inputModel)); 
+            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
+            var template = ServiceLocator.ServiceLocatorMaster.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
+            var templateRenderer = new TemplateRenderer(path);
+            var listOfReportCards = BuildReportCardsData(inowReportCardTask.Result, logo?.LogoAddress, inputModel);
+            IList<byte[]> listOfpdf = new List<byte[]>();
+            string headerTpl = null, footerTpl = null;
+            foreach (var data in listOfReportCards)
+            {
+                var bodyTpl = templateRenderer.Render(template.Layout, data);
+                if (template.Header != null)
+                    headerTpl = templateRenderer.Render(template.Header.Layout, data);
+                if (template.Footer != null)
+                    footerTpl = templateRenderer.Render(template.Footer.Layout, data);
+                var report = DocumentRenderer.RenderToPdf(path, inputModel.ContentUrl, bodyTpl, template.Style, headerTpl,
+                    template.Header?.Style, footerTpl, template.Footer?.Style);
+                listOfpdf.Add(report);
+            }
+            return DocumentRenderer.MergePdfDocuments(listOfpdf);
+        }
+        
+        public void ScheduleReportCardTask(ReportCardsInputModel inputModel)
+        {
+            Trace.Assert(Context.DistrictId.HasValue);
+
+            if (!ServiceLocator.ServiceLocatorMaster.DistrictService.IsReportCardsEnabled())
+                throw new ChalkableSecurityException("This district hasn't access Report Cards!");
+
+            var data = new ReportProcessingTaskData(Context, inputModel, inputModel.ContentUrl);
+            var scheduleTime = DateTime.UtcNow.AddDays(-20);
+
+            ServiceLocator.ServiceLocatorMaster.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.GenerateReport, scheduleTime,
+                Context.DistrictId, data.ToString(), $"{Context.DistrictId.Value}_report_processing");
+
         }
 
-        public async Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel)
+        public void GenerateReportCard(ReportCardsInputModel inputModel)
         {
-            Trace.Assert(Context.SchoolLocalId.HasValue);
-            var inowReportCardTask = GetInowReportData(inputModel);
-            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
-            return BuildReportCardsData(await inowReportCardTask, logo?.LogoAddress, inputModel);
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.DistrictId.HasValue);
+            try
+            {
+                var content = ServiceLocator.ReportService.GetReportCards(inputModel, inputModel.DefaultDataPath);
+                var reportId = $"reportcard_{Context.DistrictId.Value}_{Context.PersonId.Value}_{Guid.NewGuid()}";
+                ServiceLocator.StorageBlobService.AddBlob("reports", reportId, content);
+                ServiceLocator.NotificationService.AddReportProcessedNotification(Context.PersonId.Value, Context.RoleId, "Report Cards", reportId, null, true);
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.NotificationService.AddReportProcessedNotification(Context.PersonId.Value, Context.RoleId, "Report Cards", null, "We had an issue building your report. Please try again.", false);
+                throw e;
+            }
+        }
+
+        public byte[] DownloadReport(string reportId)
+        {
+            return ServiceLocator.StorageBlobService.GetBlobContent("reports", reportId);
         }
 
         private IList<CustomReportCardsExportModel> BuildReportCardsData(ReportCard inowData, string logoAddress,

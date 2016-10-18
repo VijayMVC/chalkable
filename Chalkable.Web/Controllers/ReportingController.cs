@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
@@ -14,6 +16,7 @@ using Chalkable.Common.JsonContractTools;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Common;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
@@ -103,30 +106,14 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ReportCards(ReportCardsInputModel inputModel)
         {
-    //          return DemoReportCards(inputModel);
-
-               return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
-        }
-
-        private byte[] GetReportCards(ReportCardsInputModel inputModel)
-        {
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             inputModel.DefaultDataPath = path;
-            var dataTask = Task.Run(() => SchoolLocator.ReportService.BuildReportCardsData(inputModel));
-            var template = MasterLocator.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
-            var templateRenderer = new TemplateRenderer(path);
-            var data = dataTask.Result;
-            IList<byte[]> reports = new List<byte[]>();
-            foreach (var dataItem in data)
-            {
-                var model = new {Data = dataItem};
-                var main = PrepareReportView(template, model, templateRenderer);
-                var header = template.Header != null ? PrepareReportView(template.Header, model, templateRenderer) : null;
-                var footer = template.Footer != null ? PrepareReportView(template.Footer, model, templateRenderer) : null;
-                reports.Add(DocumentRenderer.RenderToPdf(path, CompilerHelper.ScriptsRoot, main, header, footer));
-            }
-            templateRenderer.Dispose();
-            return DocumentRenderer.MergePdfDocuments(reports);
+            inputModel.ContentUrl = CompilerHelper.ScriptsRoot;
+            SchoolLocator.ReportService.ScheduleReportCardTask(inputModel);
+            return Json(true);
+            //          return DemoReportCards(inputModel);
+
+            //         return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
         }
 
         private ActionResult DemoReportCards(ReportCardsInputModel inputModel)
@@ -209,6 +196,11 @@ namespace Chalkable.Web.Controllers
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {
             return Report(() => reportAction(reportInputModel), reportFileName, reportInputModel.FormatTyped, DownloadReportFile);
+        }
+        
+        public ActionResult DownloadReport(string reportId, string reportName)
+        {
+            return Report(() =>SchoolLocator.ReportService.DownloadReport(reportId), reportName, ReportingFormat.Pdf, DownloadReportFile);
         }
 
         private ActionResult Report(Func<byte[]> reportAction, string reportFileName, ReportingFormat formatType

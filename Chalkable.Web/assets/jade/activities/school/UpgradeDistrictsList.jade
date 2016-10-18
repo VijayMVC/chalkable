@@ -11,6 +11,9 @@
                         span Assessment Access
                         +ActionButton('schools', 'enableAssessment', item.getId()).special-button.blue-button.upgrade-district-btn Enable
                         +ActionButton('schools', 'disableAssessment', item.getId()).negative-button.special-button.red-button Disable
+                     .report_cards-option
+                        span Report Cards Access
+                        +ActionCheckbox('reportCardsEnabled', item.isReportCardsEnabled(), false, true, 'district', 'enableReportCards', 'disableReportCards', [item.getId()])
                      span.upgraded-date
                      +ActionButton('schools', 'upgradeDistrict', item.getId()).special-button.blue-button.upgrade-district-btn Upgrade District
                      +ActionButton('schools', 'downgradeDistrict', item.getId()).negative-button.special-button.red-button Un-upgrade District

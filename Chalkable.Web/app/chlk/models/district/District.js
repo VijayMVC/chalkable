@@ -99,7 +99,10 @@ NAMESPACE('chlk.models.district', function () {
             chlk.models.common.ChlkDate, 'newCreated',
 
             [ria.serialize.SerializeProperty('newscheduled')],
-            chlk.models.common.ChlkDate, 'newScheduled'
+            chlk.models.common.ChlkDate, 'newScheduled',
+
+            [ria.serialize.SerializeProperty('isreportcardsenabled')],
+             Boolean, 'reportCardsEnabled'
 
         ]);
 });

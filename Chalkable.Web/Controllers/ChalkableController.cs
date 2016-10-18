@@ -116,7 +116,7 @@ namespace Chalkable.Web.Controllers
         public IServiceLocatorMaster MasterLocator { get; protected set; }
         public IServiceLocatorSchool SchoolLocator { get; protected set; }
         public IAcademicBenchmarkServiceLocator AcademicBenchmarkLocator { get; protected set; }
-        protected UserContext Context => SchoolLocator != null ? SchoolLocator.Context : MasterLocator.Context;
+        protected UserContext Context => SchoolLocator?.Context ?? MasterLocator?.Context;
 
         protected override void Initialize(RequestContext requestContext)
         {
@@ -138,6 +138,9 @@ namespace Chalkable.Web.Controllers
                 SchoolLocator.Context.OAuthApplication = app.Url;
                 SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(app.Url);
 
+                if(SchoolLocator.Context.LoginTimeOut.HasValue)
+                    GlobalCache.UpdateExpiryUserInfo(authAppInfo.SessionKey, new TimeSpan(0, 0, SchoolLocator.Context.LoginTimeOut.Value));
+
                 return;
             }            
 
@@ -151,10 +154,6 @@ namespace Chalkable.Web.Controllers
                 }
                 context = chalkablePrincipal.Context;
             }
-            
-            var method = GetType().GetMethod(ControllerContext.RouteData.Values["action"].ToString());
-            if(method != null && !method.GetCustomAttributes(typeof(IgnoreTimeOut), true).Any())
-                ChalkableAuthentication.UpdateLoginTimeOut(context);
 
             InitServiceLocators(context);
         }
@@ -278,10 +277,20 @@ namespace Chalkable.Web.Controllers
                 SerializationDepth = 4
             };
         }
+
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+            if(!filterContext.RouteData.Values.ContainsKey("IgnoreTimeOut"))
+                ChalkableAuthentication.UpdateLoginTimeOut(Context);
+        }
     }
 
-    public class IgnoreTimeOut : Attribute
+    public class IgnoreTimeOut : ActionFilterAttribute
     {
-        
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            filterContext.RouteData.Values.Add("IgnoreTimeOut", "1");
+        }
     }
 }

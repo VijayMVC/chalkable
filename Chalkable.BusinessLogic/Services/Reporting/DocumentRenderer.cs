@@ -11,9 +11,25 @@ namespace Chalkable.BusinessLogic.Services.Reporting
     {
         private const string LicenseKey = "zUNQQlNXQlNaVlZCU1BMUkJRU0xTUExbW1tbQlI=";
 
+        private const string DocumentLayout = @"<!DOCTYPE html>
+                <html>
+                    <head>
+                        <link href=""http://fonts.googleapis.com/css?family=Pacifico"" rel=""stylesheet"" type=""text/css""/>
+                        <link href=""http://fonts.googleapis.com/css?family=Oswald"" rel=""stylesheet"" type=""text/css""/>
+                        <link href=""http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700"" rel=""stylesheet"" type=""text/css""/>
+                        <style type = ""text/css"" >{0}</style>
+                    </head>
+                    <body style=""width: 1200px"">
+                        <div id=""container"" class=""fluid-container"">
+                            {1}
+                        </div>
+                    </body>
+                </html>";
+
         public static byte[] MergePdfDocuments(IList<byte[]> files)
         {
             var res = new Document {AutoCloseAppendedDocs = true, LicenseKey = LicenseKey};
+            //var res = new Document { LicenseKey = LicenseKey };
             foreach (var file in files)
             {
                 using (var stream = new MemoryStream())
@@ -21,10 +37,23 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                     stream.Write(file, 0, file.Length);
                     res.AppendDocument(new Document(stream));
                 }
+                //res.AppendDocument(file);
             }
             return res.Save();
         }
-        
+
+        public static byte[] RenderToPdf(string basePath, string baseUrl, string bodyTpl, string bodyStyle
+            , string headerTpl, string headerStyle, string footerTpl, string footerStyle)
+        {
+            var body = string.Format(DocumentLayout, bodyStyle, bodyTpl);
+            string header = null, footer = null;
+            if(!string.IsNullOrWhiteSpace(headerStyle) && !string.IsNullOrWhiteSpace(headerTpl))
+                header = string.Format(DocumentLayout, headerStyle, headerTpl);
+            if (!string.IsNullOrWhiteSpace(footerStyle) && !string.IsNullOrWhiteSpace(footerTpl))
+                footer = string.Format(DocumentLayout, footerStyle, footerTpl);
+            return RenderToPdf(basePath, baseUrl, body, header, footer);
+        }
+
         public static byte[] RenderToPdf(string basePath, string baseUrl, IList<string> htmls, string header, string footer)
         {
             var files = htmls.Select(html => RenderToPdf(basePath, baseUrl, html, header, footer)).ToList();
@@ -34,8 +63,9 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 
         public static byte[] RenderToPdf(string basePath, string baseUrl, string html, string header, string footer)
         {
-            baseUrl = baseUrl.StartsWith("//") ? ("https:" + baseUrl) : baseUrl;
+            baseUrl = baseUrl != null && baseUrl.StartsWith("//") ? ("https:" + baseUrl) : baseUrl;
 
+            //var wnvInternalFileName = Path.Combine(basePath, @"bin\wnvinternal.dat");
             var htmlToPdfConverter = InitializeConverter();
             if (!string.IsNullOrWhiteSpace(header))
                 AddHeader(htmlToPdfConverter, header, baseUrl);
@@ -59,8 +89,11 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             {
                 HtmlViewerWidth = 1200,
                 ConversionDelay = 0,
-                LicenseKey = LicenseKey
+                LicenseKey = LicenseKey,
+              //  WnvInternalFileName = wnvInternalFileName
             };
+            //if (!string.IsNullOrWhiteSpace(wnvInternalFileName))
+            //    htmlToPdfConverter.WnvInternalFileName = wnvInternalFileName;
             htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = PdfPageSize.Letter;
             htmlToPdfConverter.PdfDocumentOptions.PdfPageOrientation = PdfPageOrientation.Portrait;
             htmlToPdfConverter.PdfDocumentOptions.TopMargin = 18;

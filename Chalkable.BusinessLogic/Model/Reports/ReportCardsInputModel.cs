@@ -72,6 +72,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool IncludeYearToDateInformation => HasOption(ReportCardsAddionalOptions.YearToDateInformation);
         public bool IncludeComments => HasOption(ReportCardsAddionalOptions.Comments);
         public string DefaultDataPath { get; set; }
+        public string ContentUrl { get; set; }
     }
 
     public enum ReportCardsRecipientType

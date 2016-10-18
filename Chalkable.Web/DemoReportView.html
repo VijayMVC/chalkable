@@ -11,64 +11,66 @@
     <script src="https://local.chalkable.com:5001/app/bower/jade/jade.js"></script>
     
     <style type="text/css">
-            body {margin: 0}
-            * {box-sizing: border-box;}
-            .col-sm-12, .col-sm-4, .col-sm-6, .col-sm-8{position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;float: left;}
-            .col-sm-12 {width: 100%;}
-            .col-sm-4 {width: 33.33333333%;}
-            .col-sm-6 {width: 50%;}
-            .col-sm-8 {width: 66.66666667%;}
-            .h1, .h2, .h3{margin-top: 20px;margin-bottom: 10px;line-height: 1.1;}
-            .row {margin-top: 15px; margin-bottom: 50px; padding: 1px;margin-right: -15px;margin-left: -15px;}
-            .row:before {display: table;content: " ";}
-            .row:after {display: table;content: " ";clear: both;}
-            .row:last-child {margin-bottom: 35px;}
-            .row.m-t-0 {margin-top: 0}
-            .row.m-b-0 {margin-bottom: 0}
-            .main-student-panel { padding: 1px;}
-            .recipient-parent {border: 1px solid rgba(229, 229,227, 0.45); border-radius: 4px;}
-            .mailing-box{padding: 15px;}
-            table {width: 100%;margin-bottom: 20px;border-collapse: collapse; }
-            .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border:1px solid #8a8a8a; }
-            .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {padding: 8px;line-height: 1.42857143;vertical-align: top;}
-            th {text-align: left;}
-            .table>thead>tr.active>td, .table>thead>tr.active>th{background-color: #f5f5f5;}
-            hr {border: 0; margin-bottom: -40px; margin-top: 40px;border-top: 1px solid #8a8a8a;}
+        body {margin: 0}
+        .traditional-table td:first-child:not(:last-child) {width: 20%}
+        .traditional-table td:last-child:not(:first-child) {width: 40%}
+        * {box-sizing: border-box;}
+        .col-sm-12, .col-sm-4, .col-sm-6, .col-sm-8{position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;float: left;}
+        .col-sm-12 {width: 100%;}
+        .col-sm-4 {width: 33.33333333%;}
+        .col-sm-6 {width: 50%;}
+        .col-sm-8 {width: 66.66666667%;}
+        .h1, .h2, .h3{margin-top: 20px;margin-bottom: 10px;line-height: 1.1;}
+        .row {margin-top: 15px; margin-bottom: 50px; padding: 1px;margin-right: -15px;margin-left: -15px;}
+        .row:before {display: table;content: " ";}
+        .row:after {display: table;content: " ";clear: both;}
+        .row:last-child {margin-bottom: 35px;}
+        .row.m-t-0 {margin-top: 0}
+        .row.m-b-0 {margin-bottom: 0}
+        .main-student-panel { padding: 1px;}
+        .recipient-parent {border: 1px solid rgba(229, 229,227, 0.45); border-radius: 4px;}
+        .mailing-box{padding: 15px;}
+        table {width: 100%;margin-bottom: 20px;border-collapse: collapse; }
+        .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border:1px solid #8a8a8a; }
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {padding: 8px;line-height: 1.42857143;vertical-align: top;}
+        th {text-align: left;}
+        .table>thead>tr.active>td, .table>thead>tr.active>th{background-color: #f5f5f5;}
+        hr {border: 0; margin-bottom: -40px; margin-top: 40px;border-top: 1px solid #8a8a8a;}
 
-            .logo{ width: 4in; height: 2.5in; float: right; }
-			.school{ width: 4in; float: right;}
-            .h1 { font-size: 18pt; font-weight: 600 }
-			.h2 { font-size: 14pt; font-weight: 600; font-style: italic }
-			.h3 { font-size: 12pt; font-weight: 600; font-style: italic }
-			.recipient-h { font-weight: 600; font-style: italic }
-			.pre {white-space: pre-wrap}
-            p { color: green; }
-            #container, #container table { font-family: 'Open Sans', sans-serif; font-size: 11pt }
-			.classes-table { margin-bottom: 0; table-layout: fixed }
-			.classes-table td:not(.pre) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-			.classes-table td:nth-child(1), .classes-table td:nth-child(2), .classes-table th:nth-child(1), .classes-table th:nth-child(2) { width: 10%; }
-			.classes-table td:nth-child(3), .classes-table th:nth-child(3) { width: 30%; }
-			.pre { white-space: pre; }
-			.new-page { page-break-before: always; }
-			.signature-block {display: inline-block; float: right; width: 4in;}
-			.signature-block-line {background: black; height: 1px;}
-			.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th { border-top: none; }
-			.table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border-bottom-width: 1px; }
-			td.w-100 { width: 100% !important; padding: 0 !important }
-			.classes-header tr:nth-child(1) {border: 1px solid #8a8a8a; border-bottom: none}
-			.classes-header tr:nth-child(2) {border-left: 1px solid #8a8a8a; border-right: 1px solid #8a8a8a}
-            .classes-header th:not(.right-border) {border-left: none; border-right: none;}
-            .classes-header th.right-border { border-left: none !important;}
-            .right-border {border-right: 1px solid #8a8a8a}
-			th.text-center {text-align: center}
-			.classes-table .classes-table:not(:first-child){border-top: none}
-            .classes-table .teacher-name { width: 13% !important;overflow: hidden;}
-			.table:not(.table-bordered)>thead>tr>th {border-bottom-width: 0}
-			.comments-row td, .standards-row .first{border: none !important}
-			.comments-row +TR.notes-row td:not(:first-child){border-top: 1px solid #8a8a8a}
-			.notes-row td:last-child, .standards-row .description{border-left: none !important}
-			.notes-row td:first-child{border: none !important}
-			.classes-table td.first{text-indent: 15px; font-style: italic}
+        .logo{ width: 4in; height: 2.5in; float: right; }
+        .school{ width: 4in; float: right;}
+        .h1 { font-size: 18pt; font-weight: 600 }
+        .h2 { font-size: 14pt; font-weight: 600; font-style: italic }
+        .h3 { font-size: 12pt; font-weight: 600; font-style: italic }
+        .recipient-h { font-weight: 600; font-style: italic }
+        .pre {white-space: pre-wrap}
+        p { color: green; }
+        #container, #container table { font-family: 'Open Sans', sans-serif; font-size: 11pt }
+        .classes-table { margin-bottom: 0; table-layout: fixed }
+        .classes-table td:not(.pre) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .classes-table td:nth-child(1), .classes-table td:nth-child(2), .classes-table th:nth-child(1), .classes-table th:nth-child(2) { width: 10%; }
+        .classes-table td:nth-child(3), .classes-table th:nth-child(3) { width: 30%; }
+        .pre { white-space: pre; }
+        .new-page { page-break-before: always; }
+        .signature-block {display: inline-block; float: right; width: 4in;}
+        .signature-block-line {background: black; height: 1px;}
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th { border-top: none; }
+        .table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border-bottom-width: 1px; }
+        td.w-100 { width: 100% !important; padding: 0 !important }
+        .classes-header tr:nth-child(1) {border: 1px solid #8a8a8a; border-bottom: none}
+        .classes-header tr:nth-child(2) {border-left: 1px solid #8a8a8a; border-right: 1px solid #8a8a8a}
+        .classes-header th:not(.right-border) {border-left: none; border-right: none;}
+        .classes-header th.right-border { border-left: none !important;}
+        .right-border {border-right: 1px solid #8a8a8a}
+        th.text-center {text-align: center}
+        .classes-table .classes-table:not(:first-child){border-top: none}
+        .classes-table .teacher-name { width: 13% !important;overflow: hidden;}
+        .table:not(.table-bordered)>thead>tr>th {border-bottom-width: 0}
+        .comments-row td, .standards-row .first{border: none !important}
+        .comments-row +TR.notes-row td:not(:first-child){border-top: 1px solid #8a8a8a}
+        .notes-row td:last-child, .standards-row .description{border-left: none !important}
+        .notes-row td:first-child{border: none !important}
+        .classes-table td.first{text-indent: 15px; font-style: italic}
     </style>
     <script type="text/javascript">
         var Model = {
@@ -86,60 +88,193 @@
       "state": "",
       "zip": "          "
     },
-    "traditionalgradingscale": [
-      {
-        "name": "A",
-        "minvalue": 89.5,
-        "maxvalue": 120.0
-      },
-      {
-        "name": "B",
-        "minvalue": 79.5,
-        "maxvalue": 89.499
-      },
-      {
-        "name": "C",
-        "minvalue": 69.5,
-        "maxvalue": 79.499
-      },
-      {
-        "name": "D",
-        "minvalue": 59.5,
-        "maxvalue": 69.499
-      },
-      {
-        "name": "F",
-        "minvalue": 0.0,
-        "maxvalue": 59.499
-      }
-    ],
-    "standardsgradingscale": [
-      {
-        "name": "A",
-        "description": "Description A"
-      },
-      {
-        "name": "B",
-        "description": "Description B"
-      },
-      {
-        "name": "C",
-        "description": "Description C"
-      },
-      {
-        "name": "D",
-        "description": "Description D"
-      },
-      {
-        "name": "F",
-        "description": "Description F"
-      }
-    ],
+    "traditionalgradingscales": [{
+      classes:['Algebra', 'Geometry', 'Physics', 'Chemistry'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 89.5,
+          "maxvalue": 120.0
+        },
+        {
+          "name": "B",
+          "minvalue": 79.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }, {
+      classes:['Mathematics', 'Astronomy'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 88.55555,
+          "maxvalue": 130.0
+        },
+        {
+          "name": "B",
+          "minvalue": 78.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }, {
+      classes:['Mathematics'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 88.55555,
+          "maxvalue": 130.0
+        },
+        {
+          "name": "B",
+          "minvalue": 78.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }],
+    "includesignature" : true,
+    "standardsgradingscales": [{
+      classes:['Algebra', 'Geometry', 'Physics', 'Chemistry'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }, {
+      classes:['Mathematics', 'Astronomy'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }, {
+      classes:['Mathematics'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }],
     "idtoprint": false,
     "student": {
       "studentid": 123,
       "altstudentnumber": "43534STU",
-      "attendances": null,
+      "attendances": [{
+        "gradingperiodname" : "test",
+        "enrolled" : 84,
+        "present" : 83,
+        "absences" : 1,
+        "excusedabsences" : 1,
+        "unexcusedabsences" : 0,
+        "tardies" : 0,
+        "excusedtardies" : 0,
+        "unexcusedtardies" : 0
+      }, {
+        "gradingperiodname" : "test",
+        "enrolled" : 448,
+        "present" : 448,
+        "absences" : 0,
+        "excusedabsences" : 0,
+        "unexcusedabsences" : 0,
+        "tardies" : 0,
+        "excusedtardies" : 0,
+        "unexcusedtardies" : 0
+      }],
       "gradelevel": "12th Grade",
       "homeroomteacher": "Mrs. Bluth",
       "name": "George Michael Bluth",
@@ -2377,6 +2512,7 @@ each arrItem, index in arr
   -var school = model.school
   -var student = model.student
   -var recipient = student.recipient
+  -var RecipientTypeEnum = { Students: 0, Custodians: 1, MailingContacts: 2 }
   .main-student-panel(class=index > 0 ? "new-page" : "")
       .row
           .col-sm-8
@@ -2395,7 +2531,15 @@ each arrItem, index in arr
           .col-sm-8
               .recipient-parent
                   .mailing-box
-                      .recipient-h.line=recipient.recipientname
+                      if model.recipienttype == RecipientTypeEnum.Students
+                          .recipient-h.line= "Parent or Guardian of... " + recipient.recipientname
+                          .line= recipient.recipientname
+                      if model.recipienttype == RecipientTypeEnum.Custodians
+                          .recipient-h.line=recipient.recipientname
+                          .line= "As custodian for... " + student.name
+                      if model.recipienttype == RecipientTypeEnum.MailingContacts
+                          .recipient-h.line=recipient.recipientname
+                          .line= "As contact for... " + student.name
                       .line= recipient.addressline1 + " " + recipient.addressline2
                       .line= [recipient.city, recipient.state, recipient.postalcode].join(" ")
           .col-sm-4
@@ -2407,6 +2551,9 @@ each arrItem, index in arr
                       tr
                           td Homeroom Teacher
                           td=student.homeroomteacher
+                      tr
+                          td Grading Period
+                          td=student.gradingperiod.name
                       tr
                           td Grade Level
                           td=student.gradelevel
@@ -2453,7 +2600,7 @@ each arrItem, index in arr
                                                       -var gradeditems = gp.gradeditems || []
                                                       th
                                                       each gi, i in gradeditems
-                                                          th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + gi.numericgrade
+                                                          th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + Math.round(gi.numericgrade)
                                           tbody
                                               -var standards = gps[0].standards || []
                                               each standard, si in standards
@@ -2507,19 +2654,6 @@ each arrItem, index in arr
                                           td=item[prop]
                                       -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
                                       td=sum
-              .col-sm-6
-                  table.table.table-bordered.traditional-table
-                      thead
-                          tr.active
-                              td(colspan = 3) Grading Scale - Traditional
-                      tbody
-                          each grade in model.traditionalgradingscale
-                              tr
-                                  td=grade.name
-                                  td=grade.minvalue
-                                  td=grade.maxvalue
-          .row.m-t-0
-              .col-sm-6
                   table.table.table-bordered.merits-table
                       thead
                           tr.active
@@ -2533,21 +2667,33 @@ each arrItem, index in arr
                               td Demerits
                               td=student.merits
               .col-sm-6
-                  table.table.table-bordered.standards-table
-                      thead
-                          tr.active
-                              td(colspan = 2) Grading Scale - Standards
-                      tbody
-                          each grade in model.standardsgradingscale
-                              tr
-                                  td=grade.name
-                                  td=grade.description
+                  each item in model.traditionalgradingscales || []
+                      table.table.table-bordered.traditional-table
+                          thead
+                              tr.active
+                                  td(colspan = 3) Grading Scale - Traditional (#{(item.classes || []).join(', ')})
+                          tbody
+                              each grade in item.ranges
+                                  tr
+                                      td=grade.name
+                                      td=grade.minvalue
+                                      td=grade.maxvalue
+                  each item in model.standardsgradingscales || []
+                      table.table.table-bordered.standards-table
+                          thead
+                              tr.active
+                                  td(colspan = 2) Grading Scale - Standards (#{(item.classes || []).join(', ')})
+                          tbody
+                              each grade in item.ranges
+                                  tr
+                                      td=grade.name
+                                      td=grade.description
           .row
               .col-sm-12
-                  .signature-block
-                      .signature-block-line
-                      em.text Parent or Guardian Signature
-                  .clear-both
+                  if model.includesignature
+                      .signature-block
+                          .signature-block-line
+                          em.text Parent or Guardian Signature
 </script>
 
 </head>

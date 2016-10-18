@@ -53,6 +53,12 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         public const string APP_BUDGET_BALANCE_NOTIFICATION = "APP_BUDGET_BALANCE_NOTIFICATION";
         private const string APP_BUDGET_BALANCE_NOTIFICATION_TEMPLATE = "Your App budget is now $^.Other.BudgetBalance";
 
+        public const string REPORT_PROCESSING_SUCCESSED_NOTIFICATION = "REPORT_PROCESSING_SUCCESSED_NOTIFICATION";
+        private const string REPORT_PROCESSING_SUCCESSED_NOTIFICATION_TEMPLATE = "^.Other.ReportName Processing Completed. <a href='^.Other.ReportAddress'>Download Report</a>";
+
+        public const string REPORT_PROCESSING_FAILED_NOTIFICATION = "REPORT_PROCESSING_FAILED_NOTIFICATION";
+        private const string REPORT_PROCESSING_FAILED_NOTIFICATION_TEMPLATE = "^.Other.ReportName Processing Failed. ^.Other.ErrorMessage";
+
         static NotificationTemplateProvider()
         {
             templates.Add(ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION, ANNOUNCEMENT_ATTACHMENT_NOTIFICATION_TEMPLATE);
@@ -68,6 +74,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             templates.Add(APP_BUDGET_BALANCE_NOTIFICATION, APP_BUDGET_BALANCE_NOTIFICATION_TEMPLATE);
             templates.Add(ATTENDANCE_NOTIFICATION_TO_STUDENT, ATTENDANCE_NOTIFICATION_TO_STUDENT_TEMPLATE);
             templates.Add(ATTENDANCE_NOTIFICATION_TO_TEACHER, ATTENDANCE_NOTIFICATION_TO_TEACHER_TEMPLATE);
+            templates.Add(REPORT_PROCESSING_SUCCESSED_NOTIFICATION, REPORT_PROCESSING_SUCCESSED_NOTIFICATION_TEMPLATE);
+            templates.Add(REPORT_PROCESSING_FAILED_NOTIFICATION, REPORT_PROCESSING_FAILED_NOTIFICATION_TEMPLATE);
         }
 
         public static string GetTemplate(string templateName)

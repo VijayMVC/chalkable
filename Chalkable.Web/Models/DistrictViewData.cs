@@ -18,7 +18,8 @@ namespace Chalkable.Web.Models
         public int? SyncFrequency { get; set; }
         public int? MaxSyncFrequency { get; set; }
         public int FailDelta { get; set; }
-        
+        public bool IsReportCardsEnabled { get; set; }
+
         protected DistrictViewData(District district)
         {
             Id = district.Id;
@@ -29,6 +30,7 @@ namespace Chalkable.Web.Models
             SyncFrequency = district.SyncFrequency;
             MaxSyncFrequency = district.MaxSyncFrequency;
             FailDelta = district.FailDelta;
+            IsReportCardsEnabled = district.IsReportCardsEnabled;
         }
 
         public static DistrictViewData Create(District district)
@@ -115,6 +117,7 @@ namespace Chalkable.Web.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string DistrictState { get; set; }
+        public  bool IsReportCardsEnabled { get; set; }
     }
 
 }
