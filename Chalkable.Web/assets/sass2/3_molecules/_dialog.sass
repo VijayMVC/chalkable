@@ -117,12 +117,11 @@
 
 
 .info-msg-dialog
-  .leave-msg
+  .leave-msg, .error, .ok, .permissions, .report, .sync
     .x-window-body
       margin: 27px 27px 32px
       width: 401px
       padding-top: 93px
-      background: image-url("images2/msg-icons/unsaved.png") no-repeat center top
       text-align: center
       font-size: 14px
 
@@ -137,7 +136,7 @@
     BUTTON
       width: 92px
 
-      &:last-child
+      &:last-child:not(:nth-child(2))
         margin-left: 35px
 
   pre
@@ -161,3 +160,28 @@
 
     .inline
       display: inline-block
+
+  .leave-msg
+    .x-window-body
+      background: image-url("images2/msg-icons/unsaved.png") no-repeat center top
+
+  .error
+    .x-window-body
+      background: image-url("images2/msg-icons/error.png") no-repeat center top
+
+  .ok
+    .x-window-body
+      background: image-url("images2/msg-icons/ok.png") no-repeat center top
+
+  .permissions
+    .x-window-body
+      background: image-url("images2/msg-icons/permissions.png") no-repeat center top
+
+  .report
+    .x-window-body
+      padding-top: 105px
+      background: image-url("images2/msg-icons/report.png") no-repeat center top
+
+  .sync
+    .x-window-body
+      background: image-url("images2/msg-icons/sync.png") no-repeat center top
