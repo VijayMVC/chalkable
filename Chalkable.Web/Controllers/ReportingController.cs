@@ -116,27 +116,6 @@ namespace Chalkable.Web.Controllers
             //         return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
         }
 
-        private byte[] GetReportCards(ReportCardsInputModel inputModel)
-        {
-            var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
-            inputModel.DefaultDataPath = path;
-            var dataTask = Task.Run(() => SchoolLocator.ReportService.BuildReportCardsData(inputModel));
-            var template = MasterLocator.CustomReportTemplateService.GetById(inputModel.CustomReportTemplateId);
-            var templateRenderer = new TemplateRenderer(path);
-            var data = dataTask.Result;
-            IList<byte[]> reports = new List<byte[]>();
-            foreach (var dataItem in data)
-            {
-                var model = new {Data = dataItem};
-                var main = PrepareReportView(template, model, templateRenderer);
-                var header = template.Header != null ? PrepareReportView(template.Header, model, templateRenderer) : null;
-                var footer = template.Footer != null ? PrepareReportView(template.Footer, model, templateRenderer) : null;
-                reports.Add(DocumentRenderer.RenderToPdf(path, CompilerHelper.ScriptsRoot, main, header, footer));
-            }
-            templateRenderer.Dispose();
-            return DocumentRenderer.MergePdfDocuments(reports);
-        }
-
         private ActionResult DemoReportCards(ReportCardsInputModel inputModel)
         {
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");

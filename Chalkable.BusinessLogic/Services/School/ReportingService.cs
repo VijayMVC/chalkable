@@ -50,7 +50,6 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] DownloadReport(string reportId);
         void ScheduleReportCardTask(ReportCardsInputModel inputModel);
         void GenerateReportCard(ReportCardsInputModel inputModel);
-        Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel);
         FeedReportSettingsInfo GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
 
@@ -463,12 +462,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return DocumentRenderer.MergePdfDocuments(listOfpdf);
         }
-
-
-
+        
         public void ScheduleReportCardTask(ReportCardsInputModel inputModel)
         {
             Trace.Assert(Context.DistrictId.HasValue);
+
+            if (!ServiceLocator.ServiceLocatorMaster.DistrictService.IsReportCardsEnabled())
+                throw new ChalkableSecurityException("This district hasn't access Report Cards!");
+
             var data = new ReportProcessingTaskData(Context, inputModel, inputModel.ContentUrl);
             var scheduleTime = DateTime.UtcNow.AddDays(-20);
 
@@ -498,17 +499,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public byte[] DownloadReport(string reportId)
         {
             return ServiceLocator.StorageBlobService.GetBlobContent("reports", reportId);
-        }
-
-        public async Task<IList<CustomReportCardsExportModel>> BuildReportCardsData(ReportCardsInputModel inputModel)
-        {
-            Trace.Assert(Context.SchoolLocalId.HasValue);
-            if(!ServiceLocator.ServiceLocatorMaster.DistrictService.IsReportCardsEnabled())
-                throw new ChalkableSecurityException("This district hasn't access Report Cards!");
-
-            var inowReportCardTask = GetInowReportData(inputModel);
-            var logo = GetLogoBySchoolId(Context.SchoolLocalId.Value) ?? GetDistrictLogo();
-            return BuildReportCardsData(await inowReportCardTask, logo?.LogoAddress, inputModel);
         }
 
         private IList<CustomReportCardsExportModel> BuildReportCardsData(ReportCard inowData, string logoAddress,
