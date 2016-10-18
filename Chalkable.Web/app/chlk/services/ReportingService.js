@@ -352,7 +352,7 @@ NAMESPACE('chlk.services', function () {
             String, ArrayOf(chlk.models.id.SchoolPersonId)]],
         ria.async.Future, function submitReportCards(templateId, title, logo, recipient, orderBy, idToPrint, standardType
                 , groupIds_, gradingPeriodId_, attendanceReasonIds_, includeOptions_, studentIds_){
-             var url = this.getUrl('Reporting/ReportCards.json',{
+             return this.post('Reporting/ReportCards.json', Boolean, {
                  customReportTemplateId: templateId.valueOf(),
                  title: title,
                  logo: logo.valueOf(),
@@ -366,7 +366,6 @@ NAMESPACE('chlk.services', function () {
                  includeOptions: includeOptions_,
                  studentIds: studentIds_ && this.arrayToCsv(studentIds_)
             });
-            return this.getWithIframe_(url);
         },
 
         ria.async.Future, function listReportCardsLogo(){
