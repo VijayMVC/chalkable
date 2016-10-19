@@ -54,13 +54,14 @@ mixin BaseAnnouncementFormContainer(self, announcement, types, classId, adminRec
                 .title-block-container
                     +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
                 if types
-                    -var typeId = self.getSelectedTypeId()
+                    -var typeId = self.getSelectedTypeId() || announcement.getAnnouncementTypeId()
                     .left-top-container
                         .recipients-container
                             label(for="type-select").main-label Category:
                             .types-select-cnt
                                 +Select('typeid')(class="validate[required]")#type-select
-                                    +Option('', 'Select category', !typeId)
+                                    if !classAnnouncement
+                                        +Option('', 'Select category', !typeId)
                                     each item in types
                                         if item.getId().valueOf()
                                             +Option(item.getId(), item.getName(), typeId== item.getId())(

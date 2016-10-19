@@ -2440,9 +2440,6 @@ NAMESPACE('chlk.controllers', function (){
             var announcementTypeName = model.getAnnouncementTypeName();
             var classId = model.getClassId();
 
-            if(!announcementTypeId)
-                return this.Redirect('announcement', 'lessonPlan', [classId]);
-
             model.setMarkingPeriodId(this.getCurrentMarkingPeriod().getId());
 
             if (submitType == 'listLast'){
@@ -2479,59 +2476,62 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.announcement.AnnouncementForm]],
         function saveAnnouncementTeacherAction(model, form_) {
-            if(!(model.getClassId() && model.getClassId().valueOf() && model.getAnnouncementTypeId() && model.getAnnouncementTypeId().valueOf()))
-                return null;
-            var res = this.classAnnouncementService
-                .saveClassAnnouncement(
-                    model.getId(),
-                    model.getClassId(),
-                    model.getAnnouncementTypeId(),
-                    model.getTitle(),
-                    model.getContent(),
-                    model.getExpiresDate(),
-                    model.getMaxScore(),
-                    model.getWeightAddition(),
-                    model.getWeightMultiplier(),
-                    model.isHiddenFromStudents(),
-                    model.isAbleDropStudentScore(),
-                    model.getAssignedAttributesPostData(),
-                    model.isDiscussionEnabled(),
-                    model.isPreviewCommentsEnabled(),
-                    model.isRequireCommentsEnabled()
-                )
-                .attach(this.validateResponse_())
-                .then(function(model){
-                    if (form_){
-                        var applications = model.getApplications() || [];
-                        this.cacheAnnouncementApplications(applications);
+            if(model.getClassId() && model.getClassId().valueOf()){
+                var i = 0;
 
-                        var announcement = form_.getAnnouncement();
-                        announcement.setClassAnnouncementData(model.getClassAnnouncementData());
-                        announcement.setTitle(model.getTitle());
-                        announcement.setApplications(applications);
-                        announcement.setCanAddStandard(model.isCanAddStandard());
-                        announcement.setStandards(model.getStandards());
-                        announcement.setAnnouncementAttributes(model.getAnnouncementAttributes());
-                        announcement.setGradingStudentsCount(model.getGradingStudentsCount());
-                        announcement.setAbleToRemoveStandard(model.isAbleToRemoveStandard());
-                        announcement.setSuggestedApps(model.getSuggestedApps());
-                        announcement.setAppsWithContent(model.getAppsWithContent());
-                        announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
-                        announcement.setState(model.getState());
-                        announcement.setAbleUseExtraCredit(model.isAbleUseExtraCredit());
-                        announcement.setDiscussionEnabled(model.isDiscussionEnabled());
-                        announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled());
-                        announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled());
+                var res = this.classAnnouncementService
+                    .saveClassAnnouncement(
+                        model.getId(),
+                        model.getClassId(),
+                        model.getAnnouncementTypeId(),
+                        model.getTitle(),
+                        model.getContent(),
+                        model.getExpiresDate(),
+                        model.getMaxScore(),
+                        model.getWeightAddition(),
+                        model.getWeightMultiplier(),
+                        model.isHiddenFromStudents(),
+                        model.isAbleDropStudentScore(),
+                        model.getAssignedAttributesPostData(),
+                        model.isDiscussionEnabled(),
+                        model.isPreviewCommentsEnabled(),
+                        model.isRequireCommentsEnabled()
+                    )
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        if (form_){
+                            var applications = model.getApplications() || [];
+                            this.cacheAnnouncementApplications(applications);
 
-                        //announcement.setClassName(model.getClassAnnouncementData().getClassName());
-                        form_.setAnnouncement(announcement);
-                        return this.addEditAction(form_, false);
-                    }
-                }, this)
-                .attach(this.validateResponse_());
+                            var announcement = form_.getAnnouncement();
+                            announcement.setClassAnnouncementData(model.getClassAnnouncementData());
+                            announcement.setTitle(model.getTitle());
+                            announcement.setApplications(applications);
+                            announcement.setCanAddStandard(model.isCanAddStandard());
+                            announcement.setStandards(model.getStandards());
+                            announcement.setAnnouncementAttributes(model.getAnnouncementAttributes());
+                            announcement.setGradingStudentsCount(model.getGradingStudentsCount());
+                            announcement.setAbleToRemoveStandard(model.isAbleToRemoveStandard());
+                            announcement.setSuggestedApps(model.getSuggestedApps());
+                            announcement.setAppsWithContent(model.getAppsWithContent());
+                            announcement.setAssessmentApplicationId(model.getAssessmentApplicationId());
+                            announcement.setState(model.getState());
+                            announcement.setAbleUseExtraCredit(model.isAbleUseExtraCredit());
+                            announcement.setDiscussionEnabled(model.isDiscussionEnabled());
+                            announcement.setPreviewCommentsEnabled(model.isPreviewCommentsEnabled());
+                            announcement.setRequireCommentsEnabled(model.isRequireCommentsEnabled());
 
-            if (form_)
-                return this.UpdateView(this.getAnnouncementFormPageType_(), res);
+                            //announcement.setClassName(model.getClassAnnouncementData().getClassName());
+                            form_.setAnnouncement(announcement);
+                            return this.addEditAction(form_, false);
+                        }
+                    }, this)
+                    .attach(this.validateResponse_());
+
+                if (form_)
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), res);
+            }
+
             return null;
         },
 
