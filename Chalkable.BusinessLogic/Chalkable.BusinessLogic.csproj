@@ -220,6 +220,7 @@
     <Compile Include="Model\Reports\GradebookReportInputModel.cs" />
     <Compile Include="Model\Reports\GradeVerificationInputModel.cs" />
     <Compile Include="Model\Reports\LessonPlanReportInputModel.cs" />
+    <Compile Include="Model\Reports\LunchCountReportInputModel.cs" />
     <Compile Include="Model\Reports\MissingAssignmentsInputModel.cs" />
     <Compile Include="Model\Reports\ProgressReportInputModel.cs" />
     <Compile Include="Model\Reports\ReportCardsInputModel.cs" />
