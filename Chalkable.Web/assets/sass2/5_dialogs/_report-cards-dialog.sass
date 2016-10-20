@@ -1,4 +1,4 @@
-.report-cards-dialog
+.report-cards-dialog, .lunch-count-dialog
   //.x-window-footer
     background: transparent
     text-align: right
@@ -11,6 +11,9 @@
       height: 78px
       font-size: 24px
       color: #1d1d1d
+
+  .report-type-select
+    width: 100%
 
   .add-recipients-container
     .recipients-list
@@ -36,6 +39,15 @@
   .report-table
     margin: 0 80px
     width: 862px
+
+    td.item-4
+      width: 159px
+
+    td.item-4:nth-child(4)
+      width: 385px
+
+      .chosen-container, SELECT
+        width: 100% !important
 
     td.item-3:not(:nth-child(3))
       width: auto
@@ -65,9 +77,6 @@
     .report-title
       padding-left: 45px
       font-size: 12px
-
-  .recipients-list
-    margin-top: 20px
 
   .images-for-load-cnt
     opacity: 0

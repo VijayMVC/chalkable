@@ -8,6 +8,7 @@ REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceRegisterReportViewData');
 REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
+REQUIRE('chlk.models.reports.SubmitLunchCountViewData');
 REQUIRE('chlk.models.settings.ReportCardsLogo');
 
 REQUIRE('chlk.lib.ajax.IframeGetTask');
@@ -364,6 +365,22 @@ NAMESPACE('chlk.services', function () {
                  gradingPeriodId: gradingPeriodId_.valueOf(),
                  attendanceReasonIds: this.arrayToCsv(attendanceReasonIds_),
                  includeOptions: includeOptions_,
+                 studentIds: studentIds_ && this.arrayToCsv(studentIds_)
+            });
+        },
+
+        [[String, chlk.models.reports.LunchCountOrderBy, Boolean, chlk.models.reports.StudentIdentifierEnum, chlk.models.common.ChlkDate,
+            chlk.models.common.ChlkDate, String, ArrayOf(chlk.models.id.GroupId), ArrayOf(chlk.models.id.SchoolPersonId)]],
+        ria.async.Future, function submitLunchCount(title, orderBy, isAllActiveMeals, idToPrint, startDate_, endDate_, includeOptions_, groupIds_, studentIds_){
+             return this.post('Reporting/LunchCount.json', Boolean, {
+                 title: title,
+                 orderBy: orderBy.valueOf(),
+                 isAllActiveMeals: isAllActiveMeals,
+                 idToPrint: idToPrint.valueOf(),
+                 startDate: startDate_,
+                 endDate: endDate_,
+                 includeOptions: includeOptions_,
+                 groupIds: groupIds_ && this.arrayToCsv(groupIds_),
                  studentIds: studentIds_ && this.arrayToCsv(studentIds_)
             });
         },
