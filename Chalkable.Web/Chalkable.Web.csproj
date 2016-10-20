@@ -409,6 +409,10 @@
     <Compile Include="Models\LimitedEnglishViewData.cs" />
     <Compile Include="Models\GroupsViewData\GroupInfoViewData.cs" />
     <Compile Include="Models\CustomReportTemplateViewData.cs" />
+    <Compile Include="Models\LunchCountGridViewData.cs" />
+    <Compile Include="Models\MealCountItemViewData.cs" />
+    <Compile Include="Models\MealItemViewData.cs" />
+    <Compile Include="Models\MealTypeViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\ClassPanoramaViewData.cs" />
     <Compile Include="Models\EthnicityViewData.cs" />
     <Compile Include="Models\HomeroomViewData.cs" />

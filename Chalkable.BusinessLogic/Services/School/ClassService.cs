@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -77,6 +78,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void PrepareToDelete(IList<Class> classes);
 
         IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId);
+
+        LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests, bool includeOverride);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -276,6 +279,76 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId)
         {
             return DoRead(u => new ClassDataAccess(u).GetClassesBySchool(schoolYearId, schoolId, gradeLevelId)).OrderBy(x => x.Name).ToList();
+        }
+
+        public LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests, bool includeOverride)
+        {
+            IList<MealCountItem> MILK_mealCountItems = new List<MealCountItem>();
+            MILK_mealCountItems.Add(new MealCountItem {Count = 2, Enabled = true, Guest = false, PersonId = 1828, Override = false });
+            MILK_mealCountItems.Add(new MealCountItem { Count = 2, Enabled = true, Guest = true, PersonId = null, Override = false });
+            MILK_mealCountItems.Add(new MealCountItem { Count = 2, Enabled = true, Guest = false, PersonId = null, Override = true});
+            MILK_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1522, Override = false });
+            MILK_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1527, Override = false });
+            MILK_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1529, Override = false });
+
+            IList<MealItem> mealItems = new List<MealItem>();
+
+            mealItems.Add(new MealItem {MealCountItems = MILK_mealCountItems, MealType = new MealType {Id = 1, Name = "Milk"} });
+
+            IList<MealCountItem> HOT_LUNCH_mealCountItems = new List<MealCountItem>();
+            HOT_LUNCH_mealCountItems.Add(new MealCountItem { Count = 1, Enabled = true, Guest = false, PersonId = 1828, Override = false });
+            HOT_LUNCH_mealCountItems.Add(new MealCountItem { Count = 1, Enabled = true, Guest = true, PersonId = null, Override = false });
+            HOT_LUNCH_mealCountItems.Add(new MealCountItem { Count = 1, Enabled = true, Guest = false, PersonId = null, Override = true });
+            HOT_LUNCH_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1522, Override = false });
+            HOT_LUNCH_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1527, Override = false });
+            HOT_LUNCH_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1529, Override = false });
+
+            mealItems.Add(new MealItem { MealCountItems = HOT_LUNCH_mealCountItems, MealType = new MealType { Id = 2, Name = "Hot Lunch" } });
+
+            IList<MealCountItem> SALAD_mealCountItems = new List<MealCountItem>();
+            SALAD_mealCountItems.Add(new MealCountItem { Count = 1, Enabled = true, Guest = false, PersonId = 1828, Override = false });
+            SALAD_mealCountItems.Add(new MealCountItem { Count = 1, Enabled = true, Guest = true, PersonId = null, Override = false });
+            SALAD_mealCountItems.Add(new MealCountItem { Count = 1, Enabled = true, Guest = false, PersonId = null, Override = true });
+            SALAD_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1522, Override = false });
+            SALAD_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1527, Override = false });
+            SALAD_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1529, Override = false });
+
+            mealItems.Add(new MealItem { MealCountItems = SALAD_mealCountItems, MealType = new MealType { Id = 2, Name = "Salad" } });
+
+            IList<MealCountItem> PIZZA_mealCountItems = new List<MealCountItem>();
+            PIZZA_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = true, Guest = false, PersonId = 1828, Override = false });
+            PIZZA_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = true, Guest = true, PersonId = null, Override = false });
+            PIZZA_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = true, Guest = false, PersonId = null, Override = true });
+            PIZZA_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1522, Override = false });
+            PIZZA_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1527, Override = false });
+            PIZZA_mealCountItems.Add(new MealCountItem { Count = 0, Enabled = false, Guest = false, PersonId = 1529, Override = false });
+
+            mealItems.Add(new MealItem { MealCountItems = PIZZA_mealCountItems, MealType = new MealType { Id = 2, Name = "Pizza" } });
+
+            LunchCountGrid lunchCountGrid = new LunchCountGrid();
+            lunchCountGrid.MealItem = mealItems;
+
+            IList<Student> students = new List<Student>();
+            students.Add(DoRead(u => new StudentDataAccess(u).GetById(1522)));
+            students.Add(DoRead(u => new StudentDataAccess(u).GetById(1527)));
+            students.Add(DoRead(u => new StudentDataAccess(u).GetById(1529)));
+
+            lunchCountGrid.Students = students;
+
+            IList<Staff> staffs = new List<Staff>();
+            staffs.Add(DoRead(u => new StaffDataAccess(u).GetById(1828)));
+            
+            lunchCountGrid.Staffs = staffs;
+
+            lunchCountGrid.ClassId = 13836;
+
+            lunchCountGrid.Date = null;
+
+            lunchCountGrid.IncludeGuest = true;
+
+            lunchCountGrid.IncludeOverride = true;
+
+            return lunchCountGrid;
         }
 
         public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)

@@ -172,6 +172,9 @@
     <Compile Include="Model\ClaimInfo.cs" />
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
+    <Compile Include="Model\LunchCountGrid.cs" />
+    <Compile Include="Model\MealCountItem.cs" />
+    <Compile Include="Model\MealItem.cs" />
     <Compile Include="Model\PanoramaSettings\AdminPanoramaSettings.cs" />
     <Compile Include="Model\ClassPanorama\ClassPanorama.cs" />
     <Compile Include="Model\ClassStatsInfo.cs" />
