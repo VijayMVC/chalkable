@@ -4,6 +4,7 @@ from base_auth_test import *
 class TestFeed(BaseAuthedTestCase):
     def test_feed(self):
         list_of_classes = self.list_of_classes
+
         one_random_class = random.choice(list_of_classes)
         random_value_of_marking_period = random.choice(self.marking_periods())
 
