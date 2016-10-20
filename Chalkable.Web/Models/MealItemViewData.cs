@@ -8,7 +8,7 @@ namespace Chalkable.Web.Models
     {
         public MealTypeViewData MealType { get; set; }
         public IList<MealCountItemViewData> MealCountItems { get; set; }
-        public int Total => MealCountItems?.Count ?? 0;
+        public int Total => MealCountItems?.Sum(x => x.Count) ?? 0;
 
         public static MealItemViewData Create(MealItem mealItem)
         {
