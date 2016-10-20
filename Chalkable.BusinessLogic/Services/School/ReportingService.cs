@@ -45,6 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
+        byte[] GetLunchCountReport(LunchCountReportInputModel inputModel);
         byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
         byte[] GetReportCards(ReportCardsInputModel inputModel, string path);
         byte[] DownloadReport(string reportId);
@@ -415,6 +416,11 @@ namespace Chalkable.BusinessLogic.Services.School
                     GradingPeriodIds = new[] { gradingPeriodId }
                 };
             return ConnectorLocator.ReportConnector.StudentComprehensiveProgressReport(studentId, ps);
+        }
+
+        public byte[] GetLunchCountReport(LunchCountReportInputModel inputModel)
+        {
+            throw new NotImplementedException();
         }
 
         public byte[] GetFeedReport(FeedReportInputModel inputModel, string path)

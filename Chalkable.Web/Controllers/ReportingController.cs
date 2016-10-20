@@ -103,6 +103,13 @@ namespace Chalkable.Web.Controllers
             return Report(lessonPlanReportInputModel, SchoolLocator.ReportService.GetLessonPlanReport, "LessonPlanReport");
         }
 
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult LunchCountReport(LunchCountReportInputModel inputModel)
+        {
+            return Report(() => SchoolLocator.ReportService.GetLunchCountReport(inputModel), "LunchCountReport", ReportingFormat.Pdf, DownloadReportFile);
+        }
+        
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ReportCards(ReportCardsInputModel inputModel)
         {
@@ -172,7 +179,6 @@ namespace Chalkable.Web.Controllers
             }
         }
         
-
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult FeedReport(FeedReportSettingsInfo settings, int? classId, int? format, bool? complete, int? announcementType)
         {
