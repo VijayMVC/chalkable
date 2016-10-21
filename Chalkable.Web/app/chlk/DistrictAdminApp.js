@@ -66,11 +66,25 @@ NAMESPACE('chlk', function (){
                     isClassesEnabled: isClassesEnabled,
                     isPeopleEnabled: isPeopleEnabled
                 };
+
                 return BASE()
                     .then(function(data){
                         new ria.dom.Dom()
                             .fromHTML(ASSET('~/assets/jade/sidebars/DistrictAdminSideBar.jade')(sidebarOptions))
                             .appendTo("#sidebar");
+
+                        ria.dom.Dom('.report-cards-link').on('mouseover', function(node, event){
+                            node.find('.reports-bubble').removeClass('x-hidden');
+                        });
+
+                        ria.dom.Dom().on('mousedown', function(node, event){
+                            setTimeout(function(){
+                                var target = new ria.dom.Dom(event.target);
+                                if(!target.is('.report-cards-link'))
+                                    node.find('.reports-bubble').addClass('x-hidden');
+                            }, 100);
+                        });
+
                         return data;
                     });
             }

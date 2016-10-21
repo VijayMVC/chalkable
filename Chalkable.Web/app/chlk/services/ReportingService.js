@@ -377,8 +377,8 @@ NAMESPACE('chlk.services', function () {
                  orderBy: orderBy.valueOf(),
                  isAllActiveMeals: isAllActiveMeals,
                  idToPrint: idToPrint.valueOf(),
-                 startDate: startDate_,
-                 endDate: endDate_,
+                 startDate: startDate_ && startDate_.toStandardFormat(),
+                 endDate: endDate_ && endDate_.toStandardFormat(),
                  includeOptions: includeOptions_,
                  groupIds: groupIds_ && this.arrayToCsv(groupIds_),
                  studentIds: studentIds_ && this.arrayToCsv(studentIds_)

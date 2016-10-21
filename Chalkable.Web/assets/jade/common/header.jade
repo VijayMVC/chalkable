@@ -9,7 +9,10 @@ if chlk.templates.search && chlk.templates.search.SiteSearch
         label(for="siteSearch")#search-glass
     
 if chlk.controllers.ReportingController && self.getContext().getSession().get('role').isAdmin()
-    +ActionButton('reporting', 'reportCards')(data-tooltip = "Report Card", data-tooltip-position="bottom").blue.report-cards-link &nbsp;
+    span(href="javascript:").report-cards-link &nbsp;
+        .chat-bubble.top.right.reports-bubble.x-hidden
+            +ActionLink('reporting', 'lunchCount') Lunch Count
+            +ActionLink('reporting', 'reportCards') Report Card
 if chlk.controllers.NotificationController
     +ActionButton('notification', 'list-new').blue.notifications-link &nbsp;
 
