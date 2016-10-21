@@ -24,6 +24,8 @@ REQUIRE('chlk.models.grading.FinalGradesViewData');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
+REQUIRE('chlk.models.lunchCount.LunchCountGrid');
+
 NAMESPACE('chlk.services', function () {
     "use strict";
 

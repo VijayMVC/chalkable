@@ -297,7 +297,7 @@ namespace Chalkable.BusinessLogic.Services.School
             lunchCountGrid.IncludeGuest = includeGuests;
             lunchCountGrid.IncludeOverride = includeOverride;
 
-            lunchCountGrid.MealItem = new List<MealItem>();
+            lunchCountGrid.MealItems = new List<MealItem>();
 
             var mealTypes = DoRead(u => new MealTypeDataAccess(u).GetAll());
 
@@ -321,7 +321,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 mealItem.MealCountItems = mealCountItem;
                 mealItem.MealType = mealType;
 
-                lunchCountGrid.MealItem.Add(mealItem);
+                lunchCountGrid.MealItems.Add(mealItem);
             }
 
             return lunchCountGrid;

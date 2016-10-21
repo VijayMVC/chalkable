@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models
     {
         public IList<StudentViewData> Students { get; set; }
         public IList<StaffViewData> Staffs { get; set; }
-        public IList<MealItemViewData> MealItem { get; set; } 
+        public IList<MealItemViewData> MealItems { get; set; } 
         public int? ClassId { get; set; }
         public DateTime? Date { get; set; }
         public bool IncludeGuest { get; set; }
@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models
             {
                 Students = StudentViewData.Create(lunchCountGrid.Students),
                 Staffs = StaffViewData.Create(lunchCountGrid.Staffs),
-                MealItem = MealItemViewData.Create(lunchCountGrid.MealItem),
+                MealItems = MealItemViewData.Create(lunchCountGrid.MealItems),
                 Date = lunchCountGrid.Date,
                 ClassId = lunchCountGrid.ClassId,
                 IncludeGuest = lunchCountGrid.IncludeGuest,
