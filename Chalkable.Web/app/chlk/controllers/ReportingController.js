@@ -13,12 +13,6 @@ REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
-    /** @class chlk.controllers.ReportTypeEnum*/
-    ENUM('ReportTypeEnum', {
-        LUNCH_COUNT: 1,
-        REPORT_CARD: 2
-    });
-
     /** @class chlk.controllers.ReportingController*/
     CLASS(
         'ReportingController', EXTENDS(chlk.controllers.BaseController), [
@@ -52,9 +46,9 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.reports.StudentReportDialog, res);
         },
 
-        [[chlk.controllers.ReportTypeEnum]],
+        [[chlk.models.reports.AdminReportTypeEnum]],
         function adminReportAction(reportType){
-            if(reportType == chlk.controllers.ReportTypeEnum.REPORT_CARD)
+            if(reportType == chlk.models.reports.AdminReportTypeEnum.REPORT_CARD)
                 return this.Redirect('reporting', 'reportCards');
 
             return this.Redirect('reporting', 'lunchCount');
@@ -97,6 +91,9 @@ NAMESPACE('chlk.controllers', function (){
 
             if(model.getSubmitType() == 'recipient')
                 return this.addRecipients_(model);
+
+            if(model.getSubmitType() == 'changeType')
+                return this.Redirect('reporting', 'adminReport', [model.getReportType()]);
 
             if(!model.getTitle()){
                 this.ShowMsgBox('Title field is required.');
@@ -151,6 +148,9 @@ NAMESPACE('chlk.controllers', function (){
 
             if(model.getSubmitType() == 'recipient')
                 return this.addRecipients_(model);
+
+            if(model.getSubmitType() == 'changeType')
+                return this.Redirect('reporting', 'adminReport', [model.getReportType()]);
 
             if(!model.getTitle()){
                 this.ShowMsgBox('Title field is required.');

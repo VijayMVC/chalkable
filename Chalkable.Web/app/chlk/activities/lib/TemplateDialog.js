@@ -132,7 +132,7 @@ NAMESPACE('chlk.activities.lib', function () {
             [[String]],
             OVERRIDE, VOID, function onModelComplete_(msg_) {
                 //todo: rewrite
-                jQuery(this.dom.valueOf()).children().first().removeClass(this._partialUpdateCls + "-" +INNER_PARTIAL_UPDATE_CLASS);
+                this.dom && jQuery(this.dom.valueOf()).children().first().removeClass(this._partialUpdateCls + "-" +INNER_PARTIAL_UPDATE_CLASS);
                 BASE(msg_);
             }
 

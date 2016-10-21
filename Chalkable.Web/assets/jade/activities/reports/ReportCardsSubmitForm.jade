@@ -14,9 +14,11 @@
                     TR
                         TD(colspan="3").item-3
                             .text-block
-                                +Select('reportType', null, 'reporting', 'adminReport').report-type-select
-                                    +Option(chlk.controllers.ReportTypeEnum.LUNCH_COUNT.valueOf(), 'Lunch Count', false)
-                                    +Option(chlk.controllers.ReportTypeEnum.REPORT_CARD.valueOf(), 'Report Card', true)
+                                -var typeEnum = chlk.models.reports.AdminReportTypeEnum
+                                Button(type="submit", name="submitType", value="changeType", data-type-value=typeEnum.REPORT_CARD.valueOf()).x-hidden.change-type-btn
+                                +Select('reportType').report-type-select
+                                    +Option(typeEnum.LUNCH_COUNT.valueOf(), 'Lunch Count', false)
+                                    +Option(typeEnum.REPORT_CARD.valueOf(), 'Report Card', true)
                     TR
                         TD(colspan="3").item-3
                             .add-recipients-container

@@ -12,9 +12,11 @@
                     TR
                         TD(colspan="4").item-4
                             .text-block
-                                +Select('reportType', null, 'reporting', 'adminReport').report-type-select
-                                    +Option(chlk.controllers.ReportTypeEnum.LUNCH_COUNT.valueOf(), 'Lunch Count', true)
-                                    +Option(chlk.controllers.ReportTypeEnum.REPORT_CARD.valueOf(), 'Report Card', false)
+                                -var typeEnum = chlk.models.reports.AdminReportTypeEnum
+                                Button(type="submit", name="submitType", value="changeType", data-type-value=typeEnum.LUNCH_COUNT.valueOf()).x-hidden.change-type-btn
+                                +Select('reportType').report-type-select
+                                    +Option(typeEnum.LUNCH_COUNT.valueOf(), 'Lunch Count', true)
+                                    +Option(typeEnum.REPORT_CARD.valueOf(), 'Report Card', false)
                     TR
                         TD(colspan="4").item-4
                             .add-recipients-container
@@ -56,17 +58,17 @@
                                         selectOtherMonths: true
                                     }).start-date
                                 .end-date-cnt.i-b
-                                    h3 Start Date
+                                    h3 End Date
                                     +DatePicker('endDate')(data-options={
                                         showOtherMonths: true,
                                         selectOtherMonths: true
                                     }).end-date
                             h3 Include
-                                +Select('includeOptionValues', 'includeOptions')(multiple).include-select
-                                    +Option(chlk.models.reports.LunchCountAdditionalOptions.GROUP_TOTALS.valueOf(), 'Group Totals', false)
-                                    +Option(chlk.models.reports.LunchCountAdditionalOptions.GRAND_TOTALS.valueOf(), 'Grand Totals', false)
-                                    +Option(chlk.models.reports.LunchCountAdditionalOptions.STUDENTS_ONLY.valueOf(), 'Students Only', false)
-                                    +Option(chlk.models.reports.LunchCountAdditionalOptions.SUMMARY_ONLY.valueOf(), 'Summary Only', false)
+                            +Select('includeOptionValues', 'includeOptions')(multiple).include-select
+                                +Option(chlk.models.reports.LunchCountAdditionalOptions.GROUP_TOTALS.valueOf(), 'Group Totals', false)
+                                +Option(chlk.models.reports.LunchCountAdditionalOptions.GRAND_TOTALS.valueOf(), 'Grand Totals', false)
+                                +Option(chlk.models.reports.LunchCountAdditionalOptions.STUDENTS_ONLY.valueOf(), 'Students Only', false)
+                                +Option(chlk.models.reports.LunchCountAdditionalOptions.SUMMARY_ONLY.valueOf(), 'Summary Only', false)
 
         .x-window-footer.report-bottom
             BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
