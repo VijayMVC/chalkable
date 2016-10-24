@@ -451,6 +451,16 @@ NAMESPACE('chlk.controllers', function (){
                         );
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAppsPage, res);
+            },
+
+            [[chlk.models.id.ClassId]],
+            function lunchAction(classId){
+                var res = this.classService.getLunchCount(classId, new chlk.models.common.ChlkDate(), true, true)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        console.log(data);
+                    }, this);
+                return null;
             }
         ]);
 });

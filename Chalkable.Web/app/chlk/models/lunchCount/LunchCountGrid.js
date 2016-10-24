@@ -15,9 +15,9 @@ NAMESPACE('chlk.models.lunchCount', function () {
                 this.staffs = SJX.fromArrayOfDeserializables(raw.staffs, chlk.models.people.User);
                 this.mealItems = SJX.fromArrayOfDeserializables(raw.mealitems, chlk.models.lunchCount.MealItem);
                 this.classId = SJX.fromValue(raw.classid, Number);
-                this.date = SJX.fromValue(raw.date, chlk.models.common.ChlkDate);
-                this.override = SJX.fromValue(raw.override, Boolean);
-                this.enabled = SJX.fromValue(raw.enabled, Boolean);
+                this.date = SJX.fromDeserializable(raw.date, chlk.models.common.ChlkDate);
+                this.includeGuest = SJX.fromValue(raw.includeguest, Boolean);
+                this.includeOverride = SJX.fromValue(raw.includeoverride, Boolean);
             },
 
             ArrayOf(chlk.models.people.User), 'students',
@@ -25,7 +25,7 @@ NAMESPACE('chlk.models.lunchCount', function () {
             ArrayOf(chlk.models.lunchCount.MealItem), 'mealItems',
             Number, 'classId',
             chlk.models.common.ChlkDate, 'date',
-            Boolean, 'override',
-            Boolean, 'enabled'
+            Boolean, 'includeGuest',
+            Boolean, 'includeOverride'
         ]);
 });

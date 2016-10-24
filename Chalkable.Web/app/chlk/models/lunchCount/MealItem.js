@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.lunchCount', function () {
     CLASS(UNSAFE,
         'MealItem', IMPLEMENTS(ria.serialize.IDeserializable),  [
             VOID, function deserialize(raw) {
-                this.mealType = SJX.fromDeserializable(raw.name, chlk.models.lunchCount.MealType);
+                this.mealType = SJX.fromDeserializable(raw.mealtype, chlk.models.lunchCount.MealType);
                 this.mealCountItems = SJX.fromArrayOfDeserializables(raw.mealcountitems, chlk.models.lunchCount.MealCountItem);
                 this.total = SJX.fromValue(raw.total, Number);
             },

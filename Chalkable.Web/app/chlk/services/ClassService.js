@@ -318,6 +318,16 @@ NAMESPACE('chlk.services', function () {
                     schoolId: schoolId.valueOf(),
                     gradeLevel: gradeLevel_ && gradeLevel_.valueOf()
                 });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean]],
+            ria.async.Future, function getLunchCount(classId, date, includeGuests, includeOverride) {
+                return this.get('Class/LunchCount.json', chlk.models.lunchCount.LunchCountGrid, {
+                    classId: classId.valueOf(),
+                    date: date.toStandardFormat(),
+                    includeGuests: includeGuests.valueOf(),
+                    includeOverride: includeOverride.valueOf()
+                });
             }
         ])
 });
