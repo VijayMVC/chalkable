@@ -16,7 +16,7 @@ class TestStudentProfileNow(BaseTestCase):
         if len(dictionary_get_list_my_students['data']) > 10:
             student_id = dictionary_get_list_my_students['data'][10]['id']
 
-            student_now = self.teacher.get_json('/Student/Summary.json?' + '&schoolPersonId=' + str(student_id))
+            student_now = self.teacher.get_json('/Student/Summary.json?' + 'schoolPersonId=' + str(student_id))
             student_now_data = student_now['data']
 
             for k in student_now_data['classessection']:
