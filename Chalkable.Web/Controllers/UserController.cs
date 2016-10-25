@@ -91,6 +91,14 @@ namespace Chalkable.Web.Controllers
         }
 
         [IgnoreTimeOut]
+        public ActionResult LogOutWithRedirect()
+        {
+            ChalkableAuthentication.SignOut();
+            DeveloperAuthentication.SignOut();
+            return Redirect<HomeController>(x => x.Index());
+        }
+
+        [IgnoreTimeOut]
         public ActionResult Confirm(string key)
         {
             return Confirm(key, AfterConfirmAction);
