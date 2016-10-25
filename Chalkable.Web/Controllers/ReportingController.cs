@@ -100,11 +100,10 @@ namespace Chalkable.Web.Controllers
             return Report(lessonPlanReportInputModel, SchoolLocator.ReportService.GenerateReport, "LessonPlanReport");
         }
 
-
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult LunchCountReport(LunchCountReportInputModel inputModel)
         {
-            return Report(() => SchoolLocator.ReportService.GetLunchCountReport(inputModel), "LunchCountReport", ReportingFormat.Pdf, DownloadReportFile);
+            return Report(() => SchoolLocator.ReportService.GenerateReport(inputModel), "LunchCountReport", ReportingFormat.Pdf, DownloadReportFile);
         }
         
         [AuthorizationFilter("DistrictAdmin")]

@@ -34,6 +34,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting.ReportingGenerators
                 {typeof(LessonPlanReportInputModel), new LessonPlanReportGenerator(serviceLocatorSchool, connectorLocator)},
                 {typeof(FeedReportInputModel), new FeedReportGenerator(serviceLocatorSchool, connectorLocator) },
                 {typeof(ReportCardsInputModel), new ReportCardGenerator(serviceLocatorSchool, connectorLocator) },
+                {typeof(LunchCountReportInputModel), new LunchCountReportGenerator(serviceLocatorSchool, connectorLocator) }
             };
         }
 
