@@ -6,7 +6,9 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.ClassPanorama;
 using Chalkable.BusinessLogic.Model.PanoramaSettings;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -77,6 +79,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void PrepareToDelete(IList<Class> classes);
 
         IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId);
+
+        LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests, bool includeOverride);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -276,6 +280,51 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId)
         {
             return DoRead(u => new ClassDataAccess(u).GetClassesBySchool(schoolYearId, schoolId, gradeLevelId)).OrderBy(x => x.Name).ToList();
+        }
+
+        public LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests, bool includeOverride)
+        {
+            var lunchCountGrid = new LunchCountGrid();
+
+            var students = ServiceLocator.StudentService.GetClassStudents(classId, null);
+            lunchCountGrid.Students = students;
+
+            IList<Staff> staffs = ServiceLocator.StaffService.SearchStaff(Context.SchoolYearId, classId, null, null, true, 0, int.MaxValue);
+            lunchCountGrid.Staffs = staffs;
+
+            lunchCountGrid.ClassId = classId;
+            lunchCountGrid.Date = date;
+            lunchCountGrid.IncludeGuest = includeGuests;
+            lunchCountGrid.IncludeOverride = includeOverride;
+
+            lunchCountGrid.MealItems = new List<MealItem>();
+
+            var mealTypes = DoRead(u => new MealTypeDataAccess(u).GetAll());
+
+            var rnd = new Random();
+
+            foreach (var mealType in mealTypes)
+            {
+                var mealItem = new MealItem();
+                
+                var mealCountItem = new List<MealCountItem>();
+                mealCountItem.AddRange(staffs.Select(staff => new MealCountItem {Count = rnd.Next(0, 20), Enabled = true, Guest = false, PersonId = staff.Id, Override = false}).ToList());
+
+                if(includeGuests)
+                    mealCountItem.Add(new MealCountItem { Count = rnd.Next(0, 20), Enabled = true, Guest = true, PersonId = null, Override = false });
+
+                if (includeOverride)
+                    mealCountItem.Add(new MealCountItem { Count = rnd.Next(0, 20), Enabled = true, Guest = false, PersonId = null, Override = true });
+
+                mealCountItem.AddRange(students.Select(student => new MealCountItem { Count = includeOverride ? 0 : rnd.Next(0, 20), Enabled = !includeOverride, Guest = false, PersonId = student.Id, Override = false }).ToList());
+
+                mealItem.MealCountItems = mealCountItem;
+                mealItem.MealType = mealType;
+
+                lunchCountGrid.MealItems.Add(mealItem);
+            }
+
+            return lunchCountGrid;
         }
 
         public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)

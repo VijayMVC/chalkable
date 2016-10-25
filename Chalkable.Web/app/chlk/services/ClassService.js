@@ -24,6 +24,8 @@ REQUIRE('chlk.models.grading.FinalGradesViewData');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
+REQUIRE('chlk.models.lunchCount.LunchCountGrid');
+
 NAMESPACE('chlk.services', function () {
     "use strict";
 
@@ -315,6 +317,16 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Class/ClassesBySchool.json', ArrayOf(chlk.models.classes.Class), {
                     schoolId: schoolId.valueOf(),
                     gradeLevel: gradeLevel_ && gradeLevel_.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean]],
+            ria.async.Future, function getLunchCount(classId, date, includeGuests, includeOverride) {
+                return this.get('Class/LunchCount.json', chlk.models.lunchCount.LunchCountGrid, {
+                    classId: classId.valueOf(),
+                    date: date.toStandardFormat(),
+                    includeGuests: includeGuests.valueOf(),
+                    includeOverride: includeOverride.valueOf()
                 });
             }
         ])

@@ -108,6 +108,8 @@ namespace Chalkable.StiConnector.SyncModel
 
             RegisterType(typeof(SchoolProgram));
             RegisterType(typeof(StudentSchoolProgram));
+
+            RegisterType(typeof(MealType));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)
