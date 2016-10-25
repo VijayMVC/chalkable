@@ -40,6 +40,7 @@ var CHLK_API = function (window, document, $) {
         CLOSE_ME : 'closeMe',
         SAVE_ME: 'saveMe',
         SHOW_PLUS: 'showPlus',
+        USER_ACTION: 'userAction',
         APP_ERROR: 'appError',
         ON_BEFORE_CLOSE: 'addYourself',
         IS_READY_FOR_CLOSING: 'isReadyForClosing',
@@ -134,7 +135,6 @@ var CHLK_API = function (window, document, $) {
 
         requestOrigin({url: parentURL});
 
-
         ~function (elm, callback){
             var lastHeight = 0, newHeight;
             ~function run(){
@@ -144,6 +144,27 @@ var CHLK_API = function (window, document, $) {
             }();
         }(document.body, function(height) {
             postAction({height: height}, ChlkActionTypes.RESIZED, parentURL);
+        });
+
+        var clearEvent, clearEventTimer, clearTime = 1000;
+
+        $(document).on('mousedown keydown keyup mousemove touchstart touchcancel touchmove scroll', function(event, node){
+            clearTimeout(clearEventTimer);
+            clearEvent = event;
+
+            clearEventTimer = setTimeout(function(){
+                clearEvent = null;
+            }, clearTime + 1);
+        });
+
+        ~function (elm, callback){
+            ~function run(){
+                var notify = clearEvent;
+                setTimeout(run, clearTime);
+                notify && callback(clearEvent);
+            }();
+        }(document.body, function(firedEvent) {
+            postAction({firedEvt: firedEvent.type}, ChlkActionTypes.USER_ACTION, parentURL);
         });
     });
 
