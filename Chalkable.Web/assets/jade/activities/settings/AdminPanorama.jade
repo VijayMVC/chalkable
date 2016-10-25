@@ -1,0 +1,49 @@
+-var panoramaSettings = self.getPanoramaSettings()
+-var standardizedTests = self.getStandardizedTests()
+
+.settings.panorama-page
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .items
+                +ActionLink('settings', 'dashboardAdmin') Messaging
+                each app in self.getApplications()
+                    +ActionLink('settings', 'appSettings', app.getId())=app.getName()
+                if self.isAdminPanoramaEnabled()
+                    +ActionLink('settings', 'panoramaAdmin').pressed Panorama
+                +ActionLink('settings', 'reportCards') Report Cards
+    .summary-view
+        +ActionForm('settings', 'panoramaSubmit').panorama-form.no-working
+            +Hidden('filters').filters-value
+            +Hidden('excludedIds').excluded-ids
+            .panorama-block
+                B.main-text.i-b Default Range
+                .current-year.i-b Current Year+
+                .previous-years.i-b
+                    INPUT(type='number', min=0, max=12, name='previousYearsCount', value=panoramaSettings.getPreviousYearsCount() )#previous-years
+                    LABEL(for="previous-years") Previous years
+            +CloseOpen('Class Defaults').course-filters-block.panorama-filter-ctn
+                .course-types-cnt
+                    +RenderWith(self.getModel(), chlk.templates.settings.AdminPanoramaCourseTypesTpl)
+                .add-subject-container
+                    .btn-cnt.right
+                        BUTTON(type='submit', name="submitType", value="subject").add-circle-btn.add-subject-btn +
+                        b.light-grey Add Subject
+                    .clear-fix
+            +CloseOpen('Student Defaults').student-filters-block.panorama-filter-ctn
+                .filters-block
+                    .filters-container
+                        each filter in panoramaSettings.getStudentDefaultSettings() || []
+                            -var model = new chlk.models.controls.PanoramaFilterBlockViewData(standardizedTests, filter.getId(), filter.getScoreTypeId(), filter.getComponentId())
+                            +RenderWith(model, chlk.templates.controls.PanoramaFilterBlockTpl)
+                    .add-filter-container
+                        .add-circle-btn.add-filter-btn +
+                        span.light-grey Add filter
+            .bottom-block
+                +Button()(
+                    type="submit"
+                ).special-button.blue-button.submit-btn.big-button SAVE
+
+
+
+
+

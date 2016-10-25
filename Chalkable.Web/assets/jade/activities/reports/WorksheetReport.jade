@@ -1,0 +1,44 @@
+.dialog.report-window
+    +ActionForm('grading', 'submitWorksheetReport').report-form.no-working
+        .x-window-header
+            .close.close-btn.dark
+            h1=Msg.Create_Report
+
+        .x-window-body
+            .action-bar: .items: +ActionLinkList(self.buildReportLinksData('worksheetReport'))
+
+            +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+            +Hidden('classId', self.getClassId().valueOf())
+            +Hidden('studentIds', '')#student-ids-value
+            .report-content
+                if !self.isAbleDownload()
+                    .error=Msg.Report_No_Access_Msg
+                TABLE.report-table
+                    TR
+                        +ReportDatePickers(self.getStartDate(), self.getEndDate())
+                        TD.item-3
+                            +IdToPriintSelect(true, self.hideSSNumber())
+                    TR
+                        TD(colspan="3").item-1
+                            .chlk-grid-container
+                                +RenderWith(self.getModel(), chlk.templates.reports.WorksheetReportGridTpl)
+                    TR
+                        TD(colspan="3").item-1.blank-columns
+                            h3=Msg.Blank_columns
+                            +LabeledCheckbox('', 'title1', false)(withInput = true, placeholder = Msg.Insert_title)
+                            +LabeledCheckbox('', 'title4', false)(withInput = true, placeholder = Msg.Insert_title)
+                            +LabeledCheckbox('', 'title2', false)(withInput = true, placeholder = Msg.Insert_title)
+                            +LabeledCheckbox('', 'title5', false)(withInput = true, placeholder = Msg.Insert_title)
+                            +LabeledCheckbox('', 'title3', false)(withInput = true, placeholder = Msg.Insert_title)
+                    TR
+                        TD(colspan="3").item-1.blank-columns
+                            h3=Msg.Include
+                            +LabeledCheckbox(Msg.Score(true), 'printScores', false)
+                            +LabeledCheckbox(Msg.Letter_grade, 'printLetterGrade', false)
+                            +LabeledCheckbox(Msg.Average, 'printAverage', false)
+                            +LabeledCheckbox(Msg.Student_name, 'printStudent', false)
+                    +StudentsBlock(self.getStudents())
+        .x-window-footer.report-bottom
+            +ReportFormatSelect()
+            BUTTON(type="submit", disabled=!self.isAbleDownload(), name="submitType", value="submit").chlk-button.blue-button=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
