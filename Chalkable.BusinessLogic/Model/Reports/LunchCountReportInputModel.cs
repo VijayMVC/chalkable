@@ -6,13 +6,10 @@ namespace Chalkable.BusinessLogic.Model.Reports
     public class LunchCountReportInputModel
     {
         public int IdToPrint { get; set; }
-        public IntList StudentIds { get; set; }
-        public IntList GroupIds { get; set; }
         public string Title { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int OrderBy { get; set; }
-        public bool WithCountsOnly { get; set; }
         public IntList IncludeOptions { get; set; }
         private bool HasOption(LunchCountReportAddionalOptions option)
         {
