@@ -81,7 +81,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
             using (var uow = Read())
             {
-                query.SchoolId = Context.SchoolLocalId.Value;
+                if(BaseSecurity.IsDistrictAdmin(Context))
+                    query.SchoolId = Context.SchoolLocalId.Value;
                 query.PersonId = Context.PersonId.Value;
                 query.RoleId = Context.RoleId;
                 var notifications = new NotificationDataAccess(uow).GetPaginatedNotificationsDetails(query, !Context.MessagingDisabled);

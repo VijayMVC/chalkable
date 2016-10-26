@@ -7,9 +7,8 @@ class TestMarkingReadOneMessage(BaseTestCase):
         self.teacher_id = self.teacher.id_of_current_teacher()
 
     def internal_(self):
-        list_for_message_id = []
-
         if len(self.get_all_inbox_messages()) > 0:
+            list_for_message_id = []
             for i in self.get_all_inbox_messages():
                 list_for_message_id.append(i['incomemessagedata']['id'])
 

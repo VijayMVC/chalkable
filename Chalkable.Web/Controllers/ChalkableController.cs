@@ -138,8 +138,8 @@ namespace Chalkable.Web.Controllers
                 SchoolLocator.Context.OAuthApplication = app.Url;
                 SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(app.Url);
 
-                if(SchoolLocator.Context.LoginTimeOut.HasValue)
-                    GlobalCache.UpdateExpiryUserInfo(authAppInfo.SessionKey, new TimeSpan(0, 0, SchoolLocator.Context.LoginTimeOut.Value));
+                //if(SchoolLocator.Context.LoginTimeOut.HasValue)
+                //    GlobalCache.UpdateExpiryUserInfo(authAppInfo.SessionKey, new TimeSpan(0, 0, SchoolLocator.Context.LoginTimeOut.Value));
 
                 return;
             }            
@@ -278,19 +278,19 @@ namespace Chalkable.Web.Controllers
             };
         }
 
-        protected override void OnActionExecuted(ActionExecutedContext filterContext)
-        {
-            base.OnActionExecuted(filterContext);
-            if(!filterContext.RouteData.Values.ContainsKey("IgnoreTimeOut"))
-                ChalkableAuthentication.UpdateLoginTimeOut(Context);
-        }
+        //protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        //{
+        //    base.OnActionExecuted(filterContext);
+        //    if(!filterContext.RouteData.Values.ContainsKey("IgnoreTimeOut"))
+        //        ChalkableAuthentication.UpdateLoginTimeOut(Context);
+        //}
     }
 
     public class IgnoreTimeOut : ActionFilterAttribute
     {
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            filterContext.RouteData.Values.Add("IgnoreTimeOut", "1");
-        }
+        //public override void OnActionExecuting(ActionExecutingContext filterContext)
+        //{
+        //    filterContext.RouteData.Values.Add("IgnoreTimeOut", "1");
+        //}
     }
 }

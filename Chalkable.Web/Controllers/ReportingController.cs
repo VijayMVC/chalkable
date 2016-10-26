@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Reporting;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
-using Chalkable.Common;
-using Chalkable.Common.JsonContractTools;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
-using Chalkable.Web.Authentication;
-using Chalkable.Web.Common;
-using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Tools;
@@ -33,74 +25,79 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult GradeBookReport(GradebookReportInputModel gradebookReportInput)
         {
-            return Report(gradebookReportInput, SchoolLocator.ReportService.GetGradebookReport, "GradeBookReport");
+            return Report(gradebookReportInput, SchoolLocator.ReportService.GenerateReport, "GradeBookReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult WorksheetReport(WorksheetReportInputModel worksheetReportInput)
         {
-            return Report(worksheetReportInput, SchoolLocator.ReportService.GetWorksheetReport, "WorksheetReport");
+            return Report(worksheetReportInput, SchoolLocator.ReportService.GenerateReport, "WorksheetReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult ComprehensiveProgressReport(ComprehensiveProgressInputModel comprehensiveProgressInput)
         {
-            return Report(comprehensiveProgressInput, SchoolLocator.ReportService.GetComprehensiveProgressReport, "ComprehensiveProgressReport");
+            return Report(comprehensiveProgressInput, SchoolLocator.ReportService.GenerateReport, "ComprehensiveProgressReport");
         }
 
         [AuthorizationFilter("Teacher, Student")]
         public ActionResult StudentComprehensiveProgressReport(int gradingPeriodId, int studentId)
         {
-            var report = SchoolLocator.ReportService.GetStudentComprehensiveReport(studentId, gradingPeriodId);
+            var reportInputModel = new StudentComprehensiveReportInputModel
+            {
+                GradingPeriodId = gradingPeriodId,
+                StudentId = studentId
+            };
+            var report = SchoolLocator.ReportService.GenerateReport(reportInputModel);
             return DownloadReportFile(report, "StudentComprehensiveProgressReport", ReportingFormat.Pdf);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult MissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput)
         {
-            return Report(missingAssignmentsInput, SchoolLocator.ReportService.GetMissingAssignmentsReport, "MissingAssignmentsReport");
+            return Report(missingAssignmentsInput, SchoolLocator.ReportService.GenerateReport, "MissingAssignmentsReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult ProgressReport(ProgressReportInputModel progressReportInput)
         {
-            return Report(progressReportInput, SchoolLocator.ReportService.GetProgressReport, "ProgressReport");
+            return Report(progressReportInput, SchoolLocator.ReportService.GenerateReport, "ProgressReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult BirthdayReport(BirthdayReportInputModel birthdayReportInputModel)
         {
-            return Report(birthdayReportInputModel, SchoolLocator.ReportService.GetBirthdayReport, "BirthdayReport");
+            return Report(birthdayReportInputModel, SchoolLocator.ReportService.GenerateReport, "BirthdayReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult AttendanceRegisterReport(AttendanceRegisterInputModel attendanceRegisterInputModel)
         {
-            return Report(attendanceRegisterInputModel, SchoolLocator.ReportService.GetAttendanceRegisterReport, "AttendanceRegisterReport");
+            return Report(attendanceRegisterInputModel, SchoolLocator.ReportService.GenerateReport, "AttendanceRegisterReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult AttendanceProfileReport(AttendanceProfileReportInputModel attendanceProfileReportInputModel)
         {
-            return Report(attendanceProfileReportInputModel, SchoolLocator.ReportService.GetAttendanceProfileReport, "AttendanceProfileReport");
+            return Report(attendanceProfileReportInputModel, SchoolLocator.ReportService.GenerateReport, "AttendanceProfileReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult SeatingChartReport(SeatingChartReportInputModel seatingChartReportInputModel)
         {
-            return Report(seatingChartReportInputModel, SchoolLocator.ReportService.GetSeatingChartReport, "SeatingChartReport");
+            return Report(seatingChartReportInputModel, SchoolLocator.ReportService.GenerateReport, "SeatingChartReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult GradeVerificationReport(GradeVerificationInputModel gradeVerificationInputModel)
         {
-            return Report(gradeVerificationInputModel, SchoolLocator.ReportService.GetGradeVerificationReport, "GradeVerificationReport");
+            return Report(gradeVerificationInputModel, SchoolLocator.ReportService.GenerateReport, "GradeVerificationReport");
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult LessonPlanReport(LessonPlanReportInputModel lessonPlanReportInputModel)
         {
-            return Report(lessonPlanReportInputModel, SchoolLocator.ReportService.GetLessonPlanReport, "LessonPlanReport");
+            return Report(lessonPlanReportInputModel, SchoolLocator.ReportService.GenerateReport, "LessonPlanReport");
         }
 
         [AuthorizationFilter("DistrictAdmin")]
@@ -112,8 +109,6 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.ReportService.ScheduleReportCardTask(inputModel);
             return Json(true);
             //          return DemoReportCards(inputModel);
-
-            //         return Report(()=> GetReportCards(inputModel), "Report Cards", ReportingFormat.Pdf, DownloadReportFile);
         }
 
         private ActionResult DemoReportCards(ReportCardsInputModel inputModel)
@@ -146,32 +141,6 @@ namespace Chalkable.Web.Controllers
             }
         }
 
-        private string PrepareReportView(CustomReportTemplate template, object data, TemplateRenderer renderer)
-        {
-            var view = BuildReportView(template, data, renderer);
-            return RenderViewToString(view.ViewName, view.Model);
-        }
-
-        private ViewResult BuildReportView(CustomReportTemplate template, object data, TemplateRenderer renderer)
-        {
-            ViewBag.Template = renderer.Render(template.Layout, data);
-            ViewBag.Style = template.Style;
-            return View("ReportCards");
-        }
-
-        private string RenderViewToString(string viewName, object model)
-        {
-            ViewData.Model = model;
-            using (var sw = new StringWriter())
-            {
-                var viewResult = ViewEngines.Engines.FindView(ControllerContext, viewName, null);
-                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
-                viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
-                return sw.GetStringBuilder().ToString();
-            }
-        }
-        
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult FeedReport(FeedReportSettingsInfo settings, int? classId, int? format, bool? complete, int? announcementType)
@@ -187,9 +156,10 @@ namespace Chalkable.Web.Controllers
                 Format = format,
                 Settings = settings,
                 Complete = complete,
-                AnnouncementType = announcementType
+                AnnouncementType = announcementType,
+                DefaultPath = path
             };
-            return Report(() => SchoolLocator.ReportService.GetFeedReport(reportInput, path), "Feed Report", formatType, DownloadReportFile);
+            return Report(() => SchoolLocator.ReportService.GenerateReport(reportInput), "Feed Report", formatType, DownloadReportFile);
         }
 
         private ActionResult Report<TReport>(TReport reportInputModel

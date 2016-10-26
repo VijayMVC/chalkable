@@ -27,8 +27,8 @@ class TestTeacherSendingMessagesToHimSelf(BaseTestCase):
         self.assertTrue(len(self.get_all_inbox_messages()) == 15, "teacher doesn't have 15 messages")
 
         for i in self.get_all_inbox_messages():
-            self.assertTrue(i['incomemessagedata']['body'] == "this is a body_teacher_to_himself", 'body of the message is equal')
-            self.assertTrue(i['incomemessagedata']['subject'] == "this is a subject_teacher_to_himself", 'subject of the message is equal')
+            self.assertTrue(i['incomemessagedata']['body'] == "this is a body_teacher_to_himself", 'body of the message is not equal')
+            self.assertTrue(i['incomemessagedata']['subject'] == "this is a subject_teacher_to_himself", 'subject of the message is not equal')
 
     def get_all_inbox_messages(self):
         get_messages_inbox_all = self.teacher.get_json(

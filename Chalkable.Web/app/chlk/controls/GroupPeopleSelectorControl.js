@@ -71,7 +71,7 @@ NAMESPACE('chlk.controls', function () {
                 }, 100);
             },
 
-            [ria.mvc.DomEventBind('change', '.school-id, .grade-level-id')],
+            [ria.mvc.DomEventBind('change', '.group-people-selector .school-id, .group-people-selector .grade-level-id')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function schoolGradeChange(node, event, selected_){
                 var parent = node.parent('.body-content'),
@@ -111,7 +111,7 @@ NAMESPACE('chlk.controls', function () {
                     this.updateStudents_(selector, type);
             },
 
-            [ria.mvc.DomEventBind('keyup change', '.top-filter')],
+            [ria.mvc.DomEventBind('keyup change', '.group-people-selector .top-filter')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function filterKeyup(node, event, selected_){
                 clearTimeout(filterTimeout);
@@ -126,7 +126,7 @@ NAMESPACE('chlk.controls', function () {
                 }, time);
             },
 
-            [ria.mvc.DomEventBind('change', '.submit-on-change')],
+            [ria.mvc.DomEventBind('change', '.group-people-selector .submit-on-change')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function filterChange(node, event, selected_){
                 this.filterResultsByNode_(node);
@@ -254,13 +254,13 @@ NAMESPACE('chlk.controls', function () {
                     }, this);
             },
 
-            [ria.mvc.DomEventBind('change', '.all-groups-check')],
+            [ria.mvc.DomEventBind('change', '.group-people-selector .all-groups-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function allGroupsSelect(node, event, selected_){
                 this.updateSelectedGroupsByNodes_(node.parent('.body-content').find('.recipient-check'), node.is(':checked'));
             },
 
-            [ria.mvc.DomEventBind('change', '.all-persons-check')],
+            [ria.mvc.DomEventBind('change', '.group-people-selector .all-persons-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function allPersonsSelect(node, event, selected_){
                 var parent = node.parent('.body-content'),
@@ -278,32 +278,32 @@ NAMESPACE('chlk.controls', function () {
                     this.updateSelectedStudentsByNodes_($parent.find('.recipient-check'), node.is(':checked'));
             },
 
-            [ria.mvc.DomEventBind('change', '.group-check')],
+            [ria.mvc.DomEventBind('change', '.group-people-selector .group-check')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function groupSelect(node, event, selected_){
                 this.updateSelectedGroupsByNodes_(node, node.is(':checked'));
             },
 
-            [ria.mvc.DomEventBind('change', '.student-check')],
+            [ria.mvc.DomEventBind('change', '.group-people-selector .student-check')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function studentSelect(node, event){
                 this.updateSelectedStudentsByNodes_(node.$, node.is(':checked'));
             },
 
-            [ria.mvc.DomEventBind('click', '.recipient-item.student-item')],
+            [ria.mvc.DomEventBind('click', '.group-people-selector .recipient-item.student-item')],
             [[ria.dom.Dom, ria.dom.Event]],
             function studentBlockClick(node, event){
                 var checkNode = node.find('.student-check');
                 checkNode.trigger('change');
             },
 
-            [ria.mvc.DomEventBind('click', '.remove-group')],
+            [ria.mvc.DomEventBind('click', '.group-people-selector .remove-group')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function groupRemove(node, event){
                 this.updateSelectedGroupsByNodes_(node, false);
             },
 
-            [ria.mvc.DomEventBind('click', '.remove-student')],
+            [ria.mvc.DomEventBind('click', '.group-people-selector .remove-student')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function studentRemove(node, event){
                 this.updateSelectedStudentsByNodes_(node.$, false);

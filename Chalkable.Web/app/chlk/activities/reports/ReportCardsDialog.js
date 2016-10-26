@@ -119,7 +119,7 @@ NAMESPACE('chlk.activities.reports', function(){
                     this.dom.find('#group-ids-value').getValue() ||
                     this.dom.find('#student-ids-value').getValue() ||
                     this.dom.find('#student-ids-value').getValue() ||
-                    this.dom.find('.report-title').getValue() != "Report Card" ||
+                    this.dom.find('.report-title').getValue() ||
                     parseInt(this.dom.find('[name=recipient]:checked').getValue(), 10) != 0 ||
                     parseInt(this.dom.find('[name=logo]:checked').getValue(), 10) != 0 ||
                     this.dom.find('.custom-template-select').getValue() != this.dom.find('.custom-template-select').find('option:eq(0)').getValue() ||
