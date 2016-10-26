@@ -9,8 +9,6 @@ namespace Chalkable.Web.Models
         public int Count { get; set; }
         public int? PersonId { get; set; }
         public bool Guest { get; set; }
-        public bool Override { get; set; }
-        public bool Enabled { get; set; }
 
         public static MealCountItemViewData Create(MealCountItem mealCountItem)
         {
@@ -18,9 +16,7 @@ namespace Chalkable.Web.Models
             {
                 Count = mealCountItem.Count,
                 PersonId = mealCountItem.PersonId,
-                Enabled = mealCountItem.Enabled,
-                Guest = mealCountItem.Guest,
-                Override = mealCountItem.Override
+                Guest = mealCountItem.Guest
             };
         }
 

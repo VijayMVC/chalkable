@@ -455,7 +455,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.ClassId]],
             function lunchAction(classId){
-                var res = this.classService.getLunchCount(classId, new chlk.models.common.ChlkDate(), true, true)
+                var res = this.classService.getLunchCount(classId, new chlk.models.common.ChlkDate(), true)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         console.log(data);

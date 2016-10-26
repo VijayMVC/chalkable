@@ -17,7 +17,6 @@ NAMESPACE('chlk.models.lunchCount', function () {
                 this.classId = SJX.fromValue(raw.classid, Number);
                 this.date = SJX.fromDeserializable(raw.date, chlk.models.common.ChlkDate);
                 this.includeGuest = SJX.fromValue(raw.includeguest, Boolean);
-                this.includeOverride = SJX.fromValue(raw.includeoverride, Boolean);
             },
 
             ArrayOf(chlk.models.people.User), 'students',
@@ -25,7 +24,6 @@ NAMESPACE('chlk.models.lunchCount', function () {
             ArrayOf(chlk.models.lunchCount.MealItem), 'mealItems',
             Number, 'classId',
             chlk.models.common.ChlkDate, 'date',
-            Boolean, 'includeGuest',
-            Boolean, 'includeOverride'
+            Boolean, 'includeGuest'
         ]);
 });

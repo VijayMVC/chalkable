@@ -213,9 +213,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult LunchCount(int classId, DateTime date, bool includeGuests, bool includeOverride)
+        public ActionResult LunchCount(int classId, DateTime date, bool includeGuests)
         {
-            var lunchCountGrid = SchoolLocator.ClassService.GetLunchCountGrids(classId, date, includeGuests, includeOverride);
+            var lunchCountGrid = SchoolLocator.ClassService.GetLunchCountGrids(classId, date, includeGuests);
             return Json(LunchCountGridViewData.Create(lunchCountGrid));
         }
     }

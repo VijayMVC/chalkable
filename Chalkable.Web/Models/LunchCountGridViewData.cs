@@ -13,7 +13,6 @@ namespace Chalkable.Web.Models
         public int? ClassId { get; set; }
         public DateTime? Date { get; set; }
         public bool IncludeGuest { get; set; }
-        public bool IncludeOverride { get; set; }
 
         public static LunchCountGridViewData Create(LunchCountGrid lunchCountGrid)
         {
@@ -24,8 +23,7 @@ namespace Chalkable.Web.Models
                 MealItems = MealItemViewData.Create(lunchCountGrid.MealItems),
                 Date = lunchCountGrid.Date,
                 ClassId = lunchCountGrid.ClassId,
-                IncludeGuest = lunchCountGrid.IncludeGuest,
-                IncludeOverride = lunchCountGrid.IncludeOverride
+                IncludeGuest = lunchCountGrid.IncludeGuest
             };
         }
     }

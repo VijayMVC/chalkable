@@ -423,7 +423,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests, bool includeOverride)
+        public LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests)
         {
             throw new NotImplementedException();
         }

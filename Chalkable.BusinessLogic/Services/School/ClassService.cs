@@ -80,7 +80,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId);
 
-        LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests, bool includeOverride);
+        LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -282,7 +282,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new ClassDataAccess(u).GetClassesBySchool(schoolYearId, schoolId, gradeLevelId)).OrderBy(x => x.Name).ToList();
         }
 
-        public LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests, bool includeOverride)
+        public LunchCountGrid GetLunchCountGrids(int classId, DateTime date, bool includeGuests)
         {
             var lunchCountGrid = new LunchCountGrid();
 
@@ -295,7 +295,6 @@ namespace Chalkable.BusinessLogic.Services.School
             lunchCountGrid.ClassId = classId;
             lunchCountGrid.Date = date;
             lunchCountGrid.IncludeGuest = includeGuests;
-            lunchCountGrid.IncludeOverride = includeOverride;
 
             lunchCountGrid.MealItems = new List<MealItem>();
 
@@ -308,15 +307,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 var mealItem = new MealItem();
                 
                 var mealCountItem = new List<MealCountItem>();
-                mealCountItem.AddRange(staffs.Select(staff => new MealCountItem {Count = rnd.Next(0, 20), Enabled = true, Guest = false, PersonId = staff.Id, Override = false}).ToList());
+                mealCountItem.AddRange(staffs.Select(staff => new MealCountItem {Count = rnd.Next(0, 20), Guest = false, PersonId = staff.Id}).ToList());
 
                 if(includeGuests)
-                    mealCountItem.Add(new MealCountItem { Count = rnd.Next(0, 20), Enabled = true, Guest = true, PersonId = null, Override = false });
-
-                if (includeOverride)
-                    mealCountItem.Add(new MealCountItem { Count = rnd.Next(0, 20), Enabled = true, Guest = false, PersonId = null, Override = true });
-
-                mealCountItem.AddRange(students.Select(student => new MealCountItem { Count = includeOverride ? 0 : rnd.Next(0, 20), Enabled = !includeOverride, Guest = false, PersonId = student.Id, Override = false }).ToList());
+                    mealCountItem.Add(new MealCountItem { Count = rnd.Next(0, 20), Guest = true, PersonId = null });
+                
+                mealCountItem.AddRange(students.Select(student => new MealCountItem { Count = rnd.Next(0, 20), Guest = false, PersonId = student.Id }).ToList());
 
                 mealItem.MealCountItems = mealCountItem;
                 mealItem.MealType = mealType;

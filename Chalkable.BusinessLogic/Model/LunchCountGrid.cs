@@ -12,6 +12,5 @@ namespace Chalkable.BusinessLogic.Model
         public int? ClassId { get; set; }
         public DateTime? Date { get; set; }
         public bool IncludeGuest { get; set; }
-        public bool IncludeOverride { get; set; }
     }
 }

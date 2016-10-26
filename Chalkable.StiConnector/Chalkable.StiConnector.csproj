@@ -120,6 +120,7 @@
     <Compile Include="Connectors\GradebookConnector.cs" />
     <Compile Include="Connectors\LearningEarningsConnector.cs" />
     <Compile Include="Connectors\LinkConnector.cs" />
+    <Compile Include="Connectors\LunchConnector.cs" />
     <Compile Include="Connectors\Model\About.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Connectors\Model\DisciplineDetailDashboard.cs" />
     <Compile Include="Connectors\Model\DisciplineSummaryDashboard.cs" />
     <Compile Include="Connectors\Model\InfractionSummary.cs" />
+    <Compile Include="Connectors\Model\LunchCount.cs" />
     <Compile Include="Connectors\Model\Reports\AttendanceRegisterReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\AttendanceProfileReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\BirthdayReportParams.cs" />
