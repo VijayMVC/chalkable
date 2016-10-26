@@ -93,7 +93,7 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
-            this.reportingService.submitLunchCount(
+            var result = this.reportingService.submitLunchCount(
                 model.getTitle(),
                 model.getOrderBy(),
                 model.getIdToPrint(),
