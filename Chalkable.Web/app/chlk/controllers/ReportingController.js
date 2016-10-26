@@ -85,13 +85,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.reports.SubmitLunchCountViewData]],
         function submitLunchCountAction(model){
-            if(model.getSubmitType() == "addRecipients"){
-                return this.Redirect('reporting', 'showGroupsFromReport', [model.getParsedSelected()])
-            }
-
-            if(model.getSubmitType() == 'recipient')
-                return this.addRecipients_(model);
-
             if(model.getSubmitType() == 'changeType')
                 return this.Redirect('reporting', 'adminReport', [model.getReportType()]);
 
@@ -103,21 +96,18 @@ NAMESPACE('chlk.controllers', function (){
             this.reportingService.submitLunchCount(
                 model.getTitle(),
                 model.getOrderBy(),
-                model.isAllActiveMeals(),
                 model.getIdToPrint(),
                 model.getStartDate(),
                 model.getEndDate(),
-                model.getIncludeOptions(),
-                this.getIdsList(model.getGroupIds(), chlk.models.id.GroupId),
-                this.getIdsList(model.getStudentIds(), chlk.models.id.SchoolPersonId)
+                model.getIncludeOptions()
             )
-                .attach(this.validateResponse_());
+                .attach(this.validateResponse_())
+                .then(function () {
+                    this.BackgroundCloseView(chlk.activities.reports.LunchCountDialog);
+                }, this)
+                .thenBreak();
 
-            setTimeout(function(){
-                this.BackgroundCloseView(chlk.activities.reports.LunchCountDialog);
-            }.bind(this), 100);
-
-            return this.ShowAlertBox('<b>Your report is being prepared.<br>You will receive a notification when it\'s ready!</b>', null, true, 'report'), null ;
+            return this.UpdateView(chlk.activities.reports.LunchCountDialog, result);
         },
 
         function reportCardsAction(){

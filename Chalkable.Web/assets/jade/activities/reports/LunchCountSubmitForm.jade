@@ -11,7 +11,7 @@
                 TABLE.report-table
                     TR
                         TD(colspan="4").item-4
-                            .text-block
+                            .text-block.mt-28
                                 -var typeEnum = chlk.models.reports.AdminReportTypeEnum
                                 Button(type="submit", name="submitType", value="changeType", data-type-value=typeEnum.LUNCH_COUNT.valueOf()).x-hidden.change-type-btn
                                 +Select('reportType').report-type-select
@@ -19,14 +19,7 @@
                                     +Option(typeEnum.REPORT_CARD.valueOf(), 'Report Card', false)
                     TR
                         TD(colspan="4").item-4
-                            .add-recipients-container
-                                .add-recipients
-                                    .recipients-list
-                                        -var groupsModel = new chlk.models.reports.ReportCardRecipientsViewData([], [], {groups:[], students:[]})
-                                        +RenderWith(groupsModel, chlk.templates.reports.ReportCardRecipientsTpl)
-                    TR
-                        TD(colspan="4").item-4
-                            .text-block
+                            .text-block.mt-28.mb-28
                                 label Title
                                 input(type="text", name="title", placeholder="Lunch Count", maxlength=75).report-title
                     TR
@@ -36,12 +29,6 @@
                                 +Radio('orderBy', chlk.models.reports.LunchCountOrderBy.BY_CLASS.valueOf(), 'Class', false)
                                 +Radio('orderBy', chlk.models.reports.LunchCountOrderBy.MEAL_TYPE.valueOf(), 'Meal Type', false)
                                 +Radio('orderBy', chlk.models.reports.LunchCountOrderBy.STUDENT.valueOf(), 'Student', true)
-
-                        TD.item-4
-                            h3 Meals
-                            .meals
-                                +Radio('allActiveMeals', 1, 'All Active', true)
-                                +Radio('allActiveMeals', 0, 'With Counts', false)
                         TD.item-4
                             h3=Msg.ID_to_print
                             .id-to-print
@@ -50,19 +37,18 @@
                                 +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.STUDENT_NUMBER.valueOf(), Msg.Student_Number, self.getIdToPrint() == chlk.models.reports.StudentIdentifierEnum.STUDENT_NUMBER.valueOf())
                                 +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, self.getIdToPrint() == chlk.models.reports.StudentIdentifierEnum.NONE.valueOf())
                         TD.item-4
-                            .dates-cnt
-                                .start-date-cnt.i-b
-                                    h3 Start Date
-                                    +DatePicker('startDate')(data-options={
-                                        showOtherMonths: true,
-                                        selectOtherMonths: true
-                                    }).start-date
-                                .end-date-cnt.i-b
-                                    h3 End Date
-                                    +DatePicker('endDate')(data-options={
-                                        showOtherMonths: true,
-                                        selectOtherMonths: true
-                                    }).end-date
+                            h3 Start Date
+                            +DatePicker('startDate')(data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true
+                            }).start-date
+                            h3 End Date
+                            +DatePicker('endDate')(data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true
+                            }).end-date
+
+                        TD.item-4
                             h3 Include
                             +Select('includeOptionValues', 'includeOptions')(multiple).include-select
                                 +Option(chlk.models.reports.LunchCountAdditionalOptions.GROUP_TOTALS.valueOf(), 'Group Totals', false)

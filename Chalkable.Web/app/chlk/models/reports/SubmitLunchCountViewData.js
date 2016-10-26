@@ -26,7 +26,6 @@ NAMESPACE('chlk.models.reports', function () {
 
     CLASS('SubmitLunchCountViewData', EXTENDS(chlk.models.reports.BaseAdminReportViewData), IMPLEMENTS(ria.serialize.IDeserializable), [
         String, 'includeOptions',
-        Boolean, 'allActiveMeals',
         chlk.models.reports.LunchCountOrderBy, 'orderBy',
         chlk.models.common.ChlkDate, 'startDate',
         chlk.models.common.ChlkDate, 'endDate',
@@ -34,7 +33,6 @@ NAMESPACE('chlk.models.reports', function () {
         OVERRIDE, VOID, function deserialize(raw) {
             BASE(raw);
             this.includeOptions = SJX.fromValue(raw.includeOptions, String);
-            this.allActiveMeals = SJX.fromValue(raw.allActiveMeals, Boolean);
             this.orderBy = SJX.fromValue(raw.orderBy, chlk.models.reports.LunchCountOrderBy);
             this.startDate = SJX.fromDeserializable(raw.startDate, chlk.models.common.ChlkDate);
             this.endDate = SJX.fromDeserializable(raw.endDate, chlk.models.common.ChlkDate);

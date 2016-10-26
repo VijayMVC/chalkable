@@ -369,20 +369,19 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[String, chlk.models.reports.LunchCountOrderBy, Boolean, chlk.models.reports.StudentIdentifierEnum, chlk.models.common.ChlkDate,
-            chlk.models.common.ChlkDate, String, ArrayOf(chlk.models.id.GroupId), ArrayOf(chlk.models.id.SchoolPersonId)]],
-        ria.async.Future, function submitLunchCount(title, orderBy, isAllActiveMeals, idToPrint, startDate_, endDate_, includeOptions_, groupIds_, studentIds_){
-             return this.post('Reporting/LunchCount.json', Boolean, {
-                 title: title,
-                 orderBy: orderBy.valueOf(),
-                 isAllActiveMeals: isAllActiveMeals,
-                 idToPrint: idToPrint.valueOf(),
-                 startDate: startDate_ && startDate_.toStandardFormat(),
-                 endDate: endDate_ && endDate_.toStandardFormat(),
-                 includeOptions: includeOptions_,
-                 groupIds: groupIds_ && this.arrayToCsv(groupIds_),
-                 studentIds: studentIds_ && this.arrayToCsv(studentIds_)
+        [[String, chlk.models.reports.LunchCountOrderBy, chlk.models.reports.StudentIdentifierEnum, chlk.models.common.ChlkDate,
+            chlk.models.common.ChlkDate, String]],
+        ria.async.Future, function submitLunchCount(title, orderBy, idToPrint, startDate_, endDate_, includeOptions_){
+            var url = this.getUrl('Reporting/LunchCountReport.json', {
+                title: title,
+                orderBy: orderBy.valueOf(),
+                idToPrint: idToPrint.valueOf(),
+                startDate: startDate_ && startDate_.toStandardFormat(),
+                endDate: endDate_ && endDate_.toStandardFormat(),
+                includeOptions: includeOptions_
             });
+
+            return this.getWithIframe_(url);
         },
 
         ria.async.Future, function listReportCardsLogo(){

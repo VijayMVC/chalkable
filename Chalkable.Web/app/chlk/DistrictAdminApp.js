@@ -82,7 +82,7 @@ NAMESPACE('chlk', function (){
                                 var target = new ria.dom.Dom(event.target);
                                 if(!target.is('.report-cards-link'))
                                     node.find('.reports-bubble').addClass('x-hidden');
-                            }, 100);
+                            }, 500);
                         });
 
                         return data;

@@ -13,7 +13,7 @@
                 TABLE.report-table
                     TR
                         TD(colspan="3").item-3
-                            .text-block
+                            .text-block.mt-28.mb-28
                                 -var typeEnum = chlk.models.reports.AdminReportTypeEnum
                                 Button(type="submit", name="submitType", value="changeType", data-type-value=typeEnum.REPORT_CARD.valueOf()).x-hidden.change-type-btn
                                 +Select('reportType').report-type-select
@@ -28,7 +28,7 @@
                                         +RenderWith(groupsModel, chlk.templates.reports.ReportCardRecipientsTpl)
                     TR
                         TD(colspan="3").item-3
-                            .text-block
+                            .text-block.mt-28.mb-28
                                 label Title
                                 input(type="text", name="title", placeholder="Report Card", maxlength=75).report-title
                     TR
