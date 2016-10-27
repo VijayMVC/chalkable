@@ -18,6 +18,7 @@ REQUIRE('chlk.activities.classes.ClassProfileAppsPage');
 REQUIRE('chlk.activities.classes.ClassExplorerPage');
 REQUIRE('chlk.activities.classes.ClassProfileDisciplinePage');
 REQUIRE('chlk.activities.classes.ClassPanoramaPage');
+REQUIRE('chlk.activities.classes.ClassProfileLunchPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -453,14 +454,34 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.classes.ClassProfileAppsPage, res);
             },
 
-            [[chlk.models.id.ClassId]],
-            function lunchAction(classId){
-                var res = this.classService.getLunchCount(classId, new chlk.models.common.ChlkDate(new Date('10/26/2016 ')), true)
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            function lunchAction(classId, date_){
+                var res = ria.async.wait([
+                        this.classService.getLunchCount(classId, date_ || new chlk.models.common.ChlkDate(), true),
+                        this.classService.getLunchSummary(classId)
+                    ])
                     .attach(this.validateResponse_())
-                    .then(function(data){
-                        console.log(data);
+                    .then(function(result){
+                        var model = result[1];
+                        model.setLunchCountInfo(result[0]);
+                        return new chlk.models.classes.ClassProfileSummaryViewData(
+                            this.getCurrentRole(), model, this.getUserClaims_(),
+                            this.isAssignedToClass_(classId)
+                        );
+
                     }, this);
-                return null;
+
+                return this.PushOrUpdateView(chlk.activities.classes.ClassProfileLunchPage, res);
+            },
+
+            function lunchSubmitAction(data){
+                this.classService.updateLunchCount(data)
+                    .then(function(data){
+                        this.BackgroundNavigate('class', 'lunch', [data.classId, data.date]);
+                        return ria.async.BREAK;
+                    }, this)
+
+                return this.UpdateView(chlk.activities.classes.ClassProfileLunchPage, res);
             }
         ]);
 });

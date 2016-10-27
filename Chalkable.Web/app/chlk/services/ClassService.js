@@ -21,6 +21,7 @@ REQUIRE('chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData');
 REQUIRE('chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData');
 REQUIRE('chlk.models.classes.ClassGradingSummary');
 REQUIRE('chlk.models.grading.FinalGradesViewData');
+REQUIRE('chlk.models.classes.ClassProfileLunchSummary');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -212,6 +213,13 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId]],
+            ria.async.Future, function getLunchSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassProfileLunchSummary, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
             ria.async.Future, function getAttendanceSummary(classId) {
                 return this.get('Class/Summary.json', chlk.models.classes.ClassAttendanceSummary, {
                     classId: classId.valueOf()
@@ -327,6 +335,10 @@ NAMESPACE('chlk.services', function () {
                     date: date.toStandardFormat(),
                     includeGuests: includeGuests.valueOf()
                 });
+            },
+
+            ria.async.Future, function updateLunchCount(o) {
+                return this.post('Class/UpdateLunchCount.json', Boolean, o);
             }
         ])
 });
