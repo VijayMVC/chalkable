@@ -93,6 +93,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ISchoolProgramService SchoolProgramService { get; }
         IStudentSchoolProgramService StudentSchoolProgramService { get; }
         IMealTypeService MealTypeService { get; }
+        ILunchCountService LunchCountService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -180,6 +181,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private ISchoolProgramService schoolProgramService;
         private IStudentSchoolProgramService studentSchoolProgramService;
         private IMealTypeService mealTypeService;
+        private ILunchCountService lunchCountService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -261,6 +263,7 @@ namespace Chalkable.BusinessLogic.Services.School
             schoolProgramService = new SchoolProgramService(this);
             studentSchoolProgramService = new StudentSchoolProgramService(this);
             mealTypeService = new MealTypeService(this);
+            lunchCountService = new LunchCountService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -362,5 +365,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public ISchoolProgramService SchoolProgramService => schoolProgramService;
         public IStudentSchoolProgramService StudentSchoolProgramService => studentSchoolProgramService;
         public IMealTypeService MealTypeService => mealTypeService;
+        public ILunchCountService LunchCountService => lunchCountService;
     }
 }

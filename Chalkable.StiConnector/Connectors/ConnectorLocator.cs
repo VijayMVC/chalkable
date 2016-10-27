@@ -60,7 +60,7 @@ namespace Chalkable.StiConnector.Connectors
             ClassesDashboardConnector = new ClassesDashboardConnector(this);
             AboutConnector = new AboutConnector(this);
             PanoramaConnector = new PanoramaConnector(this);
-            LunchConnector = new LunchConnector(this);
+            LunchConnector = new LunchCountConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
@@ -87,7 +87,7 @@ namespace Chalkable.StiConnector.Connectors
         public ClassesDashboardConnector ClassesDashboardConnector { get; private set; }
         public AboutConnector AboutConnector { get; set; }
         public PanoramaConnector PanoramaConnector { get; private set; }
-        public LunchConnector LunchConnector { get; private set; }
+        public LunchCountConnector LunchConnector { get; private set; }
 
         public class TokenModel
         {

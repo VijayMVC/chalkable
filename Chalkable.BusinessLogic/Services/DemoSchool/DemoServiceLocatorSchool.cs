@@ -1846,5 +1846,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ISchoolProgramService SchoolProgramService { get { throw new NotImplementedException(); } }
         public IStudentSchoolProgramService StudentSchoolProgramService { get { throw new NotImplementedException(); } }
         public IMealTypeService MealTypeService { get { throw new NotImplementedException(); } }
+        public ILunchCountService LunchCountService { get { throw new NotImplementedException(); } }
     }
 }

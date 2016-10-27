@@ -187,6 +187,7 @@
     <Compile Include="Model\ClaimInfo.cs" />
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
+    <Compile Include="Model\LunchCount.cs" />
     <Compile Include="Model\LunchCountGrid.cs" />
     <Compile Include="Model\MealCountItem.cs" />
     <Compile Include="Model\MealItem.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Services\DemoSchool\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingStandardService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentService.cs" />
+    <Compile Include="Services\LunchCountService.cs" />
     <Compile Include="Services\Master\AcademicBenchmarkService.cs" />
     <Compile Include="Services\Master\ApplicationService.cs" />
     <Compile Include="Services\Master\ApplicationUploadService.cs" />
