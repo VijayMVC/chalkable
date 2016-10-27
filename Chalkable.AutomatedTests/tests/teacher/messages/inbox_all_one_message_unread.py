@@ -25,10 +25,7 @@ class TestMarkingReadOneMessage(BaseTestCase):
             post_unread = self.teacher.post_json('/PrivateMessage/MarkAsRead.json?', data={"ids": random_message,
                     "read": False})
 
-            get_messages_inbox_all = self.teacher.get_json('/PrivateMessage/List.json?' + 'start=' + str(0) + '&count=' + str(750) + '&income=' + str(True) + '&role=' + '&classOnly=' + str(False))
-            get_messages_inbox_all_data = get_messages_inbox_all['data']
-
-            for info_about_one_message in get_messages_inbox_all_data:
+            for info_about_one_message in self.get_all_inbox_messages():
                 if info_about_one_message['incomemessagedata']['id'] == random_message:
                     self.assertFalse(info_about_one_message['incomemessagedata']['read'],
                                     'Message is not in the state False')

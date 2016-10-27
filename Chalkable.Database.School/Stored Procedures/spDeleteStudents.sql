@@ -3,12 +3,18 @@
 As
 
 Delete From StudentAnnouncementApplicationMeta
-Where StudentRef in(select * from @ids)
+Where StudentRef in (Select * From @ids)
 
 Delete From StudentGroup
-Where StudentRef in(select * from @ids)
+Where StudentRef in (Select * From @ids)
+
+Delete From StudentCustomAlertDetail
+Where StudentRef in (Select * From @ids)
+
+Delete From AutoGrade
+Where StudentRef in (Select * From @ids)
 
 Delete From Student
-Where Id in(select * from @ids)
+Where Id in (Select * From @ids)
 
 Go

@@ -5,6 +5,7 @@ class TestDeletingOneMessage(BaseTestCase):
     def setUp(self):
         self.teacher = TeacherSession(self).login(user_email, user_pwd)
         self.teacher_id = self.teacher.id_of_current_teacher()
+        self.student = TeacherSession(self).login(user_email_student, user_pwd_student)
 
     def internal_(self):
         if len(self.get_all_inbox_messages()) > 0:

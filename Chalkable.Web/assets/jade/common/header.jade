@@ -7,8 +7,9 @@ if chlk.templates.search && chlk.templates.search.SiteSearch
             listCls = "site-search"
         )
         label(for="siteSearch")#search-glass
-    
-if chlk.controllers.ReportingController && self.getContext().getSession().get('role').isAdmin()
+
+-var reportCardsEnabled = self.getContext().getSession().get(ChlkSessionConstants.REPORT_CARDS_ENABLED, false)
+if chlk.controllers.ReportingController && self.getContext().getSession().get('role').isAdmin() && reportCardsEnabled
     +ActionButton('reporting', 'reportCards')(data-tooltip = "Report Card", data-tooltip-position="bottom").blue.report-cards-link &nbsp;
 if chlk.controllers.NotificationController
     +ActionButton('notification', 'list-new').blue.notifications-link &nbsp;

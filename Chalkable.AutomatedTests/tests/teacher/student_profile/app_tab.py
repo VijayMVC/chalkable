@@ -1,18 +1,21 @@
 from base_auth_test import *
+import unittest
 
+class TestStudentProfileExplorer(BaseAuthedTestCase):
+    def setUp(self):
+        self.teacher = TeacherSession(self).login(user_email, user_pwd)
 
-class TestStudentProfileInfo(BaseAuthedTestCase):
-    def test_student_info_get(self):
-        dictionary_get_list_my_students = self.get(
+    def internal_(self):
+        dictionary_get_list_my_students = self.teacher.get_json(
             '/Student/GetStudents.json?myStudentsOnly=true&byLastName=true&start=0&count=1000')
 
-        student_id = None
         if len(dictionary_get_list_my_students['data']) > 10:
-            eleventh_student = dictionary_get_list_my_students['data'][10]
-            for key, value in eleventh_student.iteritems():
-                if key == 'id':
-                    student_id = value
-            student_app = self.get('/Student/Apps.json?' + 'studentId=' + str(student_id) + '&start=' +str(0) + '&count=' + str(1000))
+            student_id = dictionary_get_list_my_students['data'][10]['id']
+
+            self.teacher.get_json('/Student/Apps.json?' + 'studentId=' + str(student_id) + '&start=' +str(0) + '&count=' + str(1000))
+
+    def test_student_profile_info_apps(self):
+        self.internal_()
 
 if __name__ == '__main__':
     unittest.main()

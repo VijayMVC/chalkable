@@ -17,7 +17,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void UpdateInternal(IList<District> entities)
         {
-            var districtId = ServiceLocatorMaster.Context.DistrictId;
+            var districtId = ServiceLocatorSchool.Context.DistrictId;
             var entity = entities.FirstOrDefault(x => x.DistrictGUID == districtId);
             if(entity == null || !districtId.HasValue)
                 return;

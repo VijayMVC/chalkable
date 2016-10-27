@@ -1,20 +1,36 @@
+from datetime import date
 from base_auth_test import *
+import unittest
 
+class TestStudentProfileAttendance(BaseAuthedTestCase):
+    def setUp(self):
+        self.teacher = TeacherSession(self).login(user_email, user_pwd)
 
-class TestStudentProfileInfo(BaseAuthedTestCase):
-    def test_student_info_get(self):
-        dictionary_get_list_my_students = self.get(
+    def internal_(self):
+        dictionary_get_list_my_students = self.teacher.get_json(
             '/Student/GetStudents.json?myStudentsOnly=true&byLastName=true&start=0&count=1000')
 
-        student_id = None
-        if len(dictionary_get_list_my_students['data']) > 10:
-            eleventh_student = dictionary_get_list_my_students['data'][10]
-            for key, value in eleventh_student.iteritems():
-                if key == 'id':
-                    student_id = value
-            student_attendance = self.get('/Student/AttendanceSummary.json?' + 'studentId=' + str(student_id))
-            student_attendance_calendar = self.get('/AttendanceCalendar/MonthForStudent.json?' + 'studentId=' + str(student_id))
+        today = date.today()
+        current_date = str(today.month) + str("-") + str(today.day) + str("-") + str(today.year)
 
+        if len(dictionary_get_list_my_students['data']) > 10:
+            student_id = dictionary_get_list_my_students['data'][10]['id']
+
+            student_attendance = self.teacher.get_json('/Student/AttendanceSummary.json?' + 'studentId=' + str(student_id))
+            student_data = student_attendance['data']
+
+            self.teacher.get_json('/AttendanceCalendar/MonthForStudent.json?' + 'studentId=' + str(student_id))
+
+            self.teacher.get_json('/AttendanceCalendar/MonthForStudent.json?' + 'date=' + str(current_date) + '&studentId=' + str(student_id))
+
+            if len(student_data['gradingperiods']) > 0:
+                for i in student_data['gradingperiods']:
+                    self.teacher.get_json(
+                        '/Student/AttendanceSummary?' + 'studentId=' + str(student_id) + '&gradingPeriodId=' + str(
+                            i['id']))
+
+    def test_student_profile_info_attendance(self):
+        self.internal_()
 
 if __name__ == '__main__':
     unittest.main()

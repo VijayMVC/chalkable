@@ -139,7 +139,9 @@ namespace Chalkable.Web.Controllers
 
             var gradingComments = SchoolLocator.GradingCommentService.GetGradingComments();
             PrepareJsonData(GradingCommentViewData.Create(gradingComments), ViewConstants.GRADING_COMMMENTS);
-            
+
+            ViewData[ViewConstants.REPORT_CARDS_ENABLED] = MasterLocator.DistrictService.IsReportCardsEnabled();
+
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
                 district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip, Context.SCEnabled);
@@ -255,6 +257,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
             ViewData[ViewConstants.SIS_API_VERSION] = Context.SisApiVersion;
             ViewData[ViewConstants.USER_LOGIN] = Context.Login;
+            ViewData[ViewConstants.LOGIN_TIME_OUT] = Context.LoginTimeOut;
 
             var leParams = SchoolLocator.LeService.GetLEParams();
 

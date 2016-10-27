@@ -48,7 +48,7 @@ Set		@schoolYearStartDate = (Select Min([Day]) From @classDays)
 --supplemental announcement out of school year
 Declare @suppAnnOutOfSchoolYearEndDate TInt32;
 Insert Into @suppAnnOutOfSchoolYearEndDate
-	Select [Id] From @toAdjust Where [ExpiresDate] > @schoolYearEndDate
+	Select [Id] From @toAdjust Where [ExpiresDate] is null or [ExpiresDate] > @schoolYearEndDate
 
 Declare @suppAnnOutOfSchoolYearStartDate TInt32;
 Insert Into @suppAnnOutOfSchoolYearStartDate

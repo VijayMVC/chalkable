@@ -8,7 +8,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool? Complete { get; set; }
         public FeedReportSettingsInfo Settings { get; set; }
         public int? AnnouncementType { get; set; }
-
+        public string DefaultPath { get; set; }
         public ReportingFormat? FormatTyped
         {
             get { return (ReportingFormat?)Format; }

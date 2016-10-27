@@ -40,14 +40,25 @@ Begin
 		vwAdminAnnouncement vwAA left join AnnouncementRecipientData adr
 			on vwAA.Id = adr.AnnouncementRef and adr.PersonRef = @callerId
 	Where Id in(select * from @adminAnnouncementIds)
-		and exists(
-				select * from 
-					AnnouncementGroup join StudentGroup 
-						on StudentGroup.GroupRef = AnnouncementGroup.GroupRef
+		and 
+		(
+			exists(
+					select * from 
+						AnnouncementGroup join StudentGroup 
+							on StudentGroup.GroupRef = AnnouncementGroup.GroupRef
+					where 
+						AnnouncementGroup.AnnouncementRef in(select * from @adminAnnouncementIds)
+						and StudentGroup.StudentRef = @callerId
+				)
+			or
+			exists(	
+				select * from
+					AdminAnnouncementStudent
 				where 
-					AnnouncementGroup.AnnouncementRef in(select * from @adminAnnouncementIds)
-					and StudentGroup.StudentRef = @callerId
-			)			
+					AdminAnnouncementRef = (select * from @adminAnnouncementIds)
+					and StudentRef = @callerId
+				)
+		)		
 End
 
 

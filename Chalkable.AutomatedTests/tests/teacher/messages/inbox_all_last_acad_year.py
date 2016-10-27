@@ -4,7 +4,7 @@ import unittest
 class TestSelectingLastAcadYear(BaseTestCase):
     def setUp(self):
         self.teacher = TeacherSession(self).login(user_email, user_pwd)
-        self.last_year = self.teacher.list_of_years()[0]
+        self.last_year = self.teacher.list_of_years()[-1]
 
     def internal_(self):
         get_messages_inbox_all = self.teacher.get_json('/PrivateMessage/List.json?' + 'start=' + str(0) + '&count=' + str(10) + '&income=' + str(True) + '&role=' + '&classOnly=' + str(False) + '&acadYear=' + str(self.last_year))

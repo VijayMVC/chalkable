@@ -213,10 +213,13 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function updateGradingCell(tpl, model, msg_) {
                 var container = this.dom.find('.item-' + model.getAnnouncementId().valueOf() + '-' + model.getStudentId());
+                container.removeClass('active-cell');
                 tpl.options({
                     maxScore: container.getData('max-score')
                 });
                 tpl.renderTo(container.setHTML(''));
+                if(!this.dom.find('.active-cell').exists())
+                    container.find('.grade-info').trigger('click');
             },
 
             OVERRIDE, function addPopUpByModel(cell, model){
