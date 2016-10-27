@@ -229,6 +229,22 @@ NAMESPACE('chlk', function (){
 
                 var tooltipTimeOut;
 
+                if(window.loginTimeOut){
+                    var loginTimer, loginTimeOut = window.loginTimeOut * 1000;
+
+                    function logoutHandler_(){
+                        document.location.href = WEB_SITE_ROOT + 'User/LogOutWithRedirect.json';
+                    }
+
+                    loginTimer = setTimeout(logoutHandler_, loginTimeOut);
+
+                    ria.dom.Dom().on('mousedown keydown keyup mousemove touchstart touchcancel touchmove scroll useraction', function(node, event){
+                        clearTimeout(loginTimer);
+
+                        loginTimer = setTimeout(logoutHandler_, loginTimeOut);
+                    });
+                }
+
                 jQuery.fn.extend({setItemsChecked : function(value){
                     var jNode;
                     jQuery(this).each(function(index, item){

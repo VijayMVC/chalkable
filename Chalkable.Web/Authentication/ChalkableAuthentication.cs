@@ -26,13 +26,13 @@ namespace Chalkable.Web.Authentication
             return hex.ToString();
         }
 
-        private static string GenerateSessionKey(int? loginTimeOut)
+        private static string GenerateSessionKey()
         {
             var value = GenerateUID();
             HttpContext.Current.Response.Cookies.Set(new HttpCookie(SESSION_KEY_COOKIE_NAME)
             {
                 Value = value,
-                Expires = DateTime.Now.Add(loginTimeOut != null ? new TimeSpan(0, 0, loginTimeOut.Value) : FormsAuthentication.Timeout)
+                Expires = DateTime.Now.Add(FormsAuthentication.Timeout)
             });
             return value;
         }
@@ -62,12 +62,12 @@ namespace Chalkable.Web.Authentication
             httpCookie.Expires = DateTime.Now.AddYears(-1);
         }
 
-        public static void SignIn(UserContext context, bool remember, int? loginTimeOut)
+        public static void SignIn(UserContext context, bool remember)
         {
-            var sessionKey = GenerateSessionKey(loginTimeOut);
+            var sessionKey = GenerateSessionKey();
             
             var now = DateTime.Now;
-            var ticket = new FormsAuthenticationTicket(1, context.Login, now, now.Add(loginTimeOut != null ? new TimeSpan(0, 0, loginTimeOut.Value) : FormsAuthentication.Timeout),
+            var ticket = new FormsAuthenticationTicket(1, context.Login, now, now.Add(FormsAuthentication.Timeout),
                 remember, context.ToString(), FormsAuthentication.FormsCookiePath);
             
             var userData = new GlobalCache.UserInfo
@@ -77,7 +77,7 @@ namespace Chalkable.Web.Authentication
                 SisToken = context.SisToken
             };
 
-            GlobalCache.SetUserInfo(sessionKey, userData, loginTimeOut != null ? new TimeSpan(0, 0, loginTimeOut.Value) : FormsAuthentication.Timeout);
+            GlobalCache.SetUserInfo(sessionKey, userData, FormsAuthentication.Timeout);
         }
 
         public static void SignOut()

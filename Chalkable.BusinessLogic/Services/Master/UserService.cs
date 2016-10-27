@@ -237,7 +237,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     EnsureTeacherChalkableAccess(claimInfos);
                 }
 #if DEBUG
-                var loginTimeOut = (int?) null;
+                var loginTimeOut = (int?)null;
 #else
                 var loginTimeOut = schoolL.AppSettingService.GetLoginTimeOut();
 #endif

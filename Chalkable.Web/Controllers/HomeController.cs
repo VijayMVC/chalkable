@@ -257,6 +257,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
             ViewData[ViewConstants.SIS_API_VERSION] = Context.SisApiVersion;
             ViewData[ViewConstants.USER_LOGIN] = Context.Login;
+            ViewData[ViewConstants.LOGIN_TIME_OUT] = Context.LoginTimeOut;
 
             var leParams = SchoolLocator.LeService.GetLEParams();
 
