@@ -29,7 +29,7 @@ NAMESPACE('chlk.templates.classes', function () {
                         var mealCountItem = mealItem.getMealCountItems().filter(function(mealCountItem){
                             return mealCountItem.getPersonId() == item.getId()
                         })[0];
-                        mealsArr.push(mealCountItem || new chlk.models.lunchCount.MealCountItem(item.getId()));
+                        mealsArr.push(mealCountItem || new chlk.models.lunchCount.MealCountItem(item.getId(), false, 0));
                     });
                     rowItem.mealItems = mealsArr;
                     topTable.push(rowItem);
@@ -43,7 +43,7 @@ NAMESPACE('chlk.templates.classes', function () {
                         var mealCountItem = mealItem.getMealCountItems().filter(function(mealCountItem){
                             return mealCountItem.isGuest()
                         })[0];
-                        mealsArr.push(mealCountItem || new chlk.models.lunchCount.MealCountItem(null, true));
+                        mealsArr.push(mealCountItem || new chlk.models.lunchCount.MealCountItem(null, true, 0));
                     });
                     rowItem.mealItems = mealsArr;
                     topTable.push(rowItem);
@@ -57,7 +57,7 @@ NAMESPACE('chlk.templates.classes', function () {
                         var mealCountItem = mealItem.getMealCountItems().filter(function(mealCountItem){
                             return mealCountItem.getPersonId() == item.getId()
                         })[0];
-                        mealsArr.push(mealCountItem || new chlk.models.lunchCount.MealCountItem(item.getId()));
+                        mealsArr.push(mealCountItem || new chlk.models.lunchCount.MealCountItem(item.getId(), false, 0));
                     });
                     rowItem.mealItems = mealsArr;
                     bottomTable.push(rowItem);

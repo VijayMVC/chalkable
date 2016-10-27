@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.lunchCount', function () {
                 BASE();
                 personId_ && this.setPersonId(personId_);
                 guest_ && this.setGuest(guest_);
-                count_ && this.setCount(count_);
+                (count_ || count_ === 0) && this.setCount(count_);
             }
         ]);
 });

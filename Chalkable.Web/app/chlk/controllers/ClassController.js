@@ -475,7 +475,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function lunchSubmitAction(data){
-                this.classService.updateLunchCount(data)
+                var res = this.classService.updateLunchCount(data)
                     .then(function(data){
                         this.BackgroundNavigate('class', 'lunch', [data.classId, data.date]);
                         return ria.async.BREAK;
