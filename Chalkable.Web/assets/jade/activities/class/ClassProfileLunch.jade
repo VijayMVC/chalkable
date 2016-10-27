@@ -1,3 +1,16 @@
+mixin MealItemCell(mealItem, mealIndex, curIndex)
+    .cell.meal-item-td
+        +Hidden("lunchCounts." + curIndex + ".staffId", (mealItem.type == chlk.templates.classes.LunchCountItemType.STAFF) ? mealItem.info.getId().valueOf() : null)
+        +Hidden("lunchCounts." + curIndex + ".studentId", (mealItem.type == chlk.templates.classes.LunchCountItemType.STUDENT) ? mealItem.info.getId().valueOf() : null)
+        +Hidden("lunchCounts." + curIndex + ".date", lunchCountInfo.getDate().toStandardFormat())
+        +Hidden("lunchCounts." + curIndex + ".mealTypeId", tableInfo.mealItems[mealIndex].getMealType().getId().valueOf())
+        input(
+            name="lunchCounts." + curIndex + ".count",
+            type="text",
+            value=mealItem.getCount(),
+            data-index=curIndex
+        ).meal-count-input
+
 -var clazz = self.getClazz()
 -var lunchCountInfo = clazz.getLunchCountInfo()
 -var tableInfo = self.getTableInfo()
@@ -18,39 +31,31 @@
                 data-params=[clazz.getId().valueOf()]
             )
         .chlk-calendar.lunch-grid
-            .chlk-grid
+            .chlk-grid(data-meal-count = tableInfo.mealItems.length)
                 .grid-content
                     .grid-header.grid-row
-                        .cell
+                        .cell.no-bodrer
                         each item in tableInfo.mealItems
-                            .cell.meal-item-th=item.getMealType().getName()
+                            .cell.no-bodrer.meal-item-th=item.getMealType().getName()
                     if tableInfo.topTable.length
                         each item, index in tableInfo.topTable
                             .grid-row
-                                .cell=item.info.name || item.info.getDisplayName()
+                                .cell.left-cell=item.info.name || item.info.getDisplayName()
                                 each mealItem, mealIndex in item.mealItems
-                                    .cell.meal-item-td
-                                        -var curIndex = index * tableInfo.mealItems.length + mealIndex
-                                        +Hidden("lunchCounts." + curIndex + ".staffId", (item.type == chlk.templates.classes.LunchCountItemType.STAFF) ? item.info.getId().valueOf() : null)
-                                        +Hidden("lunchCounts." + curIndex + ".studentId", null)
-                                        +Hidden("lunchCounts." + curIndex + ".date", lunchCountInfo.getDate().toStandardFormat())
-                                        +Hidden("lunchCounts." + curIndex + ".mealTypeId", tableInfo.mealItems[mealIndex].getMealType().getId().valueOf())
-                                        input(name="lunchCounts." + curIndex + ".count", type="text", value=mealItem.getCount())
+                                    -var curIndex = index * tableInfo.mealItems.length + mealIndex
+                                    +MealItemCell(mealItem, mealIndex, curIndex)
                     .grid-header.grid-row.students-row
-                        .cell Students
+                        .cell.left-cell.no-bodrer Students
+                        each item in tableInfo.mealItems
+                            .cell.no-bodrer
                     if tableInfo.bottomTable.length
                         -var firstIndex = tableInfo.mealItems.length * tableInfo.topTable.length
                         each item, index in tableInfo.bottomTable
                             .grid-row
-                                .cell=item.info.getDisplayName()
+                                .cell.left-cell=item.info.getDisplayName()
                                 each mealItem, mealIndex in item.mealItems
-                                    .cell.meal-item-td
-                                        -var curIndex = firstIndex + index * tableInfo.mealItems.length + mealIndex
-                                        +Hidden("lunchCounts." + curIndex + ".staffId", null)
-                                        +Hidden("lunchCounts." + curIndex + ".studentId", item.info.getId())
-                                        +Hidden("lunchCounts." + curIndex + ".date", lunchCountInfo.getDate().toStandardFormat())
-                                        +Hidden("lunchCounts." + curIndex + ".mealTypeId", tableInfo.mealItems[mealIndex].getMealType().getId().valueOf())
-                                        input(name="lunchCounts." + curIndex + ".count", type="text", value=mealItem.getCount())
+                                    -var curIndex = firstIndex + index * tableInfo.mealItems.length + mealIndex
+                                    +MealItemCell(mealItem, mealIndex, curIndex)
         .x-window-footer.report-bottom
             BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
             BUTTON(type="submit").chlk-button.blue-button Save
