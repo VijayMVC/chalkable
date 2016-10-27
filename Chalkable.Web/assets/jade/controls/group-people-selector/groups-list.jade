@@ -1,0 +1,22 @@
+.text-filter-cnt
+    .search-with-right-icon-cnt
+        INPUT(name="filter", type="text", placeholder="Search Group Names...", value=self.getFilter(), data-value=self.getFilter()).groups-filter.top-filter
+        .icon
+.top-info-cnt
+    .left-block.i-b
+        if self.getSelectorMode() != chlk.models.recipients.SelectorModeEnum.VIEW_WITH_GROUPS
+            .box-checkbox.circle.v-m
+                +Checkbox('allGroups', false, false, true).all-groups-check.all-items-check
+            LABEL.text.v-m All
+    .center-block=self.getCountText()
+    .right-block.i-b.right
+        +ActionLink('group', 'showCreateEditDialog')(data-tooltip="Create Group").add-group Group
+            .green-plus +
+.groups-cnt.items-cnt
+    .items-cnt-2
+        +RenderWith(self.getModel(), chlk.templates.controls.group_people_selector.GroupsListItemsTpl)(
+            userRole = self.getUserRole(),
+            selected = self.getSelected(),
+            selectorMode = self.getSelectorMode(),
+            currentUser = self.getCurrentUser()
+        )

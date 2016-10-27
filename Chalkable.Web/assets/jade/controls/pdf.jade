@@ -1,0 +1,4 @@
+mixin PdfDocument(url)
+    -attributes['data-url'] = url
+    -attributes = self.processAttrs(attributes);
+    .pdf-container(attributes)
