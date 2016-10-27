@@ -120,7 +120,7 @@
     <Compile Include="Connectors\GradebookConnector.cs" />
     <Compile Include="Connectors\LearningEarningsConnector.cs" />
     <Compile Include="Connectors\LinkConnector.cs" />
-    <Compile Include="Connectors\LunchConnector.cs" />
+    <Compile Include="Connectors\LunchCountConnector.cs" />
     <Compile Include="Connectors\Model\About.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
