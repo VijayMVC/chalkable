@@ -184,6 +184,7 @@
     <Compile Include="Services\SyncModelAdapters\InfractionAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\LanguageAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\LimitedEnglishAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\MealTypeAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonEmailAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonEthnicityAdapter.cs" />

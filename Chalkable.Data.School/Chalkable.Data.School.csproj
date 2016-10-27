@@ -119,6 +119,7 @@
     <Compile Include="DataAccess\GradingScaleDataAccess.cs" />
     <Compile Include="DataAccess\GroupDataAccess.cs" />
     <Compile Include="DataAccess\LPGalleryCategoryDataAccess.cs" />
+    <Compile Include="DataAccess\MealTypeDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\DbMaintenanceDataAccess.cs" />
     <Compile Include="DataAccess\PersonSettingDataAccess.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Model\Language.cs" />
     <Compile Include="Model\LimitedEnglish.cs" />
     <Compile Include="Model\LPGalleryCategory.cs" />
+    <Compile Include="Model\MealType.cs" />
     <Compile Include="Model\PersonEthnicity.cs" />
     <Compile Include="Model\PersonLanguage.cs" />
     <Compile Include="Model\PersonNationality.cs" />
