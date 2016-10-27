@@ -238,7 +238,7 @@ NAMESPACE('chlk', function (){
 
                     loginTimer = setTimeout(logoutHandler_, loginTimeOut);
 
-                    ria.dom.Dom().on('mousedown keydown keyup mousemove touchstart touchcancel touchmove scroll', function(node, event){
+                    ria.dom.Dom().on('mousedown keydown keyup mousemove touchstart touchcancel touchmove scroll useraction', function(node, event){
                         clearTimeout(loginTimer);
 
                         loginTimer = setTimeout(logoutHandler_, loginTimeOut);

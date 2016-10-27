@@ -164,7 +164,7 @@ var CHLK_API = function (window, document, $) {
                 notify && callback(clearEvent);
             }();
         }(document.body, function(firedEvent) {
-            postAction({firedEvt: firedEvent.type}, ChlkActionTypes.USER_ACTION, parentURL);
+            postAction({firedEvt: 'useraction'}, ChlkActionTypes.USER_ACTION, parentURL);
         });
     });
 
