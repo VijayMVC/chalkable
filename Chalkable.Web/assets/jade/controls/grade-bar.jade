@@ -1,0 +1,22 @@
+mixin doRender_(includeAll, topBarData, controller_, action_, prepend_)
+   -var gradeLevelsText = topBarData.getSelectedIds() || ''
+   -var currentGradeLevelsId = gradeLevelsText ? gradeLevelsText.split(',') : []
+   -var data = self.prepareModel(topBarData, includeAll)
+   -attributes.currentGradeLevelsId = currentGradeLevelsId
+   -attributes.fixedElementWidth = true
+   +LeftRightToolbar()(attributes).grades-bar
+      each item in data
+         -var id = item.getId()
+         -var isPressed = self.isPressed(item, currentGradeLevelsId)
+         -var currentIds = self.getCurrentIds(item, currentGradeLevelsId, isPressed)
+         -var params = [currentIds].concat(prepend_ || [])
+         +ActionLinkWithPrepend(controller_, action_, params)(
+            class = isPressed ? "pressed-can-click" : ""
+         ).button-link.item.grade-button
+            SPAN.text-container= item.getName()
+
+mixin GradesToolBar(topBarData, controller_, action_, prepend_)
+   +doRender_(false, topBarData, controller_, action_, prepend_)(attributes)
+
+mixin GradesToolBarWithAll(topBarData, controller_, action_, prepend_)
+   +doRender_(true, topBarData, controller_, action_, prepend_)(attributes)
