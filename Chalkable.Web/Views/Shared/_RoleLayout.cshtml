@@ -319,6 +319,8 @@
             var schoolYear = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.SCHOOL_YEAR));
             var years = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.YEARS));
             var schoolName = @ViewData.GetJsConstantValueOrNull(ViewConstants.SCHOOL_NAME);
+            var reportCardsEnabled = @ViewData.GetJsConstantValueOrNull(ViewConstants.REPORT_CARDS_ENABLED);
+            var loginTimeOut = @ViewData.GetJsConstantValueOrNull(ViewConstants.LOGIN_TIME_OUT);
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)

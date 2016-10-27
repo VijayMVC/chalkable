@@ -1,4 +1,4 @@
-﻿Create PROCEDURE [dbo].[spAdjustClassAnnouncementDates]
+﻿CREATE PROCEDURE [dbo].[spAdjustClassAnnouncementDates]
 	@ids   TInt32 ReadOnly,
 	@startDate datetime2,
 	@classId   int
@@ -32,6 +32,8 @@ Insert Into @toAdjust
 Declare @minAnnDate datetime2;
 Set		@minAnnDate = (Select Min([ExpiresDate]) From @toAdjust);
 
+print @minAnnDate
+
 --to save distance beween supp announcements
 Update @toAdjust
 Set [ExpiresDate] = DateAdd(d, DateDiff(d, @minAnnDate, [ExpiresDate]), @startDate)
@@ -49,7 +51,7 @@ Set		@schoolYearStartDate = (Select Min([Day]) From @classDays)
 --supplemental announcement out of school year
 Declare @annOutOfSchoolYearEndDate TInt32;
 Insert Into @annOutOfSchoolYearEndDate
-	Select [Id] From @toAdjust Where [ExpiresDate] > @schoolYearEndDate
+	Select [Id] From @toAdjust Where [ExpiresDate] is null or [ExpiresDate] > @schoolYearEndDate
 
 Declare @annOutOfSchoolYearStartDate TInt32;
 Insert Into @annOutOfSchoolYearStartDate
@@ -71,5 +73,6 @@ From @toAdjust t
 Where ClassAnnouncement.Id = t.Id
 
 select SisActivityId, ExpiresDate from @toAdjust
+
 
 GO

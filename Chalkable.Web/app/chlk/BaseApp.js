@@ -161,6 +161,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.YEARS, ArrayOf(Number));
                 this.saveInSession(session, ChlkSessionConstants.SIS_API_VERSION, String);
                 this.saveInSession(session, ChlkSessionConstants.SCHOOL_NAME, String);
+                this.saveInSession(session, ChlkSessionConstants.REPORT_CARDS_ENABLED, Boolean);
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
@@ -227,6 +228,22 @@ NAMESPACE('chlk', function (){
                 ria.templates.ConverterFactories().register(new chlk.ConvertersFactory());
 
                 var tooltipTimeOut;
+
+                if(window.loginTimeOut){
+                    var loginTimer, loginTimeOut = window.loginTimeOut * 1000;
+
+                    function logoutHandler_(){
+                        document.location.href = WEB_SITE_ROOT + 'User/LogOutWithRedirect.json';
+                    }
+
+                    loginTimer = setTimeout(logoutHandler_, loginTimeOut);
+
+                    ria.dom.Dom().on('mousedown keydown keyup mousemove touchstart touchcancel touchmove scroll useraction', function(node, event){
+                        clearTimeout(loginTimer);
+
+                        loginTimer = setTimeout(logoutHandler_, loginTimeOut);
+                    });
+                }
 
                 jQuery.fn.extend({setItemsChecked : function(value){
                     var jNode;

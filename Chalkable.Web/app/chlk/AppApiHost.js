@@ -119,6 +119,11 @@ NAMESPACE('chlk', function(){
 
                     break;
 
+                case 'userAction':
+                    ria.dom.Dom().trigger(data.firedEvt);
+
+                    break;
+
                 case 'shadeMe':
                 case 'popMe':
                     if ($iframe.$.parents('.app-wrapper-page').Dom().exists()) {

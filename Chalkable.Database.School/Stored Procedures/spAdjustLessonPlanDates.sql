@@ -63,7 +63,7 @@ Set		@schoolYearStartDate = (Select Min([day]) From @classDays)
 --Lps where EndDate is out of School Year end date
 Declare		@LPsOutOfSchoolYearEndDate TInt32;
 Insert Into @LPsOutOfSchoolYearEndDate
-	Select Id From @toAdjust Where EndDate > @schoolYearEndDate
+	Select Id From @toAdjust Where [EndDate] is null or EndDate > @schoolYearEndDate
 
 --Fixing End and Start date for announcement 
 --if it is out of school year end date
