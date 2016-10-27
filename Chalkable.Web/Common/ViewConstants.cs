@@ -70,5 +70,6 @@
         public const string USER_LOGIN = "UserLogin";
 
         public const string REPORT_CARDS = "ReportCards";
+        public const string REPORT_CARDS_ENABLED = "ReportCardsEnabled";
     }
 }

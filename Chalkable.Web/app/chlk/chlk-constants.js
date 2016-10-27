@@ -95,5 +95,6 @@ var ChlkSessionConstants = {
     TOPIC_BREADCRUMBS: 'topicBreadcrumbs',
     AB_STANDARD_LAST_ARGUMENTS: 'ABStandardLastArguments',
     STANDARD_LAST_ARGUMENTS: 'standardLastArguments',
-    TOPIC_LAST_ARGUMENTS: 'topicLastArguments'
+    TOPIC_LAST_ARGUMENTS: 'topicLastArguments',
+    REPORT_CARDS_ENABLED: 'reportCardsEnabled',
 };
