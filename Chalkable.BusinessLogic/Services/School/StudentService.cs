@@ -16,6 +16,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.StudentPanorama;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -304,7 +305,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var schoolYearIds = schoolYears.Where(x => studentSchoolYears.Any(y => y.Id == x.Id)).Select(x=>x.Id).ToList();
             
             var tasks = schoolYearIds.Select(syId => Task.Run(() => ServiceLocator.CalendarDateService.GetLastDays(syId, true, null, Context.NowSchoolYearTime))).ToList();
-            var studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
+            StudentPanorama studentPanorama = null;
+            if(schoolYearIds.Count > 0)
+                studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
 
             var days = (await Task.WhenAll(tasks)).SelectMany(x => x).OrderBy(x=>x.Day).ToList();
             return StudentPanoramaInfo.Create(studentPanorama, days);

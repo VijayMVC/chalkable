@@ -17,13 +17,13 @@ namespace Chalkable.BusinessLogic.Model.StudentPanorama
         {
             var res = new StudentPanoramaInfo{AllSchoolDays = days};
 
-            if (model.DailyAbsences != null)
+            if (model?.DailyAbsences != null)
                 res.DailyAbsences = StudentAbsenceInfo.Create(model.DailyAbsences.ToList(), model.PeriodAbsences?.ToList());
 
-            if (model.Infractions != null)
+            if (model?.Infractions != null)
                 res.Infractions = model.Infractions.Select(StudentInfractionInfo.Create).ToList();
 
-            if (model.StandardizedTests != null)
+            if (model?.StandardizedTests != null)
                 res.StandardizedTests = model.StandardizedTests.Select(StudentStandardizedTestInfo.Create).ToList();
             
             return res;

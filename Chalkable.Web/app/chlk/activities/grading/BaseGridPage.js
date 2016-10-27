@@ -358,12 +358,12 @@ NAMESPACE('chlk.activities.grading', function () {
                 activeCell.find('form').trigger('submit');
 
                 if(selectNext_ && !activeCell.hasClass('avg-value-container')){
-                    var nextCell = activeCell.next().find('.edit-cell');
+                    var nextCell = activeCell.next().find('.grade-info');
                     setTimeout(function(){
                         if(nextCell.exists())
                             nextCell.trigger('click');
                         else
-                            this.dom.trigger('click');
+                            activeCell.find('.grade-info').trigger('click');
                     }.bind(this), 1);
                 }
             },
@@ -423,7 +423,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             /* Grade value input events */
 
-            [ria.mvc.DomEventBind('contextmenu', '.value-input')],
+            /*[ria.mvc.DomEventBind('contextmenu', '.value-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeMouseDown(node, event){
                 var cell = node.parent('.grade-value');
@@ -444,7 +444,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     return false;
                 }
                 return true;
-            },
+            },*/
 
             [ria.mvc.DomEventBind('focus', '.value-input')],
             [[ria.dom.Dom, ria.dom.Event]],

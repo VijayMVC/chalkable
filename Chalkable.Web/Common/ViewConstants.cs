@@ -70,6 +70,7 @@
         public const string USER_LOGIN = "UserLogin";
 
         public const string REPORT_CARDS = "ReportCards";
+        public const string REPORT_CARDS_ENABLED = "ReportCardsEnabled";
 
         public const string LOGIN_TIME_OUT = "LoginTimeOut";
     }

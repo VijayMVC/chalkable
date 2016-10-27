@@ -139,7 +139,9 @@ namespace Chalkable.Web.Controllers
 
             var gradingComments = SchoolLocator.GradingCommentService.GetGradingComments();
             PrepareJsonData(GradingCommentViewData.Create(gradingComments), ViewConstants.GRADING_COMMMENTS);
-            
+
+            ViewData[ViewConstants.REPORT_CARDS_ENABLED] = MasterLocator.DistrictService.IsReportCardsEnabled();
+
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
                 district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip, Context.SCEnabled);

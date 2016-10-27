@@ -161,6 +161,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.YEARS, ArrayOf(Number));
                 this.saveInSession(session, ChlkSessionConstants.SIS_API_VERSION, String);
                 this.saveInSession(session, ChlkSessionConstants.SCHOOL_NAME, String);
+                this.saveInSession(session, ChlkSessionConstants.REPORT_CARDS_ENABLED, Boolean);
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
