@@ -56,6 +56,10 @@ mixin MealItemCell(mealItem, mealIndex, curIndex)
                                 each mealItem, mealIndex in item.mealItems
                                     -var curIndex = firstIndex + index * tableInfo.mealItems.length + mealIndex
                                     +MealItemCell(mealItem, mealIndex, curIndex)
+                    .grid-header.grid-row.total-row
+                        .cell.left-cell Total
+                        each item in tableInfo.mealItems
+                            .cell=item.getTotal()
         .x-window-footer.report-bottom
             BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
             BUTTON(type="submit").chlk-button.blue-button Save
