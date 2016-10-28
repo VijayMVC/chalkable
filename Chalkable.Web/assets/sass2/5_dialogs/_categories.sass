@@ -1,0 +1,57 @@
+.add-new-category-dialog
+  .saved-block
+    top: 21px
+    right: 40px
+    position: absolute
+
+  .box-checkbox
+    position: relative
+    z-index: 5
+    top: 4px
+
+    &.disabled
+      opacity: 0.5
+
+    + SPAN
+      margin-left: 5px
+
+  .action-checkbox.right
+    float: right
+
+  input[type=checkbox]
+    cursor: pointer
+
+  .buttons-container
+    text-align: center
+    padding: 10px 0
+    background: #F5F6F3
+
+  .dialog
+    width: 300px
+
+    .delete-btn
+      top: 10px
+      pointer-events: auto
+      right: 6px
+
+    .create-category
+      float: right
+      position: relative
+      left: 4px
+      padding: 0 6px
+      margin-right: 32px
+
+  .categories-cnt
+    overflow: auto
+    max-height: 400px
+
+  .category-cnt
+    padding: 10px
+    position: relative
+
+  .category-name
+    width: 190px
+
+    &:not(:focus)
+      border: none
+      +box-shadow(none)

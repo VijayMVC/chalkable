@@ -1,0 +1,289 @@
+.recipients-window
+  width: 956px
+
+  .le-link
+    color: #2c75ba
+    text-decoration: none
+
+  &.dialog
+    width: 1018px
+
+    .items-cnt
+      overflow-y: auto
+      height: 310px
+
+  .add-group
+    text-decoration: none
+    font-weight: 600
+    font-size: 14px
+
+  .chosen-container
+    &.chosen-with-drop
+      .chosen-single
+        div
+          b
+            background-position: -12px 4px
+
+      .chosen-drop
+        border: 1px solid #c8c7c3
+
+    .chosen-single
+      height: 32px
+      background: #fff
+      border-color: #c8c7c3
+
+      >DIV
+        +background(linear-gradient(top, #ffffff, #f2f1ed))
+        border-left: 1px solid #c8c7c3
+        width: 22px
+
+        b
+          background-position: 5px 6px
+
+  .action-bar
+    display: inline-block
+    margin-bottom: 28px
+    margin-top: 0
+
+  INPUT[type="text"]
+    line-height: 24px
+    border: 1px solid #c8c7c3
+    box-sizing: border-box
+    padding: 0 11px
+    font-style: italic
+
+  LABEL:not(.checkbox-label)
+    font-weight: bold
+    font-size: 12px
+    margin: 0 0 7px 2px
+    display: block
+
+  .left-block
+    LABEL:not(.checkbox-label)
+      display: inline-block
+      margin: 0 16px
+
+  .recipients-body
+    margin: 15px 32px 30px 30px
+
+  .group-name-cnt
+    margin-bottom: 25px
+
+    .name
+      width: 100%
+
+.group-people-selector
+  .buttons-container
+    text-align: right
+    margin-top: 20px
+
+  &.view-with-groups
+    .recipient-item
+      .recipient-check-cnt
+        display: none
+
+  &.select-without-groups, &.edit-without-groups
+    .empty-group
+      background: image-url("images2/common/empty-group.png") no-repeat 50% 50%
+
+  li.active-result
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+  .scroll-freezed
+    .items-cnt-2
+      padding-bottom: 25px
+
+      &::after
+        content: ' '
+        background: image-url("images2/loaders/horizontal.gif") center center no-repeat
+        position: absolute
+        height: 13px
+        width: 100%
+        bottom: 0
+        left: 0
+
+  .items-cnt
+    margin-right: -25px
+
+    .items-cnt-2
+      position: relative
+
+  .text-filter-cnt
+    position: relative
+
+    .search-with-right-icon-cnt
+      height: 29px
+      position: absolute
+      top: -61px
+      right: 0
+
+      INPUT
+        width: 191px
+
+  .filters-cnt
+    .filter-cnt
+      display: inline-block
+
+      &:not(:last-child)
+        margin-right: 20px
+
+    .sort-by-cnt .chosen-container
+      width: 140px !important
+
+    .school-cnt .chosen-container
+      width: 309px !important
+
+    .grade-level-cnt .chosen-container
+      width: 63px !important
+
+    .class-cnt .chosen-container
+      width: 174px !important
+
+    .program-cnt .chosen-container
+      width: 189px !important
+
+  .top-info-cnt
+    font-weight: bold
+    margin-bottom: 16px
+    position: relative
+
+    .center-block
+      position: absolute
+      left: 0
+      right: 0
+      z-index: 1
+      top: 0
+      text-align: center
+
+    .left-block, .right-block
+      position: relative
+      z-index: 2
+
+  .filters-cnt+.top-info-cnt
+    margin-top: 34px
+    padding-left: 10px
+
+  .items-4
+    .recipient-item
+      padding: 6px 10px
+      width: 200px
+      height: 48px
+      line-height: 40px
+
+      .group-icon
+        margin-top: 0
+
+      &:not(:nth-child(4n))
+        margin-right: 24px
+
+      &:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4))
+        margin-top: 17px
+
+  .items-3
+    .recipient-item
+      padding: 10px
+      width: 271px
+      height: 70px
+      line-height: 70px
+
+      &:not(:nth-child(3n))
+        margin-right: 39px
+
+      &:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3))
+        margin-top: 17px
+
+  .body-content:not(.active)
+    display: none
+
+  .recipient-item
+    display: inline-block
+    border: 1px solid #c8c7c3
+    border-radius: 5px
+    position: relative
+    vertical-align: top
+
+    .message-button
+      position: absolute
+      right: 11px
+      width: 28px
+      height: 20px
+      top: 50%
+      margin-top: -10px
+      background: image-url("images2/common/message.png") 0 0 no-repeat
+      +transition(opacity 0.2s)
+
+      &:not(:hover)
+        opacity: 0.2
+
+    .edit-group
+      position: absolute
+      right: 14px
+      top: 33px
+      width: 24px
+      height: 24px
+      +icons-24-sprite(arrow)
+
+    .students-count
+      position: absolute
+      line-height: 15px
+      font-size: 14px
+      font-weight: 600
+      color: #c1c1be
+      bottom: 6px
+      right: 9px
+
+    &.new
+      border-color: #1d8e17
+
+      .recipient-name b
+        color: #1d8e17
+
+      .group-icon
+        +icons-32-sprite(group-icon-green)
+
+    &>a
+      display: block
+
+    .inner-item
+      display: inline-block
+      vertical-align: middle
+
+    INPUT[type="checkbox"]
+      margin-right: 6px
+
+    .recipient-icon
+      margin-right: 13px
+      margin-left: 4px
+
+    .group-icon
+      width: 32px
+      height: 32px
+      +icons-32-sprite(group-icon)
+      margin-left: 8px
+      margin-top: -11px
+
+    .recipient-remove
+      position: absolute
+      top: 3px
+      right: 4px
+      +icons-24-sprite(small-remove, 0, -6px, -6px)
+      width: 12px
+      height: 12px
+      cursor: pointer
+
+      &:not(:hover)
+        opacity: 0.5
+
+    .recipient-name
+      width: 135px
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+      line-height: 19px
+
+      b
+        font-weight: bold
+        font-size: 14px
+        color: #2f7790
