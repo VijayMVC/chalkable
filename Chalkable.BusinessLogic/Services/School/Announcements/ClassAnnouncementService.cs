@@ -515,7 +515,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         ToClassId = x.CopyToSectionId
                     }).ToList();
 
-                fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u).CopyClassAnnouncementsToClass(sisActivityCopyRes,  Context.NowSchoolTime);
+                //TODO change it from dictionaty to CopyAnnouncementResult later
+                fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u)
+                    .CopyClassAnnouncementsToClass(sisActivityCopyRes, Context.NowSchoolTime)
+                    .ToDictionary(x => x.FromAnnouncementId, x => x.ToAnnouncementId);
+
                 AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator);
                 ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementsIds.Select(x => x.Value).ToList(), u);
 
@@ -565,7 +569,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                             ToClassId = x.CopyToSectionId
                         }).ToList();
 
-                    var resAnnIds = da.CopyClassAnnouncementsToClass(sisCopyResult, Context.NowSchoolYearTime).Select(x=>x.Value).ToList();
+                    var resAnnIds = da.CopyClassAnnouncementsToClass(sisCopyResult, Context.NowSchoolYearTime)
+                        .Select(x=>x.ToAnnouncementId).Distinct().ToList();
                     var attOwners = new ClassTeacherDataAccess(u).GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
 
                     AnnouncementAttachmentService.CopyAnnouncementAttachments(classAnnouncementId, attOwners, resAnnIds, u, ServiceLocator, ConnectorLocator);

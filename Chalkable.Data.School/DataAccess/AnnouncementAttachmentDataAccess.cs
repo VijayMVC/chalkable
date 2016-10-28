@@ -26,6 +26,9 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<AnnouncementAttachment> GetLastAttachments(IList<int> announcementIds, int count = int.MaxValue)
         {
+            if(announcementIds.Count == 0)
+                return new List<AnnouncementAttachment>();
+
             var annIdsStr = announcementIds.Select(x => x.ToString()).JoinString(",");
             var dbQuery = new DbQuery();
             var annRefField = $"{nameof (AnnouncementAttachment)}_{nameof(AnnouncementAttachment.AnnouncementRef)}";
