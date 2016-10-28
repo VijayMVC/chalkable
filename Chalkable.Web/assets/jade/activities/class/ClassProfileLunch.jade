@@ -8,7 +8,9 @@ mixin MealItemCell(mealItem, mealIndex, curIndex)
             name="lunchCounts." + curIndex + ".count",
             type="text",
             value=mealItem.getCount(),
-            data-index=curIndex
+            data-value=mealItem.getCount(),
+            data-index=curIndex,
+            readonly = lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
         ).meal-count-input
 
 -var clazz = self.getClazz()
@@ -19,8 +21,9 @@ mixin MealItemCell(mealItem, mealIndex, curIndex)
     +ProfileTopBar(self, 'lunch')
     +ActionForm('class', 'lunchSubmit').class-lunch-form
         +Hidden('classId', clazz.getId())
+        +ActionLink('class', 'lunchClear', clazz.getId(), lunchCountInfo.getDate()).cancel-link
         .top-date
-            +DatePicker('date', lunchCountInfo.getDate())(
+            +DatePickerWithIcon('date', lunchCountInfo.getDate())(
                 data-options={
                     showOtherMonths: true,
                     selectOtherMonths: true,
@@ -41,6 +44,8 @@ mixin MealItemCell(mealItem, mealIndex, curIndex)
                         each item, index in tableInfo.topTable
                             .grid-row
                                 .cell.left-cell=item.info.name || item.info.getDisplayName()
+                                    if item.type == chlk.templates.classes.LunchCountItemType.STAFF
+                                        .teacher-icon
                                 each mealItem, mealIndex in item.mealItems
                                     -var curIndex = index * tableInfo.mealItems.length + mealIndex
                                     +MealItemCell(mealItem, mealIndex, curIndex)
@@ -53,6 +58,9 @@ mixin MealItemCell(mealItem, mealIndex, curIndex)
                         each item, index in tableInfo.bottomTable
                             .grid-row
                                 .cell.left-cell=item.info.getDisplayName()
+                                    div(
+                                        data-stringalerts=item.info.getAlertsInfo().getStringAlerts()
+                                    ).alerts-icon.yellow.small.no-tooltip
                                 each mealItem, mealIndex in item.mealItems
                                     -var curIndex = firstIndex + index * tableInfo.mealItems.length + mealIndex
                                     +MealItemCell(mealItem, mealIndex, curIndex)
@@ -61,6 +69,6 @@ mixin MealItemCell(mealItem, mealIndex, curIndex)
                         each item in tableInfo.mealItems
                             .cell=item.getTotal()
         .x-window-footer.report-bottom
-            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
-            BUTTON(type="submit").chlk-button.blue-button Save
+            BUTTON(type="button", disabled).grey-button.lunch-count-btn.lunch-cancel=Msg.Cancel
+            BUTTON(type="submit", disabled).blue-button.lunch-count-btn Save
 

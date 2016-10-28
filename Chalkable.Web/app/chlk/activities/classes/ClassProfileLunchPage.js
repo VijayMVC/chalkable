@@ -13,7 +13,7 @@ NAMESPACE('chlk.activities.classes', function () {
             [ria.mvc.DomEventBind('keydown', '.meal-count-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function countKeyDown(node, event){
-                var lrub = [ria.dom.Keys.LEFT.valueOf(), ria.dom.Keys.RIGHT.valueOf(), ria.dom.Keys.UP.valueOf(), ria.dom.Keys.DOWN.valueOf()],
+                var lrub = [ria.dom.Keys.LEFT.valueOf(), ria.dom.Keys.RIGHT.valueOf(), ria.dom.Keys.UP.valueOf(), ria.dom.Keys.DOWN.valueOf(), ria.dom.Keys.ENTER.valueOf()],
                     value = node.getValue() || "";
                 if(lrub.indexOf(event.keyCode) > -1){
                     var currentIndex = node.getData('index'), nextIndex = -1,
@@ -22,6 +22,7 @@ NAMESPACE('chlk.activities.classes', function () {
 
                     switch(event.which){
                         case ria.dom.Keys.UP.valueOf(): nextIndex = currentIndex - mealsCount;break;
+                        case ria.dom.Keys.ENTER.valueOf(): event.preventDefault();
                         case ria.dom.Keys.DOWN.valueOf(): nextIndex = currentIndex + mealsCount;break;
                         case ria.dom.Keys.LEFT.valueOf(): if((currentIndex % mealsCount) && (node.getSelectedText() || node.getCursorPosition() == 0)) nextIndex = currentIndex - 1;break;
                         case ria.dom.Keys.RIGHT.valueOf(): if((currentIndex % mealsCount < mealsCount - 1) && (node.getSelectedText() || node.getCursorPosition() == value.length)) nextIndex = currentIndex + 1;break;
@@ -38,7 +39,7 @@ NAMESPACE('chlk.activities.classes', function () {
                     return;
                 }
 
-                if ([46, 8, 9, 27, 110, 190].indexOf(event.keyCode) !== -1 ||
+                /*if ([46, 8, 9, 27, 110, 190].indexOf(event.keyCode) !== -1 ||
                     (event.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
                     (event.keyCode >= 35 && event.keyCode <= 40)) {
                     return;
@@ -46,8 +47,51 @@ NAMESPACE('chlk.activities.classes', function () {
 
                 if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) && (event.keyCode < 96 || event.keyCode > 105) || value.length >= 2) {
                     event.preventDefault();
-                }
-            }
+                }*/
+            },
 
+            [ria.mvc.DomEventBind('change', '.meal-count-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function countChange(node, event){
+                var value = node.getValue(), iValue = parseInt(value, 10),
+                    btns = this.dom.find('.lunch-count-btn');
+                if(iValue != value || iValue < 0)
+                    node.setValue(0);
+                else
+                    if(iValue > 99)
+                        node.setValue(99);
+
+                if(node.getValue() != node.getData('value')){
+                    if(!node.hasClass('changed'))
+                        node.addClass('changed');
+                }else
+                    node.removeClass('changed');
+
+                if(this.dom.find('.meal-count-input.changed').count() > 0){
+                    btns.removeAttr('disabled');
+                    btns.setProp('disabled', false);
+                }else{
+                    btns.setAttr('disabled', 'disabled');
+                    btns.setProp('disabled', true);
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.lunch-cancel')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelClick(node, event){
+                this.view.ShowLeaveConfirmBox()
+                    .then(function (can_cancel) {
+                        if (can_cancel === true) {
+                            this.dom.find('.cancel-link').trigger('click');
+                        }
+                    }, this);
+            },
+
+            OVERRIDE, Object, function isReadyForClosing() {
+                if(this.dom.find('.meal-count-input.changed').count() > 0)
+                    return this.view.ShowLeaveConfirmBox();
+
+                return true;
+            }
         ]);
 });

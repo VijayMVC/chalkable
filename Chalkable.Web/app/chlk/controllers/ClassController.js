@@ -464,20 +464,29 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(result){
                         var model = result[1];
                         model.setLunchCountInfo(result[0]);
-                        return new chlk.models.classes.ClassProfileSummaryViewData(
+                        var resModel = new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
                             this.isAssignedToClass_(classId)
                         );
+                        this.getContext().getSession().set(ChlkSessionConstants.LUNCH_COUNT_MODEL, resModel);
+                        return resModel;
 
                     }, this);
 
                 return this.PushOrUpdateView(chlk.activities.classes.ClassProfileLunchPage, res);
             },
 
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            function lunchClearAction(classId, date_){
+                var resModel = this.getContext().getSession().get(ChlkSessionConstants.LUNCH_COUNT_MODEL, null);
+
+                return this.UpdateView(chlk.activities.classes.ClassProfileLunchPage, ria.async.DeferredData(resModel, 100));
+            },
+
             function lunchSubmitAction(data){
                 var res = this.classService.updateLunchCount(data)
                     .then(function(model){
-                        this.BackgroundNavigate('class', 'lunch', [data.classId, data.date]);
+                        this.BackgroundNavigate('class', 'lunch', [data.classId, data.date.replace(/\//g, '-')]);
                         return ria.async.BREAK;
                     }, this)
 
