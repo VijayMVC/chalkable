@@ -1,0 +1,22 @@
+-var groups = self.getSelectedGroups() || []
+-var students = self.getSelectedStudents() || []
+
++Hidden('groupIds', (self.getGroupIds() || []).join(',')).selected-groups
++Hidden('studentIds', (self.getStudentIds() || []).join(',')).selected-students
++Hidden('selectedItems', self.getSelectedItemsObj())
+
+.items-cnt(class = (!groups.length && !students.length) ? "empty-group" : "")
+    .items-cnt-2
+        each group in groups
+            .recipient-item.group-item.selected(data-id=group.getId().valueOf())
+                .recipient-icon.group-icon.inner-item
+                .recipient-name.inner-item(data-tooltip-type="overflow", data-tooltip=group.getName())
+                    b.group-name=group.getName()
+                .recipient-remove.remove-group(data-type=chlk.models.recipients.RecipientTypeEnum.GROUP.valueOf(), data-id=group.getId().valueOf())
+        each student in students
+            .recipient-item.student-item.selected
+                .recipient-icon.student-icon.inner-item
+                    +PersonImg(student, 47)
+                .recipient-name.inner-item(data-tooltip-type="overflow", data-tooltip=student.getDisplayName())
+                    b=student.getDisplayName()
+                .recipient-remove.remove-student(data-type=chlk.models.recipients.RecipientTypeEnum.STUDENT.valueOf(), data-id=student.getId().valueOf())
