@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[spAdjustClassAnnouncementDates]
+﻿Create PROCEDURE [dbo].[spAdjustClassAnnouncementDates]
 	@ids   TInt32 ReadOnly,
 	@startDate datetime2,
 	@classId   int
@@ -9,14 +9,9 @@ Set		@schoolYearId = (Select SchoolYearRef From Class Where Id = @classId);
 
 --need to get all class days, to obtain right result
 --when start date is out of begining of School Year
-Declare @classDays table ( [Day] datetime2 );
+Declare @classDays TDate;
 Insert Into @classDays
-	Select Distinct [Day] From [Date]
-	Where SchoolYearRef = @schoolYearId 
-		  And IsSchoolDay = 1 
-		  And Exists(Select * From ClassPeriod Where ClassPeriod.DayTypeRef = [Date].DayTypeRef And ClassPeriod.ClassRef = @classId)
-		  --And [Day] >= @startDate
-	Order By [Day]
+	exec spGetClassDays @classId
 
 Declare @toAdjust table
 (
@@ -45,7 +40,7 @@ Set [ExpiresDate] =(Select Min([Day]) From @classDays Where [Day] >= [ExpiresDat
 --Getting last school day of School Year
 Declare @schoolYearEndDate datetime2;
 Declare @schoolYearStartDate datetime2;
-Set		@schoolYearEndDate   = (Select Max([day]) From @classDays)
+Set		@schoolYearEndDate   = (Select Max([Day]) From @classDays)
 Set		@schoolYearStartDate = (Select Min([Day]) From @classDays)
 
 --supplemental announcement out of school year

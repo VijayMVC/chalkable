@@ -8,13 +8,9 @@ As
 Declare @schoolYearId int;
 Set		@schoolYearId = (Select SchoolYearRef From Class Where Id = @classId);
 
-Declare @classDays table ( [Day] datetime2 );
+Declare @classDays TDate;
 Insert Into @classDays
-	Select Distinct [Day] From [Date]
-	Where SchoolYearRef = @schoolYearId and IsSchoolDay = 1 
-		  And Exists(Select * From ClassPeriod Where ClassPeriod.DayTypeRef = [Date].DayTypeRef And ClassPeriod.ClassRef = @classId)
-		  And [Day] >= @startDate
-	Order by [Day]
+	exec spGetClassDays @classId
 
 Declare @toAdjust table
 (
@@ -57,8 +53,8 @@ From @toAdjust lp
 --Getting last school day of School Year
 Declare @schoolYearEndDate datetime2;
 Declare @schoolYearStartDate datetime2;
-Set		@schoolYearEndDate = (Select Max([day]) From @classDays)
-Set		@schoolYearStartDate = (Select Min([day]) From @classDays)
+Set		@schoolYearEndDate = (Select Max([Day]) From @classDays)
+Set		@schoolYearStartDate = (Select Min([Day]) From @classDays)
 
 --Lps where EndDate is out of School Year end date
 Declare		@LPsOutOfSchoolYearEndDate TInt32;

@@ -9,14 +9,9 @@ Set		@schoolYearId = (Select SchoolYearRef From Class Where Id = @classId);
 
 --need to get all class days, to obtain right result
 --when start date is out of begining of School Year
-Declare @classDays table ( [Day] datetime2 );
+Declare @classDays TDate;
 Insert Into @classDays
-	Select Distinct [Day] From [Date]
-	Where SchoolYearRef = @schoolYearId 
-		  And IsSchoolDay = 1 
-		  And Exists(Select * From ClassPeriod Where ClassPeriod.DayTypeRef = [Date].DayTypeRef And ClassPeriod.ClassRef = @classId)
-		  --And [Day] >= @startDate
-	Order By [Day]
+	exec spGetClassDays @classId
 
 Declare @toAdjust table
 (
