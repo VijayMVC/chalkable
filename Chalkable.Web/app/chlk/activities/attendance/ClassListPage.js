@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.attendance.BasePostAttendancePage');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.attendance.ClassAttendanceTpl');
 REQUIRE('chlk.templates.attendance.ClassList');
 REQUIRE('chlk.templates.common.InfoMsg');
@@ -11,14 +11,16 @@ NAMESPACE('chlk.activities.attendance', function () {
     /** @class chlk.activities.attendance.ClassListPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
+        [ria.mvc.ActivityGroup('Attendance')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.ClassList)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassList, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassListPeopleTpl, 'sort', '.people-list-container' , ria.mvc.PartialUpdateRuleActions.Replace)],
-        'ClassListPage', EXTENDS(chlk.activities.attendance.BasePostAttendancePage), [
+        'ClassListPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
 
             function $(){
                 BASE();
+                this._needPopUp = false;
                 this._typesEnum = chlk.models.attendance.AttendanceTypeEnum;
                 this._comboTimer = null;
                 this._gridEvents = chlk.controls.GridEvents;
@@ -28,6 +30,21 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this._classAttendances = null;
                 this._currentStudentAtt = null;
                 this._canChangeReasons = null;
+                this._currentDate = null;
+            },
+
+            OVERRIDE, Object, function isReadyForClosing() {
+                if(this._needPopUp){
+                    this._currentDate && $('.tb-date-picker').datepicker('setDate', this._currentDate);
+                    return this.view.ShowLeaveConfirmBox()
+                }
+                return true;
+            },
+
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                this._currentDate = model.getDate().getDate();
+                this._needPopUp = false;
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendanceTpl)],

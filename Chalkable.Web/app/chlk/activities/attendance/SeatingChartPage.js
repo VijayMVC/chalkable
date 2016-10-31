@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.attendance.BasePostAttendancePage');
+REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.attendance.SeatingChartTpl');
 REQUIRE('chlk.templates.attendance.SeatingChartPeopleTpl');
 REQUIRE('chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl');
@@ -137,19 +137,26 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.SeatingChartTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
-        'SeatingChartPage', EXTENDS(chlk.activities.attendance.BasePostAttendancePage), [
+        'SeatingChartPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             function $(){
                 BASE();
+                this._needPopUp = false;
                 needChartPopUp = false;
-                this._submitFormSelector = '.save-attendances-form';
                 this._canChangeReasons = null;
             },
 
-            [[ria.dom.Dom]],
+            /*[[ria.dom.Dom]],
             OVERRIDE, function tryToLeave(node){
                 if(this._needPopUp && !node.parent(this._submitFormSelector).exists() || needChartPopUp && !node.is('#submit-chart')){
                     this.showLeavePopUp(node, needChartPopUp);
                     return false;
+                }
+                return true;
+            },*/
+
+            OVERRIDE, Object, function isReadyForClosing() {
+                if(this._needPopUp || needChartPopUp){
+                    return this.view.ShowLeaveConfirmBox();
                 }
                 return true;
             },
@@ -504,6 +511,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
+                this._needPopUp = false;
                 var attModel = this.getAttendancesModel(model);
                 this._canChangeReasons = attModel.isAbleChangeReasons();
                 this.setAbleRePost(attModel.isAbleRePost());
@@ -542,10 +550,10 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             },
 
-            OVERRIDE, function leaveClick_(node){
+            /*OVERRIDE, function leaveClick_(node){
                 BASE(node);
                 needChartPopUp = false;
-            },
+            },*/
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();

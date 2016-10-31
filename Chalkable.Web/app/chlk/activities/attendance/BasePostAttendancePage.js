@@ -18,7 +18,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this._submitFormSelector = '.set-attendance-list-form';
             },
 
-            function datePickerHandler(event){
+            /*function datePickerHandler(event){
                 var target = new ria.dom.Dom(event.target);
                 if(target.is('.ui-state-default') || (target.is('td') && target.find('>.ui-state-default').exists()))
                     if(!this.tryToLeave(target)){
@@ -26,9 +26,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                         event.stopPropagation();
                         return false;
                     }
-            },
+            },*/
 
-            [[ria.dom.Dom, Boolean]],
+            /*[[ria.dom.Dom, Boolean]],
             function showLeavePopUp(node, chart_){
                 var buttons = [{
                     text: Msg.Leave_anyways,
@@ -74,26 +74,26 @@ NAMESPACE('chlk.activities.attendance', function () {
             function removeLeavePopUp(){
                 new ria.dom.Dom('#chlk-overlay, #chlk-dialogs').addClass('x-hidden');
                 new ria.dom.Dom('#chlk-dialogs').find('.info-msg-dialog').remove();
-            },
+            },*/
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 this._needPopUp = false;
-                var that = this;
+                /*var that = this;
                 new ria.dom.Dom('#page').on('click.leave', '.action-link:not(.pressed):not(#all-present-link)', function(node, event){
                     return that.tryToLeave(node);
                 });
 
 
-                document.addEventListener('click', this.datePickerHandler, true);
+                document.addEventListener('click', this.datePickerHandler, true);*/
             },
 
-            OVERRIDE, VOID, function onStop_() {
+            /*OVERRIDE, VOID, function onStop_() {
                 BASE();
                 new ria.dom.Dom('#page').off('click.leave', '.action-link:not(.class-button)');
                 //this.dom.find('.class-button:not(.pressed)').off('click.leave');
                 document.removeEventListener('click', this.datePickerHandler, true);
-            },
+            },*/
 
             [[ria.dom.Dom]],
             function tryToLeave(node){

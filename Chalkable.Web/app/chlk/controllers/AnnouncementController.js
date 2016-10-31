@@ -588,7 +588,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addClassAnnouncementAction(classId_, announcementTypeId_, date_, noDraft_) {
-            this.getView().reset();
+            //this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
             this.cacheAnnouncementType(chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
             var classes = this.classService.getClassesForTopBarSync();
@@ -644,7 +644,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
-            this.getView().reset();
+            //this.getView().reset();
             this.getView().pushD(new chlk.activities.lib.PendingActionDialog(), ria.async.Future.$fromData({}));
             this.getContext().getSession().set('classInfo', null);
             return this.announcementService
@@ -850,7 +850,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, Number]],
         function lessonPlanAction(classId_) {
-            this.getView().reset();
+            //this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
             var result = ria.async.wait([
                     this.lessonPlanService.addLessonPlan(classId_),
@@ -877,7 +877,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
         function supplementalAnnouncementAction(classId_, date_, studentIds_) {
-            this.getView().reset();
+            //this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
             var result =
                 ria.async.wait(
@@ -1309,7 +1309,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function viewAction(announcementId, announcementType_) {
-            this.getView().reset();
+            //this.getView().reset();
             var result = this.announcementService
                 .getAnnouncement(announcementId, announcementType_)
                 .attach(this.validateResponse_())
@@ -1359,7 +1359,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function viewDistrictAdminAction(announcementId, announcementType_) {
-            this.getView().reset();
+            //this.getView().reset();
 
             var result = ria.async.wait([
                     this.announcementService.getAnnouncement(announcementId, announcementType_),

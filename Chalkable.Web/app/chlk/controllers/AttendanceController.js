@@ -485,7 +485,8 @@ NAMESPACE('chlk.controllers', function (){
                     return model;
                 }, this);
 
-            return this.PushOrUpdateView(chlk.activities.attendance.ClassListPage, result, byPostButton_ ? 'saved' : '');
+            return byPostButton_ ? this.UpdateView(chlk.activities.attendance.ClassListPage, result, byPostButton_ ? 'saved' : ''):
+                this.PushView(chlk.activities.attendance.ClassListPage, result);
         },
 
         [chlk.controllers.SidebarButton('attendance')],
