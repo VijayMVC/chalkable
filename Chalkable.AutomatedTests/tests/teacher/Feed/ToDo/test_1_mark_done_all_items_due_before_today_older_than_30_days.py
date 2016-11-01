@@ -23,7 +23,7 @@ class TestMarkItems_All_DueBeforeToday_OlderThan30days(BaseTestCase):
         self.teacher.post_json('/Announcement/Done.json?', data={'option': option})
 
         list_items_json_unicode = self.teacher.get_json(
-            '/Feed/List.json?start=' + str(start) + '&classId=&complete=false&count=' + str(count))
+            '/Feed/List.json?' + 'start=' + str(start) + '&classId=' + '&complete=' + 'False' + '&count=' + str(count))
         dictionary_verify_annoucementviewdatas_all = list_items_json_unicode['data']['annoucementviewdatas']
 
         if option == 3:
