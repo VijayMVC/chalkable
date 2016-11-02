@@ -146,12 +146,13 @@ namespace Chalkable.BusinessLogic.Model
         public bool HasSysAdminSettings { get; set; }
         public bool HasDistrictAdminSettings { get; set; }
         public bool HasStudentProfile { get; set; }
+        public bool HasPanoramaView { get; set; }
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
         public bool ProvidesRecommendedContent { get; set; }
         public static ApplicationAccessInfo Create(bool hasStudentMyApps, bool hasTeacherMyApps, bool hasAdminMyApps, bool hasParentMyApps
             , bool canAttach, bool showInGradeView, bool hasTeacherExternalAttach, bool hasStudentExternalAttach, bool hasAdminExternalAttach,
-            bool hasSysAdminSettings, bool hasDistrictAdminSettings, bool hasStudentProfile, bool providesRecommendedContent)
+            bool hasSysAdminSettings, bool hasDistrictAdminSettings, bool hasStudentProfile, bool providesRecommendedContent, bool hasPanoramaView)
         {
             return new ApplicationAccessInfo
             {
@@ -165,6 +166,7 @@ namespace Chalkable.BusinessLogic.Model
                 HasSysAdminSettings = hasSysAdminSettings,
                 HasDistrictAdminSettings = hasDistrictAdminSettings,
                 HasStudentProfile = hasStudentProfile,
+                HasPanoramaView = hasPanoramaView,
                 CanAttach = canAttach,
                 ShowInGradeView = showInGradeView,
                 ProvidesRecommendedContent =  providesRecommendedContent
@@ -186,6 +188,7 @@ namespace Chalkable.BusinessLogic.Model
                 HasSysAdminSettings = application.HasSysAdminSettings,
                 HasDistrictAdminSettings = application.HasDistrictAdminSettings,
                 HasStudentProfile = application.HasStudentProfile,
+                HasPanoramaView = application.HasPanoramaView,
                 ShowInGradeView = application.ShowInGradeView,
                 ProvidesRecommendedContent = application.ProvidesRecommendedContent
             };

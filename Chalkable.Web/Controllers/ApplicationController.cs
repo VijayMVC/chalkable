@@ -345,6 +345,27 @@ namespace Chalkable.Web.Controllers
             return Json(BaseApplicationViewData.Create(apps));
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult ListForPanorama()
+        {
+            var allApps = MasterLocator.ApplicationService.GetApplications(live: true)
+                         .Where(x => x.HasPanoramaView)
+                         .Select(BaseApplicationViewData.Create)
+                         .ToList();
+            if (ApplicationSecurity.HasAssessmentEnabled(Context) && Context.Claims.HasPermission(ClaimInfo.ASSESSMENT_ADMIN))
+            {
+                var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
+                if (assessement != null && assessement.HasDistrictAdminSettings && !allApps.Exists(x => x.Id == assessement.Id))
+                    allApps.Add(BaseApplicationViewData.Create(assessement));
+            }
+            else
+            {
+                var assessmentId = SchoolLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId();
+                allApps = allApps.Where(x => x.Id != assessmentId).ToList();
+            }
+            return Json(allApps);
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult UpdateStudentAnnouncementApplicationMeta(int announcementApplicationId, int studentId, string text)
         {

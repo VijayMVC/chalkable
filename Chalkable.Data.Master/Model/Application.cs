@@ -7,8 +7,6 @@ namespace Chalkable.Data.Master.Model
 {
     public class Application
     {
-
-
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -45,6 +43,7 @@ namespace Chalkable.Data.Master.Model
         public bool HasSysAdminSettings { get; set; }
         public bool HasDistrictAdminSettings { get; set; }
         public bool HasStudentProfile { get; set; }
+        public bool HasPanoramaView { get; set; }
         public bool ProvidesRecommendedContent { get; set; }
         public bool IsTrustedApp { get; set; }
 
