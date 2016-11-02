@@ -363,6 +363,9 @@ namespace Chalkable.Web.Controllers
                 var assessmentId = SchoolLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId();
                 allApps = allApps.Where(x => x.Id != assessmentId).ToList();
             }
+            foreach (var app in allApps)
+                app.AccessToken = MasterLocator.ApplicationService.GetAccessToken(app.Id, ChalkableAuthentication.GetSessionKey());
+            
             return Json(allApps);
         }
 
