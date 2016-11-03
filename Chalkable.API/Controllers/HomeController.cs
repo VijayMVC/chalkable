@@ -14,7 +14,8 @@ namespace Chalkable.API.Controllers
     {
         [AllowCorsPolicy]
         public virtual async Task<ActionResult> Index(string mode, string token, string apiRoot, int? announcementApplicationId,
-            int? studentId, int? announcementId, int? announcementType, int? attributeId, int? start, int? count, string contentId)
+            int? studentId, int? announcementId, int? announcementType, int? attributeId, int? start, int? count, string contentId
+            ,int? classId, int? schoolId)
         {
 
             if (string.IsNullOrWhiteSpace(apiRoot))
@@ -62,7 +63,7 @@ namespace Chalkable.API.Controllers
             CurrentUser = await GetCurrentUser(mode);
         
             return await ResolveAction(mode, announcementApplicationId, studentId, announcementId, announcementType,
-                attributeId, StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode), contentId);
+                attributeId, StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode), contentId, classId, schoolId);
         }
 
 
@@ -188,6 +189,6 @@ namespace Chalkable.API.Controllers
 
         protected abstract Task<ActionResult> ResolveAction(string mode, int? announcementApplicationId,
             int? studentId, int? announcementId, int? announcementType, int? attributeId,
-            IEnumerable<StandardInfo> standards, string contentId);
+            IEnumerable<StandardInfo> standards, string contentId, int? classId, int? schoolId);
     }
 }

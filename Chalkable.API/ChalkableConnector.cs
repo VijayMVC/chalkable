@@ -20,6 +20,7 @@ namespace Chalkable.API
         public StandardsEndpoint Standards => new StandardsEndpoint(this);
         public CalendarEndpoint Calendar => new CalendarEndpoint(this);
         public AttendanceEndpoint Attendance => new AttendanceEndpoint(this);
+        public PanoramaEndpoint Panorama => new PanoramaEndpoint(this);
 
         public async Task<T> Get<T>(string endpoint)
         {

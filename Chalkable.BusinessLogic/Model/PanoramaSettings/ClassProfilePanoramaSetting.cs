@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Model.PanoramaSettings
 {

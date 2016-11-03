@@ -1,4 +1,6 @@
-﻿@{
+﻿
+@model Chalkable.Api.SampleApp.Models.DefaultJsonViewData
+@{
     ViewBag.Title = "App";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -6,6 +8,13 @@
 <div>
     <h3>Person Data</h3><br/>
     <pre> @ViewBag.CurrentUser.JsonData</pre>
+    
+    @if (Model != null)
+    {
+        <h3>Other Data</h3><br />
+        <pre> @Model.JsonData</pre>
+    }
+
 </div>
 
 

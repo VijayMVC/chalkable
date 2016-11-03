@@ -33,6 +33,8 @@ namespace Chalkable.API
         public const string PROFILE_VIEW_MODE = "profileview";
         public const string SETTINGS_MODE = "settingsview";
         public const string STUDENT_PROFILE_MODE = "studentprofileview";
+        public const string CLASS_PANORAMA_VIEW = "classpanoramaview";
+        public const string SCHOOL_PANORAMA_VIEW = "schoolpanoramaview";
         public const string CONTENT_QUERY = "content-query";
         public const string ANNOUNCEMENT_APPLICATION_SUBMIT = "announcement-application-submit";
         public const string ANNOUNCEMENT_APPLICATION_REMOVE = "announcement-application-remove";
