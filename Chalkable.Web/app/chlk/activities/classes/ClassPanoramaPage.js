@@ -124,6 +124,12 @@ NAMESPACE('chlk.activities.classes', function () {
             OVERRIDE, VOID, function onRefresh_(model) {
                 BASE(model);
                 this.updateChartsSize_();
+                this.dom.find('iframe').$
+                    .load(function () {
+                        this.ready = false;
+                        this.dom.find('iframe').parent()
+                            .removeClass('partial-update');
+                    }.bind(this))
             },
 
             [[Object, String]],

@@ -49,6 +49,9 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.SchoolYearService, 'schoolYearService',
 
+            [ria.mvc.Inject],
+            chlk.services.ApplicationService, 'appsService',
+
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
                 var result = ria.async.wait([
@@ -347,7 +350,28 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.ClassId]],
             function panoramaAction(classId){
-                var result = this.getPanorama_(classId);
+                var result = ria.async.wait([
+                    this.classService.getPanorama(classId),
+                    this.appsService.getListForPanorama()
+                ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var model = result[0], apps = result[1];
+                        apps.forEach(function(app){
+                            var viewUrl = app.getUrl() + '?mode=classpanoramaview&classId=' + classId.valueOf()
+                                + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                                + '&token=' + encodeURIComponent(app.getAccessToken());
+                            app.setViewUrl(viewUrl);
+                        });
+                        model.setApps(apps || [])
+                        var years = this.getContext().getSession().get(ChlkSessionConstants.YEARS, []);
+                        model.setYears(years);
+                        model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
+                        return new chlk.models.classes.ClassProfileSummaryViewData(
+                            this.getCurrentRole(), model, this.getUserClaims_(),
+                            this.isAssignedToClass_(classId)
+                        );
+                    }, this);
 
                 this.userTrackingService.viewClassPanorama();
 

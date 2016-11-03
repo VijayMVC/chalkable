@@ -50,6 +50,10 @@ NAMESPACE('chlk.services', function () {
                     })
             },
 
+            ria.async.Future, function getListForPanorama() {
+                return this.get('Application/ListForPanorama.json', ArrayOf(chlk.models.apps.ApplicationForPanoramaViewData), {})
+            },
+
             ria.async.Future, function getExternalAttachApps() {
                 return this.get('Application/ExternalAttachApps.json', ArrayOf(chlk.models.apps.Application), {
                         start: 0,

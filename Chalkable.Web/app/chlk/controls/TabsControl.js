@@ -21,7 +21,7 @@ NAMESPACE('chlk.controls', function () {
                 var parent = node.parent('.tabs-block'), tab = node.getData('tab');
                 parent.find('.active').removeClass('active');
                 node.addClass('active');
-                parent.find('.chart-content[data-tab=' + tab + ']').addClass('active');
+                parent.find('.tab-content[data-tab=' + tab + ']').addClass('active');
                 parent.trigger(chlk.controls.TabEvents.TAB_CHANGED.valueOf());
             }
         ]);
