@@ -83,7 +83,8 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 Count = lunchCount.Count,
                 Guest = !lunchCount.StudentId.HasValue && !lunchCount.StaffId.HasValue,
-                PersonId = lunchCount.StaffId ?? lunchCount.StudentId
+                PersonId = lunchCount.StaffId ?? lunchCount.StudentId,
+                IsAbsent = lunchCount.IsAbsent
             };
         }
 

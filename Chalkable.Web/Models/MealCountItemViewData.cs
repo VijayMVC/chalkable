@@ -9,6 +9,7 @@ namespace Chalkable.Web.Models
         public int Count { get; set; }
         public int? PersonId { get; set; }
         public bool Guest { get; set; }
+        public bool IsAbsent { get; set; }
 
         public static MealCountItemViewData Create(MealCountItem mealCountItem)
         {
@@ -16,7 +17,8 @@ namespace Chalkable.Web.Models
             {
                 Count = mealCountItem.Count,
                 PersonId = mealCountItem.PersonId,
-                Guest = mealCountItem.Guest
+                Guest = mealCountItem.Guest,
+                IsAbsent = mealCountItem.IsAbsent
             };
         }
 
