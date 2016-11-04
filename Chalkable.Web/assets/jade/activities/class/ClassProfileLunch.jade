@@ -1,4 +1,4 @@
-mixin MealItemCell(mealItem, mealIndex, curIndex)
+mixin MealItemCell(mealItem, mealIndex, curIndex, readonly)
     .cell.meal-item-td
         +Hidden("lunchCounts." + curIndex + ".staffId", (mealItem.type == chlk.templates.classes.LunchCountItemType.STAFF) ? mealItem.info.getId().valueOf() : null)
         +Hidden("lunchCounts." + curIndex + ".studentId", (mealItem.type == chlk.templates.classes.LunchCountItemType.STUDENT) ? mealItem.info.getId().valueOf() : null)
@@ -10,7 +10,7 @@ mixin MealItemCell(mealItem, mealIndex, curIndex)
             value=mealItem.getCount(),
             data-value=mealItem.getCount(),
             data-index=curIndex,
-            readonly = lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
+            readonly = readonly || lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
         ).meal-count-input
 
 -var clazz = self.getClazz()
@@ -58,12 +58,14 @@ mixin MealItemCell(mealItem, mealIndex, curIndex)
                         each item, index in tableInfo.bottomTable
                             .grid-row
                                 .cell.left-cell=item.info.getDisplayName()
+                                    if item.info.isAbsent()
+                                        .absent-icon
                                     div(
                                         data-stringalerts=item.info.getAlertsInfo().getStringAlerts()
                                     ).alerts-icon.yellow.small.no-tooltip
                                 each mealItem, mealIndex in item.mealItems
                                     -var curIndex = firstIndex + index * tableInfo.mealItems.length + mealIndex
-                                    +MealItemCell(mealItem, mealIndex, curIndex)
+                                    +MealItemCell(mealItem, mealIndex, curIndex, item.info.isAbsent())
                     .grid-header.grid-row.total-row
                         .cell.left-cell Total
                         each item in tableInfo.mealItems

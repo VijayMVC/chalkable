@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.models.people.User');
+REQUIRE('chlk.models.people.UserForLunchViewData');
 REQUIRE('chlk.models.lunchCount.MealItem');
 
 NAMESPACE('chlk.models.lunchCount', function () {
@@ -11,7 +11,7 @@ NAMESPACE('chlk.models.lunchCount', function () {
     CLASS(UNSAFE,
         'LunchCountGrid', IMPLEMENTS(ria.serialize.IDeserializable),  [
             VOID, function deserialize(raw) {
-                this.students = SJX.fromArrayOfDeserializables(raw.students, chlk.models.people.User);
+                this.students = SJX.fromArrayOfDeserializables(raw.students, chlk.models.people.UserForLunchViewData);
                 this.staffs = SJX.fromArrayOfDeserializables(raw.staffs, chlk.models.people.User);
                 this.mealItems = SJX.fromArrayOfDeserializables(raw.mealitems, chlk.models.lunchCount.MealItem);
                 this.classId = SJX.fromValue(raw.classid, Number);
@@ -19,7 +19,7 @@ NAMESPACE('chlk.models.lunchCount', function () {
                 this.includeGuest = SJX.fromValue(raw.includeguest, Boolean);
             },
 
-            ArrayOf(chlk.models.people.User), 'students',
+            ArrayOf(chlk.models.people.UserForLunchViewData), 'students',
             ArrayOf(chlk.models.people.User), 'staffs',
             ArrayOf(chlk.models.lunchCount.MealItem), 'mealItems',
             Number, 'classId',
