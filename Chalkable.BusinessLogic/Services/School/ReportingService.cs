@@ -1,31 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.Master;
-using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.BusinessLogic.Services.Reporting.ReportingGenerators;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.Data.School.Model.Announcements;
-using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model.Reports;
-using Chalkable.StiConnector.Connectors.Model.Reports.ReportCards;
-using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
