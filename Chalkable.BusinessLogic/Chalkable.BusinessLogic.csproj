@@ -239,6 +239,7 @@
     <Compile Include="Model\StudentDetailsInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />
     <Compile Include="Model\StudentHealthFormInfo.cs" />
+    <Compile Include="Model\StudentLunchCount.cs" />
     <Compile Include="Model\StudentPanorama\StudentAbsenceInfo.cs" />
     <Compile Include="Model\StudentPanorama\StudentInfractionInfo.cs" />
     <Compile Include="Model\StudentPanorama\StudentPanoramaInfo.cs" />

@@ -30,7 +30,6 @@ namespace Chalkable.BusinessLogic.Services.School
             var lunchCountGrid = new LunchCountGrid();
 
             var students = ServiceLocator.StudentService.GetClassStudents(classId, null).OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
-            lunchCountGrid.Students = students;
 
             var currentClass = ServiceLocator.ClassService.GetById(classId);
 
@@ -47,6 +46,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var mealTypes = DoRead(u => new MealTypeDataAccess(u).GetAll()).OrderBy(x => x.Name);
 
             await lunchCounts;
+
+            lunchCountGrid.Students = students.Select(student => StudentLunchCount.Create(student, lunchCounts.Result.FirstOrDefault(x => x.StudentId == student.Id)?.IsAbsent)).ToList();
 
             foreach (var mealType in mealTypes)
             {
@@ -83,8 +84,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 Count = lunchCount.Count,
                 Guest = !lunchCount.StudentId.HasValue && !lunchCount.StaffId.HasValue,
-                PersonId = lunchCount.StaffId ?? lunchCount.StudentId,
-                IsAbsent = lunchCount.IsAbsent
+                PersonId = lunchCount.StaffId ?? lunchCount.StudentId
             };
         }
 
