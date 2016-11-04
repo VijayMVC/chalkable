@@ -152,6 +152,7 @@
     <Compile Include="Controllers\BaseSampleAppController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PanoramaController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\SysAdminController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />

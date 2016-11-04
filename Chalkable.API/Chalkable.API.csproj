@@ -67,6 +67,7 @@
     <Compile Include="Endpoints\Base.cs" />
     <Compile Include="Endpoints\CalendarEndpoint.cs" />
     <Compile Include="Endpoints\GradingEndpoint.cs" />
+    <Compile Include="Endpoints\PanoramaEndpoint.cs" />
     <Compile Include="Endpoints\PersonEndpoint.cs" />
     <Compile Include="Endpoints\StandardsEndpoint.cs" />
     <Compile Include="Endpoints\StudyCenterEndpoint.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Models\CoreRole.cs" />
     <Compile Include="Models\CoreRoles.cs" />
     <Compile Include="Models\IntList.cs" />
+    <Compile Include="Models\Panorama\ClassPanorama.cs" />
     <Compile Include="Models\PersonClaim.cs" />
     <Compile Include="Models\SchoolInfo.cs" />
     <Compile Include="Models\SchoolPerson.cs" />

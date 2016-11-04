@@ -20,7 +20,9 @@ namespace Chalkable.Api.SampleApp.Controllers
             , int? announcementType
             , int? attributeId
             , IEnumerable<StandardInfo> standards
-            , string contentId)
+            , string contentId
+            , int? classId
+            , int? schoolId)
         {
             await Task.Delay(0);
 
@@ -76,8 +78,22 @@ namespace Chalkable.Api.SampleApp.Controllers
                 case Settings.MY_VIEW_MODE:
                     if (CurrentUser.IsTeacher || CurrentUser.IsDistrictAdmin)
                         return RedirectToAction("Index", "Teacher");
-
                     return RedirectToAction("Index", CurrentUser.Role.Name);
+
+                case Settings.CLASS_PANORAMA_VIEW:
+                    if (CurrentUser.IsTeacher || CurrentUser.IsDistrictAdmin)
+                        return RedirectToAction("ClassPanorama", "Panorama", new RouteValueDictionary
+                        {
+                            {"classId", classId}
+                        });
+                    break;
+                case Settings.SCHOOL_PANORAMA_VIEW:
+                    if (CurrentUser.IsDistrictAdmin)
+                        return RedirectToAction("SchoolPanorama", "Panorama", new RouteValueDictionary
+                        {
+                            {"schoolId", schoolId }
+                        });
+                    break;
 
                 //special private mode for miniquiz practice
                 case "practice":

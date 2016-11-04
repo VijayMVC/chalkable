@@ -14,6 +14,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public bool HasSysAdminSettings { get; set; }
         public bool HasDistrictAdminSettings { get; set; }
         public bool HasStudentProfile { get; set; }
+        public bool HasPanoramaView { get; set; }
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
         public bool ProvidesRecommendedContent { get; set; }
@@ -33,6 +34,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                     HasSysAdminSettings = application.HasSysAdminSettings,
                     HasDistrictAdminSettings = application.HasDistrictAdminSettings,
                     HasStudentProfile = application.HasStudentProfile,
+                    HasPanoramaView = application.HasPanoramaView,
                     CanAttach = application.CanAttach,
                     ShowInGradeView = application.ShowInGradeView,
                     ProvidesRecommendedContent = application.ProvidesRecommendedContent,

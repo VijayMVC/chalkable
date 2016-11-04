@@ -146,13 +146,13 @@ namespace Chalkable.Web.Controllers
             return Json(classes.Select(ClassStatsViewData.Create));
         }
 
-        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new [] {AppPermissionType.Class})]
         public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents)
         {
             if(!Context.Claims.HasPermission(ClaimInfo.VIEW_PANORAMA))
                 throw new ChalkableSecurityException("You are not allowed to view class panorama");
 
-            if(settings.AcadYears == null)
+            if(settings?.AcadYears == null)
                 settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSetting>(classId);
 
             if (settings.AcadYears.Count == 0)

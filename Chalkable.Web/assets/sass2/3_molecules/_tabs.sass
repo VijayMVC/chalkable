@@ -38,16 +38,15 @@
         &:not(:first-child)
           border-left: 1px solid #c8c7c3
 
-  .charts-content
-    .chart-content
-      +animation(fadeEffect 1s)
+  .tab-content
+    +animation(fadeEffect 1s)
 
-      &.active
-        opacity: 1
+    &.active
+      opacity: 1
 
-      &:not(.active)
-        opacity: 0
-        display: none
+    &:not(.active)
+      opacity: 0
+      display: none
 
 +keyframes(fadeEffect)
   from

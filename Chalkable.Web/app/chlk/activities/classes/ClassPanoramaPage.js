@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.classes.ClassProfilePanoramaTpl');
+REQUIRE('chlk.templates.classes.ClassProfilePanoramaFormTpl');
 REQUIRE('chlk.templates.classes.ClassProfilePanoramaChartsTpl');
 REQUIRE('chlk.templates.classes.ClassProfilePanoramaTestsChartTpl');
 REQUIRE('chlk.templates.classes.ClassProfilePanoramaStudentsTpl');
@@ -15,9 +16,11 @@ NAMESPACE('chlk.activities.classes', function () {
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.classes.ClassProfilePanoramaTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaChartsTpl, '', '.charts-part', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaFormTpl, 'standardized-tests', '.standardized-tests-cnt', ria.mvc.PartialUpdateRuleActions.Replace)],
+        //[ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaFormTpl, chlk.activities.lib.DontShowLoader(), '.standardized-tests-cnt', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaStudentsTpl, 'sort', '.panorama-students-tab', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaTestsChartTpl, chlk.activities.lib.DontShowLoader(), '.standardized-tests-tab', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
+        //[ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfilePanoramaTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassPanoramaPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.PartialUpdateRule(null, 'save-filters')],
@@ -124,6 +127,12 @@ NAMESPACE('chlk.activities.classes', function () {
             OVERRIDE, VOID, function onRefresh_(model) {
                 BASE(model);
                 this.updateChartsSize_();
+                this.dom.find('iframe').$
+                    .load(function () {
+                        this.ready = false;
+                        this.dom.find('iframe').parent()
+                            .removeClass('partial-update');
+                    }.bind(this))
             },
 
             [[Object, String]],

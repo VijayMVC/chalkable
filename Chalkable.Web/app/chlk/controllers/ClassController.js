@@ -49,6 +49,9 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.SchoolYearService, 'schoolYearService',
 
+            [ria.mvc.Inject],
+            chlk.services.ApplicationService, 'appsService',
+
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
                 var result = ria.async.wait([
@@ -327,27 +330,34 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.classes.ClassExplorerPage, res);
             },
 
-            function getPanorama_(classId, restore_){
-                return ria.async.wait([
-                        this.classService.getPanorama(classId)
-                    ])
-                    .attach(this.validateResponse_())
-                    .then(function(result){
-                        var model = result[0];
-                        var years = this.getContext().getSession().get(ChlkSessionConstants.YEARS, []);
-                        model.setYears(years);
-                        model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
-                        restore_ && model.setShowFilters(true);
-                        return new chlk.models.classes.ClassProfileSummaryViewData(
-                            this.getCurrentRole(), model, this.getUserClaims_(),
-                            this.isAssignedToClass_(classId)
-                        );
-                    }, this);
+            function preparePanorama_(model, classId){
+                var years = this.getContext().getSession().get(ChlkSessionConstants.YEARS, []);
+                model.setYears(years);
+                model.setOrderBy(chlk.models.profile.ClassPanoramaSortType.NAME);
+                return new chlk.models.classes.ClassProfileSummaryViewData(
+                    this.getCurrentRole(), model, this.getUserClaims_(),
+                    this.isAssignedToClass_(classId)
+                );
             },
 
             [[chlk.models.id.ClassId]],
             function panoramaAction(classId){
-                var result = this.getPanorama_(classId);
+                var result = ria.async.wait([
+                    this.classService.getPanorama(classId),
+                    this.appsService.getListForPanorama()
+                ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var model = result[0], apps = result[1];
+                        apps.forEach(function(app){
+                            var viewUrl = app.getUrl() + '?mode=classpanoramaview&classId=' + classId.valueOf()
+                                + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                                + '&token=' + encodeURIComponent(app.getAccessToken());
+                            app.setViewUrl(viewUrl);
+                        });
+                        model.setApps(apps || [])
+                        return this.preparePanorama_(model, classId);
+                    }, this);
 
                 this.userTrackingService.viewClassPanorama();
 
@@ -358,10 +368,15 @@ NAMESPACE('chlk.controllers', function (){
             function restorePanoramaAction(classId){
                 var result = this.classService.restorePanorama(classId)
                     .then(function(data){
-                        return this.getPanorama_(classId, true);
+                        return this.classService.getPanorama(classId)
+                            .attach(this.validateResponse_())
+                            .then(function(model){
+                                model.setShowFilters(true);
+                                return this.preparePanorama_(model, classId);
+                            }, this);
                     }, this);
 
-                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, result);
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, result, 'standardized-tests');
             },
 
             [[chlk.models.profile.ClassPanoramaSortType, Boolean]],
@@ -402,7 +417,7 @@ NAMESPACE('chlk.controllers', function (){
                 res = this.classService.getPanorama(data.classId, filterValues, selectedAndHighlighted)
                     .attach(this.validateResponse_());
 
-                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, byCheck ? chlk.activities.lib.DontShowLoader() : '');
+                return this.UpdateView(chlk.activities.classes.ClassPanoramaPage, res, byCheck ? chlk.activities.lib.DontShowLoader() : 'standardized-tests');
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],

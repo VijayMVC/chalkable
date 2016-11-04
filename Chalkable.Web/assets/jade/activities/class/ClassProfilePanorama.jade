@@ -4,17 +4,21 @@
     h2.page-title=clazz.getName()
     +ProfileTopBar(self, 'panorama')
     .summary-view
-        +ActionForm('class', 'panoramaSubmit').class-panorama-form.no-working
-            +Hidden('classId', clazz.getId().valueOf())
-            +Hidden('selectedStudents').selected-students
-            +Hidden('highlightedStudents').highlighted-students
-            BUTTON(type='submit', name="submitType", value="check").x-hidden.submit-by-check
-            +CloseOpen('Filter', !clazz.isShowFilters())
-                +PanoramaFilter(clazz.getYears(), clazz.getStandardizedTests(), clazz.getFilterSettings(), 'class', 'restorePanorama', [clazz.getId()])
-            .charts-part
-                +RenderWith(clazz, chlk.templates.classes.ClassProfilePanoramaChartsTpl)(
-                    userRole=self.getUserRole()
-                )
+        +Tabs.panorama-tabs.stats-container.big
+            .top-bar
+                UL.tab-headers
+                    LI(data-tab=1).tab-header.active Standardized Tests
+                    each app, index in clazz.getApps()
+                        LI(data-tab=(2 + index)).tab-header=app.getName()
+            .panoramas-content
+                .tab-content.panorama-content.standardized-tests-cnt(data-tab=1).active.relative
+                    +RenderWith(self.getModel(), chlk.templates.classes.ClassProfilePanoramaFormTpl)(
+                        userRole=self.getUserRole()
+                    )
+                each app, index in clazz.getApps()
+                    .tab-content.panorama-content(data-tab=(2 + index)).relative
+                        .iframe-wrap.partial-update
+                            iframe(src=app.getViewUrl(), width="100%", border=0, style="border: none; min-height: 700px", allowfullscreen)
 
 
 

@@ -5,6 +5,7 @@ REQUIRE('chlk.models.profile.ClassDistributionSectionViewData');
 REQUIRE('chlk.models.profile.PanoramaSettingsViewData');
 REQUIRE('chlk.models.profile.StandardizedTestStatsViewData');
 REQUIRE('chlk.models.panorama.StudentStandardizedTestStats');
+REQUIRE('chlk.models.apps.ApplicationForPanoramaViewData');
 REQUIRE('chlk.models.schoolYear.Year');
 
 NAMESPACE('chlk.models.profile', function () {
@@ -27,6 +28,7 @@ NAMESPACE('chlk.models.profile', function () {
     /** @class chlk.models.profile.ClassPanoramaViewData*/
     CLASS(
         UNSAFE, 'ClassPanoramaViewData', EXTENDS(chlk.models.classes.Class), IMPLEMENTS(ria.serialize.IDeserializable), [
+            ArrayOf(chlk.models.apps.ApplicationForPanoramaViewData), 'apps',
             chlk.models.profile.PanoramaSettingsViewData, 'filterSettings',
             ArrayOf(chlk.models.profile.StandardizedTestViewData), 'standardizedTests',
             chlk.models.profile.ClassDistributionSectionViewData, 'classDistributionSection',
