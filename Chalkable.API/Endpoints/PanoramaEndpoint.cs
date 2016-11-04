@@ -20,15 +20,7 @@ namespace Chalkable.API.Endpoints
                 SelectedStudents = selectedStudentIds ?? new List<int>(),
                 Settings = settings ?? new PanoramaSettings()
             };
-
-            using (var stream = new MemoryStream())
-            {
-                var writer = new StreamWriter(stream);
-                JsonSerializer.Create().Serialize(writer, data);
-                writer.Flush();
-                return await Connector.Put<ClassPanorama>("Class/Panorama.json", stream);
-            }
-
+            return await Connector.Post<ClassPanorama>("/Class/Panorama.json", data);
         }
     }
     

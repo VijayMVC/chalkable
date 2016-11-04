@@ -1,13 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using Chalkable.Api.SampleApp.Models;
 
 namespace Chalkable.Api.SampleApp.Controllers
 {
     public class PanoramaController : BaseSampleAppController
     {
-        public ActionResult ClassPanorama(int classId)
+        public async Task<ActionResult> ClassPanorama(int classId)
         {
-            var classPanorama = Connector.Panorama.GetClassPanorama(classId);
+            var classPanorama = await Connector.Panorama.GetClassPanorama(classId);
             PrepareBaseData(null);
             return View("App", DefaultJsonViewData.Create(classPanorama));
         }

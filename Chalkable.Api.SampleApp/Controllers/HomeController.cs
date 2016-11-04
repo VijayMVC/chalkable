@@ -84,7 +84,7 @@ namespace Chalkable.Api.SampleApp.Controllers
                     if (CurrentUser.IsTeacher || CurrentUser.IsDistrictAdmin)
                         return RedirectToAction("ClassPanorama", "Panorama", new RouteValueDictionary
                         {
-                            {"clssId", classId}
+                            {"classId", classId}
                         });
                     break;
                 case Settings.SCHOOL_PANORAMA_VIEW:

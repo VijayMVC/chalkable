@@ -65,6 +65,25 @@ namespace Chalkable.API
             }
         }
 
+        public async Task<T> Post<T>(string endpoint, Object postData)
+        {
+            try
+            {
+                var stream = new MemoryStream();
+                var writer = new StreamWriter(stream);
+                JsonSerializer.Create().Serialize(writer, postData);
+                writer.Flush();
+                stream.Seek(0, SeekOrigin.Begin);
+                return await Call<T>(endpoint, stream, WebRequestMethods.Http.Post, "application/json; charset=UTF-8");
+            }
+            catch (Exception e)
+            {
+                throw new ChalkableApiException($"Chalkable API POST {endpoint} failed", e);
+            }
+        }
+
+
+
         protected async Task<T> Call<T>(string endpoint, Stream stream, string method = null, string contentType = null)
         {
             return await Call<T>(endpoint, method,
