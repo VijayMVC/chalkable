@@ -2,7 +2,13 @@
 	@ids TInt32 ReadOnly
 As
 
+Delete From SupplementalAnnouncementRecipient
+Where StudentRef in (Select * From @ids)
+
 Delete From StudentAnnouncementApplicationMeta
+Where StudentRef in (Select * From @ids)
+
+Delete From AdminAnnouncementStudent
 Where StudentRef in (Select * From @ids)
 
 Delete From StudentGroup
