@@ -1,7 +1,9 @@
 ﻿using System;
+using Chalkable.StiConnector.Attributes;
 
 namespace Chalkable.StiConnector.SyncModel
 {
+    [SisMinVersion("7.3.11.21298")]
     public class SchoolProgram : SyncModel
     {
         public int SchoolProgramID { get; set; }
