@@ -16,7 +16,7 @@ NAMESPACE('chlk.controls', function () {
      * @class chlk.controls.ClassesBarControl
      */
     var baseMargin = 0,
-        allItem;
+        allItem, popupInterval;
 
     CLASS(
         'ClassesBarControl', EXTENDS(chlk.controls.Base), [
@@ -85,6 +85,12 @@ NAMESPACE('chlk.controls', function () {
                 });
             },
 
+            function hidePopup_(){
+                clearInterval(popupInterval);
+                var popupHolder = new ria.dom.Dom('#chlk-class-bar-popup-container');
+                popupHolder.setHTML('');
+            },
+
             function processAttrs(attributes) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
@@ -113,28 +119,29 @@ NAMESPACE('chlk.controls', function () {
                         });
 
                         classesBar.on('mouseover', '.group .class-button', function(node, event){
-
                             var itemId = Number.parseInt(node.getData('item-id'));
                             if(itemId){
+                                clearInterval(popupInterval);
                                 var classId = new chlk.models.id.ClassId(itemId);
                                 var c = this.context.getService(chlk.services.ClassService).getClassById(classId);
                                 var popUpTpl = new chlk.templates.classes.ClassPopupTpl();
                                 popUpTpl.assign(c);
-
                                 var popupHolder = new ria.dom.Dom('#chlk-class-bar-popup-container');
                                 var main = popupHolder.parent();
-                                //var top =  node.offset().top + node.height() - main.offset().top + 90;
                                 var left = node.offset().left - main.offset().left + 120;
                                 popupHolder.setCss('left', left);
                                 popupHolder.setCss('top', top);
                                 popUpTpl.renderTo(popupHolder.setHTML(''));
+                                popupInterval = setInterval(function(){
+                                    if(!node.is(':visible'))
+                                        this.hidePopup_();
+                                }.bind(this), 500)
                             }
 
                         }.bind(this));
 
                         classesBar.on('mouseleave  click', '.group .class-button', function(node,event){
-                            var popupHolder = new ria.dom.Dom('#chlk-class-bar-popup-container');
-                            popupHolder.setHTML('');
+                            this.hidePopup_();
                         }.bind(this));
 
                         /*mainClassesBar.on('click', '.class-button', function(node, event){

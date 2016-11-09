@@ -54,6 +54,20 @@ class UserSession:
         var_years_cut_off_string = ''.join(var_years__cut_off_string)
         self.var_years_list = ast.literal_eval(var_years_cut_off_string)
 
+        # getting grading periods and dates
+        self.list_for_grading_periods_and_classes = []
+        var_grading_periods_list_for_dict = re.findall('var gradingPeriods = .+', page_as_one_string)
+        var_grading_periods_string_for_dict = ''.join(var_grading_periods_list_for_dict)
+        var_grading_periods_cut_off_string_for_dict = var_grading_periods_string_for_dict[30:-3]
+        dictionary_var_grading_periods_cut_off_string_for_dict = json.loads(var_grading_periods_cut_off_string_for_dict)
+        # print dictionary_var_grading_periods_cut_off_string_for_dict, type(dictionary_var_grading_periods_cut_off_string_for_dict)
+        dictionary_var_grading_periods_cut_off_string_for_dict_data = \
+        dictionary_var_grading_periods_cut_off_string_for_dict['data']
+        for j in dictionary_var_grading_periods_cut_off_string_for_dict_data:
+            # print j['startdate'], j['enddate']
+            self.list_for_grading_periods_and_classes.append({'startdate': j['startdate'], 'enddate': j['enddate']})
+
+
 
     def get_(self, url, status=200, **kwargs):
         r = self.session.get(chlk_server_url + url, **kwargs)

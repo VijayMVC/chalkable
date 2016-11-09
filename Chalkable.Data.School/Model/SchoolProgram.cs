@@ -5,7 +5,6 @@ namespace Chalkable.Data.School.Model
 {
     public class SchoolProgram
     {
-        [IdentityFieldAttr]
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string Code { get; set; }
