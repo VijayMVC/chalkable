@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[StudentSchoolProgram]
 (
-    [Id] INT IDENTITY (1,1) NOT NULL CONSTRAINT [NCPK_StudentSchoolProgram] PRIMARY KEY NONCLUSTERED ( [Id] ),
+    [Id] INT NOT NULL CONSTRAINT [NCPK_StudentSchoolProgram] PRIMARY KEY NONCLUSTERED ( [Id] ),
     [StudentId] INT NOT NULL,
     [AcadSessionId] INT NOT NULL,
     [SchoolProgramId] INT NOT NULL,
