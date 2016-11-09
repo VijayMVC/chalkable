@@ -40,7 +40,8 @@ NAMESPACE('chlk.models.people', function () {
                 this.specialInstructions = SJX.fromValue(raw.specialinstructions, String);
                 this.spedStatus = SJX.fromValue(raw.spedstatus, String);
                 this.healthConditions = SJX.fromArrayOfDeserializables(raw.healthconditions, chlk.models.people.HealthCondition);
-                this.availableNotVerifiedHealthForm = SJX.fromValue(raw.hasnotverifiedhealthform, Boolean)
+                this.availableNotVerifiedHealthForm = SJX.fromValue(raw.hasnotverifiedhealthform, Boolean);
+                this.iepActive = SJX.fromValue(raw.isiepactive, Boolean);
 
                 this.role = null;
                 if(raw.role && raw.role.id != undefined) {
@@ -71,6 +72,7 @@ NAMESPACE('chlk.models.people', function () {
             String, 'spedStatus',
             ArrayOf(chlk.models.people.HealthCondition), 'healthConditions',
             ArrayOf(String), 'studentCustomAlertDetails',
+            Boolean, 'iepActive',
 
             Boolean, 'availableNotVerifiedHealthForm',
 
@@ -89,13 +91,9 @@ NAMESPACE('chlk.models.people', function () {
                 else alerts.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.MEDICAL_ALERT, Msg.Alert_Medical_text))
             },
 
-            Boolean, function showSpedStatus(){
-                return !!this.getSpedStatus() && this.getSpedStatus() == 'Active';
-            },
-
             Boolean, function showAlerts(){
                 var res = this.isWithMedicalAlert() || this.isAllowedInetAccess()
-                    || this.getSpecialInstructions() || this.showSpedStatus() || (this.getStudentCustomAlertDetails().length != 0);
+                    || this.getSpecialInstructions() || this.isIepActive() || (this.getStudentCustomAlertDetails().length != 0);
                 return !!res;
             },
 
@@ -110,7 +108,7 @@ NAMESPACE('chlk.models.people', function () {
                     this.addMedicalAlerts_(res);
                 if(this.getSpecialInstructions())
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPECIAL_INSTRUCTIONS_ALERT, this.getSpecialInstructions()));
-                if(this.showSpedStatus())
+                if(this.isIepActive())
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPED_STATUS_ALERT, Msg.Alert_Sped_text));
                 this.studentCustomAlertDetails.forEach(function (item) {
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.CUSTOM_STUDENT_ALERT_DETAILS, item));

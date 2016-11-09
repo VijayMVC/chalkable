@@ -66,7 +66,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
 
         public static StudentInfoViewData Create(PersonDetails student, StudentDetailsInfo studentDetails, StudentSummaryInfo studentSummary, 
-            IList<ClassDetails> studentClasses, ClassDetails currentClass, Room currentRoom, int currentSchoolYearId, DateTime today)
+            IList<ClassDetails> studentClasses, ClassDetails currentClass, Room currentRoom, int currentSchoolYearId)
         {
             var res = Create(student);
 
@@ -86,7 +86,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.IsAllowedInetAccess = studentDetails.IsAllowedInetAccess;
             res.SpecialInstructions = studentDetails.SpecialInstructions;
             res.SpEdStatus = studentDetails.SpEdStatus;
-            res.IsIEPActive = studentDetails.IsIEPActive(today);
+            res.IsIEPActive = studentDetails.IsIEPActive;
             res.IsTitle1Eligible = studentDetails.StudentSchool.IsTitle1Eligible;
             res.Section504 = !string.IsNullOrWhiteSpace(studentDetails.Section504Qualification) 
                              && studentDetails.Section504Qualification.Trim() != "NA";
