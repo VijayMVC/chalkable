@@ -71,7 +71,7 @@ namespace Chalkable.Web.Controllers
             EnsureAnnouncementExsists(announcementId, announcementType);
             SchoolLocator.AnnouncementAttachmentService.Add(announcementId, (AnnouncementTypeEnum)announcementType, attachmentId);
             var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum) announcementType);
-            return Json(res, 6);
+            return Json(res);
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
@@ -152,7 +152,7 @@ namespace Chalkable.Web.Controllers
                 SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementTypeEnum)announcementType, bin, name);
             }
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType, true);
-            return Json(res, 6);
+            return Json(res);
         }
 
         
@@ -166,7 +166,7 @@ namespace Chalkable.Web.Controllers
                 SchoolLocator.AnnouncementAttachmentService.Delete(announcementAttachmentId);
 
             var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType, Context.Role == CoreRoles.STUDENT_ROLE);
-            return Json(res, 6);
+            return Json(res);
         }
         
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
