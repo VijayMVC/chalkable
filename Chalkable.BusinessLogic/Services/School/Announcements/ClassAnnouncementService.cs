@@ -714,14 +714,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (activities == null || activities.Count == 0)
                 return;
 
-            var classes = locator.ClassService.GetByIds(activities.Select(x => x.SectionId).ToList());
+            var classIds = activities.GroupBy(x => x.SectionId).Select(x => x.Key).ToList();
+            var classes = locator.ClassService.GetByIds(classIds);
 
             EnsureInAnnouncementsExisting(activities, dataAccess);
             IList<ClassAnnouncement> addToChlkAnns = new List<ClassAnnouncement>();
             foreach (var activity in activities)
             {
                 var @class = classes.First(x => x.Id == activity.SectionId); //  !!!
-                Trace.Assert(@class.SchoolYearRef.HasValue);
+               if(!@class.SchoolYearRef.HasValue) continue;
 
                 var ann = new ClassAnnouncement
                 {
