@@ -423,7 +423,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             /* Grade value input events */
 
-            /*[ria.mvc.DomEventBind('contextmenu', '.value-input')],
+            [ria.mvc.DomEventBind('contextmenu', '.value-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeMouseDown(node, event){
                 var cell = node.parent('.grade-value');
@@ -444,7 +444,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     return false;
                 }
                 return true;
-            },*/
+            },
 
             [ria.mvc.DomEventBind('focus', '.value-input')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -657,7 +657,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function cellContextMenu(node, event){
                 var cell = node.parent('.grade-value');
-                if(cell.hasClass('gradable')){
+                if(cell.hasClass('gradable') || node.hasClass('avg-text')){
                     this.submitActiveForm();
                     this.showCell(cell);
                     setTimeout(function(){

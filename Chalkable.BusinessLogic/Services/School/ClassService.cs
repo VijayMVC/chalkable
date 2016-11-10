@@ -65,6 +65,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses);
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
         Class GetById(int id);
+        IList<Class> GetByIds(IList<int> ids);
         IList<Class> GetAll();
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
@@ -171,6 +172,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public Class GetById(int id)
         {
             return DoRead(uow => new ClassDataAccess(uow).GetById(id));
+        }
+
+        public IList<Class> GetByIds(IList<int> ids)
+        {
+            return DoRead(uow => new ClassDataAccess(uow).GetByIds(ids));
         }
 
         public IList<Class> GetAll()
