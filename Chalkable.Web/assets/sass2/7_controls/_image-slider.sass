@@ -1,0 +1,76 @@
+.slides
+  padding: 0
+  width: 220px
+  height: 150px
+  display: block
+  margin: 0 auto
+  position: relative
+
+
+.slides *
+  user-select: none
+  -ms-user-select: none
+  -moz-user-select: none
+  -khtml-user-select: none
+  -webkit-user-select: none
+  -webkit-touch-callout: none
+
+
+.slides input
+  display: none
+
+.slide-container
+  display: block
+
+.slide
+  top: 0
+  opacity: 0
+  width: 220px
+  height: 150px
+  display: block
+  position: absolute
+  transform: scale(0)
+  transition: all .7s ease-in-out
+
+
+.slide img
+  width: 100%
+  height: 100%
+
+
+.nav label
+  position: absolute
+  width: 10px
+  height: 17px
+  background-position: 0 0
+  background-repeat: no-repeat
+  top: 50%
+  margin-top: -9px
+  cursor: pointer
+  z-index: 9
+  opacity: 0.5
+  display: none
+
+  &.next
+    right: -21px
+    background-image: inline-image("images2/common/classesbar-arrow-right.png")
+
+  &.prev
+    left: -21px
+    background-image: inline-image("images2/common/classesbar-arrow-left.png")
+
+.nav label:hover
+  opacity: 1
+
+input:checked + .slide-container
+  .slide
+    opacity: 1
+    transform: scale(1)
+    transition: opacity 1s ease-in-out
+
+  .nav label
+    display: inline-block
+
+input:checked + .slide-container .nav label
+  display: block
+
