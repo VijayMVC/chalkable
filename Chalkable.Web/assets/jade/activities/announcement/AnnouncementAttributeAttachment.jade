@@ -1,0 +1,33 @@
+mixin AttributeAttachment_(attachment)
+    if !attachment.isReadOnly()
+        .file-attachment(
+            id='file-attribute-attachment-' + attachment.getAttributeId(),
+            data-attachment-id=attachment.getId(),
+            data-sti-attachment=attachment.isStiAttachment() == true ? "true" : "false",
+            data-uuid=attachment.getUuid(),
+            data-name=attachment.getName(),
+            data-mime-type=attachment.getMimeType()
+        )
+            if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+                A(href=attachment.getUrl()).download-link.attachment-name=attachment.getName()
+            else
+                +ActionLink('announcement', 'viewAttributeAttachment', attachment.getAttributeId(), attachment.getAnnouncementType(),
+                attachment.getAnnouncementId()).attachment-name=attachment.getName()
+
+            +ActionLink('announcement', 'removeAttributeAttachment', attachment.getAnnouncementType(),
+            attachment.getAnnouncementId(), attachment.getAttributeId()).remove-file-attachment
+    else
+        .attribute-attachment
+            if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+                A(href=attachment.getUrl()).download-link Download
+                .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+            else
+                +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + attachment.getId())
+                .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+                +ActionButton('announcement', 'viewAttributeAttachment', attachment.getAttributeId(), attachment.getAnnouncementType(),
+                attachment.getAnnouncementId()) Open
+
++AttributeAttachment_(self)
+
+
+
