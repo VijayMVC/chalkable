@@ -289,6 +289,15 @@ NAMESPACE('chlk.controllers', function (){
                 this.prepareAttachment(item);
             }, this);
             announcement.setAttachments(ids.join(','));
+            if(announcement.getStudentAnnouncements() &&
+                announcement.getStudentAnnouncements().getItems() && announcement.getStudentAnnouncements().getItems().length){
+
+                announcement.getStudentAnnouncements().getItems().forEach(function(studentItem){
+                    studentItem.getAttachments().forEach(function(item){
+                        this.prepareAttachment(item);
+                    }, this);
+                }, this);
+            }
             this.cacheAnnouncementAttachments(attachments);
         },
 
@@ -1618,8 +1627,21 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function viewAttachmentAction(attachmentId, announcementId, announcementType_){
             var attachment = this.getCachedAnnouncementAttachments().filter(function(item){ return item.getId() == attachmentId; })[0];
-            if (!attachment)
-                return null;
+            if (!attachment){
+                var announcement = this.getCachedAnnouncement();
+                if(announcement.getStudentAnnouncements() &&
+                    announcement.getStudentAnnouncements().getItems() && announcement.getStudentAnnouncements().getItems().length){
+
+                    var attachments = [];
+                    announcement.getStudentAnnouncements().getItems().forEach(function(studentItem){
+                        attachments = attachments.concat(studentItem.getAttachments());
+                    });
+
+                    attachment = attachments.filter(function(item){ return item.getId() == attachmentId; })[0];
+                }
+                if (!attachment)
+                    return null;
+            }
 
             var attachmentUrl, res;
             var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
@@ -1701,15 +1723,22 @@ NAMESPACE('chlk.controllers', function (){
                 .cloneAttachment(attachmentId, announcementId)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
+                    this.cacheAnnouncement(announcement);
                     var attachments = this.getCachedAnnouncementAttachments().filter(function(item){return item.isOwner()});
-                    var newAttachments = announcement.getAnnouncementAttachments().filter(function(item){return item.isOwner()});
-                    var clone = newAttachments.filter(function(item){
-                        var len = attachments.filter(function(attachment){
-                            return attachment.getId() == item.getId()
-                        }).length;
-                        return !len;
-                    })[0];
-                    clone.setOpenOnStart(true);
+                    var newAttachments = [];
+                    if(announcement.getStudentAnnouncements() && announcement.getStudentAnnouncements().getItems() && announcement.getStudentAnnouncements().getItems().length ){
+                        announcement.getStudentAnnouncements().getItems().forEach(function(item){
+                            newAttachments = newAttachments.concat(item.getAttachments());
+                        });
+                    }
+                    else{
+                        newAttachments = announcement.getAnnouncementAttachments().filter(function(item){return item.isOwner()});
+                    }
+                    if(newAttachments.length){
+                        var clone = newAttachments[newAttachments.length - 1];
+                        clone.setOpenOnStart(true);
+                    }
+
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             this.BackgroundCloseView(chlk.activities.common.attachments.AttachmentDialog);
