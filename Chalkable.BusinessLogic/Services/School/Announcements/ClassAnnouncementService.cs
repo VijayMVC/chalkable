@@ -708,18 +708,26 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             AddActivitiesToChalkable(locator, activities, CreateClassAnnouncementDataAccess(locator, u));
         }
 
+        //TODO: Strange and ugly logic with school year. Needed to be refactored!
         private static void AddActivitiesToChalkable(IServiceLocatorSchool locator, IList<Activity> activities, ClassAnnouncementDataAccess dataAccess)
         {
-            if (activities == null) return;
+            if (activities == null || activities.Count == 0)
+                return;
+
+            var classes = locator.ClassService.GetByIds(activities.Select(x => x.SectionId).ToList());
+
             EnsureInAnnouncementsExisting(activities, dataAccess);
             IList<ClassAnnouncement> addToChlkAnns = new List<ClassAnnouncement>();
             foreach (var activity in activities)
             {
+                var @class = classes.First(x => x.Id == activity.SectionId); //  !!!
+                Trace.Assert(@class.SchoolYearRef.HasValue);
+
                 var ann = new ClassAnnouncement
                 {
                     Created = locator.Context.NowSchoolTime,
                     State = AnnouncementState.Created,
-                    SchoolYearRef = locator.Context.SchoolYearId.Value,
+                    SchoolYearRef = @class.SchoolYearRef.Value,
                     SisActivityId = activity.Id,
                 };
                 MapperFactory.GetMapper<ClassAnnouncement, Activity>().Map(ann, activity);
