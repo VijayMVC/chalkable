@@ -11,3 +11,5 @@ Set ClassAnnouncement.SchoolYearRef = c.SchoolYearRef
 From ClassAnnouncement ca Join Class c
 	On ca.ClassRef = c.Id
 Where ca.SchoolYearRef <> c.SchoolYearRef
+
+GO
