@@ -378,6 +378,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ClassStorage.GetById(id);
         }
 
+        public IList<Class> GetByIds(IList<int> ids)
+        {
+            return ids.Select(ClassStorage.GetById).ToList();
+        }
+
         public IList<Class> GetAll()
         {
             return ClassStorage.GetAll();
