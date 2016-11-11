@@ -40,7 +40,7 @@ NAMESPACE('chlk.activities.reports', function(){
                 var includeArray = this.dom.find('.include-select').getValue() || [];
 
                 if(
-                    this.dom.find('.report-title').getValue() ||
+                    this.dom.find('.report-title').getValue() != "Lunch Count" ||
                     this.dom.find('.start-date').getValue() ||
                     this.dom.find('.end-date').getValue() ||
                     parseInt(this.dom.find('[name=orderBy]:checked').getValue(), 10) != chlk.models.reports.LunchCountOrderBy.STUDENT.valueOf() ||
