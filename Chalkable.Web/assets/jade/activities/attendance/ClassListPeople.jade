@@ -53,6 +53,7 @@
         each item, i in self.getItems()
             needPresent = (i == 0 && item.getType() == valuesEnum.NA.valueOf());
             .row(index=i)
+                INPUT.with-grid-focus.with-grid-focus-hidden
                 .student-attendance-container.right
                     len = self.getItems().length;
                     if (needSuggestion && (i== 5 || (i == len - 1 && len < 6 && len > 2)))
