@@ -67,17 +67,16 @@ namespace Chalkable.BusinessLogic.Services.School
         Class GetById(int id);
         IList<Class> GetByIds(IList<int> ids);
         IList<Class> GetAll();
+        IList<Class> GetClassesBySchoolYear(int schoolYearId, int? gradeLevel); 
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
-        IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
+        IList<ClassStatsInfo> GetClassesStats(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
         IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
         bool IsTeacherClasses(int teacherId, params int[] classIds);
         ClassPanorama Panorama(int classId, IList<int> academicYears, IList<StandardizedTestFilter> standardizedTestFilters);
 
         IList<DateTime> GetDays(int classId);
         void PrepareToDelete(IList<Class> classes);
-
-        IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -185,6 +184,17 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new ClassDataAccess(u).GetAll());
         }
 
+        public IList<Class> GetClassesBySchoolYear(int schoolYearId, int? gradeLevel)
+        {
+            var conds = new AndQueryCondition {{nameof(Class.SchoolYearRef), schoolYearId}};
+            if (gradeLevel.HasValue)
+            {
+                conds.Add(nameof(Class.MinGradeLevelRef), gradeLevel, ConditionRelation.GreaterEqual);
+                conds.Add(nameof(Class.MaxGradeLevelRef), gradeLevel, ConditionRelation.LessEqual);
+            }
+            return DoRead(u => new ClassDataAccess(u).GetAll(conds));
+        }
+
         public IList<ClassDetails> GetAllSchoolsActiveClasses()
         {
             if (!BaseSecurity.IsDistrictAdmin(Context))
@@ -278,12 +288,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             DoUpdate(u => new ClassTeacherDataAccess(u).PrepareToDelete(classes));
         }
-
-        public IList<Class> GetClassesBySchool(int schoolYearId, int schoolId, int? gradeLevelId)
-        {
-            return DoRead(u => new ClassDataAccess(u).GetClassesBySchool(schoolYearId, schoolId, gradeLevelId)).OrderBy(x => x.Name).ToList();
-        }
-
+        
         public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)
         {
             IList<ClassDetails> classes = new List<ClassDetails>();
@@ -294,7 +299,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return classes;
         }
 
-        public IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType)
+        public IList<ClassStatsInfo> GetClassesStats(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
