@@ -1,0 +1,69 @@
+.standards-grid.grades-page
+    #grading-popup.grading-input-popup.popup-bubble.no-triangle
+    -var selectedId = self.getClassId()
+
+    .autocomplete-list
+
+    if self.isInProfile()
+        .buttons-group.right
+            +ActionButton('grading', "summaryGridClassProfile", selectedId)=Msg.Item(true)
+            +ActionButton('grading', "standardsGridClassProfile", selectedId).pressed=Msg.Standard(true)
+            +ActionButton('grading', "finalGradesClassProfile", selectedId)=Msg.Final_Grade(true)
+    else
+        -var topData = self.getTopData()
+        +ClassesToolBarWithAll(topData, 'grading', 'standardsGrid', null, null, null)
+        h2.page-title=Msg.Standard(true)
+        .action-bar
+            .items
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+                if self.isLEIntegrated() && self.isHasAccessToLE()
+                    +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+    .buttons-group
+        +ActionButton('grading', self.isInProfile() ? 'standardsBoxesClassProfile' : 'standards', selectedId).boxes=Msg.Box(true)
+        +ActionButton('grading', self.isInProfile() ? 'standardsGridClassProfile' : 'standardsGrid', selectedId).grid.pressed=Msg.Grid
+
+    .mps-container
+        .popup-bubble.bottom.comment.centered
+            .pop-up-triangle
+            div
+                h5=Msg.Add_comment
+                .text-container
+                    textarea(maxlength=500).comment-value
+                    .grading-comments-list
+                .buttons-bottom
+                    BUTTON.grey-button.small.cancel-comment=Msg.Cancel
+                    if self.isAbleEdit()
+                        BUTTON.blue-button.small.add-comment=Msg.Add
+        each gradingPeriod,i in self.getGradingPeriods()
+            -var item = self.getCurrentGradingGrid()
+            -var selectedGradingPeriodId = item.getGradingPeriod().getId()
+            div(
+                class=((gradingPeriod.getId() == selectedGradingPeriodId) ? "open " : "") + ((!item.getGradingItems().length || !item.getStudents().length) ? 'no-items' : ''),
+                data-index=i
+            ).chlk-calendar.marking-period-container
+                .header.mp-title
+                    -var mpName = gradingPeriod.getName()
+                    span(data-tooltip=mpName, data-tooltip-type="overflow").mp-name=mpName
+                    .collapse
+                div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                    .buttons-row
+                        .grading-selects
+                            +ActionForm('grading', 'loadGradingPeriodGridStandards').load-grading-period
+                                +Hidden('ableEdit', item.isAbleEdit())
+                                +Hidden('gradable', item.isGradable())
+                                +Hidden('classId', selectedId)
+                                +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                        .arrows-row
+                            .prev-arrow.grid-arrow
+                            .next-arrow.grid-arrow
+
+                        +ActionButton('grading', 'post-standards', selectedId, gradingPeriod.getId())(class= !gradingPeriod.isAblePostGradeBook() || !self.isAblePostStandards() ? "disabled" : "").blue-button.button-like.right Post
+                        if self.isAbleEdit()
+                            +ActionButton('grading', 'getGradeComments').blue-button.button-like.comment-button.gp-button.right= Msg.Comment
+                    .grades-container
+                        if gradingPeriod.getId() == selectedGradingPeriodId
+                            +RenderWith(item, chlk.templates.grading.ShortGradingClassStandardsGridItemsTpl)(
+                                classId = selectedId
+                            )

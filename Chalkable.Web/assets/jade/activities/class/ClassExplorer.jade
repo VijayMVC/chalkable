@@ -1,0 +1,35 @@
+-var canPressStandards = true//!self.getUserRole().isAdmin()
+
+mixin ExplorerStandardLink(standard, abId, i)
+    if !canPressStandards
+        a(
+            class = (self.showStandard(i) ? '' : 'hidden-item ') + (abId ? 'with-code ' : '')
+        ).block-item.standard
+            block
+    else
+        +ActionLink('apps', 'getSuggestedApps', self.getClazz().getId(), abId, standard.getUrlComponents())(
+            class = (self.showStandard(i) ? '' : 'hidden-item ') + (abId ? 'with-code ' : '')
+        ).block-item.standard
+            block
+
+.profile-page
+    h2.page-title=self.getClazz().getName()
+
+    +ProfileTopBar(self, 'explorer')
+    .explorer-view(class=canPressStandards ? 'can-press-standards' : '')
+        if !self.getStandards().length
+            .no-items-text No standards yet
+        .classes-blocks
+            .class-block
+                .announcement-block
+                    each standard, i in self.getStandards()
+                        -var abId = standard.getAcademicBenchmarkId()
+                        +ExplorerStandardLink(standard, abId, i)
+                            .left-block(data-tooltip-type="overflow", data-tooltip=standard.getName())=standard.getName()
+                            -var value = standard.getNumericGrade()
+                            .right-block=(parseInt(value) ? Math.round(value) : value)
+                                .circle(class=self.getStandardColor(standard))
+                    if self.showMoreButton()
+                        .block-item.more-button Show more
+                        .block-item.less-button Show less
+        .suggested-apps-container
