@@ -46,7 +46,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                 var infractions = panorama.Infractions?.FirstOrDefault(x => x.StudentId == student.Id)?.NumberOfInfractions;
                 var absences = panorama.Absences?.FirstOrDefault(x => x.StudentId == student.Id);
 
-                res.Students.Add(StudentStandardizedTestStats.Create(student, gradeAvg, absences, infractions, today, studentStats));
+                res.Students.Add(StudentStandardizedTestStats.Create(student, gradeAvg, absences, infractions, studentStats));
             }
 
             if (selectedStudents == null || selectedStudents.Count == 0)
@@ -111,7 +111,6 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                     var avg = !studentStTestsInfo.Any() ? 0 : decimal.Round(studentStTestsInfo.Average(), 2);
                     viewData.DailyStats.Add(DailyStatsViewData.Create(studentStTestsInfo.Key, avg, "MMM yyyy"));
                 }
-                    
 
                 res.Add(viewData);
             }
@@ -327,11 +326,11 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         public IList<StandardizedTestStatsViewData> StandardizedTestsStats { get; set; }
 
         public static StudentStandardizedTestStats Create(StudentDetailsInfo student, decimal? gradeAvg, ShortStudentAbsenceInfo absences, int? infractions, 
-            DateTime currentSchoolTime, IList<StandardizedTestStatsViewData> standardizedTestStats)
+            IList<StandardizedTestStatsViewData> standardizedTestStats)
         {
             return new StudentStandardizedTestStats
             {
-                Student = StudentDetailsViewData.Create(student, gradeAvg, absences, infractions, currentSchoolTime),
+                Student = StudentDetailsViewData.Create(student, gradeAvg, absences, infractions),
                 StandardizedTestsStats = standardizedTestStats
             };
         }

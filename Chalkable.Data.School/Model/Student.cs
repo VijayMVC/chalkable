@@ -37,18 +37,23 @@ namespace Chalkable.Data.School.Model
         public string StudentNumber { get; set; }
         public DateTime? OriginalEnrollmentDate { get; set; }
 
-        public bool IsIEPActive(DateTime now)
+        public bool IsIEPActive
         {
-            if (!IEPBeginDate.HasValue)
+            get
+            {
+                var now = DateTime.UtcNow;
+
+                if (!IEPBeginDate.HasValue)
+                    return false;
+
+                if (now >= IEPBeginDate.Value && !IEPEndDate.HasValue)
+                    return true;
+
+                if (IEPEndDate.HasValue && now >= IEPBeginDate.Value && now <= IEPEndDate.Value)
+                    return true;
+
                 return false;
-
-            if (now >= IEPBeginDate.Value && !IEPEndDate.HasValue)
-                return true;
-
-            if (IEPEndDate.HasValue && now >= IEPBeginDate.Value && now <= IEPEndDate.Value)
-                return true;
-
-            return false;
+            }
         }
 
         [DataEntityAttr]

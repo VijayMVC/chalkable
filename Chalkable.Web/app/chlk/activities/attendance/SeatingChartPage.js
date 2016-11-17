@@ -7,12 +7,33 @@ REQUIRE('chlk.templates.attendance.NotTakenAttendanceClassesTpl');
 NAMESPACE('chlk.activities.attendance', function () {
     "use strict";
     
-    var needChartPopUp = false;
+    var needChartPopUp = false, draggableInterval, curY;
 
     var draggableOptions = {
         revert: true,
         revertDuration: 0,
-        cancel: '.empty-box'
+        cancel: '.empty-box',
+        drag: function(event, ui){
+            curY = event.clientY;
+        },
+        start: function(event, ui){
+            curY = curY || event.clientY;
+            var doc = ria.dom.Dom(), height = 100, diff = 20, scrollTop;
+            draggableInterval = setInterval(function(){
+                if(curY){
+                    scrollTop = doc.scrollTop();
+                    if(curY > window.innerHeight - height)
+                        doc.scrollTop(scrollTop + diff);
+                    else
+                        if(scrollTop > height && curY < height)
+                            doc.scrollTop(scrollTop - diff);
+                }
+            }, 50);
+        },
+        stop: function(event, ui){
+            curY = null;
+            clearInterval(draggableInterval);
+        }
     };
 
     var activeDragging = false;

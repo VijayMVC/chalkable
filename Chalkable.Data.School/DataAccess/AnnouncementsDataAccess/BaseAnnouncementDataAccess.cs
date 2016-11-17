@@ -195,7 +195,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return res;
         }
 
-        protected class AnnouncementCopyResult
+        public class AnnouncementCopyResult
         {
             public int FromAnnouncementId { get; set; }
             public int ToAnnouncementId { get; set; }

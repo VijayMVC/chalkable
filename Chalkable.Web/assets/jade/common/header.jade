@@ -7,8 +7,9 @@ if chlk.templates.search && chlk.templates.search.SiteSearch
             listCls = "site-search"
         )
         label(for="siteSearch")#search-glass
-    
-if chlk.controllers.ReportingController && self.getContext().getSession().get('role').isAdmin()
+
+-var reportCardsEnabled = self.getContext().getSession().get(ChlkSessionConstants.REPORT_CARDS_ENABLED, false)
+if chlk.controllers.ReportingController && self.getContext().getSession().get('role').isAdmin() && reportCardsEnabled
     span(href="javascript:").report-cards-link &nbsp;
         .chat-bubble.top.right.reports-bubble.x-hidden
             +ActionLink('reporting', 'lunchCount') Lunch Count

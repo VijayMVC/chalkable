@@ -15,6 +15,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
         public bool? IsWithDrawn { get; set; }
+        public bool IsIEPActive { get; set; }
 
         protected StudentViewData(Student student)
         {
@@ -30,14 +31,15 @@ namespace Chalkable.Web.Models.PersonViewDatas
             SpEdStatus = student.SpEdStatus;
             Role = RoleViewData.Create(CoreRoles.STUDENT_ROLE);
             IsWithDrawn = student.IsWithdrawn;
+            IsIEPActive = student.IsIEPActive;
         }
 
-        public static StudentViewData Create(Student student)
+        public new static StudentViewData Create(Student student)
         {
             return new StudentViewData(student);
         }
 
-        public static IList<StudentViewData> Create(IList<Student> students)
+        public new static IList<StudentViewData> Create(IList<Student> students)
         {
             return students.Select(Create).ToList();
         }

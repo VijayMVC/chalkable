@@ -287,7 +287,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         /// </summary>
         /// <param name="sisCopyResult">Key is SOURCE sis activity id. Value is NEW sis activity id</param>
         /// <returns>Key is SOURCE announcement id. Value is NEW announcement id</returns>
-        public IDictionary<int, int> CopyClassAnnouncementsToClass(IList<SisActivityCopyResult> sisCopyResult, DateTime created)
+        public IList<AnnouncementCopyResult> CopyClassAnnouncementsToClass(IList<SisActivityCopyResult> sisCopyResult, DateTime created)
         {
             var @params = new Dictionary<string, object>
             {
@@ -296,8 +296,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             };
             using (var reader = ExecuteStoredProcedureReader("spCopyClassAnnouncementsToClass", @params))
             {
-                return reader.ReadList<AnnouncementCopyResult>()
-                    .ToDictionary(x => x.FromAnnouncementId, y => y.ToAnnouncementId);
+                return reader.ReadList<AnnouncementCopyResult>().ToList();
             }
         }
 

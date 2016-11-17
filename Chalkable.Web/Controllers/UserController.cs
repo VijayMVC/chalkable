@@ -79,7 +79,7 @@ namespace Chalkable.Web.Controllers
         private void SwitchToRole(CoreRole role)
         {
             var context = MasterLocator.UserService.SwitchToRole(role);
-            ChalkableAuthentication.SignIn(context, false, context.LoginTimeOut);
+            ChalkableAuthentication.SignIn(context, false);
         }
 
         [IgnoreTimeOut]
@@ -88,6 +88,14 @@ namespace Chalkable.Web.Controllers
             ChalkableAuthentication.SignOut();
             DeveloperAuthentication.SignOut();
             return Json(new { success = true, data = new { success = true } }, JsonRequestBehavior.AllowGet);
+        }
+
+        [IgnoreTimeOut]
+        public ActionResult LogOutWithRedirect()
+        {
+            ChalkableAuthentication.SignOut();
+            DeveloperAuthentication.SignOut();
+            return Redirect<HomeController>(x => x.Index());
         }
 
         [IgnoreTimeOut]
@@ -185,7 +193,7 @@ namespace Chalkable.Web.Controllers
             var context = logOnAction(userService);
             if (context != null)
             {
-                ChalkableAuthentication.SignIn(context, false, context.LoginTimeOut);
+                ChalkableAuthentication.SignIn(context, false);
                 if (context.DeveloperId.HasValue && !DemoUserService.IsDemoUser(context))
                     DeveloperAuthentication.SignIn(context, remember);
             }

@@ -9,14 +9,9 @@ Set		@schoolYearId = (Select SchoolYearRef From Class Where Id = @classId);
 
 --need to get all class days, to obtain right result
 --when start date is out of begining of School Year
-Declare @classDays table ( [Day] datetime2 );
+Declare @classDays TDate;
 Insert Into @classDays
-	Select Distinct [Day] From [Date]
-	Where SchoolYearRef = @schoolYearId 
-		  And IsSchoolDay = 1 
-		  And Exists(Select * From ClassPeriod Where ClassPeriod.DayTypeRef = [Date].DayTypeRef And ClassPeriod.ClassRef = @classId)
-		  --And [Day] >= @startDate
-	Order By [Day]
+	exec spGetClassDays @classId
 
 Declare @toAdjust table
 (
@@ -32,6 +27,8 @@ Insert Into @toAdjust
 Declare @minAnnDate datetime2;
 Set		@minAnnDate = (Select Min([ExpiresDate]) From @toAdjust);
 
+print @minAnnDate
+
 --to save distance beween supp announcements
 Update @toAdjust
 Set [ExpiresDate] = DateAdd(d, DateDiff(d, @minAnnDate, [ExpiresDate]), @startDate)
@@ -43,13 +40,13 @@ Set [ExpiresDate] =(Select Min([Day]) From @classDays Where [Day] >= [ExpiresDat
 --Getting last school day of School Year
 Declare @schoolYearEndDate datetime2;
 Declare @schoolYearStartDate datetime2;
-Set		@schoolYearEndDate   = (Select Max([day]) From @classDays)
+Set		@schoolYearEndDate   = (Select Max([Day]) From @classDays)
 Set		@schoolYearStartDate = (Select Min([Day]) From @classDays)
 
 --supplemental announcement out of school year
 Declare @annOutOfSchoolYearEndDate TInt32;
 Insert Into @annOutOfSchoolYearEndDate
-	Select [Id] From @toAdjust Where [ExpiresDate] > @schoolYearEndDate
+	Select [Id] From @toAdjust Where [ExpiresDate] is null or [ExpiresDate] > @schoolYearEndDate
 
 Declare @annOutOfSchoolYearStartDate TInt32;
 Insert Into @annOutOfSchoolYearStartDate
@@ -71,5 +68,6 @@ From @toAdjust t
 Where ClassAnnouncement.Id = t.Id
 
 select SisActivityId, ExpiresDate from @toAdjust
+
 
 GO

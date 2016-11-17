@@ -27,10 +27,13 @@ NAMESPACE('chlk.activities.grading', function () {
                     '][data-standard-id=' + model.getStandardId().valueOf() +
                     '][data-grading-period-id=' + model.getGradingPeriodId().valueOf() + ']');
                 container.empty();
+                container.removeClass('active-cell');
                 tpl.options({
                     ableEdit: true
                 });
                 tpl.renderTo(container);
+                if(!this.dom.find('.active-cell').exists())
+                    container.find('.grade-info').trigger('click');
             },
 
             OVERRIDE, function prepareAllScores(model){

@@ -15,6 +15,7 @@ class TestFeedReports(BaseTestCase):
 
         start_date = feed_report_settings['data']['startdate']
         end_date = feed_report_settings['data']['enddate']
+
         self.start_date_correct_format = datetime.strptime(start_date, "%Y-%m-%d").strftime("%m-%d-%Y")
         self.end_date_correct_format = datetime.strptime(end_date, "%Y-%m-%d").strftime("%m-%d-%Y")
 
