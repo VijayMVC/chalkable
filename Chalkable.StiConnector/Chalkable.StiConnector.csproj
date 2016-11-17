@@ -179,6 +179,7 @@
     <Compile Include="Connectors\Model\Section.cs" />
     <Compile Include="Connectors\Model\SectionPanorama\SectionPanorama.cs" />
     <Compile Include="Connectors\Model\SectionSummary.cs" />
+    <Compile Include="Connectors\Model\SectionSummaryForStudent.cs" />
     <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
     <Compile Include="Connectors\Model\Reports\GradebookReportParams.cs" />

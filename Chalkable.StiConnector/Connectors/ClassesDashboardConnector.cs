@@ -93,5 +93,11 @@ namespace Chalkable.StiConnector.Connectors
 
             return Call<IList<SectionSummary>>($"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/teachers/{teacherId}/sections/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}", param);
         }
+
+        public IList<SectionSummaryForStudent> GetSectionSummaryForStudent(int acadSessionId, int studentId, int gradingPeriodId)
+        {
+            //TODO: add Api version check 
+            return Call<IList<SectionSummaryForStudent>>($"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/students/{studentId}/sections/{gradingPeriodId}");
+        }
     }
 }
