@@ -1,11 +1,11 @@
-﻿Create PROCEDURE [dbo].[spAdjustClassAnnouncementDates]
-	@ids   TInt32 ReadOnly,
-	@startDate datetime2,
-	@classId   int
+﻿CREATE PROCEDURE [dbo].[spAdjustClassAnnouncementDates_NEW]
+	@ids     TInt32 ReadOnly,
+	@shift   int,
+	@classId int
 As
 
 Declare @schoolYearId int;
-Set		@schoolYearId = (Select SchoolYearRef From Class Where Id = @classId);
+Set	@schoolYearId = (Select SchoolYearRef From Class Where Id = @classId);
 
 --need to get all class days, to obtain right result
 --when start date is out of begining of School Year
@@ -13,61 +13,17 @@ Declare @classDays TDate;
 Insert Into @classDays
 	exec spGetClassDays @classId
 
-Declare @toAdjust table
-(
-	[Id]		  int,
-	[SisActivityId] int, 
-	[ExpiresDate] datetime2
-);
+Begin Transaction
 
-Insert Into @toAdjust
-	Select [Id], [SisActivityId], [Expires] From ClassAnnouncement 
-	Where [Id] in(Select * From @ids)
+	Update ClassAnnouncement
+	Set Expires = dbo.CalcAnnouncementDate(@classDays, Expires, @shift)
+	From ClassAnnouncement Join @ids caIds
+		On ClassAnnouncement.Id = caIds.Value
 
-Declare @minAnnDate datetime2;
-Set		@minAnnDate = (Select Min([ExpiresDate]) From @toAdjust);
+	select SisActivityId, Expires
+	From ClassAnnouncement Join @ids caIds
+		On ClassAnnouncement.Id = caIds.Value
 
-print @minAnnDate
-
---to save distance beween supp announcements
-Update @toAdjust
-Set [ExpiresDate] = DateAdd(d, DateDiff(d, @minAnnDate, [ExpiresDate]), @startDate)
-
---move to nearest class day
-Update @toAdjust
-Set [ExpiresDate] =(Select Min([Day]) From @classDays Where [Day] >= [ExpiresDate])
-
---Getting last school day of School Year
-Declare @schoolYearEndDate datetime2;
-Declare @schoolYearStartDate datetime2;
-Set		@schoolYearEndDate   = (Select Max([Day]) From @classDays)
-Set		@schoolYearStartDate = (Select Min([Day]) From @classDays)
-
---supplemental announcement out of school year
-Declare @annOutOfSchoolYearEndDate TInt32;
-Insert Into @annOutOfSchoolYearEndDate
-	Select [Id] From @toAdjust Where [ExpiresDate] is null or [ExpiresDate] > @schoolYearEndDate
-
-Declare @annOutOfSchoolYearStartDate TInt32;
-Insert Into @annOutOfSchoolYearStartDate
-	Select [Id] From @toAdjust Where [ExpiresDate] < @schoolYearStartDate
-
---Fixing date for announcement
-Update @toAdjust
-Set [ExpiresDate] = @schoolYearEndDate
-Where Id in (Select * From @annOutOfSchoolYearEndDate)
-
-Update @toAdjust
-Set [ExpiresDate] = @schoolYearStartDate
-Where Id in (Select * From @annOutOfSchoolYearStartDate)
-
-------------------------------------------------------------------
-Update ClassAnnouncement
-Set Expires = t.ExpiresDate
-From @toAdjust t
-Where ClassAnnouncement.Id = t.Id
-
-select SisActivityId, ExpiresDate from @toAdjust
-
+Commit
 
 GO

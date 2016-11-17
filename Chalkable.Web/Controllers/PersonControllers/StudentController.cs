@@ -261,13 +261,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
-            var gradingSummary = SchoolLocator.GradingStatisticService.GetStudentGradingSummary(syId, studentId);
+            var gradingSummaryTask = SchoolLocator.GradingStatisticService.GetStudentGradingSummary(syId, studentId);
 
             var enrolledClassIds =
                 SchoolLocator.ClassService.GetClassPersons(studentId, null, true, null).Select(x => x.ClassRef);
 
-            var classes = 
-                gradingSummary.StudentAverages.Select(x => SchoolLocator.ClassService.GetById(x.ClassId)).ToList();
+            var gradingSummary = await gradingSummaryTask;
+            var classIds = gradingSummary.StudentAverages.Select(x => x.ClassId).ToList();
+            var classes = SchoolLocator.ClassService.GetByIds(classIds);
 
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);

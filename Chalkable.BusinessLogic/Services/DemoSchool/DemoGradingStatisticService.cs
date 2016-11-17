@@ -406,7 +406,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         }
 
-        public StudentGrading GetStudentGradingSummary(int schoolYearId, int studentId)
+        public async Task<StudentGrading> GetStudentGradingSummary(int schoolYearId, int studentId)
         {
             throw new NotImplementedException();
         }
