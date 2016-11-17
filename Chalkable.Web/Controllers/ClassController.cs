@@ -147,10 +147,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Student")]
-        public ActionResult ClassesStatsForStudent(int gradingPeriodId)
+        public ActionResult ClassesStatsForStudent(int gradingPeriodId, int? sortType)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var classes = SchoolLocator.ClassService.GetClassesStatsForStudent(Context.PersonId.Value, gradingPeriodId);
+            var classes = SchoolLocator.ClassService.GetClassesStatsForStudent(Context.PersonId.Value, gradingPeriodId, (ClassSortType?)sortType);
             return Json(classes.Select(ClassStatsViewData.Create));
         }
 

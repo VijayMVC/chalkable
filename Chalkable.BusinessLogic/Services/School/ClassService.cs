@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
         IList<ClassStatsInfo> GetClassesStats(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
-        IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId);
+        IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId, ClassSortType? sortType);
              
         IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
         bool IsTeacherClasses(int teacherId, params int[] classIds);
@@ -335,12 +335,13 @@ namespace Chalkable.BusinessLogic.Services.School
             }           
         }
 
-        public IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId)
+        public IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId, ClassSortType? sortType)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
             if(!(BaseSecurity.IsDistrictOrTeacher(Context) || studentId == Context.PersonId))
                 throw new ChalkableSecurityException();
 
+            
             IList<SectionSummaryForStudent> iNowRes;
             try
             {
@@ -357,8 +358,35 @@ namespace Chalkable.BusinessLogic.Services.School
                 var classesIds = iNowRes.Select(x => x.SectionId).ToList();
                 var classes = new ClassDataAccess(u).GetByIds(classesIds);
                 var classTeachers = new ClassTeacherDataAccess(u).GetClassTeachers(classesIds);
-                return ClassStatsInfo.Create(iNowRes, classes, classTeachers);
+                var res = ClassStatsInfo.Create(iNowRes, classes, classTeachers);
+                return SortClassesStats(res, sortType).ToList();
             }
+        }
+
+        private IEnumerable<ClassStatsInfo> SortClassesStats(IEnumerable<ClassStatsInfo> classesStats, ClassSortType? sortType)
+        {
+            sortType = sortType ?? ClassSortType.ClassAsc;
+            bool descending = sortType == ClassSortType.AttendanceDesc ||
+                              sortType == ClassSortType.DisciplineAsc ||
+                              sortType == ClassSortType.ClassDesc ||
+                              sortType == ClassSortType.GradesDesc ||
+                              sortType == ClassSortType.TeacherDesc;
+
+            if (sortType == ClassSortType.ClassAsc || sortType == ClassSortType.ClassDesc)
+                classesStats = classesStats.OrderBy(x => x.Name).ThenBy(x => x.ClassNumber);
+            if (sortType == ClassSortType.AttendanceAsc || sortType == ClassSortType.AttendanceDesc)
+                classesStats = classesStats.OrderBy(x => x.AbsenceCount);
+            if (sortType == ClassSortType.DisciplineAsc || sortType == ClassSortType.DisciplineDesc)
+                classesStats = classesStats.OrderBy(x => x.DisciplinesCount);
+            if (sortType == ClassSortType.GradesAsc || sortType == ClassSortType.GradesDesc)
+                classesStats = classesStats.OrderBy(x => x.Average);
+            if (sortType == ClassSortType.TeacherAsc || sortType == ClassSortType.TeacherDesc)
+                classesStats = classesStats.OrderBy(x => x.PrimaryTeacherDisplayName);
+
+            if (descending)
+                classesStats = classesStats.Reverse();
+
+            return classesStats;
         }
 
         public IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId)

@@ -406,7 +406,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId)
+        public IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId, ClassSortType? sortType)
         {
             throw new NotImplementedException();
         }
