@@ -302,18 +302,18 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
 
 
-        public IList<Pair<int, DateTime>> AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        public IList<Pair<int, DateTime>> AdjustDates(IList<int> ids, int shift, int classId)
         {
             var @params = new Dictionary<string, object>
             {
                 ["ids"] = ids,
-                ["startDate"] = startDate,
+                ["shift"] = shift,
                 ["classId"] = classId
             };
 
             var res = new List<Pair<int, DateTime>>();
 
-            using (var reader = ExecuteStoredProcedureReader("spAdjustClassAnnouncementDates", @params))
+            using (var reader = ExecuteStoredProcedureReader("spAdjustClassAnnouncementDates_NEW", @params))
             {
                 while (reader.Read())
                 {
