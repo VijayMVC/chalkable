@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.EnumMappers;
 using Chalkable.BusinessLogic.Model;
@@ -71,6 +72,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
         IList<ClassStatsInfo> GetClassesStats(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
+        IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId);
+             
         IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
         bool IsTeacherClasses(int teacherId, params int[] classIds);
         ClassPanorama Panorama(int classId, IList<int> academicYears, IList<StandardizedTestFilter> standardizedTestFilters);
@@ -330,6 +333,32 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 return ClassStatsInfo.Create(iNowRes, classes, classTeachers);
             }           
+        }
+
+        public IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            if(!(BaseSecurity.IsDistrictOrTeacher(Context) || studentId == Context.PersonId))
+                throw new ChalkableSecurityException();
+
+            IList<SectionSummaryForStudent> iNowRes;
+            try
+            {
+                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionSummaryForStudent(Context.SchoolYearId.Value, studentId, gradingPeriodId);
+            }
+            catch (ChalkableSisNotSupportVersionException)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+                var chalkableRes = DoRead(u => new ClassDataAccess(u).GetStudentClasses(Context.SchoolYearId.Value, studentId, gp.MarkingPeriodRef));
+                return chalkableRes.Select(ClassStatsInfo.Create).ToList();
+            }
+            using (var u = Read())
+            {
+                var classesIds = iNowRes.Select(x => x.SectionId).ToList();
+                var classes = new ClassDataAccess(u).GetByIds(classesIds);
+                var classTeachers = new ClassTeacherDataAccess(u).GetClassTeachers(classesIds);
+                return ClassStatsInfo.Create(iNowRes, classes, classTeachers);
+            }
         }
 
         public IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId)

@@ -146,6 +146,14 @@ namespace Chalkable.Web.Controllers
             return Json(classes.Select(ClassStatsViewData.Create));
         }
 
+        [AuthorizationFilter("Student")]
+        public ActionResult ClassesStatsForStudent(int gradingPeriodId)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var classes = SchoolLocator.ClassService.GetClassesStatsForStudent(Context.PersonId.Value, gradingPeriodId);
+            return Json(classes.Select(ClassStatsViewData.Create));
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents)
         {
