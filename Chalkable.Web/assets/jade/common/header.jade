@@ -10,7 +10,10 @@ if chlk.templates.search && chlk.templates.search.SiteSearch
 
 -var reportCardsEnabled = self.getContext().getSession().get(ChlkSessionConstants.REPORT_CARDS_ENABLED, false)
 if chlk.controllers.ReportingController && self.getContext().getSession().get('role').isAdmin() && reportCardsEnabled
-    +ActionButton('reporting', 'reportCards')(data-tooltip = "Report Card", data-tooltip-position="bottom").blue.report-cards-link &nbsp;
+    span(href="javascript:").report-cards-link &nbsp;
+        .chat-bubble.top.right.reports-bubble.x-hidden
+            +ActionLink('reporting', 'lunchCount') Lunch Count
+            +ActionLink('reporting', 'reportCards') Report Card
 if chlk.controllers.NotificationController
     +ActionButton('notification', 'list-new').blue.notifications-link &nbsp;
 

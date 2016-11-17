@@ -103,7 +103,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
             }
             var res = GetInfo(personId, currentSchoolYear.SchoolRef, personInfo => StudentInfoViewData.Create(personInfo, studentDetailsInfo,
-                studentSummaryInfo, studentClasses, currentClass, currentRoom, syId, today));
+                studentSummaryInfo, studentClasses, currentClass, currentRoom, syId));
 
             var studentContacts = SchoolLocator.ContactService.GetStudentContactDetails(personId);
             res.StudentContacts = StudentContactViewData.Create(studentContacts);

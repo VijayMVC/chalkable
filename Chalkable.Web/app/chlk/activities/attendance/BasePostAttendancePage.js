@@ -80,8 +80,10 @@ NAMESPACE('chlk.activities.attendance', function () {
                 BASE(model);
                 this._needPopUp = false;
                 var that = this;
+                new ria.dom.Dom('#page').off('click.leave', '.action-link:not(.class-button)');
                 new ria.dom.Dom('#page').on('click.leave', '.action-link:not(.pressed):not(#all-present-link)', function(node, event){
-                    return that.tryToLeave(node);
+                    if(!ria.dom.Dom('.info-msg-dialog').exists())
+                        return that.tryToLeave(node);
                 });
 
 

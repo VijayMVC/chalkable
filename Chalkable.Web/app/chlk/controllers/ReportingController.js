@@ -8,6 +8,7 @@ REQUIRE('chlk.services.GroupService');
 
 REQUIRE('chlk.activities.reports.StudentReportDialog');
 REQUIRE('chlk.activities.reports.ReportCardsDialog');
+REQUIRE('chlk.activities.reports.LunchCountDialog');
 REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
 
 NAMESPACE('chlk.controllers', function (){
@@ -45,6 +46,14 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.reports.StudentReportDialog, res);
         },
 
+        [[chlk.models.reports.AdminReportTypeEnum]],
+        function adminReportAction(reportType){
+            if(reportType == chlk.models.reports.AdminReportTypeEnum.REPORT_CARD)
+                return this.Redirect('reporting', 'reportCards');
+
+            return this.Redirect('reporting', 'lunchCount');
+        },
+
         [[chlk.models.reports.SubmitStudentReportViewData]],
         function submitStudentComprehensiveProgressReportAction(reportViewData){
             var result = this.reportingService.submitStudentComprehensiveProgressReport(
@@ -58,6 +67,47 @@ NAMESPACE('chlk.controllers', function (){
                 .thenBreak();
 
             return this.UpdateView(chlk.activities.reports.StudentReportDialog, result);
+        },
+
+        function lunchCountAction(){
+            if (this.isDemoSchool())
+                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+
+            var res = this.customReportTemplateService.getDefaultStudentIdToPrint()
+                .attach(this.validateResponse_())
+                .then(function(idToPrint){
+                    var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT);
+                    return new chlk.models.reports.SubmitLunchCountViewData(ableDownload, idToPrint || chlk.models.reports.StudentIdentifierEnum.NONE);
+                }, this);
+
+            return this.ShadeView(chlk.activities.reports.LunchCountDialog, res);
+        },
+
+        [[chlk.models.reports.SubmitLunchCountViewData]],
+        function submitLunchCountAction(model){
+            if(model.getSubmitType() == 'changeType')
+                return this.Redirect('reporting', 'adminReport', [model.getReportType()]);
+
+            if(!model.getTitle()){
+                this.ShowMsgBox('Title field is required.');
+                return null;
+            }
+
+            var result = this.reportingService.submitLunchCount(
+                model.getTitle(),
+                model.getOrderBy(),
+                model.getIdToPrint(),
+                model.getStartDate(),
+                model.getEndDate(),
+                model.getIncludeOptions()
+            )
+                .attach(this.validateResponse_())
+                .then(function () {
+                    this.BackgroundCloseView(chlk.activities.reports.LunchCountDialog);
+                }, this)
+                .thenBreak();
+
+            return this.UpdateView(chlk.activities.reports.LunchCountDialog, result);
         },
 
         function reportCardsAction(){
@@ -88,6 +138,9 @@ NAMESPACE('chlk.controllers', function (){
 
             if(model.getSubmitType() == 'recipient')
                 return this.addRecipients_(model);
+
+            if(model.getSubmitType() == 'changeType')
+                return this.Redirect('reporting', 'adminReport', [model.getReportType()]);
 
             if(!model.getTitle()){
                 this.ShowMsgBox('Title field is required.');
@@ -132,7 +185,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShowAlertBox('<b>Your report is being prepared.<br>You will receive a notification when it\'s ready!</b>', null, true, 'report'), null ;
         },
 
-        [[chlk.models.reports.SubmitReportCardsViewData]],
         function addRecipients_(model){
             if(!model.getRecipientsToAdd())
                 return null;
@@ -166,7 +218,7 @@ NAMESPACE('chlk.controllers', function (){
             });
 
             var res = ria.async.DeferredData(new chlk.models.reports.ReportCardRecipientsViewData(parsedSelected.groups, parsedSelected.students, selected), 10);
-            return this.UpdateView(chlk.activities.reports.ReportCardsDialog, res, 'recipients');
+            return this.UpdateView(this.getView().getCurrent().getClass(), res, 'recipients');
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
@@ -187,7 +239,7 @@ NAMESPACE('chlk.controllers', function (){
         function saveGroupsToReportAction(model){
             var selected = model.getParsedSelected();
             var model = new chlk.models.reports.ReportCardRecipientsViewData(selected.groups, selected.students, model.getSelectedItems());
-            return this.UpdateView(chlk.activities.reports.ReportCardsDialog, ria.async.DeferredData(model), 'recipients');
+            return this.UpdateView(this.getView().getCurrent().getClass(), ria.async.DeferredData(model), 'recipients');
         }
     ])
 });

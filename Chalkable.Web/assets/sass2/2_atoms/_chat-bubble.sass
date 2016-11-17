@@ -39,10 +39,15 @@
     right: -7px
     left: auto
 
-  &.top::before
-    +rotate(-45deg)
-    top: -7px
-    left: 17px
+  &.top
+    &::before
+      +rotate(-45deg)
+      top: -7px
+      left: 17px
+
+    &.right::before
+      right: 10px
+      left: auto
 
   &.bottom::before
     +rotate(135deg)

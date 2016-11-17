@@ -89,6 +89,11 @@ namespace Chalkable.StiConnector.Connectors
             return Download(BaseUrl + "reports/seatingchart", ps);
         }
 
+        public byte[] LunchCountReport(LunchCountReportParams ps)
+        {
+            return Download(BaseUrl + "reports/lunchcounts", ps);
+        }
+
         public async Task<ReportCard> GetReportCardData(ReportCardOptions options)
         {
             return await PostAsync<ReportCard, ReportCardOptions>($"{BaseUrl}reports/reportcard", options);

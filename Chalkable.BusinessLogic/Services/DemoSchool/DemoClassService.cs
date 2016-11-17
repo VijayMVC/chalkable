@@ -378,9 +378,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ClassStorage.GetById(id);
         }
 
+        public IList<Class> GetByIds(IList<int> ids)
+        {
+            return ids.Select(ClassStorage.GetById).ToList();
+        }
+
         public IList<Class> GetAll()
         {
             return ClassStorage.GetAll();
+        }
+
+        public IList<Class> GetClassesBySchoolYear(int schoolYearId, int? gradeLevel)
+        {
+            var res = GetAll().Where(x => x.SchoolYearRef == schoolYearId);
+            if (gradeLevel.HasValue)
+                res = res.Where(x => x.MinGradeLevelRef <= gradeLevel.Value && x.MaxGradeLevelRef >= gradeLevel.Value);
+            return res.ToList();
         }
 
         public IList<ClassDetails> GetAllSchoolsActiveClasses()
@@ -388,7 +401,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortyType)
+        public IList<ClassStatsInfo> GetClassesStats(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortyType)
         {
             throw new NotImplementedException();
         }

@@ -143,7 +143,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult ClassesStats(int schoolYearId, string filter, int? start, int? count, int? teacherId, int? sortType)
         {
-            var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId,(ClassSortType?) sortType);
+            var classes = SchoolLocator.ClassService.GetClassesStats(schoolYearId, start, count, filter, teacherId,(ClassSortType?) sortType);
             return Json(classes.Select(ClassStatsViewData.Create));
         }
 
@@ -205,10 +205,14 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult ClassesBySchool(int schoolId, int? gradeLevelId)
+        public ActionResult ClassesBySchool(int schoolId, int? gradeLevel)
         {
-            var schoolYear = Context.SchoolYearId;
-            var classes = SchoolLocator.ClassService.GetClassesBySchool(schoolYear.Value, schoolId, gradeLevelId);
+            var currentSy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            var schoolYear = SchoolLocator.SchoolYearService.GetSchoolYears(0, 1, schoolId, currentSy.AcadYear, true).FirstOrDefault();
+            IList<Class> classes = new List<Class>();
+            if (schoolYear != null)
+                classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYear.Id, gradeLevel);
+
             return Json(classes.Select(ShortClassViewData.Create));
         }
 

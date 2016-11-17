@@ -515,7 +515,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         ToClassId = x.CopyToSectionId
                     }).ToList();
 
-                fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u).CopyClassAnnouncementsToClass(sisActivityCopyRes,  Context.NowSchoolTime);
+                //TODO change it from dictionaty to CopyAnnouncementResult later
+                fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u)
+                    .CopyClassAnnouncementsToClass(sisActivityCopyRes, Context.NowSchoolTime)
+                    .ToDictionary(x => x.FromAnnouncementId, x => x.ToAnnouncementId);
+
                 AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator);
                 ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementsIds.Select(x => x.Value).ToList(), u);
 
@@ -565,7 +569,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                             ToClassId = x.CopyToSectionId
                         }).ToList();
 
-                    var resAnnIds = da.CopyClassAnnouncementsToClass(sisCopyResult, Context.NowSchoolYearTime).Select(x=>x.Value).ToList();
+                    var resAnnIds = da.CopyClassAnnouncementsToClass(sisCopyResult, Context.NowSchoolYearTime)
+                        .Select(x=>x.ToAnnouncementId).Distinct().ToList();
                     var attOwners = new ClassTeacherDataAccess(u).GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
 
                     AnnouncementAttachmentService.CopyAnnouncementAttachments(classAnnouncementId, attOwners, resAnnIds, u, ServiceLocator, ConnectorLocator);
@@ -703,18 +708,27 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             AddActivitiesToChalkable(locator, activities, CreateClassAnnouncementDataAccess(locator, u));
         }
 
+        //TODO: Strange and ugly logic with school year. Needed to be refactored!
         private static void AddActivitiesToChalkable(IServiceLocatorSchool locator, IList<Activity> activities, ClassAnnouncementDataAccess dataAccess)
         {
-            if (activities == null) return;
+            if (activities == null || activities.Count == 0)
+                return;
+
+            var classIds = activities.GroupBy(x => x.SectionId).Select(x => x.Key).ToList();
+            var classes = locator.ClassService.GetByIds(classIds);
+
             EnsureInAnnouncementsExisting(activities, dataAccess);
             IList<ClassAnnouncement> addToChlkAnns = new List<ClassAnnouncement>();
             foreach (var activity in activities)
             {
+                var @class = classes.First(x => x.Id == activity.SectionId); //  !!!
+               if(!@class.SchoolYearRef.HasValue) continue;
+
                 var ann = new ClassAnnouncement
                 {
                     Created = locator.Context.NowSchoolTime,
                     State = AnnouncementState.Created,
-                    SchoolYearRef = locator.Context.SchoolYearId.Value,
+                    SchoolYearRef = @class.SchoolYearRef.Value,
                     SisActivityId = activity.Id,
                 };
                 MapperFactory.GetMapper<ClassAnnouncement, Activity>().Map(ann, activity);

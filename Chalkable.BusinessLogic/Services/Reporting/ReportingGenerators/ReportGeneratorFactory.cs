@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting.ReportingGenerators
 {
     public class ReportGeneratorFactory
     {
-        private static IDictionary<Type, Object> _generatorDictionary;
+        //private static IDictionary<Type, Object> _generatorDictionary;
 
         private static IDictionary<Type, Object> BuildGaneratorDictionary(
             IServiceLocatorSchool serviceLocatorSchool,
@@ -34,6 +34,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting.ReportingGenerators
                 {typeof(LessonPlanReportInputModel), new LessonPlanReportGenerator(serviceLocatorSchool, connectorLocator)},
                 {typeof(FeedReportInputModel), new FeedReportGenerator(serviceLocatorSchool, connectorLocator) },
                 {typeof(ReportCardsInputModel), new ReportCardGenerator(serviceLocatorSchool, connectorLocator) },
+                {typeof(LunchCountReportInputModel), new LunchCountReportGenerator(serviceLocatorSchool, connectorLocator) }
             };
         }
 
@@ -43,8 +44,8 @@ namespace Chalkable.BusinessLogic.Services.Reporting.ReportingGenerators
         )
             where TReportSettings : class
         {
-            if (_generatorDictionary == null)
-                _generatorDictionary = BuildGaneratorDictionary(serviceLocatorSchool, connectorLocator);
+
+            var _generatorDictionary = BuildGaneratorDictionary(serviceLocatorSchool, connectorLocator);
             if (!_generatorDictionary.ContainsKey(typeof(TReportSettings)))
                 throw new ChalkableException("Could not find report generator for such input data");
             var res = _generatorDictionary[typeof(TReportSettings)] as IReportGenerator<TReportSettings>;

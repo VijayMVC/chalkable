@@ -17,8 +17,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public int? Discipline { get; set; }
         public decimal? TotalOfDaysEnrolled { get; set; }
 
-        public static StudentDetailsViewData Create(StudentDetailsInfo student, decimal? gradeAvg, ShortStudentAbsenceInfo absences, int? infractions, 
-            DateTime currentSchoolTime)
+        public static StudentDetailsViewData Create(StudentDetailsInfo student, decimal? gradeAvg, ShortStudentAbsenceInfo absences, int? infractions)
         {
             return new StudentDetailsViewData
             {
@@ -34,7 +33,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 Absences = absences != null ? decimal.Round(absences.NumberOfAbsences) : (decimal?)null,
                 Discipline = infractions ?? 0,
                 GradeAvg = gradeAvg.HasValue ? decimal.Round(gradeAvg.Value, 2) : (decimal?) null,
-                IsIEPActive = student.IsIEPActive(currentSchoolTime),
+                IsIEPActive = student.IsIEPActive,
                 IsRetainedFromPrevSchoolYear = false,
                 TotalOfDaysEnrolled = absences?.NumberOfDaysEnrolled
             };
