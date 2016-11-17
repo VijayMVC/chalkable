@@ -313,7 +313,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
             var res = new List<Pair<int, DateTime>>();
 
-            using (var reader = ExecuteStoredProcedureReader("spAdjustClassAnnouncementDates_NEW", @params))
+            using (var reader = ExecuteStoredProcedureReader("spAdjustClassAnnouncementDates", @params))
             {
                 while (reader.Read())
                 {
