@@ -310,6 +310,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.GradingPeriodId, Number]],
+            ria.async.Future, function getClassesStatisticForStudent(gradingPeriodId, sortType_) {
+                return this.get('Class/ClassesStatsForStudent.json', ArrayOf(chlk.models.school.SchoolClassesStatisticViewData.OF(chlk.models.id.ClassId)), {
+                    gradingPeriodId: gradingPeriodId.valueOf(),
+                    sortType: sortType_
+                });
+            },
+
             [[chlk.models.id.SchoolId, chlk.models.id.GradeLevelId]],
             ria.async.Future, function getClassesBySchool(schoolId, gradeLevel_) {
                 return this.get('Class/ClassesBySchool.json', ArrayOf(chlk.models.classes.Class), {
