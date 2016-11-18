@@ -1,0 +1,56 @@
+.admin-summary-page
+    h2.page-title Classes
+    +ActionForm('schools', 'classesStatistic').school-statistic-form
+        .form-container
+            +Select("gradingPeriodId").grading-period-select.flat
+                each gp in self.getGradingPeriods()
+                    +Option(gp.getId(), gp.getName(), self.getGradingPeriodId() == gp.getId())
+            Button(type="submit", name="submitType", value="gradingPeriod").x-hidden.gp-submit
+            .clear-fix
+        .grid-container
+            -var stats = self.getItemsStatistic()
+            -var classes = stats.getItems()
+            -var isNotEmptyStatistic = stats.isNotEmptyStatistic()
+            -var sortType = stats.getSortType()
+            -var typesEnum = chlk.models.admin.ClassSortTypeEnum
+            input(type="hidden", name="sortType", value=sortType)
+            .chlk-calendar
+                .grid-top-content
+                    if classes.length
+                        +ListView(classes).district-summary-grid
+                            .grid-content
+                                .grid-header.grid-row
+                                    .cell.name=Msg.Classes
+                                    .cell.teacher-name=Msg.Teacher
+                                    .cell.section Section
+                                    if isNotEmptyStatistic
+                                        .cell.attendance=Msg.Attendance + ' %'
+                                        .cell.discipline=Msg.Discipline
+                                        .cell.grades=Msg.Grade_Avg
+                                each clazz in classes
+                                    .grid-row
+                                        .cell.name
+                                            +ActionLink('class', 'info', clazz.getId())(data-tooltip = (clazz.getClassNumber() || '') + ' ' + clazz.getName())=clazz.getName()
+                                        .cell.teacher-name=clazz.getPrimaryTeacherName()
+                                        .cell.section=clazz.getClassNumber()
+                                        if isNotEmptyStatistic
+                                            .cell.attendance
+                                                +ActionLink('class', 'attendanceList', clazz.getId())(
+                                                    data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
+                                                    data-disabled-message = clazz.isAttendancesProfileEnabled() ? '' : clazz.getNoAccessMsg('attendance'),
+                                                    class = clazz.getAbsencesClass()
+                                                ).with-events.circle-cnt=clazz.getPresence() && Math.round(clazz.getPresence() * 10) / 10
+                                            .cell.discipline
+                                                +ActionLink('class', 'discipline', clazz.getId())(
+                                                    data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
+                                                    data-disabled-message = clazz.isDisciplinesProfileEnabled() ? '' : clazz.getNoAccessMsg('discipline'),
+                                                    class = clazz.getInfractionsClass()
+                                                ).with-events.circle-cnt=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
+                                            .cell.grades
+                                                +ActionLink('class', 'grading', clazz.getId())(
+                                                    data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
+                                                    data-disabled-message = clazz.isGradingProfileEnabled() ? '' : clazz.getNoAccessMsg('grading'),
+                                                    class = clazz.getAvgClass()
+                                                ).with-events.circle-cnt=clazz.getAvg() && parseInt(clazz.getAvg(), 10)
+                    else
+                        .no-items-text There are no classes
