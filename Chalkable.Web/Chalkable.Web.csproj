@@ -416,6 +416,7 @@
     <Compile Include="Models\EthnicityViewData.cs" />
     <Compile Include="Models\HomeroomViewData.cs" />
     <Compile Include="Models\PanoramaViewDatas\StudentPanoramaViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentAlertDetailsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentDetailsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentHealthFormViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentLunchCountViewData.cs" />
