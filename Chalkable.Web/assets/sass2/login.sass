@@ -1,0 +1,200 @@
+@import "compass/css3/box-shadow"
+
+// variables
+
+$white: #fff
+
+$black: #000
+
+$silver: #dfe0e0
+$silver_light: #f6f7f7
+$silver_dark: #cfd0d0
+
+$gray_light: #949493
+$gray_dark: #393938
+
+$blue: #2c75ba
+$blue_light: #4a93d8
+$blue_dark: #1c65aa
+
+$orange: #ffb820
+$orange_light: #ffc72f
+$orange_dark: #ffa911
+
+$red: #f46036
+
+$green: #96d041
+
+$main-width: 470px
+$main-margin: 70px
+
+@import "compass/css3/transform"
+@import "compass/css3/transition"
+@import "0_ephir/shake"
+
+// background
+
+body
+    margin: 0
+    padding: 0
+    background: $silver_light
+    color: $gray_dark
+    font-family: 'Open Sans', sans-serif
+    min-width: $main-width + $main-margin*2
+    font-size: 13px
+
+    overflow-x: auto
+    overflow-y: scroll
+
+A
+    font-weight: bold
+    text-decoration: none
+
+    &, &:visited
+        color: inherit
+
+    &:hover, &:active
+        color: $blue
+
+.wrapper
+    padding: 0 $main-margin
+
+.login-page
+    max-width: 960px
+    margin: 0 auto
+
+    > div
+        margin: 15px auto
+        width: $main-width
+        text-align: center
+
+    .logo
+        margin: 40px auto 23px
+        height: image-height("images2/login/logo.png")
+        background: image-url("images2/login/logo.png") center 0 no-repeat
+
+    .body
+        position: relative
+        +transition(height .1s linear)
+
+    .modal-form
+        background: $white
+        border: 1px solid $silver
+        border-radius: 3px
+        +box-shadow(transparentize($silver, .7) 0 0 2px 1px)
+        padding: 0 0 15px
+
+    h2
+        font-size: 22px
+
+    hr
+        border-color: $silver_light
+        border-width: 1px 0 0 0
+        margin: 35px 0 20px
+
+    .img-c-folder
+        margin-top: 0
+        height: 147px
+        background: image-url("images2/login/illustration.png") center 0 no-repeat
+
+    form
+        margin: 25px 95px 12px
+
+    .banner
+        color: $red
+        font-size: 14px
+
+        &.info
+            color: $gray_dark
+
+    .form-group
+        margin: 14px 0
+        position: relative
+
+    input.error
+        border-color: $red
+        margin-top: 25px
+
+    label.error
+        color: white
+        bottom: 50px
+        border-radius: 5px
+        text-align: right
+        display: block !important
+        position: absolute
+        right: 0
+        background: rgba(0, 0, 0, 0.7)
+
+        &:not(:empty)
+            padding: 10px
+
+    input, button
+        display: block
+        line-height: 47px
+        width: 100%
+        font-size: 16px
+        font-weight: 600
+        border: 1px solid transparent
+        box-sizing: border-box
+        padding: 0 15px
+        border-radius: 2px
+        height: 49px
+
+    input
+        background-color: $white !important
+        color: $gray_dark
+        border-color: $silver_dark
+
+    input:-webkit-autofill
+        background-color: $white !important
+        color: $gray_dark
+        border-color: $silver_dark
+
+    button
+        background: $blue
+        color: $white
+        border-color: $blue
+        cursor: pointer
+
+    small
+        color: $gray_light
+        font-size: 13px
+
+        A
+            color: $blue
+            font-weight: 600
+
+
+    .sub-footer
+        font-size: 14px
+        A
+            display: inline-block
+            margin: 0 10px
+
+    .footer
+        margin-top: -5px
+        font-size: 12px
+        color: $gray_light
+
+
+    input[type=submit][disabled], button[type=submit][disabled]
+        opacity: 0.5
+
+        &.working
+            //color: transparent !important
+            position: relative
+
+            &::after
+                content: ' '
+                position: absolute
+                top: 0
+                left: 0
+                width: 20%
+                bottom: 0
+                background: image-url("images2/loaders/circular-grey.gif") no-repeat 50% 50%
+                background-size: 50%
+
++shake-keyframes('shake-horizontal', 40px)
+
+.shaking
+    +animation(shake-horizontal .25s .1s)
