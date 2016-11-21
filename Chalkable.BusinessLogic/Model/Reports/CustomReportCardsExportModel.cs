@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 LogoHref = logoRef,
                 AcadSessionName = reportCard.AcadSessionName,
                 ReportDate = reportDate.ToString("m/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture),
-                CopyRight = "Copyright (c) 2016 Chalkable ST.US.000031.",
+                CopyRight = $"Copyright (c) {DateTime.Now.Year} Chalkable",
                 School = new SchoolReportCardsExportModel
                 {
                     Address1 = reportCard.School.Address1,
