@@ -4,15 +4,11 @@
 	@classId int
 As
 
-Declare @schoolYearId int;
-Set	@schoolYearId = (Select SchoolYearRef From Class Where Id = @classId);
-
 --need to get all class days, to obtain right result
 --when start date is out of begining of School Year
 Declare @classDays TDate;
 Insert Into @classDays
 	exec spGetClassDays @classId
-
 
 Update ClassAnnouncement
 Set Expires = dbo.CalcAnnouncementDate(@classDays, Expires, @shift)
