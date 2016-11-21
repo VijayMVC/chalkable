@@ -6,6 +6,7 @@ REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineTypeService');
 REQUIRE('chlk.services.SchoolYearService');
+REQUIRE('chlk.services.StudentService');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassScheduleViewData');
@@ -19,6 +20,7 @@ REQUIRE('chlk.activities.classes.ClassExplorerPage');
 REQUIRE('chlk.activities.classes.ClassProfileDisciplinePage');
 REQUIRE('chlk.activities.classes.ClassPanoramaPage');
 REQUIRE('chlk.activities.classes.ClassProfileLunchPage');
+REQUIRE('chlk.activities.classes.StudentAlertsPopup');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -49,6 +51,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.SchoolYearService, 'schoolYearService',
+
+            [ria.mvc.Inject],
+            chlk.services.StudentService, 'studentService',
 
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
@@ -452,6 +457,17 @@ NAMESPACE('chlk.controllers', function (){
                         );
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAppsPage, res);
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.SchoolYearId]],
+            function showAlertsPopUpAction(studentId, schoolYearId){
+                var res = this.studentService.getStudentAlertDetails(studentId, schoolYearId)
+                    .then(function(model){
+                        model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                        return model;
+                    });
+
+                return this.ShadeView(chlk.activities.classes.StudentAlertsPopup, res);
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
