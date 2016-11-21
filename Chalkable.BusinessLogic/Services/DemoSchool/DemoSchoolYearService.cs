@@ -99,10 +99,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             SchoolYearStorage = new DemoSchoolYearStorage();
         }
 
-        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null)
+        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null, int? acadYear = null, bool activeOnly = false)
         {
-            var schoolYears = SchoolYearStorage.GetAll();
-            return new PaginatedList<SchoolYear>(schoolYears, start/count, count, schoolYears.Count);
+            var schoolYears = SchoolYearStorage.GetAll().AsEnumerable();
+            if (schoolId.HasValue)
+                schoolYears = schoolYears.Where(x => x.SchoolRef == schoolId);
+            if (acadYear.HasValue)
+                schoolYears = schoolYears.Where(x => x.AcadYear == acadYear);
+            if (activeOnly)
+                schoolYears = schoolYears.Where(x => x.IsActive);
+
+            return new PaginatedList<SchoolYear>(schoolYears, start/count, count);
         }
 
         public IList<int> GetYears()

@@ -159,6 +159,7 @@
     <Compile Include="Connectors\Model\DisciplineReferral.cs" />
     <Compile Include="Connectors\Model\Reports\GradeVerificationReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\LessonPlanReportParams.cs" />
+    <Compile Include="Connectors\Model\Reports\LunchCountReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\MissingAssignmentsParams.cs" />
     <Compile Include="Connectors\Model\Reports\ReportCards\ReportCardAddressData.cs" />
     <Compile Include="Connectors\Model\Reports\ReportCards\GradingPeriod.cs" />

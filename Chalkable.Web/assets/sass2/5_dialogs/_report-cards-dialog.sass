@@ -1,4 +1,8 @@
-.report-cards-dialog
+.lunch-count-dialog
+  .report-window .chosen-container-multi .chosen-choices
+    min-height: 60px
+
+.report-cards-dialog, .lunch-count-dialog
   //.x-window-footer
     background: transparent
     text-align: right
@@ -11,6 +15,9 @@
       height: 78px
       font-size: 24px
       color: #1d1d1d
+
+  .report-type-select
+    width: 100%
 
   .add-recipients-container
     .recipients-list
@@ -33,9 +40,24 @@
     .x-window-body
       width: auto
 
+    .report-content
+      min-height: 500px
+
   .report-table
     margin: 0 80px
     width: 862px
+
+    .hasDatepicker
+      width: 114px
+
+    td.item-4
+      width: 159px
+
+    td.item-4:nth-child(4)
+      width: 385px
+
+      .chosen-container, SELECT
+        width: 100% !important
 
     td.item-3:not(:nth-child(3))
       width: auto
@@ -46,8 +68,13 @@
       .chosen-container, SELECT
         width: 100% !important
 
+  .mt-28
+    margin-top: 28px
+
+  .mb-28
+    margin-bottom: 28px
+
   .text-block
-    margin: 28px 0
     position: relative
 
     LABEL
@@ -66,9 +93,6 @@
       padding-left: 45px
       font-size: 12px
       color: #aaa
-
-  .recipients-list
-    margin-top: 20px
 
   .images-for-load-cnt
     opacity: 0

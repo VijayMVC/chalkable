@@ -112,13 +112,21 @@ NAMESPACE('chlk.activities.reports', function(){
                 }
             },
 
+            [ria.mvc.DomEventBind('change', '.report-type-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function reportTypeChange(node, event, selected_){
+                var btn = this.dom.find('.change-type-btn');
+                btn.trigger('click');
+                node.$.val(btn.getData('type-value'));
+                node.trigger('chosen:updated');
+            },
+
             OVERRIDE, Object, function isReadyForClosing() {
                 var includeArray = this.dom.find('.include-select').getValue() || [],
                     oEnum = chlk.models.reports.ReportCardsAdditionalOptions;
 
                 if(
                     this.dom.find('#group-ids-value').getValue() ||
-                    this.dom.find('#student-ids-value').getValue() ||
                     this.dom.find('#student-ids-value').getValue() ||
                     this.dom.find('.report-title').getValue() != "Report Card"  ||
                     parseInt(this.dom.find('[name=recipient]:checked').getValue(), 10) != 0 ||

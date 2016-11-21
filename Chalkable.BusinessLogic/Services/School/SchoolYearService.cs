@@ -15,11 +15,12 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface ISchoolYearService
     {
         IList<SchoolYear> Add(IList<SchoolYear> schoolYears); 
-        IList<SchoolYear> Edit(IList<SchoolYear> schoolYears); 
-        SchoolYear GetSchoolYearById(int id);
-        PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null);
-        IList<int> GetYears(); 
+        IList<SchoolYear> Edit(IList<SchoolYear> schoolYears);
         void Delete(IList<int> schoolYearIds);
+
+        SchoolYear GetSchoolYearById(int id);
+        PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null, int? acadYear = null, bool activeOnly = false);
+        IList<int> GetYears(); 
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetPreviousSchoolYears(int fromSchoolYearid, int count = 1);
         IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true);
@@ -46,13 +47,17 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new SchoolYearDataAccess(u).GetById(id));
         }
 
-        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null)
+        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null, int? acadYear = null, bool activeOnly = false)
         {
             var acadSessions = ConnectorLocator.UsersConnector.GetUserAcadSessionsIds(); 
             
             var conds = new AndQueryCondition();
             if(schoolId.HasValue)
                 conds.Add(nameof(SchoolYear.SchoolRef), schoolId.Value);
+            if(activeOnly)
+                conds.Add(nameof(SchoolYear.ArchiveDate), null);
+            if(acadYear.HasValue)
+                conds.Add(nameof(SchoolYear.AcadYear), acadYear);
 
             var res = DoRead(u => new SchoolYearDataAccess(u).GetAll(conds));
             res = res.Where(x => acadSessions.Contains(x.Id)).ToList();

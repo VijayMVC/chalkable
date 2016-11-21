@@ -8,6 +8,7 @@ REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceRegisterReportViewData');
 REQUIRE('chlk.models.reports.SubmitReportCardsViewData');
+REQUIRE('chlk.models.reports.SubmitLunchCountViewData');
 REQUIRE('chlk.models.settings.ReportCardsLogo');
 
 REQUIRE('chlk.lib.ajax.IframeGetTask');
@@ -366,6 +367,21 @@ NAMESPACE('chlk.services', function () {
                  includeOptions: includeOptions_,
                  studentIds: studentIds_ && this.arrayToCsv(studentIds_)
             });
+        },
+
+        [[String, chlk.models.reports.LunchCountOrderBy, chlk.models.reports.StudentIdentifierEnum, chlk.models.common.ChlkDate,
+            chlk.models.common.ChlkDate, String]],
+        ria.async.Future, function submitLunchCount(title, orderBy, idToPrint, startDate_, endDate_, includeOptions_){
+            var url = this.getUrl('Reporting/LunchCountReport.json', {
+                title: title,
+                orderBy: orderBy.valueOf(),
+                idToPrint: idToPrint.valueOf(),
+                startDate: startDate_ && startDate_.toStandardFormat(),
+                endDate: endDate_ && endDate_.toStandardFormat(),
+                includeOptions: includeOptions_
+            });
+
+            return this.getWithIframe_(url);
         },
 
         ria.async.Future, function listReportCardsLogo(){
