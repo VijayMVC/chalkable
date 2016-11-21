@@ -370,7 +370,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     if (e.InnerException != null && e.InnerException.Message == InowErrors.ACTIVITY_SECTION_NAME_DATE_MUSTBEUNIQUE_ERROR)
                     {
                         uow.Rollback();
-                        throw new ChalkableException("During adjusting activities was a conflict. Activity title, date and class should be unique. Please try again");
+                        throw new ChalkableException("A conflict occurred while adjusting activities. Please ensure that activity title, date and class are unique and try again");
                     }
                 }
             }
