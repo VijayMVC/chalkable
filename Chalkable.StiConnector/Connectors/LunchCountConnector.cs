@@ -14,6 +14,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public async Task<IList<LunchCount>> GetLunchCount(int sectionId, DateTime date)
         {
+            EnsureApiVersion("7.3.11.21573");
             var url = $"{BaseUrl}chalkable/sections/{sectionId}/lunchcount/{date.ToString(Constants.DATE_FORMAT)}";
             return await CallAsync<IList<LunchCount>>(url);
         }
@@ -21,6 +22,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public void UpdateLunchCount(int sectionId, DateTime date, List<LunchCount> lunchCounts)
         {
+            EnsureApiVersion("7.3.11.21573");
             Post($"{BaseUrl}chalkable/sections/{sectionId}/lunchcount/{date.ToString(Constants.DATE_FORMAT)}", lunchCounts);
         }
     }
