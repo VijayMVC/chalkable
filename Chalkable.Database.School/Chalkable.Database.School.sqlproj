@@ -380,6 +380,8 @@
     <Build Include="Tables\AdminAnnouncementStudent.sql" />
     <Build Include="User Defined Types\TStudentGroup.sql" />
     <Build Include="Functions\CalcAnnouncementDate.sql" />
+    <Build Include="Tables\MealType.sql" />
+    <Build Include="User Defined Types\TMealType.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.000.Update sort type in PersonSettings.sql" />

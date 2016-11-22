@@ -45,6 +45,7 @@ NAMESPACE('chlk.templates.profile', function(){
                     //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))
                     links.push(this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, !this.canViewGrading_(teacherIds), '7.1.6.19573'));
                     links.push(this.buildActionLinkModelForClass('explorer', 'Explorer', pressedActionName, classId_, !this.canViewExplorer_(teacherIds)));
+                    links.push(this.buildActionLinkModelForClass('lunch', 'Lunch', pressedActionName, classId_, false, '7.3.11.21573'));
                     links.push(this.buildActionLinkModelForClass('panorama', 'Panorama', pressedActionName, classId_, !this.canViewPanorama_(teacherIds)));
                 }
                 return links;

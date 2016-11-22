@@ -15,6 +15,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PanoramaViewDatas;
 using Chalkable.Web.Models.Settings;
@@ -213,6 +214,20 @@ namespace Chalkable.Web.Controllers
                 classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYear.Id, gradeLevel);
 
             return Json(classes.Select(ShortClassViewData.Create));
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public async Task<ActionResult> LunchCount(int classId, DateTime date, bool includeGuests)
+        {
+            var lunchCountGrid = await SchoolLocator.LunchCountService.GetLunchCountGrid(classId, date, includeGuests);
+            return Json(LunchCountGridViewData.Create(lunchCountGrid));
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult UpdateLunchCount(int classId, DateTime date, List<LunchCount> lunchCounts)
+        {
+            SchoolLocator.LunchCountService.UpdateLunchCount(classId, date, lunchCounts);
+            return Json(true);
         }
     }
 }
