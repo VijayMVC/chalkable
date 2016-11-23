@@ -1,0 +1,1886 @@
+﻿{
+                data: {
+					acadyear : 2017,
+					logohref : "https://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_reportcardslogo_83009fe9-8594-4e33-a09e-1ef4f81d0e8d",
+					acadsessionname : "High School 2016-17",
+					school : {
+						address1 : "17 Fast Times Way",
+						address2 : "",
+						city : "Hometowne",
+						name : "Greene High School",
+						phone : "",
+						state : "",
+						zip : "          "
+					},
+					traditionalgradingscale: [{
+						name: "A",
+						minvalue: 89.5,
+						maxvalue: 120
+					}, {
+						name: "B",
+						minvalue: 79.5,
+						maxvalue: 89.499
+					}, {
+						name: "C",
+						minvalue: 69.5,
+						maxvalue: 79.499
+					}, {
+						name: "D",
+						minvalue: 59.5,
+						maxvalue: 69.499
+					}, {
+						name: "F",
+						minvalue: 0,
+						maxvalue: 59.499
+					}],
+					standardsgradingscale: [{
+						name: "A",
+						description: "Description A"
+					}, {
+						name: "B",
+						description: "Description B"
+					}, {
+						name: "C",
+						description: "Description C"
+					}, {
+						name: "D",
+						description: "Description D"
+					}, {
+						name: "F",
+						description: "Description F"
+					}],
+					idtoprint: false,
+                    student: { 
+						studentid: 123, 
+						altstudentnumber : "43534STU",
+						attendance : [{
+								enrolled : 75.0,
+								present: 66.0,
+								absences : 4.0,
+								tardies: 5.0,
+								excusedabsences : 1.0,
+								excusedtardies : 0.0,
+								gradingperiodid : 1,
+								gradingperiodname : "S-1",
+								unexcusedabsences : 3.0,
+								unexcusedtardies : 5.0
+							}, {
+								enrolled : 80.0,
+								present: 76.0,
+								absences : 2.0,
+								tardies: 2.0,
+								excusedabsences : 0.0,
+								excusedtardies : 1.0,
+								gradingperiodid : 2,
+								gradingperiodname : "S-2",
+								unexcusedabsences : 2.0,
+								unexcusedtardies : 1.0
+							}
+						],
+						gradelevel : "12th Grade",
+						homeroomteacher : "Mrs. Bluth",
+						name : "George Michael Bluth",
+						promoted : true,
+						classes : [{
+							name : "Math 7",
+							sectionnumber : "001",
+							teacher : "Teacher, A",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}, {
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Not Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Qwerty"
+									}],
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "1st Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}, {
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Not Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Qwerty"
+									}],
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "English 7",
+							sectionnumber : "002",
+							teacher: "Teacher, Another",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "Math 7",
+							sectionnumber : "001",
+							teacher : "Teacher, A",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "1st Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "English 7",
+							sectionnumber : "002",
+							teacher: "Teacher, Another",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "Math 7",
+							sectionnumber : "001",
+							teacher : "Teacher, A",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "1st Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "English 7",
+							sectionnumber : "002",
+							teacher: "Teacher, Another",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "Math 7",
+							sectionnumber : "001",
+							teacher : "Teacher, A",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "1st Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "English 7",
+							sectionnumber : "002",
+							teacher: "Teacher, Another",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "Math 7",
+							sectionnumber : "001",
+							teacher : "Teacher, A",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "1st Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "English 7",
+							sectionnumber : "002",
+							teacher: "Teacher, Another",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "Math 7",
+							sectionnumber : "001",
+							teacher : "Teacher, A",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "1st Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "English 7",
+							sectionnumber : "002",
+							teacher: "Teacher, Another",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "Math 7",
+							sectionnumber : "001",
+							teacher : "Teacher, A",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "1st Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "English 7",
+							sectionnumber : "002",
+							teacher: "Teacher, Another",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "Math 7",
+							sectionnumber : "001",
+							teacher : "Teacher, A",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "1st Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}, {
+							name : "English 7",
+							sectionnumber : "002",
+							teacher: "Teacher, Another",
+							timestardy : 1.0,
+							gradingperiods : [{
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}, {
+								gradeditems : [{
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : [{
+										commentheadername : "Comment",
+										commentheaderdescription : "Comment for Avg",
+										commentcode : "E",
+										comment : "Excellent"
+									}],
+									gradeditemname : "Avg",
+									isexempt : false,
+									numericgrade : 98.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "B",
+									comments : null,
+									gradeditemname : "Exam",
+									isexempt : false,
+									numericgrade : 88.0
+								}, {
+									alphagradeid : 0,
+									alphagrade : "A",
+									comments : null,
+									gradeditemname : "Final",
+									isexempt : false,
+									numericgrade : 93.0
+								}],
+								gradingperiodid : 0,
+								gradingperiodname : "2nd Nine Weeks",
+								note : "This a note for the student",
+								standards : [{
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}, {
+									name : "Standard 1",
+									description : "Description",
+									grade : "A",
+									comment : ""
+								}, {
+									name : "Standard 2",
+									description : "Another description",
+									grade : "B",
+									comment : "Comment"
+								}]
+							}]
+						}],
+						
+						recipient : {
+							addressline1 : "111 First Street",
+							addressline2 : "Apt. 2",
+							city : "Anytown",
+							postalcode : "11111",
+							recipientname : "George Bluth",
+							state : "AL"
+						},
+						gradingperiod : {
+							announcement : "",
+							name: "4th Quarter",
+							startdate : "2006-03-21T00:00:00",
+							enddate : "2006-06-01T00:00:00"
+						},
+						
+						reportcardscomment: "Steven has been an excellent student. He's really taken affection for the electric guitar! I would strongly encourage you to look at acquiring a private tutor.",
+						merits: 0,
+						demerits: 0
+					}
+                }
+            } 
