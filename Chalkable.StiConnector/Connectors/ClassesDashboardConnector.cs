@@ -96,7 +96,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public IList<SectionSummaryForStudent> GetSectionSummaryForStudent(int acadSessionId, int studentId, int gradingPeriodId)
         {
-            //TODO: add Api version check 
+            EnsureApiVersion("7.3.11.21573");
             return Call<IList<SectionSummaryForStudent>>($"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/students/{studentId}/sections/{gradingPeriodId}");
         }
     }

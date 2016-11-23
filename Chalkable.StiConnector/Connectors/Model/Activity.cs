@@ -28,10 +28,9 @@ namespace Chalkable.StiConnector.Connectors.Model
         public decimal? WeightAddition { get; set; }
         public decimal? WeightMultiplier { get; set; }
         public bool Complete { get; set; }
-        
-        public decimal? MaxWeight
-        {
-            get { return MaxScore*WeightMultiplier + WeightAddition; }
-        }
+
+        public Score Score { get; set; }
+
+        public decimal? MaxWeight => MaxScore*WeightMultiplier + WeightAddition;
     }
 }

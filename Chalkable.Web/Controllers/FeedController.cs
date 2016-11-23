@@ -94,14 +94,11 @@ namespace Chalkable.Web.Controllers
             var apps = schoolL.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(annApps.Select(x => x.ApplicationRef).ToList());
             annApps = annApps.Where(x => apps.Any(a => a.Id == x.ApplicationRef)).ToList();
 
-            IList<StudentAnnouncement> stAnns = new List<StudentAnnouncement>();
-            if (schoolL.Context.Role == CoreRoles.STUDENT_ROLE)
+            var stAnns = announcements.Where(x => x.CurrentStudentScore != null).Select(x =>
             {
-                var stAnnsDetails = Task.Run(()=>schoolL.StudentAnnouncementService.GetStudentAnnouncementsByAnnIds(announcements.Select(x => x.Id).ToList(), schoolL.Context.PersonId.Value));
-                foreach (var stAnnDetails in stAnnsDetails.Result)
-                    stAnns.Add(stAnnDetails);
-                 
-            }
+                StudentAnnouncement res = x.CurrentStudentScore;
+                return res;
+            }).ToList();
             return AnnouncementViewData.Create(announcements, annApps, apps, schoolL.Context.Claims, stAnns);
         }
     }
