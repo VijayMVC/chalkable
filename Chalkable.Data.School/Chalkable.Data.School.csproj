@@ -119,7 +119,6 @@
     <Compile Include="DataAccess\GradingScaleDataAccess.cs" />
     <Compile Include="DataAccess\GroupDataAccess.cs" />
     <Compile Include="DataAccess\LPGalleryCategoryDataAccess.cs" />
-    <Compile Include="DataAccess\MealTypeDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\DbMaintenanceDataAccess.cs" />
     <Compile Include="DataAccess\PersonSettingDataAccess.cs" />

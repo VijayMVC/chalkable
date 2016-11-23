@@ -25,67 +25,15 @@ namespace Chalkable.BusinessLogic.Services.School
         public async Task<LunchCountGrid> GetLunchCountGrid(int classId, DateTime date, bool includeGuests)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
-            var lunchCounts = ConnectorLocator.LunchConnector.GetLunchCount(classId, date);
-            
-            var lunchCountGrid = new LunchCountGrid();
 
+            var lunchCountsTask = ConnectorLocator.LunchConnector.GetLunchCount(classId, date);
             var students = ServiceLocator.StudentService.GetClassStudents(classId, null).OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
-
             var currentClass = ServiceLocator.ClassService.GetById(classId);
-
-            var staffs = ServiceLocator.StaffService.SearchStaff(Context.SchoolYearId, classId, null, null, true, 0, int.MaxValue)
-                .OrderBy(x => x.Id != currentClass.PrimaryTeacherRef).ThenBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
-            lunchCountGrid.Staffs = staffs;
-
-            lunchCountGrid.ClassId = classId;
-            lunchCountGrid.Date = date;
-            lunchCountGrid.IncludeGuest = includeGuests;
-
-            lunchCountGrid.MealItems = new List<MealItem>();
-
-            var mealTypes = DoRead(u => new MealTypeDataAccess(u).GetAll()).OrderBy(x => x.Name);
-
-            await lunchCounts;
-
-            lunchCountGrid.Students = students.Select(student => StudentLunchCount.Create(student, lunchCounts.Result.FirstOrDefault(x => x.StudentId == student.Id)?.IsAbsent)).ToList();
-
-            foreach (var mealType in mealTypes)
-            {
-                var mealItem = new MealItem();
-
-                var mealCountItem = new List<MealCountItem>();
-                mealCountItem.AddRange(from staff in staffs
-                                       join lunchCount in lunchCounts.Result.Where(x => x.MealTypeId == mealType.Id)
-                                            on staff.Id equals lunchCount.StaffId
-                                       select CreateMealCount(lunchCount));
-
-                if (includeGuests)
-                    mealCountItem.AddRange(from lunchCount in
-                                            lunchCounts.Result.Where(x => !x.StaffId.HasValue && !x.StudentId.HasValue && x.MealTypeId == mealType.Id)
-                                            select CreateMealCount(lunchCount));
-
-                mealCountItem.AddRange(from student in students
-                                       join lunchCount in lunchCounts.Result.Where(x => x.MealTypeId == mealType.Id)
-                                            on student.Id equals lunchCount.StudentId
-                                       select CreateMealCount(lunchCount));
-
-                mealItem.MealCountItems = mealCountItem;
-                mealItem.MealType = mealType;
-
-                lunchCountGrid.MealItems.Add(mealItem);
-            }
-
-            return lunchCountGrid;
-        }
-
-        private MealCountItem CreateMealCount(StiConnector.Connectors.Model.LunchCount lunchCount)
-        {
-            return new MealCountItem
-            {
-                Count = lunchCount.Count,
-                Guest = !lunchCount.StudentId.HasValue && !lunchCount.StaffId.HasValue,
-                PersonId = lunchCount.StaffId ?? lunchCount.StudentId
-            };
+            var staffs = ServiceLocator.StaffService.SearchStaff(Context.SchoolYearId, classId, null, null, false, 0, int.MaxValue)
+                .OrderBy(x => x.Id != currentClass.PrimaryTeacherRef).ToList(); //primary theacher should be on the TOP         
+            var mealTypes = ServiceLocator.MealTypeService.GetAll();
+                       
+            return LunchCountGrid.Create(classId, date, students, staffs, mealTypes, await lunchCountsTask, includeGuests);
         }
 
         public void UpdateLunchCount(int classId, DateTime date, IList<LunchCount> lunchCounts)

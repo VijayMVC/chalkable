@@ -23,7 +23,7 @@ namespace Chalkable.StiConnector.Connectors
         public void UpdateLunchCount(int sectionId, DateTime date, List<LunchCount> lunchCounts)
         {
             EnsureApiVersion("7.3.11.21573");
-            Post($"{BaseUrl}chalkable/sections/{sectionId}/lunchcount/{date.ToString(Constants.DATE_FORMAT)}", lunchCounts);
+            Put($"{BaseUrl}chalkable/sections/{sectionId}/lunchcount/{date.ToString(Constants.DATE_FORMAT)}", lunchCounts);
         }
     }
 }

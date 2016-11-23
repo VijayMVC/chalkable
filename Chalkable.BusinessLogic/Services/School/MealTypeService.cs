@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<MealType> GetAll()
         {
             var conds = new AndQueryCondition { { nameof(MealType.IsActive), true } };
-            return DoRead(u => new MealTypeDataAccess(u).GetAll(conds)).OrderBy(x => x.Name).ToList();
+            return DoRead(u => new DataAccessBase<MealType>(u).GetAll(conds)).OrderBy(x => x.Name).ToList();
         }
     }
 }
