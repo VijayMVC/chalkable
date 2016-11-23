@@ -14,13 +14,13 @@
             -var sortType = stats.getSortType()
             -var typesEnum = chlk.models.admin.ClassSortTypeEnum
             input(type="hidden", name="sortType", value=sortType)
-            .chlk-calendar
+            .grid-with-border
                 .grid-top-content
                     if classes.length
                         +ListView(classes).district-summary-grid
                             .grid-content
                                 .grid-header.grid-row
-                                    +ActionLink('schools', 'classesSummary', self.getGradingPeriodId(), sortType == typesEnum.CLASS_ASC.valueOf() ? typesEnum.CLASS_DESC.valueOf() : typesEnum.CLASS_ASC.valueOf()).cell.name=Msg.Classes
+                                    +ActionLink('schools', 'classesSummary', self.getGradingPeriodId(), sortType == typesEnum.CLASS_ASC.valueOf() ? typesEnum.CLASS_DESC.valueOf() : typesEnum.CLASS_ASC.valueOf()).cell.name=Msg.Class
                                     +ActionLink('schools', 'classesSummary', self.getGradingPeriodId(), sortType == typesEnum.TEACHER_ASC.valueOf() ? typesEnum.TEACHER_DESC.valueOf() : typesEnum.TEACHER_ASC.valueOf()).cell.teacher-name=Msg.Teacher
                                     .cell.section Section
                                     if isNotEmptyStatistic
@@ -30,6 +30,9 @@
                                 each clazz in classes
                                     .grid-row
                                         .cell.name
+                                            .icon
+                                                .pic
+                                                    +ClassImg(clazz, 24, 43)
                                             +ActionLink('class', 'info', clazz.getId())(data-tooltip = (clazz.getClassNumber() || '') + ' ' + clazz.getName())=clazz.getName()
                                         .cell.teacher-name=clazz.getPrimaryTeacherName()
                                         .cell.section=clazz.getClassNumber()
