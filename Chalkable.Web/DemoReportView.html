@@ -26,6 +26,7 @@
         .row:before {display: table;content: " ";}
         .row:after {display: table;content: " ";clear: both;}
         .row:last-child {margin-bottom: 35px;}
+		.row.signature-row {margin-bottom: 0;}
         .row.m-t-0 {margin-top: 0}
         .row.m-b-0 {margin-bottom: 0}
         .main-student-panel { padding: 1px;}
@@ -2689,7 +2690,7 @@ each arrItem, index in arr
                                   tr
                                       td=grade.name
                                       td=grade.description
-          .row
+          .row.signature-row
               .col-sm-12
                   if model.includesignature
                       .signature-block
