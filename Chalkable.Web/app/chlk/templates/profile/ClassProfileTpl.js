@@ -45,7 +45,7 @@ NAMESPACE('chlk.templates.profile', function(){
                     //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))
                     links.push(this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, !this.canViewGrading_(teacherIds), '7.1.6.19573'));
                     links.push(this.buildActionLinkModelForClass('explorer', 'Explorer', pressedActionName, classId_, !this.canViewExplorer_(teacherIds)));
-                    links.push(this.buildActionLinkModelForClass('lunch', 'Lunch', pressedActionName, classId_, false, '7.3.11.21573'));
+                    links.push(this.buildActionLinkModelForClass('lunch', 'Lunch', pressedActionName, classId_, !this.canViewLunch_(teacherIds), '7.3.11.21573'));
                     links.push(this.buildActionLinkModelForClass('panorama', 'Panorama', pressedActionName, classId_, !this.canViewPanorama_(teacherIds)));
                 }
                 return links;
@@ -102,6 +102,17 @@ NAMESPACE('chlk.templates.profile', function(){
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var canViewExplorer = this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ADMIN)
                     || (this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM)
+                    && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
+                return canViewExplorer && this.isStudyCenterEnabled();
+            },
+
+            [[ArrayOf(chlk.models.id.SchoolPersonId)]],
+            Boolean, function canViewLunch_(teacherIds){
+                var currentUserId = this.getCurrentUser().getId();
+                var permissionEnum = chlk.models.people.UserPermissionEnum;
+                var canViewExplorer = this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_LUNCH_COUNT_ADMIN)
+                    || this.hasUserPermission_(permissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN)
+                    || ((this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_LUNCH_COUNT) || this.hasUserPermission_(permissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT))
                     && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
                 return canViewExplorer && this.isStudyCenterEnabled();
             },

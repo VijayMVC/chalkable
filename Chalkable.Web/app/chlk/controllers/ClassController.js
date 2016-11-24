@@ -470,6 +470,10 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.classes.StudentAlertsPopup, res);
             },
 
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT_ADMIN,
+                 chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN]
+            ])],
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             function lunchAction(classId, date_){
                 var res = ria.async.wait([
@@ -480,6 +484,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(result){
                         var model = result[1];
                         model.setLunchCountInfo(result[0]);
+                        model.setAbleSubmit(!this.isPageReadonly_('MAINTAIN_CLASSROOM_LUNCH_COUNT', 'MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN', model));
                         var resModel = new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
                             this.isAssignedToClass_(classId)
