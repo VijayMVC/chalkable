@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Task<IList<ShortClassGradesSummary>> GetClassesGradesSummary(int teacherId, GradingPeriod gradingPeriod);
         Task<FinalGradeInfo> GetFinalGrade(int classId, GradingPeriod gradingPeriod);
         void PostStandards(int classId, int? gradingPeriodId);
-        StudentGrading GetStudentGradingSummary(int schoolYearId, int studentId);
+        Task<StudentGrading> GetStudentGradingSummary(int schoolYearId, int studentId);
         StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
@@ -273,11 +273,10 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             ConnectorLocator.GradebookConnector.PostStandards(classId, gradingPeriodId);
         }
-
-        //TODO make this method async 
-        public StudentGrading GetStudentGradingSummary(int schoolYearId, int studentId)
+        
+        public async Task<StudentGrading> GetStudentGradingSummary(int schoolYearId, int studentId)
         {
-            var gradingSummaryDashBoard = ConnectorLocator.GradingConnector.GetStudentGradingSummary(schoolYearId, studentId);
+            var gradingSummaryDashBoard = await ConnectorLocator.GradingConnector.GetStudentGradingSummary(schoolYearId, studentId);
 
             return new StudentGrading
             {

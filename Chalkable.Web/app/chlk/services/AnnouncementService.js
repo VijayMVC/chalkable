@@ -55,12 +55,12 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, String, chlk.models.common.ChlkDate]],
-            ria.async.Future, function adjustDates(classId, announcements, startDate_) {
+            [[chlk.models.id.ClassId, String, Number]],
+            ria.async.Future, function adjustDates(classId, announcements, shift) {
                 return this.post('Announcement/AdjustDates.json', Boolean, {
                     classId: classId.valueOf(),
                     announcements: JSON.parse(announcements),
-                    startDate: startDate_ && startDate_.toStandardFormat()
+                    shift: shift
                 });
             },
 

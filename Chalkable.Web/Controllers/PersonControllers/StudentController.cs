@@ -76,7 +76,16 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, await studentHealths, await healthFormsTask, BaseSecurity.IsStudent(Context));
             return Json(res);
         }
-        
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public async Task<ActionResult> StudentAlertDetails(int studentId, int schoolYearId)
+        {
+            var healths = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
+            var student = SchoolLocator.StudentService.GetById(studentId, schoolYearId);
+            return Json(StudentAlertDetailsViewData.Create(student, await healths, customAlerts));
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
         public async Task<ActionResult> Info(int personId)
         {
@@ -261,13 +270,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
-            var gradingSummary = SchoolLocator.GradingStatisticService.GetStudentGradingSummary(syId, studentId);
+            var gradingSummaryTask = SchoolLocator.GradingStatisticService.GetStudentGradingSummary(syId, studentId);
 
             var enrolledClassIds =
                 SchoolLocator.ClassService.GetClassPersons(studentId, null, true, null).Select(x => x.ClassRef);
 
-            var classes = 
-                gradingSummary.StudentAverages.Select(x => SchoolLocator.ClassService.GetById(x.ClassId)).ToList();
+            var gradingSummary = await gradingSummaryTask;
+            var classIds = gradingSummary.StudentAverages.Select(x => x.ClassId).ToList();
+            var classes = SchoolLocator.ClassService.GetByIds(classIds);
 
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
@@ -340,5 +350,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var settings = SchoolLocator.PanoramaSettingsService.Restore<StudentProfilePanoramaSetting>(null);
             return Json(PersonProfilePanoramaSettingViewData.Create(settings));
         }
+        
     }
 }

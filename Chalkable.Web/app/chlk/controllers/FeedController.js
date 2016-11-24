@@ -202,7 +202,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
             }
             if(model.getSubmitType() == 'adjust'){
-                res = this.announcementService.adjustDates(model.getClassId(), model.getSelectedAnnouncements(), model.getAdjustStartDate())
+                res = this.announcementService.adjustDates(model.getClassId(), model.getSelectedAnnouncements(), model.getAdjustCount())
                     .then(function(data){
                         return this.getFeedItems(false, model.isImportantOnly(), model.getClassId(), 0, model.getStartDate(), model.getEndDate(),
                             model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet(), model.isInProfile(), JSON.parse(model.getSelectedAnnouncements()), model.getAdjustCount());

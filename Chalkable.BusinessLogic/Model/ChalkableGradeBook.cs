@@ -54,8 +54,7 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? CalculatedAvg { get; set; }
         public decimal? EnteredAvg { get; set; }
         public int StudentId { get; set; }
-        public int ClassId { get; set; }
-        
+        public int ClassId { get; set; }  
         public int? GradingPeriodId { get; set; }
         public AlphaGrade CalculatedAlphaGrade { get; set; }
         public AlphaGrade EnteredAlphaGrade { get; set; }
@@ -127,7 +126,7 @@ namespace Chalkable.BusinessLogic.Model
                         Code = stcomment.CommentCode,
                         Comment = stcomment.CommentText
                     };
-            }
+            }    
             return res;
         }
     }

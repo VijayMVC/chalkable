@@ -230,7 +230,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             base.Update(entity);
         }
 
-        public void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        public void AdjustDates(IList<int> ids, int shift, int classId)
         {
             if (ids == null || ids.Count == 0)
                 return;
@@ -238,7 +238,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var @params = new Dictionary<string, object>
             {
                 ["ids"] = ids,
-                ["startDate"] = startDate,
+                ["shift"] = shift,
                 ["classId"] = classId
             };
 

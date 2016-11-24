@@ -168,7 +168,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             throw new NotImplementedException();
         }
 
-        public override void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        public override void AdjustDates(IList<int> ids, int shift, int classId)
         {
             throw new NotImplementedException();
         }
