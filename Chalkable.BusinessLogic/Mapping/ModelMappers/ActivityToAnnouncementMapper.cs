@@ -48,7 +48,11 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             ann.Complete = activity.Complete;
             if (activity.Score != null)
             {
-                ann.CurrentStudentScore = ann.CurrentStudentScore ?? new StudentAnnouncementDetails();
+                ann.CurrentStudentScore = ann.CurrentStudentScore ?? new StudentAnnouncementDetails
+                {
+                    AnnouncementId = ann.Id,
+                    AnnouncementTitle = ann.Title,
+                };
                 MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(ann.CurrentStudentScore, activity.Score);
             }
         }
