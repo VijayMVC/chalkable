@@ -12,7 +12,7 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
             value=mealItem.getCount(),
             data-value=mealItem.getCount(),
             data-index=curIndex,
-            readonly = readonly || lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
+            readonly = readonly || !clazz.isAbleSubmit() || lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
         ).meal-count-input
 
 -var clazz = self.getClazz()

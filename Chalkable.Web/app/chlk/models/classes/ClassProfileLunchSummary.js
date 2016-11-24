@@ -8,6 +8,8 @@ NAMESPACE('chlk.models.classes', function () {
     CLASS(
         'ClassProfileLunchSummary', EXTENDS(chlk.models.classes.Class), [
 
-            chlk.models.lunchCount.LunchCountGrid, 'lunchCountInfo'
+            chlk.models.lunchCount.LunchCountGrid, 'lunchCountInfo',
+
+            Boolean, 'ableSubmit'
         ]);
 });
