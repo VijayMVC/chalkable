@@ -21,6 +21,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public StudentReportCardsExportModel Student { get; set; }
         public bool IncludeSignature { get; set; }
         public ReportCardsRecipientType RecipientType { get; set; }
+        public bool IncludeMeritDemerit { get; set; }
 
         public static CustomReportCardsExportModel Create(ReportCard reportCard, Student studentData, ReportCardAddressData recipient, string logoRef, DateTime reportDate
             , ReportCardsInputModel inputModel)
@@ -45,6 +46,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 Student = StudentReportCardsExportModel.Create(reportCard.GradingPeriod, studentData, recipient, inputModel.IncludeGradedStandardsOnly, inputModel.IncludeComments),
                 IncludeSignature = inputModel.IncludeParentSignature,
                 RecipientType = inputModel.RecipientType,
+                IncludeMeritDemerit = inputModel.IncludeMeritDemerit,
                 TraditionalGradingScales = new List<GradingScaleExportModel<TraditionalGradingScaleRangeExportModel>>(),
                 StandardsGradingScales = new List<GradingScaleExportModel<StandardsGradingScaleRangeExportModel>>(),
                 IdToPrint = inputModel.IdToPrint != 0 // 0 - this is NONE option on ui.
