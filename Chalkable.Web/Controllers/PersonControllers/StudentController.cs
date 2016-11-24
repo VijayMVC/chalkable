@@ -76,7 +76,16 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, await studentHealths, await healthFormsTask, BaseSecurity.IsStudent(Context));
             return Json(res);
         }
-        
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public async Task<ActionResult> StudentAlertDetails(int studentId, int schoolYearId)
+        {
+            var healths = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
+            var student = SchoolLocator.StudentService.GetById(studentId, schoolYearId);
+            return Json(StudentAlertDetailsViewData.Create(student, await healths, customAlerts));
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
         public async Task<ActionResult> Info(int personId)
         {
@@ -341,5 +350,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var settings = SchoolLocator.PanoramaSettingsService.Restore<StudentProfilePanoramaSetting>(null);
             return Json(PersonProfilePanoramaSettingViewData.Create(settings));
         }
+        
     }
 }

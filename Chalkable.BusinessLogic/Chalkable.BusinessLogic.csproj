@@ -187,6 +187,10 @@
     <Compile Include="Model\ClaimInfo.cs" />
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
+    <Compile Include="Model\LunchCount.cs" />
+    <Compile Include="Model\LunchCountGrid.cs" />
+    <Compile Include="Model\MealCountItem.cs" />
+    <Compile Include="Model\MealItem.cs" />
     <Compile Include="Model\PanoramaSettings\AdminPanoramaSettings.cs" />
     <Compile Include="Model\ClassPanorama\ClassPanorama.cs" />
     <Compile Include="Model\ClassStatsInfo.cs" />
@@ -236,6 +240,7 @@
     <Compile Include="Model\StudentDetailsInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />
     <Compile Include="Model\StudentHealthFormInfo.cs" />
+    <Compile Include="Model\StudentLunchCount.cs" />
     <Compile Include="Model\StudentPanorama\StudentAbsenceInfo.cs" />
     <Compile Include="Model\StudentPanorama\StudentInfractionInfo.cs" />
     <Compile Include="Model\StudentPanorama\StudentPanoramaInfo.cs" />
@@ -426,7 +431,9 @@
     <Compile Include="Services\School\LEService.cs" />
     <Compile Include="Services\School\LimitedEnglishService.cs" />
     <Compile Include="Services\School\LPGalleryCategoryService.cs" />
+    <Compile Include="Services\School\LunchCountService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
+    <Compile Include="Services\School\MealTypeService.cs" />
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
     <Compile Include="Services\School\Notifications\NotificationService.cs" />
     <Compile Include="Services\School\Notifications\NotificationTemplateProvider.cs" />

@@ -243,6 +243,12 @@ NAMESPACE('chlk.controls', function () {
                     }.bind(this));
             },
 
+            [ria.mvc.DomEventBind('click', '.calendar-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function starClick(node, event){
+                node.parent().find('.hasDatepicker').trigger('focus');
+            },
+
             [[ria.dom.Dom, Object, Object]],
             VOID, function reanimate_(node, options, value_) {
                 var defaultOptions = {dateFormat: "mm/dd/yy"};
