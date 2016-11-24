@@ -1,0 +1,76 @@
+mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
+    if !mealItem.info
+        -console.info(mealItem)
+    .cell.meal-item-td
+        +Hidden("lunchCounts." + curIndex + ".staffId", (type == chlk.templates.classes.LunchCountItemType.STAFF) ? mealItem.getPersonId().valueOf() : null)
+        +Hidden("lunchCounts." + curIndex + ".studentId", (type == chlk.templates.classes.LunchCountItemType.STUDENT) ? mealItem.getPersonId().valueOf() : null)
+        +Hidden("lunchCounts." + curIndex + ".date", lunchCountInfo.getDate().toStandardFormat())
+        +Hidden("lunchCounts." + curIndex + ".mealTypeId", tableInfo.mealItems[mealIndex].getMealType().getId().valueOf())
+        input(
+            name="lunchCounts." + curIndex + ".count",
+            type="text",
+            value=mealItem.getCount(),
+            data-value=mealItem.getCount(),
+            data-index=curIndex,
+            readonly = readonly || lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
+        ).meal-count-input
+
+-var clazz = self.getClazz()
+-var lunchCountInfo = clazz.getLunchCountInfo()
+-var tableInfo = self.getTableInfo()
+.profile-page.class-profile
+    h2.page-title=clazz.getName()
+    +ProfileTopBar(self, 'lunch')
+    +ActionForm('class', 'lunchSubmit').class-lunch-form
+        +Hidden('classId', clazz.getId())
+        +ActionLink('class', 'lunchClear', clazz.getId(), lunchCountInfo.getDate()).cancel-link
+        .top-date
+            +DatePickerWithIcon('date', lunchCountInfo.getDate())(
+                data-options={
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                    inCurrentGradingPeriods: true
+                },
+                data-controller= "class",
+                data-action="lunch",
+                data-params=[clazz.getId().valueOf()]
+            )
+        .chlk-calendar.lunch-grid
+            .chlk-grid(data-meal-count = tableInfo.mealItems.length)
+                .grid-content
+                    .grid-header.grid-row
+                        .cell.no-bodrer
+                        each item in tableInfo.mealItems
+                            .cell.no-bodrer.meal-item-th=item.getMealType().getName()
+                    if tableInfo.topTable.length
+                        each item, index in tableInfo.topTable
+                            .grid-row
+                                .cell.left-cell=item.info.name || item.info.getDisplayName()
+                                    if item.type == chlk.templates.classes.LunchCountItemType.STAFF
+                                        .teacher-icon
+                                each mealItem, mealIndex in item.mealItems
+                                    -var curIndex = index * tableInfo.mealItems.length + mealIndex
+                                    +MealItemCell(mealItem, mealIndex, curIndex, null, item.type)
+                    .grid-header.grid-row.students-row
+                        .cell.left-cell.no-bodrer Students
+                        each item in tableInfo.mealItems
+                            .cell.no-bodrer
+                    if tableInfo.bottomTable.length
+                        -var firstIndex = tableInfo.mealItems.length * tableInfo.topTable.length
+                        each item, index in tableInfo.bottomTable
+                            .grid-row
+                                .cell.left-cell=item.info.getDisplayName()
+                                    if item.info.isAbsent()
+                                        .absent-icon
+                                    +ActionLink('class', 'showAlertsPopUp', item.info.getId(), clazz.getSchoolYearId()).alerts-icon.yellow.small.no-tooltip
+                                each mealItem, mealIndex in item.mealItems
+                                    -var curIndex = firstIndex + index * tableInfo.mealItems.length + mealIndex
+                                    +MealItemCell(mealItem, mealIndex, curIndex, item.info.isAbsent(), item.type)
+                    .grid-header.grid-row.total-row
+                        .cell.left-cell Total
+                        each item in tableInfo.mealItems
+                            .cell=item.getTotal()
+        .x-window-footer.report-bottom
+            BUTTON(type="button", disabled).grey-button.lunch-count-btn.lunch-cancel=Msg.Cancel
+            BUTTON(type="submit", disabled).blue-button.lunch-count-btn Save
+
