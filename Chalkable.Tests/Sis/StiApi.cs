@@ -420,5 +420,17 @@ namespace Chalkable.Tests.Sis
                 throw new Exception(msg);
             }
         }
+
+        [Test]
+        public void TestMealTypeSync()
+        {
+            var connector = ConnectorLocator.Create("Chalkable", "8nA4qU4yG", "http://sandbox.sti-k12.com/chalkable/api/");
+
+            var mealType = (connector.SyncConnector.GetDiff(typeof(StiConnector.SyncModel.MealType), null) as SyncResult<StiConnector.SyncModel.MealType>).All;
+
+            Debug.WriteLine(JsonConvert.SerializeObject(mealType));
+        }
+
+
     }
 }

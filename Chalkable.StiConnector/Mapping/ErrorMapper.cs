@@ -208,7 +208,7 @@ namespace Chalkable.StiConnector.Mapping
     
     public class ErrorMapper
     {
-        private static IDictionary<string, string> mapper = new Dictionary<string, string>
+        private static readonly IDictionary<string, string> Mapper = new Dictionary<string, string>
             {
                 {InowErrors.ACTIVITY_DATE_INVALID_RANGE_FOR_SECION_ERROR, "Looks like you set the due date when class isn't scheduled. Try a different date."},
                 {InowErrors.ACTIVITY_DELETEFAILED_ACTIVITYSCORESFOUND_ERROR, "You can't delete an item if there are already grades on it. Delete those grades to delete the item. Please notice that withdrawn students also could have grades."},
@@ -300,8 +300,8 @@ namespace Chalkable.StiConnector.Mapping
                 {InowErrors.STANDARDSCORE_CANNOTDELETESTUDENTDATA_ERROR,  String.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
                 {InowErrors.STANDARDSCORECOMMENT_CANNOTDELETESTUDENTDATA_ERROR,  String.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
          
-                {InowErrors.STUDENTGRADEDSTANDARD_CANNOTDELETESTUDENTDATA_ERROR,   String.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
-                {InowErrors.STUDENTSTANDARDCOMMENT_CANNOTDELETESTUDENTDATA_ERROR,  String.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
+                {InowErrors.STUDENTGRADEDSTANDARD_CANNOTDELETESTUDENTDATA_ERROR,   string.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
+                {InowErrors.STUDENTSTANDARDCOMMENT_CANNOTDELETESTUDENTDATA_ERROR,  string.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
                 {InowErrors.CLASSROOM_CANNOTPOST_SECTIONISNOTSCHEDULEDONTHISDAY_ERROR,  "Cannot post attendance because the Section is not scheduled on this day."},
 
                 {InowErrors.ACTIVITY_UNIT_MUST_BE_ALPHA_NUMERIC_ONLY_ERROR,  "Unit must be AlphaNumeric.Please re-enter Unit."},
@@ -339,20 +339,21 @@ namespace Chalkable.StiConnector.Mapping
                 {InowErrors.STUDENTPERIODABSENCE_TIMESLOT_NOTINSTUDENTSCHEDULE_ERROR,  "Period is not in Student Schedule."},
 
                 {InowErrors.OCCURRENCE_NOTE_INVALIDFORMAT_ERROR, String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Note")},
-                {InowErrors.AVERAGESCORE_INVALID_ALPHAGRADE_FOR_GRADING_SCALE_ERROR, "Invalid Alpha grade for Grading Scale."}
+                {InowErrors.AVERAGESCORE_INVALID_ALPHAGRADE_FOR_GRADING_SCALE_ERROR, "Invalid Alpha grade for Grading Scale."},
+
             }; 
 
            
 
         public string Map(string inowError)
         {
-            return mapper.ContainsKey(inowError) ? mapper[inowError] : null;
+            return Mapper.ContainsKey(inowError) ? Mapper[inowError] : null;
         }
 
         public string BackMap(string chalkableError)
         {
-            if (mapper.Any(x => x.Value == chalkableError))
-                return mapper.First(x => x.Value == chalkableError).Key;
+            if (Mapper.Any(x => x.Value == chalkableError))
+                return Mapper.First(x => x.Value == chalkableError).Key;
             return null;
         }
     }

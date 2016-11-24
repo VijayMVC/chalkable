@@ -145,7 +145,8 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 {typeof(AppSetting), new AppSettingAdapter(this) },
                 {typeof(LimitedEnglish), new LimitedEnglishAdapter(this) },
                 {typeof(SchoolProgram), new SchoolProgramAdapter(this) },
-                {typeof(StudentSchoolProgram), new StudentSchoolProgramAdapter(this) }
+                {typeof(StudentSchoolProgram), new StudentSchoolProgramAdapter(this) },
+                {typeof(MealType), new MealTypeAdapter(this) }
             };
         }
 

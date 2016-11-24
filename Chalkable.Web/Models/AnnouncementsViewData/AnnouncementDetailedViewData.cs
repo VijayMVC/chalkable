@@ -9,7 +9,7 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
-    public class AnnouncementDetailedViewData : AnnouncementGradeViewData
+    public class AnnouncementDetailedViewData : AnnouncementViewData
     {
         public IList<AnnouncementAttachmentViewData> AnnouncementAttachments { get; set; }
         public IList<AnnouncementAssignedAttributeViewData>  AnnouncementAttributes { get; set; }

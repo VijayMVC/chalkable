@@ -71,6 +71,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.maxScore = SJX.fromValue(raw.maxscore, Number);
                 this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
                 this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
+                this.grade = SJX.fromValue(raw.grade, Number);
                 this.gradable = SJX.fromValue(raw.gradable, Boolean);
                 this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);

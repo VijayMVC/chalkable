@@ -18,6 +18,7 @@ REQUIRE('chlk.activities.school.ImportSchoolDialog');
 REQUIRE('chlk.activities.school.UpgradeDistrictsPage');
 REQUIRE('chlk.activities.school.SchoolClassesSummaryPage');
 REQUIRE('chlk.activities.school.SchoolTeachersSummaryPage');
+REQUIRE('chlk.activities.school.StudentClassesSummaryPage');
 
 REQUIRE('chlk.models.school.SchoolPeople');
 REQUIRE('chlk.models.district.District');
@@ -352,6 +353,30 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
 
             return this.PushView(chlk.activities.school.SchoolClassesSummaryPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[chlk.models.id.GradingPeriodId, Number]],
+        function classesSummaryStudentAction(gradingPeriodId_, sortType_){
+            sortType_ = sortType_ || chlk.models.admin.ClassSortTypeEnum.CLASS_ASC.valueOf();
+            var currentGp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, []);
+            var gradingPeriodId = (gradingPeriodId_ && gradingPeriodId_.valueOf()) ? gradingPeriodId_ : (currentGp && currentGp.getId())
+            var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
+            var result = this.classService.getClassesStatisticForStudent(gradingPeriodId, sortType_)
+                .then(function(classes){
+                    this.prepareClassForSummary(classes);
+                    return new chlk.models.school.ClassesForStudentViewData(gradingPeriodId, gradingPeriods,
+                        new chlk.models.admin.BaseStatisticGridViewData(classes, sortType_));
+                }, this)
+                .attach(this.validateResponse_());
+
+            return this.PushOrUpdateView(chlk.activities.school.StudentClassesSummaryPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[chlk.models.admin.BaseStatisticGridViewData]],
+        function classesStatisticStudentAction(model){
+            return this.Redirect('schools', 'classesSummary', [model.getGradingPeriodId()])
         },
 
         [chlk.controllers.SidebarButton('classes')],

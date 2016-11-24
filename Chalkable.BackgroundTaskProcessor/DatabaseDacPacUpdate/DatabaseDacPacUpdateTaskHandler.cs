@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security;
 using System.Threading;
@@ -153,31 +154,40 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
             var lifecycle = jobExecution.Lifecycle;
             while (true)
             {
-                var status = await elasticJobs.JobExecutions.GetJobExecutionAsync(jobExecution.JobExecutionId);
-                if (status.Lifecycle != lifecycle)
-                    log.LogInfo($"{dacPacName} job is {status.Lifecycle}");
-                lifecycle = status.Lifecycle;
-
-                var stats = helper.GetChilderJobExecutionStat(jobExecution.JobName);
-                log.LogInfo("Task stats:\n" + stats.Select(x=>x.Lifecycle + ": " + x.Count).JoinString("\n"));
-
-                var taskExecutions = helper.GetJobTaskExecutions(jobExecution.JobName, since, null);
-                log.LogInfo(taskExecutions.Select(x => x.Message));
-                since = taskExecutions.Max(x => x.EndTime);
-
-                switch (status.Lifecycle)
+                try
                 {
-                    case JobExecutionLifecycle.Failed:
-                    case JobExecutionLifecycle.Canceled:
-                    case JobExecutionLifecycle.Skipped:
-                    case JobExecutionLifecycle.TimedOut:
-                        log.LogError("Deploy " + status.Lifecycle);
-                        return false;
+                    var status = await elasticJobs.JobExecutions.GetJobExecutionAsync(jobExecution.JobExecutionId);
+                    if (status.Lifecycle != lifecycle)
+                        log.LogInfo($"{dacPacName} job is {status.Lifecycle}");
+                    lifecycle = status.Lifecycle;
 
-                    case JobExecutionLifecycle.Succeeded:
-                        log.Flush();
-                        return true;
+                    var stats = helper.GetChilderJobExecutionStat(jobExecution.JobName);
+                    log.LogInfo("Task stats:\n" + stats.Select(x => x.Lifecycle + ": " + x.Count).JoinString("\n"));
+
+                    var taskExecutions = helper.GetJobTaskExecutions(jobExecution.JobName, since, null);
+                    log.LogInfo(taskExecutions.Select(x => x.Message));
+                    since = taskExecutions.Max(x => x.EndTime);
+
+                    switch (status.Lifecycle)
+                    {
+                        case JobExecutionLifecycle.Failed:
+                        case JobExecutionLifecycle.Canceled:
+                        case JobExecutionLifecycle.Skipped:
+                        case JobExecutionLifecycle.TimedOut:
+                            log.LogError("Deploy " + status.Lifecycle);
+                            return false;
+
+                        case JobExecutionLifecycle.Succeeded:
+                            log.Flush();
+                            return true;
+                    }
                 }
+                catch (SqlException e)
+                {
+                    log.LogInfo($"Failed to connect to {azureJobsCreds.DatabaseName}@{azureJobsCreds.DatabaseName}: {e.Message}");
+                    log.LogException(e);
+                }
+
                 await Task.Delay(30000);
             }
         }

@@ -1,4 +1,5 @@
-﻿using Chalkable.StiConnector.Connectors.Model;
+﻿using System.Threading.Tasks;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -9,9 +10,9 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
         
-        public GradingSummaryDashboard GetStudentGradingSummary(int acadSessionId, int studentId)
+        public async Task<GradingSummaryDashboard> GetStudentGradingSummary(int acadSessionId, int studentId)
         {
-            return Call<GradingSummaryDashboard>(BuildBaseUrl(acadSessionId, studentId) + "summary");
+            return await CallAsync<GradingSummaryDashboard>(BuildBaseUrl(acadSessionId, studentId) + "summary");
             
         }
         

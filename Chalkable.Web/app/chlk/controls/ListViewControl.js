@@ -167,6 +167,7 @@ NAMESPACE('chlk.controls', function () {
                     if(!noScroll_)
                         this.scrollToElement();
                     this.focusGrid();
+                    var x = window.scrollX || document.documentElement.scrollLeft, y = window.scrollY || document.documentElement.scrollTop;
                     node.trigger(chlk.controls.GridEvents.AFTER_ROW_SELECT.valueOf(), [row, index]);
                 }
             },
@@ -420,7 +421,9 @@ NAMESPACE('chlk.controls', function () {
                 if(target_ && (target_.hasClass(otherInputWithFocusClass) || target_.hasClass('grid-focus')))
                     return;
 
-                var x = window.scrollX, y = window.scrollY;
+                var x = window.scrollX || document.documentElement.scrollLeft, y = window.scrollY || document.documentElement.scrollTop;
+                window.scrollTo(x, y);
+                node.find('.grid-focus').setCss('top', y + 'px');
                 if(row.exists()){
                     var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
                     if(focusNode.exists()){
@@ -433,7 +436,6 @@ NAMESPACE('chlk.controls', function () {
                 }else{
                     node.find('.grid-focus').valueOf()[0].focus();
                 }
-                window.scrollTo(x, y);
             },
 
             VOID, function scrollToElement(){

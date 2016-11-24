@@ -45,6 +45,11 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
         {
             MapperFactory.GetMapper<Activity, ClassAnnouncement>().Map(activity, ann.ClassAnnouncementData);
             activity.Complete = ann.Complete;
+            if (ann.CurrentStudentScore != null)
+            {
+                activity.Score = activity.Score ?? new Score();
+                MapperFactory.GetMapper<Score, StudentAnnouncementDetails>().Map(activity.Score, ann.CurrentStudentScore);
+            }
         }
     }
 

@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
@@ -91,7 +93,13 @@ namespace Chalkable.Web.Controllers
             var annApps = schoolL.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(annsIdsWithApp, true);
             var apps = schoolL.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(annApps.Select(x => x.ApplicationRef).ToList());
             annApps = annApps.Where(x => apps.Any(a => a.Id == x.ApplicationRef)).ToList();
-            return AnnouncementViewData.Create(announcements, annApps, apps, schoolL.Context.Claims);
+
+            var stAnns = announcements.Where(x => x.CurrentStudentScore != null).Select(x =>
+            {
+                StudentAnnouncement res = x.CurrentStudentScore;
+                return res;
+            }).ToList();
+            return AnnouncementViewData.Create(announcements, annApps, apps, schoolL.Context.Claims, stAnns);
         }
     }
 }

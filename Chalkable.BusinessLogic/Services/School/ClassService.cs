@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.EnumMappers;
 using Chalkable.BusinessLogic.Model;
@@ -19,22 +20,25 @@ namespace Chalkable.BusinessLogic.Services.School
     public enum ClassSortType
     {
         ClassAsc = 0,
-        ClassDesc,
+        ClassDesc = 1,
 
-        TeacherAsc,
-        TeacherDesc,
+        TeacherAsc = 2,
+        TeacherDesc = 3,
 
-        StudentsAsc,
-        StudentsDesc,
+        StudentsAsc = 4,
+        StudentsDesc = 5,
 
-        AttendanceAsc,
-        AttendanceDesc,
+        AttendanceAsc = 6,
+        AttendanceDesc = 7,
 
-        DisciplineAsc,
-        DisciplineDesc,
+        DisciplineAsc = 8,
+        DisciplineDesc = 9,
+        
+        GradesAsc = 10,
+        GradesDesc = 11,
 
-        GradesAsc,
-        GradesDesc
+        PeriodsAsc = 12,
+        PeriodsDesc = 13
     }
 
     public interface IClassService
@@ -71,6 +75,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
         IList<ClassStatsInfo> GetClassesStats(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
+        IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId, ClassSortType? sortType);
+             
         IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
         bool IsTeacherClasses(int teacherId, params int[] classIds);
         ClassPanorama Panorama(int classId, IList<int> academicYears, IList<StandardizedTestFilter> standardizedTestFilters);
@@ -330,6 +336,61 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 return ClassStatsInfo.Create(iNowRes, classes, classTeachers);
             }           
+        }
+
+        public IList<ClassStatsInfo> GetClassesStatsForStudent(int studentId, int gradingPeriodId, ClassSortType? sortType)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            if(!(BaseSecurity.IsDistrictOrTeacher(Context) || studentId == Context.PersonId))
+                throw new ChalkableSecurityException();
+
+            IList<SectionSummaryForStudent> iNowRes;
+            try
+            {
+                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionSummaryForStudent(Context.SchoolYearId.Value, studentId, gradingPeriodId);
+            }
+            catch (ChalkableSisNotSupportVersionException)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+                var chalkableRes = DoRead(u => new ClassDataAccess(u).GetStudentClasses(Context.SchoolYearId.Value, studentId, gp.MarkingPeriodRef));
+                return SortClassesStats(chalkableRes.Select(ClassStatsInfo.Create), sortType).ToList();
+            }
+            using (var u = Read())
+            {
+                var classesIds = iNowRes.Select(x => x.SectionId).ToList();
+                var classes = new ClassDataAccess(u).GetByIds(classesIds);
+                var classTeachers = new ClassTeacherDataAccess(u).GetClassTeachers(classesIds);
+                var res = ClassStatsInfo.Create(iNowRes, classes, classTeachers);
+                return SortClassesStats(res, sortType).ToList();
+            }
+        }
+
+        private IEnumerable<ClassStatsInfo> SortClassesStats(IEnumerable<ClassStatsInfo> classesStats, ClassSortType? sortType)
+        {
+            sortType = sortType ?? ClassSortType.ClassAsc;
+            var descending = sortType == ClassSortType.AttendanceDesc ||
+                              sortType == ClassSortType.DisciplineAsc ||
+                              sortType == ClassSortType.ClassDesc ||
+                              sortType == ClassSortType.GradesDesc ||
+                              sortType == ClassSortType.TeacherDesc;
+
+            if (sortType == ClassSortType.ClassAsc || sortType == ClassSortType.ClassDesc)
+                classesStats = classesStats.OrderBy(x => x.Name).ThenBy(x => x.ClassNumber);
+            if (sortType == ClassSortType.AttendanceAsc || sortType == ClassSortType.AttendanceDesc)
+                classesStats = classesStats.OrderBy(x => x.AbsenceCount);
+            if (sortType == ClassSortType.DisciplineAsc || sortType == ClassSortType.DisciplineDesc)
+                classesStats = classesStats.OrderBy(x => x.DisciplinesCount);
+            if (sortType == ClassSortType.GradesAsc || sortType == ClassSortType.GradesDesc)
+                classesStats = classesStats.OrderBy(x => x.Average);
+            if (sortType == ClassSortType.TeacherAsc || sortType == ClassSortType.TeacherDesc)
+                classesStats = classesStats.OrderBy(x => x.PrimaryTeacherDisplayName);
+            if (sortType == ClassSortType.PeriodsAsc || sortType == ClassSortType.PeriodsDesc)
+                classesStats = classesStats.OrderBy(x => x.Periods);
+
+            if (descending)
+                classesStats = classesStats.Reverse();
+
+            return classesStats;
         }
 
         public IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId)
