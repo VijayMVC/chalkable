@@ -353,7 +353,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
                 var chalkableRes = DoRead(u => new ClassDataAccess(u).GetStudentClasses(Context.SchoolYearId.Value, studentId, gp.MarkingPeriodRef));
-                return chalkableRes.Select(ClassStatsInfo.Create).ToList();
+                return SortClassesStats(chalkableRes.Select(ClassStatsInfo.Create), sortType).ToList();
             }
             using (var u = Read())
             {
