@@ -1,6 +1,4 @@
 mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
-    if !mealItem.info
-        -console.info(mealItem)
     .cell.meal-item-td
         +Hidden("lunchCounts." + curIndex + ".staffId", (type == chlk.templates.classes.LunchCountItemType.STAFF) ? mealItem.getPersonId().valueOf() : null)
         +Hidden("lunchCounts." + curIndex + ".studentId", (type == chlk.templates.classes.LunchCountItemType.STUDENT) ? mealItem.getPersonId().valueOf() : null)
