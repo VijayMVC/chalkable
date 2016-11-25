@@ -224,14 +224,14 @@ namespace Chalkable.Web.Controllers
             return Json(classes.Select(ShortClassViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public async Task<ActionResult> LunchCount(int classId, DateTime date, bool includeGuests)
         {
             var lunchCountGrid = await SchoolLocator.LunchCountService.GetLunchCountGrid(classId, date, includeGuests);
             return Json(LunchCountGridViewData.Create(lunchCountGrid));
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult UpdateLunchCount(int classId, DateTime date, List<LunchCount> lunchCounts)
         {
             SchoolLocator.LunchCountService.UpdateLunchCount(classId, date, lunchCounts);

@@ -38,21 +38,18 @@
                                         .cell.period=clazz.getPeriods()
                                         if isNotEmptyStatistic
                                             .cell.attendance
-                                                +ActionLink('class', 'attendanceList', clazz.getId())(
+                                                .with-events.circle-cnt(
                                                     data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
-                                                    data-disabled-message = clazz.isAttendancesProfileEnabled() ? '' : clazz.getNoAccessMsg('attendance'),
                                                     class = clazz.getAbsencesClass()
-                                                ).with-events.circle-cnt=clazz.getPresence() && Math.round(clazz.getPresence() * 10) / 10
+                                                )=clazz.getPresence() && Math.round(clazz.getPresence() * 10) / 10
                                             .cell.discipline
-                                                +ActionLink('class', 'discipline', clazz.getId())(
+                                                .with-events.circle-cnt(
                                                     data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
-                                                    data-disabled-message = clazz.isDisciplinesProfileEnabled() ? '' : clazz.getNoAccessMsg('discipline'),
                                                     class = clazz.getInfractionsClass()
-                                                ).with-events.circle-cnt=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
+                                                )=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
                                             .cell.grades
-                                                +ActionLink('class', 'grading', clazz.getId())(
+                                                +ActionLink('feed', 'gradingList', clazz.getId())(
                                                     data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
-                                                    data-disabled-message = clazz.isGradingProfileEnabled() ? '' : clazz.getNoAccessMsg('grading'),
                                                     class = clazz.getAvgClass()
                                                 ).with-events.circle-cnt=clazz.getAvg() && parseInt(clazz.getAvg(), 10)
                     else

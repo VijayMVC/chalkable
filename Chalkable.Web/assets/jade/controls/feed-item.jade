@@ -54,7 +54,7 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
                         .small-icon.discussion-icon(data-tooltip="Class Discussion")
 
                     if gradable && hasGrade
-                        .grade-info=item.getGrade() + "/" + classAnnouncement.getMaxScore()
+                        .grade-info=Math.round(item.getGrade()) + "/" + classAnnouncement.getMaxScore()
 
                     if lessonPlan
                         .line(data-tooltip = lessonPlan.getPercents() + '% complete')

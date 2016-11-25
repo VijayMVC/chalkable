@@ -494,7 +494,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     }, this);
 
-                return this.PushOrUpdateView(chlk.activities.classes.ClassProfileLunchPage, res);
+                return this.PushView(chlk.activities.classes.ClassProfileLunchPage, res);
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],

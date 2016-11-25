@@ -115,6 +115,12 @@ NAMESPACE('chlk.controllers', function (){
             return this.listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, true);
         },
 
+        [chlk.controllers.SidebarButton('inbox')],
+        [[chlk.models.id.ClassId]],
+        function gradingListAction(classId){
+            return this.listAction(classId, null, null, null, null, null, null, null, chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_DESCENDING, true);
+        },
+
         function parseEnumValue_(enumType, valToParse_){
             if(!(valToParse_ instanceof enumType )){
                 var val = parseInt(valToParse_, 10);
