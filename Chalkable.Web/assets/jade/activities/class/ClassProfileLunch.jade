@@ -33,8 +33,9 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
                 },
                 data-controller= "class",
                 data-action="lunch",
-                data-params=[clazz.getId().valueOf()]
-            )
+                data-params=[clazz.getId().valueOf()],
+                data-value=lunchCountInfo.getDate().getDate()
+            ).lunch-date
         .chlk-calendar.lunch-grid
             .chlk-grid(data-meal-count = tableInfo.mealItems.length)
                 .grid-content
@@ -72,5 +73,5 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
                             .cell=item.getTotal()
         .x-window-footer.report-bottom
             BUTTON(type="button", disabled).grey-button.lunch-count-btn.lunch-cancel=Msg.Cancel
-            BUTTON(type="submit", disabled).blue-button.lunch-count-btn Save
+            BUTTON(type="submit", disabled).blue-button.lunch-count-btn.lunch-submit Save
 

@@ -79,19 +79,45 @@ NAMESPACE('chlk.activities.classes', function () {
             [ria.mvc.DomEventBind('click', '.lunch-cancel')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function cancelClick(node, event){
+                var okClick;
                 this.view.ShowLeaveConfirmBox()
                     .then(function (can_cancel) {
+                        okClick = true;
                         if (can_cancel === true) {
                             this.dom.find('.cancel-link').trigger('click');
                         }
+                    }, this)
+                    .complete(function(){
+                        this.onConfirmComplete(okClick);
                     }, this);
             },
 
+            [ria.mvc.DomEventBind('click', '.lunch-submit')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function submitClick(node, event){
+                this.dom.find('.meal-count-input.changed').removeClass('changed');
+            },
+
             OVERRIDE, Object, function isReadyForClosing() {
+                var okClick;
                 if(this.dom.find('.meal-count-input.changed').count() > 0)
-                    return this.view.ShowLeaveConfirmBox();
+                    return this.view.ShowLeaveConfirmBox()
+                        .then(function (can_cancel) {
+                            okClick = true;
+                            return can_cancel;
+                        }, this)
+                        .complete(function(res){
+                            this.onConfirmComplete(okClick);
+                        }, this);
 
                 return true;
+            },
+
+            function onConfirmComplete(okClick_){
+                if(!okClick_){
+                    var node = this.dom.find('.lunch-date');
+                    node.datepicker('setDate', new Date(node.getData('value')));
+                }
             }
         ]);
 });
