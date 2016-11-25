@@ -193,6 +193,9 @@ NAMESPACE('chlk.models.people', function () {
                 this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN;
                 this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_GRADES.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_GRADES;
                 this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT_ADMIN.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT_ADMIN;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT;
                 this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_ROSTER.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_ROSTER;
                 this.mapper_[this.userPermissionEnum.MAINTAIN_DISCIPLINE.valueOf()] = this.userPermissionEnum.MAINTAIN_DISCIPLINE;
                 this.mapper_[this.userPermissionEnum.VIEW_DISCIPLINE.valueOf()] = this.userPermissionEnum.VIEW_DISCIPLINE;

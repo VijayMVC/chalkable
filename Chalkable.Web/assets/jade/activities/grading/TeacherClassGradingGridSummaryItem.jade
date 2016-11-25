@@ -102,8 +102,6 @@ mixin DisplayTotalPoints(model)
             +DisplayTotalPoints(self)
             each announcement in self.getGradingItems()
                 maxScore = announcement.getMaxScore()
-                -console.log(self.getStandardId())
-                -console.log(self.getCategoryId())
                 div(
                     data-max-score=announcement.getMaxScore(),
                     data-announcement-id=announcement.getId().valueOf(),
