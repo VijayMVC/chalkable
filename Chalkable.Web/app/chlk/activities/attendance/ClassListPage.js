@@ -142,12 +142,13 @@ NAMESPACE('chlk.activities.attendance', function () {
                         var input = row.find('input.combo-input');
                         if(row.find('.combo-list').exists())
                             this.scrollToOption(null, row.find('.combo-list-container'));
-                        var x = window.scrollX, y = window.scrollY;
+                        var x = window.scrollX || document.documentElement.scrollLeft, y = window.scrollY || document.documentElement.scrollTop;
+                        window.scrollTo(x, y);
+                        gridFocus.setCss('top', y + 'px');
                         if(input.exists())
                             input.trigger('focus');
                         else
                             gridFocus.trigger('focus');
-                        window.scrollTo(x, y);                        
                     }.bind(this), 1);
 
                 }

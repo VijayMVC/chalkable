@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
@@ -14,6 +15,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Mapping;
 using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
@@ -347,16 +349,31 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
 
-        public override void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        public override void AdjustDates(IList<int> ids, int shift, int classId)
         {
             BaseSecurity.EnsureTeacher(Context);
-            if (startDate < Context.SchoolYearStartDate || startDate > Context.SchoolYearEndDate)
-                throw new ChalkableException("Start date should be between school year start and end date");
 
-            var newDates = DoRead(u => CreateClassAnnouncementDataAccess(u).AdjustDates(ids, startDate, classId));
+            using (var uow = Update())
+            {
 
-            var activityDates = newDates.Select(x => new ActivityDate {ActivityId = x.First, Date = x.Second}).ToList();
-            ConnectorLocator.ActivityConnector.AdjustDates(activityDates);
+                var newDates = CreateClassAnnouncementDataAccess(uow).AdjustDates(ids, shift, classId);
+
+                var activityDates = ActivityDate.Create(newDates);
+
+                try //Post new dates to iNow. If any conflicts terminate whole operation.
+                {
+                    ConnectorLocator.ActivityConnector.AdjustDates(activityDates);
+                    uow.Commit();
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException != null && e.InnerException.Message == InowErrors.ACTIVITY_SECTION_NAME_DATE_MUSTBEUNIQUE_ERROR)
+                    {
+                        uow.Rollback();
+                        throw new ChalkableException("A conflict occurred while adjusting activities. Please ensure that activity title, date and class are unique and try again");
+                    }
+                }
+            }
         }
 
         public override IList<AnnouncementComplex> GetAnnouncementsByIds(IList<int> announcementIds)

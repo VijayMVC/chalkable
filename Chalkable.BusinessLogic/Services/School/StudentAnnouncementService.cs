@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -15,6 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IStudentAnnouncementService
     {
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
+        Task<IList<StudentAnnouncementDetails>> GetStudentAnnouncementsByAnnIds(IList<int> announcementIds, int studentId); 
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
             , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
         AutoGrade SetAutoGrade(int announcementApplicationId, int? recepientId, string value);
@@ -30,6 +33,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO : needs testing 
+
+
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
                                             bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
@@ -44,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             //need this info, before we post data to iNow, for notification
             Trace.Assert(ann.SisActivityId.HasValue);
-            var studentScoreBefore = ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, studentId);
+            var studentScoreBefore = Task.Run(()=>ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, studentId)).Result;
 
             var stAnn = new StudentAnnouncement
             {
@@ -80,57 +85,83 @@ namespace Chalkable.BusinessLogic.Services.School
             return stAnn;
         }
 
+
+        public async Task<IList<StudentAnnouncementDetails>> GetStudentAnnouncementsByAnnIds(IList<int> announcementIds, int studentId)
+        {
+            var tasks = announcementIds.Select(annId => GetStudentAnnouncement(annId, studentId)).ToArray();
+            var res = await Task.WhenAll(tasks);
+            return res.ToList();
+        }
+        
+        private async Task<StudentAnnouncementDetails> GetStudentAnnouncement(int announcementId, int studentId)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
+            if (!ann.SisActivityId.HasValue)
+                throw new ChalkableException("Current announcement is not in Inow ");
+
+            var scoreTask = ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, studentId);
+            var student = ServiceLocator.StudentService.GetById(studentId, Context.SchoolYearId.Value);
+            var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
+            return CreateStudentAnnouncement(ann, student, await scoreTask, alternateScores);
+        }
+
+
+        //TODO: make this method async 
         public IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
+
+            if (CoreRoles.STUDENT_ROLE == Context.Role)
+                return new List<StudentAnnouncementDetails> { Task.Run(() => GetStudentAnnouncement(announcementId, Context.PersonId.Value)).Result};
+
             Trace.Assert(Context.SchoolYearId.HasValue);
             var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
 
             if (!ann.SisActivityId.HasValue)
                 throw new ChalkableException("Current announcement is not in Inow ");
 
-            IList<Score> scores = new List<Score>();
-            IList<Student> persons = new List<Student>();
-            if (CoreRoles.STUDENT_ROLE == Context.Role)
-            {
-                scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));
-                persons.Add(ServiceLocator.StudentService.GetById(Context.PersonId.Value, Context.SchoolYearId.Value));
-            }
-            else
-            {
-                scores = ConnectorLocator.ActivityScoreConnector.GetScores(ann.SisActivityId.Value);
-                var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
-                var enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
-                var mp = ServiceLocator.MarkingPeriodService.GetLastClassMarkingPeriod(ann.ClassRef, ann.Expires);
-
-                if (mp == null)
-                {
-                    throw new ChalkableException("No marking period is scheduled at announcements expiery date.");
-                }
-                persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
-            }
-            var res = new List<StudentAnnouncementDetails>();
+            var scoresTask = Task.Run(()=>ConnectorLocator.ActivityScoreConnector.GetScores(ann.SisActivityId.Value));
+            var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
+            var enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
+            var mp = ServiceLocator.MarkingPeriodService.GetLastClassMarkingPeriod(ann.ClassRef, ann.Expires);
+            if (mp == null)
+                throw new ChalkableException("No marking period is scheduled at announcements expiery date.");
+            
+            var students = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
             var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
+            return CreateStudentAnnouncements(ann, students, scoresTask.Result, alternateScores);
+        }
+
+        private StudentAnnouncementDetails CreateStudentAnnouncement(ClassAnnouncement ann, Student student, Score score, IList<AlternateScore> alternateScores)
+        {
+            var stAnn = new StudentAnnouncementDetails
+            {
+                ClassId = ann.ClassRef,
+                Student = student,
+                AnnouncementId = ann.Id
+            };
+            MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
+            if (stAnn.AlternateScoreId.HasValue)
+                stAnn.AlternateScore = alternateScores.FirstOrDefault(x => x.Id == stAnn.AlternateScoreId.Value);
+            return stAnn;
+        }
+
+        private IList<StudentAnnouncementDetails> CreateStudentAnnouncements(ClassAnnouncement ann, IList<Student> students, IList<Score> scores, IList<AlternateScore> alternateScores)
+        {
+            var res = new List<StudentAnnouncementDetails>();
             foreach (var score in scores)
             {
-                var student = persons.FirstOrDefault(x => x.Id == score.StudentId);
+                var student = students.FirstOrDefault(x => x.Id == score.StudentId);
                 if (student != null)
                 {
-                    var stAnn = new StudentAnnouncementDetails
-                    {
-                        ClassId = ann.ClassRef,
-                        Student = student,
-                        AnnouncementId = ann.Id
-                    };
-                    MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
-                    if (stAnn.AlternateScoreId.HasValue)
-                        stAnn.AlternateScore = alternateScores.FirstOrDefault(x => x.Id == stAnn.AlternateScoreId.Value);
-                    res.Add(stAnn);    
+                    res.Add(CreateStudentAnnouncement(ann, student, score, alternateScores));
                 }
             }
             return res;
         }
+
 
         public AutoGrade SetAutoGrade(int announcementApplicationId, int? studentId, string value)
         {

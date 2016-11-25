@@ -25,6 +25,8 @@ NAMESPACE('chlk.models.school', function () {
 
             String, 'classNumber',
 
+            String, 'periods',
+
             ArrayOf(chlk.models.id.SchoolPersonId), 'teachersIds',
 
             function getNoAccessMsg(name){
@@ -36,6 +38,7 @@ NAMESPACE('chlk.models.school', function () {
                 this.departmentId = SJX.fromValue(raw.departmentref, chlk.models.id.DepartmentId);
                 this.primaryTeacherName = SJX.fromValue(raw.primaryteacherdisplayname, String);
                 this.classNumber = SJX.fromValue(raw.classnumber, String);
+                this.periods = SJX.fromValue(raw.periods, String);
                 this.teachersIds = SJX.fromArrayOfValues(raw.teacherids || [], chlk.models.id.SchoolPersonId);
             }
         ]);

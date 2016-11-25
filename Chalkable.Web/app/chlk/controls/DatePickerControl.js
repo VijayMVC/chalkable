@@ -44,11 +44,12 @@ NAMESPACE('chlk.controls', function () {
                     var that = this;
                     options.onSelect = function (dateText, inst) {
                         var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(new Date(dateText));
-                        params.push(date);
+                        var curParams = params.slice();
+                        curParams.push(date);
                         var state = that.context.getState();
                         state.setController(controller);
                         state.setAction(action);
-                        state.setParams(params);
+                        state.setParams(curParams);
                         state.setPublic(false);
                         that.context.stateUpdated();
                     }
@@ -241,6 +242,12 @@ NAMESPACE('chlk.controls', function () {
 
                         this.updateDatePicker(node, value_, options);
                     }.bind(this));
+            },
+
+            [ria.mvc.DomEventBind('click', '.calendar-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function starClick(node, event){
+                node.parent().find('.hasDatepicker').trigger('focus');
             },
 
             [[ria.dom.Dom, Object, Object]],

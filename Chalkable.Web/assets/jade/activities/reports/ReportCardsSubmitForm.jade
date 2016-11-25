@@ -1,15 +1,3 @@
-mixin Radio(name, value, title, selected)
-    -attributes.type = "radio"
-    -attributes.name = name
-    -attributes.value = value
-    -attributes.checked = selected ? "checked" : null
-    -attributes.id = attributes.id || ria.dom.Dom.GID()
-    input(attributes).chlk-radio-input
-    label(for=attributes.id)=title
-    br
-
-
-
 .dialog.report-window
     +ActionForm('reporting', 'submitReportCards').comprehensive-progress-report-form.no-working.report-form
         .x-window-header
@@ -25,6 +13,14 @@ mixin Radio(name, value, title, selected)
                 TABLE.report-table
                     TR
                         TD(colspan="3").item-3
+                            .text-block.mt-28.mb-28
+                                -var typeEnum = chlk.models.reports.AdminReportTypeEnum
+                                Button(type="submit", name="submitType", value="changeType", data-type-value=typeEnum.REPORT_CARD.valueOf()).x-hidden.change-type-btn
+                                +Select('reportType').report-type-select
+                                    +Option(typeEnum.LUNCH_COUNT.valueOf(), 'Lunch Count', false)
+                                    +Option(typeEnum.REPORT_CARD.valueOf(), 'Report Card', true)
+                    TR
+                        TD(colspan="3").item-3
                             .add-recipients-container
                                 .add-recipients
                                     .recipients-list
@@ -32,7 +28,7 @@ mixin Radio(name, value, title, selected)
                                         +RenderWith(groupsModel, chlk.templates.reports.ReportCardRecipientsTpl)
                     TR
                         TD(colspan="3").item-3
-                            .text-block
+                            .text-block.mt-28.mb-28
                                 label Title
                                 input(type="text", name="title", placeholder="Report Card", maxlength=75).report-title
                     TR

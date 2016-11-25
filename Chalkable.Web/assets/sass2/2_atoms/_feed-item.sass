@@ -110,6 +110,19 @@
   .attachment
     height: 80px
 
+  &.student.class-announcement
+    .attachment
+      .small-icon:not(.grades-icon)
+        margin-top: 2px
+
+      .grades-icon
+        +icons-32-sprite(grades-2)
+        width: 32px
+        height: 32px
+        position: absolute
+        margin-top: 27px
+        right: 0
+
   .attachment
     padding-right: 140px
     position: relative
@@ -122,14 +135,25 @@
       top: 0
       min-width: 125px
 
+    .grade-info
+      text-align: right
+      line-height: 88px
+      font-size: 29px
+      font-weight: bold
+      position: absolute
+      right: 0
+      color: #7b7974
+
     .small-icon
       width: 24px
       height: 24px
       margin: 36px -1px 0 10px
       display: inline-block
       vertical-align: middle
-      opacity: 0.5
+      opacity: 0.7
       float: right
+      position: relative
+      z-index: 1
 
     .discussion-icon
       +icons-24-sprite(discussion)

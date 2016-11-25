@@ -302,12 +302,12 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
 
 
-        public IList<Pair<int, DateTime>> AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        public IList<Pair<int, DateTime>> AdjustDates(IList<int> ids, int shift, int classId)
         {
             var @params = new Dictionary<string, object>
             {
                 ["ids"] = ids,
-                ["startDate"] = startDate,
+                ["shift"] = shift,
                 ["classId"] = classId
             };
 

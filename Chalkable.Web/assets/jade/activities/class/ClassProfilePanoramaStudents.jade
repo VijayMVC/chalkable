@@ -10,8 +10,8 @@ mixin HeaderLink_(name, type)
 if self.getUserRole().isTeacher()
     BUTTON(type='submit', name="submitType", value="supplemental", data-tooltip='Add Supplemental Assignment').v-hidden.add-supplemental-btn.right
 .clear-fix
-.chlk-calendar.students-grid
-    .grid-top-content.chlk-grid
+.students-grid
+    .grid-top-content.chlk-grid.grid-with-border
         .district-summary-grid
             .grid-content
                 -var students = self.getStudents()

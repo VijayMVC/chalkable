@@ -17,4 +17,9 @@ mixin DatePickerInline(name, value_)
 mixin ButtonDatePicker(name, text_, value_)
     -attributes = self.processAttrs(name, value_, attributes)
     input(type="button", text=text_)(attributes).chlk-button
+
+mixin DatePickerWithIcon(name, value_)
+    .date-picker-cnt
+        +DatePicker(name, value_)(attributes)
+        .calendar-icon
     

@@ -104,6 +104,9 @@ namespace Chalkable.Data.School.Model.Announcements
         public IList<string> AttachmentNames { get; set; }
         public bool Gradable => GradableType && ClassAnnouncementData.IsScored;
         public bool GradableType => ClassAnnouncementData != null;
+
+        public StudentAnnouncementDetails CurrentStudentScore { get; set; }
+
     }
 
     public class AnnouncementDetails : AnnouncementComplex

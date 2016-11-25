@@ -30,16 +30,33 @@ header
 
   .report-cards-link
     position: relative
-    width: 30px
+    display: inline-block
+    +icons-24-sprite(custom-report)
+    width: 24px
+    height: 24px
+    top: 3px
+
+  .reports-bubble
+    position: absolute
+    width: 125px
+    z-index: 100
+    padding: 0
+    line-height: 34px
+    right: -5px
+    top: 36px
 
     &::before
-      content: ' '
-      position: absolute
-      top: 0
-      left: 0
-      right: 0
-      bottom: 0
-      +icons-24-sprite(custom-report, 0, 2px, 2px)
+      z-index: -1
+
+    a
+      padding: 0 12px
+      color: #56554f
+      display: block
+      text-align: left
+      text-decoration: none
+
+      &:hover
+        background: #eee
 
   .notifications-link
     position: relative

@@ -228,35 +228,37 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public async Task<ActionResult> AdjustDates(IList<AnnouncementInputModel> announcements, DateTime startDate, int classId)
+        public async Task<ActionResult> AdjustDates(IList<AnnouncementInputModel> announcements, int shift, int classId)
         {
+            
             if (announcements == null || announcements.Count == 0)
                 return Json(true);
+
+            //If any conflicts occurred
             
-            var adjustClassAnnsTask = Task.Factory.StartNew(() => {
-                var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Class)
-                    .Select(x => x.AnnouncementId).ToList();
+            var caIds = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Class)
+                .Select(x => x.AnnouncementId).ToList();
 
-                SchoolLocator.ClassAnnouncementService.AdjustDates(ids, startDate, classId);
-            });
-
-            var adjustLpsTask = Task.Factory.StartNew(() => {
+            SchoolLocator.ClassAnnouncementService.AdjustDates(caIds, shift, classId);
+            
+            var adjustLpsTask = Task.Factory.StartNew(() =>
+            {
                 var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.LessonPlan)
                     .Select(x => x.AnnouncementId).ToList();
 
-                SchoolLocator.LessonPlanService.AdjustDates(ids, startDate, classId);
+                SchoolLocator.LessonPlanService.AdjustDates(ids, shift, classId);
             });
 
-            var adjustSuppAnnTask = Task.Factory.StartNew(() => {
+            var adjustSuppAnnTask = Task.Factory.StartNew(() =>
+            {
                 var ids = announcements.Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.Supplemental)
                     .Select(x => x.AnnouncementId).ToList();
 
-                SchoolLocator.SupplementalAnnouncementService.AdjustDates(ids, startDate, classId);
+                SchoolLocator.SupplementalAnnouncementService.AdjustDates(ids, shift, classId);
             });
 
             await adjustLpsTask;
             await adjustSuppAnnTask;
-            await adjustClassAnnsTask;
 
             return Json(true);
         }

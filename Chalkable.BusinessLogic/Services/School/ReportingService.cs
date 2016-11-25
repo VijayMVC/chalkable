@@ -22,8 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment);
         void SetProgressReportComments(int classId, int gradingPeriodId, IList<StudentCommentInputModel> studentComments);
 
-        byte[] GenerateReport<TReportSettings>(TReportSettings settings) where TReportSettings : class;
-        
+        byte[] GenerateReport<TReportSettings>(TReportSettings settings) where TReportSettings : class;     
         byte[] DownloadReport(string reportId);
         void ScheduleReportCardTask(ReportCardsInputModel inputModel);
         void GenerateReportCard(ReportCardsInputModel inputModel);
@@ -89,6 +88,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             return ReportGeneratorFactory.CreateGenerator<TReportSettings>(ServiceLocator, ConnectorLocator).GenerateReport(settings);
         }
+        
         public void ScheduleReportCardTask(ReportCardsInputModel inputModel)
         {
             Trace.Assert(Context.DistrictId.HasValue);

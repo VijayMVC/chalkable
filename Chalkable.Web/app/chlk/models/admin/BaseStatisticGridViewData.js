@@ -22,6 +22,8 @@ NAMESPACE('chlk.models.admin', function () {
 
             chlk.models.id.SchoolYearId, 'schoolYearId',
 
+            chlk.models.id.GradingPeriodId, 'gradingPeriodId',
+
             String, 'schoolName',
 
             chlk.models.id.SchoolId, 'schoolId',
@@ -63,9 +65,16 @@ NAMESPACE('chlk.models.admin', function () {
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.start = SJX.fromValue(raw.start, Number);
                 this.schoolYearId = SJX.fromValue(raw.schoolYearId, chlk.models.id.SchoolYearId);
+                this.gradingPeriodId = SJX.fromValue(raw.gradingPeriodId, chlk.models.id.GradingPeriodId);
                 this.schoolName = SJX.fromValue(raw.schoolName, String);
                 this.schoolId = SJX.fromValue(raw.schoolId, chlk.models.id.SchoolId);
                 this.teacherId = SJX.fromValue(raw.teacherId, chlk.models.id.SchoolPersonId);
+            },
+
+            Boolean, function isNotEmptyStatistic(){
+                return (this.getItems().filter(function(school){return school.getAvg() !== null}).length +
+                    this.getItems().filter(function(school){return school.getInfractionsCount() !== null}).length +
+                    this.getItems().filter(function(school){return school.getAbsences() !== null}).length) > 0
             }
         ]);
 });

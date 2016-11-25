@@ -5,7 +5,7 @@
 -var teacherId = self.getTeacherId() && self.getTeacherId().valueOf()
 input(type="hidden", name="start", value=0)
 input(type="hidden", name="sortType", value=sortType)
-.chlk-calendar
+.grid-with-border
     .grid-top-content
         if classes.length
             +ListView(classes)(
@@ -15,7 +15,7 @@ input(type="hidden", name="sortType", value=sortType)
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 .grid-content
                     .grid-header.grid-row
-                        +ActionLink('schools', 'classesSummary', self.getSchoolId(), self.getSchoolName(), self.getSchoolYearId(), teacherId, sortType == typesEnum.CLASS_ASC.valueOf() ? typesEnum.CLASS_DESC.valueOf() : typesEnum.CLASS_ASC.valueOf(), self.getFilter()).cell.name=Msg.Classes
+                        +ActionLink('schools', 'classesSummary', self.getSchoolId(), self.getSchoolName(), self.getSchoolYearId(), teacherId, sortType == typesEnum.CLASS_ASC.valueOf() ? typesEnum.CLASS_DESC.valueOf() : typesEnum.CLASS_ASC.valueOf(), self.getFilter()).cell.name=Msg.Class
                         +ActionLink('schools', 'classesSummary', self.getSchoolId(), self.getSchoolName(), self.getSchoolYearId(), teacherId, sortType == typesEnum.TEACHER_ASC.valueOf() ? typesEnum.TEACHER_DESC.valueOf() : typesEnum.TEACHER_ASC.valueOf(), self.getFilter()).cell.teacher-name=Msg.Teacher
                         +ActionLink('schools', 'classesSummary', self.getSchoolId(), self.getSchoolName(), self.getSchoolYearId(), teacherId, sortType == typesEnum.STUDENTS_ASC.valueOf() ? typesEnum.STUDENTS_DESC.valueOf() : typesEnum.STUDENTS_ASC.valueOf(), self.getFilter()).cell.students=Msg.Students
                         if isNotEmptyStatistic
