@@ -38,15 +38,21 @@
                                 +Radio('idToPrint', chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, self.getIdToPrint() == chlk.models.reports.StudentIdentifierEnum.NONE.valueOf())
                         TD.item-4
                             h3 Start Date
-                            +DatePicker('startDate')(data-options={
-                                showOtherMonths: true,
-                                selectOtherMonths: true
-                            }).start-date
+                            +DatePicker('startDate', new chlk.models.common.ChlkSchoolYearDate())(
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true
+                                },
+                                class='validate[required]'
+                            ).start-date
                             h3 End Date
-                            +DatePicker('endDate')(data-options={
-                                showOtherMonths: true,
-                                selectOtherMonths: true
-                            }).end-date
+                            +DatePicker('endDate', new chlk.models.common.ChlkSchoolYearDate())(
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true
+                                },
+                                class='validate[required]'
+                            ).end-date
 
                         TD.item-4
                             h3 Include

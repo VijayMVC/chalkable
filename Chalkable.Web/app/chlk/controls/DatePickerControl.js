@@ -44,11 +44,12 @@ NAMESPACE('chlk.controls', function () {
                     var that = this;
                     options.onSelect = function (dateText, inst) {
                         var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(new Date(dateText));
-                        params.push(date);
+                        var curParams = params.slice();
+                        curParams.push(date);
                         var state = that.context.getState();
                         state.setController(controller);
                         state.setAction(action);
-                        state.setParams(params);
+                        state.setParams(curParams);
                         state.setPublic(false);
                         that.context.stateUpdated();
                     }
