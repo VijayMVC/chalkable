@@ -41,7 +41,7 @@
                                                 .with-events.circle-cnt(
                                                     data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
                                                     class = clazz.getAbsencesClass()
-                                                )=clazz.getPresence() && Math.round(clazz.getPresence() * 10) / 10
+                                                )=clazz.getPresence() && Math.round(clazz.getPresence())
                                             .cell.discipline
                                                 .with-events.circle-cnt(
                                                     data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
