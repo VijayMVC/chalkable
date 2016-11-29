@@ -23,6 +23,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(customAlerts),
                 IsAllowedInetAccess = student.IsAllowedInetAccess,
                 SpecialInstructions = student.SpecialInstructions,
+                HasMedicalAlert = student.HasMedicalAlert,
                 SpEdStatus = student.SpEdStatus,
                 IsIEPActive = student.IsIEPActive
             };
