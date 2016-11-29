@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -14,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
         void Delete(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
         IList<StudentCustomAlertDetail> GetList(int studentId);
+        IList<StudentCustomAlertDetail> GetList(IList<Student> students);
     }
 
     class StudentCustomAlertDetailService : SchoolServiceBase, IStudentCustomAlertDetailService
@@ -52,6 +55,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 {nameof(StudentCustomAlertDetail.StudentRef), studentId},
                 {nameof(StudentCustomAlertDetail.SchoolYearRef), Context.SchoolYearId.Value}
             }).OrderBy(x => x.AlertText).ToList());
+        }
+
+        public IList<StudentCustomAlertDetail> GetList(IList<Student> students)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            return DoRead(u => new StudentCustomAlertDetailDataAccess(u).GetList(students.Select(x => x.Id).ToList(), Context.SchoolYearId.Value));
         }
     }
 }

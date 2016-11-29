@@ -143,6 +143,7 @@
     <Compile Include="DataAccess\StandardizedTestDataAccess.cs" />
     <Compile Include="DataAccess\StudentAnnouncementApplicationMetaDataAccess.cs" />
     <Compile Include="DataAccess\StudentContactDataAccess.cs" />
+    <Compile Include="DataAccess\StudentCustomAlertDetailDataAccess.cs" />
     <Compile Include="DataAccess\StudentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\SupplementalAnnouncementRecipientDataAccess.cs" />

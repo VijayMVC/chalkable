@@ -32,8 +32,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var staffs = ServiceLocator.StaffService.SearchStaff(Context.SchoolYearId, classId, null, null, false, 0, int.MaxValue)
                 .OrderBy(x => x.Id != currentClass.PrimaryTeacherRef).ToList(); //primary theacher should be on the TOP         
             var mealTypes = ServiceLocator.MealTypeService.GetAll();
+            var studentsCustomAlertDetails = ServiceLocator.StudentCustomAlertDetailService.GetList(students);
                        
-            return LunchCountGrid.Create(classId, date, students, staffs, mealTypes, await lunchCountsTask, includeGuests);
+            return LunchCountGrid.Create(classId, date, students, staffs, mealTypes, studentsCustomAlertDetails, await lunchCountsTask, includeGuests);
         }
 
         public void UpdateLunchCount(int classId, DateTime date, IList<LunchCount> lunchCounts)

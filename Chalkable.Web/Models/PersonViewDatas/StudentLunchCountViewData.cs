@@ -9,9 +9,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentLunchCountViewData(StudentLunchCount studentLunchCount) : base(studentLunchCount)
         {
             IsAbsent = studentLunchCount.IsAbsent;
+            HasCustomAlerts = studentLunchCount.HasCustomAlerts;
         }
 
         public bool IsAbsent { get; set; }
+        public bool HasCustomAlerts { get; set; }
 
         public static StudentLunchCountViewData Create(StudentLunchCount studentLunchCount)
         {
