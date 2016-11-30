@@ -1,0 +1,99 @@
+.settings
+  .general
+    .password-info
+
+      .header
+        font-size: 22px
+        font-weight: bold
+
+      .text
+        font-size: 18px
+        padding: 5px
+
+    .inow-btn
+      text-align: center
+      margin-top: 30px
+      font-size: 20px
+
+  .report-cards
+    .slides
+      margin-bottom: 40px
+      margin-left: 20px
+
+      .title
+        text-align: center
+        font-style: italic
+
+    .btn-cnt
+      position: relative
+      margin-bottom: 20px
+
+      .v-line
+        position: absolute
+        height: 21px
+        left: 18px
+        top: 30px
+        width: 0
+
+      &:last-child
+        .v-line
+          border-left: 1px solid #c8c7c3
+
+      .delete-btn
+        right: 10px
+
+      .with-logo::after
+        content: " "
+        position: absolute
+        width: 24px
+        height: 24px
+        top: 50%
+        right: 10px
+        margin-top: -12px
+        +icons-24-sprite(attachment)
+
+    .logo-section
+      .schools,.logo
+        display: inline-block
+        vertical-align: top
+
+    .download-link
+      margin-right: 50px
+      width: 200px
+      position: relative
+
+
+    .add-circle-btn
+      +background(linear-gradient(top, #fff, #f2f2ee))
+      border: 1px solid #c9c8c4
+      display: inline-block
+      font-size: 32px
+      width: 34px
+      text-align: center
+      line-height: 32px
+      border-radius: 17px
+      height: 34px
+      vertical-align: middle
+      margin-right: 12px
+      cursor: pointer
+      padding: 0
+      font-weight: normal
+      box-shadow: none
+      outline: none
+
+      &:hover
+        +background(linear-gradient(top, #fff, #f2f2ee))
+
+
+.messaging-block
+  .check-box-container
+    .title
+      width: 500px
+      display: inline-block
+      font-size: 15px
+      margin: 5px 0
+
+    &.sub
+      .title
+        font-style: italic
+        font-size: 14px
