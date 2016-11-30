@@ -1,0 +1,27 @@
+-var selectedId = self.getClassId()
+
+.grading-summary-grid.grades-page
+
+    if self.isInProfile()
+        .buttons-group.right
+            +ActionButton('grading', "summaryBoxesClassProfile", selectedId)=Msg.Item(true)
+            +ActionButton('grading', "standardsBoxesClassProfile", selectedId).pressed=Msg.Standard(true)
+            +ActionButton('grading', "finalGradesClassProfile", selectedId)=Msg.Final_Grade(true)
+    else
+        -var topData = self.getTopData()
+        +ClassesToolBarWithAll(topData, 'grading', 'standards', null, null, null)
+        h2.page-title=Msg.Standard(true)
+        .action-bar
+            .items
+                +ActionLink('grading', "summary", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standards", selectedId).pressed=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+                if self.isLEIntegrated() && self.isHasAccessToLE()
+                    +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+    .buttons-group
+        +ActionButton('grading', self.isInProfile() ? 'standardsBoxesClassProfile' : 'standards', selectedId).boxes.pressed=Msg.Box(true)
+        +ActionButton('grading', self.isInProfile() ? 'standardsGridClassProfile' : 'standardsGrid', selectedId).grid=Msg.Grid
+
+    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)(
+        gradingPeriodId = self.getGradingPeriodId()
+    )

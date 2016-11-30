@@ -1,0 +1,21 @@
+mixin ActionForm(controller, action)
+    -attributes['data-controller'] = escape(controller);
+    -attributes['data-action'] = escape(action);
+    -attributes.action = attributes.action || 'javascript:';
+    -self.prepareData(attributes);
+    form(attributes)
+        block
+
+mixin Hidden(hidName, hidValue)
+    -var hidValueFixed = hidValue && hidValue.valueOf ? hidValue.valueOf() : hidValue
+    input(type="hidden", name=hidName, value=('boolean' === typeof hidValueFixed ? hidValueFixed|0 : hidValueFixed))(attributes)
+
+mixin Radio(name, value, title, selected)
+    -attributes.type = "radio"
+    -attributes.name = name
+    -attributes.value = value
+    -attributes.checked = selected ? "checked" : null
+    -attributes.id = attributes.id || ria.dom.Dom.GID()
+    input(attributes).chlk-radio-input
+    label(for=attributes.id)=title
+    br
