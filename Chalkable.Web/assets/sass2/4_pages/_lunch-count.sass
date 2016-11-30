@@ -1,0 +1,74 @@
+.teacher-icon
+  +icons-24-sprite(teacher-icon)
+  width: 24px
+  height: 24px
+  float: right
+
+.class-lunch-form
+  .top-date
+    text-align: center
+
+    .date-picker-cnt
+      margin-top: 23px
+
+    .hasDatepicker
+      border: none
+      +box-shadow(none)
+      font-size: 16px
+      font-weight: bold
+      width: 120px
+      color: #56554f
+
+  .report-bottom
+    text-align: right
+
+    BUTTON
+      margin-left: 10px
+      width: 65px
+
+  .chlk-calendar
+    margin-top: 3px
+
+  .chlk-grid
+    .grid-row
+      .teacher-icon
+        opacity: 0.15
+
+      .cell:first-child
+        width: 40%
+        line-height: 24px
+
+      .alerts-icon, .teacher-icon
+        position: relative
+        float: right
+        top: 0
+        right: -10px
+
+      .left-cell
+        text-align: left
+        padding: 0 20px
+        position: relative
+
+      .absent-icon
+        position: absolute
+        width: 8px
+        height: 8px
+        background: #ff0000
+        border-radius: 50%
+        top: 50%
+        margin-top: -4px
+        left: 5px
+
+      .no-bodrer
+        border: none
+
+  .meal-count-input
+    width: 100%
+    box-sizing: border-box
+    height: 100%
+    border: none
+    text-align: center
+    border-radius: 0
+
+    &:not(:focus)
+      box-shadow: none
