@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -32,8 +29,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var staffs = ServiceLocator.StaffService.SearchStaff(Context.SchoolYearId, classId, null, null, false, 0, int.MaxValue)
                 .OrderBy(x => x.Id != currentClass.PrimaryTeacherRef).ToList(); //primary theacher should be on the TOP         
             var mealTypes = ServiceLocator.MealTypeService.GetAll();
+            var studentsCustomAlertDetails = ServiceLocator.StudentCustomAlertDetailService.GetListByStudentIds(students.Select(x=>x.Id).ToList());
                        
-            return LunchCountGrid.Create(classId, date, students, staffs, mealTypes, await lunchCountsTask, includeGuests);
+            return LunchCountGrid.Create(classId, date, students, staffs, mealTypes, studentsCustomAlertDetails, await lunchCountsTask, includeGuests);
         }
 
         public void UpdateLunchCount(int classId, DateTime date, IList<LunchCount> lunchCounts)
