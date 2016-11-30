@@ -61,7 +61,8 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
                                 .cell.left-cell=item.info.getDisplayName()
                                     if item.info.isAbsent()
                                         .absent-icon
-                                    +ActionLink('class', 'showAlertsPopUp', item.info.getId(), clazz.getSchoolYearId()).alerts-icon.yellow.small.no-tooltip
+                                    if item.info.showAlerts()
+                                        +ActionLink('class', 'showAlertsPopUp', item.info.getId(), clazz.getSchoolYearId()).alerts-icon.yellow.small.no-tooltip
                                 each mealItem, mealIndex in item.mealItems
                                     -var curIndex = firstIndex + index * tableInfo.mealItems.length + mealIndex
                                     +MealItemCell(mealItem, mealIndex, curIndex, item.info.isAbsent(), item.type)
