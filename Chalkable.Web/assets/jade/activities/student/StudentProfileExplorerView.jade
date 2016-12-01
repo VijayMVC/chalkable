@@ -1,0 +1,55 @@
+-var classesInfo = self.getStudentExplorer().getClassesGradingInfo()
+-var studentName = self.getStudentExplorer().getFirstName()
+-var canPressStandards = !self.getUserRole().isAdmin()
+-var student = self.getStudentExplorer()
+
+.profile-page(class=student.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
+    h2.page-title=self.getTitle() || Msg.Student_profile
+    +ProfileTopBar(self, 'explorer')
+    if !self.getUserRole().isStudent()
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(self.getStudentExplorer(), 140, !self.getUserRole().isStudent())
+                    .grades-container
+            #student-info-panel.right-block.panel-block.central-block
+                displayName =self.getStudentExplorer().getDisplayName() || self.getStudentExplorer().getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+    .explorer-view(class=canPressStandards ? 'can-press-standards' : '')
+        if !classesInfo.length
+            .no-items-text=self.showNoClassesMsg()
+        .classes-blocks
+            each classItem, i in classesInfo
+                .class-block
+                    -var title = self.getClassBlockTitle(classItem, i)
+                    .title(data-tooltip = title, data-tooltip-type="overflow")=title
+                    .announcement-block
+                        -var announcement = classItem.getAnnouncement()
+                        if !announcement && !classItem.getStandards().length
+                            .block-item.no-standards-block No Standards
+                        if announcement
+                            .block-item.announcement
+                                .left-block(
+                                    data-tooltip = studentName + ' has ' + announcement.getTitle() + ' ' + self.getDaysForAnnouncement(announcement),
+                                    data-tooltip-type="overflow"
+                                ) #{studentName + " has "}
+                                    +ActionLink('announcement', 'view', announcement.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
+                                        b=announcement.getTitle() + " "
+                                    |#{self.getDaysForAnnouncement(announcement)}
+                                .right-block __
+                                    .circle.white
+                        each standard, i in classItem.getStandards()
+                            -var abId = standard.getAcademicBenchmarkId()
+                            +ActionLink('apps', 'getSuggestedApps', classItem.getClazz().getId(), abId, standard.getUrlComponents())(
+                                class = (self.showStandard(classItem, i) ? '' : 'hidden-item ') + (abId ? 'with-code' : '')
+                            ).block-item.standard
+                                .left-block(data-tooltip=standard.getDescription())=standard.getName()
+                                -var value = standard.getStandardGrading().getGradeValue()
+                                .right-block
+                                    -var numeric = standard.getStandardGrading().getNumericGrade()
+                                    span(data-tooltip=parseInt(numeric) ? Math.round(numeric) : numeric)=(parseInt(value) ? Math.round(value) : value)
+                                    .circle(class=self.getStandardColor(standard))
+                        if self.showMoreButton(classItem)
+                            .block-item.more-button Show more
+                            .block-item.less-button Show less
+        .suggested-apps-container

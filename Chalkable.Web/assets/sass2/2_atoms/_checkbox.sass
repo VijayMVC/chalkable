@@ -1,0 +1,165 @@
+.action-checkbox-container
+  display: inline-block
+
+.box-checkbox
+  display: inline-block
+  border: 1px solid #d7d7d7
+  border-radius: 2px
+  position: relative
+
+  &.circle
+    border-radius: 10px
+    width: 20px
+    height: 20px
+
+    input[type=checkbox]:checked + LABEL
+      top: -2px
+      left: -2px
+      right: -2px
+      bottom: -2px
+
+  input[type=checkbox]
+    //top: 100px
+    position: relative
+    opacity: 0
+
+    &.partially-checked+label,  &:checked+label
+      position: absolute
+      cursor: pointer
+
+    &:checked+label
+      +icons-24-sprite(check)
+      height: 24px
+      width: 24px
+      top: -2px
+      left: -2px
+      right: -2px
+      bottom: -2px
+
+    &.partially-checked+label
+      top: 3px
+      left: 3px
+      right: 3px
+      bottom: 3px
+
+    &:not(:checked):not(.partially-checked)
+      opacity: 0
+
+    &.partially-checked+label
+      background: #6BBA71
+      width: 14px
+      height: 14px
+
+    &[disabled], &[readonly], &:disabled
+      & + label
+        -webkit-filter: grayscale(100%)
+        filter: grayscale(100%)
+
+.labeled-checkbox
+  display: inline-block
+  position: relative
+  text-align: left
+  min-width: 97px
+  height: 28px
+  line-height: 28px
+  vertical-align: middle
+  margin-bottom: 5px
+
+  label
+    cursor: pointer
+    color: #444
+
+  &.with-input
+    width: 265px
+    margin-right: 0
+    margin-bottom: 10px
+
+    &:nth-child(2n)
+      margin-right: 7px
+
+  label, .label-input
+    overflow: hidden
+    text-overflow: ellipsis
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    line-height: 28px
+    display: block
+    text-align: left
+    font-size: 13px
+    white-space: nowrap
+    vertical-align: middle
+    padding-left: 26px
+    z-index: 1
+
+    font-family: 'Open Sans', sans-serif
+    font-weight: 600
+    +text-shadow(transparentize(#fff, .5) 0 1px 0px)
+    +transition(background-color .1s ease-in)
+
+    outline: none
+    cursor: pointer
+    border-radius: 3px
+    border: 1px solid #c8c7c3
+
+
+  .label-input
+    width: 238px
+    line-height: 26px
+    height: 24px
+
+  input[type=checkbox]
+    position: relative
+    z-index: 2
+    vertical-align: middle
+    display: inline-block
+    margin: 8px
+
+    & + label
+
+      border-color: #C8C7C3
+      color: #56554F
+      +text-shadow(transparentize(#C8C7C3, .5) 0 1px 1px)
+      background-color: #FEFEFE
+      +box-shadow(transparentize(#000, .75) 0 1px 3px, #FFFFFF 0 1px 0px inset)
+
+      &:hover
+        background: #FFFFFF
+
+      &:active, &.pressed, &.pressed:hover
+        background: #F2F1ED
+
+    &:checked
+      & + label
+        border-color: #29596E
+        color: #fff
+        +text-shadow(transparentize(#29596E, .5) 0 1px 1px)
+        background-color: #548BA5
+        +background-image(linear-gradient(top, #558CA6 0%, #447B94 50%, #30677E 100%))
+        +box-shadow(transparentize(#000, .55) 0 1px 3px, #82A3B0 0 1px 0px inset)
+
+        &:hover
+          background: #568EA8
+
+      & + .label-input
+        border: 1px solid #888888
+        color: #000
+
+    &:disabled
+      & + label
+        cursor: default
+        color: #888
+        +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+        &:hover
+          background-color: #FEFEFE
+
+    &:checked:disabled
+      & + label
+        color: #aaa
+        +text-shadow(transparentize(#29596E, .5) 0 1px 1px)
+        &:hover
+          background-color: #548BA5
+
+
