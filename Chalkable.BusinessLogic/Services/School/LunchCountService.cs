@@ -23,7 +23,9 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
 
-            var lunchCountsTask = ConnectorLocator.LunchConnector.GetLunchCount(classId, date);
+            var days = ServiceLocator.ClassService.GetDays(classId);
+            var scheduledDate = days.Last(x => x <= date);
+            var lunchCountsTask = ConnectorLocator.LunchConnector.GetLunchCount(classId, scheduledDate);
             var students = ServiceLocator.StudentService.GetClassStudents(classId, null).OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
             var currentClass = ServiceLocator.ClassService.GetById(classId);
             var staffs = ServiceLocator.StaffService.SearchStaff(Context.SchoolYearId, classId, null, null, false, 0, int.MaxValue)
@@ -31,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var mealTypes = ServiceLocator.MealTypeService.GetAll();
             var studentsCustomAlertDetails = ServiceLocator.StudentCustomAlertDetailService.GetListByStudentIds(students.Select(x=>x.Id).ToList());
                        
-            return LunchCountGrid.Create(classId, date, students, staffs, mealTypes, studentsCustomAlertDetails, await lunchCountsTask, includeGuests);
+            return LunchCountGrid.Create(classId, scheduledDate, students, staffs, mealTypes, studentsCustomAlertDetails, await lunchCountsTask, includeGuests);
         }
 
         public void UpdateLunchCount(int classId, DateTime date, IList<LunchCount> lunchCounts)
