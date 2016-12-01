@@ -345,7 +345,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
 
             IList<SectionSummaryForStudent> iNowRes;
-            sortType = sortType ?? ClassSortType.PeriodsAsc;
             try
             {
                 iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionSummaryForStudent(Context.SchoolYearId.Value, studentId, gradingPeriodId);
@@ -368,7 +367,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private IEnumerable<ClassStatsInfo> SortClassesStats(IEnumerable<ClassStatsInfo> classesStats, ClassSortType? sortType)
         {
-            sortType = sortType ?? ClassSortType.ClassAsc;
+            sortType = sortType ?? ClassSortType.PeriodsAsc;
             var descending = sortType == ClassSortType.PeriodsDesc ||
                               sortType == ClassSortType.AttendanceDesc ||
                               sortType == ClassSortType.DisciplineAsc ||
