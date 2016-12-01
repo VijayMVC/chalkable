@@ -50,6 +50,12 @@ NAMESPACE('chlk.activities.classes', function () {
                 }*/
             },
 
+            [ria.mvc.DomEventBind('focus', '.meal-count-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function countFocus(node, event){
+                node.select();
+            },
+
             [ria.mvc.DomEventBind('change', '.meal-count-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function countChange(node, event){

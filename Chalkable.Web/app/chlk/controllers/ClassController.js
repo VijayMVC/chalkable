@@ -477,7 +477,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             function lunchAction(classId, date_){
                 var res = ria.async.wait([
-                        this.classService.getLunchCount(classId, date_ || new chlk.models.common.ChlkDate(), true),
+                        this.classService.getLunchCount(classId, date_, true),
                         this.classService.getLunchSummary(classId)
                     ])
                     .attach(this.validateResponse_())

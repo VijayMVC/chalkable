@@ -337,11 +337,11 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
-            ria.async.Future, function getLunchCount(classId, date, includeGuests) {
+            ria.async.Future, function getLunchCount(classId, date_, includeGuests_) {
                 return this.get('Class/LunchCount.json', chlk.models.lunchCount.LunchCountGrid, {
                     classId: classId.valueOf(),
-                    date: date.toStandardFormat(),
-                    includeGuests: includeGuests.valueOf()
+                    date: date_ && date_.toStandardFormat(),
+                    includeGuests: includeGuests_
                 });
             },
 

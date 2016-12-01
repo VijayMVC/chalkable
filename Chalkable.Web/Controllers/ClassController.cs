@@ -225,9 +225,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public async Task<ActionResult> LunchCount(int classId, DateTime date, bool includeGuests)
+        public async Task<ActionResult> LunchCount(int classId, DateTime? date, bool includeGuests)
         {
-            var lunchCountGrid = await SchoolLocator.LunchCountService.GetLunchCountGrid(classId, date, includeGuests);
+            date = date ?? SchoolLocator.Context.NowSchoolYearTime;
+            var lunchCountGrid = await SchoolLocator.LunchCountService.GetLunchCountGrid(classId, date.Value, includeGuests);
             return Json(LunchCountGridViewData.Create(lunchCountGrid));
         }
 
