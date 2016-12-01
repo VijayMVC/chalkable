@@ -1,0 +1,22 @@
+.stats-container
+    .top-bar
+        .title Attendance Chart
+        -var type = self.getDateType()
+        +Select('dateType', null, 'class', 'changeAttendanceDateType', [self.getClassId().valueOf()]).date-type-select
+            +Option(chlk.models.classes.DateTypeEnum.YEAR.valueOf(), 'Yearly', type == chlk.models.classes.DateTypeEnum.YEAR)
+            +Option(chlk.models.classes.DateTypeEnum.GRADING_PERIOD.valueOf(), 'Grading Period', type == chlk.models.classes.DateTypeEnum.GRADING_PERIOD)
+            +Option(chlk.models.classes.DateTypeEnum.LAST_MONTH.valueOf(), 'Month', type == chlk.models.classes.DateTypeEnum.LAST_MONTH)
+            +Option(chlk.models.classes.DateTypeEnum.LAST_WEEK.valueOf(), 'Week', type == chlk.models.classes.DateTypeEnum.LAST_WEEK)
+        .chart-top-legend
+            .chart-legend-item
+                .circle.yellow
+                span Late
+            .chart-legend-item
+                .circle.red
+                span Absent
+            .chart-legend-item
+                .circle.green
+                span Present
+    +Chart()(
+        data-options = self.getChartOptions()
+    )
