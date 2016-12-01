@@ -110,9 +110,7 @@ NAMESPACE('chlk.models.common', function () {
 
             [[SELF]],
             Number, function compare(date){
-                var firstDate = this.getDate();
-                var secondDate = this.getDate();
-                return firstDate > secondDate ? 1 : (firstDate < secondDate ? -1 : 0);
+                return Date.compare(this.getDate(), date.getDate());
             },
 
             Date, function getServerDate_(str_, a_, b_){

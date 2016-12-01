@@ -93,7 +93,7 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
-            if (Date.compare(model.getStartDate().getDate(), model.getEndDate().getDate()) > 0){
+            if (model.getStartDate().compare(model.getEndDate()) > 0){
                 return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
             }
 
