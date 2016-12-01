@@ -1,0 +1,10 @@
+.alerts-on-click-pop-up.popup-bubble
+    .alerts-triangle-container
+        .left-item
+        .alerts-triangle
+    .alerts-container
+        each item in self.getModel().getAlertsInfo().getAlerts()
+            .alert-item
+                alertIconClass = "alert-icon " + self.getCssClass(item)
+                div(class=alertIconClass)
+                .alert-description=item.getDescription()
