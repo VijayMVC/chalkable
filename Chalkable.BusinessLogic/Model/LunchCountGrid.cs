@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Model
 
 
         public static LunchCountGrid Create(int classId, DateTime date, IList<Student> students, IList<Staff> staffs,
-            IList<MealType> mealTypes, IList<StiConnector.Connectors.Model.LunchCount> lunchCounts, bool includeGuests)
+            IList<MealType> mealTypes, IList<StudentCustomAlertDetail> studentsCustomAlertDetails, IList<StiConnector.Connectors.Model.LunchCount> lunchCounts, bool includeGuests)
         {
             var mealItems = new List<MealItem>();
             foreach (var mealType in mealTypes)
@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Model
 
             return new LunchCountGrid
             {
-                Students = students.Select(student => StudentLunchCount.Create(student, lunchCounts.Any(x => x.StudentId == student.Id && x.IsAbsent))).ToList(),
+                Students = students.Select(student => StudentLunchCount.Create(student, lunchCounts.Any(x => x.StudentId == student.Id && x.IsAbsent), studentsCustomAlertDetails.Any(x => x.StudentRef == student.Id))).ToList(),
                 MealItems = mealItems,
                 Date = date,
                 ClassId = classId,

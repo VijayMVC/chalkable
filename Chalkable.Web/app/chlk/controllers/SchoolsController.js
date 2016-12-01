@@ -358,7 +358,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('classes')],
         [[chlk.models.id.GradingPeriodId, Number]],
         function classesSummaryStudentAction(gradingPeriodId_, sortType_){
-            sortType_ = sortType_ || chlk.models.admin.ClassSortTypeEnum.CLASS_ASC.valueOf();
+            sortType_ = (sortType_ || sortType_ === 0) ? sortType_ : chlk.models.admin.ClassSortTypeEnum.PERIOD_ASC.valueOf();
             var currentGp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, []);
             var gradingPeriodId = (gradingPeriodId_ && gradingPeriodId_.valueOf()) ? gradingPeriodId_ : (currentGp && currentGp.getId())
             var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);

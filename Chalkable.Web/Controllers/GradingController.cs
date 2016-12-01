@@ -308,7 +308,7 @@ namespace Chalkable.Web.Controllers
             return Json(StudentAveragesViewData.Create(res));
         }
 
-        [AuthorizationFilter("Teacher, Student", true, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult SetAutoGrade(int announcementApplicationId, int? studentId, string gradeValue)
         {
             if (string.IsNullOrWhiteSpace(gradeValue))

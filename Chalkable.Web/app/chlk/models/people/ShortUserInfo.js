@@ -30,6 +30,7 @@ NAMESPACE('chlk.models.people', function () {
                 this.salutation = SJX.fromValue(raw.salutation, String);
                 this.withdrawn = SJX.fromValue(raw.iswithdrawn, Boolean);
                 this.withMedicalAlert = SJX.fromValue(raw.hasmedicalalert, Boolean);
+                this.withCustomAlerts = SJX.fromValue(raw.hascustomalerts, Boolean);
                 this.allowedInetAccess = SJX.fromValue(raw.isallowedinetaccess, Boolean);
 
                 var studentCustomAlertDetails = raw.studentcustomalertdetails ? raw.studentcustomalertdetails.map(function (item) {
@@ -68,6 +69,7 @@ NAMESPACE('chlk.models.people', function () {
             Boolean, 'withdrawn',
             Boolean, 'withMedicalAlert',
             Boolean, 'allowedInetAccess',
+            Boolean, 'withCustomAlerts',
             String, 'specialInstructions',
             String, 'spedStatus',
             ArrayOf(chlk.models.people.HealthCondition), 'healthConditions',
@@ -93,7 +95,7 @@ NAMESPACE('chlk.models.people', function () {
 
             Boolean, function showAlerts(){
                 var res = this.isWithMedicalAlert() || this.isAllowedInetAccess()
-                    || this.getSpecialInstructions() || this.isIepActive() || (this.getStudentCustomAlertDetails().length != 0);
+                    || this.getSpecialInstructions() || this.isIepActive() || this.isWithCustomAlerts();
                 return !!res;
             },
 
