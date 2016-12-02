@@ -355,9 +355,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             using (var uow = Update())
             {
-
                 var newDates = CreateClassAnnouncementDataAccess(uow).AdjustDates(ids, shift, classId);
-
                 var activityDates = ActivityDate.Create(newDates);
 
                 try //Post new dates to iNow. If any conflicts terminate whole operation.
@@ -367,11 +365,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 }
                 catch (Exception e)
                 {
+                    uow.Rollback();
                     if (e.InnerException != null && e.InnerException.Message == InowErrors.ACTIVITY_SECTION_NAME_DATE_MUSTBEUNIQUE_ERROR)
                     {
-                        uow.Rollback();
-                        throw new ChalkableException("A conflict occurred while adjusting activities. Please ensure that activity title, date and class are unique and try again");
+                        throw new ChalkableException(ChlkResources.ERR_ADJUSTING_ACTIVITIES_DATE_CONFLICT);
                     }
+                    throw;
                 }
             }
         }
