@@ -315,6 +315,9 @@
   <data name="ERR_ADA_DUPLICATE_ANNOUNCEMENT_ID" xml:space="preserve">
     <value>More than one announcement with same id</value>
   </data>
+  <data name="ERR_ADJUSTING_ACTIVITIES_DATE_CONFLICT" xml:space="preserve">
+    <value>A conflict occurred while adjusting activities. Please ensure that activity title, date and class are unique and try again</value>
+  </data>
   <data name="ERR_ANNOUNCEMENT_NOT_ASSIGNED_TO_CLASS" xml:space="preserve">
     <value>This annoncement is not assignment to any classes</value>
   </data>

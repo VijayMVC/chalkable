@@ -374,7 +374,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.FeedPrintingViewData]],
         function submitFeedPrintingReportAction(reportViewData){
-            if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+            if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                 return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
             }
 

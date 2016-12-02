@@ -13,10 +13,10 @@ NAMESPACE('chlk.models.reports', function () {
 
     /** @class chlk.models.reports.LunchCountAdditionalOptions*/
     ENUM('LunchCountAdditionalOptions',{
-        GROUP_TOTALS: 0,
-        GRAND_TOTALS: 1,
-        STUDENTS_ONLY: 2,
-        SUMMARY_ONLY: 3
+        GROUP_TOTALS: 1,
+        GRAND_TOTALS: 2,
+        STUDENTS_ONLY: 3,
+        SUMMARY_ONLY: 4
     });
 
 

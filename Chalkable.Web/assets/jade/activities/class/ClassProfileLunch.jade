@@ -27,7 +27,8 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
                 data-options={
                     showOtherMonths: true,
                     selectOtherMonths: true,
-                    inCurrentGradingPeriods: true
+                    inCurrentGradingPeriods: true,
+                    enabledDays: clazz.getScheduledDays() || []
                 },
                 data-controller= "class",
                 data-action="lunch",
