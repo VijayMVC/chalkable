@@ -2,25 +2,26 @@
 	@classId int
 As
 
-Declare @schoolYearId int;
-Set		@schoolYearId = (Select SchoolYearRef From Class Where Id = @classId);
-Declare @markingPeriodId TInt32;
+Declare @schoolYearId int = (Select SchoolYearRef From Class Where Id = @classId)
+Declare @markingPeriodIds TInt32;
 
-insert into @markingPeriodId  
+insert into @markingPeriodIds 
 	Select MarkingPeriodRef 
 	From MarkingPeriodClass Join MarkingPeriod
 		On MarkingPeriodClass.MarkingPeriodRef = MarkingPeriod.Id
-	Where ClassRef = @classId Order By MarkingPeriod.EndDate Desc
+	Where ClassRef = @classId And SchoolYearRef = @schoolYearId
+	Order By MarkingPeriod.EndDate Desc
 
-
-Declare @markingPeriodStartDate datetime2 = (Select Top 1 MP.StartDate From MarkingPeriod MP Where Id in (select * from @markingPeriodId) order by MP.StartDate)
-Declare @markingPeriodEndDate datetime2 = (Select Top 1 MP.EndDate From MarkingPeriod MP Where Id in (select * from @markingPeriodId) order by MP.EndDate DESC)
 
 Select Distinct * From [Date]
 Where SchoolYearRef = @schoolYearId and IsSchoolDay = 1 
 	  And Exists(Select * From ClassPeriod 
 				 Where ClassPeriod.DayTypeRef = [Date].DayTypeRef And ClassPeriod.ClassRef = @classId)
-	  And [Day] Between @markingPeriodStartDate And @markingPeriodEndDate
+	  And Exists(
+				 Select * From MarkingPeriod
+				 Where  Id in (Select * From @markingPeriodIds)
+					   And [Date].[Day] Between StartDate And EndDate
+				)
 Order by [Day]
 
 GO
