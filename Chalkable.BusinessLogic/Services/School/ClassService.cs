@@ -367,8 +367,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private IEnumerable<ClassStatsInfo> SortClassesStats(IEnumerable<ClassStatsInfo> classesStats, ClassSortType? sortType)
         {
-            sortType = sortType ?? ClassSortType.ClassAsc;
-            var descending = sortType == ClassSortType.AttendanceDesc ||
+            sortType = sortType ?? ClassSortType.PeriodsAsc;
+            var descending = sortType == ClassSortType.PeriodsDesc ||
+                              sortType == ClassSortType.AttendanceDesc ||
                               sortType == ClassSortType.DisciplineAsc ||
                               sortType == ClassSortType.ClassDesc ||
                               sortType == ClassSortType.GradesDesc ||

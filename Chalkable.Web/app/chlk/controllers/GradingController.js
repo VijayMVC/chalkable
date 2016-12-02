@@ -778,7 +778,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.reports.SubmitMissingAssignmentsReportViewData]],
             function submitMissingAssignmentsReportAction(reportViewData){
-                if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -811,7 +811,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.reports.SubmitComprehensiveProgressViewData]],
             function submitComprehensiveProgressReportAction(reportViewData){
-                if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -887,7 +887,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitGradeBookReportViewData]],
             function submitGradeBookReportAction(reportViewData){
 
-                if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -932,7 +932,7 @@ NAMESPACE('chlk.controllers', function (){
                     if (!reportViewData.getEndDate())
                         return this.ShowAlertBox("Please provide report end date", "Error"), null;
 
-                    if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                    if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                         return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                     }
                 }
@@ -1051,7 +1051,7 @@ NAMESPACE('chlk.controllers', function (){
                         return this.UpdateView(chlk.activities.reports.WorksheetReportDialog, new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData), 'stop');*/
                     }
 
-                    if (Date.compare(model.getStartDate().getDate() , model.getEndDate().getDate()) > 0){
+                    if (model.getStartDate().compare(model.getEndDate()) > 0){
                         return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                     }
 

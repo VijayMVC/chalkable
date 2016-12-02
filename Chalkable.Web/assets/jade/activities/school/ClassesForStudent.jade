@@ -48,7 +48,7 @@
                                                     class = clazz.getInfractionsClass()
                                                 )=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
                                             .cell.grades
-                                                +ActionLink('feed', 'gradingList', clazz.getId())(
+                                                +ActionLink('feed', 'gradingList', clazz.getId(), self.getGradingPeriodId())(
                                                     data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
                                                     class = clazz.getAvgClass()
                                                 ).with-events.circle-cnt=clazz.getAvg() && parseInt(clazz.getAvg(), 10)
