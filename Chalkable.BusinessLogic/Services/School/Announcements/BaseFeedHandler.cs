@@ -66,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var supplementalAnns = InternalGetSupplementalAnns(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeFrom, true);
             res = MergeItems(res, supplementalAnns);
 
-            if (locator.Context.Role == CoreRoles.STUDENT_ROLE)
+            if (locator.Context.Role == CoreRoles.STUDENT_ROLE && !classId.HasValue)
                 res = MergeItems(res, InternalGetAdminAnns(locator, fromDate, toDate, null, complete, 0, int.MaxValue, from, to, includeFrom, includeTo));
 
             return res.ToList();
