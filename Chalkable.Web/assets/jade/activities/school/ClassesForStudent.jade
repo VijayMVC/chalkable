@@ -41,14 +41,14 @@
                                                 .with-events.circle-cnt(
                                                     data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
                                                     class = clazz.getAbsencesClass()
-                                                )=clazz.getPresence() && Math.round(clazz.getPresence() * 10) / 10
+                                                )=clazz.getPresence() && Math.round(clazz.getPresence())
                                             .cell.discipline
                                                 .with-events.circle-cnt(
                                                     data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
                                                     class = clazz.getInfractionsClass()
                                                 )=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
                                             .cell.grades
-                                                +ActionLink('feed', 'gradingList', clazz.getId())(
+                                                +ActionLink('feed', 'gradingList', clazz.getId(), self.getGradingPeriodId())(
                                                     data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
                                                     class = clazz.getAvgClass()
                                                 ).with-events.circle-cnt=clazz.getAvg() && parseInt(clazz.getAvg(), 10)

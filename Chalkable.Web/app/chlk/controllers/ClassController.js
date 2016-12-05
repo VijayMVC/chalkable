@@ -477,13 +477,15 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             function lunchAction(classId, date_){
                 var res = ria.async.wait([
-                        this.classService.getLunchCount(classId, date_ || new chlk.models.common.ChlkDate(), true),
-                        this.classService.getLunchSummary(classId)
+                        this.classService.getLunchCount(classId, date_, true),
+                        this.classService.getLunchSummary(classId),
+                        this.classService.getScheduledDays(classId)
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var model = result[1];
                         model.setLunchCountInfo(result[0]);
+                        model.setScheduledDays(result[2]);
                         model.setAbleSubmit(!this.isPageReadonly_('MAINTAIN_CLASSROOM_LUNCH_COUNT', 'MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN', model));
                         var resModel = new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),

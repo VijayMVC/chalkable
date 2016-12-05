@@ -10,6 +10,8 @@ NAMESPACE('chlk.models.classes', function () {
 
             chlk.models.lunchCount.LunchCountGrid, 'lunchCountInfo',
 
-            Boolean, 'ableSubmit'
+            Boolean, 'ableSubmit',
+
+            ArrayOf(chlk.models.common.ChlkDate), 'scheduledDays'
         ]);
 });

@@ -34,8 +34,8 @@ NAMESPACE('chlk.models.admin', function () {
         DISCIPLINE_DESC: 9,
         GRADES_ASC: 10,
         GRADES_DESC: 11,
-        PERIOD_ASC: 10,
-        PERIOD_DESC: 11
+        PERIOD_ASC: 12,
+        PERIOD_DESC: 13
     });
 
     /** @class chlk.models.admin.SchoolSortTypeEnum*/

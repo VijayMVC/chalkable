@@ -5,8 +5,9 @@ namespace Chalkable.BusinessLogic.Model
     public class StudentLunchCount : Student
     {
         public bool IsAbsent { get; set; }
+        public bool HasCustomAlerts { get; set; }
 
-        public static StudentLunchCount Create(Student student, bool isAbsent)
+        public static StudentLunchCount Create(Student student, bool isAbsent, bool hasCustomAlerts)
         {
             return new StudentLunchCount
             {
@@ -36,7 +37,8 @@ namespace Chalkable.BusinessLogic.Model
                 StudentNumber = student.StudentNumber,
                 OriginalEnrollmentDate = student.OriginalEnrollmentDate,
                 IsWithdrawn = student.IsWithdrawn,
-                IsAbsent = isAbsent
+                IsAbsent = isAbsent,
+                HasCustomAlerts = hasCustomAlerts
             };
         }
     }

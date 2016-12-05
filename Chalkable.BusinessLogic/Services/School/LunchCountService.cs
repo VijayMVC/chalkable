@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -26,14 +23,17 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
 
-            var lunchCountsTask = ConnectorLocator.LunchConnector.GetLunchCount(classId, date);
+            var days = ServiceLocator.ClassService.GetDays(classId);
+            var scheduledDate = days.Last(x => x <= date);
+            var lunchCountsTask = ConnectorLocator.LunchConnector.GetLunchCount(classId, scheduledDate);
             var students = ServiceLocator.StudentService.GetClassStudents(classId, null).OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
             var currentClass = ServiceLocator.ClassService.GetById(classId);
             var staffs = ServiceLocator.StaffService.SearchStaff(Context.SchoolYearId, classId, null, null, false, 0, int.MaxValue)
                 .OrderBy(x => x.Id != currentClass.PrimaryTeacherRef).ToList(); //primary theacher should be on the TOP         
             var mealTypes = ServiceLocator.MealTypeService.GetAll();
+            var studentsCustomAlertDetails = ServiceLocator.StudentCustomAlertDetailService.GetListByStudentIds(students.Select(x=>x.Id).ToList());
                        
-            return LunchCountGrid.Create(classId, date, students, staffs, mealTypes, await lunchCountsTask, includeGuests);
+            return LunchCountGrid.Create(classId, scheduledDate, students, staffs, mealTypes, studentsCustomAlertDetails, await lunchCountsTask, includeGuests);
         }
 
         public void UpdateLunchCount(int classId, DateTime date, IList<LunchCount> lunchCounts)

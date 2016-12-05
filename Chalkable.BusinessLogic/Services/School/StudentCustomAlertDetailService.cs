@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -14,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
         void Delete(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
         IList<StudentCustomAlertDetail> GetList(int studentId);
+        IList<StudentCustomAlertDetail> GetListByStudentIds(IList<int> studentIds);
     }
 
     class StudentCustomAlertDetailService : SchoolServiceBase, IStudentCustomAlertDetailService
@@ -42,16 +42,16 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StudentCustomAlertDetail> GetList(int studentId)
         {
-            Trace.Assert(Context.SchoolYearId.HasValue);
+            return GetListByStudentIds(new List<int> {studentId});
+        }
 
+        public IList<StudentCustomAlertDetail> GetListByStudentIds(IList<int> studentIds)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
             if (BaseSecurity.IsStudent(Context))
                 return new List<StudentCustomAlertDetail>();
 
-            return DoRead(u => new DataAccessBase<StudentCustomAlertDetail>(u).GetAll(new AndQueryCondition
-            {
-                {nameof(StudentCustomAlertDetail.StudentRef), studentId},
-                {nameof(StudentCustomAlertDetail.SchoolYearRef), Context.SchoolYearId.Value}
-            }).OrderBy(x => x.AlertText).ToList());
+            return DoRead(u => new StudentCustomAlertDetailDataAccess(u).GetList(studentIds, Context.SchoolYearId.Value));
         }
     }
 }

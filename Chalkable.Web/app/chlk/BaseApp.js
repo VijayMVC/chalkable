@@ -263,7 +263,7 @@ NAMESPACE('chlk', function (){
 
                 jQuery.fn.extend({setChecked : function(value){
                     var jNode = this, item = this[0];
-                    if(!!item.getAttribute('checked') != !!value){
+                    if(item && !!item.getAttribute('checked') != !!value){
                         jNode.prop('checked', value);
                         value ? item.setAttribute('checked', 'checked') : item.removeAttribute('checked');
                         value && item.setAttribute('checked', 'checked');

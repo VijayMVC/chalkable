@@ -27,7 +27,7 @@ Update @toAdjust
 Set [StartDate] = dbo.CalcAnnouncementDate(@classDays, [StartDate], @shift)
 
 Update @toAdjust
-Set [EndDate] = dbo.CalcAnnouncementDate(@classDays, [StartDate], TotalSchoolDays)
+Set [EndDate] = dbo.CalcAnnouncementDate(@classDays, [StartDate], IIF(TotalSchoolDays < 0, 0, TotalSchoolDays))
 ---------------------------------------------------------------------------------------
 
 Update LessonPlan
