@@ -34,7 +34,7 @@ mixin HeaderDisciplinesLink_(name, type, panoramaInfo)
             data-options = self.getDisciplinesChartOptions_()
             ).disciplines-chart
 +CloseOpen('Attendance', true).panorama-attendance-tab
-    .chlk-calendar.attendance-grid
+    .grid-with-border.attendance-grid
         +RenderWith(panoramaInfo, chlk.templates.student.StudentProfilePanoramaAttendanceStatsTpl)
 
 +CloseOpen('Demographics', true).panorama-demographics-tab
@@ -103,5 +103,5 @@ mixin HeaderDisciplinesLink_(name, type, panoramaInfo)
                     .info-title Retained
                     +YesNo_(user.isRetained())
 +CloseOpen('Discipline', true).panorama-discipline-tab
-    .chlk-calendar.discipline-grid
+    .grid-with-border.discipline-grid
         +RenderWith(panoramaInfo, chlk.templates.student.StudentProfilePanoramaDisciplineStatsTpl)

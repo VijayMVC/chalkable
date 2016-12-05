@@ -16,6 +16,7 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
     - itemClasses.push(adminAnnouncement ? 'is-admin' : (lessonPlan ? 'lesson-plan' : (supplementalAnnouncement ? 'supplemental' : 'class-announcement')))
     - itemClasses.push(item.isImported() ? 'imported' : '')
     - itemClasses.push(item.isComplete() ? 'complete' : '')
+    - itemClasses.push(self.getUserRole().isStudent() ? 'student' : '')
 
     div(class = itemClasses).feed-item
         .check-cnt(class = supplementalAnnouncement ? "supplemental" : "")
@@ -38,9 +39,11 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
                 if !adminAnnouncement
                     .description=announcementItem.getClassName()
                 .icons
+                    -var hasGrade = item.getGrade() || item.getGrade() === 0
+                    -var gradable = classAnnouncement && classAnnouncement.isGradable()
                     if item.isHiddenFromStudents()
                         .small-icon.invisible-icon(data-tooltip="Hidden from students")
-                    if classAnnouncement && classAnnouncement.isGradable()
+                    if gradable && !hasGrade
                         -var maxScore = classAnnouncement.getMaxScore()
                         .small-icon.grades-icon(data-tooltip=maxScore + ' possible point' + (maxScore == 1 ? '' : 's') )
                     if item.getOwnerAttachmentsCount() > 0
@@ -49,6 +52,9 @@ mixin FeedItem(item, disabled, isStudentGrading, isStaringDisabled)
                         .small-icon.supplemental-icon(data-tooltip=supplementalAnnouncement.getRecipientsTooltip())
                     if item.isShowDiscussionIcon()
                         .small-icon.discussion-icon(data-tooltip="Class Discussion")
+
+                    if gradable && hasGrade
+                        .grade-info=Math.round(item.getGrade()) + "/" + classAnnouncement.getMaxScore()
 
                     if lessonPlan
                         .line(data-tooltip = lessonPlan.getPercents() + '% complete')

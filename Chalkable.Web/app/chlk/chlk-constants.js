@@ -11,6 +11,7 @@ var ChlkSessionConstants = {
     CREATED_ANNOUNCEMENTS: 'createdAnnouncements',
     CURRENT_PANORAMA: 'currentPanorama',
     FIRST_LOGIN: 'firstLogin',
+    LUNCH_COUNT_MODEL: 'lunchCountModel',
     SCHOOL_YEAR:'schoolYear',
     SUPPLEMENTAL_STUDENTS: 'supplementalStudents',
     USER_ROLE: 'role',

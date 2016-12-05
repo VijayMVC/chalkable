@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -150,6 +151,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var score = new Score();
             MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, studentAnnouncement);
             ActivityScoreStorage.Add(score);
+        }
+
+        public Task<IList<StudentAnnouncementDetails>> GetStudentAnnouncementsByAnnIds(IList<int> announcementIds, int studentId)
+        {
+            throw new NotImplementedException();
         }
 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits,

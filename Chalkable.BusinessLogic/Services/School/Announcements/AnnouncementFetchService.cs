@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 case AnnouncementTypeEnum.LessonPlan:
                     return _handlers[sortOption].GetLessonPlansOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count, ownedOnly);
                 case AnnouncementTypeEnum.Admin:
-                    return _handlers[sortOption].GetAdminAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, null, complete, start, count);
+                    return classId.HasValue ? new List<AnnouncementComplex>() : _handlers[sortOption].GetAdminAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, null, complete, start, count);
                 case AnnouncementTypeEnum.Supplemental:
                     return _handlers[sortOption].GetSupplementalAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count, true);
             }

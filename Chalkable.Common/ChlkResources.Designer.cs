@@ -655,6 +655,15 @@ namespace Chalkable.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A conflict occurred while adjusting activities. Please ensure that activity title, date and class are unique and try again.
+        /// </summary>
+        public static string ERR_ADJUSTING_ACTIVITIES_DATE_CONFLICT {
+            get {
+                return ResourceManager.GetString("ERR_ADJUSTING_ACTIVITIES_DATE_CONFLICT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This annoncement is not assignment to any classes.
         /// </summary>
         public static string ERR_ANNOUNCEMENT_NOT_ASSIGNED_TO_CLASS {

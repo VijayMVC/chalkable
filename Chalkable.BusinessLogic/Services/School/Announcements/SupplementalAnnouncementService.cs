@@ -458,13 +458,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        public override void AdjustDates(IList<int> ids, DateTime startDate, int classId)
+        public override void AdjustDates(IList<int> ids, int shift, int classId)
         {
             BaseSecurity.EnsureTeacher(Context);
-            if (startDate < Context.SchoolYearStartDate || startDate > Context.SchoolYearEndDate)
-                throw new ChalkableException("Start date should be between school year start and end date");
+            //if (startDate < Context.SchoolYearStartDate || startDate > Context.SchoolYearEndDate)
+                //throw new ChalkableException("Start date should be between school year start and end date");
 
-            DoUpdate(u => CreateSupplementalAnnouncementDataAccess(u).AdjustDates(ids, startDate, classId));
+            DoUpdate(u => CreateSupplementalAnnouncementDataAccess(u).AdjustDates(ids, shift, classId));
         }
     }
 }

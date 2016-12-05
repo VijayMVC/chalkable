@@ -13,8 +13,6 @@ REQUIRE('chlk.services.AttendanceService');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
 REQUIRE('chlk.activities.grading.GradingClassStandardsPage');
 REQUIRE('chlk.activities.grading.GradingTeacherClassSummaryPage');
-REQUIRE('chlk.activities.grading.GradingStudentSummaryPage');
-REQUIRE('chlk.activities.grading.GradingStudentClassSummaryPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryGridPage');
 REQUIRE('chlk.activities.grading.GradingClassStandardsGridPage');
 REQUIRE('chlk.activities.grading.StudentAvgPopupDialog');
@@ -96,13 +94,6 @@ NAMESPACE('chlk.controllers', function (){
 
                 return this.Redirect('grading', 'summaryAll');
             },
-
-            [chlk.controllers.SidebarButton('statistic')],
-            function indexStudentAction() {
-                var classId = this.getCurrentClassId();
-                return this.Redirect('grading', 'summaryAll', [classId]);
-            },
-
 
             [chlk.controllers.Permissions([
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN,
@@ -628,22 +619,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.GradingTeacherClassSummaryPage, result);
             },
 
-            [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.id.ClassId, Boolean]],
-            function summaryAllStudentAction(classId_, update_){
-                var studentId = this.getCurrentPerson().getId();
-                var result = this.gradingService
-                    .getStudentSummary(studentId, classId_)
-                    .attach(this.validateResponse_())
-                    .then(function(model){
-                        var topData = new chlk.models.classes.ClassesForTopBar(null, classId_);
-                        model.setTopData(topData);
-                        return model;
-                    }, this);
-                return update_ ? this.UpdateView(chlk.activities.grading.GradingStudentSummaryPage, result, 'chart-update') :
-                    this.PushView(chlk.activities.grading.GradingStudentSummaryPage, result);
-            },
-
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.id.AnnouncementId]],
             function showChartAction(announcementId){
@@ -803,7 +778,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.reports.SubmitMissingAssignmentsReportViewData]],
             function submitMissingAssignmentsReportAction(reportViewData){
-                if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -836,7 +811,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.reports.SubmitComprehensiveProgressViewData]],
             function submitComprehensiveProgressReportAction(reportViewData){
-                if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -912,7 +887,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitGradeBookReportViewData]],
             function submitGradeBookReportAction(reportViewData){
 
-                if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -957,7 +932,7 @@ NAMESPACE('chlk.controllers', function (){
                     if (!reportViewData.getEndDate())
                         return this.ShowAlertBox("Please provide report end date", "Error"), null;
 
-                    if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                    if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                         return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                     }
                 }
@@ -1076,7 +1051,7 @@ NAMESPACE('chlk.controllers', function (){
                         return this.UpdateView(chlk.activities.reports.WorksheetReportDialog, new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData), 'stop');*/
                     }
 
-                    if (Date.compare(model.getStartDate().getDate() , model.getEndDate().getDate()) > 0){
+                    if (model.getStartDate().compare(model.getEndDate()) > 0){
                         return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                     }
 

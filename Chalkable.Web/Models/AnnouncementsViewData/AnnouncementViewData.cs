@@ -9,7 +9,8 @@ using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
-    public class AnnouncementViewData : ShortAnnouncementViewData
+    public class 
+        AnnouncementViewData : ShortAnnouncementViewData
     {
         public ShortAnnouncementViewData LessonPlanData { get; set; }
         public ShortAnnouncementViewData AdminAnnouncementData { get; set; }
@@ -37,7 +38,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string ApplicationName { get; set; }
         public bool ShowGradingIcon { get; set; }
         public Guid? AssessmentApplicationId { get; set; }
-        
+
+        public decimal? Grade { get; set; }
+        public string Comment { get; set; }
+
         protected AnnouncementViewData(Announcement announcementData, IList<ClaimInfo> claims) :base(announcementData)
         {
             ShortAnnouncementViewData annData = null;
@@ -98,18 +102,16 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ShowGradingIcon = studentsCounts > 0 && StudentsCountWithAttachments * 4 > studentsCounts || GradingStudentsCount > 0;
         }
 
+        protected AnnouncementViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IList<ClaimInfo> claims)
+                : this(announcement, claims)
+        {
+            PrepareGradingInfo(this, studentAnnouncements);
+        }
+
 
         public static AnnouncementViewData Create(Announcement announcement, IList<ClaimInfo> claims)
         {
             return new AnnouncementViewData(announcement, claims);
-        }
-
-        public static AnnouncementViewData Create(AnnouncementComplex announcement, IList<ClaimInfo> claims, string applicationName = null)
-        {
-            var res = new AnnouncementViewData(announcement, claims);
-            if (!string.IsNullOrEmpty(applicationName))
-                res.ApplicationName = applicationName;
-            return res;
         }
 
         public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements, IList<ClaimInfo> claims)
@@ -118,19 +120,34 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         }
 
         public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements
-            , IList<AnnouncementApplication> annApps, IList<Application> applications, IList<ClaimInfo> claims)
+            , IList<AnnouncementApplication> annApps, IList<Application> applications
+            , IList<ClaimInfo> claims, IList<StudentAnnouncement> studentAnnouncements)
         {
             var res = new List<AnnouncementViewData>();
             foreach (var ann in announcements)
             {
                 var app = applications.FirstOrDefault(a=> annApps.Any(annApp=>annApp.ApplicationRef == a.Id && annApp.AnnouncementRef == ann.Id));
-                var appName = app != null ? app.Name : null;
-                var annView = Create(ann, claims, appName);
+                var appName = app?.Name;
+                var annView = new AnnouncementViewData(ann, studentAnnouncements.Where(x => x.AnnouncementId == ann.Id).ToList(), claims);
+                annView.ApplicationName = appName;
                 if (string.IsNullOrEmpty(appName))
                     annView.ApplicationsCount = 0;
                 res.Add(annView);
             }
             return res;
-        } 
+        }
+
+        private static void PrepareGradingInfo(AnnouncementViewData res, IList<StudentAnnouncement> studentAnnouncements)
+        {
+            if (studentAnnouncements != null && studentAnnouncements.Count > 0)
+            {
+                if (studentAnnouncements.Count == 1)
+                {
+                    var studentAnnouncement = studentAnnouncements.First();
+                    res.Grade = studentAnnouncement.NumericScore;
+                    res.Comment = studentAnnouncement.Comment;
+                }
+            }
+        }
     }
 }

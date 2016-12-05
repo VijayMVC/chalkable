@@ -15,6 +15,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PanoramaViewDatas;
 using Chalkable.Web.Models.Settings;
@@ -146,6 +147,14 @@ namespace Chalkable.Web.Controllers
             return Json(classes.Select(ClassStatsViewData.Create));
         }
 
+        [AuthorizationFilter("Student")]
+        public ActionResult ClassesStatsForStudent(int gradingPeriodId, int? sortType)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var classes = SchoolLocator.ClassService.GetClassesStatsForStudent(Context.PersonId.Value, gradingPeriodId, (ClassSortType?)sortType);
+            return Json(classes.Select(ClassStatsViewData.Create));
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Panorama(int classId, ClassProfilePanoramaSetting settings, IList<int> selectedStudents)
         {
@@ -213,6 +222,21 @@ namespace Chalkable.Web.Controllers
                 classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYear.Id, gradeLevel);
 
             return Json(classes.Select(ShortClassViewData.Create));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public async Task<ActionResult> LunchCount(int classId, DateTime? date, bool includeGuests)
+        {
+            date = date ?? SchoolLocator.Context.NowSchoolYearTime;
+            var lunchCountGrid = await SchoolLocator.LunchCountService.GetLunchCountGrid(classId, date.Value, includeGuests);
+            return Json(LunchCountGridViewData.Create(lunchCountGrid));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult UpdateLunchCount(int classId, DateTime date, List<LunchCount> lunchCounts)
+        {
+            SchoolLocator.LunchCountService.UpdateLunchCount(classId, date, lunchCounts);
+            return Json(true);
         }
     }
 }

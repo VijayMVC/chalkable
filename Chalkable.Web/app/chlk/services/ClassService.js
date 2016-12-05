@@ -21,8 +21,11 @@ REQUIRE('chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData');
 REQUIRE('chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData');
 REQUIRE('chlk.models.classes.ClassGradingSummary');
 REQUIRE('chlk.models.grading.FinalGradesViewData');
+REQUIRE('chlk.models.classes.ClassProfileLunchSummary');
 
 REQUIRE('chlk.models.common.ChlkDate');
+
+REQUIRE('chlk.models.lunchCount.LunchCountGrid');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -210,6 +213,13 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId]],
+            ria.async.Future, function getLunchSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassProfileLunchSummary, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
             ria.async.Future, function getAttendanceSummary(classId) {
                 return this.get('Class/Summary.json', chlk.models.classes.ClassAttendanceSummary, {
                     classId: classId.valueOf()
@@ -310,12 +320,33 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.GradingPeriodId, Number]],
+            ria.async.Future, function getClassesStatisticForStudent(gradingPeriodId, sortType_) {
+                return this.get('Class/ClassesStatsForStudent.json', ArrayOf(chlk.models.school.SchoolClassesStatisticViewData.OF(chlk.models.id.ClassId)), {
+                    gradingPeriodId: gradingPeriodId.valueOf(),
+                    sortType: sortType_
+                });
+            },
+
             [[chlk.models.id.SchoolId, chlk.models.id.GradeLevelId]],
             ria.async.Future, function getClassesBySchool(schoolId, gradeLevel_) {
                 return this.get('Class/ClassesBySchool.json', ArrayOf(chlk.models.classes.Class), {
                     schoolId: schoolId.valueOf(),
                     gradeLevel: gradeLevel_ && gradeLevel_.valueOf()
                 });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
+            ria.async.Future, function getLunchCount(classId, date_, includeGuests_) {
+                return this.get('Class/LunchCount.json', chlk.models.lunchCount.LunchCountGrid, {
+                    classId: classId.valueOf(),
+                    date: date_ && date_.toStandardFormat(),
+                    includeGuests: includeGuests_
+                });
+            },
+
+            ria.async.Future, function updateLunchCount(o) {
+                return this.post('Class/UpdateLunchCount.json', Boolean, o);
             }
         ])
 });

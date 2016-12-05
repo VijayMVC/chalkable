@@ -5,6 +5,7 @@ REQUIRE('chlk.models.id.DepartmentId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.id.CourseTypeId');
+REQUIRE('chlk.models.id.SchoolYearId');
 REQUIRE('chlk.models.classes.Room');
 
 NAMESPACE('chlk.models.classes', function () {
@@ -36,6 +37,7 @@ NAMESPACE('chlk.models.classes', function () {
                 this.teachersIds = SJX.fromArrayOfValues(raw.teachersids, chlk.models.id.SchoolPersonId);
                 this.schoolId = raw.schoolyear ? SJX.fromValue(raw.schoolyear.schoolid, chlk.models.id.SchoolId) : null;
                 this.courseTypeId = SJX.fromValue(raw.coursetypeid, chlk.models.id.CourseTypeId);
+                this.schoolYearId = SJX.fromValue(raw.schoolyearid, chlk.models.id.SchoolYearId);
                 this.room = SJX.fromDeserializable(raw.room, chlk.models.classes.Room);
                 this.periods = SJX.fromArrayOfValues(raw.periods, String);
                 this.dayTypes = SJX.fromArrayOfValues(raw.daytypes, String);
@@ -51,6 +53,7 @@ NAMESPACE('chlk.models.classes', function () {
             READONLY, String, 'fullClassName',
             chlk.models.id.SchoolId, 'schoolId',
             chlk.models.id.CourseTypeId, 'courseTypeId',
+            chlk.models.id.SchoolYearId, 'schoolYearId',
             chlk.models.classes.Room, 'room',
             ArrayOf(String), 'periods',
             ArrayOf(String), 'dayTypes',

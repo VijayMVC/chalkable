@@ -115,6 +115,12 @@ NAMESPACE('chlk.controllers', function (){
             return this.listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_, true);
         },
 
+        [chlk.controllers.SidebarButton('inbox')],
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+        function gradingListAction(classId, gradingPeriodId){
+            return this.listAction(classId, null, null, null, null, null, gradingPeriodId, null, chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_DESCENDING, true);
+        },
+
         function parseEnumValue_(enumType, valToParse_){
             if(!(valToParse_ instanceof enumType )){
                 var val = parseInt(valToParse_, 10);
@@ -202,7 +208,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
             }
             if(model.getSubmitType() == 'adjust'){
-                res = this.announcementService.adjustDates(model.getClassId(), model.getSelectedAnnouncements(), model.getAdjustStartDate())
+                res = this.announcementService.adjustDates(model.getClassId(), model.getSelectedAnnouncements(), model.getAdjustCount())
                     .then(function(data){
                         return this.getFeedItems(false, model.isImportantOnly(), model.getClassId(), 0, model.getStartDate(), model.getEndDate(),
                             model.getGradingPeriodId(), model.getAnnType(), model.getSortType(), model.isToSet(), model.isInProfile(), JSON.parse(model.getSelectedAnnouncements()), model.getAdjustCount());
@@ -368,7 +374,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.FeedPrintingViewData]],
         function submitFeedPrintingReportAction(reportViewData){
-            if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+            if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
                 return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
             }
 

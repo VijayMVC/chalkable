@@ -93,6 +93,10 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
+            if (model.getStartDate().compare(model.getEndDate()) > 0){
+                return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+            }
+
             var result = this.reportingService.submitLunchCount(
                 model.getTitle(),
                 model.getOrderBy(),

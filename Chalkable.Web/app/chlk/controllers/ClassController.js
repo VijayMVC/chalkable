@@ -6,6 +6,7 @@ REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.DisciplineService');
 REQUIRE('chlk.services.DisciplineTypeService');
 REQUIRE('chlk.services.SchoolYearService');
+REQUIRE('chlk.services.StudentService');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassScheduleViewData');
@@ -18,6 +19,8 @@ REQUIRE('chlk.activities.classes.ClassProfileAppsPage');
 REQUIRE('chlk.activities.classes.ClassExplorerPage');
 REQUIRE('chlk.activities.classes.ClassProfileDisciplinePage');
 REQUIRE('chlk.activities.classes.ClassPanoramaPage');
+REQUIRE('chlk.activities.classes.ClassProfileLunchPage');
+REQUIRE('chlk.activities.classes.StudentAlertsPopup');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -48,6 +51,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.SchoolYearService, 'schoolYearService',
+
+            [ria.mvc.Inject],
+            chlk.services.StudentService, 'studentService',
 
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
@@ -451,6 +457,63 @@ NAMESPACE('chlk.controllers', function (){
                         );
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAppsPage, res);
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.SchoolYearId]],
+            function showAlertsPopUpAction(studentId, schoolYearId){
+                var res = this.studentService.getStudentAlertDetails(studentId, schoolYearId)
+                    .then(function(model){
+                        model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                        return model;
+                    });
+
+                return this.ShadeView(chlk.activities.classes.StudentAlertsPopup, res);
+            },
+
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT_ADMIN,
+                 chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN]
+            ])],
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            function lunchAction(classId, date_){
+                var res = ria.async.wait([
+                        this.classService.getLunchCount(classId, date_, true),
+                        this.classService.getLunchSummary(classId),
+                        this.classService.getScheduledDays(classId)
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var model = result[1];
+                        model.setLunchCountInfo(result[0]);
+                        model.setScheduledDays(result[2]);
+                        model.setAbleSubmit(!this.isPageReadonly_('MAINTAIN_CLASSROOM_LUNCH_COUNT', 'MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN', model));
+                        var resModel = new chlk.models.classes.ClassProfileSummaryViewData(
+                            this.getCurrentRole(), model, this.getUserClaims_(),
+                            this.isAssignedToClass_(classId)
+                        );
+                        this.getContext().getSession().set(ChlkSessionConstants.LUNCH_COUNT_MODEL, resModel);
+                        return resModel;
+
+                    }, this);
+
+                return this.PushView(chlk.activities.classes.ClassProfileLunchPage, res);
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            function lunchClearAction(classId, date_){
+                var resModel = this.getContext().getSession().get(ChlkSessionConstants.LUNCH_COUNT_MODEL, null);
+
+                return this.UpdateView(chlk.activities.classes.ClassProfileLunchPage, ria.async.DeferredData(resModel, 100));
+            },
+
+            function lunchSubmitAction(data){
+                var res = this.classService.updateLunchCount(data)
+                    .then(function(model){
+                        this.BackgroundNavigate('class', 'lunch', [data.classId, data.date.replace(/\//g, '-')]);
+                        return ria.async.BREAK;
+                    }, this)
+
+                return this.UpdateView(chlk.activities.classes.ClassProfileLunchPage, res);
             }
         ]);
 });

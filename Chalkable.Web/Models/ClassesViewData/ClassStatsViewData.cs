@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.Common;
-using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.ClassesViewData
 {
@@ -21,6 +17,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public decimal? Average { get; set; }
         public string ClassNumber { get; set; }
         public IList<int> TeacherIds { get; set; } 
+        public string Periods { get; set; }
         public static ClassStatsViewData Create(ClassStatsInfo classDetails)
         {
             return new ClassStatsViewData
@@ -37,7 +34,8 @@ namespace Chalkable.Web.Models.ClassesViewData
                 Average = classDetails.Average,
                 DisciplinesCount = classDetails.DisciplinesCount,
                 ClassNumber = classDetails.ClassNumber,
-                TeacherIds = classDetails.TeacherIds
+                TeacherIds = classDetails.TeacherIds,
+                Periods = classDetails.Periods
             };
         }
     }

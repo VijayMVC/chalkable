@@ -5,7 +5,6 @@ REQUIRE('chlk.models.grading.GradingClassSummaryItems');
 REQUIRE('chlk.models.grading.GradingClassSummaryGridItems');
 REQUIRE('chlk.models.grading.ItemGradingStat');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
-REQUIRE('chlk.models.grading.GradingStudentClassSummaryViewData');
 REQUIRE('chlk.models.announcement.ShortAnnouncementViewData');
 REQUIRE('chlk.models.standard.StandardGradings');
 REQUIRE('chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData');
@@ -203,14 +202,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId]],
-            ria.async.Future, function getStudentsClassSummary(studentId, classId) {
-                return this.get('Grading/StudentClassSummary', chlk.models.grading.GradingStudentClassSummaryViewData, {
-                    studentId: studentId.valueOf(),
-                    classId: classId.valueOf()
-                });
-            },
-
             [[Number, chlk.models.id.ClassId]],
             ria.async.Future, function getRecentlyGradedItems(pageIndex_, classId_){
                 return this.get('Grading/RecentlyGradedItems', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
@@ -225,15 +216,6 @@ NAMESPACE('chlk.services', function () {
                     teacherId: teacherId.valueOf()
                 });
             },
-
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId]],
-            ria.async.Future, function getStudentSummary(studentId, classId_) {
-                return this.get('Grading/StudentSummary', chlk.models.grading.GradingStudentSummaryViewData, {
-                    studentId: studentId.valueOf(),
-                    classId: classId_ && classId_.valueOf()
-                });
-            },
-
 
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function getItemGradingStat(announcementId) {

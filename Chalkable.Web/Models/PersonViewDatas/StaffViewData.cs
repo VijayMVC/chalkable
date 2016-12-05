@@ -1,4 +1,6 @@
-﻿using Chalkable.BusinessLogic.Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -20,6 +22,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public static StaffViewData Create(Staff staff)
         {
             return new StaffViewData(staff);
+        }
+
+        public static IList<StaffViewData> Create(IList<Staff> staff)
+        {
+            return staff.Select(Create).ToList();
         }
     }
 }
