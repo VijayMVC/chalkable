@@ -22,7 +22,7 @@ Begin
 	Where [Day] > @currentDate
 
 	--Resolving new date.
-	Set @currentDate = (Select top 1 [Day] from @neighborDates Order By Distance, [Day]);
+	Set @currentDate = (Select Top 1 [Day] From @neighborDates Where [Day] is not null Order By Distance, [Day]);
 End;
 
 Declare @newDate datetime2;
@@ -61,3 +61,4 @@ End;
 Return @newDate;
 
 END
+GO
