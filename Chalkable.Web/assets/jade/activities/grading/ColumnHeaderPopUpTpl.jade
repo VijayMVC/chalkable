@@ -1,0 +1,8 @@
++ActionForm('grading', 'setAnnouncementDropped')
+   +Hidden('announcementId', self.getAnnouncementId())
+   +Hidden('gradingPeriodId', self.getGradingPeriodId())
+   +Hidden('standardId', self.getStandardId())
+   +Hidden('categoryId', self.getCategoryId())
+   +Hidden('classId', self.getClassId())
+   +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(
+      data-value=self.isDropped(), addCallBack = true).with-value.entire-dropped.dropped-checkbox.main-check
