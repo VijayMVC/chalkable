@@ -12,7 +12,16 @@ else if self.isBanned()
 else if self.isAppError()
     +AppErrorDialog()
 else
-    +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId, self.getType(), advancedApp, self.getAnnouncementType()).app-wrapper
+    .base-app-dialog.app-wrapper
+        .x-window-header
+            .close-btn.close
+        .iframe-wrap
+            iframe.fixed-height(src=self.getUrl(), allowfullscreen)
+                attributes.class
+        .buttons-bottom
+            each button in self.getToolbarButtons()
+                +ToolbarButton(button, announcementAppId, announcementId, advancedApp, self.getAnnouncementType()).button-like.blue-button
+            BUTTON.close=Msg.Cancel
 
 
 

@@ -1,35 +1,4 @@
 .base-attachment-dialog
-  top: 50px
-  left: 90px
-  right: 90px
-  bottom: 10px
-  +transform(none)
-  background-color: transparent
-  overflow: visible
-  z-index: 2000
-
-  &.app-error-dialog, &.permission-error-dialog
-    .error-msg-block
-      margin-top: 25%
-      font-size: 40px
-      h2
-        font-size: 40px
-
-      .error-title
-        font-family: Arial, sans-serif
-        color: #ffffff
-
-      .error-text
-        font-size: 25px
-        font-family: Arial, sans-serif
-        color: #ffffff
-
-      .report-problem
-        font-size: 20px
-
-    .iframe-wrap
-      text-align: center
-
   .x-close-btn
     margin-top: -24px
 
@@ -64,6 +33,38 @@
         background: gray
         color: silver
 
+.base-attachment-dialog, .base-app-dialog
+  top: 50px
+  left: 90px
+  right: 90px
+  bottom: 10px
+  +transform(none)
+  background-color: transparent
+  overflow: visible
+  z-index: 2000
+
+  &.app-error-dialog, &.permission-error-dialog
+    .error-msg-block
+      margin-top: 25%
+      font-size: 40px
+      h2
+        font-size: 40px
+
+      .error-title
+        font-family: Arial, sans-serif
+        color: #ffffff
+
+      .error-text
+        font-size: 25px
+        font-family: Arial, sans-serif
+        color: #ffffff
+
+      .report-problem
+        font-size: 20px
+
+    .iframe-wrap
+      text-align: center
+
   .iframe-wrap
     background: url(images2/app/debut_dark.png)
     border: 1px solid black
@@ -92,3 +93,22 @@
 
     &.partial-update iframe
       opacity: .75
+
+.base-app-dialog
+  .close-btn
+    top: 15px
+    right: 17px
+    opacity: 1
+
+  .buttons-bottom
+    position: absolute
+    bottom: 30px
+    right: 30px
+
+    BUTTON, .button-like
+      min-width: 70px
+      line-height: 28px
+      margin-left: 15px
+      display: inline-block
+      text-decoration: none
+      box-sizing: border-box
