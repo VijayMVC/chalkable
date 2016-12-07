@@ -226,7 +226,7 @@ namespace Chalkable.Web.Models.GradingViewData
             return res;
         }
 
-        public static IList<StudentAveragesViewData> Create(IList<ChalkableStudentAverage> studentAverages)
+        public static IList<StudentAveragesViewData> Create(IEnumerable<ChalkableStudentAverage> studentAverages)
         {
             return studentAverages.Select(Create).ToList();
         } 
