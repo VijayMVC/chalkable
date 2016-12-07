@@ -80,6 +80,12 @@ NAMESPACE('chlk.activities.classes', function () {
                     btns.setAttr('disabled', 'disabled');
                     btns.setProp('disabled', true);
                 }
+
+                var mealIndex = node.getData('meal-index'), total = 0;
+                this.dom.find('.meal-count-input[data-meal-index=' + mealIndex + ']').forEach(function(mealInput){
+                    total += mealInput.getValue() ? parseInt(mealInput.getValue()) : 0;
+                });
+                this.dom.find('.total-cell[data-meal-index=' + mealIndex + ']').setHTML(total.toString());
             },
 
             [ria.mvc.DomEventBind('click', '.lunch-cancel')],
