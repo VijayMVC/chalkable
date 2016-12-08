@@ -27,7 +27,8 @@ namespace Chalkable.BusinessLogic.Services.Reporting.ReportingGenerators
                 IncludeStudentsOnly = settings.IncludeStudentsOnly,
                 IncludeSummaryOnly = settings.IncludeSummaryOnly,
                 SortOption = settings.OrderBy,
-                AcadSessionId = ServiceLocator.Context.SchoolYearId.Value
+                AcadSessionId = ServiceLocator.Context.SchoolYearId.Value,
+                Title = settings.Title
             };
         }
         protected override Func<LunchCountReportParams, byte[]> InowGenerateReportFunc => ConnectorLocator.ReportConnector.LunchCountReport;

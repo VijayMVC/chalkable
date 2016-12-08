@@ -415,6 +415,7 @@ NAMESPACE('chlk.controllers', function (){
             var postInfo = this.prepareSeatingChartEdit(model, seatingChartInfo);
             var page = model.isInProfile() ? chlk.activities.classes.ClassProfileAttendanceSeatingChartPage : chlk.activities.attendance.SeatingChartPage;
             var res = this.attendanceService.postSeatingChartWithInfo(model.getDate(), postInfo)
+                .attach(this.validateResponse_())
                 .then(function(resModel){
                     if(!model.isInProfile()){
                         var res = this.attendanceService

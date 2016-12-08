@@ -9,6 +9,7 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
             type="text",
             value=mealItem.getCount(),
             data-value=mealItem.getCount(),
+            data-meal-index=mealIndex,
             data-index=curIndex,
             readonly = readonly || !clazz.isAbleSubmit() || lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
         ).meal-count-input
@@ -69,8 +70,8 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
                                     +MealItemCell(mealItem, mealIndex, curIndex, item.info.isAbsent(), item.type)
                     .grid-header.grid-row.total-row
                         .cell.left-cell Total
-                        each item in tableInfo.mealItems
-                            .cell=item.getTotal()
+                        each item, index in tableInfo.mealItems
+                            .cell.total-cell(data-meal-index=index)=item.getTotal()
         .x-window-footer.report-bottom
             BUTTON(type="button", disabled).grey-button.lunch-count-btn.lunch-cancel=Msg.Cancel
             BUTTON(type="submit", disabled).blue-button.lunch-count-btn.lunch-submit Save

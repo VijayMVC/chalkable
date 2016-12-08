@@ -31,6 +31,11 @@ NAMESPACE('chlk.activities.lib', function () {
 
     CLASS(
         'ChlkTemplateActivity', EXTENDS(ria.mvc.TemplateActivity), [
+            function $() {
+                BASE();
+                this._rendered = false;
+            },
+
             [[ria.reflection.ReflectionClass]],
             OVERRIDE, VOID, function processAnnotations_(ref) {
                 BASE(ref);
@@ -74,6 +79,19 @@ NAMESPACE('chlk.activities.lib', function () {
             OVERRIDE, VOID, function onModelComplete_(msg_) {
                 this.dom && this.dom.removeClass(this._partialUpdateCls);
                 BASE(msg_);
+            },
+
+            [[ria.async.Future]],
+            OVERRIDE, ria.async.Future, function refreshD(future) {
+
+                future = future
+                    .then(function (data) { this._rendered = true; return data; }, this)
+
+                return BASE(future);
+            },
+
+            function isRendered(){
+                return this._rendered;
             },
 
             [[ria.templates.Template, Object, String]],
