@@ -15,7 +15,7 @@ namespace Chalkable.API.Endpoints
         public async Task<StudentDateAttendance> GetStudentAttendance(int studentId, DateTime? date)
         {
             var url = "/Attendance/StudentAttendance.json";
-            var dateParam = date?.ToString(Constans.DATE_FORMAT, CultureInfo.InvariantCulture);
+            var dateParam = date?.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
             return await Connector.Get<StudentDateAttendance>($"{url}?studentId={studentId}&date={dateParam}");
         }
     }

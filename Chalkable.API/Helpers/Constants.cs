@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chalkable.API.Helpers
 {
-    public static class Constans
+    public static class Constants
     {
         public const string DATE_FORMAT = "yyyy-MM-dd";
     }
