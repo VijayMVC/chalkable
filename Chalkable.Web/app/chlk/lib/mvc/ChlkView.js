@@ -38,6 +38,11 @@ NAMESPACE('chlk.lib.mvc', function () {
                 return this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED);
             },
 
+            Boolean, function isStackEmpty(){
+                var stackLen = this.getStack_().length;
+                return stackLen == 0 || stackLen == 1 && !this.getCurrent().isRendered();
+            },
+
 
             [[String]],
             function submitToIFrame(src){

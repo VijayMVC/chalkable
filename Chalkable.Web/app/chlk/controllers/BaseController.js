@@ -188,6 +188,9 @@ NAMESPACE('chlk.controllers', function (){
                    .catchException(chlk.lib.exception.ChalkableException, function(exception) {
                         Raygun ? Raygun.send(Raygun.fetchRaygunError(exception.toString())) : console.error(exception.toString());
 
+                       if(this.getContext().getDefaultView().isStackEmpty())
+                           return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [exception.getMessage()]);
+
                        return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
@@ -202,6 +205,10 @@ NAMESPACE('chlk.controllers', function (){
                    .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
                        var msg = this.mapSisErrorMessage(exception.getMessage());
                        Raygun ? Raygun.send(Raygun.fetchRaygunError(exception.toString())) : console.error(exception.toString());
+
+                       if(this.getContext().getDefaultView().isStackEmpty())
+                           return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [msg]);
+
                        return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
@@ -210,6 +217,10 @@ NAMESPACE('chlk.controllers', function (){
                    }, this)
                    .catchException(chlk.lib.exception.ChalkableSisNotSupportVersionException, function(exception){
                        var msg = this.mapSisErrorMessage(exception.getMessage());
+
+                       if(this.getContext().getDefaultView().isStackEmpty())
+                           return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [msg]);
+
                        return this.ShowMsgBox(msg, 'oops', [{text: Msg.GOT_IT.toUpperCase()}])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
@@ -226,11 +237,18 @@ NAMESPACE('chlk.controllers', function (){
                        return this.redirectToErrorPage_(exception.toString(), 'error', 'createAnnouncementError', []);
                    }, this)
                    .catchException(chlk.lib.exception.InvalidPictureException, function(exception) {
-                       return this.ShowMsgBox('You need to upload valid picture for you app', 'Error', [{
+                       var msg = 'You need to upload valid picture for you app';
+                       if(this.getContext().getDefaultView().isStackEmpty())
+                           return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [msg]);
+
+                       return this.ShowMsgBox(msg, 'Error', [{
                            text: 'Ok'
                        }], 'center'), null;
                    }, this)
                    .catchException(chlk.lib.exception.FileSizeExceedException, function(exception){
+                       if(this.getContext().getDefaultView().isStackEmpty())
+                           return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [exception.getMessage()]);
+
                        return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center').thenBreak();
                    }, this)
                    .catchError(this.handleServerError, this);
