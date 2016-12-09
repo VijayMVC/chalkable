@@ -10,6 +10,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -249,6 +250,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return null;
         }
 
+        public Task<IList<ChalkableStudentAverage>> GetStudentAveragesByStudentId(int schoolYearId, int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
         public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue,bool exempt, IList<ChalkableStudentAverageComment> comments, string note)
         {
             var studentAverage = new StudentAverage
@@ -406,12 +412,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         }
 
-        public async Task<StudentGrading> GetStudentGradingSummary(int schoolYearId, int studentId)
+        Task<StudentGradingDetails> IGradingStatisticService.GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId)
         {
             throw new NotImplementedException();
         }
 
-        public StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId)
+        public decimal? CalculateAvg(ClassroomOption classroomOption, IEnumerable<StudentAnnouncement> studentAnnouncements, IEnumerable<ClassAnnouncement> classAnnouncements)
         {
             throw new NotImplementedException();
         }

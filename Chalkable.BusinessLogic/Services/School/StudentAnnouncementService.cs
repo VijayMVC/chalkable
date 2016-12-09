@@ -7,7 +7,6 @@ using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
@@ -17,7 +16,8 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IStudentAnnouncementService
     {
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
-        Task<IList<StudentAnnouncementDetails>> GetStudentAnnouncementsByAnnIds(IList<int> announcementIds, int studentId); 
+        Task<IList<StudentAnnouncementDetails>> GetStudentAnnouncementsByAnnIds(IList<int> announcementIds, int studentId);
+        Task<IList<StudentAnnouncementDetails>> GetStudentAnnouncementsForGradingPeriod(int schoolYearId, int studentId, int gradingPeriodId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
             , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
         AutoGrade SetAutoGrade(int announcementApplicationId, int? recepientId, string value);
@@ -34,6 +34,27 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO : needs testing 
 
+
+        public async Task<IList<StudentAnnouncementDetails>> GetStudentAnnouncementsForGradingPeriod(int schoolYearId, int studentId, int gradingPeriodId)
+        {
+            var gradingDetailsDashboardTask =  ConnectorLocator.GradingConnector.GetStudentGradingDetails(schoolYearId, studentId, gradingPeriodId);
+            var student = ServiceLocator.StudentService.GetById(studentId, schoolYearId);
+            var scores = (await gradingDetailsDashboardTask).Scores;
+
+            var mapper = MapperFactory.GetMapper<StudentAnnouncement, Score>();
+            var res = new List<StudentAnnouncementDetails>();
+            foreach (var score in scores)
+            {
+                var studentAnn = new StudentAnnouncementDetails
+                {
+                    Student = student,
+                    StudentId = studentId
+                };
+                mapper.Map(studentAnn, score);
+                res.Add(studentAnn);
+            }
+            return res;
+        }
 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
                                             bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
