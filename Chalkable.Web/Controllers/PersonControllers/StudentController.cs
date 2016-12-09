@@ -270,19 +270,18 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
-            var gradingSummaryTask = SchoolLocator.GradingStatisticService.GetStudentGradingSummary(syId, studentId);
+            var studentAveragesTask = SchoolLocator.GradingStatisticService.GetStudentAveragesByStudentId(syId, studentId);
 
-            var enrolledClassIds =
-                SchoolLocator.ClassService.GetClassPersons(studentId, null, true, null).Select(x => x.ClassRef);
+            var enrolledClassIds = SchoolLocator.ClassService.GetClassPersons(studentId, null, true, null).Select(x => x.ClassRef);
 
-            var gradingSummary = await gradingSummaryTask;
-            var classIds = gradingSummary.StudentAverages.Select(x => x.ClassId).ToList();
+            var studentAverages = await studentAveragesTask;
+            var classIds = studentAverages.Select(x => x.ClassId).ToList();
             var classes = SchoolLocator.ClassService.GetByIds(classIds);
 
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
-            var res = StudentProfileGradingSummaryViewData.Create(student, gradingSummary, gp, gradingPeriods, classes, enrolledClassIds, customAlerts, await stHealsConditions, await healthFormsTask);
+            var res = StudentProfileGradingSummaryViewData.Create(student, studentAverages, gp, gradingPeriods, classes, enrolledClassIds, customAlerts, await stHealsConditions, await healthFormsTask);
             return Json(res);
         }
 
@@ -290,22 +289,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public async Task<ActionResult> GradingDetails(int studentId, int gradingPeriodId)
         {
             var syId = GetCurrentSchoolYearId();
+            var gradingDetailsTask = SchoolLocator.GradingStatisticService.GetStudentGradingDetails(syId, studentId, gradingPeriodId);
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
             var healthFormsTask = SchoolLocator.StudentService.GetStudentHealthForms(studentId, syId);
-            var gradingDetails = SchoolLocator.GradingStatisticService.GetStudentGradingDetails(syId, studentId, gradingPeriodId);
-
-            var student = SchoolLocator.StudentService.GetById(studentId, syId);
-            var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             
-            var activityIds = gradingDetails.StudentAnnouncements.Select(x => x.ActivityId).Distinct().ToList();
-            var announcements = SchoolLocator.ClassAnnouncementService.GetByActivitiesIds(activityIds);
-
-            var classIds = announcements.Select(x => x.ClassAnnouncementData.ClassRef).Distinct().ToList();
-
-            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
+            
 
-            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements, classAnnouncementTypes, customAlerts, 
+            var res = StudentProfileGradingDetailViewData.Create(await gradingDetailsTask, customAlerts, 
                 await stHealsConditions, Context.Claims, await healthFormsTask);
             return Json(res);
         }

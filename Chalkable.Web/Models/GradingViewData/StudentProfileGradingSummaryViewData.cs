@@ -13,13 +13,13 @@ namespace Chalkable.Web.Models.GradingViewData
         public IList<StudentGradingsViewData> GradesByGradingPeriod { get; set; } 
         public StudentViewData Student { get; set; }
         
-        public static StudentProfileGradingSummaryViewData Create(Student student, StudentGrading gradingSummary, GradingPeriod currentGradingPeriod
+        public static StudentProfileGradingSummaryViewData Create(Student student, IList<ChalkableStudentAverage> studentAverages, GradingPeriod currentGradingPeriod
             , IList<GradingPeriod> gradingPeriods, IList<Class> classes, IEnumerable<int> enrolledClassIds
             , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions
             , IList<StudentHealthFormInfo> healthForms)
         {
 
-            var avgs = gradingSummary.StudentAverages.Where(x => enrolledClassIds.Contains(x.ClassId)).ToList();
+            var avgs = studentAverages.Where(x => enrolledClassIds.Contains(x.ClassId)).ToList();
 
             var gradings = new List<StudentGradingsViewData>();
             foreach (var gp in gradingPeriods)

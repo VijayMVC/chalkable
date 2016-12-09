@@ -12,6 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<ClassroomOption> classroomOptions);
         void Delete(IList<ClassroomOption> classroomOptions);
         ClassroomOption GetClassOption(int classId, bool useInowApi = false);
+        IList<ClassroomOption> GetClassroomOptionsByIds(IList<int> classIds); 
         ClassroomOption SetUpClassroomOption(ClassroomOption classroomOption);
         void CopyClassroomOption(int fromClassId, int toClassId);
     }
@@ -48,6 +49,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 return stiClassrommOption != null ? CreateClassroomOption(stiClassrommOption) : null;
             }
             return DoRead(u => new DataAccessBase<ClassroomOption, int>(u).GetByIdOrNull(classId));
+        }
+
+        public IList<ClassroomOption> GetClassroomOptionsByIds(IList<int> classIds)
+        {
+            return DoRead(u => new DataAccessBase<ClassroomOption, int>(u).GetByIds(classIds));
         }
 
         private void EnsureInModifyAccess(ClassroomOption inputOptions, StiConnector.Connectors.Model.ClassroomOption currentOptions)

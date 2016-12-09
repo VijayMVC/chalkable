@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -9,10 +9,10 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -23,13 +23,14 @@ namespace Chalkable.BusinessLogic.Services.School
         Task<TeacherClassGrading> GetClassGradingSummary(int classId, GradingPeriod gradingPeriod);
         void PostGradebook(int classId, int? gradingPeriodId);
         
-        IList<ChalkableStudentAverage> GetStudentAverages(int classId, int? averageId, int? gradingPeriodId); 
+        IList<ChalkableStudentAverage> GetStudentAverages(int classId, int? averageId, int? gradingPeriodId);
+        Task<IList<ChalkableStudentAverage>> GetStudentAveragesByStudentId(int schoolYearId, int studentId);
         ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, bool exempt, IList<ChalkableStudentAverageComment> comments, string note);
         Task<IList<ShortClassGradesSummary>> GetClassesGradesSummary(int teacherId, GradingPeriod gradingPeriod);
         Task<FinalGradeInfo> GetFinalGrade(int classId, GradingPeriod gradingPeriod);
         void PostStandards(int classId, int? gradingPeriodId);
-        Task<StudentGrading> GetStudentGradingSummary(int schoolYearId, int studentId);
-        StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId);
+        Task<StudentGradingDetails> GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId);
+        decimal? CalculateAvg(ClassroomOption classroomOption, IEnumerable<StudentAnnouncement> studentAnnouncements, IEnumerable<ClassAnnouncement> classAnnouncements);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -249,6 +250,11 @@ namespace Chalkable.BusinessLogic.Services.School
             return studentAverages.Select(ChalkableStudentAverage.Create).ToList();
         }
 
+        public async Task<IList<ChalkableStudentAverage>> GetStudentAveragesByStudentId(int schoolYearId, int studentId)
+        {
+            var gradingSummaryDashBoard = await ConnectorLocator.GradingConnector.GetStudentGradingSummary(schoolYearId, studentId);
+            return gradingSummaryDashBoard.Averages.Select(ChalkableStudentAverage.Create).ToList();
+        }
 
         public async Task<FinalGradeInfo> GetFinalGrade(int classId, GradingPeriod gradingPeriod)
         {
@@ -274,35 +280,76 @@ namespace Chalkable.BusinessLogic.Services.School
             ConnectorLocator.GradebookConnector.PostStandards(classId, gradingPeriodId);
         }
         
-        public async Task<StudentGrading> GetStudentGradingSummary(int schoolYearId, int studentId)
+        public async Task<StudentGradingDetails> GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId)
         {
-            var gradingSummaryDashBoard = await ConnectorLocator.GradingConnector.GetStudentGradingSummary(schoolYearId, studentId);
+            var studentAnnouncementsTask = ServiceLocator.StudentAnnouncementService.GetStudentAnnouncementsForGradingPeriod(schoolYearId, studentId, gradingPeriodId);
+            var student = ServiceLocator.StudentService.GetById(studentId, schoolYearId);
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            var studentAnnouncements = await studentAnnouncementsTask;
 
-            return new StudentGrading
+            var activityIds = studentAnnouncements.Select(x => x.ActivityId).Distinct().ToList();
+            var classAnns = ServiceLocator.ClassAnnouncementService.GetByActivitiesIds(activityIds)
+                .Where(x=> x.ClassAnnouncementData != null).Select(x=>x.ClassAnnouncementData).ToList();
+
+            var classIds = classAnns.Select(x => x.ClassRef).Distinct().ToList();
+            var classAnnouncementTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+            var classRoomOptions = ServiceLocator.ClassroomOptionService.GetClassroomOptionsByIds(classIds);
+
+            var gradingsByClass = new List<StudentGradingByClass>();
+            
+            foreach (var classId in classIds)
             {
-                StudentId = gradingSummaryDashBoard.StudentId,
-                StudentAverages = gradingSummaryDashBoard.Averages.Select(ChalkableStudentAverage.Create)
-            };
-        }
-
-        public StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId)
-        {
-            var gradingDetailsDashboard = ConnectorLocator.GradingConnector.GetStudentGradingDetails(schoolYearId, studentId, gradingPeriodId);
-
-            var mapper = MapperFactory.GetMapper<StudentAnnouncement, Score>();
-            var studentAnnouncements = new List<StudentAnnouncement>();
-            foreach (var score in gradingDetailsDashboard.Scores)
-            {
-                var studentAnn = new StudentAnnouncement();
-                mapper.Map(studentAnn, score);
-                studentAnnouncements.Add(studentAnn);
+                var classOption = classRoomOptions.FirstOrDefault(x => x.Id == classId);
+                var currentTypes = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
+                var gradingsByTypes = new List<StudentGradingByAnnType>();
+                foreach (var annType in currentTypes)
+                {
+                    var currentClassAnns = classAnns.Where(x => x.ClassAnnouncementTypeRef == annType.Id).ToList();
+                    var currentStudentAnns = studentAnnouncements.Where(stAnn => currentClassAnns.Any(ca => ca.SisActivityId == stAnn.ActivityId)).ToList();
+                    gradingsByTypes.Add(new StudentGradingByAnnType
+                    {
+                        ClassAnnouncements = currentClassAnns,
+                        AnnouncementType = annType,
+                        StudentAnnouncements = currentStudentAnns,
+                        Avg = CalculateAvg(classOption, currentStudentAnns, classAnns)
+                    });
+                }
+                gradingsByClass.Add(new StudentGradingByClass
+                {
+                    ClassId = classId,
+                    Avg = gradingsByTypes.Count > 0 ? gradingsByTypes.Average(x=>x.Avg) : null,
+                    GradingsByAnnType = gradingsByTypes
+                });
             }
 
-            return new StudentGradingDetails()
+
+            return new StudentGradingDetails
             {
-                GradingPeriodId = gradingPeriodId,
-                StudentAnnouncements = studentAnnouncements
+                GradingPeriod = gp,
+                Student = student,
+                GradingsByClass = gradingsByClass
             };
+
+        }
+
+        public decimal? CalculateAvg(ClassroomOption classroomOption, IEnumerable<StudentAnnouncement> studentAnnouncements, IEnumerable<ClassAnnouncement> classAnnouncements)
+        {
+            var classAnns = classAnnouncements.Where(x=>x.MaxScore > 0).ToList();
+            var stAnns = studentAnnouncements.Where(x => x.NumericScore.HasValue).ToList();
+            stAnns = stAnns.Where(x => classAnns.Any(y => y.SisActivityId == x.ActivityId)).ToList();
+            classAnns = classAnns.Where(x => stAnns.Any(y => y.ActivityId == x.SisActivityId)).ToList();
+
+            decimal? res;
+            if (classroomOption == null || classroomOption.IsAveragingMethodPoints)
+            {
+                var maxScoreSum = classAnns.Sum(x => x.MaxScore);
+                res = maxScoreSum > 0 ? stAnns.Sum(x => x.NumericScore)/maxScoreSum : null;
+            }
+            else
+            {
+                res = classAnns.Count > 0 ? classAnns.Average(x => stAnns.FirstOrDefault(y => y.ActivityId == x.SisActivityId)?.NumericScore/x.MaxScore) : null;
+            }
+            return res*100;
         }
     }
 }

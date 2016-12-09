@@ -2,7 +2,6 @@
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.GradingViewData
@@ -10,7 +9,7 @@ namespace Chalkable.Web.Models.GradingViewData
     public class StudentProfileGradingDetailViewData : StudentProfileViewData
     {
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
-        public List<ClassAvgViewData> ClassAvgs { get; set; } 
+        public IList<ClassAvgViewData> ClassAvgs { get; set; } 
 
         protected StudentProfileGradingDetailViewData(Student person, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> healthForms)
@@ -18,59 +17,16 @@ namespace Chalkable.Web.Models.GradingViewData
         {
         }
 
-        public static StudentProfileGradingDetailViewData Create(Student student, StudentGradingDetails gradingDetails, GradingPeriod gp,
-            IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes
+        public static StudentProfileGradingDetailViewData Create(StudentGradingDetails gradingDetails
             , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions,
             IList<ClaimInfo> claims, IList<StudentHealthFormInfo> healthForms)
         {
-            var classAnnouncementGroups = announcements.GroupBy(x => x.ClassRef).Select(y => new
-            {
-                ClassId = y.Key,
-                Announcements = y.ToList()
-            });
 
-
-            var res = new StudentProfileGradingDetailViewData(student, customAlerts, healthConditions, healthForms)
+            var res = new StudentProfileGradingDetailViewData(gradingDetails.Student, customAlerts, healthConditions, healthForms)
             {
-                CurrentGradingPeriod = GradingPeriodViewData.Create(gp),
-                ClassAvgs = new List<ClassAvgViewData>()
+                CurrentGradingPeriod = GradingPeriodViewData.Create(gradingDetails.GradingPeriod),
+                ClassAvgs = ClassAvgViewData.Create(gradingDetails.GradingsByClass, gradingDetails.Student.Id, claims)
             };
-
-            foreach (var classAnnouncementGroup in classAnnouncementGroups)
-            {
-                var categoryTypes =
-                    classAnnouncementGroup.Announcements.GroupBy(x => x.ClassAnnouncementData.ClassAnnouncementTypeRef)
-                        .Select(y => new 
-                        {
-                            AnnouncementType = classAnnouncementTypes.FirstOrDefault(x => x.Id == y.Key),
-                            Items = y
-                        }).ToList();
-
-
-                var catTypes = new List<ClassCategoryAvgViewData>();
-                foreach (var categoryType in categoryTypes)
-                {
-                    var ids = categoryType.Items.Select(x => x.ClassAnnouncementData.SisActivityId).Distinct();
-                    var studentAnnouncements = gradingDetails.StudentAnnouncements.Where(x => ids.Contains(x.ActivityId)).ToList();
-                    var catType = new ClassCategoryAvgViewData()
-                    {
-                        AnnouncementType = ClassAnnouncementTypeViewData.Create(categoryType.AnnouncementType),
-                        Items = categoryType.Items.Select(x => ShortAnnouncementGradeViewData.Create(
-                            x.ClassAnnouncementData, 
-                            studentAnnouncements.Where(sa=>sa.ActivityId == x.ClassAnnouncementData.SisActivityId).ToList(), 
-                            student.Id, claims)).ToList(),
-                        Avg = studentAnnouncements.Average(x => x.NumericScore)
-                    };
-                    catTypes.Add(catType);
-                }
-                var classAvg = new ClassAvgViewData
-                {
-                    ClassId = classAnnouncementGroup.ClassId,
-                    Items = catTypes,
-                    Avg = catTypes.Average(x=>x.Avg)
-                };
-                res.ClassAvgs.Add(classAvg);
-            }
             return res;
         }
     }
@@ -86,6 +42,25 @@ namespace Chalkable.Web.Models.GradingViewData
     {
         public decimal? Avg { get; set; }
         public int? ClassId { get; set; }
-        public IList<ClassCategoryAvgViewData> Items { get; set; } 
+        public IList<ClassCategoryAvgViewData> Items { get; set; }
+
+        public static IList<ClassAvgViewData> Create(IList<StudentGradingByClass> studentGradingsByClass, int studentId, IList<ClaimInfo> claims)
+        {
+            return studentGradingsByClass.Select(gragingByClass => new ClassAvgViewData
+            {
+                Avg = gragingByClass.Avg,
+                ClassId = gragingByClass.ClassId,
+                Items = gragingByClass.GradingsByAnnType.Select(gradingByType => new ClassCategoryAvgViewData
+                {
+                    AnnouncementType = ClassAnnouncementTypeViewData.Create(gradingByType.AnnouncementType),
+                    Avg = gradingByType.Avg,
+                    Items = gradingByType.ClassAnnouncements.Select(ca =>
+                    {
+                        var stAnns = gradingByType.StudentAnnouncements.Where(sa => sa.ActivityId == ca.SisActivityId).ToList();
+                        return ShortAnnouncementGradeViewData.Create(ca, stAnns, studentId, claims);
+                    }).ToList()
+                }).ToList()
+            }).ToList();
+        } 
     }
 }
