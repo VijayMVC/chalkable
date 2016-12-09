@@ -58,7 +58,8 @@ var CHLK_API = function (window, document, $) {
         ALERT_BOX: 'showAlertBox',
         PROMPT_BOX: 'showPromptBox',
         CONFIRM_BOX: 'showConfirmBox',
-        UPDATE_ZOOM: 'updateZoom'
+        UPDATE_ZOOM: 'updateZoom',
+        UPDATE_VISIBLE_AREA: 'updateVisibleArea'
     };
 
     function postMessage(data, rWindow, rURL){
@@ -107,6 +108,15 @@ var CHLK_API = function (window, document, $) {
         (zoom >= 0) && $('html').css('zoom', zoom);
     }
 
+    var visibleArea = {
+        top: 0,
+        height: null
+    };
+
+    function updateVisibleArea(top, height) {
+        visibleArea.top = top;
+        visibleArea.height = height;
+    }
 
     $(function () {
         $(window)
@@ -120,6 +130,9 @@ var CHLK_API = function (window, document, $) {
                         // should fall through
                     case ChlkActionTypes.UPDATE_ZOOM:
                         updateZoom(e.data.zoom);
+                        break;
+                    case ChlkActionTypes.UPDATE_VISIBLE_AREA:
+                        updateVisibleArea(e.data.top, e.data.height);
                         break;
                     case ChlkActionTypes.ON_BEFORE_CLOSE:
                         handleOnBeforeClose(e.data);
@@ -272,6 +285,13 @@ var CHLK_API = function (window, document, $) {
                 data = {text: data, buttonText: 'OK'};
 
             postAction(data, ChlkActionTypes.CONFIRM_BOX, parentURL, cb);
+        },
+
+        getVisibleArea: function () {
+            return {
+                top: visibleArea.top,
+                height: visibleArea.height
+            };
         }
     };
 
