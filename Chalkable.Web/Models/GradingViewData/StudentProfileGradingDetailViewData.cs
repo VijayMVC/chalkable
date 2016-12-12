@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.Data.School.Model.Announcements;
-using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.GradingViewData
@@ -12,7 +9,7 @@ namespace Chalkable.Web.Models.GradingViewData
     public class StudentProfileGradingDetailViewData : StudentProfileViewData
     {
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
-        public List<ClassAvg> ClassAvgs { get; set; } 
+        public IList<ClassAvgViewData> ClassAvgs { get; set; } 
 
         protected StudentProfileGradingDetailViewData(Student person, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions, IList<StudentHealthFormInfo> healthForms)
@@ -20,83 +17,50 @@ namespace Chalkable.Web.Models.GradingViewData
         {
         }
 
-
-        public static StudentProfileGradingDetailViewData Create(Student student, StudentGradingDetails gradingDetails, GradingPeriod gp,
-            IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes
+        public static StudentProfileGradingDetailViewData Create(StudentGradingDetails gradingDetails
             , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions,
             IList<ClaimInfo> claims, IList<StudentHealthFormInfo> healthForms)
         {
-            var classAnnouncementGroups = announcements.GroupBy(x => x.ClassRef).Select(y => new
-            {
-                ClassId = y.Key,
-                Announcements = y.ToList()
-            });
 
-
-            var res = new StudentProfileGradingDetailViewData(student, customAlerts, healthConditions, healthForms)
+            var res = new StudentProfileGradingDetailViewData(gradingDetails.Student, customAlerts, healthConditions, healthForms)
             {
-                CurrentGradingPeriod = GradingPeriodViewData.Create(gp),
-                ClassAvgs = new List<ClassAvg>()
+                CurrentGradingPeriod = GradingPeriodViewData.Create(gradingDetails.GradingPeriod),
+                ClassAvgs = ClassAvgViewData.Create(gradingDetails.GradingsByClass, gradingDetails.Student.Id, claims)
             };
-
-            foreach (var classAnnouncementGroup in classAnnouncementGroups)
-            {
-                var categoryTypes =
-                    classAnnouncementGroup.Announcements.GroupBy(x => x.ClassAnnouncementData.ClassAnnouncementTypeRef)
-                        .Select(y => new 
-                        {
-                            AnnouncementType = classAnnouncementTypes.FirstOrDefault(x => x.Id == y.Key),
-                            Items = y
-                        }).ToList();
-
-
-                var catTypes = new List<ClassCategoryAvg>();
-                foreach (var categoryType in categoryTypes)
-                {
-                    var ids = categoryType.Items.Select(x => x.ClassAnnouncementData.SisActivityId).Distinct();
-                    var maxPoints = categoryType.Items.Sum(x => x.ClassAnnouncementData.MaxScore ?? 0);
-                    var studentAnnouncements =
-                        gradingDetails.StudentAnnouncements.Where(x => ids.Contains(x.ActivityId)).ToList();
-                    
-                    var avg = studentAnnouncements.Sum(x => x.NumericScore ?? 0) / (maxPoints == 0 ? 1 : maxPoints) * 100; //If all activities are non gradable
-                    
-                    var catType = new ClassCategoryAvg()
-                    {
-                        AnnouncementType = categoryType.AnnouncementType,
-                        Items = categoryType.Items.Select(x => ShortAnnouncementGradeViewData.Create(
-                            x.ClassAnnouncementData, 
-                            studentAnnouncements.Where(sa=>sa.ActivityId == x.ClassAnnouncementData.SisActivityId).ToList(), 
-                            student.Id, claims)).ToList(),
-                        Avg = avg
-                    };
-
-                    catTypes.Add(catType);
-                }
-
-                var classAvg = new ClassAvg
-                {
-                    ClassId = classAnnouncementGroup.ClassId,
-                    Items = catTypes,
-                    Avg = catTypes.Average(x => x.Avg)
-                };
-
-                res.ClassAvgs.Add(classAvg);
-            }
             return res;
         }
     }
 
-    public class ClassCategoryAvg
+    public class ClassCategoryAvgViewData
     {
         public IList<ShortAnnouncementGradeViewData> Items { get; set; }
         public decimal? Avg { get; set; }
-        public ClassAnnouncementType AnnouncementType { get; set; }
+        public ClassAnnouncementTypeViewData AnnouncementType { get; set; }
     }
 
-    public class ClassAvg
+    public class ClassAvgViewData
     {
         public decimal? Avg { get; set; }
         public int? ClassId { get; set; }
-        public IList<ClassCategoryAvg> Items { get; set; } 
+        public IList<ClassCategoryAvgViewData> Items { get; set; }
+
+        public static IList<ClassAvgViewData> Create(IList<StudentGradingByClass> studentGradingsByClass, int studentId, IList<ClaimInfo> claims)
+        {
+            return studentGradingsByClass.Select(gragingByClass => new ClassAvgViewData
+            {
+                Avg = gragingByClass.Avg,
+                ClassId = gragingByClass.ClassId,
+                Items = gragingByClass.GradingsByAnnType.Select(gradingByType => new ClassCategoryAvgViewData
+                {
+                    AnnouncementType = ClassAnnouncementTypeViewData.Create(gradingByType.AnnouncementType),
+                    Avg = gradingByType.Avg,
+                    Items = gradingByType.ClassAnnouncements.Select(ca =>
+                    {
+                        var stAnns = gradingByType.StudentAnnouncements.Where(sa => sa.ActivityId == ca.SisActivityId).ToList();
+                        return ShortAnnouncementGradeViewData.Create(ca, stAnns, studentId, claims);
+                    }).ToList()
+                }).ToList()
+            }).ToList();
+        } 
     }
 }

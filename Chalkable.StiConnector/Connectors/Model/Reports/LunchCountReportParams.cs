@@ -16,6 +16,7 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports
         /// Indicates which student identifier should print on the report.
         /// </summary>
         public int IdToPrint { get; set; }
+        public string Title { get; set; }
         public bool? IncludeGroupTotals { get; set; }
         public bool? IncludeGrandTotals { get; set; }
         public bool? IncludeStudentsOnly { get; set; }
@@ -28,6 +29,5 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports
         /// Date to start the report
         /// </summary>
         public DateTime? StartDate { get; set; }
-
     }
 }

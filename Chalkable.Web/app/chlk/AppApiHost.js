@@ -14,6 +14,42 @@ NAMESPACE('chlk', function(){
         return parseFloat(ria.dom.Dom('html').$.css('zoom') || '1');
     }
 
+    function getVisibleBound(frame) {
+        var $wnd = jQuery(window),
+            $frame = jQuery(frame),
+            zoom = zoomLevel(),
+            frm_pos = $frame.offset(),
+            wnd_top = $wnd.scrollTop(),
+            visible_height = window.innerHeight / zoom,
+            top_bound = Math.max(wnd_top, frm_pos.top),
+            btm_bound = Math.min(wnd_top + visible_height, frm_pos.top + $frame.height()),
+            frm_visible_top = top_bound - frm_pos.top,
+            frm_visible_height = btm_bound - top_bound;
+
+        return {
+            top: frm_visible_top,
+            height: frm_visible_height
+        };
+    }
+
+    function notifyIframeVisibleArea() {
+        ria.dom.Dom('iframe').valueOf()
+            .forEach(function (frame) {
+                var visible = getVisibleBound(frame);
+
+                if (frame.__visible_top != visible.top || frame.__visible_height != visible.height) {
+                    frame.contentWindow.postMessage({
+                        action: 'updateVisibleArea',
+                        top: visible.top,
+                        height: visible.height
+                    }, "*");
+
+                    frame.__visible_top = visible.top;
+                    frame.__visible_height = visible.height;
+                }
+            });
+    }
+
     var cbs = {};
 
     /** @class chlk.AppApiHost*/
@@ -26,13 +62,14 @@ NAMESPACE('chlk', function(){
         function $(){
             BASE();
             this.context_ = null;
+            this.bodyHeightTimer_ = null;
         },
 
         [[ria.mvc.IContext]],
         function onStart(context) {
             this.context_ = context;
 
-            jQuery(window)
+            var $wnd = jQuery(window)
                 .on('message', this.messengerCallback_)
                 .on('resize', function () {
                     ria.dom.Dom('iframe').valueOf()
@@ -40,7 +77,27 @@ NAMESPACE('chlk', function(){
                         .forEach(function (wnd) {
                             wnd.postMessage({action: 'updateZoom', zoom: zoomLevel()}, "*");
                         })
-                });
+                })
+
+                .on("scroll resize", notifyIframeVisibleArea);
+
+
+            var that = this;
+            +function (callback){
+                var elm = document.body;
+                var lastHeight = elm.clientHeight, newHeight;
+                +function run(){
+                    newHeight = elm.clientHeight;
+                    if( lastHeight != newHeight )
+                        callback();
+                    lastHeight = newHeight;
+
+                    if( that.bodyHeightTimer_ )
+                        clearTimeout(that.bodyHeightTimer_);
+
+                    that.bodyHeightTimer_ = setTimeout(run, 200);
+                }();
+            }(notifyIframeVisibleArea);
         },
 
         function onStop() {
@@ -108,6 +165,9 @@ NAMESPACE('chlk', function(){
                 case 'requestOrigin':
                     if (data.url && data.url.indexOf(window.location.origin) === 0) {
                         source.postMessage({action: 'updateOrigin', zoom: zoomLevel()}, origin);
+
+                        var visible = getVisibleBound(iframe);
+                        source.postMessage({action: 'updateVisibleArea', top: visible.top, height: visible.height}, "*");
                     }
 
                     break;

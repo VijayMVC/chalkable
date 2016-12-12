@@ -158,6 +158,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public Task<IList<StudentAnnouncementDetails>> GetStudentAnnouncementsForGradingPeriod(int schoolYearId, int studentId, int gradingPeriodId)
+        {
+            throw new NotImplementedException();
+        }
+
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits,
             string comment, bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {

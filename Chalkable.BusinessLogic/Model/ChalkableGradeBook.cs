@@ -201,18 +201,26 @@ namespace Chalkable.BusinessLogic.Model
         }
     }
 
-
-    public class StudentGrading
-    {
-        public int StudentId { get; set; }
-        public IEnumerable<ChalkableStudentAverage> StudentAverages { get; set; } 
-    }
-
+    
     public class StudentGradingDetails
     {
-        public int StudentId { get; set; }
-        public int GradingPeriodId { get; set; }
-        public IEnumerable<StudentAnnouncement> StudentAnnouncements { get; set; } 
+        public Student Student { get; set; }
+        public GradingPeriod GradingPeriod { get; set; }
+        public IList<StudentGradingByClass> GradingsByClass { get; set; } 
+    }
 
+    public class StudentGradingByClass
+    {
+        public int ClassId { get; set; }
+        public decimal? Avg { get; set; }
+        public IList<StudentGradingByAnnType> GradingsByAnnType { get; set; }
+    }
+
+    public class StudentGradingByAnnType
+    {
+        public ClassAnnouncementType AnnouncementType { get; set; }
+        public decimal? Avg { get; set; }
+        public IList<ClassAnnouncement> ClassAnnouncements { get; set; }
+        public IEnumerable<StudentAnnouncement> StudentAnnouncements { get; set; } 
     }
 }

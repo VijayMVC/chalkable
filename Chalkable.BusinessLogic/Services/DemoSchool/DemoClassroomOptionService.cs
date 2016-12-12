@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
@@ -33,6 +34,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void Delete(IList<ClassroomOption> classroomOptions)
         {
             ClassRoomOptionStorage.Delete(classroomOptions);
+        }
+
+        public IList<ClassroomOption> GetClassroomOptionsByIds(IList<int> classIds)
+        {
+            return classIds.Select(ClassRoomOptionStorage.GetById).ToList();
         }
 
         public ClassroomOption SetUpClassroomOption(ClassroomOption classroomOption)

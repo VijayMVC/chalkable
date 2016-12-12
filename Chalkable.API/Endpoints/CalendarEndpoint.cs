@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
+using Chalkable.API.Helpers;
 
 namespace Chalkable.API.Endpoints
 {
@@ -12,13 +14,16 @@ namespace Chalkable.API.Endpoints
         public async Task<bool> IsSchoolDay(DateTime? dateTime)
         {
             var url = "/Calendar/IsSchoolDay.json";
-            return await Connector.Get<bool>($"{url}?dateTime={dateTime}");
+            var date = dateTime?.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
+            return await Connector.Get<bool>($"{url}?dateTime={date}");
         }
 
         public async Task<int> SchoolDaysCount(DateTime fromDate, DateTime toDate)
         {
             var url = "/Calendar/SchoolDaysCount.json";
-            return await Connector.Get<int>($"{url}?fromDate={fromDate}&toDate={toDate}");
+            var fromDateParam = fromDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
+            var toDateParam = toDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
+            return await Connector.Get<int>($"{url}?fromDate={fromDateParam}&toDate={toDateParam}");
         }
     } 
 }
