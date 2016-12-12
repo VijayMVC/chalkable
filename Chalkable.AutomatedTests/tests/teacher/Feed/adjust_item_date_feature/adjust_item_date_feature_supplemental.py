@@ -155,12 +155,19 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
                 return result_of_index
 
             def dict_item_date(date_correct_format, activity_id):
-                for i in list_of_scheduled_dates:
-                    if i >= date_correct_format:
-                        list_supplemental_dates.append(
-                            {'announcementId': activity_id, 'expiresdate/startdate': i})
-
-                        break
+                if date_correct_format > list_of_scheduled_dates[-1]:
+                    list_supplemental_dates.append(
+                        {'announcementId': activity_id, 'expiresdate/startdate': list_of_scheduled_dates[-1]})
+                if date_correct_format < list_of_scheduled_dates[0]:
+                    list_supplemental_dates.append(
+                        {'announcementId': activity_id, 'expiresdate/startdate': list_of_scheduled_dates[0]})
+                if (date_correct_format >= list_of_scheduled_dates[0]) and (
+                            date_correct_format <= list_of_scheduled_dates[-1]):
+                    for i in list_of_scheduled_dates:
+                        if i >= date_correct_format:
+                            list_supplemental_dates.append(
+                                {'announcementId': activity_id, 'expiresdate/startdate': i})
+                            break
 
             def verify_current_vs_expected_dates():
                 for item in list_of_item_id:
