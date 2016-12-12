@@ -2,6 +2,10 @@
 	@classIds TInt32 READONLY
 AS
 
+--Delete PriveMessages
+DELETE pmc FROM dbo.PrivateMessageRecipient pmc WHERE EXISTS (SELECT * FROM @ClassIds ci WHERE pmc.RecipientClassRef = ci.Value) 
+
+--Delete Announcements 
 DELETE ca FROM dbo.ClassAnnouncement ca WHERE EXISTS (SELECT *  FROM @ClassIds ci WHERE ca.ClassRef= ci.Value)
 DELETE lp FROM dbo.LessonPlan lp WHERE EXISTS (SELECT *  FROM @ClassIds ci WHERE lp.ClassRef= ci.Value)
 DELETE sa FROM dbo.SupplementalAnnouncement sa WHERE EXISTS (SELECT *  FROM @ClassIds ci WHERE sa.ClassRef= ci.Value)
