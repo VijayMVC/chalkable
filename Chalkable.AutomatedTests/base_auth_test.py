@@ -11,6 +11,8 @@ import random
 import ast
 import string
 from time import sleep
+import datefinder
+
 
 
 class UserSession:
@@ -169,6 +171,24 @@ class TeacherSession(UserSession):
         dictionary_var_markingPeriods_cut_off_string2 = json.loads(var_markingPeriods_cut_off_string2)
         self.dict_for_marking_period_date_startdate_endate = {}
         self.dictionary_var_markingPeriods_cut_off_string_data2 = dictionary_var_markingPeriods_cut_off_string2['data']
+
+        # getting a current grading period!
+        var_grading_period_list = re.findall('var gradingPeriod = .+', page_as_one_string)
+        var_grading_period_string = ''.join(var_grading_period_list)
+        #match = re.search(r'\d{4}-\d{2}-\d{2}', var_grading_period_string)
+        #date = datetime.strptime(match.group(), '%Y-%m-%d').date()
+        var_grading_period_cut_off_list = re.findall('"startdate":"[0-9]{4}-[0-9]{2}-[0-9]{2}"', var_grading_period_string)
+        var_grading_period_cut_off_string = ''.join(var_grading_period_cut_off_list)
+        self.var_grading_period_final_list = re.findall('[0-9]{4}-[0-9]{2}-[0-9]{2}', var_grading_period_cut_off_string)
+        self.start_date_current_gr_period = self.var_grading_period_final_list[0]
+        self.start_date_gr_period_date_time_format = datetime.strptime(self.start_date_current_gr_period, '%Y-%m-%d')
+
+        var_grading_period_cut_off_list2 = re.findall('"enddate":"[0-9]{4}-[0-9]{2}-[0-9]{2}"',
+                                                      var_grading_period_string)
+        var_grading_period_cut_off_string2 = ''.join(var_grading_period_cut_off_list2)
+        self.var_grading_period_final_list2 = re.findall('[0-9]{4}-[0-9]{2}-[0-9]{2}', var_grading_period_cut_off_string2)
+        self.end_date_current_gr_period = self.var_grading_period_final_list2[0]
+        self.end_date_gr_period_date_time_format = datetime.strptime(self.end_date_current_gr_period, '%Y-%m-%d')
 
     def id_of_current_teacher(self):
         teacher_id = self.teacher_id

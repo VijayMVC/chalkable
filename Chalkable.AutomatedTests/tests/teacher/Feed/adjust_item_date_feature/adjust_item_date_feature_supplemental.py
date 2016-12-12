@@ -9,11 +9,10 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
     def internal_(self, item_type):
         for one_class in self.teacher.list_of_classes():
             print one_class
-            list_activity_dates = []
+            list_supplemental_dates = []
             self.list_for_items_id_and_types = []
             list_of_item_id = []
             list_of_scheduled_dates = []
-            list_activity_dates_names = []
 
             st_gr_period_for_list = self.teacher.start_date_gr_period_date_time_format
             end_gr_period_for_list = self.teacher.end_date_gr_period_date_time_format
@@ -24,11 +23,13 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
                 st_gr_period_for_list += timedelta(days=1)
 
             # getting gr. periods for a class
-            get_the_last_gr_pr_of_class = self.teacher.get_json('/GradingPeriod/ListByClassId.json?' + 'classId=' + str(one_class))
+            get_the_last_gr_pr_of_class = self.teacher.get_json(
+                '/GradingPeriod/ListByClassId.json?' + 'classId=' + str(one_class))
             get_the_last_gr_pr_of_class_data = get_the_last_gr_pr_of_class['data']
             list_gr_periods_for_class = []
             for i in get_the_last_gr_pr_of_class_data:
-                list_gr_periods_for_class.append(i) and (datetime.strptime(i['startdate'], "%Y-%m-%d") <= self.teacher.start_date_gr_period_date_time_format)
+                list_gr_periods_for_class.append(i) and (
+                datetime.strptime(i['startdate'], "%Y-%m-%d") <= self.teacher.start_date_gr_period_date_time_format)
 
             # get the last gr. period dates
             last_gr_period_for_class = list_gr_periods_for_class[-1]
@@ -64,10 +65,10 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
                 return dictionary_verify_annoucementviewdatas_all
 
             def get_item_date(one_item):
-                if one_item['type'] == 1:
-                    return one_item['classannouncementdata']['expiresdate']
+                if one_item['type'] == 4:
+                    return one_item['supplementalannouncementdata']['expiresdate']
 
-            def dates_for_adjust_feature(item_date, **kwargs): #!!!!!!
+            def dates_for_adjust_feature(item_date, **kwargs):
                 date = item_date + timedelta(**kwargs)
 
                 if date < start_date_one_class_date_time:
@@ -153,32 +154,23 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
 
                 return result_of_index
 
-            def dict_item_date(date_correct_format, activity_id, activity_name):
-                if date_correct_format > list_of_scheduled_dates[-1]:
-                    list_activity_dates.append(
-                        {'announcementId': activity_id, 'expiresdate/startdate': list_of_scheduled_dates[-1]})
-                if date_correct_format < list_of_scheduled_dates[0]:
-                    list_activity_dates.append(
-                        {'announcementId': activity_id, 'expiresdate/startdate': list_of_scheduled_dates[0]})
-                if (date_correct_format >= list_of_scheduled_dates[0]) and (
-                    date_correct_format <= list_of_scheduled_dates[-1]):
-                    for i in list_of_scheduled_dates:
-                        if i >= date_correct_format:
-                            list_activity_dates.append(
-                                {'announcementId': activity_id, 'expiresdate/startdate': i})
-                            list_activity_dates_names.append(
-                                {'expiresdate': i, "title": str(activity_name)})
-                            break
+            def dict_item_date(date_correct_format, activity_id):
+                for i in list_of_scheduled_dates:
+                    if i >= date_correct_format:
+                        list_supplemental_dates.append(
+                            {'announcementId': activity_id, 'expiresdate/startdate': i})
+
+                        break
 
             def verify_current_vs_expected_dates():
                 for item in list_of_item_id:
                     date = get_item_date(list_items_json_unicode(item))
                     date = datetime.strptime(date,
                                              "%Y-%m-%d")
-                    for i in list_activity_dates[:]:
+                    for i in list_supplemental_dates[:]:
                         if item == i['announcementId']:
                             self.assertEqual(i['expiresdate/startdate'], date, 'dates are not equal: ' + 'expiresdate/startdate- ' + str(i['expiresdate/startdate']) + " " + 'date- '+ str(date) + ' item- ' + str(item))
-                            del list_activity_dates[list_activity_dates.index(i)]
+                            del list_supplemental_dates[list_supplemental_dates.index(i)]
 
             def deleting_items():
                 for one_activity in list_of_item_id[:]:
@@ -186,30 +178,16 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
                                            data={"announcementId": one_activity, "announcementType": item_type})
                     del list_of_item_id[list_of_item_id.index(one_activity)]
 
-
             start_date_one_class_date_time = scheduled_class_days()[0]
             start_scheduled_day_one_class = list_of_scheduled_dates[0]
 
             end_date_one_class_date_time = scheduled_class_days()[-1]
             end_scheduled_day_one_class = list_of_scheduled_dates[-1]
 
-            #print scheduled_class_days()[(len(scheduled_class_days())/2)]
-
-            #start_date_one_class_date_time = max(start_date_one_class_date_time, self.teacher.start_date_gr_period_date_time_format) if (scheduled_class_days()[(len(scheduled_class_days())/2)] in list_for_gr_period_dates) else min(start_date_one_class_date_time, self.teacher.start_date_gr_period_date_time_format)
+            # start_date_one_class_date_time = max(start_date_one_class_date_time, self.teacher.start_date_gr_period_date_time_format) if (scheduled_class_days()[(len(scheduled_class_days())/2)] in list_for_gr_period_dates) else min(start_date_one_class_date_time, self.teacher.start_date_gr_period_date_time_format)
             start_date_one_class_date_time = min(start_date_one_class_date_time, dates_of_the_first_gr_period[0])
-            #end_date_one_class_date_time = dates_of_the_last_gr_period[-1] if end_date_one_class_date_time > dates_of_the_last_gr_period[-1] else end_date_one_class_date_time
+            # end_date_one_class_date_time = dates_of_the_last_gr_period[-1] if end_date_one_class_date_time > dates_of_the_last_gr_period[-1] else end_date_one_class_date_time
             end_date_one_class_date_time = max(end_date_one_class_date_time, dates_of_the_last_gr_period[-1])
-
-            def second_unscheduled_date_from_the_start():
-                global_date_for_item = list_of_scheduled_dates[0]
-                for i in list_of_scheduled_dates:
-                    i += timedelta(days=1)
-                    if i not in list_of_scheduled_dates and ((i + timedelta(days=1)) not in list_of_scheduled_dates):
-                        global_date_for_item = i
-
-                        break
-
-                return global_date_for_item
 
             def first_unscheduled_date_from_the_start():
                 global_date_for_item = list_of_scheduled_dates[0]
@@ -222,7 +200,7 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
 
                 return global_date_for_item
 
-            def first_second_unscheduled_date_from_the_start():
+            def first__second_unscheduled_date_from_the_start():
                 global_date_for_item = list_of_scheduled_dates[0]
                 global_date_for_item2 = list_of_scheduled_dates[0]
                 for i in list_of_scheduled_dates:
@@ -286,7 +264,7 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
                     if index_ < len(list_of_scheduled_dates) - 1:
                         next_day = list_of_scheduled_dates[index_ + 1]
                         diff_ = abs((next_day - day_).days)
-                        if diff_ > 3: # might be without the second part of the expression ( and diff_% 2 == 0)
+                        if diff_ > 3 and diff_%2 == 0: # might be without the second part of the expression
                             has_mediana = True
                             mediana_ = day_ + timedelta(days=diff_ / 2)
                             break
@@ -303,94 +281,95 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
             add_item_date_2_in_gr_period = item_date_in_gr_period(start_date_one_class_date_time, days=20)
             add_item_date_3_in_gr_period = item_date_in_gr_period(start_date_one_class_date_time, days=30)
 
-            def post_one_activity(date_in_correct_format):
+            def post_one_supplemental(date_in_correct_format):
                 random_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(30)])
 
                 self.teacher.get_json(
                     '/Announcement/Create.json?')
 
-                get_create_activity = self.teacher.get_json(
-                    '/ClassAnnouncement/CreateClassAnnouncement.aspx?' + 'classId=' + str(one_class))
-                get_create_activity_data = get_create_activity['data']
+                get_create_supplemental = self.teacher.get_json(
+                    '/SupplementalAnnouncement/CreateSupplemental.json?' + 'classId=' + str(one_class))
+                get_create_supplemental_data = get_create_supplemental['data']
 
-                activity_id = get_create_activity_data['announcement']['classannouncementdata']['id']
-                announcement_type_id = get_create_activity_data['announcement']['classannouncementdata'][
+                supplemental_id = get_create_supplemental_data['announcement']['supplementalannouncementdata']['id']
+                announcement_type_id = get_create_supplemental_data['announcement']['supplementalannouncementdata'][
                     'announcementtypeid']
-                announcement_type = get_create_activity_data['announcement']['type']
+                announcement_type = get_create_supplemental_data['announcement']['type']
 
-                self.list_for_items_id_and_types.append({'announcementId': activity_id, 'announcementType': announcement_type})
+                get_students_supplemental = self.teacher.get_json(
+                    '/Student/GetStudents.json?' + 'classId=' + str(
+                        one_class) + '&myStudentsOnly=' + str(True) +
+                    '&byLastName=' + str(True) + '&start=' + str(0) + '&count=' + str(999) + '&enrolledOnly=' +
+                    str(True))
 
-                dict_item_date(date_in_correct_format, activity_id, random_name)
+                list_for_students_id = []
+                for i in get_students_supplemental['data']:
+                    list_for_students_id.append(str(i['id']))
 
-                self.teacher.get_json(
-                    '/ClassAnnouncement/Exists.json?' + 'title=' + str(random_name) + '&classId=' + str(
-                        one_class) + '&expiresDate=' + str(date_in_correct_format) + '&excludeAnnouncementId=' + str(
-                        activity_id))
+                if len(list_for_students_id) != 0:
+                    self.list_for_items_id_and_types.append({'announcementId': supplemental_id, 'announcementType': announcement_type})
 
-                self.teacher.post_json('/ClassAnnouncement/SubmitAnnouncement.json', data={
-                        'announcementid': activity_id,
+                    dict_item_date(date_in_correct_format, supplemental_id)
 
+                    data_post_supplemental = {
                         "attributes": [],
 
-                        "candropstudentscore": False,
+                        "classAnnouncementTypeId": announcement_type_id,
 
                         "classId": one_class,
 
-                        "classannouncementtypeid": announcement_type_id,
-
-                        "content": "",
+                        "content": "Description in Supplemental",
 
                         "discussionEnabled": True,
 
-                        "expiresDate": datetime.strptime(str(date_in_correct_format), "%Y-%m-%d %H:%M:%S").strftime("%m-%d-%Y"),
-
-                        "gradable": False,
+                        'expiresDate': str(date_in_correct_format),
 
                         'hidefromstudents': False,
 
-                        "maxscore": 100,
+                        'previewCommentsEnabled': True,
 
-                        "previewCommentsEnabled": True,
+                        'recipientsIds': list_for_students_id,
 
                         "requireCommentsEnabled": True,
 
-                        "title": random_name,
+                        "supplementalAnnouncementPlanId": supplemental_id,
 
-                        "weightaddition": 0,
+                        'title': random_name
+                    }
 
-                        "weightmultiplier": 1
-                    })
+                    self.teacher.post_json('/SupplementalAnnouncement/Submit.json', data=data_post_supplemental)
 
-                #print str(date_in_correct_format), activity_id, one_class
-                list_of_item_id.append(activity_id)
+                    list_of_item_id.append(supplemental_id)
 
             def posting_items(*arglist_dates, **kwargs):
                 for i in arglist_dates:
-                    post_one_activity(i)
+                    post_one_supplemental(i)
 
-                closest_scheduled_dates =[]
-                for one_date in arglist_dates:
-                    closest_scheduled_dates.append(closest_scheduled_date(list_of_scheduled_dates, one_date))
+                if len(list_of_item_id) != 0:
+                    closest_scheduled_dates = []
+                    for one_date in arglist_dates:
+                        closest_scheduled_dates.append(closest_scheduled_date(list_of_scheduled_dates, one_date))
 
-                list_of_subtr_dates_inner =[]
-                for one_day in closest_scheduled_dates:
-                    list_of_subtr_dates_inner.append(pre_closest_scheduled_date(one_day, **kwargs))
+                    list_of_subtr_dates_inner = []
+                    for one_day in closest_scheduled_dates:
+                        list_of_subtr_dates_inner.append(pre_closest_scheduled_date(one_day, **kwargs))
 
-                date_for_adjust_method = list_of_subtr_dates_inner[0]
+                    date_for_adjust_method = list_of_subtr_dates_inner[0]
 
-                k_for_dict = 0
-                for i in list_activity_dates:
-                    i['expiresdate/startdate'] = list_of_subtr_dates_inner[k_for_dict]
-                    k_for_dict += 1
+                    k_for_dict = 0
+                    for i in list_supplemental_dates:
+                        i['expiresdate/startdate'] = list_of_subtr_dates_inner[k_for_dict]
+                        k_for_dict += 1
 
+                    self.teacher.post_json('/Announcement/AdjustDates.json',
+                                           json={"classId": one_class, "announcements": self.list_for_items_id_and_types,
+                                                 "shift": kwargs.values()[0]})
 
-                self.teacher.post_json('/Announcement/AdjustDates.json', json={"classId": one_class, "announcements": self.list_for_items_id_and_types, "shift": kwargs.values()[0]})
+                    verify_current_vs_expected_dates()
 
-                verify_current_vs_expected_dates()
+                    deleting_items()
 
-                deleting_items()
-
-                self.list_for_items_id_and_types = []
+                    self.list_for_items_id_and_types = []
 
             posting_items(dates_of_the_first_gr_period[0], days=0)
 
@@ -414,14 +393,12 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
 
             posting_items(first_unscheduled_date_from_the_start(), first_unscheduled_date_from_the_end(), days=-15)
 
-            posting_items(first_unscheduled_date_from_the_start(),first_unscheduled_date_from_the_end(), days=15)
+            posting_items(first_unscheduled_date_from_the_start(), first_unscheduled_date_from_the_end(), days=15)
 
             posting_items(first_unscheduled_date_from_the_start(), first_unscheduled_date_from_the_end(), days=-15)
 
             posting_items(subtr_item_date_1_in_gr_period, subtr_item_date_2_in_gr_period,
                           subtr_item_date_3_in_gr_period, days=15)
-
-            posting_items(subtr_item_date_2_in_gr_period, days=9)
 
             posting_items(subtr_item_date_1_in_gr_period, subtr_item_date_2_in_gr_period,
                           subtr_item_date_3_in_gr_period, days=7)
@@ -429,13 +406,11 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
             posting_items(add_item_date_1_in_gr_period, add_item_date_2_in_gr_period, add_item_date_3_in_gr_period,
                           days=-15)
 
-            posting_items(subtr_item_date_2_in_gr_period, days=-9)
-
             posting_items(add_item_date_1_in_gr_period, add_item_date_2_in_gr_period, add_item_date_3_in_gr_period,
                           days=-7)
 
-    def test_activities(self):
-        self.internal_(1)
+    def test_suppplementals(self):
+        self.internal_(4)
 
 if __name__ == '__main__':
     unittest.main()
