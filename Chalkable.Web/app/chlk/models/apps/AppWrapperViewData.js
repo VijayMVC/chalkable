@@ -34,7 +34,7 @@ NAMESPACE('chlk.models.apps', function () {
                 var buttons = [];
                 switch(mode){
                     case chlk.models.apps.AppModes.EDIT:{
-                        buttons.push(chlk.models.common.attachments.ToolbarButton('add-app', '+ Attach'));
+                        buttons.push(chlk.models.common.attachments.ToolbarButton('add-app', 'Attach'));
                     }break;
 
                     case chlk.models.apps.AppModes.VIEW:
