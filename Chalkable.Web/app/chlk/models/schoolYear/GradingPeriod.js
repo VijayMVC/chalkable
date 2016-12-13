@@ -18,6 +18,7 @@ NAMESPACE('chlk.models.schoolYear', function () {
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
                 this.ablePostGradeBook = SJX.fromValue(raw.allowgradeposting, Boolean);
+                this.current = SJX.fromValue(raw.current, Boolean);
                 this.markingPeriodId = SJX.fromValue(raw.markingperiodid, chlk.models.id.MarkingPeriodId);
             },
 
@@ -27,6 +28,7 @@ NAMESPACE('chlk.models.schoolYear', function () {
             READONLY, chlk.models.common.ChlkDate, 'startDate',
             READONLY, chlk.models.common.ChlkDate, 'endDate',
             READONLY, Boolean, 'ablePostGradeBook',
+            Boolean, 'current',
             READONLY, chlk.models.id.MarkingPeriodId, 'markingPeriodId',
 
             [[chlk.models.common.ChlkDate]],
