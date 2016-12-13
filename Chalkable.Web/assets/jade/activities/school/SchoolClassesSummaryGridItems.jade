@@ -1,0 +1,31 @@
+-var classes = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+
+each clazz in classes
+    .grid-row
+        .cell.name
+            .icon
+                .pic
+                    +ClassImg(clazz, 24, 43)
+            +ActionLink('class', 'info', clazz.getId())(data-tooltip = (clazz.getClassNumber() || '') + ' '+  clazz.getName())=clazz.getName()
+        .cell.teacher-name=clazz.getPrimaryTeacherName()
+        .cell.students=clazz.getStudentsCount()
+        if isNotEmptyStatistic
+            .cell.attendance
+                +ActionLink('class', 'attendanceList', clazz.getId())(
+                    data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
+                    data-disabled-message = clazz.isAttendancesProfileEnabled() ? '' : clazz.getNoAccessMsg('attendance'),
+                    class = clazz.getAbsencesClass()
+                ).with-events.circle-cnt=clazz.getPresence() && Math.round(clazz.getPresence())
+            .cell.discipline
+                +ActionLink('class', 'discipline', clazz.getId())(
+                    data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
+                    data-disabled-message = clazz.isDisciplinesProfileEnabled() ? '' : clazz.getNoAccessMsg('discipline'),
+                    class = clazz.getInfractionsClass()
+                ).with-events.circle-cnt=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
+            .cell.grades
+                +ActionLink('class', 'grading', clazz.getId())(
+                    data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
+                    data-disabled-message = clazz.isGradingProfileEnabled() ? '' : clazz.getNoAccessMsg('grading'),
+                    class = clazz.getAvgClass()
+                ).with-events.circle-cnt=clazz.getAvg() && parseInt(clazz.getAvg(), 10)

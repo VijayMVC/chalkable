@@ -1,0 +1,9 @@
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1= self.getTitle()
+        a.close.close-btn
+    .attach-content
+        +AttachDialogSidebar(self, self.getApp().getId())
+        .attach-main
+            .iframe-wrap.partial-update
+                iframe(src=self.getUrl(), width="100%", border=0, style="border: none; min-height: 500px")
