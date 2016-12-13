@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School
             
             var scheduledDate = GetNearestScheduledDate(classId, date);
             var lunchCountsTask = ConnectorLocator.LunchConnector.GetLunchCount(classId, scheduledDate);          
-            var students = ServiceLocator.StudentService.GetClassStudents(classId, null).OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
+            var students = ServiceLocator.StudentService.GetClassStudents(classId, null, true).OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
             var currentClass = ServiceLocator.ClassService.GetById(classId);
             var staffs = ServiceLocator.StaffService.SearchStaff(Context.SchoolYearId, classId, null, null, false, 0, int.MaxValue)
                 .OrderBy(x => x.Id != currentClass.PrimaryTeacherRef).ToList(); //primary theacher should be on the TOP         

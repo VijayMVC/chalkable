@@ -55,8 +55,8 @@ namespace Chalkable.Data.School.Model
                 return false;
             }
         }
-
-        [DataEntityAttr]
+        
+        [NotDbFieldAttr]
         public bool? IsWithdrawn { get; set; }
     }
 
