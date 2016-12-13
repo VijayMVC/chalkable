@@ -3,6 +3,10 @@ div(class=(self.getClazz() || "")).dialog.info-msg.gray
         .x-window-header: h1=self.getHeader()
 
     .x-window-body
+        if self.getIconUrl()
+            .icon-wrapper
+                img(src=self.getIconUrl())
+
         if self.isHtmlText()
             !=self.getText()
         else

@@ -117,6 +117,15 @@
 
 
 .info-msg-dialog
+  .icon-wrapper img
+    display: block
+    margin: -17px auto 27px
+
+  button
+    min-width: 92px
+    &:last-child:not(:nth-child(2))
+      margin-left: 20px
+
   .leave-msg, .error, .ok, .permissions, .report, .sync
     .x-window-body
       margin: 27px 27px 32px
@@ -150,6 +159,8 @@
 
   .x-window-body
     margin: 40px 75px
+    min-width: 401px
+    text-align: center
 
     input[type=text]
       display: block

@@ -126,6 +126,12 @@ NAMESPACE('chlk', function (){
                 window.currentChlkPerson.claims = window.userClaims;
                 window.attendanceReasons.sort(function(a,b){return (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 0) });
 
+                if(window.gradingPeriod && window.gradingPeriods){
+                    window.gradingPeriods.forEach(function(gp){
+                        gp.current = gp.id == window.gradingPeriod.id;
+                    });
+                }
+
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIODS, ArrayOf(chlk.models.schoolYear.MarkingPeriod));
                 this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);

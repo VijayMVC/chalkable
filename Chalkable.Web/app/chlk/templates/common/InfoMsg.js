@@ -26,6 +26,8 @@ NAMESPACE('chlk.templates.common', function () {
             [ria.templates.ModelPropertyBind],
             String, 'inputValue',
             [ria.templates.ModelPropertyBind],
-            Object, 'inputAttrs'
+            Object, 'inputAttrs',
+            [ria.templates.ModelPropertyBind],
+            String, 'iconUrl'
         ])
 });

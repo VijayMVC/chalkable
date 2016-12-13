@@ -210,6 +210,7 @@ NAMESPACE('chlk.controllers', function (){
             [[Object]],
             function showAlertBoxAction(data) {
                 var filtered_text = data.text || '',
+                    iconUrl = data.iconUrl || null,
                     isHtml = data.isHtmlText === true;
 
                 if (isHtml) {
@@ -219,7 +220,7 @@ NAMESPACE('chlk.controllers', function (){
                         .replace('<link', '')
                 }
 
-                this.ShowAlertBox(filtered_text, data.header || null, isHtml)
+                this.ShowAlertBox(filtered_text, data.header || null, isHtml, null, iconUrl)
                     .attach(this._replayTo(data));
 
                 return null;
@@ -227,11 +228,24 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function showPromptBoxAction(data) {
-                this.ShowPromptBox(data.text
+                var filtered_text = data.text || '',
+                    iconUrl = data.iconUrl || null,
+                    isHtml = data.isHtmlText === true;
+
+                if (isHtml) {
+                    filtered_text = filtered_text
+                        .replace('<script', '')
+                        .replace('<body', '')
+                        .replace('<link', '')
+                }
+
+                this.ShowPromptBox(filtered_text
                     , data.header || null
                     , data.inputValue || null
                     , data.inputAttrs || null
-                    , data.inputType || null)
+                    , data.inputType || null
+                    , iconUrl
+                    , isHtml)
                     .attach(this._replayTo(data));
 
                 return null;
@@ -239,10 +253,31 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function showConfirmBoxAction(data) {
-                this.ShowConfirmBox(data.text
+                var filtered_text = data.text || '',
+                    iconUrl = data.iconUrl || null,
+                    isHtml = data.isHtmlText === true;
+
+                if (isHtml) {
+                    filtered_text = filtered_text
+                        .replace('<script', '')
+                        .replace('<body', '')
+                        .replace('<link', '')
+                }
+
+                this.ShowConfirmBox(filtered_text
                     , data.header || null
                     , data.buttonText || null
-                    , data.buttonClass || null)
+                    , data.buttonClass || null
+                    , iconUrl
+                    , isHtml)
+                    .attach(this._replayTo(data));
+
+                return null;
+            },
+
+            [[chlk.models.common.InfoMsg]],
+            function showMsgBoxAction(model) {
+                this.view.showModal(chlk.activities.common.InfoMsgDialog, model)
                     .attach(this._replayTo(data));
 
                 return null;
