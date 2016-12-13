@@ -173,7 +173,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 Merits = studentData.Merits,
                 Recipient = RecipientsReportCardsExportModel.Create(recipient),
                 Classes = ClassReportCardsExportModel.Create(studentData.Sections, onlyGradedStandard, includeNote),
-                Attendances = AttendanceSummaryExportModel.Create(studentData.Attendance, "test"),
+                Attendances = AttendanceSummaryExportModel.Create(studentData.Attendance),
                 GradingPeriod = new GradingPeriodExportModel
                 {
                     Announcement = gradingPeriod.Announcement,
@@ -303,12 +303,12 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public decimal UnexcusedAbsences { get; set; }
         public decimal UnexcusedTardies { get; set; }
 
-        public static IList<AttendanceSummaryExportModel> Create(IEnumerable<ReportCardAttendanceData> attendances, string gradingPeriodName)
+        public static IList<AttendanceSummaryExportModel> Create(IEnumerable<ReportCardAttendanceData> attendances)
         {
-            return attendances.Select(attendance => Create(attendance, gradingPeriodName)).ToList();
+            return attendances.Select(attendance => Create(attendance)).ToList();
         }
 
-        public static AttendanceSummaryExportModel Create(ReportCardAttendanceData attendance, string gradingPeriodName)
+        public static AttendanceSummaryExportModel Create(ReportCardAttendanceData attendance)
         {
             var res = new AttendanceSummaryExportModel
             {
@@ -318,7 +318,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 ExcusedTardies = attendance.ExcusedTardies,
                 UnexcusedTardies = attendance.UnexcusedTardies,
                 Enrolled = attendance.DaysEnrolled,
-                GradingPeriodName = gradingPeriodName,
+                GradingPeriodName = attendance.GradingPeriodName,
                 Absences = attendance.UnexcusedAbsences + attendance.ExcusedAbsences,
                 Tardies = attendance.ExcusedTardies + attendance.UnexcusedTardies
             };
