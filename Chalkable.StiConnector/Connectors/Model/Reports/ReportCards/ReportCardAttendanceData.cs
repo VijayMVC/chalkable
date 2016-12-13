@@ -8,5 +8,6 @@
         public int GradingPeriodId { get; set; }
         public decimal UnexcusedAbsences { get; set; }
         public decimal UnexcusedTardies { get; set; }
+        public string GradingPeriodName { get; set; }
     }
 }

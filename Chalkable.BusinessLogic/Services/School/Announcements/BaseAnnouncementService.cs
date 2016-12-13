@@ -222,6 +222,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 case MarkDoneOptions.Till30Days:
                     if(toDate > Context.NowSchoolTime.AddDays(-30))
                         toDate = Context.NowSchoolTime.AddDays(-30);
+                    filterByExpiryDate = true;
                     break;
                 case MarkDoneOptions.TillToday:
                     if (toDate > Context.NowSchoolTime.AddDays(-1))
