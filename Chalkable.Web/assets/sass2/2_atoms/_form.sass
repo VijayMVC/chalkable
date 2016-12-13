@@ -1,0 +1,44 @@
+.x-form-field
+  display: block
+  position: relative
+  margin-bottom: 5px
+
+  label
+    display: inline-block
+    min-width: 90px
+    width: 25%
+
+  > *
+    vertical-align: top
+
+  .formErrorContent
+    white-space: nowrap
+
+  .input-container
+    display: inline-block
+    position: relative
+
+  .validate-ok::after
+    content: ' '
+    +icons-24-sprite(complete)
+    width: 24px
+    height: 24px
+    position: absolute
+    bottom: 9px
+    right: -30px
+
+.form-buttons, .buttons-container
+  margin-top: 10px
+  margin-bottom: 10px
+  text-align: center
+
+  > *
+    margin: 0 3px
+
+  &.grey
+    padding: 16px 14px 18px 14px
+    background: #F5F6F3
+
+    BUTTON
+      width: 82px
+      margin-left: 14px

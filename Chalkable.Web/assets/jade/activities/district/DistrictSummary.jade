@@ -1,0 +1,21 @@
+-var summary = self.getShortSummary()
+
+.admin-summary-page
+    h2.page-title=summary.getName()
+    .info-block.action-bar
+        .info-item
+            span.name #{Msg.Schools}:&nbsp;
+            span.value=summary.getSchoolsCount()
+        .info-item
+            span.name #{Msg.Students}:&nbsp;
+            span.value=summary.getStudentsCount()
+    +ActionForm('district', 'schoolsStatistic').school-statistic-form
+        .form-container
+            div
+                input(type="text", name="filter", placeholder="Search for a school...", value=self.getFilter(), data-value=self.getFilter()).statistic-filter.filter-input
+                Button(type="submit", name="submitType", value="filter").x-hidden.filter-submit
+                .clear-fix
+        .grid-container
+            +RenderWith(self.getSchoolsStatistic(), chlk.templates.district.BaseStatisticTpl)(
+                filter = self.getFilter()
+            )
