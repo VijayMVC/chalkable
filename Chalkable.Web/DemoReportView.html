@@ -15,20 +15,22 @@
         .traditional-table td:first-child:not(:last-child) {width: 20%}
         .traditional-table td:last-child:not(:first-child) {width: 40%}
         * {box-sizing: border-box;}
-        .col-sm-12, .col-sm-4, .col-sm-6, .col-sm-8{position: relative;min-height: 1px;padding-right: 15px;padding-left: 15px;float: left;}
+        .col-sm-12, .col-sm-4, .col-sm-6, .col-sm-8{position: relative;min-height: 1px;padding-left: 15px;float: left;}
         .col-sm-12 {width: 100%;}
         .col-sm-4 {width: 33.33333333%;}
         .col-sm-6 {width: 50%;}
         .col-sm-8 {width: 66.66666667%;}
-        .h1, .h2, .h3{margin-top: 20px;margin-bottom: 10px;line-height: 1.1;}
-        .row {margin-top: 15px; margin-bottom: 50px; padding: 1px;margin-right: -15px;margin-left: -15px;}
+        .h1, .h2, .h3{margin-bottom: 10px;line-height: 1.1;}
+        .h2, .h3{margin-top: 20px;}
+        .row {margin-top: 0px; margin-bottom: 50px; padding: 1px;margin-left: -15px;}
         .row:before {display: table;content: " ";}
         .row:after {display: table;content: " ";clear: both;}
         .row:last-child {margin-bottom: 35px;}
+		.row.signature-row {margin-bottom: 0;}
         .row.m-t-0 {margin-top: 0}
         .row.m-b-0 {margin-bottom: 0}
         .main-student-panel { padding: 1px;}
-        .recipient-parent {border: 1px solid rgba(229, 229,227, 0.45); border-radius: 4px;}
+        .recipient-parent {border: 1px solid rgba(229, 229,227, 0.45); border-radius: 4px;width: 4.5in; height: 1.125in}
         .mailing-box{padding: 15px;}
         table {width: 100%;margin-bottom: 20px;border-collapse: collapse; }
         .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border:1px solid #8a8a8a; }
@@ -79,6 +81,7 @@
     "logohref": "https://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_reportcardslogo_83009fe9-8594-4e33-a09e-1ef4f81d0e8d",
     "acadyear": 2017,
     "acadsessionname": "High School 2016-17",
+    "includemeritdemerit": true,
     "school": {
       "name": "Greene High School",
       "city": "Hometowne",
@@ -2654,18 +2657,19 @@ each arrItem, index in arr
                                           td=item[prop]
                                       -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
                                       td=sum
-                  table.table.table-bordered.merits-table
-                      thead
-                          tr.active
-                              td Merits/Demerits
-                              td Total
-                      tbody
-                          tr
-                              td Merits
-                              td=student.merits
-                          tr
-                              td Demerits
-                              td=student.merits
+                  if  model.includemeritdemerit
+                      table.table.table-bordered.merits-table
+                          thead
+                              tr.active
+                                  td Merits/Demerits
+                                  td Total
+                          tbody
+                              tr
+                                  td Merits
+                                  td=student.merits
+                              tr
+                                  td Demerits
+                                  td=student.demerits
               .col-sm-6
                   each item in model.traditionalgradingscales || []
                       table.table.table-bordered.traditional-table
@@ -2688,7 +2692,7 @@ each arrItem, index in arr
                                   tr
                                       td=grade.name
                                       td=grade.description
-          .row
+          .row.signature-row
               .col-sm-12
                   if model.includesignature
                       .signature-block

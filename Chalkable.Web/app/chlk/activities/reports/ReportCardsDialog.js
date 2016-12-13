@@ -96,10 +96,11 @@ NAMESPACE('chlk.activities.reports', function(){
             function customTemplateSelect(node, event_, b_){
                 var chosenC = node.$.find('+DIV.chosen-container');
                 node.$.find('option').each(function(index){
-                    var icon = $(this).data('icon'),
-                        img = '<img src="' + icon + '"/>';
-
-                    chosenC.find('.active-result:eq(' + index + ')').prepend(img);
+                    var icon = $(this).data('icon');
+                    if(icon){
+                        var img = '<img src="' + icon + '"/>';
+                        chosenC.find('.active-result:eq(' + index + ')').prepend(img);
+                    }
                 });
             },
 
@@ -127,7 +128,7 @@ NAMESPACE('chlk.activities.reports', function(){
                 if(
                     this.dom.find('#group-ids-value').getValue() ||
                     this.dom.find('#student-ids-value').getValue() ||
-                    this.dom.find('.report-title').getValue() ||
+                    this.dom.find('.report-title').getValue() != "Report Card"  ||
                     parseInt(this.dom.find('[name=recipient]:checked').getValue(), 10) != 0 ||
                     parseInt(this.dom.find('[name=logo]:checked').getValue(), 10) != 0 ||
                     this.dom.find('.custom-template-select').getValue() != this.dom.find('.custom-template-select').find('option:eq(0)').getValue() ||

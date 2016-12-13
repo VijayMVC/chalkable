@@ -12,7 +12,15 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getList(schoolYearId_) {
                 return this.get('GradingPeriod/List.json', ArrayOf(chlk.models.schoolYear.GradingPeriod), {
                     schoolYearId: schoolYearId_ && schoolYearId_.valueOf()
-                });
+                }).then(function(gps){
+                    var currentGp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, null);
+                    if(currentGp){
+                        gps.forEach(function(gp){
+                            gp.setCurrent(gp.getId() == currentGp.getId());
+                        });
+                    };
+                    return gps;
+                }, this);
             },
 
             [[chlk.models.id.ClassId]],
