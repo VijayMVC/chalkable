@@ -72,7 +72,7 @@ NAMESPACE('chlk.controls', function () {
 
                         this.updateSelect(select, attributes);
 
-                        if(attributes.firstEmpty && attributes["data-placeholder"]){
+                        if(!select.find('option:selected')[0] && attributes.firstEmpty && attributes["data-placeholder"]){
                             select.find('+DIV').find('SPAN').html(attributes["data-placeholder"]);
                         }
 
