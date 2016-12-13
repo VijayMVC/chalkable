@@ -42,7 +42,7 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
                     .grid-header.grid-row
                         .cell.no-bodrer
                         each item in tableInfo.mealItems
-                            .cell.no-bodrer.meal-item-th=item.getMealType().getName()
+                            .cell.no-bodrer.meal-item-th(data-tooltip=item.getMealType().getName(), data-tooltip-type="overflow")=item.getMealType().getName()
                     if tableInfo.topTable.length
                         each item, index in tableInfo.topTable
                             .grid-row
