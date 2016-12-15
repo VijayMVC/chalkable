@@ -17,7 +17,7 @@ class TestCustomRangeMarkItems(BaseTestCase):
 
         # get a date needed for filtering
         date = datetime.now()
-        end_date = date.today() - timedelta(days=30)
+        end_date = date.today() - timedelta(days=29)
         self.current_date_minus_30 = end_date
 
         # getting grading periods

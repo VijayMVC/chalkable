@@ -25,6 +25,9 @@ class TestAllTypesOfItemsByGradingPeriods(BaseTestCase):
             self.list_for_start_date.append(datetime.date(datetime.strptime(item['startdate'], '%Y-%m-%d')))
             self.list_for_end_date.append(datetime.date(datetime.strptime(item['enddate'], '%Y-%m-%d')))
 
+        self.list_for_start_date.sort()
+        self.list_for_end_date.sort()
+
     def internal_(self, gr_periods, start_gr_period, end_gr_period):
         def list_items_json_unicode(start, count):
             list_items_json_unicode = self.teacher.get_json(
