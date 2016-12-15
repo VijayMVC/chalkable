@@ -35,7 +35,8 @@
             +Select("classId")(firstEmpty = true).class-id.submit-on-change
                 +Option('', "", !self.getClassId())
                 each clazz in self.getClasses() || []
-                    +Option(clazz.getId().valueOf(), clazz.getName() + " " + clazz.getClassNumber(), clazz.getId() == self.getClassId())
+                    -var name = clazz.getName() + " " + clazz.getClassNumber()
+                    +Option(clazz.getId().valueOf(), name, clazz.getId() == self.getClassId())(data-tooltip=name)
     else
         +Hidden('classId').class-id
 
