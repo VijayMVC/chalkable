@@ -915,7 +915,7 @@
                                             <Paragraph>
                                               <TextRuns>
                                                 <TextRun>
-                                                  <Value>="Everyday Period(s):" + Fields!Periods.Value</Value>
+                                                  <Value>=Fields!DayTypes.Value + " Period(s):" + Fields!Periods.Value</Value>
                                                   <Style>
                                                     <FontStyle>Italic</FontStyle>
                                                     <FontSize>8pt</FontSize>
@@ -931,6 +931,9 @@
                                           <Height>0.12486in</Height>
                                           <Width>2.29946in</Width>
                                           <ZIndex>2</ZIndex>
+                                          <Visibility>
+                                            <Hidden>=IsNothing(Fields!Periods.Value) Or Len(Fields!Periods.Value) = 0</Hidden>
+                                          </Visibility>
                                           <Style>
                                             <Border>
                                               <Style>None</Style>
