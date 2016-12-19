@@ -17,16 +17,18 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'banned',
             String, 'errorTitle',
             String, 'errorMessage',
+            Boolean, 'noButtons',
 
             chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
 
-            [[chlk.models.apps.Application, chlk.models.apps.AppModes, chlk.models.announcement.AnnouncementTypeEnum]],
-            function $(app, mode, announcementType_){
+            [[chlk.models.apps.Application, chlk.models.apps.AppModes, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
+            function $(app, mode, announcementType_, noButtons_){
 
                 var fullUrl = app.getCurrentModeUrl() + "&token=" + encodeURIComponent(app.getToken());
 
                 this.setApp(app);
                 this.setAppMode(mode);
+                noButtons_ && this.setNoButtons(noButtons_);
 
                 if(announcementType_)
                     this.setAnnouncementType(announcementType_);

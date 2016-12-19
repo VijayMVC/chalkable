@@ -18,10 +18,11 @@ else
         .iframe-wrap
             iframe.fixed-height(src=self.getUrl(), allowfullscreen)
                 attributes.class
-        .buttons-bottom
-            each button in self.getToolbarButtons()
-                +ToolbarButton(button, announcementAppId, announcementId, advancedApp, self.getAnnouncementType()).button-like.blue-button
-            BUTTON.close=Msg.Cancel
+        if !self.isNoButtons()
+            .buttons-bottom
+                each button in self.getToolbarButtons()
+                    +ToolbarButton(button, announcementAppId, announcementId, advancedApp, self.getAnnouncementType()).button-like.blue-button
+                BUTTON.close=Msg.Cancel
 
 
 
