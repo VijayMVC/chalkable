@@ -39,5 +39,8 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'noButtons'
+
         ])
 });
