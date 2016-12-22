@@ -8,7 +8,20 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
 
     def internal_(self, item_type):
         for one_class in self.teacher.list_of_classes():
+
+            def list_items(classId):
+                list_items_json_unicode = self.teacher.post_json(
+                    '/Feed/List.json?', data ={'start=':str(0),
+                                               '&classId=': classId,
+                                               'count=': str(9999)})
+                dictionary_verify_annoucementviewdatas_all = list_items_json_unicode['data']['annoucementviewdatas']
+                return dictionary_verify_annoucementviewdatas_all
+
+            #@for i in list_items(one_class):
+                #@print i
+
             print one_class
+            self.activity_name = None
             list_activity_dates = []
             self.list_for_items_id_and_types = []
             list_of_item_id = []
@@ -67,7 +80,7 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
                 if one_item['type'] == 1:
                     return one_item['classannouncementdata']['expiresdate']
 
-            def dates_for_adjust_feature(item_date, **kwargs): #!!!!!!
+            def dates_for_adjust_feature(item_date, **kwargs):
                 date = item_date + timedelta(**kwargs)
 
                 if date < start_date_one_class_date_time:
@@ -80,7 +93,7 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
 
             def pre_closest_scheduled_date(item_date, **kwargs):
                 index_date = list_of_scheduled_dates.index(item_date)
-                index_new_date = index_date + kwargs.values()[0]
+                index_new_date = index_date + kwargs.get('days')
 
                 if index_new_date <= 0:
                     return start_scheduled_day_one_class
@@ -186,14 +199,11 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
                                            data={"announcementId": one_activity, "announcementType": item_type})
                     del list_of_item_id[list_of_item_id.index(one_activity)]
 
-
             start_date_one_class_date_time = scheduled_class_days()[0]
             start_scheduled_day_one_class = list_of_scheduled_dates[0]
 
             end_date_one_class_date_time = scheduled_class_days()[-1]
             end_scheduled_day_one_class = list_of_scheduled_dates[-1]
-
-            #print scheduled_class_days()[(len(scheduled_class_days())/2)]
 
             #start_date_one_class_date_time = max(start_date_one_class_date_time, self.teacher.start_date_gr_period_date_time_format) if (scheduled_class_days()[(len(scheduled_class_days())/2)] in list_for_gr_period_dates) else min(start_date_one_class_date_time, self.teacher.start_date_gr_period_date_time_format)
             start_date_one_class_date_time = min(start_date_one_class_date_time, dates_of_the_first_gr_period[0])
@@ -303,8 +313,9 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
             add_item_date_2_in_gr_period = item_date_in_gr_period(start_date_one_class_date_time, days=20)
             add_item_date_3_in_gr_period = item_date_in_gr_period(start_date_one_class_date_time, days=30)
 
-            def post_one_activity(date_in_correct_format):
-                random_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(30)])
+            def post_one_activity(date_in_correct_format, random_name=None):
+                if random_name == None:
+                    random_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(30)])
 
                 self.teacher.get_json(
                     '/Announcement/Create.json?')
@@ -362,39 +373,74 @@ class TestFeedAdjustItemDatesFeature(BaseTestCase):
                     })
 
                 #print str(date_in_correct_format), activity_id, one_class
+                self.activity_name = random_name
+
                 list_of_item_id.append(activity_id)
 
             def posting_items(*arglist_dates, **kwargs):
-                for i in arglist_dates:
-                    post_one_activity(i)
+                random_name = None
+                success = True
+                delete_item = True
+                clear_list = True
 
-                closest_scheduled_dates =[]
+                if 'clear_list' in kwargs:
+                    clear_list = kwargs['clear_list']
+
+                if 'delete_item' in kwargs:
+                    delete_item = kwargs['delete_item']
+
+                if 'success' in kwargs:
+                    success = kwargs['success']
+
+                if 'random_name' in kwargs:
+                    random_name = kwargs['random_name']
+                    del kwargs['random_name']
+
+                for i in arglist_dates:
+                    post_one_activity(i, random_name=random_name)
+
+                closest_scheduled_dates = []
                 for one_date in arglist_dates:
                     closest_scheduled_dates.append(closest_scheduled_date(list_of_scheduled_dates, one_date))
 
-                list_of_subtr_dates_inner =[]
+                list_of_subtr_dates_inner = []
                 for one_day in closest_scheduled_dates:
                     list_of_subtr_dates_inner.append(pre_closest_scheduled_date(one_day, **kwargs))
 
-                date_for_adjust_method = list_of_subtr_dates_inner[0]
+                if success == True:
+                    k_for_dict = 0
+                    for i in list_activity_dates:
+                        i['expiresdate/startdate'] = list_of_subtr_dates_inner[k_for_dict]
+                        k_for_dict += 1
 
-                k_for_dict = 0
-                for i in list_activity_dates:
-                    i['expiresdate/startdate'] = list_of_subtr_dates_inner[k_for_dict]
-                    k_for_dict += 1
-
-
-                self.teacher.post_json('/Announcement/AdjustDates.json', json={"classId": one_class, "announcements": self.list_for_items_id_and_types, "shift": kwargs.values()[0]})
+                self.teacher.post_json('/Announcement/AdjustDates.json', json={"classId": one_class, "announcements": self.list_for_items_id_and_types, "shift": kwargs.get('days')}, success=success)
 
                 verify_current_vs_expected_dates()
 
-                deleting_items()
+                if delete_item == True:
+                    deleting_items()
 
-                self.list_for_items_id_and_types = []
+                if clear_list == True:
+                    self.list_for_items_id_and_types = []
+
+            first_activity_name = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(30)])
+
+            first_activity_day = 25
+
+            second_activity_day = 27
+
+            third_activity_day = 27
+
+            posting_items(list_of_scheduled_dates[first_activity_day], random_name=first_activity_name, days=0,
+                          delete_item=False)
+
+            posting_items(list_of_scheduled_dates[second_activity_day], random_name=first_activity_name, days=0,
+                          delete_item=False, clear_list=False)
+
+            posting_items(list_of_scheduled_dates[third_activity_day], days=first_activity_day - second_activity_day,
+                          success=False, delete_item=True, clear_list=True)
 
             posting_items(dates_of_the_first_gr_period[0], days=0)
-
-            posting_items(list_of_scheduled_dates[0], days=0)
 
             posting_items(dates_of_the_first_gr_period[-2], days=0)
 

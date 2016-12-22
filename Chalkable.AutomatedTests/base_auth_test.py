@@ -69,8 +69,12 @@ class UserSession:
         for j in dictionary_var_grading_periods_cut_off_string_for_dict_data:
             # print j['startdate'], j['enddate']
             self.list_for_grading_periods_and_classes.append({'startdate': j['startdate'], 'enddate': j['enddate']})
-
-
+            
+        # getting a school name
+        found_list_school_name = re.findall('schoolName = .+', page_as_one_string)
+        concatenated_str_school_name = ''.join(found_list_school_name)
+        found_nameunicode = ''.join(concatenated_str_school_name[14:-3])
+        self.found_name_str = str(found_nameunicode)
 
     def get_(self, url, status=200, **kwargs):
         r = self.session.get(chlk_server_url + url, **kwargs)
