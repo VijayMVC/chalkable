@@ -79,7 +79,7 @@
                         TR
                             TD.item-2
                                 .check-title Standard
-                                +SlideCheckbox('groupedbystandards',  self.isGroupByStandards() && !self.isIncludeDetails(), null, self.isIncludeDetails())
+                                +SlideCheckbox('groupbystandards',  self.isGroupByStandards() && !self.isIncludeDetails(), null, self.isIncludeDetails())
         .x-window-footer.report-bottom
             BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-button=Msg.Download_PDF
             //BUTTON(type="button").chlk-button.blue-button=Msg.Print

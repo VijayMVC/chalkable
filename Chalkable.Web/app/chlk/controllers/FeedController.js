@@ -386,6 +386,7 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isIncludeDetails(),
                     reportViewData.isIncludeHiddenAttributes(),
                     reportViewData.isIncludeHiddenActivities(),
+                    reportViewData.isGroupByStandards(),
                     reportViewData.getClassId(),
                     reportViewData.isImportantOnly(),
                     reportViewData.getAnnouncementType()

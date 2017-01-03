@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Chalkable.BusinessLogic.Model.Reports
+﻿namespace Chalkable.BusinessLogic.Model.Reports
 {
     public class FeedReportInputModel
     {
