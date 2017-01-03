@@ -42,29 +42,29 @@
                             )#end-printing-date
                     TR
                         TD.item-2
-                            .print-item.print-activity-details
-                                input(type = "radio", id="include-details", name = "includedetails", value="true", data-value=true, checked = self.isIncludeDetails())
-                                label(for="include-details") Print activity details
-                        TD.item-2
                             .print-item.print-list-of-activities
                                 input(type = "radio", id="include-list", name = "includedetails", value="false", data-value=false, checked = !self.isIncludeDetails())
-                                label(for="include-list") Print list of activities
+                                label(for="include-list") Activity List
+                        TD.item-2
+                            .print-item.print-activity-details
+                                input(type = "radio", id="include-details", name = "includedetails", value="true", data-value=true, checked = self.isIncludeDetails())
+                                label(for="include-details") Activity Details
                     if self.getUserRole().isAdmin() && !classId
                         TR
                             TD.item-2
-                                .check-title Print hidden attributes
+                                .check-title Hidden attributes
                                 +SlideCheckbox('includehiddenattributes', self.isIncludeHiddenAttributes(), null, !self.isIncludeDetails())
                             TD.item-2
-                                .check-title Print attachments
+                                .check-title Attachments
                                 +SlideCheckbox('includeattachments', self.isIncludeAttachments(), null, !self.isIncludeDetails())
                     else
                         if self.getUserRole().isTeacher() || self.getUserRole().isAdmin() && classId
                             TR
                                 TD.item-2
-                                    .check-title Print hidden activities
+                                    .check-title Hidden Activities
                                     +SlideCheckbox('includehiddenactivities', self.isIncludeHiddenActivities())
                                 TD.item-2
-                                    .check-title Print hidden attributes
+                                    .check-title Hidden Attributes
                                     +SlideCheckbox('includehiddenattributes', self.isIncludeHiddenAttributes(), null, !self.isIncludeDetails())
                         TR
                             TD.item-2
@@ -74,8 +74,12 @@
                                     data-tooltip=self.getTooltip()
                                 )
                             TD.item-2
-                                .check-title Print attachments
+                                .check-title Attachments
                                 +SlideCheckbox('includeattachments', self.isIncludeAttachments(), null, !self.isIncludeDetails())
+                        TR
+                            TD.item-2
+                                .check-title Standard
+                                +SlideCheckbox('groupedbystandards',  self.isGroupByStandards() && !self.isIncludeDetails(), null, self.isIncludeDetails())
         .x-window-footer.report-bottom
             BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-button=Msg.Download_PDF
             //BUTTON(type="button").chlk-button.blue-button=Msg.Print

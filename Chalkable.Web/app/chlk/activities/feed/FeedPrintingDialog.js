@@ -18,6 +18,10 @@ NAMESPACE('chlk.activities.feed', function(){
                 var checkNodes = this.dom.find('[type=checkbox][name="includehiddenattributes"], [type=checkbox][name="includeattachments"]');
                 checkNodes.setValue(false);
                 checkNodes.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [!value]);
+
+                var standardsNode = this.dom.find('[type=checkbox][name="groupedbystandards"]');
+                standardsNode.setValue(false);
+                standardsNode.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [value]);
             }
         ]);
 });

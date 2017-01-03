@@ -21,6 +21,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.includeAttachments = SJX.fromValue(raw.includeattachments, Boolean);
                 this.includeHiddenActivities = SJX.fromValue(raw.includehiddenactivities, Boolean);
                 this.includeHiddenAttributes = SJX.fromValue(raw.includehiddenattributes, Boolean);
+                this.groupByStandards = SJX.fromValue(raw.groupedbystandards, Boolean);
                 this.editableLPOption = SJX.fromValue(raw.editablelpoption, Boolean);
                 this.importantOnly = SJX.fromValue(raw.importantonly, Boolean);
                 this.announcementType = raw.announcementtype ? SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum) : null;
@@ -44,6 +45,8 @@ NAMESPACE('chlk.models.feed', function () {
             Boolean, 'includeHiddenActivities',
 
             Boolean, 'includeHiddenAttributes',
+
+            Boolean, 'groupByStandards',
 
             Boolean, 'editableLPOption',
 
