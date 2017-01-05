@@ -1,0 +1,4 @@
+each attachment in self.getAttachments() || []
+    .img-cnt
+        .delete-btn.delete-attachment(data-id = attachment.getId().valueOf())
+        +RenderWith(attachment, chlk.templates.LoadingImageTpl)
