@@ -94,7 +94,7 @@ NAMESPACE('chlk.controllers', function () {
             [[Object]],
             function completeAction(data) {
                 this.BackgroundCloseView(chlk.activities.attach.AttachFileDialog);
-                this.WidgetComplete(data.requestId, data.id.filter(function (x) { return x }));
+                this.WidgetComplete(data.requestId, data.json.filter(function (x) { return x }).map(JSON.parse));
 
                 return null;
             },

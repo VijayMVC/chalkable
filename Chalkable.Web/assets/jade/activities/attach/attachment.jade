@@ -1,7 +1,7 @@
 .attachment-file(data-index = self.getFileIndex(), class=self.getId() ? '' : 'pending')
-    -console.log(self)
     .icon
-        +LoadingImage(src=self.getThumbnailUrl() ? self.getThumbnailUrl().replace('110x170', '33x51') : '')
+        if self.getId() && self.getId().valueOf() > 0
+            +LoadingImage(src=self.getThumbnailUrl() ? self.getThumbnailUrl().replace('110x170', '33x51') : '')
     .name(data-tooltip=self.getName(), data-tooltip-type="overflow")=self.getName()
         span.size &#32;(#{self.getSize()})
     .progress-wrapper
@@ -13,4 +13,5 @@
 
     if self.getId()
         +Hidden('id.' + self.getFileIndex(), self.getId())
+        +Hidden('json.' + self.getFileIndex(), JSON.stringify(self.getModel().serialize()))
         a.close-btn.delete-attachment

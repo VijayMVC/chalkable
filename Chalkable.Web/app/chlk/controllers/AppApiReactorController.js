@@ -182,11 +182,10 @@ NAMESPACE('chlk.controllers', function (){
             [[Object]],
             function showFileUploadAction(data) {
                 this.WidgetStart('attach', 'start', [])
-                    .then(function (ids) {
-                        return this.attachmentService.getByIds(ids.map(chlk.models.id.AttachmentId))
-                    }, this)
-                    .then(function (models) {
-                        return models.getItems().map(function (x) { return x.serialize() });
+                    .then(function (x) {
+                        return x.forEach(function (x) {
+                            x.publicUrl = (x.publicUrl.match(/^\/.*/) ? window.location.origin : '') + x.publicUrl;
+                        }), x;
                     })
                     .attach(this._replayTo(data));
 
