@@ -9,8 +9,8 @@
       <xs:element minOccurs="0" maxOccurs="1" name="SchoolName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="SchoolYear" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="ExecutionDateTime" type="xs:dateTime" />
-      <xs:element minOccurs="1" maxOccurs="1" name="StartReportDate" type="xs:dateTime" />
-      <xs:element minOccurs="1" maxOccurs="1" name="EndReportDate" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="StartReportDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EndReportDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="1" maxOccurs="1" name="IsAdminAnnouncement" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="ClassId" nillable="true" type="xs:int" />
       <xs:element minOccurs="1" maxOccurs="1" name="AdminId" nillable="true" type="xs:int" />
@@ -30,6 +30,8 @@
       <xs:element minOccurs="1" maxOccurs="1" name="TotalPoint" nillable="true" type="xs:double" />
       <xs:element minOccurs="1" maxOccurs="1" name="HasStandards" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="HasAttachments" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="StandardId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StandardName" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

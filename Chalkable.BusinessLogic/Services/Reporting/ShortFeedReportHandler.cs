@@ -24,12 +24,14 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 ToDate = inputModel.Settings.EndDate
             };
 
-            bool isForAdminPortal = BaseSecurity.IsDistrictAdmin(serviceLocator.Context) && !inputModel.ClassId.HasValue;
+            //bool isForAdminPortal = BaseSecurity.IsDistrictAdmin(serviceLocator.Context) && !inputModel.ClassId.HasValue;
 
-            var anns = isForAdminPortal
-                ? serviceLocator.AnnouncementFetchService.GetAnnouncementsForAdminFeed(inputModel.Complete, null, feedSettings)
-                : serviceLocator.AnnouncementFetchService.GetAnnouncementsForFeed(inputModel.Complete, inputModel.ClassId, feedSettings);
+            //var anns = isForAdminPortal
+            //    ? serviceLocator.AnnouncementFetchService.GetAnnouncementsForAdminFeed(inputModel.Complete, null, feedSettings)
+            //    : serviceLocator.AnnouncementFetchService.GetAnnouncementsForFeed(inputModel.Complete, inputModel.ClassId, feedSettings);
 
+            var anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(feedSettings.FromDate, feedSettings.ToDate, inputModel.ClassId, inputModel.Complete, feedSettings.AnnouncementTypeEnum);
+            
             //hide hidden activities
             if (!inputModel.Settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();

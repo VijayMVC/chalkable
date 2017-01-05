@@ -39,6 +39,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool HasStandards { get; set; }
         public bool HasAttachments { get; set; }
 
+        public int? StandardId { get; set; }
+        public string StandardName { get; set; }
 
         protected ShortFeedExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, DateTime? fromReport, DateTime? toReport)
         {
@@ -50,7 +52,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         }
 
         protected ShortFeedExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, DateTime? fromReport, DateTime? toReport, ClassDetails c, IList<DayType> dayTypes, IList<Staff> teachers
-            , AnnouncementComplex announcement)
+            , AnnouncementComplex announcement, Standard standard)
             : this(person, schoolName, sy, nowSchoolTime, fromReport, toReport)
         {
             if (c != null)
@@ -119,6 +121,12 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 PersonLastName = adminLastName;
                 AdminId = announcement.AdminRef;
             }
+
+            if (standard != null)
+            {
+                StandardId = standard.Id;
+                StandardName = standard.Name;
+            }
         }
 
         protected string GetTypeName(AnnouncementComplex announcement)
@@ -160,25 +168,31 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public ShortFeedExportModel() { }
 
         public static IList<ShortFeedExportModel> Create(Person person, string schoolName, string sy, DateTime nowTime, DateTime? fromReport, DateTime? toReport
-            , IList<ClassDetails> classes, IList<Staff> staffs, IList<DayType> dayTypes, IList<AnnouncementComplex> announcements)
+            , IList<ClassDetails> classes, IList<Staff> staffs, IList<DayType> dayTypes, IList<AnnouncementDetails> announcements)
         {
             var res = new List<ShortFeedExportModel>(); 
+            
             foreach (var c in classes)
             {
                 var anns = announcements.Where(x => x.ClassRef == c.Id).ToList();
-                if (anns.Count == 0) continue;
-                anns = anns.OrderBy(x =>
+                var standards = anns.SelectMany(x => x.AnnouncementStandards.Select(s=>s.Standard)).Distinct().OrderBy(s=>s.Name).ToList();
+                foreach (var standard in standards)
                 {
-                    if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
-                    if (x.SupplementalAnnouncementData != null) return x.SupplementalAnnouncementData.Expires;
-                    return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
-                }).ToList();
-                res.AddRange(anns.Select(a=> new ShortFeedExportModel(person, schoolName, sy, nowTime, fromReport, toReport, c, dayTypes, staffs, a)).ToList());
+                    var annsWithStandard = anns.Where(x => x.AnnouncementStandards.Any(s => s.StandardRef == standard.Id)).ToList();
+                    if (annsWithStandard.Count == 0) continue;
+                    annsWithStandard = annsWithStandard.OrderBy(x =>
+                    {
+                        if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
+                        if (x.SupplementalAnnouncementData != null) return x.SupplementalAnnouncementData.Expires;
+                        return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
+                    }).ToList();
+                    res.AddRange(annsWithStandard.Select(a => new ShortFeedExportModel(person, schoolName, sy, nowTime, fromReport, toReport, c, dayTypes, staffs, a, standard)).ToList());
+                }
             }
             var adminAnns = announcements.Where(x => x.AdminAnnouncementData != null)
                                          .OrderBy(x=>x.AdminAnnouncementData.Expires)
                                          .ToList();
-            res.AddRange(adminAnns.Select(x => new ShortFeedExportModel(person, schoolName, sy, nowTime, fromReport, toReport, null, dayTypes, staffs, x)));            
+            res.AddRange(adminAnns.Select(x => new ShortFeedExportModel(person, schoolName, sy, nowTime, fromReport, toReport, null, dayTypes, staffs, x, null)));            
             return res;
         }
     }

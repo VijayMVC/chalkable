@@ -6,12 +6,12 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>8.5338in</Width>
+              <Width>8.51573in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.96527in</Height>
+              <Height>2.19791in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1198,8 +1198,8 @@
         <DataSetName>MainDataSet</DataSetName>
         <Top>0.15848in</Top>
         <Left>0.14042in</Left>
-        <Height>1.96527in</Height>
-        <Width>8.5338in</Width>
+        <Height>2.19791in</Height>
+        <Width>8.51573in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1207,13 +1207,13 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>2.19667in</Height>
+    <Height>2.42584in</Height>
     <Style />
   </Body>
-  <Width>8.80963in</Width>
+  <Width>8.84088in</Width>
   <Page>
     <PageFooter>
-      <Height>0.44443in</Height>
+      <Height>0.53818in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -1475,6 +1475,14 @@
         <Field Name="HasAttachments">
           <DataField>HasAttachments</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="StandardId">
+          <DataField>StandardId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="StandardName">
+          <DataField>StandardName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
