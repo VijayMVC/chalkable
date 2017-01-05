@@ -173,7 +173,7 @@ namespace Chalkable.Web.Controllers
         private const string PICTURE_CONTAINER_ADDRESS = "pictureconteiner";
         private AttachmentViewData UploadForSysAdmin(string filename, byte[] bin)
         {
-            var key = $"{Context.Role.LoweredName}_{DateTime.UtcNow.ToString("yyyyMMdd_hmmssff")}";
+            var key = $"{Context.Role.LoweredName}_{DateTime.UtcNow.ToString("yyyyMMdd_hhmmss")}_{Guid.NewGuid().ToString("N")}";
             SchoolLocator.StorageBlobService.AddBlob(PICTURE_CONTAINER_ADDRESS, key, bin);
             
             return AttachmentViewData.CreateForSysAdmin(filename, key);
