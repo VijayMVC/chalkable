@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Runtime.Remoting.Contexts;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Web;
+using Chalkable.Data.Common.Storage;
 
 namespace Chalkable.Web.Models
 {
@@ -57,6 +59,28 @@ namespace Chalkable.Web.Models
         public static AttachmentViewData Create(AttachmentInfo attachmentInfo, UserContext context)
         {
             return Create(attachmentInfo, context, context.PersonId == attachmentInfo.Attachment.PersonRef);
+        }
+
+        public static AttachmentViewData CreateForSysAdmin(string filename, string key)
+        {
+            var url = new BlobHelper().GetBlobsRelativeAddress("pictureconteiner", key);
+
+            return new AttachmentViewData
+            {
+                Id = -1,
+                IsOwner = true,
+                Name = filename,
+                Type = (int)MimeHelper.GetTypeByName(filename),
+                IsTeacherAttachment = false,
+                LastAttached = DateTime.UtcNow,
+                MimeType = MimeHelper.GetContentTypeByName(filename),
+                PublicUrl = url,
+                StiAttachment = false,
+                ThumbnailUrl = null,
+                Uploaded = DateTime.UtcNow,
+                Url = null,
+                Uuid = null              
+            };
         }
     }
 }

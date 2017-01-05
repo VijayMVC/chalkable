@@ -133,7 +133,7 @@ namespace Chalkable.Data.Common.Storage
                 var conteinerAddress = conteiner.Uri.ToString();
                 return conteinerAddress + "/" + BuildBlobAddress(containerName, key ?? "");
             }
-            throw new BlobNotFoundException(string.Format("Container {0} doesn't exists", containerName));
+            throw new BlobNotFoundException($"Container {containerName} doesn't exists");
         }
 
         private string blobAddressTpl = "{0}_blob_{1}";

@@ -169,9 +169,23 @@ namespace Chalkable.Web.Controllers
             return Json(UploadAttachment(fileName, bin));
         }
 
+
+        private const string PICTURE_CONTAINER_ADDRESS = "pictureconteiner";
+        private AttachmentViewData UploadForSysAdmin(string filename, byte[] bin)
+        {
+            var key = $"{Context.Role.LoweredName}_{DateTime.UtcNow.ToString("yyyyMMdd_hmmssff")}";
+            SchoolLocator.StorageBlobService.AddBlob(PICTURE_CONTAINER_ADDRESS, key, bin);
+            
+            return AttachmentViewData.CreateForSysAdmin(filename, key);
+        }
+
         private AttachmentViewData UploadAttachment(string fileName, byte[] bin)
         {
+            if (!Context.SchoolId.HasValue || !Context.DistrictId.HasValue)
+                return UploadForSysAdmin(fileName, bin);
+
             Trace.Assert(Context.PersonId.HasValue);
+
             var attachment = SchoolLocator.AttachementService.Upload(fileName, bin);
             var res = SchoolLocator.AttachementService.TransformToAttachmentInfo(attachment, new List<int> { Context.PersonId.Value });
             return AttachmentViewData.Create(res, Context, true);
