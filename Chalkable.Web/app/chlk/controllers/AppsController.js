@@ -609,7 +609,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcementAppId_,
                         appData
                     );
-                    return new chlk.models.apps.AppWrapperViewData(app, mode);
+                    return new chlk.models.apps.AppWrapperViewData(app, mode, null, isAssessment_);
                 }, this);
 
 

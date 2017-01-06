@@ -19,7 +19,7 @@ class TestActivitiesSupplementalsLessonPlansMarkDoneAllItems(BaseTestCase):
 
             return dictionary_verify_annoucementviewdatas_all
 
-        # filter: activities,supplementals, lesson plans
+        # filter: activities, supplementals, lesson plans
         self.teacher.post_json('/Feed/SetSettings.json?', data={'announcementType': str(announcementType), 'sortType': '0'})
 
         # mark done "All Items"

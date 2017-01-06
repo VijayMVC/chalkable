@@ -42,9 +42,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         protected ShortFeedExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, DateTime? fromReport, DateTime? toReport)
         {
-            PersonId = person.Id;
-            PersonFirstName = person.FirstName;
-            PersonLastName = person.LastName;
             SchoolName = schoolName;
             SchoolYear = sy;
             ExecutionDateTime = nowSchoolTime;
@@ -62,13 +59,17 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 ClassName = c.Name;
                 ClassNumber = c.ClassNumber;
                 if (c.PrimaryTeacherRef.HasValue)
+                {
+                    PersonFirstName = c.PrimaryTeacher.FirstName;
+                    PersonLastName = c.PrimaryTeacher.LastName;
                     Owners = BuildTeachersNames(c.PrimaryTeacherRef.Value, c.ClassTeachers, teachers);
-
+                }
                 DayTypes = dayTypes.Where(x => c.ClassPeriods.Any(y => y.DayTypeRef == x.Id))
                                             .Select(x => x.Name.ToString())
                                             .Distinct()
                                             .JoinString(",");
-                Periods = c.ClassPeriods.Select(x => x.Period.Order.ToString()).Distinct().JoinString(",");
+
+                Periods = c.ClassPeriods.Select(x => x.Period.Name).Distinct().JoinString(",");
             }
             AnnouncementId = announcement.Id;
             AnnouncementName = announcement.Title;
@@ -114,6 +115,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 EndDate = adminAnn.Expires;
                 IsAdminAnnouncement = true;
                 Owners =  NameHelper.FullName(adminFirstName ?? "", adminLastName ?? "", "", false, adminAnn.AdminGender);
+                PersonFirstName = adminLastName;
+                PersonLastName = adminLastName;
                 AdminId = announcement.AdminRef;
             }
         }

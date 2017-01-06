@@ -24,7 +24,7 @@ class TestFilterByEarliestLatest(BaseTestCase):
         self.admin.post_json('/Feed/SetSettings.json?', data={'sortType': sortType})
 
         def get_item_date(one_item):
-            return one_item['adminannouncementdata']['expiresdate']
+            return datetime.date(datetime.strptime(one_item['adminannouncementdata']['expiresdate'], '%Y-%m-%d'))
 
         def get_item_id(one_item):
             return one_item['id']
