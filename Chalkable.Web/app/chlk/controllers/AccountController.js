@@ -102,17 +102,6 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        // [chlk.controllers.AccessForRoles([
-        //     chlk.models.common.RoleEnum.APPTESTER
-        // ])],
-        // [chlk.controllers.SidebarButton('settings')],
-        // function profileAppTesterAction(){
-        //     var withOldPassword =  this.getContext().getSession().get(ChlkSessionConstants.REDIRECT_URL) == '' ? true : false;
-        //     var model = new chlk.models.account.ChangePassword("old", "new", "new", withOldPassword);
-        //     return this.PushView(chlk.activities.profile.AppTesterPage, ria.async.DeferredData(model));
-        // },
-
-
         [chlk.controllers.SidebarButton('settings')],
         function resetPasswordAction(){
             var withOldPassword =  this.getContext().getSession().get(ChlkSessionConstants.REDIRECT_URL) == '' ? true : false;

@@ -15,7 +15,8 @@ namespace Chalkable.Data.Master.Model
         public const string SIS_USER_NAME_FIELD = "SisUserName";
         public const string SIS_USER_ID_FIELD = "SisUserId";
         public const string FULL_NAME_FIELD = "FullName";
-        
+        public const string IS_ASSESSMENT_ADMIN = "AssessmentAdmin";
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Login { get; set; }
@@ -33,6 +34,7 @@ namespace Chalkable.Data.Master.Model
 
         public bool IsAppTester { get; set; }
         public bool IsDistrictRegistrator { get; set; }
+        public bool IsAssessmentAdmin { get; set; }
         public string ConfirmationKey { get; set; }
         public string SisUserName { get; set; }
         public int? SisUserId { get; set; }

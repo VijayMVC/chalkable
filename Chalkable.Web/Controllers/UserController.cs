@@ -166,6 +166,8 @@ namespace Chalkable.Web.Controllers
                 return Redirect<HomeController>(x => x.Developer(null, true));
             if (context.Role == CoreRoles.APP_TESTER_ROLE)
                 return Redirect<HomeController>(x => x.AppTester(true));
+            if (context.Role == CoreRoles.ASSESSMENT_ADMIN_ROLE)
+                return Redirect<HomeController>(x => x.AssessmentAdmin(true));
             return Redirect<HomeController>(c => c.Index());
         }
 

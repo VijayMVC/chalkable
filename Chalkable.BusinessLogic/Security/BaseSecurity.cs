@@ -118,7 +118,12 @@ namespace Chalkable.BusinessLogic.Security
         {
             return context.Role == CoreRoles.APP_TESTER_ROLE;
         }
-        
+
+        public static bool IsAssessmentAdmin(UserContext context)
+        {
+            return context.Role == CoreRoles.ASSESSMENT_ADMIN_ROLE;
+        }
+
         public static void EnsureStudyCenterEnabled(UserContext context)
         {
             if(!context.SCEnabled)

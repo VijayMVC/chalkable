@@ -394,6 +394,7 @@
     <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationSchoolOptionViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
+    <Compile Include="Models\AssessmentAdminViewData.cs" />
     <Compile Include="Models\AttachmentViewData.cs" />
     <Compile Include="Models\AttachSettingsViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
@@ -757,6 +758,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\Reporting\ReportCards.cshtml" />
+    <Content Include="Views\Home\AssessmentAdmin.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

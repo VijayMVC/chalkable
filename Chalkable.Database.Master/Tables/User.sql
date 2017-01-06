@@ -11,6 +11,7 @@
     [FullName]              NVARCHAR (1024)  NULL,
     [IsAppTester]           BIT              NOT NULL,
     [IsDistrictRegistrator] BIT              NOT NULL,
+	[IsAssessmentAdmin]		BIT              NOT NULL DEFAULT (0),
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_User_District] FOREIGN KEY ([DistrictRef]) REFERENCES [dbo].[District] ([Id]),
     CONSTRAINT [UQ_Login] UNIQUE NONCLUSTERED ([Login] ASC)
@@ -48,10 +49,7 @@ as
 			Select * From SchoolUser 
 			join deleted on deleted.SisUserId = SchoolUser.UserRef and deleted.DistrictRef = SchoolUser.DistrictRef
 		)
-	Begin
-		Throw 51001, 'User can not be deleted. SchoolUser has record with such SisUserId and DistrictRef', 1
-	End
-
+		Throw 51001, 'User can not be deleted. SchoolUser has record with such SisUserId and DistrictRef', 1;
 GO
 
 CREATE Trigger [dbo].[UserLogTrigger]

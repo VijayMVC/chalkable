@@ -8,6 +8,6 @@ namespace Chalkable.Web.Common
         public const string SCHEDULE_URL_FORMAT = "schools/schedule/{0}";
         public const string ATTENDANCE_CLASS_LIST_URL_FORMAT = "attendances/class-list/{0}";
         public const string DEV_RESET_PASSWORD_URL = "settings/dashboard";
-        public const string SYSADMIN_AND_APPTESTER_RESET_PASSWORD_URL = "account/resetPassword";
+        public const string RESET_PASSWORD_URL = "account/resetPassword";
     }
 }
