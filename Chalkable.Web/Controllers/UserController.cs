@@ -177,7 +177,7 @@ namespace Chalkable.Web.Controllers
             {
                 InitServiceLocators(context);
                 MasterLocator.UserTrackingService.UserLoggedInForFirstTime(context.Login, "", "", Context.DistrictId.ToString(), 
-                        DateTime.UtcNow.ConvertFromUtc(Context.DistrictTimeZone), Context.DistrictTimeZone, Context.Role.Name, Context.SCEnabled);
+                        Context.NowSchoolTime, Context.DistrictTimeZone ?? "UTC", Context.Role.Name, Context.SCEnabled);
                 return redirectAction(context);
             }
             return Redirect<HomeController>(c => c.Index());
