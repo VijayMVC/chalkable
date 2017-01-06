@@ -40,6 +40,7 @@ NAMESPACE('chlk.models.developer', function () {
             String, 'name',
             chlk.models.id.SchoolId, 'schoolId',
             String, 'webSite',
-            String, 'payPalAddress'
+            String, 'payPalAddress',
+            Boolean, "withOldPassword"
         ]);
 });

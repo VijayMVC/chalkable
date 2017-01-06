@@ -6,7 +6,6 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.account.ChangePassword');
 
-
 NAMESPACE('chlk.controllers', function (){
 
     /** @class chlk.controllers.AccountController*/
@@ -29,7 +28,14 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.account.ChangePassword]],
         function changePasswordAction(model){
             this.accountService
-                .changePassword(model.getOldPassword(), model.getNewPassword(), model.getNewPasswordConfirmation())
+                .changePassword(model.getOldPassword(), model.getNewPassword(), model.getNewPasswordConfirmation(), model.isWithOldPassword())
+                .catchException(chlk.lib.exception.ChalkableException, function(ex){
+                    return this.ShowMsgBox(ex.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                        .then(function(){
+                            this.BackgroundNavigate('settings', 'dashboard', []);
+                        }, this)
+                        .thenBreak();
+                }, this)
                 .attach(this.validateResponse_())
                 .then(function(success){
                     return success
@@ -60,8 +66,13 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [chlk.controllers.SidebarButton('settings')],
          function profileDeveloperAction(){
+             var withOldPassword =  this.getContext().getSession().get(ChlkSessionConstants.REDIRECT_URL) == '' ? true : false;
              var result = this.developerService
                  .getInfo(this.developerService.getCurrentDeveloperSync().getId())
+                 .then(function (res) {
+                    res.setWithOldPassword(withOldPassword);
+                    return res;
+                 })
                  .attach(this.validateResponse_());
              return this.PushView(chlk.activities.profile.DeveloperPage, result);
          },
@@ -89,7 +100,24 @@ NAMESPACE('chlk.controllers', function (){
                     return this.BackgroundNavigate('settings', 'dashboard', []);
                 }, this);
             return null;
-        }
+        },
 
+        // [chlk.controllers.AccessForRoles([
+        //     chlk.models.common.RoleEnum.APPTESTER
+        // ])],
+        // [chlk.controllers.SidebarButton('settings')],
+        // function profileAppTesterAction(){
+        //     var withOldPassword =  this.getContext().getSession().get(ChlkSessionConstants.REDIRECT_URL) == '' ? true : false;
+        //     var model = new chlk.models.account.ChangePassword("old", "new", "new", withOldPassword);
+        //     return this.PushView(chlk.activities.profile.AppTesterPage, ria.async.DeferredData(model));
+        // },
+
+
+        [chlk.controllers.SidebarButton('settings')],
+        function resetPasswordAction(){
+            var withOldPassword =  this.getContext().getSession().get(ChlkSessionConstants.REDIRECT_URL) == '' ? true : false;
+            var model = new chlk.models.account.ChangePassword("old", "new", "new", withOldPassword);
+            return this.PushView(chlk.activities.settings.ChangePasswordPage, ria.async.DeferredData(model));
+        }
     ])
 });

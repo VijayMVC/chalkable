@@ -23,4 +23,4 @@
                 +Button().special-button.blue-button Save
 
     .info
-        +RenderWith(chlk.models.account.ChangePassword(), chlk.templates.settings.ChangePasswordTpl)
+        +RenderWith(chlk.models.account.ChangePassword("", "", "", self.isWithOldPassword()), chlk.templates.settings.ChangePasswordTpl)

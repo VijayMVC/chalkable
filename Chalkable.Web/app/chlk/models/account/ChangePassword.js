@@ -5,6 +5,15 @@ NAMESPACE('chlk.models.account', function () {
         'ChangePassword', [
             String, 'oldPassword',
             String, 'newPassword',
-            String, 'newPasswordConfirmation'
+            String, 'newPasswordConfirmation',
+            Boolean, "withOldPassword",
+
+            function $(oldPassword_, newPassword_, newPasswordConfirmation_, withOldPassword_){
+                BASE();
+                oldPassword_ && this.setOldPassword(oldPassword_);
+                newPassword_ && this.setNewPassword(newPassword_);
+                newPasswordConfirmation_ && this.setNewPasswordConfirmation(newPasswordConfirmation_);
+                withOldPassword_ && this.setWithOldPassword(withOldPassword_);
+            }
         ]);
 });

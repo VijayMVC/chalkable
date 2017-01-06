@@ -389,6 +389,23 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('settings')],
             function dashboardDeveloperAction() {
                return this.Redirect('account', 'profile')
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.APPTESTER
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            function dashboardAppTesterAction() {
+                var dashboard = new chlk.models.settings.Dashboard();
+                dashboard.setDbMaintenanceVisible(false);
+                dashboard.setBackgroundTaskMonitorVisible(false);
+                dashboard.setStorageMonitorVisible(false);
+                dashboard.setPreferencesVisible(false);
+                dashboard.setAppCategoriesVisible(false);
+                dashboard.setDepartmentsVisible(false);
+                dashboard.setUpgradeSchoolsVisible(false);
+                dashboard.setCustomReportTemplatesVisible(false);
+                return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
             }
         ])
 });
