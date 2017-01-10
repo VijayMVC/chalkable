@@ -67,7 +67,6 @@ namespace Chalkable.Web.Controllers
             return Json(ItemGradigStatViewData.Create(studentAnns, ann.MaxScore, announcementId));
         }
 
-
         [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public async Task<ActionResult> ClassSummaryGrids(int classId)
         {
@@ -98,7 +97,19 @@ namespace Chalkable.Web.Controllers
             var gradeBookTask = SchoolLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod, standardId, classAnnouncementTypeId, !(notCalculateGrid ?? false));
             return Json(GradingGridViewData.Create(await gradeBookTask, Context.Claims));
         }
-        
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public async Task<ActionResult> StudentClassGradingByStandard(int classId, int gradingPeriodId, int standardId, int studentId)
+        {
+            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            var gradeBookTask = SchoolLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod, standardId, null, false);
+            //TODO: get lessonPlans and supplamentals 
+            var gradeBook = await gradeBookTask;
+            var stAnns = gradeBook.Announcements.SelectMany(x => x.StudentAnnouncements)
+                    .Where(x => x.StudentId == studentId).ToList();
+            return Json(AnnouncementViewData.Create(gradeBook.Announcements, stAnns));
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult GetGridComments(int schoolYearId)
         {

@@ -114,22 +114,31 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return new AnnouncementViewData(announcement, claims);
         }
 
-        public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements, IList<ClaimInfo> claims)
+        public static IList<AnnouncementViewData> Create(IEnumerable<AnnouncementComplex> announcements, IList<ClaimInfo> claims)
         {
             return announcements.Select(x => Create(x, claims)).ToList();
         }
 
-        public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements
+        public static IList<AnnouncementViewData> Create(IEnumerable<AnnouncementComplex> announcements, IEnumerable<StudentAnnouncement> studentAnnouncements)
+        {
+            return Create(announcements, new List<AnnouncementApplication>(), new List<Application>(), new List<ClaimInfo>(), studentAnnouncements);
+        }
+
+        public static IList<AnnouncementViewData> Create(IEnumerable<AnnouncementComplex> announcements
             , IList<AnnouncementApplication> annApps, IList<Application> applications
-            , IList<ClaimInfo> claims, IList<StudentAnnouncement> studentAnnouncements)
+            , IList<ClaimInfo> claims, IEnumerable<StudentAnnouncement> studentAnnouncements)
         {
             var res = new List<AnnouncementViewData>();
+            var stAnns = studentAnnouncements.ToList();
             foreach (var ann in announcements)
             {
                 var app = applications.FirstOrDefault(a=> annApps.Any(annApp=>annApp.ApplicationRef == a.Id && annApp.AnnouncementRef == ann.Id));
                 var appName = app?.Name;
-                var annView = new AnnouncementViewData(ann, studentAnnouncements.Where(x => x.AnnouncementId == ann.Id).ToList(), claims);
-                annView.ApplicationName = appName;
+                var annView = new AnnouncementViewData(ann,
+                    stAnns.Where(x => x.AnnouncementId == ann.Id).ToList(), claims)
+                {
+                    ApplicationName = appName
+                };
                 if (string.IsNullOrEmpty(appName))
                     annView.ApplicationsCount = 0;
                 res.Add(annView);
