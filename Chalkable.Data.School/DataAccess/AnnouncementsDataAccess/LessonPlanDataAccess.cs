@@ -137,7 +137,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return ReadMany<LessonPlan>(dbQuery);
         }
 
-        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? lpGalleryCategoryId, int callerId, int? studentId, int? teacherId, bool filterByStartDate = true)
+        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? lpGalleryCategoryId, int callerId, int? studentId, int? teacherId, bool filterByStartDate = true, int? standardId= null)
         {
             //TODO: move this to the stored procedure later 
 
@@ -151,7 +151,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 conds.Add(LessonPlan.START_DATE_FIELD, "toDate", toDate, ConditionRelation.LessEqual);
             
             if(filterByStartDate)
-                conds.Add(LessonPlan.START_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
+                conds.Add(LessonPlan.START_DATE_FIELD, "fromDate2", fromDate, ConditionRelation.GreaterEqual);
             
             //if classId was set there is no need to filter by schoolYear ... possible case when class is no in the current schoolYear.
             if (classId.HasValue)
@@ -169,10 +169,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             {
                 dbQuery.Sql.Append($" and exists(select * from ClassPerson where PersonRef = {studentId} and ClassPerson.ClassRef = {LessonPlan.VW_LESSON_PLAN_NAME}.ClassRef)");
             }
-
             if (teacherId.HasValue)
             {
                 dbQuery.Sql.Append($" and exists(select * from ClassTeacher where PersonRef = {teacherId} and ClassTeacher.ClassRef = {LessonPlan.VW_LESSON_PLAN_NAME}.ClassRef)");
+            }
+            if (standardId.HasValue)
+            {
+                dbQuery.Sql.Append($" and exists(select * from AnnouncementStandard where StandardRef = {standardId.Value} and AnnouncementRef = {LessonPlan.VW_LESSON_PLAN_NAME}.Id)");
             }
             return ReadMany<LessonPlan>(dbQuery);
         }
