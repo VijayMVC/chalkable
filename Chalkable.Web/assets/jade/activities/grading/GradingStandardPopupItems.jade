@@ -1,0 +1,12 @@
+.items-cnt2
+    TABLE
+        TR
+            TH Date
+            TH Activity
+            TH Grade
+        each item in self.getItems() || []
+            TR
+                TD=self.getDateStr(item)
+                TD
+                    .text-cnt(data-tooltip=item.title, data-tooltip-type="overflow")=item.title
+                TD=item.grade
