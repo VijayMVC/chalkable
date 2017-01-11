@@ -21,7 +21,7 @@ NAMESPACE('chlk.templates.grading', function () {
                 if(item.type == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN.valueOf()){
                     var startDate = getDate(item.lessonplandata.startdate),
                         endDate = getDate(item.lessonplandata.enddate);
-                    return startDate && endDate && (startDate.format('m/d/Y') + ' - ' + endDate.format('m/d/Y'));
+                    return startDate && endDate && (startDate.format('m/d/Y') + '<br/> - ' + endDate.format('m/d/Y'));
                 }
 
                 var date = getDate(item.classannouncementdata ? item.classannouncementdata.expiresdate : item.supplementalannouncementdata);

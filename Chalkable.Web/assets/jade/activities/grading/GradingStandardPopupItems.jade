@@ -6,7 +6,14 @@
             TH Grade
         each item in self.getItems() || []
             TR
-                TD=self.getDateStr(item)
+                TD!=self.getDateStr(item)
                 TD
                     .text-cnt(data-tooltip=item.title, data-tooltip-type="overflow")=item.title
-                TD=item.grade
+                if item.type == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN.valueOf()
+                    TD.lesson-plan
+                        .icon
+                if item.type == chlk.models.announcement.AnnouncementTypeEnum.SUPPLEMENTAL_ANNOUNCEMENT.valueOf()
+                    TD.supplemental
+                        .icon
+                if item.type == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT.valueOf()
+                    TD=item.grade
