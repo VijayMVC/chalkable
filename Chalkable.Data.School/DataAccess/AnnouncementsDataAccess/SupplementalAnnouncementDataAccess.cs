@@ -76,7 +76,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public AnnouncementQueryResult GetSupplementalAnnouncementOrderedByDate(SupplementalAnnouncementQuery query)
         {
-            return InternalGetAnnouncements("spGetSupplementalAnnouncementsOrderedByDate", query, null);
+            var ps = new Dictionary<string, object>
+            {
+                ["standardId"] = query.StandardId
+            };
+            return InternalGetAnnouncements("spGetSupplementalAnnouncementsOrderedByDate", query, ps);
         }
         public AnnouncementQueryResult GetSupplementalAnnouncementOrderedByTitle(SupplementalAnnouncementQuery query)
         {
@@ -95,6 +99,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 ["toClassName"] = query.ToClassName
             };
             return InternalGetAnnouncements("spGetSupplementalAnnouncementsOrderedByClassName", query, ps);
+        }
+
+        public AnnouncementQueryResult GetSupplementalAnnouncements(SupplementalAnnouncementQuery query)
+        {
+            var ps = new Dictionary<string, object>
+            {
+                ["standardId"] = query.StandardId,
+            };
+            return InternalGetAnnouncements("spGetSupplementalAnnouncements", query, ps);
         }
 
         protected virtual AnnouncementQueryResult InternalGetAnnouncements(string procedureName, SupplementalAnnouncementQuery query, IDictionary<string, object> additionalParams)
@@ -321,5 +334,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public int? ClassId { get; set; }
         public string FromClassName { get; set; }
         public string ToClassName { get; set; }
+        public int? StandardId { get; set; }
     }
 }

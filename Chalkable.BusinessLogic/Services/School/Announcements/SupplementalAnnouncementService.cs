@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<AnnouncementComplex> GetSupplementalAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetSupplementalAnnouncementSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
-        IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
+        IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId, int? standardId);
         bool Exists(string title, int? excludeSupplementalAnnouncementId);
         SupplementalAnnouncement GetLastDraft();
     }
@@ -370,7 +370,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }, (da, q)=> da.GetSupplementalAnnouncementOrderedByClassName(q), ownedOnly);
         }
 
-        public IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId)
+        public IList<SupplementalAnnouncement> GetSupplementalAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId, int? standardId)
         {
             return GetSupplementalAnnouncements(new SupplementalAnnouncementQuery
             {
@@ -383,7 +383,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 IncludeTo = true,
                 Sort = false,
                 TeacherId = teacherId,
-                StudentId = studentId
+                StudentId = studentId,
+                StandardId = standardId
             }, (da, q) => da.GetSupplementalAnnouncementOrderedByDate(q))
             .Select(x=>x.SupplementalAnnouncementData).ToList();
         }
