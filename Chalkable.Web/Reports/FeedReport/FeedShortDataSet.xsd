@@ -32,6 +32,7 @@
       <xs:element minOccurs="1" maxOccurs="1" name="HasAttachments" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="StandardId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="StandardName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="StandardNumber" nillable="true" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

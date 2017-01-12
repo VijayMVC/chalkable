@@ -41,6 +41,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         public int? StandardId { get; set; }
         public string StandardName { get; set; }
+        public int? StandardNumber { get; set; }
 
         protected ShortFeedExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, DateTime? fromReport, DateTime? toReport)
         {
@@ -52,7 +53,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         }
 
         protected ShortFeedExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, DateTime? fromReport, DateTime? toReport, ClassDetails c, IList<DayType> dayTypes, IList<Staff> teachers
-            , AnnouncementComplex announcement, Standard standard)
+            , AnnouncementComplex announcement, Standard standard, int? standardNumber = null)
             : this(person, schoolName, sy, nowSchoolTime, fromReport, toReport)
         {
             if (c != null)
@@ -126,6 +127,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
             {
                 StandardId = standard.Id;
                 StandardName = standard.Name;
+                StandardNumber = standardNumber;
             }
         }
 
@@ -168,31 +170,51 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public ShortFeedExportModel() { }
 
         public static IList<ShortFeedExportModel> Create(Person person, string schoolName, string sy, DateTime nowTime, DateTime? fromReport, DateTime? toReport
-            , IList<ClassDetails> classes, IList<Staff> staffs, IList<DayType> dayTypes, IList<AnnouncementDetails> announcements)
+            , IList<ClassDetails> classes, IList<Staff> staffs, IList<DayType> dayTypes, IList<AnnouncementDetails> announcements, bool groupByStandards)
         {
             var res = new List<ShortFeedExportModel>(); 
             
             foreach (var c in classes)
             {
                 var anns = announcements.Where(x => x.ClassRef == c.Id).ToList();
-                var standards = anns.SelectMany(x => x.AnnouncementStandards.Select(s=>s.Standard)).Distinct().OrderBy(s=>s.Name).ToList();
-                foreach (var standard in standards)
+                if (groupByStandards)
                 {
-                    var annsWithStandard = anns.Where(x => x.AnnouncementStandards.Any(s => s.StandardRef == standard.Id)).ToList();
-                    if (annsWithStandard.Count == 0) continue;
-                    annsWithStandard = annsWithStandard.OrderBy(x =>
+                    var standards = anns.SelectMany(x => x.AnnouncementStandards.Select(s => s.Standard)).Distinct().OrderBy(s => s.Name).ToList();
+                    var standrdNumber = 1;
+                    foreach (var standard in standards)
                     {
-                        if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
-                        if (x.SupplementalAnnouncementData != null) return x.SupplementalAnnouncementData.Expires;
-                        return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
-                    }).ToList();
-                    res.AddRange(annsWithStandard.Select(a => new ShortFeedExportModel(person, schoolName, sy, nowTime, fromReport, toReport, c, dayTypes, staffs, a, standard)).ToList());
+                        var annsWithStandard = anns.Where(x => x.AnnouncementStandards.Any(s => s.StandardRef == standard.Id)).ToList();
+                        res.AddRange(BuildClassItems(person, schoolName, sy, nowTime, fromReport, toReport, c, dayTypes, staffs, annsWithStandard, standard, standrdNumber));
+                        standrdNumber++;
+                    }
+                    var annsWithNoStandards = anns.Where(x => x.AnnouncementStandards.Count == 0).ToList();
+                    var emptyStandard = new Standard {Id = -1};
+                    res.AddRange(BuildClassItems(person, schoolName, sy, nowTime, fromReport, toReport, c, dayTypes, staffs, annsWithNoStandards, emptyStandard, standrdNumber));
                 }
+                else res.AddRange(BuildClassItems(person, schoolName, sy, nowTime, fromReport, toReport, c, dayTypes, staffs, anns, null));
             }
             var adminAnns = announcements.Where(x => x.AdminAnnouncementData != null)
                                          .OrderBy(x=>x.AdminAnnouncementData.Expires)
                                          .ToList();
-            res.AddRange(adminAnns.Select(x => new ShortFeedExportModel(person, schoolName, sy, nowTime, fromReport, toReport, null, dayTypes, staffs, x, null)));            
+            res.AddRange(adminAnns.Select(x => new ShortFeedExportModel(person, schoolName, sy, nowTime, fromReport, toReport, null, dayTypes, staffs, x, null)));     
+            
+            return res;
+        }
+
+        private static IList<ShortFeedExportModel> BuildClassItems(Person person, string schoolName, string sy, DateTime nowTime,
+            DateTime? fromReport, DateTime? toReport, ClassDetails @class,  IList<DayType> dayTypes, IList<Staff> staffs,
+            IList<AnnouncementDetails> announcements, Standard standard, int? standardNumber = null)
+        {
+            var res = new List<ShortFeedExportModel>();
+            if (announcements.Count == 0)
+                return res;
+            announcements = announcements.OrderBy(x =>
+            {
+                if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
+                if (x.SupplementalAnnouncementData != null) return x.SupplementalAnnouncementData.Expires;
+                return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
+            }).ToList();
+            res.AddRange(announcements.Select(a => new ShortFeedExportModel(person, schoolName, sy, nowTime, fromReport, toReport, @class, dayTypes, staffs, a, standard, standardNumber)).ToList());
             return res;
         }
     }
