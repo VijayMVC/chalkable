@@ -947,7 +947,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('assessment')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN,
-            chlk.models.common.RoleEnum.APPTESTER
+            chlk.models.common.RoleEnum.APPTESTER,
+            chlk.models.common.RoleEnum.ASSESSMENTADMIN
         ])],
         [[String]],
         function assessmentSettingsAction(appUrlAppend_) {

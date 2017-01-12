@@ -59,7 +59,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult AppTester(bool? isPwdReset)
         {
             if (isPwdReset.HasValue && isPwdReset.Value)
-                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.SYSADMIN_AND_APPTESTER_RESET_PASSWORD_URL;
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.RESET_PASSWORD_URL;
 
             var appTester = MasterLocator.UserService.GetById(Context.UserId);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
@@ -71,6 +71,25 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifySysAdmin(appTester.Login, "", "", null, ip);
+            return View();
+        }
+
+        //[AuthorizationFilter("AssessmentAdmin")]
+        public ActionResult AssessmentAdmin(bool? isPwdReset)
+        {
+            if (isPwdReset.HasValue && isPwdReset.Value)
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.RESET_PASSWORD_URL;
+
+            var assessmentAdmin = MasterLocator.UserService.GetById(Context.UserId);
+            ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
+            PrepareJsonData(AssessmentAdminViewData.Create(assessmentAdmin), ViewConstants.CURRENT_PERSON);
+            var serverTime = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
+            ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
+            ViewData[ViewConstants.SERVER_TIME] = serverTime;
+            ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MasterLocator.UserTrackingService.IdentifySysAdmin(assessmentAdmin.Login, "", "", null, ip);
             return View();
         }
 
@@ -86,7 +105,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult SysAdmin(bool? isPwdReset)
         {
             if (isPwdReset.HasValue && isPwdReset.Value)
-                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.SYSADMIN_AND_APPTESTER_RESET_PASSWORD_URL;
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.RESET_PASSWORD_URL;
 
             var sysUser = MasterLocator.UserService.GetById(Context.UserId);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();

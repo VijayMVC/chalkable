@@ -29,6 +29,7 @@ namespace Chalkable.Common
         public static CoreRole DISTRICT_ADMIN_ROLE = new CoreRole(10, "DistrictAdmin", "DistrictAdmin");
         public static CoreRole APP_TESTER_ROLE = new CoreRole(11, "AppTester", "Application Tester");
         public static CoreRole DISTRICT_REGISTRATOR_ROLE = new CoreRole(12, "DistrictRegistrator", "District Registrator");
+        public static CoreRole ASSESSMENT_ADMIN_ROLE = new CoreRole(13, "AssessmentAdmin", "Assessment Admin");
 
         private static Dictionary<string, CoreRole> roles = new Dictionary<string, CoreRole>
                                                                  {
@@ -40,7 +41,8 @@ namespace Chalkable.Common
                                                                      {DEVELOPER_ROLE.LoweredName, DEVELOPER_ROLE},
                                                                      {APP_TESTER_ROLE.LoweredName, APP_TESTER_ROLE},
                                                                      {DISTRICT_ADMIN_ROLE.LoweredName, DISTRICT_ADMIN_ROLE},
-                                                                     {DISTRICT_REGISTRATOR_ROLE.LoweredName, DISTRICT_REGISTRATOR_ROLE}
+                                                                     {DISTRICT_REGISTRATOR_ROLE.LoweredName, DISTRICT_REGISTRATOR_ROLE},
+                                                                     {ASSESSMENT_ADMIN_ROLE.LoweredName, ASSESSMENT_ADMIN_ROLE}
                                                                 };
 
         public static CoreRole GetByName(string name)

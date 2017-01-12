@@ -13,7 +13,7 @@
     <StartDevelopmentStorage>False</StartDevelopmentStorage>
     <Name>Chalkable.Azure</Name>
     <UseEmulatorExpressByDefault>False</UseEmulatorExpressByDefault>
-    <UseWebProjectPorts>False</UseWebProjectPorts>
+    <UseWebProjectPorts>True</UseWebProjectPorts>
     <PackageEnableRemoteDebugger>False</PackageEnableRemoteDebugger>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
