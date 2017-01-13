@@ -36,6 +36,9 @@ NAMESPACE('chlk.templates.reports', function () {
             Boolean, 'includeHiddenAttributes',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'groupByStandards',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'editableLPOption',
 
             [ria.templates.ModelPropertyBind],

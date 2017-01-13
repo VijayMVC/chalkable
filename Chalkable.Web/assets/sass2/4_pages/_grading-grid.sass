@@ -424,3 +424,51 @@
 
   .highcharts-container::before
     left: 24px
+
+.student-standard-popup
+  .popup-bubble
+    padding: 0
+
+    &::before
+      left: 50%
+      margin-left: -8px
+
+    TABLE
+      border-collapse: collapse
+
+      th
+        border-bottom: 1px solid #bbb
+
+      th, td
+        padding: 5px 10px
+
+        &:not(:last-child)
+          border-right: 1px solid #bbb
+
+      .icon
+        width: 24px
+        height: 24px
+        opacity: 0.21
+
+      .lesson-plan
+        .icon
+          +icons-24-sprite(lessonplan)
+
+      .supplemental
+        .icon
+          +icons-24-sprite(supplemental)
+
+  .items-cnt
+    width: 300px
+    min-height: 100px
+    max-height: 300px
+    overflow: auto
+    padding-right: 20px
+
+    &:not(.processed)
+      background: image-url("images2/loaders/circular-grey.gif") 50% 50% no-repeat
+
+    .text-cnt
+      width: 130px
+      overflow: hidden
+      text-overflow: ellipsis

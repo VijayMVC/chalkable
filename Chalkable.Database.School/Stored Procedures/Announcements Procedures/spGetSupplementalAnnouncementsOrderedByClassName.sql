@@ -40,7 +40,8 @@ insert into @tempSA
 		@ownedOnly, 
 		@fromDate, 
 		@toDate, 
-		@complete
+		@complete,
+		null
 
 declare 
 	@FILTER_BY_CLASS_NAME int = 2,

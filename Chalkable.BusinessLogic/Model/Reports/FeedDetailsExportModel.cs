@@ -22,8 +22,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public int? StudentId { get; set; }
         public string StudentDisplayName { get; set; }
 
-        public int? StandardId { get; set; }
-        public string StandardName { get; set; }
+        //public int? StandardId { get; set; }
+        //public string StandardName { get; set; }
         public string StandardDescription { get; set; }
         public int StudentOrder { get; set; }
 
@@ -53,7 +53,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         protected FeedDetailsExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, DateTime? startRange, DateTime? endRange, AnnouncementDetails ann
             , ClassDetails classDetails, IList<DayType> dayTypes, IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, Person student, int studentOrder)
-            : base(person, schoolName, sy, nowSchoolTime, startRange, endRange, classDetails, dayTypes, staffs, ann)
+            : base(person, schoolName, sy, nowSchoolTime, startRange, endRange, classDetails, dayTypes, staffs, ann, standard)
         {
             AnnouncementDescription = ann.Content;
             HasAttributes = ann.AnnouncementAttributes.Count > 0;

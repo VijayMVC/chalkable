@@ -1176,6 +1176,20 @@ NAMESPACE('chlk.controllers', function (){
                 return this.updateStudentAvgFromModel(model);
             },
 
+            [chlk.controllers.NotChangedSidebarButton()],
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId, chlk.models.id.SchoolPersonId]],
+            function standardPopupAction(classId, gradingPeriodId, standardId, studentId){
+                var result = this.gradingService
+                    .getStudentClassGradingByStandard(classId, gradingPeriodId, standardId, studentId)
+                    .attach(this.validateResponse_())
+                    .then(function(items){
+                        var model = new chlk.models.grading.StandardsPopupViewData(studentId, standardId, items);
+                        this.BackgroundUpdateView(chlk.activities.grading.GradingClassStandardsGridPage, model, 'popup-items');
+                    }, this);
+
+                return null;
+            },
+
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate){
                 var res = this.calendarService.listClassAnnsByDateRange(startDate, endDate, classId)
