@@ -1,0 +1,123 @@
+.base-attachment-dialog
+  .x-close-btn
+    margin-top: -24px
+
+  .toolbar
+    position: absolute
+    top: -40px
+
+    &.right-toolbar
+      right: 25px
+      text-align: right
+
+    &:not(.right-toolbar)
+      left: 0
+
+    >DIV, >A
+      display: inline-block
+      padding: 11px 15px 12px 11px
+      background: #4387fd
+      color: white
+      font: bold 14px Arial
+      word-spacing: 3px
+      +box-shadow(inset 0px 0 0px 1px #3A3A3A)
+      border: 1px solid #070707
+      text-decoration: none
+      cursor: pointer
+
+      &:hover
+        opacity: 0.7
+
+      &[disabled]
+        pointer-events: none
+        background: gray
+        color: silver
+
+.base-attachment-dialog, .base-app-dialog
+  top: 50px
+  left: 90px
+  right: 90px
+  bottom: 10px
+  +transform(none)
+  background-color: transparent
+  overflow: visible
+  z-index: 2000
+
+  &.app-error-dialog, &.permission-error-dialog
+    .error-msg-block
+      margin-top: 25%
+      font-size: 40px
+      h2
+        font-size: 40px
+
+      .error-title
+        font-family: Arial, sans-serif
+        color: #ffffff
+
+      .error-text
+        font-size: 25px
+        font-family: Arial, sans-serif
+        color: #ffffff
+
+      .report-problem
+        font-size: 20px
+
+    .iframe-wrap
+      text-align: center
+
+  .iframe-wrap
+    background: url(images2/app/debut_dark.png)
+    border: 1px solid black
+    overflow-y: hidden
+    overflow-x: hidden
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+
+    .picture-container
+      position: absolute
+      top: 50%
+      left: 50%
+      +transform(translate(-50%, -50%))
+
+    .picture-container-2
+      overflow-y: auto
+
+    iframe
+      border: 0
+      height: 100%
+      width: 100%
+
+    &.partial-update iframe
+      opacity: .75
+
+.base-app-dialog
+  background: #fff
+  border: 1px solid black
+
+  .iframe-wrap
+    border: none
+    bottom: 70px
+    top: 40px
+    left: 15px
+    right: 15px
+
+  .close-btn
+    top: 5px
+    right: 13px
+    opacity: 1
+
+  .buttons-bottom
+    position: absolute
+    bottom: 20px
+    right: 20px
+
+    BUTTON, .button-like
+      min-width: 70px
+      line-height: 28px
+      margin-left: 15px
+      display: inline-block
+      text-decoration: none
+      box-sizing: border-box
