@@ -12,10 +12,11 @@ namespace Chalkable.BusinessLogic.Model.StudentPanorama
         public IList<StudentInfractionInfo> Infractions { get; set; }
         public IList<StudentStandardizedTestInfo> StandardizedTests { get; set; }
         public IList<Date> AllSchoolDays { get; set; } 
+        public IList<SchoolYear> SchoolYears { get; set; } 
 
-        public static StudentPanoramaInfo Create(SisStudentPanorama model, IList<Date> days)
+        public static StudentPanoramaInfo Create(SisStudentPanorama model, IList<Date> days, IList<SchoolYear> schoolYears)
         {
-            var res = new StudentPanoramaInfo{AllSchoolDays = days};
+            var res = new StudentPanoramaInfo {AllSchoolDays = days, SchoolYears = schoolYears};
 
             if (model?.DailyAbsences != null)
                 res.DailyAbsences = StudentAbsenceInfo.Create(model.DailyAbsences.ToList(), model.PeriodAbsences?.ToList());
@@ -25,7 +26,6 @@ namespace Chalkable.BusinessLogic.Model.StudentPanorama
 
             if (model?.StandardizedTests != null)
                 res.StandardizedTests = model.StandardizedTests.Select(StudentStandardizedTestInfo.Create).ToList();
-            
             return res;
         }
     }
