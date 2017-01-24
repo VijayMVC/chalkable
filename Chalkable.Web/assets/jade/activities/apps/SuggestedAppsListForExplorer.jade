@@ -1,0 +1,27 @@
+mixin AppItem(app)
+   div.app-icon-link-container
+       -var isBanned = false
+       +ActionLink('apps', 'openSuggestedAppFromExplorer', app.getId(), app.getUrl(), app.getMyAppsUrl(), isBanned, self.getStandardUrlComponents()).app-link
+           div(data-tooltip='').icon
+               pictureUrl = app.getBannerPictureUrl()
+           img(src=pictureUrl)
+           h2(data-tooltip = app.getName(), data-tooltip-type = "overflow")=app.getName()
+
+div
+    if self.getSuggestedApps().length
+        h3 Recommended apps:
+
+    +LeftRightToolbar().suggester-apps-tb.no-animation
+        each app, i in self.getSuggestedApps()
+            if i % 3 == 0
+                .apps-list
+                    +AppItem(app)
+
+                    if self.getSuggestedApps()[i + 1]
+                        +AppItem(self.getSuggestedApps()[i + 1])
+
+                    if self.getSuggestedApps()[i + 2]
+                        +AppItem(self.getSuggestedApps()[i + 2])
+
+    if !self.getSuggestedApps().length
+        .no-apps No recommended apps
