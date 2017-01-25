@@ -66,6 +66,19 @@ NAMESPACE('chlk.controls', function () {
                                 select.find('+DIV').find('SPAN').html(attributes["data-placeholder"]);
                         });
 
+                        select.on('chosen:showing_dropdown', function(){
+                            var select = $(this);
+                            var chosenEl = select.find('+DIV');
+                            select.find('option').each(function(index, option){
+                                var tooltip = $(option).data('tooltip');
+                                if(tooltip){
+                                    chosenEl.find('li:eq(' + index + ')').attr('data-tooltip', tooltip);
+                                    chosenEl.find('li:eq(' + index + ')').attr('data-tooltip-type', 'overflow');
+                                }
+                            })
+                                select.find('+DIV').find('SPAN').html(attributes["data-placeholder"]);
+                        });
+
                         if(attributes.firstEmpty){
                             select.find('option:eq(0)').html('&nbsp;');
                         }

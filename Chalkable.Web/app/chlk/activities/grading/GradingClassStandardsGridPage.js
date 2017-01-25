@@ -6,6 +6,8 @@ REQUIRE('chlk.activities.common.InfoByMpPage');
 REQUIRE('chlk.models.grading.GradingClassSummary');
 REQUIRE('chlk.activities.grading.BaseGridPage');
 REQUIRE('chlk.templates.grading.GradingStandardsPopUpTpl');
+REQUIRE('chlk.templates.grading.StandardsPopupTpl');
+REQUIRE('chlk.templates.grading.StandardsPopupItemsTpl');
 
 NAMESPACE('chlk.activities.grading', function () {
 
@@ -15,6 +17,46 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassStandardsGridTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         'GradingClassStandardsGridPage', EXTENDS(chlk.activities.grading.BaseGridPage), [
+
+            [ria.mvc.DomEventBind('mouseenter', '.popup-on-hover')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function cellHover(node, event){
+                if(!node.hasClass('active')){
+                    this.dom.find('.popup-on-hover.active').removeClass('active');
+                    node.addClass('active');
+
+                    var infoNode = node.find('.grade-info'),
+                        studentId = infoNode.getData('studentid'),
+                        standardId = infoNode.getData('standardid');
+
+                    var model = new chlk.models.grading.StandardsPopupViewData(new chlk.models.id.SchoolPersonId(studentId), new chlk.models.id.StandardId(standardId));
+                    var tpl = new chlk.templates.grading.StandardsPopupTpl();
+                    tpl.assign(model);
+
+                    ria.dom.Dom('.student-standard-popup').removeSelf();
+                    var dom = new ria.dom.Dom().fromHTML(tpl.render());
+                    dom.appendTo(ria.dom.Dom('body'));
+
+                    var popUp = ria.dom.Dom('.student-standard-popup'),
+                        left = node.offset().left - (popUp.find('.popup-bubble').width() - node.width())/2;
+                    popUp.setCss('left', left);
+                    popUp.setCss('top', node.offset().top + node.height()).show();
+
+                    node.find('.show-popup').trigger('click');
+                }
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.grading.StandardsPopupItemsTpl, 'popup-items')],
+            VOID, function updateStandardPopup(tpl, model, msg_) {
+                var studentId = model.getStudentId(),
+                    standardId = model.getStandardId(),
+                    target = new ria.dom.Dom(".student-standard-popup-" + studentId.valueOf() + '-' + standardId.valueOf());
+
+                if(target.exists()){
+                    var cnt = target.find(".items-cnt").addClass("processed");
+                    tpl.renderTo(cnt.empty());
+                }
+            },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassStandardsGridItemsTpl)],
             VOID, function updateGradingPeriodPart(tpl, model, msg_) {
@@ -139,11 +181,28 @@ NAMESPACE('chlk.activities.grading', function () {
                 return chlk.models.standard.StandardGrading
             },
 
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+
+                new ria.dom.Dom().on('click.standard', function(doc, event){
+                    var node = new ria.dom.Dom(event.target);
+
+                    if(!node.isOrInside('.student-standard-popup')){
+                        ria.dom.Dom('.student-standard-popup').removeSelf();
+                    }
+                });
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                BASE();
+                new ria.dom.Dom().off('click.standard');
+                ria.dom.Dom('.student-standard-popup').removeSelf();
+            },
+
             [[Object, String]],
             OVERRIDE, VOID, function onModelReady_(model, msg_) {
                 BASE(model, msg_);
 
-                _DEBUG && console.info(model);
                 if (model instanceof chlk.models.classes.BaseClassProfileViewData)
                     this._lastModel = model.getClazz().getGradingPart();
 
@@ -176,8 +235,6 @@ NAMESPACE('chlk.activities.grading', function () {
                             })
                         });
                 }
-
-                _DEBUG && console.info(this._lastModel);
             },
 
             [ria.mvc.DomEventBind('click', '[data-sort-type]')],

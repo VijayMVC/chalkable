@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.Reporting
@@ -24,20 +26,30 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 ToDate = inputModel.Settings.EndDate
             };
 
-            bool isForAdminPortal = BaseSecurity.IsDistrictAdmin(serviceLocator.Context) && !inputModel.ClassId.HasValue;
+            //bool isForAdminPortal = BaseSecurity.IsDistrictAdmin(serviceLocator.Context) && !inputModel.ClassId.HasValue;
 
-            var anns = isForAdminPortal
-                ? serviceLocator.AnnouncementFetchService.GetAnnouncementsForAdminFeed(inputModel.Complete, null, feedSettings)
-                : serviceLocator.AnnouncementFetchService.GetAnnouncementsForFeed(inputModel.Complete, inputModel.ClassId, feedSettings);
+            //var anns = isForAdminPortal
+            //    ? serviceLocator.AnnouncementFetchService.GetAnnouncementsForAdminFeed(inputModel.Complete, null, feedSettings)
+            //    : serviceLocator.AnnouncementFetchService.GetAnnouncementsForFeed(inputModel.Complete, inputModel.ClassId, feedSettings);
 
+            var anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(feedSettings.FromDate, feedSettings.ToDate, inputModel.ClassId, inputModel.Complete, feedSettings.AnnouncementTypeEnum);
+            
             //hide hidden activities
             if (!inputModel.Settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();
 
+            ////remove standards if groupByStandards is not selected
+            //if (!inputModel.Settings.GroupByStandards)
+            //    anns = anns.Select(x =>
+            //    {
+            //        x.AnnouncementStandards = new List<AnnouncementStandardDetails>();
+            //        return x;
+            //    }).ToList();
+
             var fromDate = inputModel.Settings.StartDate ?? serviceLocator.Context.SchoolYearStartDate;
             var toDate = inputModel.Settings.EndDate ?? serviceLocator.Context.SchoolYearEndDate;
             return ShortFeedExportModel.Create(baseData.Person, baseData.SchoolName, baseData.SchoolYearName, serviceLocator.Context.NowSchoolTime,
-                fromDate, toDate, baseData.Classes, baseData.Staffs, baseData.DayTypes, anns);
+                fromDate, toDate, baseData.Classes, baseData.Staffs, baseData.DayTypes, anns, inputModel.Settings.GroupByStandards);
         }
         
     }

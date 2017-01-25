@@ -143,7 +143,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ACTIVITIES,
                     PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ATTRIBUTES,
                     PersonSetting.FEED_REPORT_LP_ONLY,
-                    PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS
+                    PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS,
+                    PersonSetting.FEED_REPORT_GROUP_BY_STANDARDS
                 });
             return new FeedReportSettingsInfo(settings);
         }

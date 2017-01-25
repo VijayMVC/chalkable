@@ -24,12 +24,13 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[String,String,String]],
-            ria.async.Future, function changePassword(oldPassword, newPassword, newPasswordConfirmation) {
+            ria.async.Future, function changePassword(oldPassword, newPassword, newPasswordConfirmation, withOldPassword) {
                 return this.get('user/ChangePassword.json', Boolean
                     , {
                         oldPassword: oldPassword,
                         newPassword: newPassword,
-                        newPasswordConfirmation: newPasswordConfirmation
+                        newPasswordConfirmation: newPasswordConfirmation,
+                        resetPassword: !withOldPassword
                     });
             }
         ])

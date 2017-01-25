@@ -14,6 +14,7 @@ namespace Chalkable.Web.Models
         public bool IncludeHiddenActivities { get; set; }
         public bool IncludeHiddenAttributes { get; set; }
         public bool IncludeAttachments { get; set; }
+        public bool GroupByStandards { get; set; }
         public bool LessonPlanOnly { get; set; }
         public bool EditableLpOption { get; set; }
         public int? AnnouncementType { get; set; }
@@ -30,7 +31,8 @@ namespace Chalkable.Web.Models
                 IncludeHiddenActivities = feedReportSettings.IncludeHiddenActivities,
                 IncludeHiddenAttributes = feedReportSettings.IncludeHiddenAttributes,
                 MinDate = feedSettings.FromDate ?? DateTime.MinValue,
-                MaxDate = feedSettings.ToDate ?? DateTime.MaxValue
+                MaxDate = feedSettings.ToDate ?? DateTime.MaxValue,
+                GroupByStandards = feedReportSettings.GroupByStandards
             };
             res.LessonPlanOnly = feedSettings.AnnouncementType.HasValue && (AnnouncementTypeEnum) feedSettings.AnnouncementType.Value == AnnouncementTypeEnum.LessonPlan;
             res.StartDate = res.MinDate;

@@ -37,9 +37,14 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function secondResultClick(node, event) {
                 var dropDown = node.parent('.double-select '),
-                    yearName = dropDown.find('.first-result.active-item').getHTML();
+                    yearItem = dropDown.find('.first-result.active-item'),
+                    startDate = yearItem.getData('start-date') || '',
+                    endDate = yearItem.getData('end-date') || '',
+                    yearName = yearItem.getHTML();
                 dropDown.find('.selected-value').setValue(node.getData('id'));
                 dropDown.find('.selected-year-name').setValue(yearName);
+                dropDown.find('.selected-year-start-date').setValue(startDate);
+                dropDown.find('.selected-year-end-date').setValue(endDate);
                 dropDown.find('.selected-class-name').setValue(node.getHTML());
                 dropDown.find('.value-text').setText(node.getText());
                 dropDown.find('.second-result.selected-item').removeClass('selected-item');
@@ -108,6 +113,9 @@ NAMESPACE('chlk.controls', function () {
                     if(classes.length){
                         res.push({
                             name: item.getSchoolName() + ' - ' + item.getSchoolYear().getName(),
+                            id: item.getSchoolYear().getId(),
+                            startDate: item.getSchoolYear().getStartDate().toStandardFormat(),
+                            endDate: item.getSchoolYear().getEndDate().toStandardFormat(),
                             values: classes.map(function(clazz){
                                 return {
                                     name: clazz.getFullClassName(),

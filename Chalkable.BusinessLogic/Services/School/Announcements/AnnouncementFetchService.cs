@@ -165,7 +165,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 res.LessonPlans = ServiceLocator.LessonPlanService.GetLessonPlans(fromDate, toDate, classId, studentId, teacherId, filterByStartDate);
                 res.ClassAnnouncements = ServiceLocator.ClassAnnouncementService.GetClassAnnouncements(fromDate, toDate, classId, studentId, teacherId);
-                res.SupplementalAnnouncements = ServiceLocator.SupplementalAnnouncementService.GetSupplementalAnnouncements(fromDate, toDate, classId, studentId, teacherId);
+                res.SupplementalAnnouncements = ServiceLocator.SupplementalAnnouncementService.GetSupplementalAnnouncements(fromDate, toDate, classId, studentId, teacherId, null);
             }
             if(!classId.HasValue && !teacherId.HasValue && (BaseSecurity.IsDistrictAdmin(Context) || CoreRoles.STUDENT_ROLE == Context.Role))
                 res.AdminAnnouncements = ServiceLocator.AdminAnnouncementService.GetAdminAnnouncements(null, fromDate, toDate, studentId);

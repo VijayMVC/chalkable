@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Security
         }
         public static bool HasAssessmentEnabled(UserContext context)
         {
-            return context.AssessmentEnabled || context.SCEnabled || BaseSecurity.IsSysAdminOrDeveloper(context)  || BaseSecurity.IsAppTester(context);
+            return context.AssessmentEnabled || context.SCEnabled || BaseSecurity.IsSysAdminOrDeveloper(context)  || BaseSecurity.IsAppTester(context) || BaseSecurity.IsAssessmentAdmin(context);
         }
 }
 }

@@ -187,6 +187,16 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId, chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getStudentClassGradingByStandard(classId, gradingPeriodId, standardId, studentId) {
+                return this.get('Grading/StudentClassGradingByStandard', null, {
+                    classId: classId.valueOf(),
+                    gradingPeriodId: gradingPeriodId.valueOf(),
+                    standardId: standardId.valueOf(),
+                    studentId: studentId.valueOf()
+                });
+            },
+
             [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
             ria.async.Future, function getClassStandardsGrid(classId, gradingPeriodId) {
                 return this.get('Grading/ClassStandardGrid', chlk.models.grading.GradingClassSummaryGridItems.OF(Object), {

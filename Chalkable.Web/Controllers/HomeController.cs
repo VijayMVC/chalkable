@@ -56,15 +56,12 @@ namespace Chalkable.Web.Controllers
 
 
         //[AuthorizationFilter("AppTester")]
-        public ActionResult AppTester()
+        public ActionResult AppTester(bool? isPwdReset)
         {
-            var appTester = new User
-            {
-                Id = Guid.NewGuid(),
-                Login = "apptester@chalkable.com",
-                FullName = "App Tester"
-            };
-            //var appTester = MasterLocator.UserService.GetById(Context.UserId);
+            if (isPwdReset.HasValue && isPwdReset.Value)
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.RESET_PASSWORD_URL;
+
+            var appTester = MasterLocator.UserService.GetById(Context.UserId);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             PrepareJsonData(AppTesterViewData.Create(appTester), ViewConstants.CURRENT_PERSON);
@@ -72,8 +69,27 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.SERVER_TIME] = serverTime;
             ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
-            //var ip = RequestHelpers.GetClientIpAddress(Request);
-            //MasterLocator.UserTrackingService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MasterLocator.UserTrackingService.IdentifySysAdmin(appTester.Login, "", "", null, ip);
+            return View();
+        }
+
+        //[AuthorizationFilter("AssessmentAdmin")]
+        public ActionResult AssessmentAdmin(bool? isPwdReset)
+        {
+            if (isPwdReset.HasValue && isPwdReset.Value)
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.RESET_PASSWORD_URL;
+
+            var assessmentAdmin = MasterLocator.UserService.GetById(Context.UserId);
+            ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
+            PrepareJsonData(AssessmentAdminViewData.Create(assessmentAdmin), ViewConstants.CURRENT_PERSON);
+            var serverTime = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
+            ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
+            ViewData[ViewConstants.SERVER_TIME] = serverTime;
+            ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MasterLocator.UserTrackingService.IdentifySysAdmin(assessmentAdmin.Login, "", "", null, ip);
             return View();
         }
 
@@ -86,8 +102,11 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult SysAdmin()
+        public ActionResult SysAdmin(bool? isPwdReset)
         {
+            if (isPwdReset.HasValue && isPwdReset.Value)
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.RESET_PASSWORD_URL;
+
             var sysUser = MasterLocator.UserService.GetById(Context.UserId);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();

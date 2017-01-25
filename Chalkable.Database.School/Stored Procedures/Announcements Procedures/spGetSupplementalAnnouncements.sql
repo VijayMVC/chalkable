@@ -9,7 +9,8 @@
 	@ownedOnly bit,
 	@fromDate DateTime2, 
 	@toDate DateTime2,
-	@complete bit
+	@complete bit,
+	@standardId int
 AS
 
 declare @TEACHER_ROLE int = 2,
@@ -41,4 +42,5 @@ Where
 	and (@fromDate is null or Expires >= @fromDate)
 	and (@toDate is null or Expires <= @toDate)
 	and (@complete is null or annRecipientData.Complete = @complete or (@complete = 0 and annRecipientData.Complete is null))
+	and (@standardId is null or exists(select * from AnnouncementStandard where StandardRef = @standardId and AnnouncementRef = vwSupplementalAnnouncement.Id))
 	and (@schoolYearId is null or SchoolYearRef = @schoolYearId)

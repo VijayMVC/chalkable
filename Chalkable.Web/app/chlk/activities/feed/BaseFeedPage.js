@@ -20,6 +20,17 @@ NAMESPACE('chlk.activities.feed', function () {
 
             },
 
+            [ria.mvc.DomEventBind('change', '.double-select')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function doubleSelectChange(node, event){
+                var startDate = getDate(node.find('.selected-year-start-date').getValue()),
+                    endDate = getDate(node.find('.selected-year-end-date').getValue()),
+                    picker = this.dom.find('.copy-start-date');
+
+                picker.$.datepicker( "option", "minDate", startDate );
+                picker.$.datepicker( "option", "maxDate", endDate );
+            },
+
             [ria.mvc.DomEventBind('submit', 'form')],
             [[ria.dom.Dom, ria.dom.Event]],
             function formSubmit(node, event){

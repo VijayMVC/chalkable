@@ -24,11 +24,12 @@ class TestAllTypesOfItemsFilterByEarliestLatest(BaseTestCase):
 
         def get_item_date(one_item):
             if one_item['type'] == 3:
-                return one_item['lessonplandata']['startdate']
+                return datetime.date(datetime.strptime(one_item['lessonplandata']['startdate'], '%Y-%m-%d'))
             if one_item['type'] == 1:
-                return one_item['classannouncementdata']['expiresdate']
+                return datetime.date(datetime.strptime(one_item['classannouncementdata']['expiresdate'], '%Y-%m-%d'))
             if one_item['type'] == 4:
-                return one_item['supplementalannouncementdata']['expiresdate']
+                return datetime.date(
+                    datetime.strptime(one_item['supplementalannouncementdata']['expiresdate'], '%Y-%m-%d'))
 
         def get_item_id(one_item):
             return one_item['id']

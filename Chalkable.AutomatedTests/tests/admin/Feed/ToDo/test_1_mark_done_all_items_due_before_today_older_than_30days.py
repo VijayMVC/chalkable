@@ -12,12 +12,12 @@ class TestAdminMarkItems_All_DueBeforeToday_OlderThan30days(BaseTestCase):
         self.admin.post_json('/Announcement/UnDone.json?', data={'option': 3})
 
         # get a current time
-        self.current_time = time.strftime('%Y-%m-%d')
+        self.current_time = datetime.date(datetime.now())
 
         # get a date needed for filtering
-        date = datetime.strptime(self.current_time, "%Y-%m-%d")
-        end_date = date.today() - timedelta(days=30)
-        self.current_date_minus_30 = end_date.strftime("%Y-%m-%d")
+        date = datetime.now()
+        end_date = date.today() - timedelta(days=29)
+        self.current_date_minus_30 = datetime.date(end_date)
 
     def internal_(self, option, start, count):
         self.admin.post_json('/Announcement/Done.json?', data={'option': option})
@@ -35,7 +35,7 @@ class TestAdminMarkItems_All_DueBeforeToday_OlderThan30days(BaseTestCase):
                             'Admin announcements were not marked as done!')
 
         def get_item_date(one_item):
-            return one_item['adminannouncementdata']['expiresdate']
+            return datetime.date(datetime.strptime(one_item['adminannouncementdata']['expiresdate'], '%Y-%m-%d'))
 
         def current_time_or_time_minus_30(inner_option):
             if inner_option == 2:

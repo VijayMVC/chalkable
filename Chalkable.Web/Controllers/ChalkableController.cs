@@ -251,13 +251,17 @@ namespace Chalkable.Web.Controllers
         protected ActionResult RedirectToHome(CoreRole role)
         {
             if (role == CoreRoles.SUPER_ADMIN_ROLE)
-                return Redirect<HomeController>(x => x.SysAdmin());
+                return Redirect<HomeController>(x => x.SysAdmin(false));
             if (role == CoreRoles.DISTRICT_ADMIN_ROLE)
                 return Redirect<HomeController>(x => x.DistrictAdmin());
             if (role == CoreRoles.TEACHER_ROLE)
                 return Redirect<HomeController>(x => x.Teacher());
             if (role == CoreRoles.STUDENT_ROLE)
                 return Redirect<HomeController>(x => x.Student());
+            if (role == CoreRoles.APP_TESTER_ROLE)
+                return Redirect<HomeController>(x => x.AppTester(false));
+            if (role == CoreRoles.ASSESSMENT_ADMIN_ROLE)
+                return Redirect<HomeController>(x => x.AssessmentAdmin(false));
             return Redirect<HomeController>(x => x.Index());
         }
 

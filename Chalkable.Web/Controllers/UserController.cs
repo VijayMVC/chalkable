@@ -8,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
+using Chalkable.Web.Common;
 using Chalkable.Web.Tools;
 
 namespace Chalkable.Web.Controllers
@@ -117,13 +118,13 @@ namespace Chalkable.Web.Controllers
             return Json(true);            
         }
         
-        public ActionResult ChangePassword(string oldPassword, string newPassword, string newPasswordConfirmation)
+        public ActionResult ChangePassword(string oldPassword, string newPassword, string newPasswordConfirmation, bool resetPassword)
         {
             if (!PasswordTools.IsSecurePassword(newPassword))
                 return Json(new ChalkableException("new password is not secure enough"));
 
             var login = Context.Login;
-            if (!string.IsNullOrEmpty(oldPassword) && MasterLocator.UserService.Login(login, oldPassword) == null)
+            if (!resetPassword && MasterLocator.UserService.Login(login, oldPassword) == null)
                 return Json(new ChalkableException("old password is incorrect"));
 
             if (newPassword != newPasswordConfirmation)
@@ -158,11 +159,15 @@ namespace Chalkable.Web.Controllers
                 SchoolLocator.PersonService.ActivatePerson(context.PersonId.Value);
             //TODO: mix panel 
             if (context.Role == CoreRoles.SUPER_ADMIN_ROLE)
-                return Redirect<HomeController>(x => x.SysAdmin());
+                return Redirect<HomeController>(x => x.SysAdmin(true));
             if (context.Role == CoreRoles.TEACHER_ROLE)
                 return Redirect<HomeController>(x => x.Teacher());
             if (context.Role == CoreRoles.DEVELOPER_ROLE)
                 return Redirect<HomeController>(x => x.Developer(null, true));
+            if (context.Role == CoreRoles.APP_TESTER_ROLE)
+                return Redirect<HomeController>(x => x.AppTester(true));
+            if (context.Role == CoreRoles.ASSESSMENT_ADMIN_ROLE)
+                return Redirect<HomeController>(x => x.AssessmentAdmin(true));
             return Redirect<HomeController>(c => c.Index());
         }
 
@@ -174,7 +179,7 @@ namespace Chalkable.Web.Controllers
             {
                 InitServiceLocators(context);
                 MasterLocator.UserTrackingService.UserLoggedInForFirstTime(context.Login, "", "", Context.DistrictId.ToString(), 
-                        DateTime.UtcNow.ConvertFromUtc(Context.DistrictTimeZone), Context.DistrictTimeZone, Context.Role.Name, Context.SCEnabled);
+                        Context.NowSchoolTime, Context.DistrictTimeZone ?? "UTC", Context.Role.Name, Context.SCEnabled);
                 return redirectAction(context);
             }
             return Redirect<HomeController>(c => c.Index());

@@ -35,9 +35,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             var bodyTemplate = PreferenceService.Get(Preference.RESETTED_PASSWORD_EMAIL_BODY).Value;
             var url = string.Format(CONFIRM_URL_FORMAT, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
-            var body = string.Format(bodyTemplate, user.FullName, url);
+            var body = string.Format(bodyTemplate, user.FullName, "", url);
             SendResettedPassword(user.Login, body);
-            user.LoginInfo.LastPasswordReset = DateTime.UtcNow;
         }
         
         public void SendResettedPasswordToDeveloper(Developer developer, string confirmationKey)

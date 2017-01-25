@@ -307,7 +307,7 @@ var Msg = {
     Alert_Internet_access_text: 'Student has permission for Internet access',
     Alert_Medical_text: 'Student has medical alert',
     Alert_Special_text: 'Student marked with special alert',
-    Alert_Sped_text: 'Student marked active for Special Education Status',
+    Alert_Sped_text: 'Active IEP',
     All_day: 'All day',
     All_categories: 'All categories',
     All_standards: 'All standards',

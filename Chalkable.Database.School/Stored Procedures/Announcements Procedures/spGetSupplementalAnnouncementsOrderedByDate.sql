@@ -14,7 +14,8 @@
 	@sort bit,
 	@includeFrom bit,
 	@includeTo bit,
-	@complete bit
+	@complete bit,
+	@standardId int
 AS
 
 declare 
@@ -38,7 +39,8 @@ insert into @tempSA
 		@ownedOnly, 
 		@fromDate, 
 		@toDate,
-		@complete
+		@complete,
+		@standardId
 
 declare 
 	@FILTER_BY_DATE int = 0,

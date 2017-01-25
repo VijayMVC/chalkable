@@ -197,6 +197,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return DeveloperLogin(user);
             if (user.IsAppTester)
                 return new UserContext(user, CoreRoles.APP_TESTER_ROLE, user.District, null, null, null, null);
+            if (user.IsAssessmentAdmin)
+                return new UserContext(user, CoreRoles.ASSESSMENT_ADMIN_ROLE, user.District, null, null, null, null);
             throw new UnknownRoleException();           
         }
 
@@ -528,11 +530,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (user != null)
             {
                 var key = GenerateConfirmationKey();
-                if (user.IsDeveloper || user.IsSysAdmin || user.IsAppTester)
+                if (user.IsDeveloper)
                 {
                     var developer = ServiceLocator.DeveloperService.GetById(user.Id);
                     ServiceLocator.EmailService.SendResettedPasswordToDeveloper(developer, key);
-                }
+                }else if (user.IsSysAdmin || user.IsAppTester || user.IsAssessmentAdmin)
+                    ServiceLocator.EmailService.SendResettedPasswordToPerson(user, key);
                 else if (user.SisUserId.HasValue)
                     throw new ChalkableException($@"Please use <a href=""{user.District.SisRedirectUrl}"" target=""_blank"">InformationNOW</a> to reset your password");
                 else
