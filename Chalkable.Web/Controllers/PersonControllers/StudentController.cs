@@ -224,6 +224,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             
             return Json(res);
         }
+
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public async Task<ActionResult> Apps(int studentId, int? start, int? count)
         {
@@ -341,6 +342,5 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var settings = SchoolLocator.PanoramaSettingsService.Restore<StudentProfilePanoramaSetting>(null);
             return Json(PersonProfilePanoramaSettingViewData.Create(settings));
         }
-        
     }
 }

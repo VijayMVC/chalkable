@@ -41,22 +41,15 @@ NAMESPACE('chlk.activities.grading', function () {
 
             function activateMenuAim(){
                 var that = this;
-                //new ria.dom.Dom('.ann-grade-pop-up').remove();
 
                 jQuery(this.dom.find('.ann-type-container').valueOf()).menuAim({
                     rowSelector: ".ann-button:not(.plus-ann)",
                     activate: function(row){
-                        var node = new ria.dom.Dom(row);
-                        node.addClass('popup-container');
-                        var model = that.getAnnouncementInfo(node);
+                        var target = new ria.dom.Dom(row);
+                        var model = that.getAnnouncementInfo(target);
                         that.setCurrentMenu(this);
-                        /*setTimeout(function(){
-                            node.parent().find('.show-popup').trigger('click');
-                        }, 1);*/
                         var tpl = new chlk.templates.grading.AnnouncementForGradingPopup();
                         tpl.assign(model);
-                        var target = jQuery('.popup-container')
-                            .removeClass('popup-container');
                         jQuery('.ann-grade-pop-up').remove();
                         jQuery('body').append(tpl.render());
                         var popUp = jQuery('.ann-grade-pop-up');
@@ -66,7 +59,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
                         var container = popUp.find('.grading-chart-container');
                         jQuery.getJSON(WEB_SITE_ROOT + 'Grading/ItemGradingStat', {
-                            announcementId: node.parent('.announcements-type-item').find('.ann-button').getAttr('annid')
+                            announcementId: target.parent('.announcements-type-item').find('.ann-button').getAttr('annid')
                         }, function(res){
                             if(container[0]){
                                 var tpl = new chlk.templates.grading.ItemGradingStatTpl();
@@ -109,26 +102,6 @@ NAMESPACE('chlk.activities.grading', function () {
                         this.getCurrentMenu().deactivate();
                     }
                 }.bind(this));
-
-                new ria.dom.Dom(document).on('click.popup', '.ann-grade-pop-up .grey-button', function(node, event){
-                    var annId = node.getData('announcementid');
-                    var button = this.dom.find('.ann-button[annid=' + annId + ']');
-                    if(node.hasClass('dropped')){
-                        button.removeClass('dropped');
-                        node.addClass('x-hidden');
-                        node.parent().find('.grey-button:not(.dropped)')
-                            .removeClass('x-hidden')
-                            .addClass('disabled');
-                        this.setDropped(button, false);
-                    }else{
-                        button.addClass('dropped');
-                        node.addClass('x-hidden');
-                        node.parent().find('.grey-button.dropped')
-                            .removeClass('x-hidden')
-                            .addClass('disabled');
-                        this.setDropped(button, true);
-                    }
-                }.bind(this));
             },
 
             OVERRIDE, VOID, function onStop_(){
@@ -162,19 +135,6 @@ NAMESPACE('chlk.activities.grading', function () {
                     var announcement = this.getItems()[typeIndex].getAnnouncements()[annIndex];
                 //console.info(getDate() - dt);
                 return announcement || null;
-            },
-
-            [[ria.dom.Dom, Boolean]],
-            function setDropped(node, dropped){
-                var annIndex = node.parent('.announcements-type-item').getData('index');
-                var typeIndex = node.parent('.ann-type-container').getData('index');
-                var mpIndex = node.parent('.marking-period-container').getData('index');
-                var items = this.getItems();
-                var announcement = items[typeIndex].getAnnouncements()[annIndex];
-                if(announcement){
-                    announcement.setDropped(dropped);
-                    this.setItems(items);
-                }
             }
         ]);
 });

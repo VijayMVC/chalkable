@@ -62,12 +62,12 @@ Begin
  If @roleId = @TEACHER_ROLE
   insert into @supplementalAnnouncements
    exec spGetSupplementalAnnouncements @announcementId, @schoolYearid, @personId, @classId, @roleId, 
-    @personId, null, 1, @fromDate, @toDate, @completeStateNeedsUpdate
+    @personId, null, 1, @fromDate, @toDate, @completeStateNeedsUpdate, null
 
  If @roleId = @STUDENT_ROLE
   insert into @supplementalAnnouncements
    exec spGetSupplementalAnnouncements @announcementId, @schoolYearid, @personId, @classId, @roleId, 
-    null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate 
+    null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate, null
 End
 
 declare @announcementsToUpdate table( Id int)
@@ -135,5 +135,4 @@ Insert Into AnnouncementRecipientData
  Select Id, @personId, @complete From @announcementsToInsert
 
  Commit Transaction
-
 GO

@@ -32,7 +32,8 @@
                             data-standard-id=info.standardid,
                             data-grading-period-id=self.getGradingPeriod().getId().valueOf(),
                             class=(self.isGradable() ? 'gradable' : '')
-                        ).dotted-h.grade-value.letter
+                        ).dotted-h.grade-value.letter.popup-on-hover
+                            +ActionLink('grading', 'standardPopup', info.classid, info.gradingperiodid, info.standardid, info.studentid).x-hidden.show-popup
                             -var value = self.displayGrade(info.gradevalue)
                             div(
                                 class= (value ? "" : "empty-grade"),

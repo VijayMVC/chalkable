@@ -14,7 +14,7 @@ namespace Chalkable.BusinessLogic.Model
         public bool IncludeHiddenAttributes { get; set; }
         public bool IncludeAttachments { get; set; }
         public bool LessonPlanOnly { get; set; }
-
+        public bool GroupByStandards { get; set; }
 
         public FeedReportSettingsInfo() { }
 
@@ -30,6 +30,7 @@ namespace Chalkable.BusinessLogic.Model
             IncludeHiddenAttributes = GetBoolFromDictionary(PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ATTRIBUTES, keyValue);
             IncludeHiddenActivities = GetBoolFromDictionary(PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ACTIVITIES, keyValue);
             LessonPlanOnly = GetBoolFromDictionary(PersonSetting.FEED_REPORT_LP_ONLY, keyValue);
+            GroupByStandards = GetBoolFromDictionary(PersonSetting.FEED_REPORT_GROUP_BY_STANDARDS, keyValue);
         }
 
         private static bool GetBoolFromDictionary(string key, IDictionary<string, string> keyValue)
@@ -47,7 +48,8 @@ namespace Chalkable.BusinessLogic.Model
                 [PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ACTIVITIES] = IncludeHiddenActivities,
                 [PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ATTRIBUTES] = IncludeHiddenAttributes,
                 [PersonSetting.FEED_REPORT_LP_ONLY] = LessonPlanOnly,
-                [PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS] = IncludeAttachments
+                [PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS] = IncludeAttachments,
+                [PersonSetting.FEED_REPORT_GROUP_BY_STANDARDS] = GroupByStandards
             };
         }    
     }

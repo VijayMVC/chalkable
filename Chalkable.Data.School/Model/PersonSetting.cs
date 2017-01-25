@@ -29,7 +29,7 @@ namespace Chalkable.Data.School.Model
         public const string FEED_REPORT_INCLUDE_HIDDEN_ACTIVITIES = "feedreportincludehiddenactivities";
         public const string FEED_REPORT_LP_ONLY = "feedreportlponly";
         public const string FEED_REPORT_INCLUDE_ATTACHMENTS = "feedreportincludeattachments";
-
+        public const string FEED_REPORT_GROUP_BY_STANDARDS = "feedgroupbystandards";
 
         // Panorama Settings 
         public const string CLASS_PROFILE_PANORAMA_SETTING = "classprofilepanoramasetting";
