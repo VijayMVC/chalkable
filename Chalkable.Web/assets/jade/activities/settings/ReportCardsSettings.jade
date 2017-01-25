@@ -1,0 +1,66 @@
+mixin ImagesSlider(images)
+   ul.slides
+      -var items = images.filter(function(image){return image.address})
+      each image,i in items
+         input(type="radio", name="radio-btn", id="img-"+i, checked=i==0 ? 'checked' : null)
+         li.slide-container
+            .slide
+               img(src=image.address)
+               .title=image.name
+            if items.length > 1
+               .nav
+                  -var prev = i == 0 ? items.length - 1 : i - 1
+                  -var next = i >= items.length - 1 ? 0 : i + 1
+                  label(for="img-" + prev).prev
+                  label(for="img-" + next).next
+
+
+
+.settings
+   .report-cards
+      .action-bar.not-transparent.buttons
+         .container.panel-bg
+            .items
+               +ActionLink('settings', 'dashboardAdmin') Messaging
+               each app in self.getApplications()
+                  +ActionLink('settings', 'appSettings', app.getId())=app.getName()
+               if self.isAdminPanoramaEnabled()
+                  +ActionLink('settings', 'panoramaAdmin') Panorama
+               a.action-link.pressed  Report Cards
+
+
+      -var canUpdate = self.isAbleToUpdate();
+      .logo-section
+         +CloseOpen('Logo')
+            .schools
+               .filters-block
+                  .schools-container.filters-container
+                     .btn-cnt
+                        -var hasLogo = self.districtLogo() && self.districtLogo().getId()
+                        .for-attribute.simple-gray-button.download-link.file(
+                           class= hasLogo ? "with-logo" : ""
+                        ) District
+                           +FileUpload('settings', 'updateReportCardsLogo',[null])(
+                              multiple = false
+                              needFileIndex = false
+                           ).simple-gray-button
+                        if hasLogo
+                           +ActionLink('settings', "deleteReportCardsLogo", self.districtLogo().getId()).delete-btn
+                        .v-line
+                     each item in self.schoolsLogo()
+                        .btn-cnt
+                           .for-attribute.simple-gray-button.download-link.file.school(
+                              class= item.getId() ? "with-logo" : ""
+                           )=item.getSchoolName()
+                              +FileUpload('settings', 'updateReportCardsLogo', [item.getSchoolId()])(
+                                 multiple = false
+                                 needFileIndex = false
+                              ).simple-gray-button
+                           +ActionLink('settings', "deleteReportCardsLogo", item.getId(), item.getSchoolId())(class=item.getId() ? "" : "no-logo-delete").delete-btn
+                           .v-line
+
+                  +ActionLinkButton('settings', 'showSchoolsDialog').add-filter-container
+                     .add-circle-btn.add-school-btn +
+                     .light-grey.i-b Add School
+            .logo
+               +ImagesSlider(self.prepareImages())
