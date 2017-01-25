@@ -196,6 +196,7 @@ NAMESPACE('chlk.activities.grading', function () {
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 new ria.dom.Dom().off('click.standard');
+                ria.dom.Dom('.student-standard-popup').removeSelf();
             },
 
             [[Object, String]],
