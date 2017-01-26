@@ -43,6 +43,9 @@ NAMESPACE('chlk.lib.mvc', function () {
                 return stackLen == 0 || stackLen == 1 && !this.getCurrent().isRendered();
             },
 
+            ria.async.Future, function reset() {
+                return this.reset_();
+            },
 
             [[String]],
             function submitToIFrame(src){
@@ -92,15 +95,6 @@ NAMESPACE('chlk.lib.mvc', function () {
             [[String]],
             VOID, function updateUserName(userName) {
                 ria.dom.Dom('header .logout-area').setText(userName);
-            },
-
-            /**
-             * Pop all from stack with stop and reset engine
-             * @deprecated
-             */
-            VOID, function reset() {
-                while (this.getCurrent() !== null)
-                    this.stopActivity_(this.pop_());
             },
 
             [[String, String, Array, String, Boolean, String, Object]],
