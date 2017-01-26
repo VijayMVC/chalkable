@@ -49,17 +49,37 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-         function logoutAction(){
-             return this.accountService
-                 .logOut()
-                 .attach(this.validateResponse_())
-                 .then(function(res){
+        function logoutAction(){
+            return this.getContext().getDefaultView().reset()
+                .thenCall(this.accountService.logOut())
+                .attach(this.validateResponse_())
+                .then(function (res) {
                     if (res.isSuccess()){
                         location.href = this.getContext().getSession().get('webSiteRoot');
                         return ria.async.BREAK;
                     }
-                 }, this);
-         },
+                }, this);
+        },
+
+        function switchToAdminAction(){
+            return this.processLeaveLink_('SwitchToDistrictAdmin');
+        },
+
+        function switchToTeacherAction(){
+            return this.processLeaveLink_('SwitchToTeacher');
+        },
+
+        function redirectToINowAction(){
+            return this.processLeaveLink_('RedirectToINow');
+        },
+
+        function processLeaveLink_(action){
+            return this.getContext().getDefaultView().reset()
+                .then(function () {
+                    location.href = this.getContext().getSession().get('webSiteRoot') + 'User/' + action + '.aspx';
+                    return ria.async.BREAK;
+                }, this);
+        },
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
