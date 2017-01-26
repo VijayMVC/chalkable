@@ -1,0 +1,13 @@
+.dialog
+    .x-window-header
+        h1 Edit Categories
+        .close.close-btn
+
+    .categories-cnt
+        each category in self.getCategories()
+            +RenderWith(category, chlk.templates.announcement.LessonPlanCategoryTpl)(
+                currentUser = self.getCurrentUser()
+            )
+        .new-category
+    .buttons-container
+        +ActionButton('lpgallerycategory', 'add').special-button2.add + New Category
