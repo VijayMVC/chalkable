@@ -282,7 +282,7 @@ NAMESPACE('chlk', function (){
 
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
-                    if(!jQuery(this).data('wasClick') && !tooltipTimeOut){
+                    if(!jQuery(this).data('wasClick') && !tooltipTimeOut && !jQuery(this).hasClass('tooltip-processed')){
                         var target = jQuery(e.target),
                             tooltip = jQuery('#chlk-tooltip-item');
                         target.off('remove.tooltip');
@@ -323,6 +323,12 @@ NAMESPACE('chlk', function (){
                                 clazz && tooltip.addClass(clazz);
                             }
                         }
+
+                        var parents = target.parents('[data-tooltip]');
+                        parents.addClass('tooltip-processed');
+                        setTimeout(function(){
+                            parents.removeClass('tooltip-processed');
+                        }, 10)
                     }
 
                 });
