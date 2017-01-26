@@ -1,0 +1,25 @@
+mixin DatePicker(name, value_)
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="text", autocomplete="off")(attributes)
+    if attributes['data-options'].dateFormat
+        +Hidden(name, value_ ? value_.format('mm/dd/yy') : '').hidden-datepicker
+
+mixin DatePickerInline(name, value_)
+    -var altHiddenId = ria.dom.Dom.GID()
+    -attributes['data-options'] = attributes['data-options'] || {}
+    -attributes['data-options'].altField = '#' + altHiddenId
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="hidden", name=attributes.name, value=value_, id = altHiddenId, autocomplete="off")
+    if attributes['data-options'].dateFormat
+        +Hidden(name, value_ ? value_.format('mm/dd/yy') : '').hidden-datepicker
+    div(attributes)
+    
+mixin ButtonDatePicker(name, text_, value_)
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="button", text=text_)(attributes).chlk-button
+
+mixin DatePickerWithIcon(name, value_)
+    .date-picker-cnt
+        +DatePicker(name, value_)(attributes)
+        .calendar-icon
+    
