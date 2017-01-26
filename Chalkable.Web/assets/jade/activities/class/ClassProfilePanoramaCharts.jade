@@ -9,17 +9,17 @@
                 LI(data-tab=2).tab-header=Msg.Absences
                 LI(data-tab=3).tab-header=Msg.Discipline
         .charts-content
-            .chart-content(data-tab=1).active.relative
+            .tab-content.chart-content(data-tab=1).active.relative
                 if self.getGradeAverageDistributionChartOptions()
                     +Chart()(
                         data-options=self.getGradeAverageDistributionChartOptions()
                     ).distribution-chart.grade-average
-            .chart-content(data-tab=2).relative
+            .tab-content.chart-content(data-tab=2).relative
                 if self.getAbsencesDistributionChartOptions()
                     +Chart()(
                         data-options=self.getAbsencesDistributionChartOptions()
                     ).distribution-chart.absences
-            .chart-content(data-tab=3).relative
+            .tab-content.chart-content(data-tab=3).relative
                 if self.getDisciplineDistributionChartOptions()
                     +Chart()(
                         data-options=self.getDisciplineDistributionChartOptions()

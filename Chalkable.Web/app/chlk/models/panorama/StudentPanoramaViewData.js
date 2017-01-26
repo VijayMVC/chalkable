@@ -33,6 +33,43 @@ NAMESPACE('chlk.models.panorama', function () {
         NOTE: 8
     });
 
+    /** @class chlk.models.panorama.StudentPanoramaCalendarItemViewData*/
+    CLASS(
+        UNSAFE, 'StudentPanoramaCalendarItemViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+            Date, 'date',
+            String, 'absenceLevel',
+            Boolean, 'absent',
+            Boolean, 'halfAbsent',
+            Boolean, 'late',
+            ArrayOf(String), 'disciplines',
+
+            VOID, function deserialize(raw) {
+                this.date = getDate(raw.date);
+                this.absenceLevel = SJX.fromValue(raw.absencelevel, String);
+                this.absent = SJX.fromValue(raw.isabsent, Boolean);
+                this.halfAbsent = SJX.fromValue(raw.ishalfabsent, Boolean);
+                this.late = SJX.fromValue(raw.islate, Boolean);
+                this.disciplines = SJX.fromArrayOfValues(raw.disciplines, String);
+            }
+        ]);
+
+    /** @class chlk.models.panorama.StudentPanoramaCalendarViewData*/
+    CLASS(
+        UNSAFE, 'StudentPanoramaCalendarViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+            chlk.models.id.SchoolYearId, 'schoolYearId',
+            String, 'schoolYearName',
+            Number, 'acadYear',
+            ArrayOf(chlk.models.panorama.StudentPanoramaCalendarItemViewData), 'calendarItems',
+            Array, 'itemsByMonth',
+
+            VOID, function deserialize(raw) {
+                this.schoolYearId = SJX.fromValue(raw.schoolyearid, chlk.models.id.SchoolYearId);
+                this.schoolYearName = SJX.fromValue(raw.schoolyearname, String);
+                this.acadYear = SJX.fromValue(raw.acadyear, Number);
+                this.calendarItems = SJX.fromArrayOfDeserializables(raw.calendaritems, chlk.models.panorama.StudentPanoramaCalendarItemViewData);
+            }
+        ]);
+
     /** @class chlk.models.panorama.StudentDisciplineStatViewData*/
     CLASS(
         UNSAFE, 'StudentDisciplineStatViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
@@ -154,6 +191,7 @@ NAMESPACE('chlk.models.panorama', function () {
             ArrayOf(chlk.models.common.ChartDateItem), 'attendancesStats',
             ArrayOf(chlk.models.panorama.StudentDisciplineStatViewData), 'studentDisciplineStats',
             ArrayOf(chlk.models.panorama.StudentAbsenceStatViewData), 'studentAbsenceStats',
+            ArrayOf(chlk.models.panorama.StudentPanoramaCalendarViewData), 'calendars',
             ArrayOf(Number), 'years',
             Boolean, 'showFilters',
 
@@ -171,6 +209,7 @@ NAMESPACE('chlk.models.panorama', function () {
                 this.attendancesStats = SJX.fromArrayOfDeserializables(raw.attendancestats, chlk.models.common.ChartDateItem);
                 this.studentDisciplineStats = SJX.fromArrayOfDeserializables(raw.disciplinestats, chlk.models.panorama.StudentDisciplineStatViewData);
                 this.studentAbsenceStats = SJX.fromArrayOfDeserializables(raw.absences, chlk.models.panorama.StudentAbsenceStatViewData);
+                this.calendars = SJX.fromArrayOfDeserializables(raw.calendars, chlk.models.panorama.StudentPanoramaCalendarViewData);
 
                 this.attendancesDescending = false;
                 this.disciplinesDescending = false;

@@ -66,7 +66,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         public int SchoolYearId { get; set; }
         public string SchoolYearName { get; set; }
         public int AcadYear { get; set; }
-        public IList<StudentPanoramaCalendarItemViewData> CalendardItems { get; set; }
+        public IList<StudentPanoramaCalendarItemViewData> CalendarItems { get; set; }
 
         public static IList<StudentPanoramaCalendarViewData> Create(IList<StudentAbsenceInfo> absences, IList<StudentInfractionInfo> studentInfractions
             , IList<Date> allSchoolDays, IList<SchoolYear> schoolYears)
@@ -86,7 +86,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                     AcadYear = schoolYear.AcadYear,
                     SchoolYearName = schoolYear.Name,
                     SchoolYearId = schoolYear.Id,
-                    CalendardItems = items
+                    CalendarItems = items
                 });
             }
             return res;

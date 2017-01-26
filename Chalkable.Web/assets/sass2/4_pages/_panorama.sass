@@ -1,4 +1,92 @@
 .student-panorama
+  .panorama-calendars-tabs.tabs-block
+    .tab-headers
+      background: transparent
+      border-radius: 0
+      margin: 0
+      margin-bottom: -12px
+
+      LI
+        background: #ededed
+        border: 1px solid #ededed
+        font-size: 13px
+        height: 26px
+        line-height: 26px
+        border-bottom: none
+        margin-right: 3px
+        border-radius: 3px 3px 0 0
+
+        &:hover
+          background: #fbfbfb
+
+        &.active
+          background: white
+          border-color: #e7e6e2
+
+  .calendar-item
+    font-size: 11px
+    text-align: center
+    font-weight: 600
+    margin-right: 17px
+
+    h3
+      font-size: 12px
+      color: #767676
+      font-weight: 600
+      margin-bottom: 4px
+
+    TD
+      width: 25px
+      height: 25px
+      line-height: 25px
+
+      .day-item
+        width: 22px
+        height: 22px
+        line-height: 22px
+        position: relative
+        border-radius: 50%
+        background: #d0cdcd
+        color: #656565
+
+        &.sunday, &.saturday
+          &:not(.active-item)
+            color: #a4a4a4
+            background: transparent
+
+        &.active-item
+          background: #09b356
+          color: #ffffff
+
+        &.late
+          background: #dfd209
+          color: #000000
+
+        &.absent
+          background: #a12637
+
+        &.half-absent.active-item
+          +icons-24-sprite(absent-half-day)
+
+        &.future
+          background: #d0cdcd
+          color: #656565
+
+        &.has-disciplines
+          .disciplines-item
+            display: block
+
+        .disciplines-item
+          display: none
+          width: 7px
+          height: 7px
+          border-radius: 50%
+          border: 2px solid #ffffff
+          background: #e70303
+          position: absolute
+          right: -3px
+          top: -3px
+
   .panorama-demographics-tab
     TABLE
       width: 100%
