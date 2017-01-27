@@ -1,4 +1,4 @@
-﻿Create Procedure [dbo].[spDeletePersons]
+﻿CREATE Procedure [dbo].[spDeletePersons]
 @personIds TInt32 readonly
 as
 Delete From AnnouncementAttachment
@@ -45,12 +45,14 @@ Delete AnnouncementAttachment where AnnouncementRef in (Select Id From AdminAnno
 Delete AnnouncementQnA where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
 Delete AnnouncementRecipientData where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
 Delete AnnouncementAssignedAttribute where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
-Delete Announcement where Id in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
-Delete From AdminAnnouncement where AdminRef in (Select value from @personIds as ids)
+
+Declare @announcementIds TInt32;
+Insert Into @announcementIds
+	Select Id From AdminAnnouncement Where AdminRef in (Select [value] from @personIds as ids)
+Delete From AdminAnnouncement where Id in (Select * From @announcementIds)
+Delete Announcement where Id in (Select * From @announcementIds)
 
 Delete From Attachment Where PersonRef in (Select value From @personIds as ids)
 
 Delete from Person Where Id in (Select value From @personIds as ids)
 GO
-
-
