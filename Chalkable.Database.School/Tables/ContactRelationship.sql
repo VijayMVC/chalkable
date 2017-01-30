@@ -13,8 +13,6 @@
     [NCESCode]           NVARCHAR (10)  NOT NULL,
     [IsActive]           BIT            NOT NULL,
     [IsSystem]           BIT            NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [QU_ContactRelationship_Code] UNIQUE NONCLUSTERED ([Code] ASC),
-    CONSTRAINT [QU_ContactRelationship_Name] UNIQUE NONCLUSTERED ([Name] ASC)
+    PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

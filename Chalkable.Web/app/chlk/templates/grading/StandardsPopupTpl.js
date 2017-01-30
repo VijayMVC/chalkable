@@ -24,7 +24,7 @@ NAMESPACE('chlk.templates.grading', function () {
                     return startDate && endDate && (startDate.format('m/d/Y') + '<br/> - ' + endDate.format('m/d/Y'));
                 }
 
-                var date = getDate(item.classannouncementdata ? item.classannouncementdata.expiresdate : item.supplementalannouncementdata);
+                var date = getDate(item.classannouncementdata ? item.classannouncementdata.expiresdate : item.supplementalannouncementdata.expiresdate);
                 return date && date.format('m/d/Y');
             }
         ])

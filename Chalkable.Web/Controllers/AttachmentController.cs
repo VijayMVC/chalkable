@@ -44,7 +44,7 @@ namespace Chalkable.Web.Controllers
             return Json(attachments.Transform(x => AttachmentViewData.Create(x, Context)));
         }
 
-        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult DownloadAttachment(int attachmentId, bool? needsDownload, int? width, int? height)
         {
             //TODO: security here
@@ -139,7 +139,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, AppTester, DistrictAdmin, Teacher, Student")]
         public ActionResult Upload()
         {
             try
@@ -157,7 +157,7 @@ namespace Chalkable.Web.Controllers
             }
         }
 
-        [AcceptVerbs(HttpVerbs.Put), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        [AcceptVerbs(HttpVerbs.Put), AuthorizationFilter("SysAdmin, AppTester, DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult Upload(string fileName)
         {
             var length = Request.InputStream.Length;
@@ -192,7 +192,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult StartViewSession(int attachmentId)
         {
             Trace.Assert(Context.PersonId.HasValue);
