@@ -1,0 +1,28 @@
+
+
+
+announcementAppId = self.app && self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
+announcementId = self.app && self.app.getAnnouncementId() ? self.app.getAnnouncementId().valueOf() : ""
+advancedApp = self.app && self.app.isAdvancedApp()
+
+if self.isMyAppsError()
+    +AttachmentDialogMsg(self.getErrorTitle(), self.getErrorMessage())
+else if self.isBanned()
+    +AppBannedDialog()
+else if self.isAppError()
+    +AppErrorDialog()
+else
+    .base-app-dialog.app-wrapper
+        .x-window-header
+            .close-btn.close
+        .iframe-wrap
+            iframe.fixed-height(src=self.getUrl(), allowfullscreen)
+                attributes.class
+        if !self.isNoButtons()
+            .buttons-bottom
+                each button in self.getToolbarButtons()
+                    +ToolbarButton(button, announcementAppId, announcementId, advancedApp, self.getAnnouncementType()).button-like.blue-button
+                BUTTON.close=Msg.Cancel
+
+
+

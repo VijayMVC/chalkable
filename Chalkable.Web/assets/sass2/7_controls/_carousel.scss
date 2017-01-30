@@ -1,0 +1,116 @@
+.carousel-wrapper{
+  padding: 10px;
+  text-align: center;
+  width: 800px;
+  background: #fff;
+  border: 1px solid #e7e6e2;
+  @include box-shadow(0 1px 3px transparentize(#000, .9));
+  margin: 0 auto;
+  border-radius: 7px;
+
+  .carousel{
+    position: relative;
+    overflow: hidden;
+    height: 330px;
+    text-align: center;
+
+    a{
+      display: inline-block;
+      float: right;
+    }
+
+    li{
+      background: #eee;
+      float: left;
+      IMG, embed, iframe{
+        width:800px;
+        height: 330px;
+      }
+    }
+
+    ul{
+      width: 20000em;
+      position: absolute;
+      list-style: none;
+      margin: 0;
+    }
+
+    .picture-button{
+      top: 137px;
+      position: absolute;
+      width: 49px;
+      height: 49px;
+      border-radius: 50%;
+      background: transparentize(#000, .5);
+      cursor: pointer;
+
+      opacity: 0.1;
+      @include single-transition(opacity, .3s);
+
+      &::after {
+        content: ' ';
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 24px;
+        height: 24px;
+      }
+
+
+      &.picture-left{
+        left: 31px;
+        &::after {
+          @include icons-24-sprite(arrow-left-white, 0, -1px);
+        }
+      }
+
+      &.picture-right{
+        right: 31px;
+        &::after {
+          @include icons-24-sprite(arrow-right-white, 0, 3px, 1px);
+        }
+      }
+
+      &:hover:not([disabled]){
+        opacity: 0.85;
+      }
+
+      &:active{
+        opacity: 0.7;
+      }
+
+      &[disabled] {
+        cursor: default;
+      }
+    }
+
+
+    &:hover .picture-button {
+      opacity: .5;
+    }
+  }
+}
+
+.carousel-pagination{
+  text-align: center;
+  position: relative;
+  width: 100%;
+  bottom: 0px;
+  margin-top: 10px;
+
+  .dot{
+    display: inline-block;
+    height: 9px;
+    width: 9px;
+    border-radius: 5px;
+    background: #2B2A28;
+    margin: 0 2px;
+    cursor: pointer;
+    border: 1px solid #9F9D97;
+
+    &.selected{
+      background: #E7E6E2;
+    }
+  }
+}
+
