@@ -51,7 +51,7 @@ NAMESPACE('chlk.controllers', function (){
 
         function logoutAction(){
             return this.getContext().getDefaultView().reset()
-                .thenCall(this.accountService.logOut())
+                .thenCall(this.accountService.logOut)
                 .attach(this.validateResponse_())
                 .then(function (res) {
                     if (res.isSuccess()){
