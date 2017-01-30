@@ -4,8 +4,10 @@ NAMESPACE('chlk.lib.exception', function () {
     /** @class chlk.lib.exception.ChalkableException */
     EXCEPTION(
         'ChalkableException', [
-            function $(msg_, e_) {
+            function $(msg_, e_, title_) {
                 BASE(msg_ || 'Chalkable exception', e_);
-            }
+                this.title = title_;
+            },
+            String, 'title'
         ]);
 });

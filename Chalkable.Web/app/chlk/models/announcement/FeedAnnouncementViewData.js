@@ -46,6 +46,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
                 this.exempt = SJX.fromValue(raw.exempt, Boolean);
                 this.ableToRemoveStandard = SJX.fromValue(raw.canremovestandard, Boolean);
+                this.assessmentAttached = SJX.fromValue(raw.isassessmentattached, Boolean);
                 this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.Application);
                 this.appsWithContent = SJX.fromArrayOfDeserializables(raw.appswithcontent, chlk.models.apps.Application);
                 this.recipients = SJX.fromArrayOfDeserializables(raw.recipients, chlk.models.announcement.AdminAnnouncementRecipient);
@@ -134,6 +135,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.people.User, 'owner',
             Boolean, 'exempt',
             Boolean, 'ableToRemoveStandard',
+            Boolean, 'assessmentAttached',
             ArrayOf(chlk.models.apps.Application), 'suggestedApps',
             ArrayOf(chlk.models.apps.Application), 'appsWithContent',
             Number, 'grade',

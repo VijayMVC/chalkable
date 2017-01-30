@@ -1033,6 +1033,15 @@ namespace Chalkable.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deletions are disabled when an assessment is attached.
+        /// </summary>
+        public static string ERR_CANT_DELETE_ITEM_WITH_ASSESSMENT {
+            get {
+                return ResourceManager.GetString("ERR_CANT_DELETE_ITEM_WITH_ASSESSMENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can not determine current year.
         /// </summary>
         public static string ERR_CANT_DETERMINE_SCHOOL_YEAR {
@@ -1092,6 +1101,15 @@ namespace Chalkable.Common {
         public static string ERR_CHALKABLE_EXCEPTION {
             get {
                 return ResourceManager.GetString("ERR_CHALKABLE_EXCEPTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chalkable security error.
+        /// </summary>
+        public static string ERR_CHALKABLE_SECURITY {
+            get {
+                return ResourceManager.GetString("ERR_CHALKABLE_SECURITY", resourceCulture);
             }
         }
         
@@ -3459,6 +3477,15 @@ namespace Chalkable.Common {
         public static string ERR_TEACHER_NOT_FOUND {
             get {
                 return ResourceManager.GetString("ERR_TEACHER_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attached Assessment.
+        /// </summary>
+        public static string ERR_TITLE_ATTACHED_ASSESSMENT {
+            get {
+                return ResourceManager.GetString("ERR_TITLE_ATTACHED_ASSESSMENT", resourceCulture);
             }
         }
         

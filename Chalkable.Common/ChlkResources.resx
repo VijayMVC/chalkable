@@ -441,6 +441,9 @@
   <data name="ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION" xml:space="preserve">
     <value>Error do not make delete AnnoncementApplication Id={0}</value>
   </data>
+  <data name="ERR_CANT_DELETE_ITEM_WITH_ASSESSMENT" xml:space="preserve">
+    <value>Deletions are disabled when an assessment is attached</value>
+  </data>
   <data name="ERR_CANT_DETERMINE_SCHOOL_YEAR" xml:space="preserve">
     <value>Can not determine current year</value>
   </data>
@@ -461,6 +464,9 @@
   </data>
   <data name="ERR_CHALKABLE_EXCEPTION" xml:space="preserve">
     <value>Chalkable server exception</value>
+  </data>
+  <data name="ERR_CHALKABLE_SECURITY" xml:space="preserve">
+    <value>Chalkable security error</value>
   </data>
   <data name="ERR_CLASS_ALREADY_ASSIGNED_TO_PERIOD" xml:space="preserve">
     <value>This class is already assigned for this period</value>
@@ -1250,6 +1256,9 @@
   </data>
   <data name="ERR_TEACHER_NOT_FOUND" xml:space="preserve">
     <value>Teacher {0} not found</value>
+  </data>
+  <data name="ERR_TITLE_ATTACHED_ASSESSMENT" xml:space="preserve">
+    <value>Attached Assessment</value>
   </data>
   <data name="ERR_TOO_LONG_MSG_FORMAT" xml:space="preserve">
     <value>Please make sure that the number of characters that you have entered for the {0} field is less than or equal to {1} characters.</value>

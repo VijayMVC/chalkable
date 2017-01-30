@@ -9,6 +9,7 @@ namespace Chalkable.Common.Exceptions
         public string InnerMessage { get; set; }
         public string InnerStackTrace { get; set; }
         public string ExceptionType { get; set; }
+        public string Title { get; set; }
 
         public ExceptionViewData Inner { get; set; }
 
@@ -16,12 +17,12 @@ namespace Chalkable.Common.Exceptions
         {
             if (outer == null)
                 return null;
-
+            
             return new ExceptionViewData
             {
                 Message = outer.Message,
                 ExceptionType = outer.GetType().Name,
-
+                Title = (outer as ChalkableException)?.Title,
                 InnerMessage = outer.InnerException?.Message,
                 Inner = Create(outer.InnerException),
 

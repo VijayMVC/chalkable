@@ -95,7 +95,7 @@ NAMESPACE('chlk.services', function () {
                             case 'ChalkableSisNotSupportVersionException':
                                 throw chlk.lib.exception.ChalkableSisNotSupportVersionException(response.data.message);
                             case 'ChalkableException':
-                                throw chlk.lib.exception.ChalkableException(response.data.message);
+                                throw chlk.lib.exception.ChalkableException(response.data.message, null, response.data.title);
                             case 'NoAnnouncementException':
                                 throw chlk.lib.exception.NoAnnouncementException(response.data.message);
                             case 'NoClassAnnouncementTypeException':

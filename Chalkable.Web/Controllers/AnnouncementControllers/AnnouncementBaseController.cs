@@ -140,6 +140,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 annViewData.ApplicationName = annViewData.Applications.Count == 1
                                   ? annViewData.Applications.First().Name
                                   : annViewData.Applications.Count.ToString();
+
+                annViewData.IsAssessmentAttached = annViewData.Applications.Any(a => a.Id == annViewData.AssessmentApplicationId);
             }
             
             if (ann.AnnouncementGroups != null)

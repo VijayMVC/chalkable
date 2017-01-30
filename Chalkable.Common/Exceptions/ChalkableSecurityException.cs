@@ -2,12 +2,11 @@
 {
     public class ChalkableSecurityException : ChalkableException
     {
-        public ChalkableSecurityException() : base("Chalkable security error")
+        public ChalkableSecurityException() : base(ChlkResources.ERR_CHALKABLE_SECURITY)
         { 
         }
-        public ChalkableSecurityException(string message) : base(message)
+        public ChalkableSecurityException(string message, string title = null) : base(message, title)
         {
-            
         }
     }
 }

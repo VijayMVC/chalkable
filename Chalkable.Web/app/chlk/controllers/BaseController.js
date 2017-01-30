@@ -191,7 +191,7 @@ NAMESPACE('chlk.controllers', function (){
                        if(this.getContext().getDefaultView().isStackEmpty())
                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [exception.getMessage()]);
 
-                       return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                       return this.ShowErrorBox(exception.getMessage(), exception.getTitle() || 'oops')
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                            }, this)
@@ -209,7 +209,7 @@ NAMESPACE('chlk.controllers', function (){
                        if(this.getContext().getDefaultView().isStackEmpty())
                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [msg]);
 
-                       return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                       return this.ShowErrorBox(msg, 'oops')
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                            }, this)
@@ -221,7 +221,7 @@ NAMESPACE('chlk.controllers', function (){
                        if(this.getContext().getDefaultView().isStackEmpty())
                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [msg]);
 
-                       return this.ShowMsgBox(msg, 'oops', [{text: Msg.GOT_IT.toUpperCase()}])
+                       return this.ShowErrorBox(msg, 'oops')
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                            }, this)
@@ -390,6 +390,18 @@ NAMESPACE('chlk.controllers', function (){
 
                        return mrResult;
                    });
+           },
+
+           ria.async.Future, function ShowErrorBox(text, header_, buttonText_, buttonClass_){
+               var msg = '';
+               if(header_)
+                   msg = '<b>' + header_ + '</b><br>';
+               msg += text;
+               return this.ShowMsgBox(msg, null, [{
+                   text: buttonText_ || 'OK',
+                   clazz: buttonClass_ || 'blue-button',
+                   value: 'ok'
+               }], 'error', true);
            },
 
            [[chlk.models.common.RoleEnum]],

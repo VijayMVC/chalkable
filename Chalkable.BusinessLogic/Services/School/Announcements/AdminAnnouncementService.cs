@@ -203,7 +203,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 {nameof(AnnouncementApplication.Active), true}
             });
             if(assessmentAttached)
-                throw new ChalkableException("Admin Announcement can't be deleted with attached assessment");
+                throw new ChalkableException(ChlkResources.ERR_CANT_DELETE_ITEM_WITH_ASSESSMENT, ChlkResources.ERR_TITLE_ATTACHED_ASSESSMENT);
         }
 
         public IList<string> GetLastFieldValues(int personId)
