@@ -317,10 +317,19 @@ NAMESPACE('chlk', function (){
                                 tooltip.css('left', offset.left + (node.width() - tooltip.width())/2);
 
                                 if(onBottom)
-                                    tooltip.css('top', offset.top + node.height() + 20).addClass('bottom');
+                                    tooltip.css('top', offset.top + node.height() + 5).addClass('bottom');
                                 else
                                     tooltip.css('top', offset.top - tooltip.height());
-                                clazz && tooltip.addClass(clazz);
+                                if(clazz){
+                                    if(Array.isArray(clazz)){
+                                        clazz.forEach(function(clazzItem){
+                                            tooltip.addClass(clazzItem);
+                                        })
+                                    }
+                                    else
+                                        tooltip.addClass(clazz);
+                                }
+
                             }
                         }
 
@@ -346,7 +355,17 @@ NAMESPACE('chlk', function (){
                     var clazz = node.data('tooltip-class');
                     var tooltip = jQuery('#chlk-tooltip-item');
                     tooltip.hide();
-                    clazz && tooltip.removeClass(clazz);
+
+                    if(clazz){
+                        if(Array.isArray(clazz)){
+                            clazz.forEach(function(clazzItem){
+                                tooltip.removeClass(clazzItem);
+                            })
+                        }
+                        else
+                            tooltip.removeClass(clazz);
+                    }
+
                     tooltip.removeClass('bottom');
                     tooltip.find('.tooltip-content').html('');
                 });
