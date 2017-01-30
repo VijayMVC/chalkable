@@ -69,9 +69,10 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         public IList<StudentPanoramaCalendarItemViewData> CalendarItems { get; set; }
 
         public static IList<StudentPanoramaCalendarViewData> Create(IList<StudentAbsenceInfo> absences, IList<StudentInfractionInfo> studentInfractions
-            , IList<Date> allSchoolDays, IList<SchoolYear> schoolYears)
+            , IList<Date> allSchoolDays, IEnumerable<SchoolYear> schoolYears)
         {
             var res = new List<StudentPanoramaCalendarViewData>();
+            schoolYears = schoolYears.OrderByDescending(sy => sy.AcadYear);
             foreach (var schoolYear in schoolYears)
             {
                 var syDays = allSchoolDays.Where(sy => sy.SchoolYearRef == schoolYear.Id);

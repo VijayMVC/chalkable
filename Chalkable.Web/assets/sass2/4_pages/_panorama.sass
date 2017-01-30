@@ -23,6 +23,12 @@
           background: white
           border-color: #e7e6e2
 
+  .calendars-legend
+    margin-top: 11px
+
+  .calendar-legend-item
+    padding-left: 36px
+
   .calendar-item
     font-size: 11px
     text-align: center
@@ -40,54 +46,59 @@
       height: 25px
       line-height: 25px
 
-      .day-item
-        width: 22px
-        height: 22px
-        line-height: 22px
-        position: relative
-        border-radius: 50%
-        background: #d0cdcd
-        color: #656565
+  .text-legend
+    padding-left: 6px
+    font-weight: 600
+    font-size: 12px
 
-        &.sunday, &.saturday
-          &:not(.active-item)
-            color: #a4a4a4
-            background: transparent
+  .day-item
+    width: 22px
+    height: 22px
+    line-height: 22px
+    position: relative
+    border-radius: 50%
+    background: #d0cdcd
+    color: #656565
 
-        &.active-item
-          background: #09b356
-          color: #ffffff
+    &.sunday, &.saturday
+      &:not(.active-item)
+        color: #a4a4a4
+        background: transparent
 
-        &.late
-          background: #dfd209
-          color: #000000
+    &.active-item
+      background: #09b356
+      color: #ffffff
 
-        &.absent
-          background: #a12637
+    &.late
+      background: #dfd209
+      color: #000000
 
-        &.half-absent.active-item
-          +icons-24-sprite(absent-half-day)
+    &.absent
+      background: #a12637
 
-        &.future
-          background: #d0cdcd
-          color: #656565
+    &.half-absent.active-item
+      +icons-24-sprite(absent-half-day)
 
-        &.has-disciplines
-          overflow: visible !important
+    &.future
+      background: #d0cdcd
+      color: #656565
 
-          .disciplines-item
-            display: block
+    &.has-disciplines
+      overflow: visible !important
 
-        .disciplines-item
-          display: none
-          width: 7px
-          height: 7px
-          border-radius: 50%
-          border: 2px solid #ffffff
-          background: #e70303
-          position: absolute
-          right: -3px
-          top: -3px
+      .disciplines-item
+        display: block
+
+    .disciplines-item
+      display: none
+      width: 7px
+      height: 7px
+      border-radius: 50%
+      border: 2px solid #ffffff
+      background: #e70303
+      position: absolute
+      right: -3px
+      top: -3px
 
   .panorama-demographics-tab
     TABLE

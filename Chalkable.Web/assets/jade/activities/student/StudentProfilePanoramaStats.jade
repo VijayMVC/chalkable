@@ -59,6 +59,20 @@ mixin CalendarDayItem_(item, dayIndex)
                                             +CalendarDayItem_(calendar.days[dayIndex + 4], dayIndex + 4)
                                             +CalendarDayItem_(calendar.days[dayIndex + 5], dayIndex + 5)
                                             +CalendarDayItem_(calendar.days[dayIndex + 6], dayIndex + 6)
+            .calendars-legend.text-center
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item
+                    .text-legend.i-b.v-m Present
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item.half-absent
+                    .text-legend.i-b.v-m Absent 1/2 Day
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item.absent
+                    .text-legend.i-b.v-m Absent Full Day
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.has-disciplines
+                        .disciplines-item
+                    .text-legend.i-b.v-m Discipline
 
 +CloseOpen('Attendance', true).panorama-attendance-tab
     .grid-with-border.attendance-grid
