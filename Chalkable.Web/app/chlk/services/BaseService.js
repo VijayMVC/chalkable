@@ -12,6 +12,8 @@ REQUIRE('chlk.lib.exception.ChalkableApiException');
 REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.ChalkableSisNotSupportVersionException');
 REQUIRE('chlk.lib.exception.FileSizeExceedException');
+REQUIRE('chlk.lib.exception.AnnouncementDeleteFailedException');
+
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -100,6 +102,8 @@ NAMESPACE('chlk.services', function () {
                                 throw chlk.lib.exception.NoAnnouncementException(response.data.message);
                             case 'NoClassAnnouncementTypeException':
                                 throw chlk.lib.exception.NoClassAnnouncementTypeException();
+                            case 'AnnouncementDeleteFailedException':
+                                throw chlk.lib.exception.AnnouncementDeleteFailedException(response.data.message, null, response.data.title);
                             case 'AggregateException':
                                 throw  chlk.lib.exception.ChalkableSisException(response.data.innermessage);
                             default:

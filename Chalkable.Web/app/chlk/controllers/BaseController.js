@@ -17,6 +17,7 @@ REQUIRE('chlk.lib.exception.AppErrorException');
 REQUIRE('chlk.lib.exception.InvalidPictureException');
 REQUIRE('chlk.lib.exception.ChalkableSisNotSupportVersionException');
 REQUIRE('chlk.lib.exception.FileSizeExceedException');
+REQUIRE('chlk.lib.exception.AnnouncementDeleteFailedException');
 
 REQUIRE('chlk.services.UserTrackingService');
 
@@ -251,6 +252,16 @@ NAMESPACE('chlk.controllers', function (){
 
                        return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center').thenBreak();
                    }, this)
+                   .catchException(chlk.lib.exception.AnnouncementDeleteFailedException, function(exception){
+                        if(this.getContext().getDefaultView().isStackEmpty())
+                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [exception.getMessage()]);
+
+                        return this.ShowErrorBox(exception.getMessage(), exception.getTitle() || 'Error')
+                            .then(function(){
+                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                            }, this)
+                            .thenBreak();
+                    }, this)
                    .catchError(this.handleServerError, this);
                return head;
            },
