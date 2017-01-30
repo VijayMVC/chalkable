@@ -185,11 +185,25 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var da = CreateAdminAnnouncementDataAccess(uow);
                 var announcement = da.GetAnnouncement(announcementId, Context.PersonId.Value);
-                if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
-                    throw new ChalkableSecurityException();
+                EnsureAdminAnnouncementDelete(announcement, uow);
                 da.Delete(announcementId);
                 uow.Commit();
             }
+        }
+
+        private void EnsureAdminAnnouncementDelete(Announcement announcement, UnitOfWork unitOfWork)
+        {
+            if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
+                throw new ChalkableSecurityException();
+            var assessmentId = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId();
+            var assessmentAttached = new AnnouncementApplicationDataAccess(unitOfWork).Exists(new AndQueryCondition
+            {
+                {nameof(AnnouncementApplication.AnnouncementRef), announcement.Id},
+                {nameof(AnnouncementApplication.ApplicationRef), assessmentId},
+                {nameof(AnnouncementApplication.Active), true}
+            });
+            if(assessmentAttached)
+                throw new ChalkableException("Admin Announcement can't be deleted with attached assessment");
         }
 
         public IList<string> GetLastFieldValues(int personId)
