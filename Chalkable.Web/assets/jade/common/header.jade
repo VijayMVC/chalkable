@@ -1,0 +1,20 @@
+if chlk.templates.search && chlk.templates.search.SiteSearch
+    .wrapper
+        +SearchBox(chlk.services.SearchService, "search", chlk.templates.search.SiteSearch)#siteSearch(
+            name="siteSearch"
+            clearAfterSelect = false
+            withButton = true,
+            listCls = "site-search"
+        )
+        label(for="siteSearch")#search-glass
+
+-var reportCardsEnabled = self.getContext().getSession().get(ChlkSessionConstants.REPORT_CARDS_ENABLED, false)
+if chlk.controllers.ReportingController && self.getContext().getSession().get('role').isAdmin() && reportCardsEnabled
+    span(href="javascript:").report-cards-link &nbsp;
+        .chat-bubble.top.right.reports-bubble.x-hidden
+            +ActionLink('reporting', 'lunchCount') Lunch Count
+            +ActionLink('reporting', 'reportCards') Report Card
+if chlk.controllers.NotificationController
+    +ActionButton('notification', 'list-new').blue.notifications-link &nbsp;
+
++Logout('account', 'logout', self.getCurrentPerson())
