@@ -293,6 +293,9 @@ NAMESPACE('chlk', function (){
                             tooltip.hide();
                             tooltip.find('.tooltip-content').html('');
                         }else{
+                            var scrollTop = jQuery(window).scrollTop();
+                            jQuery(window).scrollTop(0);
+
                             var node = jQuery(this),
                                 offset = node.offset(),
                                 showTooltip = true,
@@ -329,8 +332,8 @@ NAMESPACE('chlk', function (){
                                     else
                                         tooltip.addClass(clazz);
                                 }
-
                             }
+                            jQuery(window).scrollTop(scrollTop);
                         }
 
                         var parents = target.parents('[data-tooltip]');
