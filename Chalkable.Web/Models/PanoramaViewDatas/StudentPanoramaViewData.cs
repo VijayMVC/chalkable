@@ -78,8 +78,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                 var syDays = allSchoolDays.Where(sy => sy.SchoolYearRef == schoolYear.Id);
                 var items = syDays.Select(day =>
                 {
-                    var absence = absences.FirstOrDefault(a => a.Date == day.Day);
-                    var dayInfractions = studentInfractions.Where(i => i.OccurrenceDate == day.Day).ToList();
+                    var absence = absences?.FirstOrDefault(a => a.Date == day.Day);
+                    var dayInfractions = studentInfractions?.Where(i => i.OccurrenceDate == day.Day).ToList();
                     return StudentPanoramaCalendarItemViewData.Create(absence, dayInfractions, day);
                 }).ToList();
                 res.Add(new StudentPanoramaCalendarViewData
@@ -110,7 +110,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                 IsAbsent = absence?.AbsenceLevel == "All Day",
                 IsHalfAbsent = absence?.AbsenceLevel == "Half Day",
                 IsLate = absence?.AbsenceLevel == "Tardy",
-                Disciplines = infractions.Select(x => x.InfractionName).ToList(),
+                Disciplines = infractions?.Select(x => x.InfractionName).ToList(),
                 Date = date.Day
             };
         }
