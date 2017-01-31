@@ -1,0 +1,6 @@
++ActionLink('announcementcomment', 'viewAttachment', self.getId(), self.getUrl(), self.getType())
+    if self.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+        SPAN=self.getName()
+    else
+        .img-wrapper
+            +LoadingImage(src=self.getThumbnailUrl(), id=self.getPictureId())
