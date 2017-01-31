@@ -8,6 +8,14 @@ mixin HeaderDisciplinesLink_(name, type, panoramaInfo)
         data-tooltip-type="overflow"
     )(attributes).cell=name
 
+mixin CalendarDayItem_(item, dayIndex)
+    TD
+        if item
+            -var itemInfo = self.getDayItemInfo(item, dayIndex)
+            .day-item(class=itemInfo.classes, data-tooltip=itemInfo.tooltip, data-tooltip-class='white', data-tooltip-position='bottom')=item && item.day
+                .disciplines-item(data-tooltip=itemInfo.disciplinesTooltip, data-tooltip-class='white', data-tooltip-position='bottom')
+
+-self.preparePanoramaCalendars()
 -var user = self.getModel()
 -var panoramaInfo = user.getPanoramaInfo()
 
@@ -17,22 +25,55 @@ mixin HeaderDisciplinesLink_(name, type, panoramaInfo)
             .title Standardized Tests
         if self.getTestsChartOptions_()
             +Chart()(
-            data-options = self.getTestsChartOptions_()
+                data-options = self.getTestsChartOptions_()
             ).standardized-tests-chart
-    .stats-container.attendances-tab
++CloseOpen('Calendar').panorama-attendance-tab
+    +Tabs.panorama-calendars-tabs
+        -var calendars = panoramaInfo.getCalendars()
         .top-bar
-            .title Attendance
-        if self.getAbsencesChartOptions_()
-            +Chart()(
-            data-options = self.getAbsencesChartOptions_()
-            ).attendances-chart
-    .stats-container.disciplines-tab
-        .top-bar
-            .title Discipline
-        if self.getDisciplinesChartOptions_()
-            +Chart()(
-            data-options = self.getDisciplinesChartOptions_()
-            ).disciplines-chart
+            UL.tab-headers
+                for item, index in calendars
+                    LI(data-tab=index+1, class = index ? "" : "active").tab-header=item.getSchoolYearName()
+        .calendars-content
+            for item, index in calendars
+                .tab-content(data-tab=index+1, class = index ? "" : "active").relative
+                    for calendar in item.getItemsByMonth()
+                        .calendar-item.i-b
+                            h3.calendar-title=calendar.title
+                            TABLE.calendar-table
+                                TR
+                                    TH S
+                                    TH M
+                                    TH T
+                                    TH W
+                                    TH T
+                                    TH F
+                                    TH S
+                                for dayItem, dayIndex in calendar.days
+                                    if dayIndex % 7 == 0
+                                        TR
+                                            +CalendarDayItem_(dayItem, dayIndex)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 1], dayIndex + 1)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 2], dayIndex + 2)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 3], dayIndex + 3)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 4], dayIndex + 4)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 5], dayIndex + 5)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 6], dayIndex + 6)
+            .calendars-legend.text-center
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item
+                    .text-legend.i-b.v-m Present
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item.half-absent
+                    .text-legend.i-b.v-m Absent 1/2 Day
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item.absent
+                    .text-legend.i-b.v-m Absent Full Day
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.has-disciplines
+                        .disciplines-item
+                    .text-legend.i-b.v-m Discipline
+
 +CloseOpen('Attendance', true).panorama-attendance-tab
     .grid-with-border.attendance-grid
         +RenderWith(panoramaInfo, chlk.templates.student.StudentProfilePanoramaAttendanceStatsTpl)

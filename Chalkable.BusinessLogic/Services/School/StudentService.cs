@@ -302,15 +302,16 @@ namespace Chalkable.BusinessLogic.Services.School
 
             var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYears(acadYears);
             var studentSchoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByStudent(studentId, StudentEnrollmentStatusEnum.CurrentlyEnrolled, null);
-            var schoolYearIds = schoolYears.Where(x => studentSchoolYears.Any(y => y.Id == x.Id)).Select(x=>x.Id).ToList();
-            
+            schoolYears = schoolYears.Where(x => studentSchoolYears.Any(y => y.Id == x.Id)).ToList();
+            var schoolYearIds = schoolYears.Select(x => x.Id).ToList();
+
             var tasks = schoolYearIds.Select(syId => Task.Run(() => ServiceLocator.CalendarDateService.GetLastDays(syId, true, null, Context.NowSchoolYearTime))).ToList();
             StudentPanorama studentPanorama = null;
             if(schoolYearIds.Count > 0)
                 studentPanorama = ConnectorLocator.PanoramaConnector.GetStudentPanorama(studentId, schoolYearIds, componentIds.ToList(), scoreTypeIds.ToList());
 
             var days = (await Task.WhenAll(tasks)).SelectMany(x => x).OrderBy(x=>x.Day).ToList();
-            return StudentPanoramaInfo.Create(studentPanorama, days);
+            return StudentPanoramaInfo.Create(studentPanorama, days, schoolYears);
         }
 
         public StudentDetailsInfo GetStudentDetailsInfo(int studentId, int syId)

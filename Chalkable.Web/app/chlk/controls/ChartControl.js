@@ -218,7 +218,12 @@ NAMESPACE('chlk.controls', function () {
                 if(container.exists())
                     node = container;
                 options.chart.renderTo = node.valueOf()[0];
-                charts[id] = new Highcharts.Chart(options);
+                charts[id] = new Highcharts.Chart(options, function(chart){
+                    var series = chart.series;
+                    series.forEach(function (serie) {
+                        if (serie.legendLine) serie.legendLine.destroy();
+                    });
+                });
                 node.setData('chart', charts[id]);
                 setTimeout(function(node){
                     node.addClass('processed');

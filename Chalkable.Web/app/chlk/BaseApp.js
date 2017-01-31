@@ -282,7 +282,7 @@ NAMESPACE('chlk', function (){
 
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
-                    if(!jQuery(this).data('wasClick') && !tooltipTimeOut){
+                    if(!jQuery(this).data('wasClick') && !tooltipTimeOut && !jQuery(this).hasClass('tooltip-processed')){
                         var target = jQuery(e.target),
                             tooltip = jQuery('#chlk-tooltip-item');
                         target.off('remove.tooltip');
@@ -293,6 +293,9 @@ NAMESPACE('chlk', function (){
                             tooltip.hide();
                             tooltip.find('.tooltip-content').html('');
                         }else{
+                            var scrollTop = jQuery(window).scrollTop();
+                            jQuery(window).scrollTop(0);
+
                             var node = jQuery(this),
                                 offset = node.offset(),
                                 showTooltip = true,
@@ -317,12 +320,27 @@ NAMESPACE('chlk', function (){
                                 tooltip.css('left', offset.left + (node.width() - tooltip.width())/2);
 
                                 if(onBottom)
-                                    tooltip.css('top', offset.top + node.height() + 20).addClass('bottom');
+                                    tooltip.css('top', offset.top + node.height() + 5).addClass('bottom');
                                 else
                                     tooltip.css('top', offset.top - tooltip.height());
-                                clazz && tooltip.addClass(clazz);
+                                if(clazz){
+                                    if(Array.isArray(clazz)){
+                                        clazz.forEach(function(clazzItem){
+                                            tooltip.addClass(clazzItem);
+                                        })
+                                    }
+                                    else
+                                        tooltip.addClass(clazz);
+                                }
                             }
+                            jQuery(window).scrollTop(scrollTop);
                         }
+
+                        var parents = target.parents('[data-tooltip]');
+                        parents.addClass('tooltip-processed');
+                        setTimeout(function(){
+                            parents.removeClass('tooltip-processed');
+                        }, 10)
                     }
 
                 });
@@ -340,7 +358,17 @@ NAMESPACE('chlk', function (){
                     var clazz = node.data('tooltip-class');
                     var tooltip = jQuery('#chlk-tooltip-item');
                     tooltip.hide();
-                    clazz && tooltip.removeClass(clazz);
+
+                    if(clazz){
+                        if(Array.isArray(clazz)){
+                            clazz.forEach(function(clazzItem){
+                                tooltip.removeClass(clazzItem);
+                            })
+                        }
+                        else
+                            tooltip.removeClass(clazz);
+                    }
+
                     tooltip.removeClass('bottom');
                     tooltip.find('.tooltip-content').html('');
                 });

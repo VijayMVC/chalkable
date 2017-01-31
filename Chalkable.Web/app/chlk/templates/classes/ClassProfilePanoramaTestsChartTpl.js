@@ -67,7 +67,12 @@ NAMESPACE('chlk.templates.classes', function () {
                     plotOptions:{
                         line: {
                             marker: {
-                                symbol: 'triangle-down'
+                                fillColor: '#ffffff',
+                                symbol: 'circle',
+                                radius: 5,
+                                lineWidth: 3,
+                                enabled: true,
+                                lineColor: null
                             }
                         }
                     },

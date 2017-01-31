@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
         public IList<StandardizedTestStatsViewData> StandardizedTestsStats { get; set; }
         public IList<StudentDailyAbsenceViewData> Absences { get; set; }
 
+        public IList<StudentPanoramaCalendarViewData> Calendars { get; set; } 
         public IList<DailyStatsViewData> AttendanceStats { get; set; }
         public IList<StudentInfractionViewData> DisciplineStats { get; set; }
         public IList<DailyStatsViewData> DailyDisciplineStats { get; set; }
@@ -29,7 +30,8 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                 AttendanceStats = BuildAttendanceStats(panorama.DailyAbsences, panorama.AllSchoolDays),
                 DailyDisciplineStats = BuildDisciplineStats(panorama.Infractions, panorama.AllSchoolDays),
                 FilterSettings = settings, 
-                StandardizedTests = tests.Select( x => StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList()
+                StandardizedTests = tests.Select( x => StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList(),
+                Calendars = StudentPanoramaCalendarViewData.Create(panorama.DailyAbsences, panorama.Infractions, panorama.AllSchoolDays, panorama.SchoolYears)
             };
         }
 
@@ -57,6 +59,61 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
             }
             return res;
         } 
+    }
+
+    public class StudentPanoramaCalendarViewData
+    {
+        public int SchoolYearId { get; set; }
+        public string SchoolYearName { get; set; }
+        public int AcadYear { get; set; }
+        public IList<StudentPanoramaCalendarItemViewData> CalendarItems { get; set; }
+
+        public static IList<StudentPanoramaCalendarViewData> Create(IList<StudentAbsenceInfo> absences, IList<StudentInfractionInfo> studentInfractions
+            , IList<Date> allSchoolDays, IEnumerable<SchoolYear> schoolYears)
+        {
+            var res = new List<StudentPanoramaCalendarViewData>();
+            schoolYears = schoolYears.OrderByDescending(sy => sy.AcadYear);
+            foreach (var schoolYear in schoolYears)
+            {
+                var syDays = allSchoolDays.Where(sy => sy.SchoolYearRef == schoolYear.Id);
+                var items = syDays.Select(day =>
+                {
+                    var absence = absences?.FirstOrDefault(a => a.Date == day.Day);
+                    var dayInfractions = studentInfractions?.Where(i => i.OccurrenceDate == day.Day).ToList();
+                    return StudentPanoramaCalendarItemViewData.Create(absence, dayInfractions, day);
+                }).ToList();
+                res.Add(new StudentPanoramaCalendarViewData
+                {
+                    AcadYear = schoolYear.AcadYear,
+                    SchoolYearName = schoolYear.Name,
+                    SchoolYearId = schoolYear.Id,
+                    CalendarItems = items
+                });
+            }
+            return res;
+        }
+    }
+
+    public class StudentPanoramaCalendarItemViewData
+    {
+        public DateTime Date { get; set; }
+        public string AbsenceLevel { get; set; }
+        public bool IsAbsent { get; set; }
+        public bool IsHalfAbsent { get; set; }
+        public bool IsLate { get; set; }
+        public IList<string> Disciplines { get; set; }
+
+        public static StudentPanoramaCalendarItemViewData Create(StudentAbsenceInfo absence, IList<StudentInfractionInfo> infractions, Date date)
+        {
+            return new StudentPanoramaCalendarItemViewData
+            {
+                IsAbsent = absence?.AbsenceLevel == "All Day",
+                IsHalfAbsent = absence?.AbsenceLevel == "Half Day",
+                IsLate = absence?.AbsenceLevel == "Tardy",
+                Disciplines = infractions?.Select(x => x.InfractionName).ToList(),
+                Date = date.Day
+            };
+        }
     }
 
     public class StudentDailyAbsenceViewData
