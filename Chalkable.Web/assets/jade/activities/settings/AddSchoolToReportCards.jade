@@ -1,0 +1,19 @@
+-var excludeIds = self.getExcludeIds() || []
+
+.dialog.course-types
+    .x-window-header
+        h1 Add School
+        .close.close-btn
+
+    +ActionForm('settings', 'addSchoolToReportCards')
+        +Hidden('requestId', self.getRequestId())
+        +Hidden('schoolNames', '').school-names
+        .courses-container
+            +Select('schools', 'schoolIds')(multiple, data-placeholder="Schools...").school-select
+                each item in self.getSchools() || []
+                    +Option(item.getId().valueOf(), item.getName())(
+                        disabled = excludeIds.indexOf(item.getId().valueOf()) > -1
+                    )
+        .buttons-container
+            +Button.special-button2.cancel.close Cancel
+            +Button()(type="submit").special-button2.blue-button Add

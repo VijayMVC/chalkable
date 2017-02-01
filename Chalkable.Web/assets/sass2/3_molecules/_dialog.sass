@@ -1,0 +1,196 @@
+.developer
+  .dialog, .dialog-window
+    margin: 0 auto 100px
+
+.dialog, .dialog-window
+  z-index: 1005
+  background: #fff
+  overflow: initial
+
+  .under-overlay > &
+    z-index: 998
+
+  margin: 0 auto 50px
+  top: 100px
+  position: relative
+  display: table
+  table-layout: fixed
+
+  .close-btn
+    top: 15px
+    right: 6px
+    opacity: 1
+
+  h1
+    height: 62px
+    line-height: 58px
+    font-size: 18px
+    text-align: center
+
+  h2
+    text-align: center
+    font-size: 16px
+
+  .dialog-content
+    padding: 25px
+
+  .buttons-bottom
+    text-align: center
+    padding-top: 10px
+
+    button
+      min-width: 70px
+
+      &:not(:last-child)
+        margin-right: 10px
+
+  .x-window-body
+    margin: 25px
+
+  .x-window-header, .x-window-footer
+    background: #f7f7f5
+    text-align: center
+
+  .x-window-header
+    SPAN, h1
+      line-height: 62px
+      color: #201F1C
+      font-weight: bold
+
+  .x-window-footer
+    padding: 15px
+
+    button, input[type=submit], input[type=button]
+      margin: 0 3px
+      display: inline-block
+
+.base-attachment-dialog, .base-app-dialog
+  position: fixed
+  +box-shadow(transparentize(#000, .8) 0 2px 16px)
+  max-height: 99%
+  margin: 0
+
+#chlk-dialogs
+  position: absolute
+  width: 100%
+  z-index: 999
+  top: 0
+  height: 0
+
+#chlk-overlay
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  z-index: 999
+  background: transparentize(#2f7790, .2)
+
+.stop-scrolling
+  overflow: hidden
+
+#chlk-dialogs>DIV:not(#chlk-overlay)
+  position: fixed
+  width: 100%
+  height: 100%
+  z-index: 1000
+  overflow: auto
+
+  &.under-overlay
+    z-index: 998
+
+.x-close-btn
+  background-color: #000
+  +icons-24-sprite(white-close-btn)
+  display: inline-block
+  width: 24px
+  height: 24px
+  float: right
+  cursor: pointer
+
+  &.absolute
+    top: -24px
+    right: 0
+
+  &:hover
+    opacity: 0.8
+
+
+.info-msg-dialog
+  .icon-wrapper img
+    display: block
+    margin: -17px auto 27px
+
+  button
+    min-width: 92px
+    &:last-child:not(:nth-child(2))
+      margin-left: 20px
+
+  .leave-msg, .error, .ok, .permissions, .report, .sync
+    .x-window-body
+      margin: 27px 27px 32px
+      width: 401px
+      padding-top: 93px
+      text-align: center
+      font-size: 14px
+
+      b
+        font-weight: 600
+        margin-bottom: 6px
+        display: inline-block
+
+    .buttons-container
+      margin-top: 25px
+
+    BUTTON
+      &:last-child:not(:nth-child(2))
+        margin-left: 35px
+
+  pre
+    white-space: pre-wrap
+
+  .dialog
+    display: inline-block
+    left: 50%
+    top: 30%
+    +transform(translate(-50%, -30%))
+
+  .x-window-body
+    margin: 40px 75px
+    min-width: 401px
+    text-align: center
+
+    input[type=text]
+      display: block
+      width: 100%
+
+    .center
+      text-align: center
+
+    .inline
+      display: inline-block
+
+  .leave-msg
+    .x-window-body
+      background: image-url("images2/msg-icons/unsaved.png") no-repeat center top
+
+  .error
+    .x-window-body
+      background: image-url("images2/msg-icons/error.png") no-repeat center top
+
+  .ok
+    .x-window-body
+      background: image-url("images2/msg-icons/ok.png") no-repeat center top
+
+  .permissions
+    .x-window-body
+      background: image-url("images2/msg-icons/permissions.png") no-repeat center top
+
+  .report
+    .x-window-body
+      padding-top: 105px
+      background: image-url("images2/msg-icons/report.png") no-repeat center top
+
+  .sync
+    .x-window-body
+      background: image-url("images2/msg-icons/sync.png") no-repeat center top
