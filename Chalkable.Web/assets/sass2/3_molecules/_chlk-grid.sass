@@ -1,0 +1,92 @@
+.grid-with-border
+  border: 1px solid #d8d9d9
+  margin: 25px 0
+
+.chlk-grid
+  &.chlk-calendar
+    .header
+      box-shadow: none
+
+  .grid-focus, .with-grid-focus-hidden
+    height: 0
+    width: 0
+    border: none
+    position: absolute
+
+  .grid-header
+    background: #e8e8e8
+
+    .cell
+      position: relative
+      font-weight: bold
+      font-size: 14px
+
+    .active-sort
+      padding-right: 15px
+
+      &::before
+        content: " "
+        position: absolute
+        top: 50%
+        margin-top: -3px
+        right: 4px
+        width: 0
+        height: 0
+        border-style: solid
+        border-width: 7px 5px 0 5px
+        border-color: #a19e97 transparent transparent transparent
+
+    .descending::before
+      border-width: 0 5px 7px 5px
+      border-color: transparent transparent #a19e97 transparent
+
+  .grid-content
+    display: table
+    table-layout: fixed
+    width: 100%
+    border-collapse: collapse
+
+  .grid-row
+    display: table-row
+
+    &:first-child
+      .cell
+        border-top: none
+        text-decoration: none
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+
+    &:last-child
+      .cell
+        border-bottom: none
+
+    &.highlighted
+      background: #a3b4cc
+
+  .cell
+    display: table-cell
+    height: 50px
+    border: 1px solid #c7c8c3
+    vertical-align: middle
+    border-width: 1px 0 1px 0
+
+    .circle-cnt
+      display: inline-block
+      width: 57px
+      height: 30px
+      line-height: 28px
+      border-radius: 50%
+      background: #1d8e17
+      color: white
+      font-size: 14px
+      font-weight: normal
+
+      &.red
+        background: #a32638
+
+  .footer
+    line-height: 50px
+    border-top: 1px solid #c7c8c3
+    text-align: center
+    font-style: italic
