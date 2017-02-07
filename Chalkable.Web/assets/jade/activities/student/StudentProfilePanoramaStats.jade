@@ -1,0 +1,148 @@
+mixin YesNo_(value)
+    .data-info= value ? "Yes" : "No"
+
+mixin HeaderDisciplinesLink_(name, type, panoramaInfo)
+    +ActionLink('class', 'sortPanoramaDisciplines', type, panoramaInfo.getDisciplinesOrderBy() == type && !panoramaInfo.isDisciplinesDescending())(
+        class = (panoramaInfo.getDisciplinesOrderBy() == type ? "active-sort " : "") + (panoramaInfo.isDisciplinesDescending() ? "descending" : ""),
+        data-tooltip=name,
+        data-tooltip-type="overflow"
+    )(attributes).cell=name
+
+mixin CalendarDayItem_(item, dayIndex)
+    TD
+        if item
+            -var itemInfo = self.getDayItemInfo(item, dayIndex)
+            .day-item(class=itemInfo.classes, data-tooltip=itemInfo.tooltip, data-tooltip-class='white', data-tooltip-position='bottom')=item && item.day
+                .disciplines-item(data-tooltip=itemInfo.disciplinesTooltip, data-tooltip-class='white', data-tooltip-position='bottom')
+
+-self.preparePanoramaCalendars()
+-var user = self.getModel()
+-var panoramaInfo = user.getPanoramaInfo()
+
++CloseOpen('Graph')
+    .stats-container.standardized-tests-tab
+        .top-bar
+            .title Standardized Tests
+        if self.getTestsChartOptions_()
+            +Chart()(
+                data-options = self.getTestsChartOptions_()
+            ).standardized-tests-chart
++CloseOpen('Calendar').panorama-attendance-tab
+    +Tabs.panorama-calendars-tabs
+        -var calendars = panoramaInfo.getCalendars()
+        .top-bar
+            UL.tab-headers
+                for item, index in calendars
+                    LI(data-tab=index+1, class = index ? "" : "active").tab-header=item.getSchoolYearName()
+        .calendars-content
+            for item, index in calendars
+                .tab-content(data-tab=index+1, class = index ? "" : "active").relative
+                    for calendar in item.getItemsByMonth()
+                        .calendar-item.i-b
+                            h3.calendar-title=calendar.title
+                            TABLE.calendar-table
+                                TR
+                                    TH S
+                                    TH M
+                                    TH T
+                                    TH W
+                                    TH T
+                                    TH F
+                                    TH S
+                                for dayItem, dayIndex in calendar.days
+                                    if dayIndex % 7 == 0
+                                        TR
+                                            +CalendarDayItem_(dayItem, dayIndex)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 1], dayIndex + 1)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 2], dayIndex + 2)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 3], dayIndex + 3)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 4], dayIndex + 4)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 5], dayIndex + 5)
+                                            +CalendarDayItem_(calendar.days[dayIndex + 6], dayIndex + 6)
+            .calendars-legend.text-center
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item
+                    .text-legend.i-b.v-m Present
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item.half-absent
+                    .text-legend.i-b.v-m Absent 1/2 Day
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.active-item.absent
+                    .text-legend.i-b.v-m Absent Full Day
+                .calendar-legend-item.i-b
+                    .day-item.i-b.v-m.has-disciplines
+                        .disciplines-item
+                    .text-legend.i-b.v-m Discipline
+
++CloseOpen('Attendance', true).panorama-attendance-tab
+    .grid-with-border.attendance-grid
+        +RenderWith(panoramaInfo, chlk.templates.student.StudentProfilePanoramaAttendanceStatsTpl)
+
++CloseOpen('Demographics', true).panorama-demographics-tab
+    TABLE
+        TR
+            TD
+                -var bd = user.getBirthDate()
+                .section-data
+                    .info-title Birth Date
+                    .data-info= bd && bd.format('mm.dd.yy')
+                .section-data
+                    .info-title Age
+                    .data-info= user.getAge()
+                .section-data
+                    .info-title Gender
+                    .data-info= user.getGender()
+                .section-data
+                    .info-title Race
+                    .data-info= user.getEthnicity() && user.getEthnicity().getName()
+                .section-data
+                    .info-title Hispanic
+                    +YesNo_(user.isHispanic())
+            TD
+                .section-data
+                    .info-title Special Ed
+                    +YesNo_(user.isIEPActive())
+                .section-data
+                    .info-title Title I
+                    +YesNo_(user.isTitle1Eligible())
+                .section-data
+                    .info-title Section 504
+                    +YesNo_(user.isSection504())
+                .section-data
+                    .info-title Homeless
+                    +YesNo_(user.isHomeless())
+            TD
+                .section-data
+                    .info-title Language
+                    .data-info= user.getLanguage() && user.getLanguage().getName()
+                .section-data
+                    .info-title Immigrant
+                    +YesNo_(user.isImmigrant())
+                .section-data
+                    .info-title Nationality
+                    .data-info= user.getNationality() && user.getNationality().getName()
+                .section-data
+                    .info-title LEP
+                    +YesNo_(user.isLep())
+                .section-data
+                    .info-title Exchange Student
+                    +YesNo_(user.isForeignExchange())
+            TD
+                .section-data
+                    .info-title State ID
+                    .data-info= user.getStateIDNumber()
+                .section-data
+                    .info-title Alternate ID
+                    .data-info= user.getAlternateStudentNumber()
+                .section-data
+                    .info-title Student No.
+                    .data-info= user.getStudentNumber()
+                .section-data
+                    .info-title Entry Date
+                    .data-info= user.getOriginalEnrollmentDate() && user.getOriginalEnrollmentDate().format('mm.dd.yy')
+                .section-data
+                    .info-title Retained
+                    +YesNo_(user.isRetained())
++CloseOpen('Discipline', true).panorama-discipline-tab
+    .grid-with-border.discipline-grid
+        +RenderWith(panoramaInfo, chlk.templates.student.StudentProfilePanoramaDisciplineStatsTpl)
