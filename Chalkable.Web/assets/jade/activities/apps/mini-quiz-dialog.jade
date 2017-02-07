@@ -1,0 +1,57 @@
+mixin App_(app)
+    -VALIDATE_ARG('app', [chlk.models.apps.Application], app)
+    .application
+        .wrapper
+            +LoadingImage(src=app.getBannerPictureUrl())
+            .title= app.getName()
+            block
+
+.dialog
+    .x-window-header-white
+        .close
+            .close-btn.dark
+        +ActionForm('studycenter', 'updateMiniQuiz')
+            +Hidden('standardIds', JSON.stringify(self.getStandardIds())).standard-ids
+            +Hidden('currentStandardId').current-standard-id
+        +SearchBox(chlk.services.StandardService, "searchStandards", chlk.templates.standard.StandardAutoCompleteTpl)(name="filter", placeholder="Add new").add-new
+        +LeftRightToolbar()(constantWidth = true, fixedElementMargin = true, rightPadding = -1).standards-tb
+            each value in self.getStandards()
+                -var name = value.getName()
+                -var className = value.getStandardId() == self.getCurrentStandardId() ? 'pressed' : null
+                .standard-item(class = className)
+                    +ActionLink('studycenter', 'start-practice', self.getStandardIds(value.getStandardId()), true)(
+                        data-tooltip = name,
+                        data-tooltip-type = "overflow",
+                        class = className,
+                        data-id= value.getStandardId().valueOf()
+                    ).standard-link= name
+                    a(data-id= value.getStandardId().valueOf()).close-btn.standard-remove
+    .x-window-body
+        h2.practice: span Practice
+        if self.getApplicationInfo() && self.getCurrentStandard().getAcademicBenchmarkId()
+            .iframe-wrap.partial-update
+                iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&token=' + encodeURIComponent(self.getToken()) + '&' + self.getCurrentStandard().getUrlComponents() + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
+        else
+            .iframe-wrap.partial-update
+                .banner Practice is not possible
+
+        -var installedApps = self.getInstalledApplications() || []
+        -var recommendedApps = self.getRecommendedApplications() || []
+        if installedApps.length || recommendedApps.length
+            h2.apps: span Suggested Apps
+            if installedApps.length
+                h3 My Apps
+                +LeftRightToolbar()(rightPadding = -20)
+                    .attachments-and-applications
+                        each app in installedApps
+                            +App_(app)
+                                - var isBanned = false
+                                +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open
+            if recommendedApps.length
+                h3 Recommended
+                +LeftRightToolbar()(rightPadding = -20)
+                    .attachments-and-applications
+                        each app in recommendedApps
+                            +App_(app)
+                                - var isBanned = false
+                                +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open

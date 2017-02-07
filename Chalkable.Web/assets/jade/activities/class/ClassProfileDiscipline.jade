@@ -1,0 +1,16 @@
+-var clazz = self.getClazz()
+
+.profile-page.class-profile
+    h2.page-title=clazz.getName()
+    +ProfileTopBar(self, 'discipline')
+    .summary-view
+        #top-panel.disciplines-chart
+            +RenderWith(clazz.getStats(), chlk.templates.discipline.ClassDisciplineStatsTpl)(
+                currentUser = self.getCurrentUser()
+                userRole = self.getUserRole()
+            )
+        .disciplines-container
+            +RenderWith(clazz.getDisciplines(), chlk.templates.discipline.ClassDisciplinesTpl)(
+                currentUser = self.getCurrentUser()
+                userRole = self.getUserRole()
+            )

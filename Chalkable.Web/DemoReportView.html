@@ -1,0 +1,2721 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
+    
+    <script src="https://local.chalkable.com:5001/app/bower/jquery/dist/jquery.js"></script>
+    <script src="https://local.chalkable.com:5001/app/bower/jade/jade.js"></script>
+    
+    <style type="text/css">
+        body {margin: 0}
+        .traditional-table td:first-child:not(:last-child) {width: 20%}
+        .traditional-table td:last-child:not(:first-child) {width: 40%}
+        * {box-sizing: border-box;}
+        .col-sm-12, .col-sm-4, .col-sm-6, .col-sm-8{position: relative;min-height: 1px;padding-left: 15px;float: left;}
+        .col-sm-12 {width: 100%;}
+        .col-sm-4 {width: 33.33333333%;}
+        .col-sm-6 {width: 50%;}
+        .col-sm-8 {width: 66.66666667%;}
+        .h1, .h2, .h3{margin-bottom: 10px;line-height: 1.1;}
+        .h2, .h3{margin-top: 20px;}
+        .row {margin-top: 0px; margin-bottom: 50px; padding: 1px;margin-left: -15px;}
+        .row:before {display: table;content: " ";}
+        .row:after {display: table;content: " ";clear: both;}
+        .row:last-child {margin-bottom: 35px;}
+		.row.signature-row {margin-bottom: 0;}
+        .row.m-t-0 {margin-top: 0}
+        .row.m-b-0 {margin-bottom: 0}
+        .main-student-panel { padding: 1px;}
+        .recipient-parent {border: 1px solid rgba(229, 229,227, 0.45); border-radius: 4px;width: 4.5in; height: 1.125in}
+        .mailing-box{padding: 15px;}
+        table {width: 100%;margin-bottom: 20px;border-collapse: collapse; }
+        .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border:1px solid #8a8a8a; }
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {padding: 8px;line-height: 1.42857143;vertical-align: top;}
+        th {text-align: left;}
+        .table>thead>tr.active>td, .table>thead>tr.active>th{background-color: #f5f5f5;}
+        hr {border: 0; margin-bottom: -40px; margin-top: 40px;border-top: 1px solid #8a8a8a;}
+
+        .logo{ width: 4in; height: 2.5in; float: right; }
+        .school{ width: 4in; float: right;}
+        .h1 { font-size: 18pt; font-weight: 600 }
+        .h2 { font-size: 14pt; font-weight: 600; font-style: italic }
+        .h3 { font-size: 12pt; font-weight: 600; font-style: italic }
+        .recipient-h { font-weight: 600; font-style: italic }
+        .pre {white-space: pre-wrap}
+        p { color: green; }
+        #container, #container table { font-family: 'Open Sans', sans-serif; font-size: 11pt }
+        .classes-table { margin-bottom: 0; table-layout: fixed }
+        .classes-table td:not(.pre) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .classes-table td:nth-child(1), .classes-table td:nth-child(2), .classes-table th:nth-child(1), .classes-table th:nth-child(2) { width: 10%; }
+        .classes-table td:nth-child(3), .classes-table th:nth-child(3) { width: 30%; }
+        .pre { white-space: pre; }
+        .new-page { page-break-before: always; }
+        .signature-block {display: inline-block; float: right; width: 4in;}
+        .signature-block-line {background: black; height: 1px;}
+        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th { border-top: none; }
+        .table-bordered>thead>tr>td, .table-bordered>thead>tr>th { border-bottom-width: 1px; }
+        td.w-100 { width: 100% !important; padding: 0 !important }
+        .classes-header tr:nth-child(1) {border: 1px solid #8a8a8a; border-bottom: none}
+        .classes-header tr:nth-child(2) {border-left: 1px solid #8a8a8a; border-right: 1px solid #8a8a8a}
+        .classes-header th:not(.right-border) {border-left: none; border-right: none;}
+        .classes-header th.right-border { border-left: none !important;}
+        .right-border {border-right: 1px solid #8a8a8a}
+        th.text-center {text-align: center}
+        .classes-table .classes-table:not(:first-child){border-top: none}
+        .classes-table .teacher-name { width: 13% !important;overflow: hidden;}
+        .table:not(.table-bordered)>thead>tr>th {border-bottom-width: 0}
+        .comments-row td, .standards-row .first{border: none !important}
+        .comments-row +TR.notes-row td:not(:first-child){border-top: 1px solid #8a8a8a}
+        .notes-row td:last-child, .standards-row .description{border-left: none !important}
+        .notes-row td:first-child{border: none !important}
+        .classes-table td.first{text-indent: 15px; font-style: italic}
+    </style>
+    <script type="text/javascript">
+        var Model = {
+  "title": null,
+  "data": {
+    "logohref": "https://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_reportcardslogo_83009fe9-8594-4e33-a09e-1ef4f81d0e8d",
+    "acadyear": 2017,
+    "acadsessionname": "High School 2016-17",
+    "includemeritdemerit": true,
+    "school": {
+      "name": "Greene High School",
+      "city": "Hometowne",
+      "address1": "17 Fast Times Way",
+      "address2": "",
+      "phone": "",
+      "state": "",
+      "zip": "          "
+    },
+    "traditionalgradingscales": [{
+      classes:['Algebra', 'Geometry', 'Physics', 'Chemistry'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 89.5,
+          "maxvalue": 120.0
+        },
+        {
+          "name": "B",
+          "minvalue": 79.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }, {
+      classes:['Mathematics', 'Astronomy'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 88.55555,
+          "maxvalue": 130.0
+        },
+        {
+          "name": "B",
+          "minvalue": 78.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }, {
+      classes:['Mathematics'],
+      ranges: [
+        {
+          "name": "A",
+          "minvalue": 88.55555,
+          "maxvalue": 130.0
+        },
+        {
+          "name": "B",
+          "minvalue": 78.5,
+          "maxvalue": 89.499
+        },
+        {
+          "name": "C",
+          "minvalue": 69.5,
+          "maxvalue": 79.499
+        },
+        {
+          "name": "D",
+          "minvalue": 59.5,
+          "maxvalue": 69.499
+        },
+        {
+          "name": "F",
+          "minvalue": 0.0,
+          "maxvalue": 59.499
+        }
+      ]
+    }],
+    "includesignature" : true,
+    "standardsgradingscales": [{
+      classes:['Algebra', 'Geometry', 'Physics', 'Chemistry'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }, {
+      classes:['Mathematics', 'Astronomy'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }, {
+      classes:['Mathematics'],
+      ranges: [
+        {
+          "name": "A",
+          "description": "Description A"
+        },
+        {
+          "name": "B",
+          "description": "Description B"
+        },
+        {
+          "name": "C",
+          "description": "Description C"
+        },
+        {
+          "name": "D",
+          "description": "Description D"
+        },
+        {
+          "name": "F",
+          "description": "Description F"
+        }
+      ]
+    }],
+    "idtoprint": false,
+    "student": {
+      "studentid": 123,
+      "altstudentnumber": "43534STU",
+      "attendances": [{
+        "gradingperiodname" : "test",
+        "enrolled" : 84,
+        "present" : 83,
+        "absences" : 1,
+        "excusedabsences" : 1,
+        "unexcusedabsences" : 0,
+        "tardies" : 0,
+        "excusedtardies" : 0,
+        "unexcusedtardies" : 0
+      }, {
+        "gradingperiodname" : "test",
+        "enrolled" : 448,
+        "present" : 448,
+        "absences" : 0,
+        "excusedabsences" : 0,
+        "unexcusedabsences" : 0,
+        "tardies" : 0,
+        "excusedtardies" : 0,
+        "unexcusedtardies" : 0
+      }],
+      "gradelevel": "12th Grade",
+      "homeroomteacher": "Mrs. Bluth",
+      "name": "George Michael Bluth",
+      "promoted": true,
+      "classes": [
+        {
+          "name": "Math 7",
+          "classnumber": "20350.02",
+          "timestardy": 1.0,
+          "teacher": "Teacher, A",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "1st Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    },
+                    {
+                      "comment": "Not Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": [
+                    {
+                      "comment": "Qwerty",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    },
+                    {
+                      "comment": "Not Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": [
+                    {
+                      "comment": "Qwerty",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "English 7",
+          "classnumber": "20364.01",
+          "timestardy": 1.0,
+          "teacher": "Teacher, Another",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Math 7",
+          "classnumber": "20364.02",
+          "timestardy": 1.0,
+          "teacher": "Teacher, A",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "1st Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "English 7",
+          "classnumber": "20364.03",
+          "timestardy": 1.0,
+          "teacher": "Teacher, Another",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Math 7",
+          "classnumber": "20364.04",
+          "timestardy": 1.0,
+          "teacher": "Teacher, A",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "1st Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "English 7",
+          "classnumber": "20364.05",
+          "timestardy": 1.0,
+          "teacher": "Teacher, Another",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Math 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, A",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "1st Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "English 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, Another",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Math 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, A",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "1st Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "English 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, Another",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Math 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, A",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "1st Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "English 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, Another",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Math 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, A",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "1st Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "English 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, Another",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Math 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, A",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "1st Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "English 7",
+          "classnumber": null,
+          "timestardy": 1.0,
+          "teacher": "Teacher, Another",
+          "gradingperiods": [
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            },
+            {
+              "gradingperiodid": 0,
+              "gradingperiodname": "2nd Nine Weeks",
+              "note": "This a note for the student",
+              "gradeditems": [
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Avg",
+                  "isexempt": false,
+                  "numericgrade": 98.0,
+                  "comments": [
+                    {
+                      "comment": "Excellent",
+                      "commentcode": "E",
+                      "commentheaderdescription": "Comment for Avg",
+                      "commentheadername": "Comment"
+                    }
+                  ]
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "B",
+                  "gradeditemname": "Exam",
+                  "isexempt": false,
+                  "numericgrade": 88.0,
+                  "comments": null
+                },
+                {
+                  "alphagradeid": 0,
+                  "alphagrade": "A",
+                  "gradeditemname": "Final",
+                  "isexempt": false,
+                  "numericgrade": 93.0,
+                  "comments": null
+                }
+              ],
+              "standards": [
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                },
+                {
+                  "name": "Standard 1",
+                  "description": "Description",
+                  "grade": "A",
+                  "comment": ""
+                },
+                {
+                  "name": "Standard 2",
+                  "description": "Another description",
+                  "grade": "B",
+                  "comment": "Comment"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "recipient": {
+        "addressline1": "111 First Street",
+        "addressline2": "Apt. 2",
+        "city": "Anytown",
+        "postalcode": "11111",
+        "recipientname": "George Bluth",
+        "state": "AL"
+      },
+      "gradingperiod": {
+        "announcement": "",
+        "name": "4th Quarter",
+        "startdate": "2006-03-21T00:00:00",
+        "enddate": "2006-06-01T00:00:00"
+      },
+      "merits": 0.0,
+      "demerits": 0.0,
+      "reportcardscomment": "Steven has been an excellent student. He's really taken affection for the electric guitar! I would strongly encourage you to look at acquiring a private tutor."
+    }
+  }
+};
+
+    </script>
+
+<script type="text/jade" id="template">
+-var arr = [1,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3,2,3,1,2,3]
+each arrItem, index in arr
+  -var school = model.school
+  -var student = model.student
+  -var recipient = student.recipient
+  -var RecipientTypeEnum = { Students: 0, Custodians: 1, MailingContacts: 2 }
+  .main-student-panel(class=index > 0 ? "new-page" : "")
+      .row
+          .col-sm-8
+              .h1="Report Card - " + student.name + (idtoprint ? " " + student.studentid : "")
+              .h2=school.name
+              .school-mailing
+                  .line=(school.address1 || "") + " " + (school.address2 || "")
+                  if school.city && school.state && school.zip
+                      .line=[school.city, school.state, school.zip].join(" ")
+                  if school.phone
+                      .line=school.phone
+          .col-sm-4
+              if model.logohref
+                  img(src=model.logohref, width="3in").logo
+      .row
+          .col-sm-8
+              .recipient-parent
+                  .mailing-box
+                      if model.recipienttype == RecipientTypeEnum.Students
+                          .recipient-h.line= "Parent or Guardian of... " + recipient.recipientname
+                          .line= recipient.recipientname
+                      if model.recipienttype == RecipientTypeEnum.Custodians
+                          .recipient-h.line=recipient.recipientname
+                          .line= "As custodian for... " + student.name
+                      if model.recipienttype == RecipientTypeEnum.MailingContacts
+                          .recipient-h.line=recipient.recipientname
+                          .line= "As contact for... " + student.name
+                      .line= recipient.addressline1 + " " + recipient.addressline2
+                      .line= [recipient.city, recipient.state, recipient.postalcode].join(" ")
+          .col-sm-4
+              table.table.table-bordered.right-table.school
+                  tbody
+                      tr
+                          td School Year
+                          td=model.acadsessionname
+                      tr
+                          td Homeroom Teacher
+                          td=student.homeroomteacher
+                      tr
+                          td Grading Period
+                          td=student.gradingperiod.name
+                      tr
+                          td Grade Level
+                          td=student.gradelevel
+                      if student.promoted
+                          tr
+                              td Status
+                              td Promoted
+      if student.classes && student.classes.length
+          .row
+              .col-sm-12
+                  table.table.classes-table
+                      thead.classes-header
+                          -var gps = student.classes[0].gradingperiods || []
+                          tr
+                              th
+                              th.teacher-name
+                              th.right-border
+                              each gp in gps
+                                  -var gradeditems = gp.gradeditems || []
+                                  th(colspan=gradeditems.length + 1).right-border.text-center= gp.gradingperiodname
+                          tr
+                              th Class
+                              th.teacher-name Teacher
+                              th.right-border Section
+                              each gp in gps
+                                  -var gradeditems = gp.gradeditems || []
+                                  th Std
+                                  each gi, i in gradeditems
+                                      th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.gradeditemname
+                      tbody
+                          tr
+                              -var span = 3 + gps.length
+                              -gps.forEach(function(gp){ span = span + (gp.gradeditems || []).length })
+                              td(colspan= span).w-100
+                                  each item in student.classes
+                                      -var gps = item.gradingperiods || []
+                                      table.table.table-bordered.classes-table
+                                          thead.classes-header
+                                              tr.active
+                                                  th=item.name
+                                                  th.teacher-name=item.teacher
+                                                  th.right-border=item.classnumber
+                                                  each gp in gps
+                                                      -var gradeditems = gp.gradeditems || []
+                                                      th
+                                                      each gi, i in gradeditems
+                                                          th(class = i == gradeditems.length - 1 ? "right-border" : "")= gi.alphagrade + ' ' + Math.round(gi.numericgrade)
+                                          tbody
+                                              -var standards = gps[0].standards || []
+                                              each standard, si in standards
+                                                  tr.standards-row
+                                                      if si == 0
+                                                          td(rowspan = standards.length).first Standards
+                                                      td(colspan = 2).right-border.description= standard.name + ' - ' + standard.description
+                                                      each gp,i in gps
+                                                          -var gradeditems = gp.gradeditems || []
+                                                          td(colspan = gradeditems.length + 1)= standard.grade || '-'
+                                              -var lastGp = gps[gps.length - 1]
+                                              -var lastGIs = lastGp.gradeditems
+                                              -var itemsWithComments = lastGIs.filter(function(item){return item.comments})
+                                              -var gpColspan = 1
+                                              -gps.forEach(function(gp){gpColspan = gpColspan + 1 + gp.gradeditems.length})
+                                              if itemsWithComments.length
+                                                  each cItem, index in itemsWithComments
+                                                      tr.comments-row
+                                                          if index == 0
+                                                              td(rowspan = itemsWithComments.length).first Comments
+                                                          td=cItem.gradeditemname
+                                                          td(colspan = gpColspan).pre=cItem.comments.map(function(item){return item.comment}).join('\n')
+                                              if lastGp.note
+                                                  tr.notes-row
+                                                      td.first Notes
+                                                      td(colspan = gpColspan + 1)= lastGp.note
+                  hr
+      div(style="page-break-inside: avoid")
+          if student.gradingperiod
+              .row
+                  .col-sm-12
+                      .h3=student.gradingperiod.name + " Announcement"
+                      em=student.gradingperiod.announcement || "Grading Period Announcement"
+          .row.m-b-0
+              .col-sm-6
+                  if student.attendances && student.attendances[0]
+                      table.table.table-bordered.attendance-table
+                          thead
+                              tr.active
+                                  td Attendance
+                                  each gp in student.attendances
+                                      td= gp.gradingperiodname || ("GP-" + gp.gradingperiodid)
+                                  td Total
+                          tbody
+                              -var items = ['enrolled', 'present', 'absences', 'excusedabsences', 'unexcusedabsences', 'tardies', 'excusedtardies', 'unexcusedtardies'];
+                              -var names = { enrolled: 'Enrolled', present: 'Present', absences: 'Absent', excusedabsences: '    Excused', unexcusedabsences: '    Unexcused', tardies: 'Tardy', excusedtardies: '    Excused', unexcusedtardies: '    Unexcused'}
+                              for prop in items
+                                  tr
+                                      td.pre=names[prop]
+                                      each item in student.attendances || []
+                                          td=item[prop]
+                                      -var sum =  student.attendances.reduce(function(sum, current) {return sum + current[prop];}, 0)
+                                      td=sum
+                  if  model.includemeritdemerit
+                      table.table.table-bordered.merits-table
+                          thead
+                              tr.active
+                                  td Merits/Demerits
+                                  td Total
+                          tbody
+                              tr
+                                  td Merits
+                                  td=student.merits
+                              tr
+                                  td Demerits
+                                  td=student.demerits
+              .col-sm-6
+                  each item in model.traditionalgradingscales || []
+                      table.table.table-bordered.traditional-table
+                          thead
+                              tr.active
+                                  td(colspan = 3) Grading Scale - Traditional (#{(item.classes || []).join(', ')})
+                          tbody
+                              each grade in item.ranges
+                                  tr
+                                      td=grade.name
+                                      td=grade.minvalue
+                                      td=grade.maxvalue
+                  each item in model.standardsgradingscales || []
+                      table.table.table-bordered.standards-table
+                          thead
+                              tr.active
+                                  td(colspan = 2) Grading Scale - Standards (#{(item.classes || []).join(', ')})
+                          tbody
+                              each grade in item.ranges
+                                  tr
+                                      td=grade.name
+                                      td=grade.description
+          .row.signature-row
+              .col-sm-12
+                  if model.includesignature
+                      .signature-block
+                          .signature-block-line
+                          em.text Parent or Guardian Signature
+</script>
+
+</head>
+    <body>
+        <div id="container" class="fluid-container">
+            <h1>Demo Report</h1>
+        </div>
+    <script type="text/javascript">
+            (function(jade, $, model) {
+                var template = $('#template').text();
+                var html = "";
+                try {
+                    html = jade.render(template, { model: model.data });
+                } catch (e) {
+                    html = '<h1>Error rendering report</h1><pre>' + e.message + '\n\n' + e.stack + '</pre>';
+                }
+                $('#container').html(html);
+            })(jade, jQuery, Model);
+    </script>
+    </body>
+</html>

@@ -1,0 +1,54 @@
+.alert-flag
+  position: absolute
+  width: 12px
+  height: 18px
+
+  &.incomplete
+    +icons-24-sprite(incomplete-flag)
+
+  &.late
+    +icons-24-sprite(orange-flag)
+
+  &.absent
+    +icons-24-sprite(blue-flag)
+
+  &.multiple
+    +icons-24-sprite(alerts)
+
+  &.error
+    +icons-24-sprite(red-flag)
+
+.grading-input-popup
+  z-index: 100
+  top: 78px
+  text-align: left
+  text-shadow: white 0px 1px 1px
+  position: absolute
+  display: none
+
+  &.popup-bubble
+    padding: 10px 12px 3px
+    width: 97px
+
+  &.no-triangle
+    left: 0
+
+    &::before
+      content: none
+
+  .labeled-checkbox
+    margin: 0 0 3px 0
+    line-height: initial
+    display: block
+    font: normal 14px Arial
+
+    label, .label-input
+      width: 73px
+
+.no-items-text
+  font: bold italic 19px/260px "Open Sans"
+  text-align: center
+  height: 260px
+  &.small
+    font: bold italic 19px/120px "Open Sans"
+    height: 120px

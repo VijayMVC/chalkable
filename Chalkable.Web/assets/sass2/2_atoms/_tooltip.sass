@@ -1,0 +1,65 @@
+.chlk-tooltip
+  position: absolute
+  min-width: 55px
+  display: none
+  z-index: 999999
+
+  .tooltip-content
+    background: rgba(0,0,0,0.8)
+    color: white
+    text-shadow: none
+    border-radius: 5px
+    font-size: 13px
+    padding: 10px
+    line-height: 15px
+    max-width: 400px
+    text-align: left
+    white-space: pre-wrap
+
+  &.break-word
+    .tooltip-content
+      word-break: break-word
+
+  .tooltip-triangle
+    width: 0
+    height: 0
+    border-left: 7px solid transparent
+    border-right: 7px solid transparent
+    border-top: 7px solid rgba(0,0,0,0.8)
+    left: 50%
+    position: relative
+    margin-left: -7px
+    //z-index: 10
+    top: -1px
+
+  &.bottom
+    .tooltip-triangle
+      position: absolute
+      top: -6px
+      +rotate(180deg)
+
+  &.white
+    .tooltip-content
+      background: #fff
+      color: black
+      border: 1px solid #c8c7c3
+      padding: 4px 6px
+      font-size: 12px
+      font-weight: 600
+
+    .tooltip-triangle
+      border-left: 8px solid transparent
+      border-right: 8px solid transparent
+      border-top: 8px solid #c8c7c3
+      margin-left: -8px
+
+      &::before
+        content: " "
+        border-left: 7px solid transparent
+        border-right: 7px solid transparent
+        border-top: 7px solid #fff
+        width: 0
+        height: 0
+        position: absolute
+        top: -8px
+        left: -7px

@@ -1,0 +1,51 @@
+//requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
+mixin ProfileTopBar(tplObj, pressedActionName)
+    .action-bar
+        .items
+            +ActionLinkList(tplObj.buildActionLinkModels(pressedActionName))
+            block
+
+//requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
+mixin UserProfileTopBar(tplObj, user, pressedActionName)
+    +ProfileTopBar(tplObj, pressedActionName)
+        if user.getId() == tplObj.getCurrentUser().getId() && !tplObj.getUserRole().isAdmin()
+            .right
+                +ActionLink('settings', 'dashboard').settings Settings
+
+
+mixin StudentClassesInfo(user)
+    if user.getClassesSection()
+        +CloseOpen(Msg.Classes).today-work-panel
+            .classes-tb-container
+                +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class).classes-bar
+
+mixin StudentProfileSummaryInfo(tpl, pressedLinkName, renderClassesInfo)
+    -user = tpl.getUser() 
+    -statusData = tpl.getStatusData()
+    .profile-page(class=user.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
+        h2.page-title=Msg.Student_profile
+
+        +ProfileTopBar(tpl, pressedLinkName)
+        .summary-view
+            #top-panel
+                #avatar-photo-conainer.left-block.panel-block
+                    .img-container
+                        +PersonImg(user, 140, !tpl.getUserRole().isStudent())
+                #info-panel.central-block.panel-block
+                    displayName =user.getDisplayName() || user.getFullName()
+                    h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                    .status
+                        div(class=statusData.status, data-tooltip=statusData.statusName)
+                        |#{user.getCurrentClassName()}
+                        if(user.getCurrentClassName() && user.getRoomName() && user.getCurrentClassName().toLowerCase() != 'no class now')
+                            |&nbsp;- #{user.getRoomName()}
+                #glance-block-panel.right-block.panel-block
+                    .glance-container
+                        if user.getAttendanceBox()
+                            +GlanceBox(null, null, tpl.buildAttendanceGlanceBoxData(), null, null, true, true)
+                        if user.getDisciplineBox()
+                            +GlanceBox(null, null, tpl.buildDisciplineGlanceBoxData(), null, null)
+                        if user.getGradesBox()
+                            +GlanceBox(null, null, tpl.buildGradesGlanceBoxData(), null, null, true, true)
+        if renderClassesInfo
+            +StudentClassesInfo(user)
