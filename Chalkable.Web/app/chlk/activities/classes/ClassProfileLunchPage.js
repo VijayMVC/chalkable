@@ -77,6 +77,22 @@ NAMESPACE('chlk.activities.classes', function () {
                 }
                 this.calculateTotal_(input);
             },
+
+            [ria.mvc.DomEventBind('click', '.clear-grade')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function clearGradeClick(node, event){
+                var input = this.dom.find('.meal-active'), that = this;
+                var index = input.getData('meal-index');
+                this.dom.find('.meal-count-input[data-meal-index=' + index + ']').forEach(function(item){
+                    var value = 0
+                    if(item.getValue() && parseInt(item.getValue(), 10) !== 0)
+                        item.setValue(value)
+                            .setData('value', value)
+                            .addClass('changed');
+                })
+                this.hideGradingPopUp_();
+                this.calculateTotal_(input);
+            },
             
             Number, function getParsedValue_(node){
                 var value = (node.getValue() || '').trim();
@@ -145,8 +161,7 @@ NAMESPACE('chlk.activities.classes', function () {
             [ria.mvc.DomEventBind('change', '.meal-count-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function countChange(node, event){
-                var value = node.getValue(), iValue = parseInt(value, 10),
-                    btns = this.dom.find('.lunch-count-btn');
+                var value = node.getValue(), iValue = parseInt(value, 10);
                 if(iValue != value || iValue < 0)
                     node.setValue(0);
                 else
@@ -159,6 +174,11 @@ NAMESPACE('chlk.activities.classes', function () {
                 }else
                     node.removeClass('changed');
 
+                this.calculateTotal_(node);
+            },
+
+            function checkSaveBtnState_(){
+                var btns = this.dom.find('.lunch-count-btn');
                 if(this.dom.find('.meal-count-input.changed').count() > 0){
                     btns.removeAttr('disabled');
                     btns.setProp('disabled', false);
@@ -166,8 +186,6 @@ NAMESPACE('chlk.activities.classes', function () {
                     btns.setAttr('disabled', 'disabled');
                     btns.setProp('disabled', true);
                 }
-
-                this.calculateTotal_(node);
             },
 
             function calculateTotal_(node){
@@ -176,6 +194,7 @@ NAMESPACE('chlk.activities.classes', function () {
                     total += mealInput.getValue() ? parseInt(mealInput.getValue()) : 0;
                 });
                 this.dom.find('.total-cell[data-meal-index=' + mealIndex + ']').setHTML(total.toString());
+                this.checkSaveBtnState_();
             },
 
             [ria.mvc.DomEventBind('click', '.lunch-cancel')],

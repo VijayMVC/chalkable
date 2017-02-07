@@ -20,7 +20,8 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
 -var tableInfo = self.getTableInfo()
 .profile-page.class-profile.relative
     #grading-popup.grading-input-popup.popup-bubble.no-triangle
-        BUTTON.blue-button.fill-grade Fill
+        BUTTON.blue-button.fill-grade Fill All
+        BUTTON.blue-button.clear-grade Clear All
     h2.page-title=clazz.getName()
     +ProfileTopBar(self, 'lunch')
     +ActionForm('class', 'lunchSubmit').class-lunch-form
