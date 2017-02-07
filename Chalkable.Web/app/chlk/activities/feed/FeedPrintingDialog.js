@@ -19,7 +19,7 @@ NAMESPACE('chlk.activities.feed', function(){
                 checkNodes.setValue(false);
                 checkNodes.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [!value]);
 
-                var standardsNode = this.dom.find('[type=checkbox][name="groupedbystandards"]');
+                var standardsNode = this.dom.find('[type=checkbox][name="groupbystandards"]');
                 standardsNode.setValue(false);
                 standardsNode.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [value]);
             }
