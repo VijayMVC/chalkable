@@ -14,10 +14,13 @@ NAMESPACE('chlk.activities.feed', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             function includeDetailsChange(node, event){
                 var value = JSON.parse(node.getValue());
-                var nodes = this.dom.find('[name="includehiddenattributes"], [name="includeattachments"]');
                 var checkNodes = this.dom.find('[type=checkbox][name="includehiddenattributes"], [type=checkbox][name="includeattachments"]');
                 checkNodes.setValue(false);
                 checkNodes.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [!value]);
+
+                //set hidden attribute as checked if activityDetails is also checked
+                //Note: By default hidden attribute should be checked
+                this.dom.find('[type=checkbox][name="includehiddenattributes"]').setValue(value);
 
                 var standardsNode = this.dom.find('[type=checkbox][name="groupedbystandards"]');
                 standardsNode.setValue(false);
