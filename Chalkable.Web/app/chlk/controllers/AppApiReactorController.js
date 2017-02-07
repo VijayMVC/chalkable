@@ -49,7 +49,7 @@ NAMESPACE('chlk.controllers', function (){
 
             function appIsNotReadyForClose_() {
                 this.ShowMsgBox(
-                        '<b>Sorry</b><br/>App is not ready for closing',
+                        '<b>Sorry</b><br/><span>App is not ready for closing</span>',
                         null,[{
                             text: 'Ok',
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
@@ -140,7 +140,7 @@ NAMESPACE('chlk.controllers', function (){
                         refresh_attached_files: data.refresh_attached_files
                     }],
                     color: chlk.models.common.ButtonColor.RED.valueOf()
-                }], 'center leave-msg leave-msg', true), null;
+                }], 'center leave-msg', true), null;
             },
 
             [[Object]],

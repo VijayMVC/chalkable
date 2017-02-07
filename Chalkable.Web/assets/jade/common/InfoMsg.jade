@@ -3,25 +3,26 @@ div(class=(self.getClazz() || "")).dialog.info-msg.gray
         .x-window-header: h1=self.getHeader()
 
     .x-window-body
-        if self.getIconUrl()
-            .icon-wrapper
-                img(src=self.getIconUrl())
+        .text-cnt
+            if self.getIconUrl()
+                .icon-wrapper
+                    img(src=self.getIconUrl())
 
-        if self.isHtmlText()
-            !=self.getText()
-        else
-            pre=self.getText()
+            if self.isHtmlText()
+                !=self.getText()
+            else
+                pre=self.getText()
 
-        case self.getInputType()
-            when null
-                = ''
-            when 'datepicker'
-                -var attributes = self.getInputAttrs() || {}
-                .center: +DatePickerInline("value", self.getInputValue()).inline
-            default
-                -var type = self.getInputType() || "text"
-                -var attributes = self.getInputAttrs() || {}
-                .center: input(name="value", type=type, value=self.getInputValue(), class = attributes.class)
+            case self.getInputType()
+                when null
+                    = ''
+                when 'datepicker'
+                    -var attributes = self.getInputAttrs() || {}
+                    .center: +DatePickerInline("value", self.getInputValue()).inline
+                default
+                    -var type = self.getInputType() || "text"
+                    -var attributes = self.getInputAttrs() || {}
+                    .center: input(name="value", type=type, value=self.getInputValue(), class = attributes.class)
 
         .buttons-container.center
             input(name="button", type="hidden")

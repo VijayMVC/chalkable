@@ -129,7 +129,7 @@ NAMESPACE('chlk.lib.mvc', function () {
             },
 
             ria.async.Future, function ShowLeaveConfirmBox() {
-                return this.ShowConfirmBox("<b>Are you sure you want to leave this page?</b></br>You will lose unsaved changes.", 'leave-msg')
+                return this.ShowConfirmBox("<b>Are you sure you want to leave this page?</b></br><span>You will lose unsaved changes.</span>", 'leave-msg')
                     .then(function (data) {
                         return data == 'ok';
                     });

@@ -1792,8 +1792,8 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, String, chlk.models.announcement.AnnouncementTypeEnum]],
         function deleteAction(announcementId, typeName, announcementType) {
             this.disableAnnouncementSaving(true);
-            this.ShowMsgBox('You are about to delete this item.\n'+ 'All attachments for this ' + typeName + ' will be gone forever.\n' +
-                    'Are you sure?', null, [{
+            this.ShowMsgBox('<b>You are about to delete this item.</b><br/>'+ '<span>All attachments for this ' + typeName + ' will be gone forever.</br/>' +
+                    'Are you sure?</span>', null, [{
                 text: "Cancel",
                 controller: 'announcement',
                 action: 'cancelDelete',
@@ -1805,7 +1805,7 @@ NAMESPACE('chlk.controllers', function (){
                 action: 'deleteAnnouncement',
                 params: [announcementId.valueOf(), announcementType],
                 color: chlk.models.common.ButtonColor.RED.valueOf()
-            }], 'leave-msg');
+            }], 'leave-msg', true);
             return null;
         },
 
@@ -2324,9 +2324,9 @@ NAMESPACE('chlk.controllers', function (){
                     var success = !!lpInGallery;
                     if(lpInGallery){
                         if(lpInGallery.isAnnOwner() || this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)){
-                            return this.ShowMsgBox('You are replacing the existing lesson plan \- do you want to continue ?', null,
+                            return this.ShowMsgBox('<b>You are replacing the existing lesson plan</b><span>do you want to continue ?</span>', null,
                                     [{text: 'NO', clazz: 'blue-button'},
-                                    {text: 'Continue', value: 'ok'}], 'leave-msg'
+                                    {text: 'Continue', value: 'ok'}], 'leave-msg', true
                                 )
                                 .then(function(msResult){
                                     if(msResult){
@@ -2421,7 +2421,7 @@ NAMESPACE('chlk.controllers', function (){
                     && model.getEndDate().getDate() >= _.getStartDate().getDate() && model.getEndDate().getDate() <= _.getEndDate().getDate()}).length) ||
                 (model.isInGallery() && !(model.getStartDate().getDate() >= schoolYear.getStartDate().getDate() && model.getStartDate().getDate() <= schoolYear.getEndDate().getDate()
                 && model.getEndDate().getDate() >= schoolYear.getStartDate().getDate() && model.getEndDate().getDate() <= schoolYear.getEndDate().getDate()))){
-                this.ShowMsgBox('Lesson Plan is not valid. Start date and End date can\'t be in different grading periods', null, null, 'leave-msg');
+                this.ShowMsgBox('<b>Lesson Plan is not valid.</b><br/><span>Start date and End date can\'t be in different grading periods</span>', null, null, 'leave-msg');
                 return null;
             }
 

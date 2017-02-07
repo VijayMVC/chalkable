@@ -687,15 +687,15 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         ria.async.Future, function tryDeleteApplication_(id, appName){
-            var msgText = "You are about to delete application. This can not be undone!!!\n\nPlease type application name to confirm.",
+            var msgText = "<b>You are about to delete application. This can not be undone!!!</b><br/><span>Please type application name to confirm.</span>",
                 buttons = [{text: 'DELETE', clazz: 'negative-button', value: 'ok'}, {text: 'Cancel'}];
-            return this.ShowMsgBox(msgText, null, buttons, 'leave-msg', false, 'text', "")
+            return this.ShowMsgBox(msgText, null, buttons, 'leave-msg', true, 'text', "")
                 .then(function (mrResult) {
                     if(!mrResult)
                         return ria.async.BREAK;
 
                     if (appName != mrResult)
-                        return this.ShowAlertBox("<b>Invalid application name</b><br/>Incorrect application name provided", null, true, 'leave-msg')
+                        return this.ShowAlertBox("<b>Invalid application name</b><br/><span>Incorrect application name provided</span>", null, true, 'leave-msg', true)
                             .thenBreak();
 
                     return mrResult;

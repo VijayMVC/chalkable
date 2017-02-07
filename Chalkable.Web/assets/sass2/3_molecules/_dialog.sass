@@ -121,18 +121,30 @@
     display: block
     margin: -17px auto 27px
 
+  .buttons-container
+    >BUTTON, >.button
+      &:last-child:not(:nth-child(2))
+        margin-left: 20px
+
   button
     min-width: 92px
-    &:last-child:not(:nth-child(2))
-      margin-left: 20px
 
   .leave-msg, .error, .ok, .permissions, .report, .sync
+    .text-cnt
+      display: inline-block
+      margin-top: 15px
+
+    SPAN
+      color: #7b7974
+      font-weight: normal
+
     .x-window-body
       margin: 27px 27px 32px
       width: 401px
       padding-top: 93px
       text-align: center
       font-size: 14px
+      font-weight: 600
 
       b
         font-weight: 600
@@ -142,9 +154,9 @@
     .buttons-container
       margin-top: 25px
 
-    BUTTON
-      &:last-child:not(:nth-child(2))
-        margin-left: 35px
+      >BUTTON, >.button
+        &:last-child:not(:nth-child(2))
+          margin-left: 35px
 
   pre
     white-space: pre-wrap
