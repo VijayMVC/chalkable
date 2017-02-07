@@ -1,0 +1,34 @@
+.alerts-pop-up
+  z-index: 99999999999
+  display: none
+
+.alerts-on-click-pop-up, .alerts-pop-up
+  padding: 4px 10px 4px
+  width: 268px
+  text-align: left
+
+  .alert-item
+    text-overflow: ellipsis
+
+    &:not(:last-child)
+      border-bottom: 1px solid #eee
+
+    .alert-icon
+      display: inline-block
+      vertical-align: middle
+      background-repeat: no-repeat
+      background-position: center
+      width: 61px
+      height: 61px
+
+      @each $item in internet, medical, special, sped, custom-alert
+        &.#{$item}
+          +alerts-icons-sprite($item)
+
+
+    .alert-description
+      display: inline-block
+      vertical-align: middle
+      padding: 6px 0
+      width: 202px
+      white-space: normal

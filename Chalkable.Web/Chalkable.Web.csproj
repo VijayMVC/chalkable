@@ -1,0 +1,833 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\JavaScriptEngineSwitcher.V8.2.0.0\build\JavaScriptEngineSwitcher.V8.props" Condition="Exists('..\packages\JavaScriptEngineSwitcher.V8.2.0.0\build\JavaScriptEngineSwitcher.V8.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{60802BF0-AF2E-47F8-A792-7135DC7565D0}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chalkable.Web</RootNamespace>
+    <AssemblyName>Chalkable.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <SkipPostSharp>True</SkipPostSharp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ApplicationInsights.Diagnostics, Version=1.0.50929.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ApplicationInsights.Diagnostics.1.0.50929.0\lib\net45\ApplicationInsights.Diagnostics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClearScript, Version=5.4.7.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.2.0.0\lib\net40-client\ClearScript.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JavaScriptEngineSwitcher.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.2.0.0\lib\net40-client\JavaScriptEngineSwitcher.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JavaScriptEngineSwitcher.V8, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.2.0.0\lib\net40-client\JavaScriptEngineSwitcher.V8.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.1.2.3\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.1.2.3\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.1.2.3\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.1.2.3\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.1.2.3\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=1.2.3.490, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.1.2.3\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.TraceListener, Version=1.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.TraceListener.1.2.6\lib\net45\Microsoft.ApplicationInsights.TraceListener.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.7.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql">
+      <HintPath>..\packages\Microsoft.SqlServer.Dac.1.0.1\lib\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Tools.Utilities">
+      <HintPath>..\packages\Microsoft.SqlServer.Dac.1.0.1\lib\Microsoft.Data.Tools.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent, Version=1.0.40.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\lib\net40\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Dac">
+      <HintPath>..\packages\Microsoft.SqlServer.Dac.1.0.1\lib\Microsoft.SqlServer.Dac.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.Runtime.12.0.2.2402\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.Runtime.12.0.2.2402\lib\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.Runtime.12.0.2.2402\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.11.0.2\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc">
+      <HintPath>..\3rdParty\Microsoft.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.1.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=6.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mindscape.Raygun4Net, Version=5.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Core.5.3.1\lib\net40\Mindscape.Raygun4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mindscape.Raygun4Net.Mvc, Version=5.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.3.1\lib\net40\Mindscape.Raygun4Net.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mindscape.Raygun4Net4, Version=5.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mindscape.Raygun4Net.Mvc.5.3.1\lib\net40\Mindscape.Raygun4Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Observable.TraceEventSession, Version=1.0.50929.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ApplicationInsights.Diagnostics.1.0.50929.0\lib\net45\Observable.TraceEventSession.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionFilters\HandleErrorFilter.cs" />
+    <Compile Include="ActionFilters\AuthorizationFilter.cs" />
+    <Compile Include="ActionFilters\TraceControllerFilter.cs" />
+    <Compile Include="Authentication\ApplicationAuthentification.cs" />
+    <Compile Include="Authentication\ChalkableAuthentication.cs" />
+    <Compile Include="Authentication\ChalkableIdentity.cs" />
+    <Compile Include="Authentication\ChalkablePrincipal.cs" />
+    <Compile Include="Authentication\DeveloperAuthentication.cs" />
+    <Compile Include="Common\UrlFormats.cs" />
+    <Compile Include="Common\ViewConstants.cs" />
+    <Compile Include="Controllers\AcademicBenchmarkController.cs" />
+    <Compile Include="Controllers\AdminDistrictController.cs" />
+    <Compile Include="Controllers\AnnouncementAttachmentController.cs" />
+    <Compile Include="Controllers\AnnouncementCommentController.cs" />
+    <Compile Include="Controllers\AnnouncementControllers\AdminAnnouncementController.cs" />
+    <Compile Include="Controllers\AnnouncementControllers\ClassAnnouncementController.cs" />
+    <Compile Include="Controllers\AnnouncementControllers\LessonPlanController.cs" />
+    <Compile Include="Controllers\AnnouncementControllers\SupplementalAnnouncementController.cs" />
+    <Compile Include="Controllers\ApplicationController.cs" />
+    <Compile Include="Controllers\AttachmentController.cs" />
+    <Compile Include="Controllers\AttendanceController.cs" />
+    <Compile Include="Controllers\AttendanceReasonController.cs" />
+    <Compile Include="Controllers\CalendarControllers\AnnouncementCalendarController.cs" />
+    <Compile Include="Controllers\AnnouncementControllers\AnnouncementController.cs" />
+    <Compile Include="Controllers\AnnouncementQnAController.cs" />
+    <Compile Include="Controllers\AnnouncementTypeController.cs" />
+    <Compile Include="Controllers\BackgroundTaskController.cs" />
+    <Compile Include="Controllers\AnnouncementControllers\AnnouncementBaseController.cs" />
+    <Compile Include="Controllers\CalendarControllers\AttendanceCalendarController.cs" />
+    <Compile Include="Controllers\CalendarControllers\CalendarController.cs" />
+    <Compile Include="Controllers\CalendarControllers\DisciplineCalendarController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\ChalkableController.cs" />
+    <Compile Include="ActionResults\ChalkableJsonResult.cs" />
+    <Compile Include="Controllers\ChalkableDepartmentController.cs" />
+    <Compile Include="Controllers\ClassController.cs" />
+    <Compile Include="Controllers\ClassroomOptionController.cs" />
+    <Compile Include="Controllers\AnnouncementAttributeController.cs" />
+    <Compile Include="Controllers\CustomReportTemplateController.cs" />
+    <Compile Include="Controllers\DbMaintenanceController.cs" />
+    <Compile Include="Controllers\DemoSchoolController.cs" />
+    <Compile Include="Controllers\DeveloperController.cs" />
+    <Compile Include="Controllers\DisciplineController.cs" />
+    <Compile Include="Controllers\DisciplineTypeController.cs" />
+    <Compile Include="Controllers\DistrictController.cs" />
+    <Compile Include="Controllers\FeedController.cs" />
+    <Compile Include="Controllers\GradingController.cs" />
+    <Compile Include="Controllers\GradingPeriodController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\LimitedEnglishController.cs" />
+    <Compile Include="Controllers\LPGalleryCategoryController.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\PeriodController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MarkingPeriodController.cs" />
+    <Compile Include="Controllers\PersonControllers\StudentController.cs" />
+    <Compile Include="Controllers\PersonControllers\TeacherController.cs" />
+    <Compile Include="Controllers\PreferenceController.cs" />
+    <Compile Include="Controllers\PrivateMessageController.cs" />
+    <Compile Include="Controllers\ReportingController.cs" />
+    <Compile Include="Controllers\SchoolController.cs" />
+    <Compile Include="Controllers\SchoolYearController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\StandardController.cs" />
+    <Compile Include="Controllers\StaticContentController.cs" />
+    <Compile Include="Controllers\StorageMonitorController.cs" />
+    <Compile Include="Controllers\PersonControllers\PersonController.cs" />
+    <Compile Include="Controllers\StudyCenterController.cs" />
+    <Compile Include="Controllers\TeacherCommentController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Extensions\StaticContentExtenstion.cs" />
+    <Compile Include="Extensions\ViewDataExtension.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HtmlExtensions.cs" />
+    <Compile Include="Logic\ApiExplorer\ChalkableApiExplorerLogic.cs" />
+    <Compile Include="Logic\ApplicationLogic.cs" />
+    <Compile Include="Logic\ClassLogic.cs" />
+    <Compile Include="Logic\StudentAnnouncementLogic.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\AuthorityViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\CourseViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\DocumentViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\GradeLevelViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\StandardRelationsViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\StandardViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\SubjectDocumentViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\SubjectViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\TopicViewData.cs" />
+    <Compile Include="Models\AddressViewData.cs" />
+    <Compile Include="Models\AlphaGradeViewData.cs" />
+    <Compile Include="Models\AlternateScoreViewData.cs" />
+    <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
+    <Compile Include="Models\AnnouncementCommentViewData.cs" />
+    <Compile Include="Models\AnnouncementQnAViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AdminAnnouncementRecipientViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AdminAnnouncementViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementAttributeViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementDetailedViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\ClassAnnouncementViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\CopyAnnouncementResultViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\SupplementalAnnouncementViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\LessonPlanViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementAssignedAttributeViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\ShortAnnouncementViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\ApplicationSchoolOptionViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
+    <Compile Include="Models\AssessmentAdminViewData.cs" />
+    <Compile Include="Models\AttachmentViewData.cs" />
+    <Compile Include="Models\AttachSettingsViewData.cs" />
+    <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\AttendanceMonthViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\StudentAttendanceSummaryViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\StudentDateAttendanceViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />
+    <Compile Include="Models\AutoGradeViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassComplexViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
+    <Compile Include="Models\LimitedEnglishViewData.cs" />
+    <Compile Include="Models\GroupsViewData\GroupInfoViewData.cs" />
+    <Compile Include="Models\CustomReportTemplateViewData.cs" />
+    <Compile Include="Models\LunchCountGridViewData.cs" />
+    <Compile Include="Models\MealCountItemViewData.cs" />
+    <Compile Include="Models\MealItemViewData.cs" />
+    <Compile Include="Models\MealTypeViewData.cs" />
+    <Compile Include="Models\PanoramaViewDatas\ClassPanoramaViewData.cs" />
+    <Compile Include="Models\EthnicityViewData.cs" />
+    <Compile Include="Models\HomeroomViewData.cs" />
+    <Compile Include="Models\PanoramaViewDatas\StudentPanoramaViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentAlertDetailsViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentDetailsViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentHealthFormViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentLunchCountViewData.cs" />
+    <Compile Include="Models\ReportCardsLogoViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentSchoolsInfoViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\SchoolProgramViewData.cs" />
+    <Compile Include="Models\Settings\AdminPanoramaSettingsViewData.cs" />
+    <Compile Include="Models\Settings\BasePanoramaSettingsViewData.cs" />
+    <Compile Include="Models\Settings\ClassProfilePanoramaSettingsViewData.cs" />
+    <Compile Include="Models\DisciplinesViewData\DisciplineDailySummaryViewData.cs" />
+    <Compile Include="Models\DistrictAdminSettingsViewData.cs" />
+    <Compile Include="Models\FeedComplexViewData.cs" />
+    <Compile Include="Models\ClassAnnouncementTypeInputData.cs" />
+    <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
+    <Compile Include="Models\BudgetBalanceViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\AnnouncementApplicationViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\ApplicationAccessViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\ApplicationPersmissionsViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\ApplicationUpdateInputModel.cs" />
+    <Compile Include="Models\AttendancesViewData\AttendanceReasonViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\AttendanceSummaryViewData.cs" />
+    <Compile Include="Models\BackgroundTaskLogViewData.cs" />
+    <Compile Include="Models\BackgroundTaskViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\BaseApplicationViewData.cs" />
+    <Compile Include="Models\Binders\DateTimeBinder.cs" />
+    <Compile Include="Models\CalendarsViewData\AnnouncementCalendarWeekViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\AnnouncementMonthCalendarViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\AttendanceCalendarViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\DisciplineCalendarViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\MonthCalendarViewData.cs" />
+    <Compile Include="Models\CalendarsViewData\TeacherClassWeekCalendarViewData.cs" />
+    <Compile Include="Models\CategoryViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerControllerViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerDropdownItemViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerMethodViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ApiExplorerViewData.cs" />
+    <Compile Include="Models\ChalkableApiExplorerViewData\ParamViewData.cs" />
+    <Compile Include="Models\ChalkableApiItemDescription.cs" />
+    <Compile Include="Models\ChalkableDepartmentViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\ClassAttendanceViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassAppsViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassAttendanceSummaryViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassExpolorerViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassScheduleViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
+    <Compile Include="Models\ClassesViewData\CourseTypeDetailsViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassViewData.cs" />
+    <Compile Include="Models\ClassPeriodViewData.cs" />
+    <Compile Include="Models\ClassroomOptionViewData.cs" />
+    <Compile Include="Models\AppTesterViewData.cs" />
+    <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />
+    <Compile Include="Models\FeedReportSettingsViewData.cs" />
+    <Compile Include="Models\FeedReportViewData.cs" />
+    <Compile Include="Models\FeedSettingsViewData.cs" />
+    <Compile Include="Models\GradedItemViewData.cs" />
+    <Compile Include="Models\GradingViewData\StudentProfileGradingDetailViewData.cs" />
+    <Compile Include="Models\GradingViewData\StudentProfileGradingSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingScaleViewData.cs" />
+    <Compile Include="Models\GroupsViewData\GroupExplorerViewData.cs" />
+    <Compile Include="Models\GroupsViewData\GroupViewData.cs" />
+    <Compile Include="Models\LPGalleryCategoryViewData.cs" />
+    <Compile Include="Models\MessagingSettingsViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonClaimsViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentAppsViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentCustomAlertDetailViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentProfileViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\TeacherStatsViewData.cs" />
+    <Compile Include="Models\PossibleMessageRecipientViewData.cs" />
+    <Compile Include="Models\PracticeGradeViewData.cs" />
+    <Compile Include="Models\ScheduleItemViewData.cs" />
+    <Compile Include="Models\DepartmentGradingStatViewData.cs" />
+    <Compile Include="Models\DeveloperViewData.cs" />
+    <Compile Include="Models\DisciplinesViewData\ClassDisciplineInputModel.cs" />
+    <Compile Include="Models\DisciplinesViewData\DisciplineTypeViewData.cs" />
+    <Compile Include="Models\DisciplinesViewData\DisciplineView.cs" />
+    <Compile Include="Models\DisciplinesViewData\StudentDisciplineSummaryViewData.cs" />
+    <Compile Include="Models\DistrictViewData.cs" />
+    <Compile Include="Models\FinalGradeViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingClassSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingCommentViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingGridViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingPeriodViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingStandardClassSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingStandardGridViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingStudentClassSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingStudentSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingTeacherSummaryViewData.cs" />
+    <Compile Include="Models\ItemGradigStatViewData.cs" />
+    <Compile Include="Models\NotificationsByDateViewData.cs" />
+    <Compile Include="Models\NotificationViewData.cs" />
+    <Compile Include="Models\PeriodViewData.cs" />
+    <Compile Include="Models\IdNameViewData.cs" />
+    <Compile Include="Models\MarkingPeriodViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\CurrentPersonViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonInfoViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonScheduleViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonSummaryViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\ShortPersonViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StaffViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentCommentViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentGradingViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentHealthConditionViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentInfoViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentSummaryViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\TeacherInfoViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\TeacherSummaryViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\UserViewData.cs" />
+    <Compile Include="Models\PhoneViewData.cs" />
+    <Compile Include="Models\PreferenceViewData.cs" />
+    <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />
+    <Compile Include="Models\PrivateMessageViewData.cs" />
+    <Compile Include="Models\RoleViewData.cs" />
+    <Compile Include="Models\RoomViewData.cs" />
+    <Compile Include="Models\ScheduleSectionViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\LocalSchoolSummaryViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\LocalSchoolViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\SchoolOptionViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\SchoolViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
+    <Compile Include="Models\SchoolYearClassesViewData.cs" />
+    <Compile Include="Models\SchoolYearViewData.cs" />
+    <Compile Include="Models\SearchViewData.cs" />
+    <Compile Include="Models\Settings\CourseTypeSettingViewData.cs" />
+    <Compile Include="Models\Settings\PersonProfilePanoramaSettingsViewData.cs" />
+    <Compile Include="Models\ShortDistrictSummaryViewData.cs" />
+    <Compile Include="Models\Settings\StandardizedTestFilterViewData.cs" />
+    <Compile Include="Models\StandardizedTestViewData.cs" />
+    <Compile Include="Models\StandardSubjectViewData.cs" />
+    <Compile Include="Models\StorageMonitorViewData.cs" />
+    <Compile Include="Models\StudentAnnouncementApplicationMetaViewData.cs" />
+    <Compile Include="Models\StudentAnnouncementViewData.cs" />
+    <Compile Include="Models\HoverBoxesViewData.cs" />
+    <Compile Include="Models\GroupsViewData\StudentForGroupViewData.cs" />
+    <Compile Include="Models\StudentDailyAttendanceViewData.cs" />
+    <Compile Include="Models\SysAdminViewData.cs" />
+    <Compile Include="Models\TeacherCommentViewData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="Tools\ApiRequestExtensions.cs" />
+    <Compile Include="Tools\CompilerHelper.cs" />
+    <Compile Include="Tools\PasswordTools.cs" />
+    <Compile Include="Tools\RequestHelpers.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="app\bower\jade\jade.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="Reports\DefaultCustomReportCardsJson.txt" />
+    <Content Include="Scripts\api\chlk-js-api.js" />
+    <Content Include="Scripts\api\chlk-js-api.min.js" />
+    <Content Include="Scripts\api\chlk-post-message-api.js" />
+    <Content Include="Global.asax" />
+    <Content Include="loaderio-5b599a813535f4cd31553b713ccbec90.html" />
+    <Content Include="loaderio-e721e158fdd474be0e20e8973ea389f0.html" />
+    <Content Include="pathfinder\student_methods.xml" />
+    <Content Include="pathfinder\teacher_methods.xml" />
+    <Content Include="Scripts\api\chlk-post-message-api.min.js" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="Views\Reporting\TemplateRenderer.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkConnector\Chalkable.AcademicBenchmarkConnector.csproj">
+      <Project>{A8F83B5E-129F-465E-B8AE-B37231C28DF1}</Project>
+      <Name>Chalkable.AcademicBenchmarkConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.API\Chalkable.API.csproj">
+      <Project>{A7272B5D-DC95-4783-888D-3A36E8922226}</Project>
+      <Name>Chalkable.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
+      <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
+      <Name>Chalkable.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.AcademicBenchmark\Chalkable.Data.AcademicBenchmark.csproj">
+      <Project>{61935eee-bf16-477d-aa84-30555fc0f71c}</Project>
+      <Name>Chalkable.Data.AcademicBenchmark</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
+      <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>
+      <Name>Chalkable.Data.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
+      <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
+      <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
+      <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
+      <Name>Chalkable.Data.School</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Database.Master\Chalkable.Database.Master.sqlproj">
+      <Project>{1d736e07-c8ef-4282-9d37-2e33ba2ecb00}</Project>
+      <Name>Chalkable.Database.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Database.School\Chalkable.Database.School.sqlproj">
+      <Project>{be01fdc7-65d4-4d0a-8fae-ed6d67e47a44}</Project>
+      <Name>Chalkable.Database.School</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
+      <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
+      <Name>Chalkable.StiConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.UserTracking\Chalkable.UserTracking.csproj">
+      <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
+      <Name>Chalkable.UserTracking</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\SysAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_RoleLayout.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\ChlkHelpers.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Teacher.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Developer\DeveloperDocs.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Developer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Developer\Info.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Student.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fakeData\gradingClassSummary.json" />
+    <Content Include="fakeData\gradingSummary.json" />
+    <Content Include="fakeData\itemGradingStat.json" />
+    <Content Include="fakeData\adminAttendanceSummary.json" />
+    <Content Include="fakeData\adminFeed.json" />
+    <Content Include="fakeData\appBudget.json" />
+    <Content Include="fakeData\getAttendanceForStudent.json" />
+    <Content Include="fakeData\disciplineList.json" />
+    <Content Include="fakeData\disciplineTypes.json" />
+    <Content Include="fakeData\disciplineClassList.json" />
+    <Content Include="fakeData\attendanceSummary.json" />
+    <Content Include="fakeData\adminDisciplines.json" />
+    <Content Include="fakeData\disciplinesCalendar.json" />
+    <Content Include="fakeData\studentDisciplines.json" />
+    <Content Include="fakeData\studentDisciplinesSummary.json" />
+    <Content Include="fakeData\bannedAppData.json" />
+    <Content Include="fakeData\unbannedAppData.json" />
+    <Content Include="fakeData\appGeneralReviews.json" />
+    <Content Include="fakeData\appAnalytics.json" />
+    <Content Include="fakeData\creditCardData.json" />
+    <Content Include="fakeData\personFunds.json" />
+    <Content Include="fakeData\teacherGradingGrid.json" />
+    <Content Include="fakeData\seatingChart.json" />
+    <Content Include="fakeData\seatingChart1.json" />
+    <Content Include="fakeData\seatingChart2.json" />
+    <Content Include="fakeData\seatingChart3.json" />
+    <Content Include="Views\Home\Terms.cshtml" />
+    <Content Include="Content\icons-templates\banner.psd" />
+    <Content Include="Content\icons-templates\icon.psd" />
+    <Content Include="Content\icons-templates\screenshot.psd" />
+    <Content Include="pathfinder\student_fake_method_responses.json" />
+    <Content Include="pathfinder\teacher_fake_method_responses.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\AppTester.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\DistrictAdmin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\Telemetry.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
+    <Content Include="Reports\FeedReport\FeedShortReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Reports\FeedReport\FeedDetailsDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Reports\FeedReport\FeedShortDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\Reporting\ReportCards.cshtml" />
+    <Content Include="Views\Home\AssessmentAdmin.cshtml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'STAGING|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>11603</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:11603/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>start xcopy /Y /C $(SolutionDir)Chalkable.Database.Master\bin\Output\Chalkable.Database.Master.dacpac $(TargetDir)
+start xcopy /Y /C $(SolutionDir)Chalkable.Database.School\bin\Output\Chalkable.Database.School.dacpac $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>del /Q $(TargetDir)\Chalkable.Database.Master.dacpac
+del /Q  $(TargetDir)\Chalkable.Database.School.dacpac</PreBuildEvent>
+  </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets'))" />
+    <Error Condition="!Exists('..\packages\JavaScriptEngineSwitcher.V8.2.0.0\build\JavaScriptEngineSwitcher.V8.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JavaScriptEngineSwitcher.V8.2.0.0\build\JavaScriptEngineSwitcher.V8.props'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets" Condition="Exists('..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.40\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

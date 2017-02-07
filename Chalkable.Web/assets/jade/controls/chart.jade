@@ -1,0 +1,9 @@
+mixin Chart()
+    -attributes = self.processAttrs(attributes)
+    div(attributes).chart-container
+        if attributes.scroll
+            +LeftRightToolbar()(
+                padding = 100,
+                needDots = false,
+                disabledClass = 'x-hidden'
+            )
