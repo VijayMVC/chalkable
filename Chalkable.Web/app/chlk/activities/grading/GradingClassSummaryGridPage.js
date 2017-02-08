@@ -49,7 +49,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
             },
 
-
             [ria.mvc.DomEventBind('contextmenu', '.inner-grade-container.announcement-container .grading-grid-th')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             Boolean, function headerClick(node, event, options_){
@@ -114,8 +113,6 @@ NAMESPACE('chlk.activities.grading', function () {
                     select.trigger('chosen:updated');
                 }
             },
-
-
 
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
