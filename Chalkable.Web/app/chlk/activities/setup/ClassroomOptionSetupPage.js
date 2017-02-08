@@ -129,7 +129,7 @@ NAMESPACE('chlk.activities.setup', function () {
                 buttons.forEach(function(item){
                     buttonsModel.push(serializer.deserialize(item, chlk.models.common.Button));
                 });
-                var model = new chlk.models.common.InfoMsg('This screen contains unsaved information. \n Are you sure you want to navigate away?', Msg.Whoa.capitalize(), buttonsModel);
+                var model = new chlk.models.common.InfoMsg('<b>This screen contains unsaved information.</b><br/> <span>Are you sure you want to navigate away?</span>', null, buttonsModel, 'leave-msg', true);
                 var tpl = new chlk.templates.common.InfoMsg();
                 tpl.assign(model);
                 new ria.dom.Dom('#chlk-dialogs').appendChild('<div class="info-msg-dialog"></div>');

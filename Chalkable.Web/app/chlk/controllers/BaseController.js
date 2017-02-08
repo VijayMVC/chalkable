@@ -192,7 +192,9 @@ NAMESPACE('chlk.controllers', function (){
                        if(this.getContext().getDefaultView().isStackEmpty())
                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [exception.getMessage()]);
 
-                       return this.ShowErrorBox(exception.getMessage(), exception.getTitle() || 'oops')
+                       var text = exception.getTitle() ? '<b>' + exception.getTitle() + '</b></br>' + exception.getMessage() : exception.getMessage();
+
+                       return this.ShowErrorBox(text)
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                            }, this)
@@ -210,7 +212,7 @@ NAMESPACE('chlk.controllers', function (){
                        if(this.getContext().getDefaultView().isStackEmpty())
                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [msg]);
 
-                       return this.ShowErrorBox(msg, 'oops')
+                       return this.ShowErrorBox(msg)
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                            }, this)
@@ -222,7 +224,7 @@ NAMESPACE('chlk.controllers', function (){
                        if(this.getContext().getDefaultView().isStackEmpty())
                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [msg]);
 
-                       return this.ShowErrorBox(msg, 'oops')
+                       return this.ShowErrorBox(msg)
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                            }, this)
@@ -242,21 +244,23 @@ NAMESPACE('chlk.controllers', function (){
                        if(this.getContext().getDefaultView().isStackEmpty())
                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [msg]);
 
-                       return this.ShowMsgBox(msg, 'Error', [{
+                       return this.ShowMsgBox(msg, null, [{
                            text: 'Ok'
-                       }], 'center'), null;
+                       }], 'error'), null;
                    }, this)
                    .catchException(chlk.lib.exception.FileSizeExceedException, function(exception){
                        if(this.getContext().getDefaultView().isStackEmpty())
                            return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [exception.getMessage()]);
 
-                       return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center').thenBreak();
+                       return this.ShowMsgBox(exception.getMessage(), null, [{text: 'Ok'}], 'error').thenBreak();
                    }, this)
                    .catchException(chlk.lib.exception.AnnouncementDeleteFailedException, function(exception){
                         if(this.getContext().getDefaultView().isStackEmpty())
                             return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [exception.getMessage()]);
 
-                        return this.ShowErrorBox(exception.getMessage(), exception.getTitle() || 'Error')
+                       var text = exception.getTitle() ? '<b>' + exception.getTitle() + '</b></br>' + exception.getMessage() : exception.getMessage();
+
+                        return this.ShowErrorBox(text, null)
                             .then(function(){
                                 this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                             }, this)
@@ -394,7 +398,7 @@ NAMESPACE('chlk.controllers', function (){
 
            ria.async.Future, function ShowConfirmBox(text, header_, buttonText_, buttonClass_, iconUrl_, isHtmlText_) {
                return this.ShowMsgBox(text, header_, [{text: buttonText_ || 'OK', clazz: buttonClass_ || 'blue-button', value: 'ok'}, {text: 'Cancel'}]
-                        , null, isHtmlText_ === true, null, null, null, iconUrl_)
+                        , 'leave-msg', isHtmlText_ === true, null, null, null, iconUrl_)
                    .then(function (mrResult) {
                        if (!mrResult)
                            return ria.async.BREAK;

@@ -30,7 +30,7 @@ NAMESPACE('chlk.controllers', function (){
             this.accountService
                 .changePassword(model.getOldPassword(), model.getNewPassword(), model.getNewPasswordConfirmation(), model.isWithOldPassword())
                 .catchException(chlk.lib.exception.ChalkableException, function(ex){
-                    return this.ShowMsgBox(ex.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                    return this.ShowMsgBox(ex.getMessage(), null,[{ text: Msg.GOT_IT.toUpperCase() }], 'error')
                         .then(function(){
                             this.BackgroundNavigate('settings', 'dashboard', []);
                         }, this)
@@ -39,8 +39,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(success){
                     return success
-                        ? this.ShowAlertBox('Password was changed.')
-                        : this.ShowAlertBox('Change password failed.');
+                        ? this.ShowAlertBox('Password was changed.', null, null, 'ok')
+                        : this.ShowAlertBox('Change password failed.', null, null, 'error');
                 }, this)
                 .then(function () {
                     return this.BackgroundNavigate('settings', 'dashboard', []);
@@ -113,8 +113,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(res){
                     return res != null && res.isValidInfo()
-                        ? this.ShowAlertBox('Info saved.')
-                        : this.ShowAlertBox(!res.isValidEmail() ? 'Email already exists' : 'Info save failed.')
+                        ? this.ShowAlertBox('Info saved.', null, null, 'ok')
+                        : this.ShowAlertBox(!res.isValidEmail() ? 'Email already exists' : 'Info save failed.', null, null, res.isValidEmail() ? 'error' : 'leave-msg')
                 }, this)
                 .then(function () {
                     return this.BackgroundNavigate('settings', 'dashboard', []);

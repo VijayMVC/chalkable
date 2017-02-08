@@ -123,7 +123,7 @@ NAMESPACE('chlk.controllers', function () {
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
             function tryDeleteLessonPlanFromGalleryAction(lessonPlanId, classId_){
                 this.ShowConfirmBox('This will PERMANENTLY delete this lesson plan from the gallery for everyone. Are you sure you want to delete this?',
-                    "whoa.", null, 'negative-button')
+                    null, null, 'negative-button')
                     .thenCall(this.lessonPlanService.removeLessonPlanFromGallery, [lessonPlanId])
                     .attach(this.validateResponse_())
                     .then(function (data) {

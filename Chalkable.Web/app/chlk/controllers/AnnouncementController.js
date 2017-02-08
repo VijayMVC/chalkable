@@ -1506,7 +1506,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function showAttributesFilesUploadMsg_(){
-            this.ShowMsgBox('You can add only 1 attachment to attribute', 'Error');
+            this.ShowMsgBox('You can add only 1 attachment to attribute', null, null, 'leave-msg');
         },
 
         [chlk.controllers.SidebarButton('add-new')],
@@ -1574,7 +1574,7 @@ NAMESPACE('chlk.controllers', function (){
                 .catchException(chlk.lib.exception.FileSizeExceedException, function(exception){
 
                     this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'cancel-attachment-upload');
-                    return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center').thenBreak();
+                    return this.ShowMsgBox(exception.getMessage(), null, [{text: 'Ok'}], 'error').thenBreak();
                 }, this)
                 .handleProgress(function(event){
                     var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex, event.total, event.loaded, file.name);
@@ -1613,7 +1613,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId]],
         function applyManualGradeAction(announcementId){
-            return this.ShowMsgBox(Msg.You_ll_be_grading_by_hand, Msg.Just_checking, [{
+            return this.ShowMsgBox('<b>' + Msg.Just_checking + '</b><br/>' + Msg.You_ll_be_grading_by_hand, null, [{
                 text: Msg.Grade_manually.toUpperCase(),
                 controller: 'announcement',
                 action: 'gradeManually',
@@ -1621,7 +1621,7 @@ NAMESPACE('chlk.controllers', function (){
                 color: chlk.models.common.ButtonColor.RED.valueOf() }, {
                 text: Msg.Cancel.toUpperCase(),
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
-            }]), null;
+            }], 'leave-msg', true), null;
         },
 
         [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
@@ -1792,8 +1792,8 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, String, chlk.models.announcement.AnnouncementTypeEnum]],
         function deleteAction(announcementId, typeName, announcementType) {
             this.disableAnnouncementSaving(true);
-            this.ShowMsgBox('You are about to delete this item.\n'+ 'All attachments for this ' + typeName + ' will be gone forever.\n' +
-                    'Are you sure?', 'whoa.', [{
+            this.ShowMsgBox('<b>You are about to delete this item.</b><br/>'+ '<span>All attachments for this ' + typeName + ' will be gone forever.</br/>' +
+                    'Are you sure?</span>', null, [{
                 text: "Cancel",
                 controller: 'announcement',
                 action: 'cancelDelete',
@@ -1805,7 +1805,7 @@ NAMESPACE('chlk.controllers', function (){
                 action: 'deleteAnnouncement',
                 params: [announcementId.valueOf(), announcementType],
                 color: chlk.models.common.ButtonColor.RED.valueOf()
-            }]);
+            }], 'leave-msg', true);
             return null;
         },
 
@@ -1817,7 +1817,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.disableAnnouncementSaving(false);
                     var msg = this.mapSisErrorMessage(exception.getMessage());
 
-                    return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                    return this.ShowMsgBox(msg, null,[{ text: Msg.GOT_IT.toUpperCase() }], 'error')
                         .then(function(){
                             this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                         }, this)
@@ -2191,7 +2191,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function submitSupplementalAnnouncement(model, isEdit){
             if(!model.getRecipientIds()){
-                this.ShowMsgBox('Please select recipients', 'whoa.');
+                this.ShowMsgBox('Please select recipients', null, null, 'leave-msg');
                 return null;
             }
 
@@ -2324,9 +2324,9 @@ NAMESPACE('chlk.controllers', function (){
                     var success = !!lpInGallery;
                     if(lpInGallery){
                         if(lpInGallery.isAnnOwner() || this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)){
-                            return this.ShowMsgBox('You are replacing the existing lesson plan \- do you want to continue ?', null,
+                            return this.ShowMsgBox('<b>You are replacing the existing lesson plan</b><span>do you want to continue ?</span>', null,
                                     [{text: 'NO', clazz: 'blue-button'},
-                                    {text: 'Continue', value: 'ok'}]
+                                    {text: 'Continue', value: 'ok'}], 'leave-msg', true
                                 )
                                 .then(function(msResult){
                                     if(msResult){
@@ -2338,7 +2338,7 @@ NAMESPACE('chlk.controllers', function (){
                                 }, this);
                         }
                         else{
-                            this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
+                            this.ShowMsgBox('There is Lesson Plan with that title in gallery', null, null, 'leave-msg');
                             return null;
                         }
                     }
@@ -2405,12 +2405,12 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.FeedAnnouncementViewData]],
         function trySubmitLessonPlan(model){
             if(model.getStartDate().compare(model.getEndDate()) == 1){
-                this.ShowMsgBox('Lesson Plan is not valid. Start date is greater the end date', 'whoa.');
+                this.ShowMsgBox('Lesson Plan is not valid. Start date is greater the end date', null, null, 'leave-msg');
                 return null;
             }
 
             if(model.isInGallery() && !(model.getGalleryCategoryId() && model.getGalleryCategoryId().valueOf())){
-                this.ShowMsgBox('Cannot create lesson plan template without category!', 'whoa.');
+                this.ShowMsgBox('Cannot create lesson plan template without category!', null, null, 'leave-msg');
                 return null;
             }
 
@@ -2421,7 +2421,7 @@ NAMESPACE('chlk.controllers', function (){
                     && model.getEndDate().getDate() >= _.getStartDate().getDate() && model.getEndDate().getDate() <= _.getEndDate().getDate()}).length) ||
                 (model.isInGallery() && !(model.getStartDate().getDate() >= schoolYear.getStartDate().getDate() && model.getStartDate().getDate() <= schoolYear.getEndDate().getDate()
                 && model.getEndDate().getDate() >= schoolYear.getStartDate().getDate() && model.getEndDate().getDate() <= schoolYear.getEndDate().getDate()))){
-                this.ShowMsgBox('Lesson Plan is not valid. Start date and End date can\'t be in different grading periods', 'whoa.');
+                this.ShowMsgBox('<b>Lesson Plan is not valid.</b><br/><span>Start date and End date can\'t be in different grading periods</span>', null, null, 'leave-msg');
                 return null;
             }
 
@@ -2598,7 +2598,7 @@ NAMESPACE('chlk.controllers', function (){
                         this.ShowMsgBox(Msg.Same_Title_Text, '', [{
                             text: Msg.OK.toUpperCase(),
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                        }]);
+                        }], null, null, 'leave-msg');
 
                         this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
 

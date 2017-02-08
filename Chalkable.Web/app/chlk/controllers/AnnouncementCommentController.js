@@ -44,7 +44,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.AnnouncementComment]],
         function postAction(model){
             if(!model.getText() && !model.getAttachmentIds()){
-                this.ShowMsgBox('Please enter text or add attachment', 'whoa.');
+                this.ShowMsgBox('Please enter text or add attachment', null, null, 'leave-msg');
                 return null;
             }
 
