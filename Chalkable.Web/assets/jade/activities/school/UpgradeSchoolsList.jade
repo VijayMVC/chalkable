@@ -1,0 +1,13 @@
+.schools.grid-container.schools-individual
+   each school in self.getPaginatedSchools().getItems()
+      .row.school-info
+         span(class= school.isUpgraded() ? 'saved-icon' : '').title.school-name=school.getName() + ' School'
+
+         .assessment-option
+            span.assessment-option-title Assessment Access
+            +ActionCheckbox('assessmentEnabled', school.isAssessmentEnabled(), false, true, 'schools', 'enableAssessment', 'disableAssessment', [null, school.getId()])
+         span.report_cards-option
+         span.upgraded-date=school.getStudyCenterEnabledTill() || ''
+         +ActionButton('schools', 'upgradeSchool', school.getId()).special-button.blue-button.upgrade-school-btn Upgrade School
+         if school.isUpgraded()
+            +ActionButton('schools', 'downgradeSchool', school.getId()).negative-button.special-button.red-button Un-upgrade School

@@ -1,0 +1,26 @@
+.developer
+    h2.page-title Developer Info
+    .action-bar
+        .items
+            +ActionLink('account', 'profile').pressed Profile
+            +ActionLink('developer', 'paypalSettings') PayPal
+
+    .info
+        +ActionForm('account', 'profileSave')
+            +Hidden("id", self.id ? self.id.valueOf() : null)
+            .row
+                label Developer name*
+                input(name="name", value=self.name, type="text", class="text validate[required]")
+            .row
+                label Developer email
+                input(name="email", value=self.email, class="validate[required, custom[email]] text", type="text")
+            .row
+                label.last Developer web site*
+                input(name="websitelink", value=self.webSite, class="validate[required, custom[url]] text", type="text")
+            .row
+                span.hint *This info will appear in the App Store
+            .align-right
+                +Button().special-button.blue-button Save
+
+    .info
+        +RenderWith(chlk.models.account.ChangePassword("", "", "", self.isWithOldPassword()), chlk.templates.settings.ChangePasswordTpl)
