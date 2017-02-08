@@ -110,11 +110,11 @@ NAMESPACE('chlk.templates.profile', function(){
             Boolean, function canViewLunch_(teacherIds){
                 var currentUserId = this.getCurrentUser().getId();
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
-                var canViewExplorer = this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_LUNCH_COUNT_ADMIN)
+                var canViewLunch = this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_LUNCH_COUNT_ADMIN)
                     || this.hasUserPermission_(permissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT_ADMIN)
                     || ((this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_LUNCH_COUNT) || this.hasUserPermission_(permissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT))
                     && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
-                return canViewExplorer && this.isStudyCenterEnabled();
+                return canViewLunch;
             },
 
             [[ArrayOf(chlk.models.id.SchoolPersonId)]],
