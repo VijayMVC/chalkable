@@ -48,7 +48,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 buttons.forEach(function(item){
                     buttonsModel.push(serializer.deserialize(item, chlk.models.common.Button));
                 });
-                var model = new chlk.models.common.InfoMsg(chart_ ? 'Seating chart isn\'t saved' : Msg.Click_post_to_save, Msg.Whoa.capitalize(), buttonsModel, 'attendance-leave');
+                var model = new chlk.models.common.InfoMsg(chart_ ? 'Seating chart isn\'t saved' : Msg.Click_post_to_save, null, buttonsModel, 'leave-msg');
                 var tpl = new chlk.templates.common.InfoMsg();
                 tpl.assign(model);
                 new ria.dom.Dom('#chlk-dialogs').appendChild('<div class="info-msg-dialog"></div>');

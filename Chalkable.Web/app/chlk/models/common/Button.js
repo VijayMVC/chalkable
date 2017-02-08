@@ -2,8 +2,8 @@ NAMESPACE('chlk.models.common', function () {
     "use strict";
     /** @class chlk.models.common.ButtonColor*/
     ENUM('ButtonColor', {
-        RED: 'red',
-        BLUE: 'blue',
+        RED: 'negative-button',
+        BLUE: 'blue-button',
         GREEN: 'green',
         GRAY: 'gray'
     });

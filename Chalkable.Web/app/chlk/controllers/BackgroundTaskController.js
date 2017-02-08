@@ -117,7 +117,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.BgTaskId]],
             ria.async.Future, function tryCancelAction(id){
                 var msgText = "Do you realy want to Cancel this task?";
-                return this.ShowConfirmBox(msgText, "whoa.", null, 'negative-button')
+                return this.ShowConfirmBox(msgText, null, null, 'negative-button')
                     .thenCall(this.bgTaskService.cancelTask, [id])
                     .attach(this.validateResponse_())
                     .then(function() {
@@ -132,7 +132,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.BgTaskId]],
             ria.async.Future, function tryRerunAction(id){
                 var msgText = "Do you realy want to Rerun this task?";
-                return this.ShowConfirmBox(msgText, "whoa.", 'RERUN', 'negative-button')
+                return this.ShowConfirmBox(msgText, null, 'RERUN', 'negative-button')
                     .thenCall(this.bgTaskService.rerunTask, [id])
                     .attach(this.validateResponse_())
                     .then(function() {
@@ -147,7 +147,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.bgtasks.RerunTasksPostData]],
             ria.async.Future, function tryRerunAllAction(postData){
                 var msgText = "Do you realy want to Rerun All tasks?";
-                return this.ShowConfirmBox(msgText, "whoa.", 'RERUN', 'negative-button')
+                return this.ShowConfirmBox(msgText, null, 'RERUN', 'negative-button')
                     .thenCall(this.bgTaskService.rerunTasks, [ this.getIdsList(postData.getTasksIdsStr(), chlk.models.id.BgTaskId)])
                     .attach(this.validateResponse_())
                     .then(function() {

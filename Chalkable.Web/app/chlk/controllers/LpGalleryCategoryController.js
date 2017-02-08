@@ -38,7 +38,7 @@ NAMESPACE('chlk.controllers', function () {
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.id.LpGalleryCategoryId]],
             function tryDeleteAction(categoryId) {
-                this.ShowConfirmBox('Are you sure you want to delete this category?', "whoa.", null, 'negative-button')
+                this.ShowConfirmBox('Are you sure you want to delete this category?', null, null, 'negative-button')
                     .then(function (data) {
                         return this.BackgroundNavigate('lpgallerycategory', 'delete', [categoryId]);
                     }, this);
@@ -65,7 +65,7 @@ NAMESPACE('chlk.controllers', function () {
                 var res = this.lpGalleryCategoryService.create(model.getName())
                     .then(function(data){
                         if(!data)
-                            this.ShowMsgBox("Category with this name already exists");
+                            this.ShowMsgBox("Category with this name already exists", null, null, 'leave-msg');
                         return this.lpGalleryCategoryService.list();
                     }, this)
                     .then(function(list){
@@ -83,7 +83,7 @@ NAMESPACE('chlk.controllers', function () {
                 var res = this.lpGalleryCategoryService.update(model.getId(), model.getName())
                     .then(function(data){
                         if(!data)
-                            this.ShowMsgBox("Category with this name already exists");
+                            this.ShowMsgBox("Category with this name already exists", null, null, 'leave-msg');
                         return this.lpGalleryCategoryService.list();
                     }, this)
                     .then(function(list){

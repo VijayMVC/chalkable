@@ -323,7 +323,7 @@ NAMESPACE('chlk.controllers', function (){
                         }, this)
                 }, this)
                 .catchException(chlk.lib.exception.ChalkableException, function(exception) {
-                    return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                    return this.ShowMsgBox(exception.getMessage(), null,[{ text: Msg.GOT_IT.toUpperCase() }], 'error')
                         .then(function(){
                             this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                             this.redirectToPage_('district', 'summary', [])

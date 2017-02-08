@@ -166,7 +166,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(model){
                         if(model.message){
                             this.getView().pop();
-                            return this.ShowMsgBox(model.message, ''), null;
+                            return this.ShowMsgBox(model.message, null, null, 'error'), null;
                         }
                         return this.BackgroundNavigate('feed', 'list');
                     }, this)
@@ -260,7 +260,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.UpdateView(chlk.activities.setup.CategoriesSetupPage, res, 'copy');
                 }
 
-                var res = this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), "whoa.", null, 'negative-button')
+                var res = this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), null, null, 'negative-button')
                     .thenCall(this.announcementTypeService.deleteTypes, [model.getIds().split(',')])
                     .attach(this.validateResponse_())
                     .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
@@ -333,7 +333,7 @@ NAMESPACE('chlk.controllers', function (){
                     return item != '';
                 });
 
-                this.ShowConfirmBox('Do You really want to delete ' + (commentIds.length > 1 ? 'these comments?' : 'this comment?'), "whoa.", null, 'negative-button')
+                this.ShowConfirmBox('Do You really want to delete ' + (commentIds.length > 1 ? 'these comments?' : 'this comment?'), null, null, 'negative-button')
                     .thenCall(this.teacherCommentService.deleteComments, [commentIds])
                     .attach(this.validateResponse_())
                     .then(function(data){
