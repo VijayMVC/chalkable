@@ -1,0 +1,477 @@
+.grades-page:not(.final-page)
+  .autocomplete-list
+    .autocomplete-item
+      width: auto
+
+.chlk-calendar
+  .arrows-row
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    text-align: center
+    padding-top: 9px
+
+  .grid-arrow
+    width: 72px
+    height: 27px
+    cursor: pointer
+    display: inline-block
+
+    &:first-child
+      margin-right: 10px
+
+    &.prev-arrow
+      background: url(images2/grading/arrow-prevr.png) 0 0 no-repeat
+
+    &.next-arrow
+      background: url(images2/grading/arrow-next.png) 0 0 no-repeat
+
+    &:active
+      opacity: 0.5
+
+    &.disabled
+      opacity: 0
+      cursor: default
+
+.grades-page
+  position: relative
+
+  .marking-period-container
+    position: relative
+
+    &.open
+      z-index: 10
+
+      .collapse
+        @include transform(rotate(90deg))
+
+  .collapse
+    position: absolute
+    right: 25px
+    top: 26px
+    +icons-24-sprite(arrow, 0, -6px, -4px)
+    width: 12px
+    height: 16px
+    +transition(all .2s ease-in-out)
+
+  .chlk-pop-up-container.codes, .chlk-pop-up-container.comment
+    display: none
+
+  .mps-container
+    position: relative
+
+  .gp-button
+    display: none
+
+  .marking-period-container:not(.open)
+    .mp-data
+      height: 0
+      overflow: hidden
+
+  .buttons-group
+    margin-top: 15px
+
+  .buttons-row
+    border-bottom: 1px solid #c8c7c3
+    color: #56554f
+    +text-shadow(transparentize(#fff, .5) 0 2px 1px)
+    line-height: 62px
+    padding: 0 17px
+    position: relative
+    height: 62px
+
+    .blue-button
+      float: right
+      margin: 16px 3px
+      width: 148px
+      position: relative
+      z-index: 10
+
+  .grading-selects
+    display: inline-block
+    position: relative
+    z-index: 10
+
+  .grading-select
+    min-width: 137px
+    
+    &+DIV.chosen-container
+      margin-right: 20px
+      max-width: 200px
+
+  .ann-types-container
+    white-space: nowrap
+    position: relative
+
+    &::before
+      content: ' '
+      position: absolute
+      top: 0
+      right: 0
+      left: 0
+      height: 56px
+      background: #f7f7f5
+      border-bottom: 1px solid #ededed
+
+    .lr-toolbar
+      width: 100%
+
+  .ann-type-container
+    width: 200px
+    text-align: center
+    border-right: 1px solid #ededed
+    display: inline-block
+    height: 100%
+    vertical-align: top
+
+    //&:last-child
+      border-right: 0
+
+  .announcements-type-item
+    //display: inline-block
+    width: 100%
+    position: relative
+    border: 1px solid transparent
+
+    &:hover
+      background-color: transparentize(#000, .95)
+
+    > A
+      display: block
+      margin: 15px
+      max-height: 52px
+      font-size: 12px
+      line-height: 18px
+      overflow: hidden
+      font-style: italic
+
+  .dotted-container, .lr-toolbar, .fixed-block
+    display: inline-block
+    vertical-align: top
+
+  .grading-grid-th
+    height: 56px
+    border-bottom: 1px solid #c7c8c3
+    border-right: 1px solid #c7c8c3
+    text-align: center
+    background: #f7f7f5
+    position: relative
+
+    .time, .max-score
+      font: normal 13px/19px 'Open Sans'
+      font-style: italic
+
+    a
+      text-decoration: none
+
+  .announcement-container
+    .type-name
+      line-height: 19px
+      width: 110px
+      text-overflow: ellipsis
+      overflow: hidden
+
+  .grid-toolbar
+    .dotted-container:last-child
+      .grading-grid-th2
+        border-right: none
+
+    .arrow
+      display: none
+
+  .type-name
+    font: bold 13px/56px 'Open Sans'
+    color: #2b2a28
+    padding: 0 3px
+    position: relative
+    display: block
+
+  .name-container
+    .type-name
+      width: 214px
+      text-align: left
+      padding: 0 0 0 19px
+
+  .avgs-container
+    .type-name
+      width: 120px
+
+  .student-name
+    .withdrawn
+      position: absolute
+      top: 50%
+      margin-top: -3px
+      right: 7px
+
+  .dotted-container
+    >.dotted-h, >.student-name
+      border-bottom: 1px solid #c7c8c3
+      border-right: 1px solid #c7c8c3
+      height: 40px
+      line-height: 40px
+
+    .student-name
+      padding-left: 19px
+      position: relative
+
+    >.dotted-h
+      text-align: center
+
+  .alert-flag
+    top: -1px
+    right: 5px
+    z-index: -10
+
+    &.incomplete, &.late, &.absent, &.multiple, &.error
+      z-index: 4
+
+  .dotted-h
+    position: relative
+
+    &.grade-value
+      cursor: pointer
+
+    &:not(.gradable)
+      .grade-info
+        background: transparent
+
+    &.active-cell
+      .value-input
+        display: block
+
+    &.top-popup
+      .grading-input-popup
+        top: auto
+        bottom: 40px
+
+      &.one
+        .grading-input-popup
+          bottom: 0
+
+    &.avg-value-container
+      font-weight: bold
+
+  .with-comment
+    position: absolute
+    top: 7px
+    left: 6px
+    width: 11px
+    height: 12px
+    +icons-24-sprite(comment-icon2)
+    z-index: 2
+
+  .grade-value.gradable
+    .grade-info
+      height: 40px
+
+      &:hover
+        background-color: #eeeeee
+        position: relative
+        z-index: 1
+
+        .with-comment
+          display: none
+
+        &::after
+          content: ' '
+          position: absolute
+          top: 4px
+          left: 4px
+          +icons-24-sprite(edit-cell)
+          width: 12px
+          height: 12px
+
+  .value-input
+    position: absolute
+    left: -1px
+    right: 0
+    top: -1px
+    bottom: 0
+    width: 100%
+    border-radius: 0
+    border: 1px solid #d1d1d1
+    display: none
+    text-align: center
+    z-index: 3
+    color: #2d788f
+    border-bottom: none
+    height: 38px
+    padding: 0
+
+    &.error
+      border-color: #d16060
+      outline: none
+
+  .standards-select + DIV
+    margin-right: 16px
+
+  .grading-input-popup.no-triangle
+    left: 0
+    top: 40px
+
+  .active-row
+    background: rgba(189, 205, 226, 0.5)
+
+  .dropped-value
+    text-decoration: line-through
+
+  .popup-bubble
+    .buttons-bottom
+      margin-top: 14px
+      text-align: center
+
+      button
+        margin-bottom: 0
+        width: 80px
+
+        &:not(:last-child)
+          margin-right: 10px
+
+    &.comment, &.codes
+      display: none
+
+    &.codes
+      padding: 10px
+      color: #333333
+
+      h3
+        text-align: center
+        font: bold 18px Arial
+        margin-bottom: 20px
+
+      .row
+        &.header
+          font: bold 14px Arial
+          margin-bottom: 7px
+
+        &:not(.header)
+          margin-top: 4px
+
+          >DIV.name
+            font: normal 14px Arial
+
+        >DIV
+          display: inline-block
+          vertical-align: middle
+
+          &.check
+            width: 26px
+
+          &.name
+            width: 93px
+            overflow: hidden
+            text-overflow: ellipsis
+
+          &.code
+            width: 128px
+
+            .code-input
+              width: 82px
+              height: 20px
+
+          &.comment
+            width: 331px
+
+            .codes-select
+              width: 322px
+
+  .edited
+    font: normal 10px Arial italic
+    text-align: left
+    position: absolute
+    color: #b1b1b1
+    text-shadow: 0 1px 0 white
+    padding-left: 3px
+    bottom: 1px
+    left: 46px
+
+    &::before
+      content: ' '
+      position: absolute
+      top: 50%
+      left: 0
+      margin-top: -5px
+      +icons-24-sprite(edited-avg)
+
+  .chlk-pop-up-container.comment
+    h5
+      font: normal 10px Georgia italic
+      text-align: center
+      margin-bottom: 6px
+
+    textarea
+      width: 137px
+      min-height: 54px
+
+    BUTTON
+      width: 68px
+
+.report-link
+  position: absolute
+  +icons-32-sprite(printer-icon, 0)
+  right: 10px
+  top: 17px
+
+.grading-chart-container
+  width: 185px
+  height: 100px
+  margin: 10px 0
+
+  &:not(.processed)
+    background: image-url("images2/loaders/circular-grey.gif") 50% 50% no-repeat
+
+  .chart-container
+    background: #ffffff
+
+  .highcharts-container::before
+    left: 24px
+
+.student-standard-popup
+  .popup-bubble
+    padding: 0
+
+    &::before
+      left: 50%
+      margin-left: -8px
+
+    TABLE
+      min-width: 320px
+      border-collapse: collapse
+
+      th
+        border-bottom: 1px solid #bbb
+
+      th, td
+        padding: 5px 10px
+
+        &:not(:last-child)
+          border-right: 1px solid #bbb
+
+      .icon
+        width: 24px
+        height: 24px
+        opacity: 0.21
+
+      .lesson-plan
+        .icon
+          +icons-24-sprite(lessonplan)
+
+      .supplemental
+        .icon
+          +icons-24-sprite(supplemental)
+
+  .items-cnt
+    width: 300px
+    min-height: 50px
+    max-height: 300px
+    overflow: auto
+    padding-right: 20px
+
+    &:not(.processed)
+      background: image-url("images2/loaders/circular-grey.gif") 50% 50% no-repeat
+
+    .text-cnt
+      width: 130px
+      overflow: hidden
+      text-overflow: ellipsis

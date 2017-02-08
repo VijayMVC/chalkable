@@ -1,0 +1,61 @@
+.close-open-control
+  &.mp-50
+    .close-open-block
+      margin: 0 -50px
+      padding: 0 50px
+
+    .close-open-block::after
+      content: ' '
+      clear: both
+      display: block
+
+  > h3
+    font-size: 18px
+    line-height: 36px
+    color: #2b2a28
+    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+    margin: 0 0 24px
+
+    position: relative
+    &::after
+      content: ' '
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
+      height: 1px
+      background: #e7e6e2
+
+    .co-open, .co-close
+      float: right
+      width: 24px
+      height: 24px
+      cursor: pointer
+      +icons-24-sprite(arrow)
+
+    .co-close
+      +rotate(90deg)
+
+
+  &.co-opened
+    .co-open
+      display: none
+
+    &.co-finished
+      .close-open-block
+        overflow: visible
+
+  &:not(.co-opened)
+    >h3
+      color: #aba9a5
+
+    .co-close
+      display: none
+
+    .close-open-block
+      display: none
+
+  .close-open-block
+    overflow: hidden
+    +transition(height .2s ease-in-out)
+
