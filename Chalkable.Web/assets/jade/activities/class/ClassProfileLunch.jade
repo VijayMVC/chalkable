@@ -1,5 +1,6 @@
 mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
-    .cell.meal-item-td
+    readonly = readonly || !clazz.isAbleSubmit() || lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
+    .cell.meal-item-td(class = readonly ? 'readonly' : '')
         +Hidden("lunchCounts." + curIndex + ".staffId", (type == chlk.templates.classes.LunchCountItemType.STAFF) ? mealItem.getPersonId().valueOf() : null)
         +Hidden("lunchCounts." + curIndex + ".studentId", (type == chlk.templates.classes.LunchCountItemType.STUDENT) ? mealItem.getPersonId().valueOf() : null)
         +Hidden("lunchCounts." + curIndex + ".date", lunchCountInfo.getDate().toStandardFormat())
@@ -11,13 +12,16 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
             data-value=mealItem.getCount(),
             data-meal-index=mealIndex,
             data-index=curIndex,
-            readonly = readonly || !clazz.isAbleSubmit() || lunchCountInfo.getDate().getDate() < getDate() - 1000 * 60 * 60 * 24
+            readonly = readonly
         ).meal-count-input
 
 -var clazz = self.getClazz()
 -var lunchCountInfo = clazz.getLunchCountInfo()
 -var tableInfo = self.getTableInfo()
-.profile-page.class-profile
+.profile-page.class-profile.relative
+    #grading-popup.grading-input-popup.popup-bubble.no-triangle
+        BUTTON.blue-button.fill-grade Fill All
+        BUTTON.blue-button.clear-grade Clear All
     h2.page-title=clazz.getName()
     +ProfileTopBar(self, 'lunch')
     +ActionForm('class', 'lunchSubmit').class-lunch-form

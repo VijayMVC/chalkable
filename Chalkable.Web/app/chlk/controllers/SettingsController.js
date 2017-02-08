@@ -335,7 +335,7 @@ NAMESPACE('chlk.controllers', function (){
             function appSettingsAction(appId) {
 
                 if(!this.isStudyCenterEnabled() && !this.isAssessmentEnabled())
-                    return this.ShowMsgBox('Current school doesn\'t support assessments, applications, study center, profile explorer', 'whoa.'), null;
+                    return this.ShowMsgBox('Current school doesn\'t support assessments, applications, study center, profile explorer', null, null, 'error'), null;
 
                 var mode = "settingsview";
 

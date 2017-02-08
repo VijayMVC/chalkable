@@ -68,7 +68,7 @@ NAMESPACE('chlk.controllers', function (){
         function seatingChartReportAction(gradingPeriodId, classId){
 
             if (this.isDemoSchool())
-                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
 
             var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId,
                 null, null, null, this.hasUserPermission_(chlk.models.people.UserPermissionEnum.SEATING_CHART_REPORT)));
@@ -79,7 +79,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId]],
         function attendanceProfileReportAction(classId){
             if (this.isDemoSchool())
-                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
 
             var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, null);
             var gradingPeriodId = gp.getId();
@@ -101,7 +101,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId]],
         function attendanceRegisterReportAction(gradingPeriodId, classId){
             if (this.isDemoSchool())
-                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
 
             var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
             var res = this.attendanceService.getAttendanceMonths()
@@ -143,15 +143,15 @@ NAMESPACE('chlk.controllers', function (){
         function submitAttendanceProfileReportAction(reportViewData){
 
             if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
-                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                    return this.ShowAlertBox("Report start time should be less than report end time", null, null, 'leave-msg'), null;
                 }
 
             if (!reportViewData.getAbsenceReasons()){
-                return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", "Error"), null;
+                return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", null, null, 'leave-msg'), null;
             }
 
             if (!reportViewData.getTerms()){
-                return this.ShowAlertBox("You should select at least one term", "Error"), null;
+                return this.ShowAlertBox("You should select at least one term", null, null, 'leave-msg'), null;
             }
 
             var result = this.reportingService.submitAttendanceProfileReport(
@@ -187,7 +187,7 @@ NAMESPACE('chlk.controllers', function (){
         function submitAttendanceRegisterReportAction(reportViewData){
 
             if (!reportViewData.getAbsenceReasons()){
-                return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", "Error"), null;
+                return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", null, null, 'leave-msg'), null;
             }
 
             var result = this.reportingService.submitAttendanceRegisterReport(

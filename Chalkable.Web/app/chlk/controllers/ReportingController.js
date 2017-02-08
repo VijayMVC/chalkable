@@ -34,7 +34,7 @@ NAMESPACE('chlk.controllers', function (){
 
         function studentComprehensiveProgressReportAction(){
             if (this.isDemoSchool())
-                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
 
             var res = this.gradingPeriodService.getList()
                 .then(function(data){
@@ -71,7 +71,7 @@ NAMESPACE('chlk.controllers', function (){
 
         function lunchCountAction(){
             if (this.isDemoSchool())
-                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
 
             var res = this.customReportTemplateService.getDefaultStudentIdToPrint()
                 .attach(this.validateResponse_())
@@ -89,12 +89,12 @@ NAMESPACE('chlk.controllers', function (){
                 return this.Redirect('reporting', 'adminReport', [model.getReportType()]);
 
             if(!model.getTitle()){
-                this.ShowMsgBox('Title field is required.');
+                this.ShowMsgBox('Title field is required.', null, null, 'leave-msg');
                 return null;
             }
 
             if (model.getStartDate().compare(model.getEndDate()) > 0){
-                return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                return this.ShowAlertBox("Report start time should be less than report end time", null, null, 'leave-msg'), null;
             }
 
             var result = this.reportingService.submitLunchCount(
@@ -116,7 +116,7 @@ NAMESPACE('chlk.controllers', function (){
 
         function reportCardsAction(){
             if (this.isDemoSchool())
-                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
 
             var res = ria.async.wait([
                 this.gradingPeriodService.getList(),
@@ -147,22 +147,22 @@ NAMESPACE('chlk.controllers', function (){
                 return this.Redirect('reporting', 'adminReport', [model.getReportType()]);
 
             if(!model.getTitle()){
-                this.ShowMsgBox('Title field is required.');
+                this.ShowMsgBox('Title field is required.', null, null, 'leave-msg');
                 return null;
             }
 
             if(!model.getCustomReportTemplateId() || !model.getCustomReportTemplateId().valueOf()){
-                this.ShowMsgBox('Layout field is required.');
+                this.ShowMsgBox('Layout field is required.', null, null, 'leave-msg');
                 return null;
             }
 
             if(!model.getGradingPeriodId() || !model.getGradingPeriodId().valueOf()){
-                this.ShowMsgBox('Grading Period field is required.');
+                this.ShowMsgBox('Grading Period field is required.', null, null, 'leave-msg');
                 return null;
             }
 
             if(!model.getAttendanceReasonIds()){
-                this.ShowMsgBox('Absence Reasons field is required.');
+                this.ShowMsgBox('Absence Reasons field is required.', null, null, 'leave-msg');
                 return null;
             }
 
@@ -186,7 +186,7 @@ NAMESPACE('chlk.controllers', function (){
                 this.BackgroundCloseView(chlk.activities.reports.ReportCardsDialog);
             }.bind(this), 100);
 
-            return this.ShowAlertBox('<b>Your report is being prepared.<br>You will receive a notification when it\'s ready!</b>', null, true, 'report'), null ;
+            return this.ShowAlertBox('<b>Your report is being prepared.<br>You will receive a notification when it\'s ready!</b>', null, true, 'report ok'), null ;
         },
 
         function addRecipients_(model){

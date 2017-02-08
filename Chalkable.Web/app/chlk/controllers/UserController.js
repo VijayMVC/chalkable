@@ -185,9 +185,9 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(data){
                         if(data.getMessage())
-                            return this.ShowMsgBox(data.getMessage(), 'Error', [{
+                            return this.ShowMsgBox(data.getMessage(), null, [{
                                text: 'Ok'
-                           }], 'center'), null;
+                           }], 'center error'), null;
                         var user = this.getUserFromSession();
                         if(user){
                             user.setLogin(data.getLogin())

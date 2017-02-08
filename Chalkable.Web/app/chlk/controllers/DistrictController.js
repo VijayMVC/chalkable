@@ -56,11 +56,11 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.districtService
                 .syncDistrict(id)
                 .attach(this.validateResponse_());
-            this.ShowMsgBox('Sync task is created', 'fyi.', [{
+            this.ShowMsgBox('<b>fyi.</b><br/>Sync task is created', null, [{
                 text: Msg.GOT_IT.toUpperCase(),
                 controller: "district",
                 action: "list"
-            }]);
+            }], 'ok');
             return null;
         },
 

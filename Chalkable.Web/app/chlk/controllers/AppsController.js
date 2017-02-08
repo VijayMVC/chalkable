@@ -238,7 +238,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
-                        return this.ShowAlertBox('This application was not found')
+                        return this.ShowAlertBox('This application was not found', null, null, 'leave-msg')
                             .thenBreak();
                     }
 
@@ -264,13 +264,13 @@ NAMESPACE('chlk.controllers', function (){
         [[Number, Number, String, Object]],
         function uploadPictureDeveloperAction(width, height, msg, fileList) {
             if (!this.isValidFileExtension(fileList[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
-                return this.ShowMsgBox("Sorry, this picture format is invalid", 'Error', [{
+                return this.ShowMsgBox("Sorry, this picture format is invalid", null, [{
                     text: 'Ok',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf(),
                     controller: 'apps',
                     action: 'invalidPictureFormat',
                     params: [width, height, msg]
-                }]), null;
+                }], 'error'), null;
 
             var result = this.appsService
                 .uploadPicture(fileList[0], width, height)
@@ -309,13 +309,13 @@ NAMESPACE('chlk.controllers', function (){
             var msg = "Screenshots";
 
             if (!this.isValidFileExtension(fileList[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
-                return this.ShowMsgBox("Sorry, this picture format is invalid", 'Error', [{
+                return this.ShowMsgBox("Sorry, this picture format is invalid", null, [{
                     text: 'Ok',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf(),
                     controller: 'apps',
                     action: 'invalidScreenShotPictureFormat',
                     params: [(screenshots_ || ""), width, height, msg]
-                }]), null;
+                }], 'error'), null;
 
             var result = this.appsService
                 .uploadPicture(fileList[0], width, height)
@@ -492,7 +492,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String, chlk.models.id.AnnouncementAttributeId]],
         function viewExternalAttachAppAction(announcementId, appId, announcementType, appUrlAppend_, attributeId_) {
             if(!this.isStudyCenterEnabled())
-                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', null, null, 'error'), null;
 
             var mode = chlk.models.apps.AppModes.ATTACH;
 
@@ -566,10 +566,10 @@ NAMESPACE('chlk.controllers', function (){
         function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_, appUrlSuffix_, isAssessment_) {
 
             if(!isAssessment_ && !this.isStudyCenterEnabled())
-                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', null, null, 'error'), null;
 
             if(isAssessment_ && !this.isAssessmentEnabled() && !this.isStudyCenterEnabled())
-                return this.ShowMsgBox('Current school doesn\'t support assessments'), null;
+                return this.ShowMsgBox('Current school doesn\'t support assessments', null, null, 'error'), null;
 
 
             var result = this.appsService
@@ -687,15 +687,15 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         ria.async.Future, function tryDeleteApplication_(id, appName){
-            var msgText = "You are about to delete application. This can not be undone!!!\n\nPlease type application name to confirm.",
+            var msgText = "<b>You are about to delete application. This can not be undone!!!</b><br/><span>Please type application name to confirm.</span>",
                 buttons = [{text: 'DELETE', clazz: 'negative-button', value: 'ok'}, {text: 'Cancel'}];
-            return this.ShowMsgBox(msgText, "whoa.", buttons, null, false, 'text', "")
+            return this.ShowMsgBox(msgText, null, buttons, 'leave-msg', true, 'text', "")
                 .then(function (mrResult) {
                     if(!mrResult)
                         return ria.async.BREAK;
 
                     if (appName != mrResult)
-                        return this.ShowAlertBox("Incorrect application name provided", "Invalid application name")
+                        return this.ShowAlertBox("<b>Invalid application name</b><br/><span>Incorrect application name provided</span>", null, true, 'leave-msg', true)
                             .thenBreak();
 
                     return mrResult;
@@ -777,7 +777,7 @@ NAMESPACE('chlk.controllers', function (){
                 }
 
                 if (appIconId == null || appBannerId == null){
-                    return this.ShowAlertBox('You need to upload icon and banner picture for you app', 'Error'), null;
+                    return this.ShowAlertBox('You need to upload icon and banner picture for you app', null, null, 'leave-msg'), null;
                 }
 
                 //todo : check for externalAttach picture
@@ -787,7 +787,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 if ((developerWebsite == null || developerWebsite == "") ||
                     (developerName == null || developerName == "")){
-                    return this.ShowAlertBox('We just need you to enter your Developer Name and Website. You can do that in settings, on the left.'), null;
+                    return this.ShowAlertBox('We just need you to enter your Developer Name and Website. You can do that in settings, on the left.', null, null, 'leave-msg'), null;
                 }
             }
 
@@ -809,7 +809,7 @@ NAMESPACE('chlk.controllers', function (){
                  .then(function(newApp){
                      if(newApp.getMessage()){
                          return this
-                             .ShowAlertBox(newApp.getMessage())
+                             .ShowAlertBox(newApp.getMessage(), null, null, 'leave-msg')
                              .thenBreak()
                      }
 
@@ -828,13 +828,13 @@ NAMESPACE('chlk.controllers', function (){
                     return this.appsService.createApp(devId, appName);
                 }, this)
                 .catchError(function(error_){
-                    return this.ShowMsgBox("App with this name already exists", "whoa.", [{
+                    return this.ShowMsgBox("App with this name already exists", null, [{
                             text: 'Ok',
                             controller: 'apps',
                             action: 'general',
                             params: [],
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                        }], 'center')
+                        }], 'center leave-msg')
                         .thenBreak();
                 }, this)
                 .attach(this.validateResponse_())
@@ -953,7 +953,7 @@ NAMESPACE('chlk.controllers', function (){
         [[String]],
         function assessmentSettingsAction(appUrlAppend_) {
             var result = this.prepareExternalAttachAppViewData_("sysadminview", appUrlAppend_);
-            return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
+            return this.PushView(chlk.activities.apps.AppWrapperPage, result);
         },
 
         [chlk.controllers.SidebarButton('apps')],

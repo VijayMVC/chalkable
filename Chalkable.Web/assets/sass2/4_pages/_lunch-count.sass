@@ -4,6 +4,20 @@
   height: 24px
   float: right
 
+.class-profile-lunch-page
+  .grading-input-popup
+    box-sizing: border-box
+    padding: 8px 6px
+
+    BUTTON
+      text-align: left
+      width: 100%
+      margin: 0
+      height: 31px
+
+      &:not(:first-child)
+        margin-top: 10px
+
 .class-lunch-form
   .top-date
     text-align: center
@@ -30,6 +44,12 @@
     margin-top: 3px
 
   .chlk-grid
+    .cell
+      border-width: 1px
+
+      &:first-child
+        border-left-width: 0
+
     .grid-row
       .teacher-icon
         opacity: 0.15
@@ -62,6 +82,22 @@
       .no-bodrer
         border: none
 
+  .meal-item-td:not(.readonly)
+    background-color: #EEEEEE
+
+    &::before
+      content: " "
+      width: 12px
+      height: 12px
+      +icons-24-sprite(edit-cell)
+      position: absolute
+      margin-left: 5px
+      margin-top: 5px
+
+    &:hover
+      INPUT:not(:focus)
+        background: transparent
+
   .meal-count-input
     width: 100%
     box-sizing: border-box
@@ -69,6 +105,7 @@
     border: none
     text-align: center
     border-radius: 0
+    position: relative
 
     &:not(:focus)
       box-shadow: none

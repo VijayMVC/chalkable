@@ -49,12 +49,13 @@ NAMESPACE('chlk.controllers', function (){
 
             function appIsNotReadyForClose_() {
                 this.ShowMsgBox(
-                        'App is not ready for closing',
-                        'Sorry',[{
+                        '<b>Sorry</b><br/><span>App is not ready for closing</span>',
+                        null,[{
                             text: 'Ok',
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
                         }],
-                        'app-wrapper-error centered'
+                        'app-wrapper-error centered leave-msg',
+                        true
                     ).then(function () {
                         this.BackgroundUpdateView(chlk.activities.apps.AppWrapperDialog, null, 'unfreeze');
                     }, this);
@@ -125,7 +126,7 @@ NAMESPACE('chlk.controllers', function (){
                 if (data.force)
                     return this.closeCurrentAppAction(data);
 
-                return this.ShowMsgBox('Close without attaching the app?', 'just checking.', [{
+                return this.ShowMsgBox('<b>just checking.</b><br/>Close without attaching the app?', null, [{
                     text: 'CANCEL',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf()
                 }, {
@@ -139,7 +140,7 @@ NAMESPACE('chlk.controllers', function (){
                         refresh_attached_files: data.refresh_attached_files
                     }],
                     color: chlk.models.common.ButtonColor.RED.valueOf()
-                }], 'center'), null;
+                }], 'center leave-msg', true), null;
             },
 
             [[Object]],

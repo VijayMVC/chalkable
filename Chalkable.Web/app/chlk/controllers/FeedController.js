@@ -143,11 +143,11 @@ NAMESPACE('chlk.controllers', function (){
                     '(View Lookup, View Classroom or View Classroom (Admin)).\n' +
                     'Without those permissions you cannot use Chalkable.  \n' +
                     'Please contact your administrator for more information. \n';
-                return this.ShowMsgBox(text, 'Error.', [{
+                return this.ShowMsgBox(text, null, [{
                     text: 'LOG OUT',
                     controller: 'account',
                     action: 'logout'
-                }], 'center'), null;
+                }], 'center permissions'), null;
             }
 
             sortType_ = this.parseEnumValue_(chlk.models.announcement.FeedSortTypeEnum, sortType_);
@@ -174,11 +174,11 @@ NAMESPACE('chlk.controllers', function (){
                     '(Chalkable Admin).\n' +
                     'Without those permissions you cannot use Chalkable Admin POrtal.  \n' +
                     'Please contact your administrator for more information. \n';
-                return this.ShowMsgBox(text, 'Error.', [{
+                return this.ShowMsgBox(text, null, [{
                     text: 'LOG OUT',
                     controller: 'account',
                     action: 'logout'
-                }], 'center'), null;
+                }], 'center permissions'), null;
             }
 
             sortType_ = this.parseEnumValue_(chlk.models.announcement.FeedSortTypeEnum, sortType_);
@@ -375,7 +375,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.feed.FeedPrintingViewData]],
         function submitFeedPrintingReportAction(reportViewData){
             if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
-                return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                return this.ShowAlertBox("Report start time should be less than report end time", null, null, 'leave-msg'), null;
             }
 
             var result = this.reportingService.submitFeedReport(

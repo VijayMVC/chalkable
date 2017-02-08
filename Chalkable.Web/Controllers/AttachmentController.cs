@@ -11,7 +11,6 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -138,8 +137,7 @@ namespace Chalkable.Web.Controllers
             return File(content, contentTypeName, attName);
         }
 
-
-        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, AppTester, DistrictAdmin, Teacher, Student")]
+        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, AppTester, AssessmentAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult Upload()
         {
             try
@@ -157,7 +155,7 @@ namespace Chalkable.Web.Controllers
             }
         }
 
-        [AcceptVerbs(HttpVerbs.Put), AuthorizationFilter("SysAdmin, AppTester, DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        [AcceptVerbs(HttpVerbs.Put), AuthorizationFilter("SysAdmin, AppTester, AssessmentAdmin, DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult Upload(string fileName)
         {
             var length = Request.InputStream.Length;
@@ -168,7 +166,6 @@ namespace Chalkable.Web.Controllers
             Request.InputStream.Read(bin, 0, (int)length);
             return Json(UploadAttachment(fileName, bin));
         }
-
 
         private const string PICTURE_CONTAINER_ADDRESS = "pictureconteiner";
         private AttachmentViewData UploadForSysAdmin(string filename, byte[] bin)
@@ -190,8 +187,7 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.AttachementService.TransformToAttachmentInfo(attachment, new List<int> { Context.PersonId.Value });
             return AttachmentViewData.Create(res, Context, true);
         }
-
-
+        
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult StartViewSession(int attachmentId)
         {
@@ -228,6 +224,5 @@ namespace Chalkable.Web.Controllers
                 return HandleAttachmentException(exception);
             }
         }
-
     }
 }

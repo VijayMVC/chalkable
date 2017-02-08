@@ -38,11 +38,11 @@ NAMESPACE('chlk.controllers', function (){
                         model.getSchoolSql()
                     )
                     .attach(this.validateResponse_());
-                this.ShowMsgBox('Db update task is started.', 'fyi.', [{
+                this.ShowMsgBox('<b>fyi.</b><br/>Db update task is started.', null, [{
                     text: Msg.GOT_IT.toUpperCase(),
                     controller: "settings",
                     action: "dashboard"
-                }]);
+                }], 'ok');
             },
 
             function backupAction(){

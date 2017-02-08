@@ -165,7 +165,7 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .then(function(resModel){
                         if(!resModel.getCurrentAverage())
-                            this.ShowMsgBox('There are no grading items in selected Grading Period');
+                            this.ShowMsgBox('There are no grading items in selected Grading Period', null, null, 'leave-msg');
                         var index = model.getSelectedIndex();
                         if(index || index == 0)
                             resModel.setSelectedIndex(index);
@@ -664,7 +664,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
-                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                    return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
                 var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                 var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.GRADE_BOOK_REPORT) ||
                     this.hasUserPermission_(chlk.models.people.UserPermissionEnum.GRADE_BOOK_REPORT_CLASSROOM);
@@ -677,7 +677,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function birthdayReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
-                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                    return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
                 var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT) ||
                     this.hasUserPermission_(chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT_CLASSROOM);
                 //var isAbleToReadSSNumber = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER);
@@ -696,7 +696,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function seatingChartReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
-                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                    return this.ShowMsgBox('Not available for demo', null, null, 'error'), null;
                 var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.SEATING_CHART_REPORT);
                 var isAbleToReadSSNumber = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER);
                 var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId, startDate, endDate, null, ableDownload, isAbleToReadSSNumber));
@@ -779,7 +779,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitMissingAssignmentsReportViewData]],
             function submitMissingAssignmentsReportAction(reportViewData){
                 if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
-                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                    return this.ShowAlertBox("Report start time should be less than report end time", null, null, 'leave-msg'), null;
                 }
 
                 var result = this.reportingService.submitMissingAssignmentsReport(
@@ -812,7 +812,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitComprehensiveProgressViewData]],
             function submitComprehensiveProgressReportAction(reportViewData){
                 if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
-                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                    return this.ShowAlertBox("Report start time should be less than report end time", null, null, 'leave-msg'), null;
                 }
 
                 var result = this.reportingService.submitComprehensiveProgressReport(
@@ -857,7 +857,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitGradeVerificationReportViewData]],
             function submitGradeVerificationReportAction(reportViewData){
                 if (!reportViewData.getStudentAverageIds()){
-                    return this.ShowAlertBox("You should select at least one graded item", "Error"), null;
+                    return this.ShowAlertBox("You should select at least one graded item", null, null, 'leave-msg'), null;
                 }
 
                 var result = this.reportingService.submitGradeVerificationReport(
@@ -888,7 +888,7 @@ NAMESPACE('chlk.controllers', function (){
             function submitGradeBookReportAction(reportViewData){
 
                 if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
-                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                    return this.ShowAlertBox("Report start time should be less than report end time", null, null, 'leave-msg'), null;
                 }
 
                 var result = this.reportingService.submitGradeBookReport(
@@ -928,18 +928,18 @@ NAMESPACE('chlk.controllers', function (){
                 if (reportViewData.getStartDate() || reportViewData.getEndDate()){
 
                     if (!reportViewData.getStartDate())
-                        return this.ShowAlertBox("Please provide report start date", "Error"), null;
+                        return this.ShowAlertBox("Please provide report start date", null, null, 'leave-msg'), null;
                     if (!reportViewData.getEndDate())
-                        return this.ShowAlertBox("Please provide report end date", "Error"), null;
+                        return this.ShowAlertBox("Please provide report end date", null, null, 'leave-msg'), null;
 
                     if (reportViewData.getStartDate().compare(reportViewData.getEndDate()) > 0){
-                        return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                        return this.ShowAlertBox("Report start time should be less than report end time", null, null, 'leave-msg'), null;
                     }
                 }
 
 
                 if (reportViewData.getStartMonth() > reportViewData.getEndMonth()){
-                    return this.ShowAlertBox("Start Month must be less than or equal to End Month", "Error"), null;
+                    return this.ShowAlertBox("Start Month must be less than or equal to End Month", null, null, 'leave-msg'), null;
                 }
 
                 var result = this.reportingService.submitBirthdayReport(
@@ -1016,7 +1016,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitProgressReportViewData]],
             function submitProgressReportAction(model){
                 if(!model.getAbsenceReasonIds()){
-                    this.ShowMsgBox(Msg.Progress_Report_No_Reasons_msg);
+                    this.ShowMsgBox(Msg.Progress_Report_No_Reasons_msg, null, null, 'leave-msg');
                 }
                 else{
                     var count = model.getNotSelectedCount();
@@ -1044,7 +1044,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(model['getTitle' + i]() && model['getTitle' + i]().trim()) len++;
                     }
                     if(model.getAnnouncementIds().split(',').length + len > 8){
-                        return this.ShowAlertBox(Msg.Worksheet_report_msg, "fyi."), null;
+                        return this.ShowAlertBox(Msg.Worksheet_report_msg, null, null, 'leave-msg'), null;
                         /*this.ShowMsgBox(Msg.Worksheet_report_msg, 'fyi.', [{
                             text: Msg.GOT_IT.toUpperCase()
                         }]);
@@ -1052,7 +1052,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                     if (model.getStartDate().compare(model.getEndDate()) > 0){
-                        return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                        return this.ShowAlertBox("Report start time should be less than report end time", null, null, 'leave-msg'), null;
                     }
 
                     var result = this.reportingService.submitWorksheetReport(
@@ -1132,7 +1132,7 @@ NAMESPACE('chlk.controllers', function (){
             function postStandardsAction(classId, gradingPeriodId) {
                 var result = this.gradingService
                     .postStandards(classId, gradingPeriodId)
-                    .thenCall(this.ShowAlertBox, ['Standards posted successfully.'])
+                    .thenCall(this.ShowAlertBox, ['Standards posted successfully.', null, null, 'ok'])
                     .thenBreak();
 
                 return this.UpdateView(this.getView().getCurrent().getClass(), result);
