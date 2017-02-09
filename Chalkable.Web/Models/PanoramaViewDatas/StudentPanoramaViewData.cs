@@ -110,7 +110,7 @@ namespace Chalkable.Web.Models.PanoramaViewDatas
                 IsAbsent = absence?.AbsenceLevel == "All Day",
                 IsHalfAbsent = absence?.AbsenceLevel == "Half Day",
                 IsLate = absence?.AbsenceLevel == "Tardy",
-                Disciplines = infractions?.Select(x => x.InfractionName).ToList(),
+                Disciplines = infractions?.Select(x => x.InfractionName).OrderBy(x=>x).ToList(),
                 Date = date.Day
             };
         }
