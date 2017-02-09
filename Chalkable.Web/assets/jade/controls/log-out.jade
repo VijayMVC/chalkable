@@ -1,0 +1,14 @@
+mixin SwitchBlock(user)
+    -var roleId = user.getRole().getId()
+    if roleId == chlk.models.common.RoleEnum.DISTRICTADMIN.valueOf()
+        +ActionLink('account', 'switchToTeacher').switch-to-role Teacher Portal
+    if roleId == chlk.models.common.RoleEnum.TEACHER.valueOf() && user.hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)
+        +ActionLink('account', 'switchToAdmin').switch-to-role Admin Portal
+
+mixin Logout(controller, action, currentPerson)
+    .wrapper
+        BUTTON.blue.logout-area= currentPerson.getDisplayName()
+        .logout
+            +SwitchBlock(currentPerson)
+            +ActionLink('account', 'redirectToINow').inow InformationNow
+            +ActionLink(controller, action) Log Out

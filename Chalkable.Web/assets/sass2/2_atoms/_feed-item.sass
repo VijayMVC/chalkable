@@ -1,0 +1,181 @@
+.feed-item
+  .check-cnt
+    display: none
+
+  &.imported
+    border-color: #41b768
+
+  .line
+    height: 4px
+    background-color: #d45151
+    border-radius: 2px
+    top: 68px
+    position: absolute
+    width: 100%
+    overflow: hidden
+
+  .inner-line
+    height: 100%
+    background-color: #41b768
+
+  border: 1px solid #c8c7c3
+  border-radius: 5px
+  margin: 8px 0 0
+  +box-shadow(transparentize(#000, .91) 0 2px 3px)
+
+  padding: 0 11px 0 63px
+  position: relative
+
+  .star
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    width: 63px
+
+    &::before
+      content: ' '
+      position: absolute
+      left: 18px
+      top: 27px
+      height: 24px
+      width: 24px
+      +icons-24-sprite(todo)
+      opacity: .75
+
+    &:hover::before
+      opacity: 1
+
+    &.complete
+      display: none
+
+      &::before
+        +icons-24-sprite(done)
+
+  &.complete
+    .star
+      display: none
+
+    .star.complete
+      display: block
+
+  &.is-admin
+    .star
+      &::before
+        top: 30px
+        +icons-24-sprite(admin-item-todo)
+
+      &.complete::before
+        +icons-24-sprite(admin-item)
+
+  .announcement-link
+    padding-left: 42.5%
+    position: relative
+    display: block
+    text-decoration: none
+
+    .title
+      left: 0
+      top: 27px
+      width: 41%
+      position: absolute
+      white-space: nowrap
+      vertical-align: middle
+      text-overflow: ellipsis
+      overflow: hidden
+
+      font-size: 20px
+      line-height: 25px
+      font-weight: 700
+      color: #2f7790
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)
+
+      letter-spacing: -1px
+
+  .date
+    left: 0
+
+  .date, .description
+    top: 56px
+    width: 262px
+    position: absolute
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    font-size: 11px
+    line-height: 15px
+    color: #7b7974
+    +text-shadow(transparentize(#fff, .25) 0 1px 0)
+
+  .attachment
+    height: 80px
+
+  &.student.class-announcement
+    .attachment
+      .small-icon:not(.grades-icon)
+        margin-top: 2px
+
+      .grades-icon
+        +icons-32-sprite(grades-2)
+        width: 32px
+        height: 32px
+        position: absolute
+        margin-top: 27px
+        right: 0
+
+  .attachment
+    padding-right: 140px
+    position: relative
+
+    .icons
+      height: 100%
+      position: absolute
+      right: 0
+      z-index: 1
+      top: 0
+      min-width: 125px
+
+    .grade-info
+      text-align: right
+      line-height: 88px
+      font-size: 29px
+      font-weight: bold
+      position: absolute
+      right: 0
+      color: #7b7974
+
+    .small-icon
+      width: 24px
+      height: 24px
+      margin: 36px -1px 0 10px
+      display: inline-block
+      vertical-align: middle
+      opacity: 0.7
+      float: right
+      position: relative
+      z-index: 1
+
+    .discussion-icon
+      +icons-24-sprite(discussion)
+
+    .attachment-icon
+      +icons-24-sprite(attachment)
+
+    .grades-icon
+      +icons-24-sprite(chart)
+
+    .invisible-icon
+      +icons-24-sprite(invisible)
+
+    .supplemental-icon
+      +icons-24-sprite(supplemental)
+
+  .content
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    word-break: break-all
+    font-size: 13px
+    line-height: 80px
+    color: #2b2a28
+    +text-shadow(transparentize(#fff, .5) 0 1px 0)
