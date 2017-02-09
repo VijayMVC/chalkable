@@ -1,0 +1,241 @@
+.student-panorama
+  .panorama-calendars-tabs.tabs-block
+    .tab-headers
+      background: transparent
+      border-radius: 0
+      margin: 0
+      margin-bottom: -12px
+
+      LI
+        background: #ededed
+        border: 1px solid #ededed
+        font-size: 13px
+        height: 26px
+        line-height: 26px
+        border-bottom: none
+        margin-right: 3px
+        border-radius: 3px 3px 0 0
+
+        &:hover
+          background: #fbfbfb
+
+        &.active
+          background: white
+          border-color: #e7e6e2
+
+  .calendars-legend
+    margin-top: 11px
+
+  .calendar-legend-item
+    padding-left: 36px
+
+  .calendar-item
+    font-size: 11px
+    text-align: center
+    font-weight: 600
+    margin-right: 17px
+
+    h3
+      font-size: 12px
+      color: #767676
+      font-weight: 600
+      margin-bottom: 4px
+
+    TD
+      width: 25px
+      height: 25px
+      line-height: 25px
+
+  .text-legend
+    padding-left: 6px
+    font-weight: 600
+    font-size: 12px
+
+  .day-item
+    width: 22px
+    height: 22px
+    line-height: 22px
+    position: relative
+    border-radius: 50%
+    background: #d0cdcd
+    color: #656565
+
+    &.sunday, &.saturday
+      &:not(.active-item)
+        color: #a4a4a4
+        background: transparent
+
+    &.active-item
+      background: #09b356
+      color: #ffffff
+
+    &.late
+      background: #dfd209
+      color: #000000
+
+    &.absent
+      background: #a12637
+
+    &.half-absent.active-item
+      background-color: transparent
+      +icons-24-sprite(absent-half-day)
+
+    &.future
+      background: #d0cdcd
+      color: #656565
+
+    &.has-disciplines
+      overflow: visible !important
+
+      .disciplines-item
+        display: block
+
+    .disciplines-item
+      display: none
+      width: 7px
+      height: 7px
+      border-radius: 50%
+      border: 2px solid #ffffff
+      background: #e70303
+      position: absolute
+      right: -3px
+      top: -3px
+
+  .panorama-demographics-tab
+    TABLE
+      width: 100%
+
+    TD
+      width: 25%
+      vertical-align: top
+
+    .info-title
+      width: 42%
+      margin-right: 0
+      vertical-align: top
+
+      &:before
+        content: ''
+
+    .data-info
+      width: 58%
+
+  .chlk-grid
+    .cell
+      word-break: break-all
+
+      &:not(.center)
+        text-align: left
+        padding: 0 10px
+
+        &.active-sort
+          padding-right: 15px
+
+      &.code
+        width: 5%
+
+      &.periods, &.primary
+        width: 7%
+
+      &.category, &.demerits
+        width: 8%
+
+      &.level, &.date, &.disposition-date, &.infraction, &.disposition
+        width: 14%
+
+      &.reason
+        width: 22%
+
+.panorama-page
+
+  .students-grid
+    .cell:not(.name)
+      padding: 0 5px
+
+  .stats-container
+    .top-bar
+      text-align: center
+
+  .chart-label-y
+    text-align: left
+    overflow: visible
+
+  .highcharts-container
+    &::before
+      content: none
+
+  .cell
+    word-break: break-all
+
+    &.checks
+      width: 5%
+
+    &.name
+      width: 25%
+
+    &.ethnicity, &.hispanic, &.iep-active, &.retained
+      width: 4%
+
+      &.active-sort::before
+        right: 5px
+
+  h3
+    margin-top: 24px
+
+  .chart-content
+    height: 300px
+
+  .chart-container
+    &:not(.small-chart)
+      height: 300px
+    width: 100%
+
+  .tab-headers
+    margin: -15px -20px
+
+  .add-supplemental-btn
+    padding: 0
+    width: 24px
+    height: 24px
+    border: none
+    +box-shadow(none)
+    +icons-24-sprite(supplemental)
+    margin: -10px 0
+
+    &:hover
+      +icons-24-sprite(supplemental)
+
+
+  .add-subject-container
+    margin-top: 20px
+
+  .course-type-header
+    margin-bottom: 10px
+    position: relative
+
+  .main-text
+    font-size: 18px
+    margin-right: 10px
+
+  .current-year
+    margin: 0 10px
+    font-style: italic
+    font-size: 14px
+
+  .previous-years
+    LABEL
+      margin: 0 10px
+      font-size: 14px
+      font-weight: 600
+
+.add-course-to-panorama-dialog, .add-school-to-report-cards-dialog
+  SELECT
+    width: 265px
+
+  .dialog
+    width: 300px
+
+  .chosen-container
+    display: block
+    margin: 20px auto
+
