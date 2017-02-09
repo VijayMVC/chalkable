@@ -1,0 +1,33 @@
+-selectedClassId = self.getSelectedClassId()
+.dialog.add-duplicate-announcements
+    +ActionForm('announcement', 'duplicate').add-duplicate-announcements-form
+        .x-window-header
+            h1 HOW TO DUPLICATE AN ITEM
+        .x-window-body
+            +Hidden('announcementId', self.getAnnouncementId() && self.getAnnouncementId().valueOf())
+            +Hidden('selectedIds', '')
+            +Hidden('type', self.getType().valueOf())
+            .main-container
+                +LeftRightToolbar(self.getClasses())(
+                    selectedItemId=selectedClassId && selectedClassId.valueOf(),
+                    pressAfterClick=false
+                ).classes-bar
+                    each item in self.getClasses()
+                        BUTTON(
+                            classId=item.getId(),
+                            class=selectedClassId == item.getId()? "pressed " : "",
+                            type="button",
+                            name="submitType",
+                            value="save",
+                            data-tooltip=item.getId() ? item.getFullClassName() : ''
+                        ).item.class-button.validate-skip
+                            +ClassImg(item, 45, 80).avatar
+                            SPAN.text-container(data-tooltip=item.getName(), data-tooltip-type="overflow")= item.getName()
+                .text-container
+                    .tooltip-text
+                    .note
+                        .title Note:
+                        .text If an application was attached, it will not be sent with the duplicate item
+        .x-window-footer
+            +Button.special-button2.cancel.close Cancel
+            +Button()(type="submit", disabled).special-button2.blue.add.add-duplicate-btn Submit

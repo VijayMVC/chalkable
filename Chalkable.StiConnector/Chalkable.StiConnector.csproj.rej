@@ -1,0 +1,18 @@
+--- Chalkable.StiConnector.csproj
++++ Chalkable.StiConnector.csproj
+@@ -125,7 +125,6 @@
+     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
+     <Compile Include="Connectors\Model\ActivityAttribute.cs" />
+     <Compile Include="Connectors\Model\ActivityCategory.cs" />
+-    <Compile Include="Connectors\Model\ActivityCopyOptions.cs" />
+     <Compile Include="Connectors\Model\ActivityCopyResult.cs" />
+     <Compile Include="Connectors\Model\ActivityStandard.cs" />
+     <Compile Include="Connectors\Model\AttendanceDailySummary.cs" />
+@@ -256,6 +255,7 @@
+     <Compile Include="SyncModel\StaffRole.cs" />
+     <Compile Include="SyncModel\StaffSchool.cs" />
+     <Compile Include="SyncModel\Standard.cs" />
++    <Compile Include="SyncModel\StandardizedTest.cs" />
+     <Compile Include="SyncModel\StandardSubject.cs" />
+     <Compile Include="SyncModel\Student.cs" />
+     <Compile Include="SyncModel\StudentAcadSession.cs" />

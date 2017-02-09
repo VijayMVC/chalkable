@@ -1,0 +1,82 @@
+mixin SingleContact_(contact, person, primaryPhone, address)
+    .sections-info
+        .section-data
+            .info-title-large=person.getFullName()
+            .info-title-secondary=contact.getRelationshipName()
+        if person.getEmail()
+            .section-data
+                .info-title=Msg.Email
+                .data-info=person.getEmail()
+        each phone in person.getPhones()
+            if phone.isIsPrimary()
+                .section-data
+                    .info-title=Msg.PrimaryPhone
+                    .data-info=phone.getValue()
+        if address
+            .section-data
+                .info-title=Msg.Address
+                .data-info=address
+        .section-data
+            .info-title-small=Msg.Allowed_to_pickup
+            .data-info-small=contact.isAllowedToPickup() ? 'Yes' : 'No'
+            .info-title-small=Msg.Receives_bill
+            .data-info-small=contact.isReceivesBill() ? 'Yes' : 'No'
+        .section-data
+            .info-title-small=Msg.Custodian
+            .data-info-small=contact.isCustodian() ? 'Yes' : 'No'
+            .info-title-small=Msg.Receives_mailings
+            .data-info-small=contact.isReceivesMailings() ? 'Yes' : 'No'
+        .section-data
+            .info-title-small=Msg.Emergency_contact
+            .data-info-small=contact.isEmergencyContact() ? 'Yes' : 'No'
+            .info-title-small=Msg.Responsible_for_bill
+            .data-info-small=contact.isResponsibleForBill() ? 'Yes' : 'No'
+        .section-data
+            .info-title-small=Msg.Family_member
+            .data-info-small=contact.isFamilyMember() ? 'Yes' : 'No'
+
+mixin ParentProfileInfoView(contacts)
+    +CloseOpen('Contacts').today-work-panel
+        -var index = 0;
+        table
+            while (index < contacts.length)
+
+                -var person = contacts[index].getPersonInfo()
+                -var primaryPhone = person.getPrimaryPhone() ? person.getPrimaryPhone().getValue() : '';
+                -var address = person.getAddress() ? person.getAddress().getValue() : ''
+                tr
+                    td(valign='top')
+                        +SingleContact_(contacts[index], person, primaryPhone, address)
+                    if contacts[index+1]
+                        -var person2 = contacts[index+1].getPersonInfo()
+                        -var primaryPhone2 = person2.getPrimaryPhone() ? person2.getPrimaryPhone().getValue() : '';
+                        -var address2 = person2.getAddress() ? person2.getAddress().getValue() : ''
+                        td(valign='top')
+                            +SingleContact_(contacts[index+1], person2, primaryPhone2, address2)
+                        if contacts[index+2]
+                            -var person3 = contacts[index+2].getPersonInfo()
+                            -var primaryPhone3 = person3.getPrimaryPhone() ? person3.getPrimaryPhone().getValue() : '';
+                            -var address3 = person3.getAddress() ? person3.getAddress().getValue() : ''
+                            td(valign='top')
+                                +SingleContact_(contacts[index + 2], person3, primaryPhone3, address3)
+                                br
+                                br
+                -index += 3
+
+-var person = self.getUser()
+-var forms = person.getHealthForms()
+-var hasForms = forms && forms.length
+
+.profile-page.view-mode(class=person.isAvailableNotVerifiedHealthForm() ? 'not-verified-health-form' : '')
+    h2.page-title=Msg.Student_profile
+    +ProfileTopBar(self, 'info')
+    +ProfileInfoView(self)
+        +ParentProfileInfoView(person.getStudentContacts())
+        //todo parent section
+    +ProfileInfoForm('students', self)
+        +ParentProfileInfoView(person.getStudentContacts())
+
+    if hasForms
+        +CloseOpen('Health').health-panel
+            +RenderWith(person, chlk.templates.profile.SchoolPersonInfoHealthFormsTpl)
+
