@@ -282,13 +282,14 @@ NAMESPACE('chlk', function (){
 
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
-                    if(!jQuery(this).data('wasClick') && !tooltipTimeOut && !jQuery(this).hasClass('tooltip-processed')){
-                        var target = jQuery(e.target),
-                            tooltip = jQuery('#chlk-tooltip-item');
+                    var target = jQuery(e.target),
+                        tooltip = jQuery('#chlk-tooltip-item');
+                    if(!jQuery(this).data('wasClick') && !tooltipTimeOut && !jQuery(this).hasClass('tooltip-processed') && !(target.hasClass('active-tooltip') && tooltip.is(':visible'))){                        
                         target.off('remove.tooltip');
                         target.on('remove.tooltip', function(e){
                             target.trigger('mouseleave');
                         });
+                        
                         if(target.hasClass('no-tooltip') || target.parents('.no-tooltip')[0]){
                             tooltip.hide();
                             tooltip.find('.tooltip-content').html('');
@@ -307,6 +308,10 @@ NAMESPACE('chlk', function (){
                                 showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
                             }
                             if((value || value === 0) && showTooltip ){
+                                setTimeout(function(){
+                                    target.addClass('active-tooltip');
+                                }, 1);                                
+
                                 var timeout = node.data('tooltip-timeout');
                                 if(timeout){
                                     tooltipTimeOut = setTimeout(function(){
@@ -317,7 +322,6 @@ NAMESPACE('chlk', function (){
                                     tooltip.show();
 
                                 tooltip.find('.tooltip-content').html(node.data('tooltip'));
-                                tooltip.css('left', offset.left + (node.width() - tooltip.width())/2);
 
                                 if(onBottom)
                                     tooltip.css('top', offset.top + node.height() + 5).addClass('bottom');
@@ -332,6 +336,7 @@ NAMESPACE('chlk', function (){
                                     else
                                         tooltip.addClass(clazz);
                                 }
+                                tooltip.css('left', offset.left + (node.width() - tooltip.width())/2);
                             }
                             jQuery(window).scrollTop(scrollTop);
                         }
@@ -346,6 +351,7 @@ NAMESPACE('chlk', function (){
                 });
 
                 jQuery(document).on('mouseleave click', '[data-tooltip]', function(e){
+                    jQuery(e.target).removeClass('active-tooltip');
                     clearTimeout(tooltipTimeOut);
                     tooltipTimeOut = null;
                     var node = jQuery(this);

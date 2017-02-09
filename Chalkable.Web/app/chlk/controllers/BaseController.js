@@ -258,7 +258,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(this.getContext().getDefaultView().isStackEmpty())
                             return this.redirectToErrorPage_(exception.toString(), 'error', 'generalServerError', [exception.getMessage()]);
 
-                       var text = exception.getTitle() ? '<b>' + exception.getTitle() + '</b></br>' + exception.getMessage() : exception.getMessage();
+                       var text = exception.getTitle() ? '<b>' + exception.getTitle() + '</b></br><span>' + exception.getMessage() + '</span>' : exception.getMessage();
 
                         return this.ShowErrorBox(text, null)
                             .then(function(){
