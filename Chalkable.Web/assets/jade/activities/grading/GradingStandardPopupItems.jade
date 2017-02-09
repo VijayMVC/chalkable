@@ -1,0 +1,19 @@
+.items-cnt2
+    TABLE
+        TR
+            TH Date
+            TH Activity
+            TH Grade
+        each item in self.getItems() || []
+            TR
+                TD!=self.getDateStr(item)
+                TD
+                    .text-cnt(data-tooltip=item.title, data-tooltip-type="overflow")=item.title
+                if item.type == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN.valueOf()
+                    TD.lesson-plan
+                        .icon
+                if item.type == chlk.models.announcement.AnnouncementTypeEnum.SUPPLEMENTAL_ANNOUNCEMENT.valueOf()
+                    TD.supplemental
+                        .icon
+                if item.type == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT.valueOf()
+                    TD=item.grade
