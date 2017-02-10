@@ -1,0 +1,10 @@
+each address in self.getItems()
+    textarea(
+        class="home-address",
+        data-id= address && address.getId() ? address.getId().valueOf() : null,
+        data-type=0,
+        readonly
+    )= address ? address.getValue() : ''
+
+
+
