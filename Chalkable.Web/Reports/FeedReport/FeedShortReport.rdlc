@@ -732,7 +732,7 @@
                                                                 <Paragraph>
                                                                   <TextRuns>
                                                                     <TextRun>
-                                                                      <Value>=IIF(IsNothing(Fields!StandardName.Value),"No Activities attached",Fields!StandardName.Value)</Value>
+                                                                      <Value>=IIF(IsNothing(Fields!StandardName.Value),"No standard attached",Fields!StandardName.Value)</Value>
                                                                       <Style>
                                                                         <FontSize>12pt</FontSize>
                                                                         <Color>#56554f</Color>
@@ -1233,7 +1233,7 @@
                               <KeepTogether>true</KeepTogether>
                               <DataSetName>MainDataSet</DataSetName>
                               <Left>0.01168in</Left>
-                              <Height>1.21805in</Height>
+                              <Height>1.21806in</Height>
                               <Width>8.29513in</Width>
                               <Style>
                                 <Border>
@@ -1245,7 +1245,7 @@
                           <KeepTogether>true</KeepTogether>
                           <Top>1.10346in</Top>
                           <Left>0.11459in</Left>
-                          <Height>1.21805in</Height>
+                          <Height>1.21806in</Height>
                           <Width>8.32475in</Width>
                           <ZIndex>2</ZIndex>
                           <Visibility>
@@ -2003,7 +2003,7 @@
                               <KeepTogether>true</KeepTogether>
                               <DataSetName>MainDataSet</DataSetName>
                               <Left>0.02106in</Left>
-                              <Height>0.70069in</Height>
+                              <Height>0.7007in</Height>
                               <Width>8.29513in</Width>
                               <Style>
                                 <Border>
@@ -2015,7 +2015,7 @@
                           <KeepTogether>true</KeepTogether>
                           <Top>2.42152in</Top>
                           <Left>0.11459in</Left>
-                          <Height>0.70069in</Height>
+                          <Height>0.7007in</Height>
                           <Width>8.32059in</Width>
                           <ZIndex>3</ZIndex>
                           <Visibility>
@@ -2035,6 +2035,7 @@
                         </Border>
                       </Style>
                     </Rectangle>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
