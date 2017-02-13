@@ -12,7 +12,8 @@ mixin MealItemCell(mealItem, mealIndex, curIndex, readonly, type)
             data-value=mealItem.getCount(),
             data-meal-index=mealIndex,
             data-index=curIndex,
-            readonly = readonly
+            readonly = readonly,
+            autocomplete = "off"
         ).meal-count-input
 
 -var clazz = self.getClazz()
