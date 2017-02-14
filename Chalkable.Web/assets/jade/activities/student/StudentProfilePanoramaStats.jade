@@ -13,7 +13,7 @@ mixin CalendarDayItem_(item, dayIndex)
         if item
             -var itemInfo = self.getDayItemInfo(item, dayIndex)
             .day-item(class=itemInfo.classes, data-tooltip=itemInfo.tooltip, data-tooltip-class='white', data-tooltip-position='bottom')=item && item.day
-                .disciplines-item(data-tooltip=itemInfo.disciplinesTooltip, data-tooltip-class='white', data-tooltip-position='bottom')
+                .disciplines-item
 
 -self.preparePanoramaCalendars()
 -var user = self.getModel()

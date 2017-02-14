@@ -124,11 +124,11 @@ NAMESPACE('chlk.templates.student', function () {
                         disciplinesTooltip = dayItem.disciplines.map(function(item){
                             return dateFormat + item;
                         }).join('\n');
+                        tooltip = tooltip ? tooltip + '\n' + disciplinesTooltip : disciplinesTooltip;
                     }
                 }
                 return {
                     classes : classes.join(' '),
-                    disciplinesTooltip : disciplinesTooltip,
                     tooltip : tooltip
                 };
             },

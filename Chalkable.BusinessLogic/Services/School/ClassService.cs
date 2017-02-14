@@ -105,12 +105,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses)
         {
             BaseSecurity.EnsureDistrictAdmin(Context);
-            using (var uow = Update())
-            {
-                var mpClassDa = new MarkingPeriodClassDataAccess(uow);
-                mpClassDa.Insert(markingPeriodClasses);
-                uow.Commit();
-            }
+            DoUpdate(u=> new MarkingPeriodClassDataAccess(u).Insert(markingPeriodClasses));
         }
         
         public void AddStudents(IList<ClassPerson> classPersons)
@@ -198,13 +193,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 conds.Add(nameof(Class.MinGradeLevelRef), gradeLevel, ConditionRelation.GreaterEqual);
                 conds.Add(nameof(Class.MaxGradeLevelRef), gradeLevel, ConditionRelation.LessEqual);
             }
-            return DoRead(u => new ClassDataAccess(u).GetAll(conds));
+            return DoRead(u => new ClassDataAccess(u).GetAll(conds))
+                        .OrderBy(c => c.Name)
+                        .ThenBy(c => c.ClassNumber)
+                        .ToList();
         }
 
         public IList<ClassDetails> GetAllSchoolsActiveClasses()
         {
-            if (!BaseSecurity.IsDistrictAdmin(Context))
-                throw new ChalkableSecurityException();
+            BaseSecurity.EnsureDistrictAdmin(Context);
             return DoRead(u => new ClassDataAccess(u).GetAllSchoolsActiveClasses());
         }
 
@@ -249,17 +246,14 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassPerson> GetClassPersons(int? personId, int? classId, bool? isEnrolled, int? markingPeriodId)
         {
-            using (var uow = Read())
+            var query = new ClassPersonQuery
             {
-                return new ClassPersonDataAccess(uow)
-                    .GetClassPersons(new ClassPersonQuery
-                        {
-                            ClassId = classId,
-                            IsEnrolled = isEnrolled,
-                            PersonId = personId,
-                            MarkingPeriodId = markingPeriodId
-                        });
-            }
+                ClassId = classId,
+                IsEnrolled = isEnrolled,
+                PersonId = personId,
+                MarkingPeriodId = markingPeriodId
+            };
+            return DoRead(u => new ClassPersonDataAccess(u).GetClassPersons(query));
         }
 
         public ClassPanorama Panorama(int classId, IList<int> academicYears, IList<StandardizedTestFilter> standardizedTestFilters)
