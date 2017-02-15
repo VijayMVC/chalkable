@@ -63,6 +63,37 @@ NAMESPACE('chlk.templates.feed', function () {
 
             function hasFilters(){
                 return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate() || this.getSortType() && this.getSortType().valueOf()
+            },
+
+            function getTimeSelectPlaceholder(){
+                if(this.getStartDate())
+                    return this.getStartDate().format('M d - ') + this.getEndDate().format('M d');
+
+                var gpId = this.getGradingPeriodId()
+
+                if(gpId)
+                    return this.getGradingPeriods().filter(function(gp){return gp.getId() == gpId})[0].getName();
+
+                return 'Any Time';
+            },
+
+            function getActivitiesTypeSelectPlaceholder(){
+                var typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
+
+                switch(this.getAnnType()){
+                    case typesEnum.CLASS_ANNOUNCEMENT : return 'Activities Only';
+                    case typesEnum.ADMIN : return 'Admin Announcement Only';
+                    case typesEnum.LESSON_PLAN : return 'Lesson Plan Only';
+                    case typesEnum.SUPPLEMENTAL_ANNOUNCEMENT : return 'Supplemental Only';
+                    default : return 'All Types';
+                }
+            },
+
+            function getSortSelectPlaceholder(){
+                if(this.getSortType() == chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_ASCENDING)
+                    return 'Due Date: Earliest';
+
+                return 'Due Date: Latest';
             }
         ])
 });
