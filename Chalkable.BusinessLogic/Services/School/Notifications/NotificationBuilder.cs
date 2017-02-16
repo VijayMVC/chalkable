@@ -63,6 +63,9 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
             var reportFailed = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.REPORT_PROCESSING_FAILED_NOTIFICATION);
             RenderService.RegisterMainRenderer(NotificationTemplateProvider.REPORT_PROCESSING_FAILED_NOTIFICATION, new TemplateRenderer(reportFailed), false);
+
+            var postedAppNotificationTpl = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.POSTED_APPLICATION_NOTIFICATION);
+            RenderService.RegisterMainRenderer(NotificationTemplateProvider.POSTED_APPLICATION_NOTIFICATION, new TemplateRenderer(postedAppNotificationTpl), false);
             
         }
 
@@ -182,8 +185,12 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION,
                                                  NotificationType.Announcement, recipient, announcement, null, null,
-                                                 null, null, new { AnnouncementTitle = announcement.Title, AnnouncementType = GetAnnouncementType(announcement.Type)});
+                                                 null, null, new {
+                                                     AnnouncementTitle = announcement.Title,
+                                                     AnnouncementType = GetAnnouncementType(announcement.Type)
+                                                 });
         }
+
         public Notification BuildAnnouncementNewAttachmentNotificationToPerson(DateTime created, AnnouncementDetails announcement, Person toPerson, Person fromschoolPerson)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON,
@@ -319,6 +326,17 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var otherModel = new { BudgetBalance = budgetBalance };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.APP_BUDGET_BALANCE_NOTIFICATION,
                                                  NotificationType.AppBudgetBallance, recipient, null, null, null, null, null, otherModel);
+        }
+
+        public Notification BuildApplicationNotification(Person recipient, Guid applicationId, string applicationName, string htmlText)
+        {
+            var otherModel = new {
+                HtmlSnippet = htmlText,
+                ApplicationName = applicationName
+            };
+
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.POSTED_APPLICATION_NOTIFICATION, NotificationType.Application,
+                recipient, applicationId: applicationId, other: otherModel);
         }
     }
 }
