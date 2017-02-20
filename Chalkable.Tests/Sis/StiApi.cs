@@ -430,7 +430,5 @@ namespace Chalkable.Tests.Sis
 
             Debug.WriteLine(JsonConvert.SerializeObject(mealType));
         }
-
-
     }
 }

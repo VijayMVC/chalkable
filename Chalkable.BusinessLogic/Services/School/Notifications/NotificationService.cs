@@ -31,7 +31,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         void AddReportProcessedNotification(int toPersonId, int roleId, string reportName, string reportId, string errorMessage, bool processingSucced);
         void MarkAsShown(int[] notificationIds);
-        
+
+        void AddApplicationNotification(int toPersonId, Guid applicationId, string applicationName, string htmlText);
     }
     
     public class NotificationService : SchoolServiceBase, INotificationService
@@ -284,7 +285,15 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             //AddNotification(notification);
         }
 
+        public void AddApplicationNotification(int toPersonId, Guid applicationId, string applicationName, string htmlText)
+        {
+            //GetPerson doesn't return ROLE
+            var toSchoolPerson = ServiceLocator.PersonService.GetPerson(toPersonId);
+            toSchoolPerson.RoleRef = Context.RoleId;
 
+            var notification = builder.BuildApplicationNotification(toSchoolPerson, applicationId, applicationName, htmlText);
+            AddNotification(notification);
+        }
 
     }
 }

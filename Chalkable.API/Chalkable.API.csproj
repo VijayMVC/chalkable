@@ -67,6 +67,7 @@
     <Compile Include="Endpoints\Base.cs" />
     <Compile Include="Endpoints\CalendarEndpoint.cs" />
     <Compile Include="Endpoints\GradingEndpoint.cs" />
+    <Compile Include="Endpoints\NotificationEndpoint.cs" />
     <Compile Include="Endpoints\PersonEndpoint.cs" />
     <Compile Include="Endpoints\StandardsEndpoint.cs" />
     <Compile Include="Endpoints\StudyCenterEndpoint.cs" />
