@@ -213,6 +213,9 @@
                                           <Height>0.1639in</Height>
                                           <Width>2.30363in</Width>
                                           <ZIndex>3</ZIndex>
+                                          <Visibility>
+                                            <Hidden>=IsNothing(Fields!ClassNumber.Value)</Hidden>
+                                          </Visibility>
                                           <Style>
                                             <Border>
                                               <Style>None</Style>
@@ -1989,11 +1992,6 @@
                                         <GroupExpression>=Fields!AnnouncementId.Value</GroupExpression>
                                       </GroupExpressions>
                                     </Group>
-                                    <SortExpressions>
-                                      <SortExpression>
-                                        <Value>=Fields!AnnouncementId.Value</Value>
-                                      </SortExpression>
-                                    </SortExpressions>
                                     <TablixMembers>
                                       <TablixMember />
                                     </TablixMembers>
@@ -2035,7 +2033,6 @@
                         </Border>
                       </Style>
                     </Rectangle>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>

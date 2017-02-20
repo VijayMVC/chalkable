@@ -20,6 +20,7 @@ namespace Chalkable.API
         public StandardsEndpoint Standards => new StandardsEndpoint(this);
         public CalendarEndpoint Calendar => new CalendarEndpoint(this);
         public AttendanceEndpoint Attendance => new AttendanceEndpoint(this);
+        public NotificationEndpoint Notification => new NotificationEndpoint(this);
 
         public async Task<T> Get<T>(string endpoint)
         {
@@ -91,7 +92,8 @@ namespace Chalkable.API
         public class ResponseSuccessDto
         {
             [JsonProperty("success")]
-            public bool Success { get; set; }
+            public bool Success { get;
+                set; }
             [JsonProperty("data")]
             public object Data { get; set; }
         }

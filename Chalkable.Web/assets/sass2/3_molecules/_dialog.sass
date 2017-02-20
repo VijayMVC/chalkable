@@ -128,8 +128,13 @@
 
   button
     min-width: 92px
+    
 
-  .leave-msg, .error, .ok, .permissions, .report, .sync
+  .info-msg
+    &.leave-msg, &.error, &.ok, &.permissions, &.report, &.sync
+      .x-window-body
+        padding-top: 93px
+
     .text-cnt
       display: inline-block
       margin-top: 15px
@@ -141,7 +146,6 @@
     .x-window-body
       margin: 27px 27px 32px
       width: 401px
-      padding-top: 93px
       text-align: center
       font-size: 14px
       font-weight: 600
