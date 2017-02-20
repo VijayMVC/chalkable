@@ -237,5 +237,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             NotificationStorage.Add(notifications);
         }
+
+        public void AddApplicationNotification(int toPersonId, Guid applicationId, string applicationName, string htmlText)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

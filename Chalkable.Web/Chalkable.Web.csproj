@@ -394,6 +394,7 @@
     <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationSchoolOptionViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
+    <Compile Include="Models\AppNotificationInput.cs" />
     <Compile Include="Models\AssessmentAdminViewData.cs" />
     <Compile Include="Models\AttachmentViewData.cs" />
     <Compile Include="Models\AttachSettingsViewData.cs" />

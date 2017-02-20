@@ -351,5 +351,7 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.ApplicationSchoolService.UpdateStudentAnnouncementApplicationMeta(announcementApplicationId, studentId, text);
             return Json(true);
         }
+
+        
     }
 }
