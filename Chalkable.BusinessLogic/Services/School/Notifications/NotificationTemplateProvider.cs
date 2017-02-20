@@ -59,6 +59,9 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         public const string REPORT_PROCESSING_FAILED_NOTIFICATION = "REPORT_PROCESSING_FAILED_NOTIFICATION";
         private const string REPORT_PROCESSING_FAILED_NOTIFICATION_TEMPLATE = "^.Other.ReportName Processing Failed. ^.Other.ErrorMessage";
 
+        public const string POSTED_APPLICATION_NOTIFICATION = "POSTED_APPLICATION_NOTIFICATION";
+        private const string POSTED_APPLICATION_NOTIFICATION_TEMPLATE = "^.Other.ApplicationName: ^.Other.HtmlSnippet";
+
         static NotificationTemplateProvider()
         {
             templates.Add(ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION, ANNOUNCEMENT_ATTACHMENT_NOTIFICATION_TEMPLATE);
@@ -76,6 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             templates.Add(ATTENDANCE_NOTIFICATION_TO_TEACHER, ATTENDANCE_NOTIFICATION_TO_TEACHER_TEMPLATE);
             templates.Add(REPORT_PROCESSING_SUCCESSED_NOTIFICATION, REPORT_PROCESSING_SUCCESSED_NOTIFICATION_TEMPLATE);
             templates.Add(REPORT_PROCESSING_FAILED_NOTIFICATION, REPORT_PROCESSING_FAILED_NOTIFICATION_TEMPLATE);
+            templates.Add(POSTED_APPLICATION_NOTIFICATION, POSTED_APPLICATION_NOTIFICATION_TEMPLATE);
         }
 
         public static string GetTemplate(string templateName)

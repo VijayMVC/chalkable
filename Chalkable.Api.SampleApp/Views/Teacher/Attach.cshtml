@@ -9,12 +9,24 @@
 @section headscripts
 {
     <script type="text/javascript">
+        function postNotification() {
+            $.ajax({
+                method: 'POST',
+                url: "/Teacher/NotifyMarianeGolden"
+            });
+        }
+
         CHLK_API.setReady(true);
     </script>   
 }
 
+
 <h2>App is Ready to Attach</h2>
 <div>
+    <div>
+        <h3>NOTIFICATION FOR MARIANE GOLDEN</h3>
+        <button onclick="postNotification()">Post Notification</button>
+    </div>
     <div>
         <h3>Person Data</h3><br />
         <pre> @ViewBag.CurrentUser.JsonData</pre><br />

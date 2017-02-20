@@ -398,7 +398,7 @@ NAMESPACE('chlk.controllers', function (){
 
            ria.async.Future, function ShowConfirmBox(text, header_, buttonText_, buttonClass_, iconUrl_, isHtmlText_) {
                return this.ShowMsgBox(text, header_, [{text: buttonText_ || 'OK', clazz: buttonClass_ || 'blue-button', value: 'ok'}, {text: 'Cancel'}]
-                        , 'leave-msg', isHtmlText_ === true, null, null, null, iconUrl_)
+                        , iconUrl_ ? null : 'leave-msg', isHtmlText_ === true, null, null, null, iconUrl_)
                    .then(function (mrResult) {
                        if (!mrResult)
                            return ria.async.BREAK;

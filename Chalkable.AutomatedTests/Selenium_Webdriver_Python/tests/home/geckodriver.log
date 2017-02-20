@@ -1,0 +1,14 @@
+1487068702566	geckodriver	INFO	Listening on 127.0.0.1:54927
+1487068704685	mozprofile::profile	INFO	Using profile path C:\Users\Taras\AppData\Local\Temp\rust_mozprofile.JKS7tfAF9N9C
+1487068704694	geckodriver::marionette	INFO	Starting browser C:\Program Files (x86)\Mozilla Firefox\firefox.exe
+1487068704711	geckodriver::marionette	INFO	Connecting to Marionette on localhost:54933
+1487068706413	Marionette	INFO	Listening on port 54933
+1487068710031	Marionette	WARN	Using deprecated data structure for setting timeouts
+1487068775248	addons.productaddons	WARN	Failed downloading via XHR, status: 0, reason: error
+*************************
+A coding exception was thrown and uncaught in a Task.
+
+Full message: TypeError: NetworkError when attempting to fetch resource.
+Full stack: 
+*************************
+[Child 5460] WARNING: pipe error: 109: file c:/builds/moz2_slave/m-rel-w32-00000000000000000000/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346

@@ -93,7 +93,7 @@ div(class = (noComplete ? "no-complete " : "") + (self.hasFilters() ? 'settings-
                         +Option(1, 'Items due before today', false)
                         +Option(2, 'Items older than 30 days', false)
                         +Option(3, 'All Items', false)
-                +Select('gradingperiodid')(data-placeholder = self.getStartDate() && (self.getStartDate().format('M d - ') + self.getEndDate().format('M d')), value = 0).gradingPeriodSelect
+                +Select('gradingperiodid')(data-placeholder = self.getTimeSelectPlaceholder(), value = 0).gradingPeriodSelect
                     +Option(-2, '', !!self.getStartDate())
                     +Option(null, 'Any Time', (!self.getGradingPeriodId() || !self.getGradingPeriodId().valueOf()) && !self.getStartDate())
                     each gp in self.getGradingPeriods()
@@ -127,14 +127,14 @@ div(class = (noComplete ? "no-complete " : "") + (self.hasFilters() ? 'settings-
                         br
                         Button(type="submit", name="submitType", value="sort", disabled = !self.getStartDate() || self.getEndDate())#date-ok-button.blue-button=Msg.OK
                 if self.isInProfile() || !isAdmin
-                    +Select('announcementtype')(data-placeholder = 'Any Type').annTypeSelect.submit-after-select
+                    +Select('announcementtype')(data-placeholder = self.getActivitiesTypeSelectPlaceholder()).annTypeSelect.submit-after-select
                         +Option(null, 'All Types', !self.getAnnType())
                         +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
                         if self.getUserRole().isStudent()
                             +Option(typesEnum.ADMIN.valueOf(), 'Admin Announcement Only', typesEnum.ADMIN == self.getAnnType())
                         +Option(typesEnum.LESSON_PLAN.valueOf(), 'Lesson Plan Only', typesEnum.LESSON_PLAN == self.getAnnType())
                         +Option(typesEnum.SUPPLEMENTAL_ANNOUNCEMENT.valueOf(), 'Supplemental Only', typesEnum.SUPPLEMENTAL_ANNOUNCEMENT == self.getAnnType())
-                +Select('sorttype')(data-placeholder = 'Sort').sortSelect.submit-after-select
+                +Select('sorttype')(data-placeholder = self.getSortSelectPlaceholder()).sortSelect.submit-after-select
                     +Option(0, 'Due Date: Earliest', self.getSortType() == chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_ASCENDING)
                     +Option(1, 'Due Date: Latest', self.getSortType() == chlk.models.announcement.FeedSortTypeEnum.DUE_DATE_DESCENDING)
                 if self.hasFilters()

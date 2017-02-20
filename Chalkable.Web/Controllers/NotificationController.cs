@@ -3,10 +3,17 @@ using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Data.Common.Enums;
+using Chalkable.Common.Exceptions;
 
 namespace Chalkable.Web.Controllers
 {
-    [RequireHttps, TraceControllerFilter]
+    /**
+     * Need to turn off TraceControllerFilter, in order to enable
+     * html in params. It fires param validation before mvc sees
+     * that property of post model has AllowHtmlAttribute.
+    */
+    [RequireHttps /*, TraceControllerFilter*/]
     public class NotificationController : ChalkableController
     {
         [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
@@ -47,6 +54,19 @@ namespace Chalkable.Web.Controllers
         {
             var notifications = SchoolLocator.NotificationService.GetUnshownNotifications();
             SchoolLocator.NotificationService.MarkAsShown(notifications.Select(x => x.Id).ToArray());
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
+        [ValidateInput(false)]
+        public ActionResult ApplicationNotification(AppNotificationInput inputData)
+        {
+            if (string.IsNullOrWhiteSpace(SchoolLocator.Context.OAuthApplication))
+                throw new ChalkableException("Only Application can post notifications");
+
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
+            SchoolLocator.NotificationService.AddApplicationNotification(inputData.PersonId, app.Id, app.Name, inputData.HtmlText);
+
             return Json(true);
         }
     }

@@ -8,6 +8,8 @@ NAMESPACE('chlk.activities.feed', function () {
     CLASS(
         'BaseFeedPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
+            Boolean, 'sortPending',
+
             function prepareSelect(node){
                 var value = parseInt(node.getValue());
                 if(!value || value < 1){
@@ -59,7 +61,7 @@ NAMESPACE('chlk.activities.feed', function () {
 
             [ria.mvc.DomEventBind('change keydown', '.start-end-picker')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function dateSelect(node, event, selected_){console.info(event.which);
+            VOID, function dateSelect(node, event, selected_){
                 //if(event.type == 'change' || event.which == ria.dom.Keys.ENTER.valueOf()){
                     var btn = this.dom.find('#date-ok-button');
                     if(!this.dom.find('#toDate').getValue() || !this.dom.find('#toDate').getValue())
@@ -67,6 +69,11 @@ NAMESPACE('chlk.activities.feed', function () {
                     else
                         btn.removeAttr('disabled');
                 //}
+            },
+
+            function sortSubmit_(){
+                this.dom.find('#sort-submit').trigger('click');
+                this.setSortPending(true);
             },
 
             [ria.mvc.DomEventBind('change', '.gradingPeriodSelect')],
@@ -78,7 +85,7 @@ NAMESPACE('chlk.activities.feed', function () {
                             this.dom.find('.date-range-popup').removeClass('hidden');
                         else{
                             this.dom.find('.start-end-picker').next().setValue('');
-                            this.dom.find('#sort-submit').trigger('click');
+                            this.sortSubmit_();
                         }
 
                     }.bind(this), 10);
@@ -89,7 +96,7 @@ NAMESPACE('chlk.activities.feed', function () {
             VOID, function submitAfterSelect(node, event, selected_){
                 if(!node.hasClass('prepared'))
                     setTimeout(function(){
-                        this.dom.find('#sort-submit').trigger('click');
+                        this.sortSubmit_();
                     }.bind(this), 10);
             },
 
@@ -240,11 +247,11 @@ NAMESPACE('chlk.activities.feed', function () {
             VOID, function clearFiltersClick(node, event){
                 this.dom.find('select:not(.markDoneSelect), .start-end-picker').setValue('');
                 this.dom.find('.to-set').setValue('true');
-                this.dom.find('#sort-submit').trigger('click');
+                this.sortSubmit_();
             },
 
             function sortSubmit(){
-                this.dom.find('#sort-submit').trigger('click');
+                this.sortSubmit_();
                 var select = this.dom.find('#sort-select');
                 select.removeClass('chosen-container-active');
                 select.removeClass('chosen-with-drop');
@@ -271,7 +278,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 BASE(model, msg_);
                 this.dom.find('select.prepared').removeClass('prepared');
 
-                if(model instanceof chlk.models.feed.Feed){
+                if(model instanceof chlk.models.feed.Feed){                    
                     scheduledDays = model.getClassScheduledDays && model.getClassScheduledDays() || [];
                     minActivityDate = null;
                     formatedScheduledDays = scheduledDays && scheduledDays.map(function(item){return item.format('mm-dd-yy')});
@@ -283,7 +290,18 @@ NAMESPACE('chlk.activities.feed', function () {
                     if(!model.getItems().length)
                         this.dom.find('.form-for-grid').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
                 }
+
+                if(model instanceof chlk.models.feed.Feed || model instanceof chlk.models.feed.FeedAdmin)                    
+                    this.setSortPending(false);
             },
+
+            [[String]],
+            OVERRIDE, VOID, function onModelComplete_(msg_) {
+                BASE(msg_);
+                if(msg_ == chlk.activities.lib.DontShowLoader() && this.isSortPending())
+                    this.dom && this.dom.addClass(this._partialUpdateCls);
+            },
+
 
             function getClassScheduledDays_(model){
                 return model.getClassScheduledDays && model.getClassScheduledDays() || [];
