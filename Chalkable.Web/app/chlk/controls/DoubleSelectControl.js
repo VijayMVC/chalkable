@@ -111,11 +111,12 @@ NAMESPACE('chlk.controls', function () {
                 items.forEach(function(item){
                     var classes = item.getClasses();
                     if(classes.length){
+                        var sY = item.getSchoolYear();
                         res.push({
-                            name: item.getSchoolName() + ' - ' + item.getSchoolYear().getName(),
-                            id: item.getSchoolYear().getId(),
-                            startDate: item.getSchoolYear().getStartDate().toStandardFormat(),
-                            endDate: item.getSchoolYear().getEndDate().toStandardFormat(),
+                            name: item.getSchoolName() + ' - ' + sY.getName(),
+                            id: sY.getId(),
+                            startDate: sY.getStartDate() && sY.getStartDate().toStandardFormat(),
+                            endDate: sY.getEndDate() && sY.getEndDate().toStandardFormat(),
                             values: classes.map(function(clazz){
                                 return {
                                     name: clazz.getFullClassName(),
