@@ -19,7 +19,14 @@ NAMESPACE('chlk.services', function () {
             },
 
             ria.async.Future, function listOfSchoolYearClasses() {
-                return this.get('SchoolYear/ListOfSchoolYearClasses.json', ArrayOf(chlk.models.schoolYear.YearAndClasses), {});
+                return this.get('SchoolYear/ListOfSchoolYearClasses.json', ArrayOf(chlk.models.schoolYear.YearAndClasses), {})
+                    .then(function(items){
+                        items = items.filter(function(item){
+                            var sY = item.getSchoolYear();
+                            return sY.getStartDate() && sY.getEndDate();
+                        });
+                        return items;
+                    });
             }
         ])
 });
