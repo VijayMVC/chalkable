@@ -9,10 +9,9 @@ namespace Chalkable.API.Endpoints
         {
         }
 
-        public async Task NotifyPerson(int personId, string html)
+        public async Task NotifyPerson(string html)
         {
             var @params = HttpUtility.ParseQueryString(string.Empty);
-            @params.Add("personId", personId.ToString());
             @params.Add("htmlText", html);
 
             await Connector.Post<bool>($"/Notification/ApplicationNotification.json", @params);

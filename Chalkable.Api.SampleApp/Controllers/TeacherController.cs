@@ -108,7 +108,7 @@ namespace Chalkable.Api.SampleApp.Controllers
 
         public async Task<ActionResult> NotifyMarianeGolden()
         {
-            await Connector.Notification.NotifyPerson(8502, "<span style=\"color: red;\">Hello world ^_^ </span>");
+            await Connector.Notification.NotifyPerson("<span style=\"color: red;\">Hello world ^_^ </span>");
             return Json(true);
         }
     }
