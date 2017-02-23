@@ -280,6 +280,19 @@ NAMESPACE('chlk', function (){
                     }
                 }});
 
+                function isFixedOrHasFixedParrent(node){
+                    if(node.is(document))
+                        return false;
+
+                    if(node.css('position') == 'fixed')
+                        return true;
+                    
+                    if(node.parent().length)
+                        return isFixedOrHasFixedParrent(node.parent())
+
+                    return false;
+                };
+
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
                     var target = jQuery(e.target),
@@ -294,11 +307,19 @@ NAMESPACE('chlk', function (){
                             tooltip.hide();
                             tooltip.find('.tooltip-content').html('');
                         }else{
-                            var scrollTop = jQuery(window).scrollTop();
-                            jQuery(window).scrollTop(0);
+                            var scrollTop = jQuery(window).scrollTop(),
+                                scrollLeft = jQuery(window).scrollLeft(),
+                                node = jQuery(this)
+                                fixed = isFixedOrHasFixedParrent(node);
 
-                            var node = jQuery(this),
-                                offset = node.offset(),
+                            if(!fixed){
+                                jQuery(window).scrollTop(0);
+                                jQuery(window).scrollLeft(0);
+                            }else{
+                                tooltip.addClass('fixed');
+                            }                    
+
+                            var offset = node.offset(),
                                 showTooltip = true,
                                 value = node.data('tooltip'),
                                 type = node.data('tooltip-type'),
@@ -323,10 +344,12 @@ NAMESPACE('chlk', function (){
 
                                 tooltip.find('.tooltip-content').html(node.data('tooltip'));
 
+                                var top = offset.top - (fixed ? scrollTop : 0);
+
                                 if(onBottom)
-                                    tooltip.css('top', offset.top + node.height() + 5).addClass('bottom');
+                                    tooltip.css('top', top + node.height() + 5).addClass('bottom');
                                 else
-                                    tooltip.css('top', offset.top - tooltip.height());
+                                    tooltip.css('top', top - tooltip.height());
                                 if(clazz){
                                     if(Array.isArray(clazz)){
                                         clazz.forEach(function(clazzItem){
@@ -336,9 +359,15 @@ NAMESPACE('chlk', function (){
                                     else
                                         tooltip.addClass(clazz);
                                 }
-                                tooltip.css('left', offset.left + (node.width() - tooltip.width())/2);
+
+                                var left = offset.left - (fixed ? scrollLeft : 0);
+                                tooltip.css('left', left + (node.width() - tooltip.width())/2);
                             }
-                            jQuery(window).scrollTop(scrollTop);
+
+                            if(!fixed){
+                                jQuery(window).scrollTop(scrollTop);
+                                jQuery(window).scrollLeft(scrollLeft);
+                            }  
                         }
 
                         var parents = target.parents('[data-tooltip]');
@@ -376,6 +405,7 @@ NAMESPACE('chlk', function (){
                     }
 
                     tooltip.removeClass('bottom');
+                    tooltip.removeClass('fixed');
                     tooltip.find('.tooltip-content').html('');
                 });
 
