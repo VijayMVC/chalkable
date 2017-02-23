@@ -778,7 +778,7 @@ var Msg = {
     Please_enter_a_grade: 'Please enter a grade.',
     Progress_Report_No_Reasons_msg: 'You should select at least one absence reason',
     Report_No_Access_Msg: 'User is denied access to view a report.',
-    Same_Title_Text: "There is an item with that title on the selected date.\nPlease enter a different title or select a different date.",
+    Same_Title_Text: "<b>There is an item with that title on the selected date.</b><br/><span>Please enter a different title or select a different date.</span>",
     OAuth_description: " OAuth 2.0 is used for authentication. The authentication token you receive, " +
         "after making your request, includes a user role. The user role defines the level of access.",
     You_already_entered_some_grades: 'You already entered some grades. These grades</br>will be cleared if you continue with the change.',
