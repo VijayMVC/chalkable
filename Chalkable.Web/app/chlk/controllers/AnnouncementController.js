@@ -2402,6 +2402,19 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        function isDateInPeriod_(date, period){
+            return date.getDate() >= period.getStartDate().getDate() && date.getDate() <= period.getEndDate().getDate();
+        },
+
+        function isDatesInPeriod_(start, end, period){
+            return this.isDateInPeriod_(start, period) && this.isDateInPeriod_(end, period);
+        },
+
+        [[ArrayOf(chlk.models.schoolYear.GradingPeriod), chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+        Boolean, function isGradingPeriodsContaintsRange_(gradingPeriods, start, end){
+            return gradingPeriods.filter(function(_){return this.isDatesInPeriod_(start, end, _)}.bind(this)).length > 0;
+        },
+
         [[chlk.models.announcement.FeedAnnouncementViewData]],
         function trySubmitLessonPlan(model){
             if(model.getStartDate().compare(model.getEndDate()) == 1){
@@ -2414,15 +2427,18 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
-            var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
-            var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
-
-            if((!model.isInGallery() && !gradingPeriods.filter(function(_){return model.getStartDate().getDate() >= _.getStartDate().getDate() && model.getStartDate().getDate() <= _.getEndDate().getDate()
-                    && model.getEndDate().getDate() >= _.getStartDate().getDate() && model.getEndDate().getDate() <= _.getEndDate().getDate()}).length) ||
-                (model.isInGallery() && !(model.getStartDate().getDate() >= schoolYear.getStartDate().getDate() && model.getStartDate().getDate() <= schoolYear.getEndDate().getDate()
-                && model.getEndDate().getDate() >= schoolYear.getStartDate().getDate() && model.getEndDate().getDate() <= schoolYear.getEndDate().getDate()))){
-                this.ShowMsgBox('<b>Lesson Plan is not valid.</b><br/><span>Start date and End date can\'t be in different grading periods</span>', null, null, 'leave-msg');
-                return null;
+            if(model.isInGallery()) {
+                var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR, []);
+                if(!this.isDatesInPeriod_(model.getStartDate(), model.getEndDate(), schoolYear)) {
+                    this.ShowMsgBox('Lesson Plan is not valid.\nStart date and End date is out of current school year', null, null, 'leave-msg');
+                    return null;
+                }
+            } else {
+                var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
+                if(!this.isGradingPeriodsContaintsRange_(gradingPeriods, model.getStartDate(), model.getEndDate())) {
+                    this.ShowMsgBox('Lesson Plan is not valid.\nStart date and End date can\'t be in different grading periods', null, null, 'leave-msg');
+                    return null;
+                }
             }
 
             var res;

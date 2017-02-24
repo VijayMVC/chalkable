@@ -61,11 +61,13 @@ namespace Chalkable.Web.Controllers
         [ValidateInput(false)]
         public ActionResult ApplicationNotification(AppNotificationInput inputData)
         {
+            System.Diagnostics.Trace.Assert(Context.PersonId.HasValue);
+
             if (string.IsNullOrWhiteSpace(SchoolLocator.Context.OAuthApplication))
                 throw new ChalkableException("Only Application can post notifications");
 
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
-            SchoolLocator.NotificationService.AddApplicationNotification(inputData.PersonId, app.Id, app.Name, inputData.HtmlText);
+            SchoolLocator.NotificationService.AddApplicationNotification(Context.PersonId.Value, app.Id, app.Name, inputData.HtmlText);
 
             return Json(true);
         }
