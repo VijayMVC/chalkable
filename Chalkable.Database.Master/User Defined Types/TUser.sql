@@ -7,8 +7,8 @@
     [IsDeveloper]           BIT              NOT NULL,
     [IsAppTester]           BIT              NOT NULL,
     [IsDistrictRegistrator] BIT              NOT NULL,
+	[IsAssessmentAdmin]		BIT				 NOT NULL,
     [ConfirmationKey]       NVARCHAR (256)   NULL,
     [SisUserName]           NVARCHAR (256)   NULL,
     [SisUserId]             INT              NULL,
     [DistrictRef]           UNIQUEIDENTIFIER NULL);
-
