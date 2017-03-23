@@ -189,6 +189,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.isAutoUpdate()
                     )
                     .then(function(newModel){
+                        studentIds = newModel.getStudents().map(function(item){return item.getStudentInfo().getId().valueOf()});
+                        this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, newModel.getStudents().map(function(item){return item.getStudentInfo()}));
                         newModel.setAutoUpdate(model.isAutoUpdate());
                         newModel.setCategoryId(model.getCategoryId());
                         newModel.setStandardId(model.getStandardId());

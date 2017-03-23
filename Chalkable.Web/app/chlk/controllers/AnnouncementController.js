@@ -2614,7 +2614,7 @@ NAMESPACE('chlk.controllers', function (){
                         this.ShowMsgBox(Msg.Same_Title_Text, '', [{
                             text: Msg.OK.toUpperCase(),
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                        }], null, null, 'leave-msg');
+                        }], 'leave-msg', true);
 
                         this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
 
