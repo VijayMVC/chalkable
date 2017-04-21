@@ -7,6 +7,8 @@ ord int)
 insert into @chalkableTables
 (name, ord)
 values
+('ReportCardsLogo', 29),
+('AdminAnnouncementStudent', 28),
 ('PersonSetting', 27),
 ('Notification', 26),
 ('AutoGrade', 25),

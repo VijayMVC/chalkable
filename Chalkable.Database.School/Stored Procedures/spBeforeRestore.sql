@@ -7,6 +7,8 @@ declare @chalkableTables table
 insert into @chalkableTables
 (name)
 values
+('ReportCardsLogo'),
+('AdminAnnouncementStudent'),
 ('PersonSetting'),
 ('Notification'),
 ('AutoGrade'),
