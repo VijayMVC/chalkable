@@ -11,6 +11,7 @@ using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
+using Chalkable.BusinessLogic.Security;
 
 namespace Chalkable.Web.Controllers
 {
@@ -60,6 +61,10 @@ namespace Chalkable.Web.Controllers
             if (standard.AcademicBenchmarkId.HasValue)
                 suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(
                         new List<Guid> {standard.AcademicBenchmarkId.Value}, 0, int.MaxValue);
+
+            //filter banned suggestedApps
+            if(!BaseSecurity.IsSysAdminOrDeveloper(Context))
+                suggestedApps = suggestedApps?.Where(x => allApps.Any(y => x.Id == y.Id)).ToList();
 
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
